@@ -41,6 +41,17 @@ class TemplateRender extends AbstractController
             ->add('submit', SubmitType::class)
             ->getForm();
 
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $values = $form->getData();
+            $content = $this->repository->renderTemplate($name, 'essai', $values);
+
+            return $this->render('wiki/template_wrapper.html.twig', [
+                    'titre' => 'essai',
+                    'content' => $content
+            ]);
+        }
+
         return $this->render('front/template_form.html.twig', ['form' => $form->createView()]);
     }
 
