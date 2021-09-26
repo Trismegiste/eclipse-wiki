@@ -1,0 +1,54 @@
+/*
+ * Generic form
+*/
+.pure-form fieldset label {
+    padding-right: 1em;
+    padding-left: 0.1em;
+}
+
+.pure-form fieldset .pure-u-1-2 > label {
+    text-align: right;
+    display: block;
+}
+
+.pure-form fieldset input[type="checkbox"] {
+    margin-top: 0.6em;
+    margin-bottom: 1.1em;
+}
+
+.pure-form fieldset input[type="file"] {
+    margin-top: 0.3em;
+    margin-bottom: 0.8em;
+}
+
+.pure-form fieldset input {
+    margin-bottom: 0.5em;
+}
+
+.pure-form fieldset select {
+    margin-bottom: 0.5em;
+}
+
+.pure-form fieldset input[type="radio"] {
+    margin-top: 0.6em;
+    margin-bottom: 1.1em;
+}
+
+.help-text {
+    margin-left: 1em;
+}
+
+.form-error ul {
+    margin: 1em 0 0;
+    padding: 0;
+}
+
+.form-error li {
+    list-style-type: none; 
+    color: darkred;
+}
+
+form i.icon-eye, form i.icon-eye-off {
+    margin-left: -30px;
+    cursor: pointer;
+}
