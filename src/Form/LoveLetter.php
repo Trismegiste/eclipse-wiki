@@ -26,17 +26,17 @@ class LoveLetter extends AbstractType
             ->add('player', TextType::class)
             ->add('context', TextareaType::class)
             ->add('drama', TextareaType::class)
-            ->add('trait1', ChoiceType::class)
-            ->add(('difficulty1'), NumberType::class)
-            ->add('trait2', ChoiceType::class)
+            ->add('trait1', Type\TraitType::class, ['category' => 'yolo'])
+            ->add(('difficulty1'), NumberType::class) // @todo regroup trait & difficulty in one RollType
+            ->add('trait2', Type\TraitType::class, ['category' => 'yolo'])
             ->add(('difficulty2'), NumberType::class)
-            ->add('trait3', ChoiceType::class)
-            ->add(('difficulty3'), NumberType::class)
-            ->add('choix1', TextareaType::class, ['required' => true])
-            ->add('choix2', TextareaType::class, ['required' => true])
-            ->add('choix3', TextareaType::class, ['required' => true])
-            ->add('choix4', TextareaType::class, ['required' => true])
-            ->add('choix5', TextareaType::class, ['required' => false])
+            ->add('trait3', Type\TraitType::class, ['category' => 'yolo'])
+            ->add(('difficulty3'), NumberType::class) // Collection of 3
+            ->add('choice1', TextareaType::class, ['required' => true])
+            ->add('choice2', TextareaType::class, ['required' => true])
+            ->add('choice3', TextareaType::class, ['required' => true])
+            ->add('choice4', TextareaType::class, ['required' => true])
+            ->add('choice5', TextareaType::class, ['required' => false])
             ->add('generate', SubmitType::class);
     }
 

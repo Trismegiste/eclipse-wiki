@@ -30,7 +30,13 @@ class TraitType extends AbstractType
         $resolver->setRequired('category');
 
         $resolver->setDefault('choices', function (Options $opt) {
-            return $this->repository->findAll($opt['category']);
+            $listing = $this->repository->findAll($opt['category']);
+            $choice = [];
+            foreach ($listing as $item) {
+                $choice[$item->title] = $item->title;
+            }
+
+            return $choice;
         });
     }
 
