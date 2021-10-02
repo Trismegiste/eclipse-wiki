@@ -21,11 +21,10 @@
     margin-bottom: 0.8em;
 }
 
-.pure-form fieldset input {
-    margin-bottom: 0.5em;
-}
-
-.pure-form fieldset select {
+.pure-form fieldset input, 
+.pure-form fieldset input, 
+.pure-form fieldset select,
+.pure-form fieldset textarea {
     margin-bottom: 0.5em;
 }
 
@@ -46,9 +45,4 @@
 .form-error li {
     list-style-type: none; 
     color: darkred;
-}
-
-form i.icon-eye, form i.icon-eye-off {
-    margin-left: -30px;
-    cursor: pointer;
 }

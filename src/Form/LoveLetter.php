@@ -22,16 +22,22 @@ class LoveLetter extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('player', TextType::class)
-                ->add('context', TextareaType::class)
-                ->add('drama', TextareaType::class)
-                ->add('trait1', ChoiceType::class)
-                ->add(('difficulty1'), NumberType::class)
-                ->add('trait2', ChoiceType::class)
-                ->add(('difficulty2'), NumberType::class)
-                ->add('trait3', ChoiceType::class)
-                ->add(('difficulty3'), NumberType::class)
-                ->add('generate', SubmitType::class);
+        $builder
+            ->add('player', TextType::class)
+            ->add('context', TextareaType::class)
+            ->add('drama', TextareaType::class)
+            ->add('trait1', ChoiceType::class)
+            ->add(('difficulty1'), NumberType::class)
+            ->add('trait2', ChoiceType::class)
+            ->add(('difficulty2'), NumberType::class)
+            ->add('trait3', ChoiceType::class)
+            ->add(('difficulty3'), NumberType::class)
+            ->add('choix1', TextareaType::class, ['required' => true])
+            ->add('choix2', TextareaType::class, ['required' => true])
+            ->add('choix3', TextareaType::class, ['required' => true])
+            ->add('choix4', TextareaType::class, ['required' => true])
+            ->add('choix5', TextareaType::class, ['required' => false])
+            ->add('generate', SubmitType::class);
     }
 
 }
