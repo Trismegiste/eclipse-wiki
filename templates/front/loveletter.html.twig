@@ -1,5 +1,74 @@
 {% extends "front/base.html.twig" %}
 
+{% block title %}Love letter {{ player }}{% endblock %}
+
+{% block stylesheets %}
+    <style>
+
+        /* title */
+        h1.big-title {
+            font-size: 3em;
+            border: none;
+            text-align: center;
+            margin: 0;
+            padding: 0.6em;
+            color: white;
+            background-color: #c60000;
+            font-weight: lighter;
+        }
+
+        .rules {
+            background-color: #eee;
+            padding: 0.3em 1em;
+        }
+
+        .signature {
+            text-align: right;
+            padding-right: 10em;
+        }
+
+        p, li {
+            line-height: 140%;
+        }
+
+        .choices li {
+            margin-bottom: 1em;            
+        }
+    </style>   
+{% endblock %}
+
 {% block body %}
-    {{ dump(loveletter) }}
+    <h1 class="big-title">Love letter</h1>       
+
+    <p>Cher {{ player }},</p>
+    <section class="intro">
+        <p><strong>Contexte</strong> : {{ context }}</p>
+        <p><strong>Drame</strong> : {{ drama }}</p>
+    </section>
+
+    <section class="rules">
+        <p>Effectue une Rencontre Rapide par Étape, c'est-à-dire, compte un Marqueur pour chaque Succès & Prouesse sur ces 3 tests :</p>
+
+        <ul>
+            <li>{{ roll1.trait }} à {{ roll1.difficulty }}</li>
+            <li>{{ roll2.trait }} à {{ roll2.difficulty }}</li>
+            <li>{{ roll3.trait }} à {{ roll3.difficulty }}</li>
+        </ul>
+    </section>
+
+    <section class="choices">
+        <p>Avec 5 Marqueurs ou plus, choisis une des possibilités ci-dessous.
+            Avec 3 ou 4 Marqueurs, choisis-en 2. Avec 2 Marqueurs, en choisir une et le MJ en choisit une.
+            Avec 1 Marqueur ou moins, le MJ en choisit 2 :</p>
+
+        <ul>
+            <li>{{ choice1 }}</li>
+            <li>{{ choice2 }}</li>
+            <li>{{ choice3 }}</li>
+            <li>{{ choice4 }}</li>
+            <li>{{ choice5 }}</li>
+        </ul>
+    </section>
+
+    <p class="signature">Ton MJ</p>
 {% endblock %}

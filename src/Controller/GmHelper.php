@@ -26,7 +26,7 @@ class GmHelper extends AbstractController
         $form = $this->createForm(LoveLetter::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            return $this->render('front/loveletter.html.twig', ['loveletter' => $form->getData()]);
+            return $this->render('front/loveletter.html.twig', $form->getData());
         }
 
         return $this->render('front/template_form.html.twig', ['form' => $form->createView()]);
