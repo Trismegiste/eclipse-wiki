@@ -66,7 +66,7 @@
             <li>{{ choice2 }}</li>
             <li>{{ choice3 }}</li>
             <li>{{ choice4 }}</li>
-            <li>{{ choice5 }}</li>
+            {% if choice5 is not empty %}<li>{{ choice5 }}</li>{% endif %}
         </ul>
     </section>
 
