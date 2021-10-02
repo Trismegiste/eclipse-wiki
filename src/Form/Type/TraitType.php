@@ -30,18 +30,12 @@ class TraitType extends AbstractType
         $resolver->setRequired('category');
 
         $resolver->setDefault('choices', function (Options $opt) {
-            
-            return $this->repository->findSocialNetworks();
-            return $this->repository->findAttributes();
-            return $this->repository->findSkills();
-            
-        //    $listing = $this->repository->findAll($opt['category']);
-            $choice = [];
-            foreach ($listing as $item) {
-                $choice[$item->title] = $item->title;
-            }
 
-            return $choice;
+            return [
+                'Attributs' => $this->repository->findAttributes(),
+                'Compétences' => $this->repository->findSkills(),
+                'Réseaux sociaux' => $this->repository->findSocialNetworks()
+            ];
         });
     }
 

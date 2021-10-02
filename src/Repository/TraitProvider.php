@@ -46,18 +46,22 @@ class TraitProvider
 
     public function findAttributes(): array
     {
-        $content = $this->wiki->getPageByName('Attributs');
-        $doc = new \DOMDocument("1.0", "utf-8");
-        $doc->loadXML($content);
-        $xpath = new \DOMXpath($doc);
-        $elements = $xpath->query("//tr/td");
+        return $this->cache->get('attributes_list', function (ItemInterface $item) {
+                $item->expiresAfter(DateInterval::createFromDateString('1 day'));
 
-        for ($k = 0; $k < 5; $k++) {
-            $name = $elements->item(3 * $k);
-            $listing[$name->textContent] = $name->textContent;
-        }
+                $content = $this->wiki->getPageByName('Attributs');
+                $doc = new \DOMDocument("1.0", "utf-8");
+                $doc->loadXML($content);
+                $xpath = new \DOMXpath($doc);
+                $elements = $xpath->query("//tr/td");
 
-        return $listing;
+                for ($k = 0; $k < 5; $k++) {
+                    $name = $elements->item(3 * $k);
+                    $listing[$name->textContent] = $name->textContent;
+                }
+
+                return $listing;
+            });
     }
 
     public function findSocialNetworks(): array
