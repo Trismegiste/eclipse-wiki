@@ -21,11 +21,15 @@ class GmHelper extends AbstractController
     /**
      * @Route("/gm/loveletter")
      */
-    public function loveLetter(Request $request, \App\Repository\TraitProvider $pro): Response
+    public function loveLetter(Request $request): Response
     {
         $form = $this->createForm(LoveLetter::class);
-        $attr = $pro->findAttributes();
-        return $this->render('front/template_form.html.twig', ['attr' => $attr, 'form' => $form->createView()]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            return $this->render('front/loveletter.html.twig', ['loveletter' => $form->getData()]);
+        }
+
+        return $this->render('front/template_form.html.twig', ['form' => $form->createView()]);
     }
 
 }

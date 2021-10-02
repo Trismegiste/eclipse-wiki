@@ -56,8 +56,8 @@ class TraitProvider
                 $elements = $xpath->query("//tr/td");
 
                 for ($k = 0; $k < 5; $k++) {
-                    $name = $elements->item(3 * $k);
-                    $listing[$name->textContent] = $name->textContent;
+                    $name = trim($elements->item(3 * $k)->textContent);
+                    $listing[$name] = $name;
                 }
 
                 return $listing;
