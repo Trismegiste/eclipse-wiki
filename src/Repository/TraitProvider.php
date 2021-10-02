@@ -46,7 +46,7 @@ class TraitProvider
 
     public function findAttributes(): array
     {
-        return $this->cache->get('attributes_list', function (ItemInterface $item) {
+        return $this->cache->get('attribute_list', function (ItemInterface $item) {
                 $item->expiresAfter(DateInterval::createFromDateString('1 day'));
 
                 $content = $this->wiki->getPageByName('Attributs');
