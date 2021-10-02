@@ -26,13 +26,9 @@ class LoveLetter extends AbstractType
             ->add('player', TextType::class)
             ->add('context', TextareaType::class)
             ->add('drama', TextareaType::class)
-            ->add('essai', Type\RollType::class)
-            ->add('trait1', Type\TraitType::class, ['category' => 'all'])
-            ->add('difficulty1', NumberType::class) // @todo regroup trait & difficulty in one RollType
-            ->add('trait2', Type\TraitType::class, ['category' => 'all'])
-            ->add('difficulty2', NumberType::class)
-            ->add('trait3', Type\TraitType::class, ['category' => 'all'])
-            ->add('difficulty3', NumberType::class) // Collection of 3
+            ->add('roll1', Type\RollType::class)
+            ->add('roll2', Type\RollType::class)
+            ->add('roll3', Type\RollType::class)
             ->add('choice1', TextareaType::class, ['required' => true])
             ->add('choice2', TextareaType::class, ['required' => true])
             ->add('choice3', TextareaType::class, ['required' => true])
