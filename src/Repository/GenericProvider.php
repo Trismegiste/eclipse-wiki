@@ -1,0 +1,30 @@
+<?php
+
+/*
+ * Eclipse Wiki
+ */
+
+namespace App\Repository;
+
+use App\Service\MediaWiki;
+use Symfony\Contracts\Cache\CacheInterface;
+
+/**
+ * Description of GenericProvider
+ */
+abstract class GenericProvider
+{
+
+    protected $wiki;
+    protected $cache;
+
+    public function __construct(MediaWiki $param, CacheInterface $cache)
+    {
+        $this->wiki = $param;
+        $this->cache = $cache;
+    }
+
+    abstract public function getListing(): array;
+
+    abstract public function findOne(string $key);
+}
