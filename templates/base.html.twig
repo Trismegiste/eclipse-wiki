@@ -5,11 +5,18 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css" integrity="sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5" crossorigin="anonymous"/>
+        <link  rel="stylesheet" href="{{ asset('css/form.css') }}"/> 
+        <link  rel="stylesheet" href="{{ asset('css/main.css') }}"/> 
         {% block stylesheets %}
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        {% block body %}
+            <h1 class="big-title">{% block header_title %}{% endblock %}</h1>       
+            <article>
+                {% block content %}{% endblock %}
+            </article>
+        {% endblock %}
         {% block javascripts %}
         {% endblock %}
     </body>

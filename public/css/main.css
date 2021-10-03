@@ -1,0 +1,21 @@
+/* title */
+h1.big-title {
+    font-size: 3em;
+    border: none;
+    text-align: center;
+    margin: 0;
+    padding: 0.3em;
+    color: white;
+    background-color: #c60000;
+    font-weight: lighter;
+}
+
+article {
+    margin: 1em;
+}
+
+@media print {
+    article {
+        margin: 0;
+    }
+}     

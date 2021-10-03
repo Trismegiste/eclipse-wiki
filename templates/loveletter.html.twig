@@ -1,22 +1,9 @@
-{% extends "front/base.html.twig" %}
+{% extends "base.html.twig" %}
 
 {% block title %}Love letter {{ player }}{% endblock %}
 
 {% block stylesheets %}
     <style>
-
-        /* title */
-        h1.big-title {
-            font-size: 3em;
-            border: none;
-            text-align: center;
-            margin: 0;
-            padding: 0.6em;
-            color: white;
-            background-color: #c60000;
-            font-weight: lighter;
-        }
-
         .rules {
             background-color: #eee;
             padding: 0.3em 1em;
@@ -37,9 +24,9 @@
     </style>   
 {% endblock %}
 
-{% block body %}
-    <h1 class="big-title">Love letter</h1>       
+{% block header_title %}Love letter{% endblock %}
 
+{% block content %}
     <p>Cher {{ player }},</p>
     <section class="intro">
         <p><strong>Contexte</strong> : {{ context }}</p>
