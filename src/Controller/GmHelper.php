@@ -29,7 +29,7 @@ class GmHelper extends AbstractController
             return $this->render('loveletter.html.twig', $form->getData());
         }
 
-        return $this->render('form.html.twig', ['form' => $form->createView()]);
+        return $this->render('form.html.twig', ['title' => 'Love letter', 'form' => $form->createView()]);
     }
 
 }
