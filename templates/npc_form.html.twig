@@ -1,0 +1,33 @@
+{% extends "base.html.twig" %}
+
+{% block header_title %}Générateur PNJ{% endblock %}
+
+{% block content %}
+    <div class="pure-g">
+        <div class="pure-u-1-2">
+            {{ form(form) }}
+        </div>
+        <div class="pure-u-1-2">
+            <h2>Historique</h2>
+            <section id="historique_detail"></section>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function (event) {
+            document.getElementById('npc_historique').addEventListener('change', function (event) {
+                console.log(event.target.value)
+                fetch('{{ path('app_gmhelper_getbackground') }}?key=' + event.target.value)
+                        .then(function (resp) {
+                            return resp.text()
+                        })
+                        .then(function (data) {
+                            document.getElementById('historique_detail').innerHTML = data
+                        })
+            })
+        })
+    </script>
+{% endblock %}
