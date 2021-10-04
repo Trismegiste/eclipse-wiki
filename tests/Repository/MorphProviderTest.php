@@ -20,9 +20,14 @@ class MorphProviderTest extends KernelTestCase
         $this->sut = new MorphProvider(static::getContainer()->get(MediaWiki::class), static::getContainer()->get(CacheInterface::class));
     }
 
-    public function testListing()
+    public function _testListing()
     {
-        $this->sut->getListing();
+        var_dump($this->sut->getListing());
+    }
+
+    public function testFindOne()
+    {
+        var_dump($this->sut->findOne('Nuéenoïde'));
     }
 
 }
