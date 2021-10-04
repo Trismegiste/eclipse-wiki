@@ -38,6 +38,9 @@ class MorphProvider extends GenericProvider
         $elements = $xpath->query("//div[@data-source='type']/child::div");
         $obj->type = $elements->item(0)->textContent;
 
+        $elements = $xpath->query("//div[@data-source='cout']/child::div");
+        $obj->price = $elements->item(0)->textContent;
+
         return $obj;
     }
 

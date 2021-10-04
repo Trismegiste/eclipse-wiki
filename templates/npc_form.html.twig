@@ -12,6 +12,8 @@
             <section id="background_detail"></section>
             <h2>Faction</h2>
             <section id="faction_detail"></section>
+            <h2>Morphe</h2>
+            <section id="morph_detail"></section>
         </div>
     </div>
 {% endblock %}
@@ -39,6 +41,17 @@
                         })
                         .then(function (data) {
                             document.getElementById('faction_detail').innerHTML = data
+                        })
+            })
+
+            document.getElementById('npc_morphe').addEventListener('change', function (event) {
+                console.log(event.target.value)
+                fetch('{{ path('app_npcgenerator_getmorph') }}?key=' + event.target.value)
+                        .then(function (resp) {
+                            return resp.text()
+                        })
+                        .then(function (data) {
+                            document.getElementById('morph_detail').innerHTML = data
                         })
             })
         })

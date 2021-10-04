@@ -16,6 +16,7 @@ class Morph
     public $ability = [];
     public $disability = [];
     public $type;
+    public $price;
 
     public function __construct(string $param)
     {
