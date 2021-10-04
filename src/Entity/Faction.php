@@ -1,20 +1,19 @@
 <?php
 
 /*
- * Eclipse Wiki
+ * eclipse-wiki
  */
 
 namespace App\Entity;
 
 /**
- * Background for a NPC
+ * Faction for a NPC
  */
-class Background
+class Faction
 {
 
     public $title;
-    public $ability = [];
-    public $disability = [];
+    public $characteristic = [];
     public $motivation = [];
 
     public function __construct(string $param)

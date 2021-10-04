@@ -27,4 +27,10 @@ abstract class GenericProvider
     abstract public function getListing(): array;
 
     abstract public function findOne(string $key);
+
+    protected function sanitize(string $key): string
+    {
+        return str_replace(['%', '-'], '_', urlencode($key));
+    }
+
 }

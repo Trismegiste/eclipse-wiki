@@ -57,4 +57,15 @@ class GmHelper extends AbstractController
         return $this->render('fragment/background_detail.html.twig', ['background' => $bg]);
     }
 
+    /**
+     * @Route("/gm/faction/info", name="app_gmhelper_getfaction")
+     */
+    public function getFaction(Request $request, \App\Repository\FactionProvider $provider): Response
+    {
+        $key = $request->query->get('key');
+        $fac = $provider->findOne($key);
+
+        return $this->render('fragment/faction_detail.html.twig', ['faction' => $fac]);
+    }
+
 }

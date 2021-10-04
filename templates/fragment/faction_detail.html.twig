@@ -1,0 +1,16 @@
+<h3>Caractéristiques</h3>
+<ul>
+    {% for row in faction.characteristic %}
+        <li>
+            {{ row }}
+        </li>
+    {% endfor %}
+</ul>
+<h3>Motivations</h3>
+<ul>
+    {% for row in faction.motivation %}
+        <li>
+            {{ row }}
+        </li>
+    {% endfor %}
+</ul>

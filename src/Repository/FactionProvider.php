@@ -6,38 +6,30 @@
 
 namespace App\Repository;
 
-use App\Entity\Background;
+use App\Entity\Faction;
 use DOMDocument;
 use Symfony\Contracts\Cache\ItemInterface;
 
 /**
- * Description of BackgroundProvider
+ * Provider for Faction
  */
-class BackgroundProvider extends GenericProvider
+class FactionProvider extends GenericProvider
 {
 
     public function findOne(string $key)
     {
-        $sanitizedKey = $this->sanitize($key);
-
-        return $this->cache->get('background_page_' . $sanitizedKey, function (ItemInterface $item) use ($key) {
+        return $this->cache->get('faction_page_' . $this->sanitize($key), function (ItemInterface $item) use ($key) {
                     $content = $this->wiki->getPageByName($key);
                     $doc = new DOMDocument("1.0", "utf-8");
                     $doc->loadXML($content);
 
                     $xpath = new \DOMXpath($doc);
-                    $obj = new Background($key);
+                    $obj = new Faction($key);
 
                     // abilities, thanks to http://xpather.com/
-                    $elements = $xpath->query("//span[@id='Avantages']/parent::h2/following-sibling::ul[1]/li[text()]");
+                    $elements = $xpath->query("//ul[1]/li[text()]");
                     foreach ($elements as $li) {
-                        $obj->ability[] = trim($li->nodeValue);
-                    }
-
-                    // disabiilties
-                    $elements = $xpath->query("//span[@id='D.C3.A9savantages']/parent::h2/following-sibling::ul[1]/li[text()]");
-                    foreach ($elements as $li) {
-                        $obj->disability[] = trim($li->nodeValue);
+                        $obj->characteristic[] = trim($li->nodeValue);
                     }
 
                     // motivations
@@ -52,8 +44,8 @@ class BackgroundProvider extends GenericProvider
 
     public function getListing(): array
     {
-        return $this->cache->get('background_list', function (ItemInterface $item) {
-                    $bg = $this->wiki->searchPageFromCategory('Historique', 50);
+        return $this->cache->get('faction_list', function (ItemInterface $item) {
+                    $bg = $this->wiki->searchPageFromCategory('Faction', 50);
 
                     $listing = [];
                     foreach ($bg as $item) {

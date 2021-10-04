@@ -9,7 +9,9 @@
         </div>
         <div class="pure-u-1-2">
             <h2>Historique</h2>
-            <section id="historique_detail"></section>
+            <section id="background_detail"></section>
+            <h2>Faction</h2>
+            <section id="faction_detail"></section>
         </div>
     </div>
 {% endblock %}
@@ -25,7 +27,18 @@
                             return resp.text()
                         })
                         .then(function (data) {
-                            document.getElementById('historique_detail').innerHTML = data
+                            document.getElementById('background_detail').innerHTML = data
+                        })
+            })
+
+            document.getElementById('npc_faction').addEventListener('change', function (event) {
+                console.log(event.target.value)
+                fetch('{{ path('app_gmhelper_getfaction') }}?key=' + event.target.value)
+                        .then(function (resp) {
+                            return resp.text()
+                        })
+                        .then(function (data) {
+                            document.getElementById('faction_detail').innerHTML = data
                         })
             })
         })
