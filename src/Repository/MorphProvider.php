@@ -17,31 +17,34 @@ class MorphProvider extends GenericProvider
 
     public function findOne(string $key)
     {
-        $content = $this->wiki->getPageByName($key);
-        $doc = new DOMDocument("1.0", "utf-8");
-        $doc->loadXML($content);
+        return $this->cache->get('morph_page_' . $this->sanitize($key), function (ItemInterface $item) use ($key) {
 
-        $xpath = new \DOMXpath($doc);
-        $obj = new \App\Entity\Morph($key);
+                $content = $this->wiki->getPageByName($key);
+                $doc = new DOMDocument("1.0", "utf-8");
+                $doc->loadXML($content);
 
-        // abilities, thanks to http://xpather.com/
-        $elements = $xpath->query("//span[@id='Avantages']/parent::h2/following-sibling::ul[1]/li[text()]");
-        foreach ($elements as $li) {
-            $obj->ability[] = trim($li->nodeValue);
-        }
-        // disabiilties
-        $elements = $xpath->query("//span[@id='D.C3.A9savantages']/parent::h2/following-sibling::ul[1]/li[text()]");
-        foreach ($elements as $li) {
-            $obj->disability[] = trim($li->nodeValue);
-        }
+                $xpath = new \DOMXpath($doc);
+                $obj = new \App\Entity\Morph($key);
 
-        $elements = $xpath->query("//div[@data-source='type']/child::div");
-        $obj->type = $elements->item(0)->textContent;
+                // abilities, thanks to http://xpather.com/
+                $elements = $xpath->query("//span[@id='Avantages']/parent::h2/following-sibling::ul[1]/li[text()]");
+                foreach ($elements as $li) {
+                    $obj->ability[] = trim($li->nodeValue);
+                }
+                // disabiilties
+                $elements = $xpath->query("//span[@id='D.C3.A9savantages']/parent::h2/following-sibling::ul[1]/li[text()]");
+                foreach ($elements as $li) {
+                    $obj->disability[] = trim($li->nodeValue);
+                }
 
-        $elements = $xpath->query("//div[@data-source='cout']/child::div");
-        $obj->price = $elements->item(0)->textContent;
+                $elements = $xpath->query("//div[@data-source='type']/child::div");
+                $obj->type = $elements->item(0)->textContent;
 
-        return $obj;
+                $elements = $xpath->query("//div[@data-source='cout']/child::div");
+                $obj->price = $elements->item(0)->textContent;
+
+                return $obj;
+            });
     }
 
     public function getListing(): array

@@ -6,7 +6,11 @@
 
 namespace App\Controller;
 
+use App\Form\Npc;
+use App\Repository\BackgroundProvider;
+use App\Repository\FactionProvider;
 use App\Repository\MorphProvider;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,8 +18,44 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Generator for NPC
  */
-class NpcGenerator extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
+class NpcGenerator extends AbstractController
 {
+
+    /**
+     * @Route("/npc")
+     */
+    public function create(Request $request): Response
+    {
+        $form = $this->createForm(Npc::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            return $this->render('loveletter.html.twig', $form->getData());
+        }
+
+        return $this->render('npc_form.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/npc/background/info")
+     */
+    public function getBackground(Request $request, BackgroundProvider $provider): Response
+    {
+        $key = $request->query->get('key');
+        $bg = $provider->findOne($key);
+
+        return $this->render('fragment/background_detail.html.twig', ['background' => $bg]);
+    }
+
+    /**
+     * @Route("/npc/faction/info", name="app_npcgenerator_getfaction")
+     */
+    public function getFaction(Request $request, FactionProvider $provider): Response
+    {
+        $key = $request->query->get('key');
+        $fac = $provider->findOne($key);
+
+        return $this->render('fragment/faction_detail.html.twig', ['faction' => $fac]);
+    }
 
     /**
      * @Route("/npc/morph/info")

@@ -24,7 +24,7 @@
         document.addEventListener('DOMContentLoaded', function (event) {
             document.getElementById('npc_historique').addEventListener('change', function (event) {
                 console.log(event.target.value)
-                fetch('{{ path('app_gmhelper_getbackground') }}?key=' + event.target.value)
+                fetch('{{ path('app_npcgenerator_getbackground') }}?key=' + event.target.value)
                         .then(function (resp) {
                             return resp.text()
                         })
@@ -35,7 +35,7 @@
 
             document.getElementById('npc_faction').addEventListener('change', function (event) {
                 console.log(event.target.value)
-                fetch('{{ path('app_gmhelper_getfaction') }}?key=' + event.target.value)
+                fetch('{{ path('app_npcgenerator_getfaction') }}?key=' + event.target.value)
                         .then(function (resp) {
                             return resp.text()
                         })
