@@ -18,7 +18,7 @@ class BackgroundProvider extends GenericProvider
 
     public function findOne(string $key)
     {
-        $sanitizedKey = str_replace(['%', '-'], '_', $key);
+        $sanitizedKey = str_replace(['%', '-'], '_', urlencode($key));
 
         return $this->cache->get('background_page_' . $sanitizedKey, function (ItemInterface $item) use ($key) {
                 $content = $this->wiki->getPageByName($key);

@@ -1,6 +1,22 @@
-{# empty Twig template #}
+<h3>Avantages</h3>
 <ul>
     {% for row in background.ability %}
+        <li>
+            {{ row }}
+        </li>
+    {% endfor %}
+</ul>
+<h3>Désavantages</h3>
+<ul>
+    {% for row in background.disability %}
+        <li>
+            {{ row }}
+        </li>
+    {% endfor %}
+</ul>
+<h3>Motivations</h3>
+<ul>
+    {% for row in background.motivation %}
         <li>
             {{ row }}
         </li>
