@@ -1,3 +1,4 @@
+<h2>{{ background.title }}</h2>
 <h3>Avantages</h3>
 <ul>
     {% for row in background.ability %}
@@ -6,14 +7,16 @@
         </li>
     {% endfor %}
 </ul>
-<h3>Désavantages</h3>
-<ul>
-    {% for row in background.disability %}
-        <li>
-            {{ row }}
-        </li>
-    {% endfor %}
-</ul>
+{% if background.disability is not empty %}
+    <h3>Désavantages</h3>
+    <ul>
+        {% for row in background.disability %}
+            <li>
+                {{ row }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
 <h3>Motivations</h3>
 <ul>
     {% for row in background.motivation %}

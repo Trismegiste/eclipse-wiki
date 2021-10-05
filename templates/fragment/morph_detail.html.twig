@@ -1,5 +1,4 @@
-<h3>Type {{ morph.type }}</h3>
-<h3>Coût {{ morph.price }}</h3>
+<h2>{{ morph.title }} ({{ morph.type }})</h2>
 <h3>Avantages</h3>
 <ul>
     {% for row in morph.ability %}
@@ -8,11 +7,14 @@
         </li>
     {% endfor %}
 </ul>
-<h3>Désavantages</h3>
-<ul>
-    {% for row in morph.disability %}
-        <li>
-            {{ row }}
-        </li>
-    {% endfor %}
-</ul>
+{% if morph.disability is not empty %}
+    <h3>Désavantages</h3>
+    <ul>
+        {% for row in morph.disability %}
+            <li>
+                {{ row }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+<h3>Coût {{ morph.price }}</h3>
