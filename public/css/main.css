@@ -19,3 +19,9 @@ article {
         margin: 0;
     }
 }     
+
+.character section i {
+    font-size: 800%;
+    opacity: 15%;
+    margin: 0.2em;
+}
