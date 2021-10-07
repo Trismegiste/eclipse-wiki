@@ -21,6 +21,8 @@ class BackgroundProvider extends GenericProvider
         $sanitizedKey = $this->sanitize($key);
 
         return $this->cache->get('background_page_' . $sanitizedKey, function (ItemInterface $item) use ($key) {
+                    $item->expiresAfter(\DateInterval::createFromDateString('1 day'));
+
                     $content = $this->wiki->getPageByName($key);
                     $doc = new DOMDocument("1.0", "utf-8");
                     $doc->loadXML($content);
@@ -53,6 +55,7 @@ class BackgroundProvider extends GenericProvider
     public function getListing(): array
     {
         return $this->cache->get('background_list', function (ItemInterface $item) {
+                    $item->expiresAfter(\DateInterval::createFromDateString('1 day'));
                     $bg = $this->wiki->searchPageFromCategory('Historique', 50);
 
                     $listing = [];

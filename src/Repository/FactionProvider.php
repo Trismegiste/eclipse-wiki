@@ -19,6 +19,7 @@ class FactionProvider extends GenericProvider
     public function findOne(string $key)
     {
         return $this->cache->get('faction_page_' . $this->sanitize($key), function (ItemInterface $item) use ($key) {
+                    $item->expiresAfter(\DateInterval::createFromDateString('1 day'));
                     $content = $this->wiki->getPageByName($key);
                     $doc = new DOMDocument("1.0", "utf-8");
                     $doc->loadXML($content);
@@ -45,6 +46,7 @@ class FactionProvider extends GenericProvider
     public function getListing(): array
     {
         return $this->cache->get('faction_list', function (ItemInterface $item) {
+                    $item->expiresAfter(\DateInterval::createFromDateString('1 day'));
                     $bg = $this->wiki->searchPageFromCategory('Faction', 50);
 
                     $listing = [];
