@@ -22,14 +22,16 @@ class NpcGenerator extends AbstractController
 {
 
     /**
-     * @Route("/npc")
+     * @Route("/npc/create")
      */
     public function create(Request $request): Response
     {
         $form = $this->createForm(Npc::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            return $this->render('loveletter.html.twig', $form->getData());
+            // @todo SAVE
+
+            return $this->redirectToRoute('app_npcgenerator_edit', ['pk' => $npc->getPk()]);
         }
 
         return $this->render('npc_form.html.twig', ['form' => $form->createView()]);
