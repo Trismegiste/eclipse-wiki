@@ -6,7 +6,7 @@
 
 namespace App\Controller;
 
-use App\Form\Npc;
+use App\Form\NpcCreate;
 use App\Repository\BackgroundProvider;
 use App\Repository\FactionProvider;
 use App\Repository\MorphProvider;
@@ -26,7 +26,7 @@ class NpcGenerator extends AbstractController
      */
     public function create(Request $request): Response
     {
-        $form = $this->createForm(Npc::class);
+        $form = $this->createForm(NpcCreate::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $npc = $form->getData();

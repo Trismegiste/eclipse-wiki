@@ -17,9 +17,9 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Description of Npc
+ * Creation of Npc
  */
-class Npc extends AbstractType
+class NpcCreate extends AbstractType
 {
 
     protected $background;
@@ -55,6 +55,11 @@ class Npc extends AbstractType
 
             return null;
         });
+    }
+
+    public function getBlockPrefix()
+    {
+        return 'npc';
     }
 
 }
