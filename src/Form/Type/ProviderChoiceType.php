@@ -15,9 +15,7 @@ use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Description of ProviderChoiceType
- *
- * @author flo
+ * A ChoiceType using a GenericProvider
  */
 class ProviderChoiceType extends AbstractType
 {
