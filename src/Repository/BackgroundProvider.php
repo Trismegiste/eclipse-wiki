@@ -16,7 +16,7 @@ use Symfony\Contracts\Cache\ItemInterface;
 class BackgroundProvider extends GenericProvider
 {
 
-    public function findOne(string $key)
+    public function findOne(string $key): Background
     {
         $sanitizedKey = $this->sanitize($key);
 

@@ -26,7 +26,7 @@ abstract class GenericProvider
 
     abstract public function getListing(): array;
 
-    abstract public function findOne(string $key); // @todo renvoyer une interface avec une methode getKey()
+    abstract public function findOne(string $key): \App\Entity\Indexable;
 
     protected function sanitize(string $key): string
     {

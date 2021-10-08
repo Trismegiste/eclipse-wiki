@@ -16,7 +16,7 @@ use Symfony\Contracts\Cache\ItemInterface;
 class FactionProvider extends GenericProvider
 {
 
-    public function findOne(string $key)
+    public function findOne(string $key): Faction
     {
         return $this->cache->get('faction_page_' . $this->sanitize($key), function (ItemInterface $item) use ($key) {
                     $item->expiresAfter(\DateInterval::createFromDateString('1 day'));

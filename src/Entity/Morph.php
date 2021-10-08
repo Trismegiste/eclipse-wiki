@@ -9,7 +9,7 @@ namespace App\Entity;
 /**
  * Morph for a NPC
  */
-class Morph
+class Morph implements Indexable
 {
 
     public $title;
@@ -21,6 +21,11 @@ class Morph
     public function __construct(string $param)
     {
         $this->title = $param;
+    }
+
+    public function getUId(): string
+    {
+        return $this->title;
     }
 
 }

@@ -9,7 +9,7 @@ namespace App\Entity;
 /**
  * Background for a NPC
  */
-class Background
+class Background implements Indexable
 {
 
     public $title;
@@ -20,6 +20,11 @@ class Background
     public function __construct(string $param)
     {
         $this->title = $param;
+    }
+
+    public function getUId(): string
+    {
+        return $this->title;
     }
 
 }

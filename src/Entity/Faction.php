@@ -9,7 +9,7 @@ namespace App\Entity;
 /**
  * Faction for a NPC
  */
-class Faction
+class Faction implements Indexable
 {
 
     public $title;
@@ -19,6 +19,11 @@ class Faction
     public function __construct(string $param)
     {
         $this->title = $param;
+    }
+
+    public function getUId(): string
+    {
+        return $this->title;
     }
 
 }

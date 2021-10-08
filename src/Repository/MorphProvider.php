@@ -15,7 +15,7 @@ use Symfony\Contracts\Cache\ItemInterface;
 class MorphProvider extends GenericProvider
 {
 
-    public function findOne(string $key)
+    public function findOne(string $key): \App\Entity\Morph
     {
         return $this->cache->get('morph_page_' . $this->sanitize($key), function (ItemInterface $item) use ($key) {
                     $item->expiresAfter(\DateInterval::createFromDateString('1 day'));
