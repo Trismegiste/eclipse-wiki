@@ -6,11 +6,16 @@
 
 namespace App\Entity;
 
+use Trismegiste\Toolbox\MongoDb\Root;
+use Trismegiste\Toolbox\MongoDb\RootImpl;
+
 /**
  * A Character
  */
-class Character
+class Character implements Root
 {
+
+    use RootImpl;
 
     protected $background;
     protected $faction;

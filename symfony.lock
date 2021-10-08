@@ -545,6 +545,9 @@
     "theseer/tokenizer": {
         "version": "1.2.1"
     },
+    "trismegiste/toolbox": {
+        "version": "dev-master"
+    },
     "twig/extra-bundle": {
         "version": "v3.3.3"
     },

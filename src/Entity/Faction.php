@@ -6,11 +6,16 @@
 
 namespace App\Entity;
 
+use MongoDB\BSON\Persistable;
+use Trismegiste\Toolbox\MongoDb\PersistableImpl;
+
 /**
  * Faction for a NPC
  */
-class Faction implements Indexable
+class Faction implements Indexable, Persistable
 {
+
+    use PersistableImpl;
 
     public $title;
     public $characteristic = [];

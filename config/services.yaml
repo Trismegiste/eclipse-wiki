@@ -26,3 +26,17 @@ services:
     App\Service\MediaWiki:
         arguments:
             $host: '%env(resolve:WIKISOURCE)%'
+            
+    MongoDB\Driver\Manager:
+        arguments:
+            - '%env(resolve:DATABASE_URL)%'
+            
+    Trismegiste\Toolbox\MongoDb\RepositoryFactory:
+        $dbName: '%env(resolve:DATABASE_NAME)%'
+      
+    app.character.repository:
+        class: Trismegiste\Toolbox\MongoDb\Repository
+        factory: ['@Trismegiste\Toolbox\MongoDb\RepositoryFactory', 'create']
+        arguments: ['character']
+    Trismegiste\Toolbox\MongoDb\Repository $characterRepo: '@app.character.repository'
+            

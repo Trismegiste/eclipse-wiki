@@ -6,11 +6,16 @@
 
 namespace App\Entity;
 
+use MongoDB\BSON\Persistable;
+use Trismegiste\Toolbox\MongoDb\PersistableImpl;
+
 /**
  * Morph for a NPC
  */
-class Morph implements Indexable
+class Morph implements Indexable, Persistable
 {
+
+    use PersistableImpl;
 
     public $title;
     public $ability = [];

@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Trismegiste\Toolbox\MongoDb\Repository;
 
 /**
  * Generator for NPC
@@ -21,8 +22,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class NpcGenerator extends AbstractController
 {
 
+    protected $repository;
+
+    public function __construct(Repository $characterRepo)
+    {
+        $this->repository = $characterRepo;
+    }
+
     /**
-     * @Route("/npc/create")
+     * @Route("/npc/create", methods={"GET","POST"})
      */
     public function create(Request $request): Response
     {
@@ -30,11 +38,22 @@ class NpcGenerator extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $npc = $form->getData();
+            $this->repository->save($npc);
 
-            return $this->render('npc_test.html.twig', ['npc' => $npc]);
+            return $this->redirectToRoute('app_npcgenerator_edit', ['pk' => $npc->getPk()]);
         }
 
         return $this->render('npc_form.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/npc/edit/{pk}", methods={"GET","POST"})
+     */
+    public function edit(string $pk, Request $request): Response
+    {
+        $npc = $this->repository->load($pk);
+
+        return $this->render('npc_test.html.twig', ['npc' => $npc]);
     }
 
     /**
