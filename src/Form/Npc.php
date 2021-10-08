@@ -34,10 +34,10 @@ class Npc extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('historique', ChoiceType::class, ['choices' => $this->background->getListing(), 'placeholder' => '--- Choisissez un Historique ---'])
-            ->add('faction', ChoiceType::class, ['choices' => $this->faction->getListing(), 'placeholder' => '--- Choisissez une Faction ---'])
-            ->add('morphe', ChoiceType::class, ['choices' => $this->morph->getListing(), 'placeholder' => '--- Choisissez un Morphe ---'])
-            ->add('generate', SubmitType::class);
+                ->add('historique', Type\ProviderChoiceType::class, ['provider' => $this->background, 'placeholder' => '--- Choisissez un Historique ---'])
+                ->add('faction', Type\ProviderChoiceType::class, ['provider' => $this->faction, 'placeholder' => '--- Choisissez une Faction ---'])
+                ->add('morphe', Type\ProviderChoiceType::class, ['provider' => $this->morph, 'placeholder' => '--- Choisissez un Morphe ---'])
+                ->add('generate', SubmitType::class);
     }
 
 }

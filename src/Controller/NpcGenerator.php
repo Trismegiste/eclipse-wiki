@@ -29,9 +29,9 @@ class NpcGenerator extends AbstractController
         $form = $this->createForm(Npc::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            // @todo SAVE
+            $npc = $form->getData();
 
-            return $this->redirectToRoute('app_npcgenerator_edit', ['pk' => $npc->getPk()]);
+            return $this->render('npc_test.html.twig', ['npc' => $npc]);
         }
 
         return $this->render('npc_form.html.twig', ['form' => $form->createView()]);
