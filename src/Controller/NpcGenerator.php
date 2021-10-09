@@ -7,6 +7,7 @@
 namespace App\Controller;
 
 use App\Form\NpcCreate;
+use App\Form\NpcStats;
 use App\Repository\BackgroundProvider;
 use App\Repository\FactionProvider;
 use App\Repository\MorphProvider;
@@ -43,7 +44,7 @@ class NpcGenerator extends AbstractController
             return $this->redirectToRoute('app_npcgenerator_edit', ['pk' => $npc->getPk()]);
         }
 
-        return $this->render('npc_form.html.twig', ['form' => $form->createView()]);
+        return $this->render('npc_create.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -52,8 +53,17 @@ class NpcGenerator extends AbstractController
     public function edit(string $pk, Request $request): Response
     {
         $npc = $this->repository->load($pk);
+        $form = $this->createForm(NpcStats::class, $npc);
 
-        return $this->render('npc_test.html.twig', ['npc' => $npc]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $npc = $form->getData();
+            $this->repository->save($npc);
+
+            return $this->redirectToRoute('app_npcgenerator_create');
+        }
+
+        return $this->render('npc_edit.html.twig', ['form' => $form->createView()]);
     }
 
     /**

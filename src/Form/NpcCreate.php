@@ -8,6 +8,7 @@ namespace App\Form;
 
 use App\Entity\Character;
 use App\Repository\BackgroundProvider;
+use App\Repository\CharacterFactory;
 use App\Repository\FactionProvider;
 use App\Repository\MorphProvider;
 use Symfony\Component\Form\AbstractType;
@@ -25,21 +26,23 @@ class NpcCreate extends AbstractType
     protected $background;
     protected $faction;
     protected $morph;
+    protected $factory;
 
-    public function __construct(BackgroundProvider $bg, FactionProvider $fac, MorphProvider $morph)
+    public function __construct(BackgroundProvider $bg, FactionProvider $fac, MorphProvider $morph, CharacterFactory $factory)
     {
         $this->background = $bg;
         $this->faction = $fac;
         $this->morph = $morph;
+        $this->factory = $factory;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('background', Type\ProviderChoiceType::class, ['provider' => $this->background, 'placeholder' => '--- Choisissez un Historique ---'])
-                ->add('faction', Type\ProviderChoiceType::class, ['provider' => $this->faction, 'placeholder' => '--- Choisissez une Faction ---'])
-                ->add('morph', Type\ProviderChoiceType::class, ['provider' => $this->morph, 'placeholder' => '--- Choisissez un Morphe ---'])
-                ->add('generate', SubmitType::class);
+            ->add('background', Type\ProviderChoiceType::class, ['provider' => $this->background, 'placeholder' => '--- Choisissez un Historique ---'])
+            ->add('faction', Type\ProviderChoiceType::class, ['provider' => $this->faction, 'placeholder' => '--- Choisissez une Faction ---'])
+            ->add('morph', Type\ProviderChoiceType::class, ['provider' => $this->morph, 'placeholder' => '--- Choisissez un Morphe ---'])
+            ->add('generate', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -50,7 +53,7 @@ class NpcCreate extends AbstractType
             $fac = $form->get('faction')->getData();
 
             if (!is_null($bg) && !is_null($fac)) {
-                return new Character($bg, $fac);
+                return $this->factory->create($bg, $fac);
             }
 
             return null;

@@ -20,6 +20,7 @@ class Character implements Root
     protected $background;
     protected $faction;
     protected $morph;
+    public $attributes = [];
 
     public function __construct(Background $bg, Faction $fac)
     {
