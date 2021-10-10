@@ -7,7 +7,9 @@
 namespace App\Form;
 
 use App\Entity\Character;
+use App\Repository\TraitProvider;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,6 +21,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class NpcStats extends AbstractType
 {
 
+    protected $provider;
+
+    public function __construct(TraitProvider $pro)
+    {
+        $this->provider = $pro;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -28,6 +37,12 @@ class NpcStats extends AbstractType
                     'expanded' => true,
                     'max_modif' => 0
                 ]
+            ])
+            ->add('skill_select', ChoiceType::class, [
+                'mapped' => false,
+                'expanded' => true,
+                'multiple' => true,
+                'choices' => $this->provider->findSkills()
             ])
             ->add('edit', SubmitType::class);
     }

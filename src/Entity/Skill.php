@@ -18,11 +18,13 @@ class Skill extends SaWoTrait implements Persistable
     use PersistableImpl;
 
     protected $linkedAttr;
+    protected $core;
 
-    public function __construct(string $str, string $attrAbbrev)
+    public function __construct(string $str, string $linkAttr, bool $core = false)
     {
         parent::__construct($str);
-        $this->linkedAttr = $attrAbbrev;
+        $this->linkedAttr = $linkAttr;
+        $this->core = $core;
     }
 
 }
