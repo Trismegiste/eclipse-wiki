@@ -19,6 +19,7 @@ class Attribute implements Persistable
 
     protected $name;
     public $dice;
+    public $modifier = 0; // after d12
 
     public function __construct(string $str)
     {
