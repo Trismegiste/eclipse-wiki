@@ -53,10 +53,10 @@ class TraitProvider
                 $doc = new \DOMDocument("1.0", "utf-8");
                 $doc->loadXML($content);
                 $xpath = new \DOMXpath($doc);
-                $elements = $xpath->query("//tr/td");
+                $elements = $xpath->query("//tr/td[1]");
 
                 for ($k = 0; $k < 5; $k++) {
-                    $name = trim($elements->item(3 * $k)->textContent);
+                    $name = trim($elements->item($k)->textContent);
                     $listing[$name] = $name;
                 }
 

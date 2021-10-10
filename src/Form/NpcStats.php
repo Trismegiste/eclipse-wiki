@@ -9,6 +9,7 @@ namespace App\Form;
 use App\Entity\Character;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -25,10 +26,10 @@ class NpcStats extends AbstractType
                 'entry_type' => Type\AttributeType::class,
                 'entry_options' => [
                     'expanded' => true,
-                    'max_modif' => 4
+                    'max_modif' => 0
                 ]
             ])
-            ->add('edit', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class);
+            ->add('edit', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
