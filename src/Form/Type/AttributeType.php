@@ -25,13 +25,14 @@ class AttributeType extends AbstractType
         for ($k = 4; $k <= 12; $k += 2) {
             $choices["d$k"] = $k;
         }
-        $choices['d12+1'] = 13;
-        $choices['d12+2'] = 14;
+        for ($k = 1; $k <= $options['max_modif']; $k++) {
+            $choices["d12+$k"] = 12 + $k;
+        }
 
         $builder
             ->add('roll', ChoiceType::class, [
                 'choices' => $choices,
-                'getter' => function (Attribute $attr, FormInterface $form): bool {
+                'getter' => function (Attribute $attr, FormInterface $form): int {
                     return $attr->dice + $attr->modifier;
                 },
                 'setter' => function (Attribute &$attr, int $roll, FormInterface $form): void {
@@ -42,13 +43,16 @@ class AttributeType extends AbstractType
                         $attr->dice = $roll;
                         $attr->modifier = 0;
                     }
-                }
+                },
+                'expanded' => $options['expanded']
         ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('data_class', Attribute::class);
+        $resolver->setDefault('expanded', false);
+        $resolver->setDefault('max_modif', 2);
     }
 
 }
