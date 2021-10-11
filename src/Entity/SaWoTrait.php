@@ -9,7 +9,7 @@ namespace App\Entity;
 /**
  * A Trait in SaWo
  */
-class SaWoTrait
+abstract class SaWoTrait
 {
 
     protected $name;

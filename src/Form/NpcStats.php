@@ -31,20 +31,20 @@ class NpcStats extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('attributes', CollectionType::class, [
+                ->add('attributes', CollectionType::class, [
                 'entry_type' => Type\AttributeType::class,
-                'entry_options' => [
+                    'entry_options' => [
+                        'expanded' => true,
+                        'max_modif' => 0
+                    ]
+                ])
+                ->add('skill_select', ChoiceType::class, [
+                    'mapped' => false,
                     'expanded' => true,
-                    'max_modif' => 0
-                ]
-            ])
-            ->add('skill_select', ChoiceType::class, [
-                'mapped' => false,
-                'expanded' => true,
-                'multiple' => true,
-                'choices' => $this->provider->findSkills()
-            ])
-            ->add('edit', SubmitType::class);
+                    'multiple' => true,
+                    'choices' => $this->provider->findSkills()
+                ])
+                ->add('edit', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

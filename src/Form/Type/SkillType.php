@@ -6,14 +6,14 @@
 
 namespace App\Form\Type;
 
-use App\Entity\Attribute;
+use App\Entity\Skill;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Description of AttributeType
  */
-class AttributeType extends AbstractType
+class SkillType extends AbstractType
 {
 
     public function getParent()
@@ -23,7 +23,7 @@ class AttributeType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefault('data_class', Attribute::class);
+        $resolver->setDefault('data_class', Skill::class);
     }
 
 }
