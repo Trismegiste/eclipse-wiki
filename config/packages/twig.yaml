@@ -3,7 +3,7 @@ twig:
     form_themes: 
         - 'form/purecss_layout.html.twig'
         - 'form/rolltype.html.twig'
-        - 'form/attributetype.html.twig'
+        - 'form/trait_type.html.twig'
 
 when@test:
     twig:

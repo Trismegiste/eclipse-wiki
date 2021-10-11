@@ -1,0 +1,15 @@
+{# Custom rendering for AttributeType #}
+{% block attribute_row %}
+    <div class="pure-g">
+        <div class="pure-u-1-2"><label>{{ form.vars.data.name }}</label></div>
+        <div class="pure-u-1-2">{{ form_widget(form.roll) }}</div>
+    </div>
+{% endblock %}
+
+{# Custom rendering for SkillType. The undefined check is because of prototype #}
+{% block skill_row %}
+    <div class="pure-g">
+        <div class="pure-u-1-2"><label>{{ form.vars.data.name ?? 'undefined' }}</label></div>
+        <div class="pure-u-1-2">{{ form_widget(form.roll) }}</div>
+    </div>
+{% endblock %}
