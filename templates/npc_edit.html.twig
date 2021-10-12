@@ -17,11 +17,12 @@
                         item.innerHTML = collectionHolder
                                 .dataset
                                 .prototype
-                                .replace(/__name__/g, 666)
+                                .replace(/__name__/g, Math.floor(Math.random()*10000))
                                 .replace(/__undefined__/g, ev.target.value)
                         collectionHolder.appendChild(item);
                     } else {
                         console.log(ev.target.value + ' ' + ev.target.checked)
+                        // @todo remove
                     }
                 });
             })
