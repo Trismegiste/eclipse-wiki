@@ -37,13 +37,15 @@ class NpcStats extends AbstractType
                         'max_modif' => 0
                     ]
                 ])
+                ->add('skill_list', Type\TraitType::class, ['category' => 'skill', 'expanded' => true, 'mapped' => false, 'multiple' => true])
                 ->add('skills', CollectionType::class, [
                     'entry_type' => Type\SkillType::class,
                     'entry_options' => [
                         'expanded' => true,
                         'max_modif' => 0
                     ],
-                    'allow_add' => true
+                    'allow_add' => true,
+                    'prototype_data' => $this->getProtoData()
                 ])
                 ->add('edit', SubmitType::class);
     }
@@ -51,6 +53,14 @@ class NpcStats extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefault('data_class', Character::class);
+    }
+
+    protected function getProtoData()
+    {
+        $obj = new \App\Entity\Skill('__undefined__', '__ATTR__');
+        $obj->dice = 4;
+
+        return $obj;
     }
 
 }

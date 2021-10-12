@@ -2,3 +2,29 @@
 {% block content %}
     {{ form(form) }}
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            [...document.querySelectorAll('#npc_stats_skill_list input[type=checkbox]')].forEach(function (item) {
+                item.addEventListener('change', function (ev) {
+                    if (ev.target.checked) {
+                        const collectionHolder = document.querySelector('#npc_stats_skills')
+
+                        const item = document.createElement('div');
+
+                        item.innerHTML = collectionHolder
+                                .dataset
+                                .prototype
+                                .replace(/__name__/g, 666)
+                                .replace(/__undefined__/g, ev.target.value)
+                        collectionHolder.appendChild(item);
+                    } else {
+                        console.log(ev.target.value + ' ' + ev.target.checked)
+                    }
+                });
+            })
+        })
+    </script>
+{% endblock %}
