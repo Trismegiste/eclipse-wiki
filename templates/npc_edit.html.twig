@@ -9,6 +9,9 @@
         document.addEventListener('DOMContentLoaded', function () {
             [...document.querySelectorAll('#npc_stats_skill_list input[type=checkbox]')].forEach(function (item) {
                 item.addEventListener('change', function (ev) {
+
+                    const key = ev.target.id.match(/.+_(\d+)$/)[1]
+
                     if (ev.target.checked) {
                         const collectionHolder = document.querySelector('#npc_stats_skills')
 
@@ -17,12 +20,11 @@
                         item.innerHTML = collectionHolder
                                 .dataset
                                 .prototype
-                                .replace(/__name__/g, Math.floor(Math.random()*10000))
+                                .replace(/__name__/g, key)
                                 .replace(/__undefined__/g, ev.target.value)
                         collectionHolder.appendChild(item);
                     } else {
-                        console.log(ev.target.value + ' ' + ev.target.checked)
-                        // @todo remove
+                        document.getElementById('npc_stats_skills_' + key + '_roll').parentNode.parentNode.parentNode.remove()
                     }
                 });
             })
