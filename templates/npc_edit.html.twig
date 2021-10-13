@@ -7,26 +7,33 @@
     {{ parent() }}
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+
+            // link checkbox to listing
             [...document.querySelectorAll('#npc_stats_skill_list input[type=checkbox]')].forEach(function (item) {
+
+                // check the checkbox if the same skill in the listing
+                if (document.querySelector('#npc_stats_skills input[type=hidden][value="' + item.value + '"]') !== null) {
+                    item.checked = true
+                }
+
+                // Add event listener on checkbox
                 item.addEventListener('change', function (ev) {
 
                     const key = ev.target.id.match(/.+_(\d+)$/)[1]
+                    const skillName = ev.target.value
 
                     if (ev.target.checked) {
                         const collectionHolder = document.querySelector('#npc_stats_skills')
 
-                        const item = document.createElement('div');
-
-                        item.innerHTML = collectionHolder
+                        collectionHolder.innerHTML += collectionHolder
                                 .dataset
                                 .prototype
                                 .replace(/__name__/g, key)
-                                .replace(/__undefined__/g, ev.target.value)
-                        collectionHolder.appendChild(item);
+                                .replace(/__undefined__/g, skillName)
                     } else {
-                        document.getElementById('npc_stats_skills_' + key + '_roll').parentNode.parentNode.parentNode.remove()
+                        document.querySelector('#npc_stats_skills input[type=hidden][value="' + skillName + '"]').parentNode.parentNode.remove()
                     }
-                });
+                })
             })
         })
     </script>
