@@ -28,7 +28,7 @@ class SkillType extends AbstractType
     {
         $resolver->setDefault('data_class', Skill::class);
         $resolver->setDefault('empty_data', function (FormInterface $form) {
-            return new Skill($form->get('name')->getData(), 'YOLO');
+            return new Skill($form->get('name')->getData(), 'Undefined');
         });
     }
 

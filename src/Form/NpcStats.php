@@ -37,7 +37,12 @@ class NpcStats extends AbstractType
                         'max_modif' => 0
                     ]
                 ])
-                ->add('skill_list', Type\TraitType::class, ['category' => 'skill', 'expanded' => true, 'mapped' => false, 'multiple' => true])
+                ->add('skill_list', Type\TraitType::class, [
+                    'mapped' => false,
+                    'category' => 'skill',
+                    'expanded' => true,
+                    'multiple' => true
+                ])
                 ->add('skills', CollectionType::class, [
                     'entry_type' => Type\SkillType::class,
                     'entry_options' => [
@@ -45,6 +50,7 @@ class NpcStats extends AbstractType
                         'max_modif' => 0
                     ],
                     'allow_add' => true,
+                    'allow_delete' => true,
                     'prototype_data' => $this->getProtoData()
                 ])
                 ->add('edit', SubmitType::class);

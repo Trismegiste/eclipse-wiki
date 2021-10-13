@@ -15,7 +15,9 @@ use Trismegiste\Toolbox\MongoDb\RootImpl;
 class Character implements Root
 {
 
-    use RootImpl;
+    use RootImpl {
+        bsonSerialize as defaultDump;
+    }
 
     protected $background;
     protected $faction;
@@ -48,6 +50,13 @@ class Character implements Root
     public function getMorph(): ?Morph
     {
         return $this->morph;
+    }
+
+    public function bsonSerialize()
+    {
+        $this->skills = array_values($this->skills);
+
+        return $this->defaultDump();
     }
 
 }
