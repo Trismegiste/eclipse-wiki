@@ -23,7 +23,7 @@ class Character implements Root
     protected $faction;
     protected $morph;
     public $attributes = [];
-    public $skills = [];
+    protected $skills = [];
     protected $wildCard = false;
 
     public function __construct(Background $bg, Faction $fac)
@@ -54,9 +54,37 @@ class Character implements Root
 
     public function bsonSerialize()
     {
+        usort($this->skills, function (Skill $a, Skill $b) {
+            return $a->getName() > $b->getName();
+        });
         $this->skills = array_values($this->skills);
 
         return $this->defaultDump();
+    }
+
+    public function addSkill(Skill $sk): void
+    {
+        foreach ($this->skills as $item) {
+            if ($item->getName() === $sk->getName()) {
+                return;
+            }
+        }
+
+        $this->skills[] = $sk;
+    }
+
+    public function removeSkill(Skill $sk): void
+    {
+        foreach ($this->skills as $idx => $item) {
+            if ($item->getName() === $sk->getName()) {
+                unset($this->skills[$idx]);
+            }
+        }
+    }
+
+    public function getSkills(): array
+    {
+        return $this->skills;
     }
 
 }

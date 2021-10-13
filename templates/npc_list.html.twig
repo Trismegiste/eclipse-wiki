@@ -1,0 +1,19 @@
+{% extends "base.html.twig" %}
+{% block content %}
+    <table class="pure-table">
+        <tr>
+            <th>Background</th>
+            <th>Faction</th>
+            <th>Morph</th>
+            <th>Action</th>
+        </tr>
+        {% for npc in listing %}
+            <tr>
+                <td>{{ npc.background.title }}</td>
+                <td>{{ npc.faction.title }}</td>
+                <td>{{ npc.morph.title }}</td>
+                <td><a href="{{ path('app_npcgenerator_edit', {pk: npc.pk}) }}">Edit</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

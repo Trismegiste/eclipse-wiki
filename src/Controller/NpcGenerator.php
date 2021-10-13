@@ -31,6 +31,14 @@ class NpcGenerator extends AbstractController
     }
 
     /**
+     * @Route("/npc/list", methods={"GET"})
+     */
+    public function list(): Response
+    {
+        return $this->render('npc_list.html.twig', ['listing' => $this->repository->search()]);
+    }
+
+    /**
      * @Route("/npc/create", methods={"GET","POST"})
      */
     public function create(Request $request): Response
@@ -60,7 +68,7 @@ class NpcGenerator extends AbstractController
             $npc = $form->getData();
             $this->repository->save($npc);
 
-            return $this->redirectToRoute('app_npcgenerator_create');
+            return $this->redirectToRoute('app_npcgenerator_list');
         }
 
         return $this->render('npc_edit.html.twig', ['form' => $form->createView()]);

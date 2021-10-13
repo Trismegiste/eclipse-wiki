@@ -51,7 +51,8 @@ class NpcStats extends AbstractType
                     ],
                     'allow_add' => true,
                     'allow_delete' => true,
-                    'prototype_data' => $this->getProtoData()
+                    'prototype_data' => $this->getProtoData(),
+                    'by_reference' => false
                 ])
                 ->add('edit', SubmitType::class);
     }
