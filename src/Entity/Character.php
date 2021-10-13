@@ -55,7 +55,7 @@ class Character implements Root
     public function bsonSerialize()
     {
         usort($this->skills, function (Skill $a, Skill $b) {
-            return $a->getName() > $b->getName();
+            return iconv('UTF-8', 'ASCII//TRANSLIT', $a->getName()) > iconv('UTF-8', 'ASCII//TRANSLIT', $b->getName());
         });
         $this->skills = array_values($this->skills);
 
