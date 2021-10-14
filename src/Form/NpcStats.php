@@ -21,10 +21,12 @@ class NpcStats extends AbstractType
 {
 
     protected $provider;
+    protected $edge;
 
-    public function __construct(TraitProvider $pro)
+    public function __construct(TraitProvider $pro, \App\Repository\EdgeProvider $edge)
     {
         $this->provider = $pro;
+        $this->edge = $edge;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -54,6 +56,7 @@ class NpcStats extends AbstractType
                     'prototype_data' => $this->getProtoData(),
                     'by_reference' => false
                 ])
+                ->add('edges', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, ['choices' => $this->edge->getListing(), 'expanded'=>true, 'multiple'=>true])
                 ->add('edit', SubmitType::class);
     }
 

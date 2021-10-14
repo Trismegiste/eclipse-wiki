@@ -9,12 +9,21 @@ namespace App\Repository;
 use App\Entity\Indexable;
 
 /**
- * Description of GenericProvider
+ * GenericProvider provides Indexable
  */
 interface GenericProvider
 {
 
+    /**
+     * Gets all Indexable
+     * @return array
+     */
     public function getListing(): array;
 
+    /**
+     * Gets one Indexable with its unique key
+     * @param string $key
+     * @return Indexable
+     */
     public function findOne(string $key): Indexable;
 }

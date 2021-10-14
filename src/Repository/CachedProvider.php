@@ -10,7 +10,7 @@ use App\Service\MediaWiki;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
- * Description of GenericProvider
+ * CachedProvider uses cached API requests
  */
 abstract class CachedProvider implements GenericProvider
 {
@@ -24,6 +24,11 @@ abstract class CachedProvider implements GenericProvider
         $this->cache = $cache;
     }
 
+    /**
+     * Sanitizes a string for using as a cache key
+     * @param string $key
+     * @return string
+     */
     protected function sanitize(string $key): string
     {
         return str_replace(['%', '-'], '_', urlencode($key));

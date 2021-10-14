@@ -25,6 +25,7 @@ class Character implements Root
     public $attributes = [];
     protected $skills = [];
     protected $wildCard = false;
+    public $edges = [];
 
     public function __construct(Background $bg, Faction $fac)
     {
