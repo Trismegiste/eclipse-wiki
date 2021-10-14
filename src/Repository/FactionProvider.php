@@ -13,7 +13,7 @@ use Symfony\Contracts\Cache\ItemInterface;
 /**
  * Provider for Faction
  */
-class FactionProvider extends GenericProvider
+class FactionProvider extends CachedProvider
 {
 
     public function findOne(string $key): \App\Entity\Indexable

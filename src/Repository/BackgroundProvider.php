@@ -11,9 +11,9 @@ use DOMDocument;
 use Symfony\Contracts\Cache\ItemInterface;
 
 /**
- * Description of BackgroundProvider
+ * BackgroundProvider is a provider for Background
  */
-class BackgroundProvider extends GenericProvider
+class BackgroundProvider extends CachedProvider
 {
 
     public function findOne(string $key): \App\Entity\Indexable

@@ -6,31 +6,15 @@
 
 namespace App\Repository;
 
-use App\Service\MediaWiki;
-use Symfony\Contracts\Cache\CacheInterface;
+use App\Entity\Indexable;
 
 /**
  * Description of GenericProvider
  */
-abstract class GenericProvider
+interface GenericProvider
 {
 
-    protected $wiki;
-    protected $cache;
+    public function getListing(): array;
 
-    public function __construct(MediaWiki $param, CacheInterface $cache)
-    {
-        $this->wiki = $param;
-        $this->cache = $cache;
-    }
-
-    abstract public function getListing(): array;
-
-    abstract public function findOne(string $key): \App\Entity\Indexable;
-
-    protected function sanitize(string $key): string
-    {
-        return str_replace(['%', '-'], '_', urlencode($key));
-    }
-
+    public function findOne(string $key): Indexable;
 }

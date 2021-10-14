@@ -12,7 +12,7 @@ use Symfony\Contracts\Cache\ItemInterface;
 /**
  * Provider for morph
  */
-class MorphProvider extends GenericProvider
+class MorphProvider extends CachedProvider
 {
 
     public function findOne(string $key): \App\Entity\Indexable
