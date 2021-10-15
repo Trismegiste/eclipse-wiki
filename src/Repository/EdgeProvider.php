@@ -7,12 +7,11 @@
 namespace App\Repository;
 
 use App\Entity\Indexable;
-use Symfony\Contracts\Cache\ItemInterface;
 
 /**
  * Provider for Edges
  */
-class EdgeProvider extends CachedProvider
+class EdgeProvider extends MongoDbProvider
 {
 
     public function findOne(string $key): Indexable
@@ -22,17 +21,14 @@ class EdgeProvider extends CachedProvider
 
     public function getListing(): array
     {
-        return $this->cache->get('edge_list', function (ItemInterface $item) {
-                    $item->expiresAfter(\DateInterval::createFromDateString('1 day'));
-                    $edge = $this->wiki->searchPageFromCategory('Atout', 200);
+        $it = $this->repository->search(['category' => 'Atout']);
 
-                    $listing = [];
-                    foreach ($edge as $row) {
-                        $listing[$row->title] = $row->title;
-                    }
+        $listing = [];
+        foreach ($it as $edge) {
+            $listing[$edge->getTitle()] = $edge->getTitle();
+        }
 
-                    return $listing;
-                });
+        return $listing;
     }
 
 }

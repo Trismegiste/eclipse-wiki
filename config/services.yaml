@@ -40,3 +40,9 @@ services:
         arguments: ['character']
     Trismegiste\Toolbox\MongoDb\Repository $characterRepo: '@app.character.repository'
             
+    app.mwpage.repository:
+        class: Trismegiste\Toolbox\MongoDb\Repository
+        factory: ['@Trismegiste\Toolbox\MongoDb\RepositoryFactory', 'create']
+        arguments: ['mwpage']
+    Trismegiste\Toolbox\MongoDb\Repository $pageRepo: '@app.mwpage.repository'
+                        
