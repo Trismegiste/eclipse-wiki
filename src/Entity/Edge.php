@@ -24,7 +24,7 @@ class Edge implements Persistable, Indexable
     protected $biomorph;
     protected $synthmorph;
     protected $requis;
-    public $container = null;
+    public $origin = null; // creation, gift, xperience, morph, morph slot...
 
     public function __construct(string $str, string $rank, string $category, $ego = false, $biomorph = false, $synthmorph = false, $requis = '')
     {
