@@ -12,7 +12,7 @@ use Trismegiste\Toolbox\MongoDb\PersistableImpl;
 /**
  * An Edge
  */
-class Edge implements Persistable
+class Edge implements Persistable, Indexable
 {
 
     use PersistableImpl;
@@ -20,13 +20,21 @@ class Edge implements Persistable
     protected $name;
     protected $rank;
     protected $category;
-    public $source = null;
+    protected $ego;
+    protected $biomorph;
+    protected $synthmorph;
+    protected $requis;
+    public $container = null;
 
-    public function __construct(string $str, string $rank, string $category)
+    public function __construct(string $str, string $rank, string $category, $ego = false, $biomorph = false, $synthmorph = false, $requis = '')
     {
         $this->name = $str;
         $this->rank = $rank;
         $this->category = $category;
+        $this->ego = $ego;
+        $this->biomorph = $biomorph;
+        $this->synthmorph = $synthmorph;
+        $this->requis = $requis;
     }
 
     public function getName(): string
@@ -42,6 +50,11 @@ class Edge implements Persistable
     public function getRank(): string
     {
         return $this->rank;
+    }
+
+    public function getUId(): string
+    {
+        return $this->name;
     }
 
 }
