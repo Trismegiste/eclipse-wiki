@@ -36,9 +36,9 @@ class Dumper extends Command
     protected function configure(): void
     {
         $this
-                ->setDescription('Dump pages to MongoDb')
-                ->addArgument('category', InputArgument::REQUIRED)
-                ->addOption('limit', null, InputOption::VALUE_REQUIRED, 'How many', 50);
+            ->setDescription('Dump pages to MongoDb')
+            ->addArgument('category', InputArgument::REQUIRED)
+            ->addOption('limit', null, InputOption::VALUE_REQUIRED, 'How many', 50);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -49,15 +49,17 @@ class Dumper extends Command
 
         $page = $this->mediaWiki->searchPageFromCategory($category, $input->getOption('limit'));
         $io->success("Found " . \count($page) . ' pages');
+
+        // delete old :
+        $io->section('Delete old...');
+        $it = $this->repository->search(['category' => $category]);
+        $this->repository->delete(iterator_to_array($it));
+
+        // dump :
+        $io->section('Dumping...');
         $io->progressStart(\count($page));
         foreach ($page as $item) {
-            // update or new ?
-            $found = $this->repository->search(['title' => $item->title])->toArray();
-            if (0 === count($found)) {
-                $entity = new MediaWikiPage($item->title, $category);
-            } else {
-                $entity = $found[0];
-            }
+            $entity = new MediaWikiPage($item->title, $category);
             // content
             $entity->content = $this->mediaWiki->getPage($item->pageid);
             $this->repository->save($entity);
