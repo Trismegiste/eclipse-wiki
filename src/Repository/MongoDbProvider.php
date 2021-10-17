@@ -44,11 +44,18 @@ abstract class MongoDbProvider implements GenericProvider
         return $listing;
     }
 
-    protected function getFirstTextContent(\DOMXpath $xpath, string $query): string
+    protected function getParametersFromTemplate(string $name, string $content, array $default = []): array
     {
-        $elements = $xpath->query($query);
+        $match = [];
+        $param = $default;
+        preg_match('#\{\{' . $name . '\|([^\}]+)\}\}#', $content, $match);
+        $paramStr = explode('|', $match[1]);
+        foreach ($paramStr as $assoc) {
+            preg_match('#([^=]+)=([^=]+)#', $assoc, $kv);
+            $param[$kv[1]] = $kv[2];
+        }
 
-        return trim($elements->item(0)->textContent);
+        return $param;
     }
 
     abstract protected function createFromPage(MediaWikiPage $page): Indexable;

@@ -5,6 +5,7 @@
  */
 
 use App\Entity\MediaWikiPage;
+use App\Entity\Skill;
 use App\Repository\SkillProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -45,6 +46,8 @@ class SkillProviderTest extends KernelTestCase
     {
         $skill = $this->sut->getListing();
         $this->assertCount(1, $skill);
+        $this->assertArrayHasKey('Dummy', $skill);
+        $this->assertInstanceOf(Skill::class, $skill['Dummy']);
         $this->assertEquals('Dummy', $skill['Dummy']->getName());
     }
 

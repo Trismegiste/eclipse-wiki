@@ -18,9 +18,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class SkillType extends AbstractType
 {
+
+    protected $repository;
+
     public function __construct(\App\Repository\SkillProvider $repo)
     {
-        
+        $this->repository = $repo;
     }
 
     public function getParent()
@@ -32,7 +35,7 @@ class SkillType extends AbstractType
     {
         $resolver->setDefault('data_class', Skill::class);
         $resolver->setDefault('empty_data', function (FormInterface $form) {
-            return new Skill($form->get('name')->getData(), 'Undefined');
+            return $this->repository->findOne($form->get('name')->getData());
         });
     }
 
