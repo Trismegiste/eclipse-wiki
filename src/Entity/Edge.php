@@ -57,4 +57,9 @@ class Edge implements Persistable, Indexable
         return $this->name;
     }
 
+    public function getPrerequisite(): string
+    {
+        return $this->requis;
+    }
+
 }

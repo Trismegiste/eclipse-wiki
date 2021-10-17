@@ -30,7 +30,7 @@ class EdgeProviderTest extends KernelTestCase
         $repo->delete(iterator_to_array($it));
 
         $dummy = new MediaWikiPage('Dummy', 'Atout');
-        $dummy->content = "{{SaWoAtout|ego=1|type=pro|rang=n|src=EP}}xxxxxxxxxxxx";
+        $dummy->content = "{{SaWoAtout|ego=1|type=pro|rang=n|src=EP}}xxxxxxxxxxxx{{PrérequisAtout|INT d8}}zzzzzzzz";
         $repo->save($dummy);
         $it = $repo->search();
         $this->assertCount(1, iterator_to_array($it));
@@ -49,6 +49,7 @@ class EdgeProviderTest extends KernelTestCase
         $this->assertArrayHasKey('Dummy', $edge);
         $this->assertInstanceOf(Edge::class, $edge['Dummy']);
         $this->assertEquals('Dummy', $edge['Dummy']->getName());
+        $this->assertEquals('INT d8', $edge['Dummy']->getPrerequisite());
     }
 
 }

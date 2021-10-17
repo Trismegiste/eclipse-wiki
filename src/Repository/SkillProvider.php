@@ -18,7 +18,7 @@ class SkillProvider extends MongoDbProvider
 
     protected function createFromPage(MediaWikiPage $page): Indexable
     {
-        $param = $this->getParametersFromTemplate('SaWoCompétence', $page->content, ['core' => 0]);
+        $param = $this->getNamedParametersFromTemplate('SaWoCompétence', $page->content, ['core' => 0]);
 
         return new Skill($page->getTitle(), $param['attr'], $param['core']);
     }

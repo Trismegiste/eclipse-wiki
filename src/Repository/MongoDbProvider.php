@@ -44,7 +44,7 @@ abstract class MongoDbProvider implements GenericProvider
         return $listing;
     }
 
-    protected function getParametersFromTemplate(string $name, string $content, array $default = []): array
+    protected function getNamedParametersFromTemplate(string $name, string $content, array $default = []): array
     {
         $match = [];
         $param = $default;
@@ -53,6 +53,19 @@ abstract class MongoDbProvider implements GenericProvider
         foreach ($paramStr as $assoc) {
             preg_match('#([^=]+)=([^=]+)#', $assoc, $kv);
             $param[$kv[1]] = $kv[2];
+        }
+
+        return $param;
+    }
+
+    protected function getOrderedParametersFromTemplate(string $name, string $content, array $default = []): array
+    {
+        $match = [];
+        preg_match('#\{\{' . $name . '\|([^\}]+)\}\}#', $content, $match);
+        $paramStr = explode('|', $match[1]);
+        $param = $default;
+        foreach ($paramStr as $idx => $val) {
+            $param[$idx] = $val;
         }
 
         return $param;
