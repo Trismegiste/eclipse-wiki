@@ -61,7 +61,7 @@ class Dumper extends Command
         foreach ($page as $item) {
             $entity = new MediaWikiPage($item->title, $category);
             // content
-            $entity->content = $this->mediaWiki->getPage($item->pageid);
+            $entity->content = $this->mediaWiki->getWikitextByName($item->title);
             $this->repository->save($entity);
             $io->progressAdvance();
             usleep(100000); // to prevent DDoS

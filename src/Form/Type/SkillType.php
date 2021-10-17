@@ -18,6 +18,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class SkillType extends AbstractType
 {
+    public function __construct(\App\Repository\SkillProvider $repo)
+    {
+        
+    }
 
     public function getParent()
     {

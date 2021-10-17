@@ -7,7 +7,6 @@
 namespace App\Repository;
 
 use App\Entity\Edge;
-use App\Entity\Indexable;
 use App\Entity\MediaWikiPage;
 use DOMDocument;
 
@@ -17,35 +16,7 @@ use DOMDocument;
 class EdgeProvider extends MongoDbProvider
 {
 
-    public function findOne(string $key): Indexable
-    {
-        $it = $this->repository->search(['category' => 'Atout', 'title' => $key]);
-        $it->rewind();
-        $page = $it->current();
-
-        return $this->createEdgeFromPage($page);
-    }
-
-    public function getListing(): array
-    {
-        $it = $this->repository->search(['category' => 'Atout']);
-
-        $listing = [];
-        foreach ($it as $page) {
-            $listing[$page->getTitle()] = $page->getTitle();
-        }
-
-        return $listing;
-    }
-
-    protected function getFirstTextContent(\DOMXpath $xpath, string $query): string
-    {
-        $elements = $xpath->query($query);
-
-        return trim($elements->item(0)->textContent);
-    }
-
-    protected function createEdgeFromPage(MediaWikiPage $page)
+    protected function createFromPage(MediaWikiPage $page): \App\Entity\Indexable
     {
         $doc = new DOMDocument("1.0", "utf-8");
         $doc->loadXML($page->content);
@@ -59,6 +30,11 @@ class EdgeProvider extends MongoDbProvider
         $requis = $this->getFirstTextContent($xpath, "//tr[contains(th, 'Prérequis')]/td");
 
         return new Edge($page->getTitle(), $rank, $category, $ego, $bio, $synth, $requis);
+    }
+
+    protected function getCategory(): string
+    {
+        return 'Atout';
     }
 
 }

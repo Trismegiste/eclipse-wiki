@@ -12,7 +12,7 @@ use Trismegiste\Toolbox\MongoDb\PersistableImpl;
 /**
  * A SaWo Skill
  */
-class Skill extends SaWoTrait implements Persistable
+class Skill extends SaWoTrait implements Persistable, Indexable
 {
 
     use PersistableImpl;
@@ -25,6 +25,11 @@ class Skill extends SaWoTrait implements Persistable
         parent::__construct($str);
         $this->linkedAttr = $linkAttr;
         $this->core = $core;
+    }
+
+    public function getUId(): string
+    {
+        return $this->name;
     }
 
 }
