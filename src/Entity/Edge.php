@@ -6,13 +6,14 @@
 
 namespace App\Entity;
 
+use JsonSerializable;
 use MongoDB\BSON\Persistable;
 use Trismegiste\Toolbox\MongoDb\PersistableImpl;
 
 /**
  * An Edge
  */
-class Edge implements Persistable, Indexable
+class Edge implements Persistable, Indexable, JsonSerializable
 {
 
     use PersistableImpl;
@@ -60,6 +61,26 @@ class Edge implements Persistable, Indexable
     public function getPrerequisite(): string
     {
         return $this->requis;
+    }
+
+    public function isBio(): bool
+    {
+        return $this->biomorph;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->bsonSerialize();
+    }
+
+    public function isSynth(): bool
+    {
+        return $this->synthmorph;
+    }
+
+    public function isEgo(): bool
+    {
+        return $this->ego;
     }
 
 }

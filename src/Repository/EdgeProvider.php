@@ -19,7 +19,7 @@ class EdgeProvider extends MongoDbProvider
     protected function createFromPage(MediaWikiPage $page): Indexable
     {
         $param = $this->getNamedParametersFromTemplate('SaWoAtout', $page->content, ['ego' => 0, 'bio' => 0, 'synth' => 0]);
-        $req = $this->getOrderedParametersFromTemplate('PrérequisAtout', $page->content);
+        $req = $this->getOrderedParametersFromTemplate('PrérequisAtout', $page->content, ['']);
 
         return new Edge($page->getTitle(), $param['rang'], $param['type'], $param['ego'] == 1, $param['bio'] == 1, $param['synth'] == 1, $req[0]);
     }
@@ -27,6 +27,18 @@ class EdgeProvider extends MongoDbProvider
     protected function getCategory(): string
     {
         return 'Atout';
+    }
+
+    public function getAllEdgeCategory(): array
+    {
+        $listing = $this->getListing();
+        $category = [];
+        /** @var \App\Entity\Edge $edge */
+        foreach ($listing as $edge) {
+            $category[$edge->getCategory()] = $edge->getCategory();
+        }
+
+        return $category;
     }
 
 }

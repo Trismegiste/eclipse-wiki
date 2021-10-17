@@ -48,11 +48,12 @@ abstract class MongoDbProvider implements GenericProvider
     {
         $match = [];
         $param = $default;
-        preg_match('#\{\{' . $name . '\|([^\}]+)\}\}#', $content, $match);
-        $paramStr = explode('|', $match[1]);
-        foreach ($paramStr as $assoc) {
-            preg_match('#([^=]+)=([^=]+)#', $assoc, $kv);
-            $param[$kv[1]] = $kv[2];
+        if (preg_match('#\{\{' . $name . '\|([^\}]+)\}\}#', $content, $match)) {
+            $paramStr = explode('|', $match[1]);
+            foreach ($paramStr as $assoc) {
+                preg_match('#([^=]+)=([^=]+)#', $assoc, $kv);
+                $param[$kv[1]] = $kv[2];
+            }
         }
 
         return $param;
@@ -61,11 +62,12 @@ abstract class MongoDbProvider implements GenericProvider
     protected function getOrderedParametersFromTemplate(string $name, string $content, array $default = []): array
     {
         $match = [];
-        preg_match('#\{\{' . $name . '\|([^\}]+)\}\}#', $content, $match);
-        $paramStr = explode('|', $match[1]);
         $param = $default;
-        foreach ($paramStr as $idx => $val) {
-            $param[$idx] = $val;
+        if (preg_match('#\{\{' . $name . '\|([^\}]+)\}\}#', $content, $match)) {
+            $paramStr = explode('|', $match[1]);
+            foreach ($paramStr as $idx => $val) {
+                $param[$idx] = $val;
+            }
         }
 
         return $param;
