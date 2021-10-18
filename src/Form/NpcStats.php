@@ -75,9 +75,6 @@ class NpcStats extends AbstractType
             ])
             ->add('edges', CollectionType::class, [
                 'entry_type' => Type\EdgeType::class,
-                'entry_options' => [
-                    'expanded' => true
-                ],
                 'allow_add' => true,
                 'allow_delete' => true,
                 'prototype_data' => $this->getProtoEdge(),

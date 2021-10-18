@@ -1,10 +1,22 @@
 {% extends "base.html.twig" %}
+
+{% form_theme form _self %}
+
+{% block _npc_stats_edges_widget %}
+    <ul x-data="{{ {listing: form.vars.data}|json_encode()|e('html_attr') }}">
+        <template x-for="edge in listing">
+            <li x-text="edge.name"></li>
+        </template>
+    </ul>
+{% endblock %}
+
 {% block content %}
     {{ form(form) }}
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="//unpkg.com/alpinejs" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
 
