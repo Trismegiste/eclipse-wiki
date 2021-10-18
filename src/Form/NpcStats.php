@@ -59,7 +59,7 @@ class NpcStats extends AbstractType
                 'prototype_data' => $this->getProtoData(),
                 'by_reference' => false
             ])
-            ->add('edge_category_list', ChoiceType::class, [
+            ->add('edge_list', ChoiceType::class, [
                 'mapped' => false,
                 'choices' => $this->edge->getListing(),
                 'group_by' => function (\App\Entity\Edge $edge) {

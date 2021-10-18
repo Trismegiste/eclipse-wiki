@@ -19,13 +19,12 @@ class Character implements Root
         bsonSerialize as defaultDump;
     }
 
+    protected $wildCard = false;
     protected $background;
     protected $faction;
     protected $morph;
     public $attributes = [];
     protected $skills = [];
-    protected $wildCard = false;
-    public $edges = [];
 
     public function __construct(Background $bg, Faction $fac)
     {

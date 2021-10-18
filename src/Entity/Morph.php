@@ -15,7 +15,8 @@ use Trismegiste\Toolbox\MongoDb\PersistableImpl;
 class Morph implements Indexable, Persistable
 {
 
-    use PersistableImpl;
+    use PersistableImpl,
+        EdgeContainer;
 
     public $title;
     public $ability = [];
