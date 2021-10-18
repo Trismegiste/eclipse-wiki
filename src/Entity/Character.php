@@ -18,6 +18,7 @@ class Character implements Root
     use RootImpl {
         bsonSerialize as defaultDump;
     }
+    use EdgeContainer;
 
     protected $wildCard = false;
     protected $background;

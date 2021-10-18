@@ -37,6 +37,18 @@
                     }
                 })
             })
+
+            // adding edge on change :
+            document.querySelector('#npc_stats_edge_list').addEventListener('change', function (ev) {
+                const collectionHolder = document.querySelector('#npc_stats_edges')
+                const edgeName = ev.target.value
+
+                collectionHolder.innerHTML += collectionHolder
+                        .dataset
+                        .prototype
+                        .replace(/__name__/g, Math.floor(100 + 1000000 * Math.random()))
+                        .replace(/__undefined__/g, edgeName)
+            })
         })
     </script>
 {% endblock %}

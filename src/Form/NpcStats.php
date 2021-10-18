@@ -56,7 +56,7 @@ class NpcStats extends AbstractType
                 ],
                 'allow_add' => true,
                 'allow_delete' => true,
-                'prototype_data' => $this->getProtoData(),
+                'prototype_data' => $this->getProtoSkill(),
                 'by_reference' => false
             ])
             ->add('edge_list', ChoiceType::class, [
@@ -73,6 +73,16 @@ class NpcStats extends AbstractType
                         . str_replace(['[[', ']]'], '', $edge->getPrerequisite())) : '';
                 }
             ])
+            ->add('edges', CollectionType::class, [
+                'entry_type' => Type\EdgeType::class,
+                'entry_options' => [
+                    'expanded' => true
+                ],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype_data' => $this->getProtoEdge(),
+                'by_reference' => false,
+            ])
             //->add('edges', ChoiceType::class, ['choices' => $this->edge->getListing(), 'expanded' => true, 'multiple' => true])
             ->add('edit', SubmitType::class);
     }
@@ -82,10 +92,17 @@ class NpcStats extends AbstractType
         $resolver->setDefault('data_class', Character::class);
     }
 
-    protected function getProtoData()
+    protected function getProtoSkill()
     {
         $obj = new Skill('__undefined__', '__ATTR__');
         $obj->dice = 4;
+
+        return $obj;
+    }
+
+    protected function getProtoEdge()
+    {
+        $obj = new \App\Entity\Edge('__undefined__', 'NIL', '__CAT__');
 
         return $obj;
     }
