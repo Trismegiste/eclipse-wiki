@@ -1,0 +1,26 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <table class="pare-table pure-table-striped">
+        <tr>
+            <th>Categorie</th>
+            <th>Nom</th>
+            <th>Rang</th>
+            <th>Prerequis</th>
+            <th>Ego</th>
+            <th>Biomorphe</th>
+            <th>Synthmorphe</th>
+        </tr>
+        {% for edge in listing %}
+            <tr>
+                <td>{{ edge.category|upper }}</td>
+                <td>{{ edge.name }}</td>
+                <td>{{ edge.rank|upper }}</td>
+                <td>{{ edge.prerequisite|replace({'[[':'',']]':''}) }}</td>
+                <td>{{ edge.ego ? 'Oui' : 'Non' }}</td>
+                <td>{{ edge.bio ? 'Oui' : 'Non' }}</td>
+                <td>{{ edge.synth ? 'Oui' : 'Non' }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

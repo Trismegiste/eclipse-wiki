@@ -3,11 +3,20 @@
 {% form_theme form _self %}
 
 {% block _npc_stats_edges_widget %}
-    <ul x-data="{{ {listing: form.vars.data}|json_encode()|e('html_attr') }}">
+    <div class="pure-g" x-data="{{ { listing: form.vars.data }|json_encode()|e('html_attr') }}" data-choices="{{ attr.choices|json_encode()|e('html_attr') }}">
+        <div class="pure-u-1">
+            <select class="pure-input-1" x-on:change="console.log($event.target.value)">
+                <template x-for="edge in JSON.parse($root.dataset.choices)">
+                    <option x-text="edge.name + ' ' + edge.category" x-bind:value="edge.name"></option>
+                </template>                
+            </select>
+        </div>
         <template x-for="edge in listing">
-            <li x-text="edge.name"></li>
+            <div class="pure-u-1">
+                <label x-text="edge.name"></label>
+            </div>
         </template>
-    </ul>
+    </div>
 {% endblock %}
 
 {% block content %}
