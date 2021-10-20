@@ -12,7 +12,7 @@ use Trismegiste\Toolbox\MongoDb\RootImpl;
 /**
  * A Character
  */
-class Character implements Root
+class Character implements Root, \JsonSerializable
 {
 
     use RootImpl {
@@ -86,6 +86,11 @@ class Character implements Root
     public function getSkills(): array
     {
         return $this->skills;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->bsonSerialize();
     }
 
 }

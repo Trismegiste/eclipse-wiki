@@ -66,20 +66,22 @@ class NpcStats extends AbstractType
                         return $edge->getCategory();
                     },
                     'choice_filter' => 'isEgo',
-                    'choice_value' => 'name',
+                    'choice_value' => function (?\App\Entity\Edge $edge) {
+                        return json_encode($edge);
+                    },
                     'choice_label' => function (?\App\Entity\Edge $edge) {
                         return $edge ? ($edge->getName()
                         . ' (' . strtoupper($edge->getRank()) . ') : '
                         . str_replace(['[[', ']]'], '', $edge->getPrerequisite())) : '';
-                    }
+                    },
+                    'attr' => ['x-on:change' => 'edges.push(JSON.parse($event.target.value))']
                 ])
                 ->add('edges', CollectionType::class, [
                     'entry_type' => Type\EdgeType::class,
                     'allow_add' => true,
                     'allow_delete' => true,
                     'prototype_data' => $this->getProtoEdge(),
-                    'by_reference' => false,
-                    'attr' => ['choices' => $this->edge->getListing()]
+                    'by_reference' => false
                 ])
                 ->add('edit', SubmitType::class);
     }
