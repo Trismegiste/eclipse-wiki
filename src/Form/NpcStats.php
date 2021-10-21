@@ -79,9 +79,7 @@ class NpcStats extends AbstractType
                 ->add('edges', CollectionType::class, [
                     'entry_type' => Type\EdgeType::class,
                     'allow_add' => true,
-                    'allow_delete' => true,
-                    'prototype_data' => $this->getProtoEdge(),
-                    'by_reference' => false
+                    'allow_delete' => true
                 ])
                 ->add('edit', SubmitType::class);
     }
@@ -95,13 +93,6 @@ class NpcStats extends AbstractType
     {
         $obj = new Skill('__undefined__', '__ATTR__');
         $obj->dice = 4;
-
-        return $obj;
-    }
-
-    protected function getProtoEdge()
-    {
-        $obj = new \App\Entity\Edge('__undefined__', 'NIL', '__CAT__');
 
         return $obj;
     }

@@ -17,7 +17,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Choice for an Edge
  */
-class EdgeType extends AbstractType
+class EdgeType extends AbstractType implements \Symfony\Component\Form\DataMapperInterface
 {
 
     protected $repository;
@@ -40,12 +40,13 @@ class EdgeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', HiddenType::class)
-            ->add('origin', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
-                'choices' => $this->getOrigin(),
-                'preferred_choices' => $options['preferred_choices'],
-                'expanded' => $options['expanded']
-            ])
+                ->add('name', HiddenType::class, ['mapped' => 0])
+                ->add('origin', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+                    'choices' => $this->getOrigin(),
+                    'preferred_choices' => $options['preferred_choices'],
+                    'expanded' => $options['expanded']
+                ])
+                ->setDataMapper($this)
         ;
     }
 
@@ -62,6 +63,34 @@ class EdgeType extends AbstractType
         ];
 
         return array_combine($src, $src);
+    }
+
+    public function mapDataToForms($viewData, \Traversable $forms)
+    {
+        // there is no data yet, so nothing to prepopulate
+        if (null === $viewData) {
+            return;
+        }
+
+        // invalid data type
+        if (!$viewData instanceof Edge) {
+            throw new \Symfony\Component\Form\Exception\UnexpectedTypeException($viewData, Color::class);
+        }
+
+        /** @var FormInterface[] $forms */
+        $forms = iterator_to_array($forms);
+
+        // initialize form field values
+        $forms['name']->setData($viewData->getName());
+        $forms['origin']->setData($viewData->origin);
+    }
+
+    public function mapFormsToData(\Traversable $forms, &$edge)
+    {
+        /** @var FormInterface[] $forms */
+        $forms = iterator_to_array($forms);
+        $edge = $this->repository->findOne($forms['name']->getData());
+        $edge->origin = $forms['origin']->getData();
     }
 
 }

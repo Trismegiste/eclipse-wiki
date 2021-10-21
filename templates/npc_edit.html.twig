@@ -16,13 +16,13 @@
                         <option value="Création">Création</option>
                         <option value="Morphe">Morphe</option>
                         <option value="Slot">Slot</option>
-                            <option value="Cadeau">Cadeau</option>
+                        <option value="Cadeau">Cadeau</option>
                     </select>
                 </div>
                 <nav class="pure-u-1-3">
                     <a href="#"><i class="icon-angle-circled-up"></i></a>
                     <a href="#"><i class="icon-angle-circled-down"></i></a>
-                    <a href="#"><i class="icon-trash-empty"></i></a>
+                    <a href="#" x-on:click="edges.splice(idx, 1)"><i class="icon-trash-empty"></i></a>
                 </nav>
             </div>
         </template>
