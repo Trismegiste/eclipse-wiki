@@ -5,4 +5,8 @@
 .icon-d10:before { content: '\e803'; } /* '' */
 .icon-d12:before { content: '\e804'; } /* '' */
 .icon-d20:before { content: '\e805'; } /* '' */
+.icon-trash-empty:before { content: '\e806'; } /* '' */
+.icon-wildcard:before { content: '\e807'; } /* '' */
 .icon-spin3:before { content: '\e832'; } /* '' */
+.icon-angle-circled-up:before { content: '\f139'; } /* '' */
+.icon-angle-circled-down:before { content: '\f13a'; } /* '' */
