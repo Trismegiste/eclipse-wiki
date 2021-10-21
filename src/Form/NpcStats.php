@@ -60,7 +60,9 @@ class NpcStats extends AbstractType
                     'by_reference' => false
                 ])
                 ->add('edge_list', ChoiceType::class, [
+                    'placeholder' => '-------------',
                     'mapped' => false,
+                    'required' => false,
                     'choices' => $this->edge->getListing(),
                     'group_by' => function (\App\Entity\Edge $edge) {
                         return $edge->getCategory();
@@ -74,7 +76,7 @@ class NpcStats extends AbstractType
                         . ' (' . strtoupper($edge->getRank()) . ') : '
                         . str_replace(['[[', ']]'], '', $edge->getPrerequisite())) : '';
                     },
-                    'attr' => ['x-on:change' => 'edges.push(JSON.parse($event.target.value))']
+                    'attr' => ['x-on:change' => 'edges.push(JSON.parse($event.target.value)); $el.value=""']
                 ])
                 ->add('edges', CollectionType::class, [
                     'entry_type' => Type\EdgeType::class,
