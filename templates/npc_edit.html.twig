@@ -62,8 +62,12 @@
                 <div class="pure-u-1-3"><label x-text="hindrance.name"></label></div>
                 <div class="pure-u-1-4">
                     <select x-bind:name="'npc_stats[hindrances][' + idx + '][level]'" required="required" x-model="hindrance.level">
-                        <option value="1">Mineur</option>
-                        <option value="2">Majeur</option>
+                        <template x-if="1 & hindrance.choices">
+                            <option value="1">Mineur</option>
+                        </template>
+                        <template x-if="2 & hindrance.choices">
+                            <option value="2">Majeur</option>
+                        </template>
                     </select>
                 </div>                
                 <div class="pure-u-1-4">
