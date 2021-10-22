@@ -7,8 +7,11 @@
 namespace App\Form;
 
 use App\Entity\Character;
+use App\Entity\Edge;
+use App\Entity\Hindrance;
 use App\Entity\Skill;
 use App\Repository\EdgeProvider;
+use App\Repository\HindranceProvider;
 use App\Repository\TraitProvider;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -27,7 +30,7 @@ class NpcStats extends AbstractType
     protected $edge;
     protected $hindrance;
 
-    public function __construct(TraitProvider $pro, EdgeProvider $edge, \App\Repository\HindranceProvider $hindrance)
+    public function __construct(TraitProvider $pro, EdgeProvider $edge, HindranceProvider $hindrance)
     {
         $this->provider = $pro;
         $this->edge = $edge;
@@ -66,13 +69,13 @@ class NpcStats extends AbstractType
                     'mapped' => false,
                     'required' => false,
                     'choices' => $this->edge->getListing(),
-                    'group_by' => function (\App\Entity\Edge $edge) {
+                    'group_by' => function (Edge $edge) {
                         return $edge->getCategory();
                     },
-                    'choice_value' => function (?\App\Entity\Edge $edge) {
+                    'choice_value' => function (?Edge $edge) {
                         return json_encode($edge);
                     },
-                    'choice_label' => function (?\App\Entity\Edge $edge) {
+                    'choice_label' => function (?Edge $edge) {
                         return $edge ? ($edge->getName()
                         . ' (' . strtoupper($edge->getRank()) . ') : '
                         . str_replace(['[[', ']]'], '', $edge->getPrerequisite())) : '';
@@ -89,11 +92,11 @@ class NpcStats extends AbstractType
                     'mapped' => false,
                     'required' => false,
                     'choices' => $this->hindrance->getListing(),
-                    'choice_value' => function (?\App\Entity\Hindrance $hind) {
+                    'choice_value' => function (?Hindrance $hind) {
                         return json_encode($hind);
                     },
-                    'choice_label' => function (?\App\Entity\Hindrance $hind) {
-                        return $hind->getName();
+                    'choice_label' => function (?Hindrance $hind) {
+                        return $hind->getName() . ' (' . HindranceProvider::paramType[$hind->getChoices()] . ')';
                     },
                     'attr' => ['x-on:change' => 'hindrances.push(JSON.parse($event.target.value)); $el.value=""']
                 ])
