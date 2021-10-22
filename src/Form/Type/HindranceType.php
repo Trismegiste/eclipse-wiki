@@ -15,23 +15,22 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Choice for an Edge
+ * Choice for an Hindrance
  */
-class EdgeType extends AbstractType implements \Symfony\Component\Form\DataMapperInterface
+class HindranceType extends AbstractType implements \Symfony\Component\Form\DataMapperInterface
 {
 
     protected $repository;
 
-    public function __construct(EdgeProvider $repo)
+    public function __construct(\App\Repository\HindranceProvider $repo)
     {
         $this->repository = $repo;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefault('data_class', Edge::class);
+        $resolver->setDefault('data_class', \App\Entity\Hindrance::class);
         $resolver->setDefault('expanded', false);
-        $resolver->setDefault('preferred_choices', ['Progression']);
         $resolver->setDefault('empty_data', function (FormInterface $form) {
             return $this->repository->findOne($form->get('name')->getData());
         });
@@ -43,7 +42,13 @@ class EdgeType extends AbstractType implements \Symfony\Component\Form\DataMappe
                 ->add('name', HiddenType::class, ['mapped' => 0])
                 ->add('origin', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
                     'choices' => $this->getOrigin(),
-                    'preferred_choices' => $options['preferred_choices'],
+                    'expanded' => $options['expanded']
+                ])
+                ->add('level', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+                    'choices' => [
+                        'Mineur' => 1,
+                        'Majeur' => 2
+                    ],
                     'expanded' => $options['expanded']
                 ])
                 ->setDataMapper($this)
@@ -56,10 +61,8 @@ class EdgeType extends AbstractType implements \Symfony\Component\Form\DataMappe
             'Background',
             'Faction',
             'Création',
-            'Progression',
-            'Cadeau',
             'Morphe',
-            'Slot'
+            'Donné par le MJ'
         ];
 
         return array_combine($src, $src);
@@ -73,8 +76,8 @@ class EdgeType extends AbstractType implements \Symfony\Component\Form\DataMappe
         }
 
         // invalid data type
-        if (!$viewData instanceof Edge) {
-            throw new \Symfony\Component\Form\Exception\UnexpectedTypeException($viewData, Edge::class);
+        if (!$viewData instanceof \App\Entity\Hindrance) {
+            throw new \Symfony\Component\Form\Exception\UnexpectedTypeException($viewData, \App\Entity\Hindrance::class);
         }
 
         /** @var FormInterface[] $forms */
@@ -83,6 +86,7 @@ class EdgeType extends AbstractType implements \Symfony\Component\Form\DataMappe
         // initialize form field values
         $forms['name']->setData($viewData->getName());
         $forms['origin']->setData($viewData->origin);
+        $forms['level']->setData($viewData->getLevel());
     }
 
     public function mapFormsToData(\Traversable $forms, &$edge)
@@ -91,6 +95,7 @@ class EdgeType extends AbstractType implements \Symfony\Component\Form\DataMappe
         $forms = iterator_to_array($forms);
         $edge = $this->repository->findOne($forms['name']->getData());
         $edge->origin = $forms['origin']->getData();
+        $edge->setLevel($forms['level']->getData());
     }
 
 }

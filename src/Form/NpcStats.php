@@ -25,11 +25,13 @@ class NpcStats extends AbstractType
 
     protected $provider;
     protected $edge;
+    protected $hindrance;
 
-    public function __construct(TraitProvider $pro, EdgeProvider $edge)
+    public function __construct(TraitProvider $pro, EdgeProvider $edge, \App\Repository\HindranceProvider $hindrance)
     {
         $this->provider = $pro;
         $this->edge = $edge;
+        $this->hindrance = $hindrance;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -67,7 +69,6 @@ class NpcStats extends AbstractType
                     'group_by' => function (\App\Entity\Edge $edge) {
                         return $edge->getCategory();
                     },
-                    'choice_filter' => 'isEgo',
                     'choice_value' => function (?\App\Entity\Edge $edge) {
                         return json_encode($edge);
                     },
@@ -80,6 +81,24 @@ class NpcStats extends AbstractType
                 ])
                 ->add('edges', CollectionType::class, [
                     'entry_type' => Type\EdgeType::class,
+                    'allow_add' => true,
+                    'allow_delete' => true
+                ])
+                ->add('hindrance_list', ChoiceType::class, [
+                    'placeholder' => '-------------',
+                    'mapped' => false,
+                    'required' => false,
+                    'choices' => $this->hindrance->getListing(),
+                    'choice_value' => function (?\App\Entity\Hindrance $hind) {
+                        return json_encode($hind);
+                    },
+                    'choice_label' => function (?\App\Entity\Hindrance $hind) {
+                        return $hind->getName();
+                    },
+                    'attr' => ['x-on:change' => 'hindrances.push(JSON.parse($event.target.value)); $el.value=""']
+                ])
+                ->add('hindrances', CollectionType::class, [
+                    'entry_type' => Type\HindranceType::class,
                     'allow_add' => true,
                     'allow_delete' => true
                 ])
