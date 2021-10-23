@@ -107,4 +107,14 @@ class NpcGenerator extends AbstractController
         return $this->render('fragment/morph_detail.html.twig', ['morph' => $obj]);
     }
 
+    /**
+     * @Route("/npc/show/{pk}", methods={"GET"})
+     */
+    public function show(string $pk): Response
+    {
+        $npc = $this->repository->load($pk);
+
+        return $this->render('npc/show.html.twig', ['npc' => $npc]);
+    }
+
 }

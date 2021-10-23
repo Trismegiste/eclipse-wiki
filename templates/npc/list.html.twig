@@ -1,7 +1,7 @@
 {% extends "base.html.twig" %}
 {% block header_title %}Personnages{% endblock %}
 {% block content %}
-    <table class="pure-table">
+    <table class="pure-table pure-table-striped">
         <tr>
             <th>Nom</th>
             <th>Background</th>
@@ -15,7 +15,8 @@
                 <td>{{ npc.background.title }}</td>
                 <td>{{ npc.faction.title }}</td>
                 <td>{{ npc.morph.title }}</td>
-                <td><a href="{{ path('app_npcgenerator_edit', {pk: npc.pk}) }}">Edit</a></td>
+                <td><a href="{{ path('app_npcgenerator_show', {pk: npc.pk}) }}"><i class="icon-eye"></i></a></td>
+                <td><a href="{{ path('app_npcgenerator_edit', {pk: npc.pk}) }}"><i class="icon-edit"></i></a></td>
             </tr>
         {% endfor %}
     </table>
