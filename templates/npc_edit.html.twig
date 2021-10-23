@@ -61,14 +61,18 @@
             <div class="pure-g">
                 <div class="pure-u-1-3"><label x-text="hindrance.name"></label></div>
                 <div class="pure-u-1-4">
-                    <select x-bind:name="'npc_stats[hindrances][' + idx + '][level]'" required="required" x-model="hindrance.level">
-                        <template x-if="1 & hindrance.choices">
+                    <template x-if="1 == hindrance.choices">
+                        <label class="fakeselect">Mineur<input type="hidden" x-bind:name="'npc_stats[hindrances][' + idx + '][level]'" x-model="hindrance.choices"/></label>
+                    </template>
+                    <template x-if="2 == hindrance.choices">
+                        <label class="fakeselect">Majeur<input type="hidden" x-bind:name="'npc_stats[hindrances][' + idx + '][level]'" x-model="hindrance.choices"/></label>
+                    </template>
+                    <template x-if="3 == hindrance.choices">
+                        <select x-bind:name="'npc_stats[hindrances][' + idx + '][level]'" required="required" x-model="hindrance.level">
                             <option value="1">Mineur</option>
-                        </template>
-                        <template x-if="2 & hindrance.choices">
                             <option value="2">Majeur</option>
-                        </template>
-                    </select>
+                        </select>
+                    </template>
                 </div>                
                 <div class="pure-u-1-4">
                     <input x-bind:name="'npc_stats[hindrances][' + idx + '][name]'" type="hidden" required="required" x-model="hindrance.name"/>

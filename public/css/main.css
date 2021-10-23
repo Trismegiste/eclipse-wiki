@@ -41,3 +41,8 @@ article {
 #npc_stats nav a {
     cursor: pointer;
 }
+
+#npc_stats label.fakeselect {
+    display: block;
+    margin-left: 0.8em;
+}
