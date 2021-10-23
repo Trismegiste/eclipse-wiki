@@ -35,7 +35,7 @@ class NpcGenerator extends AbstractController
      */
     public function list(): Response
     {
-        return $this->render('npc_list.html.twig', ['listing' => $this->repository->search()]);
+        return $this->render('npc/list.html.twig', ['listing' => $this->repository->search()]);
     }
 
     /**
@@ -52,7 +52,7 @@ class NpcGenerator extends AbstractController
             return $this->redirectToRoute('app_npcgenerator_edit', ['pk' => $npc->getPk()]);
         }
 
-        return $this->render('npc_create.html.twig', ['form' => $form->createView()]);
+        return $this->render('npc/create.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -71,7 +71,7 @@ class NpcGenerator extends AbstractController
             return $this->redirectToRoute('app_npcgenerator_list');
         }
 
-        return $this->render('npc_edit.html.twig', ['form' => $form->createView()]);
+        return $this->render('npc/edit.html.twig', ['form' => $form->createView()]);
     }
 
     /**
