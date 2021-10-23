@@ -26,6 +26,7 @@ class Character implements Root, \JsonSerializable
     protected $morph;
     public $attributes = [];
     protected $skills = [];
+    public $name; // the name of this character
 
     public function __construct(Background $bg, Faction $fac)
     {
