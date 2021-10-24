@@ -4,9 +4,9 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}Eclipse Savage{% endblock %}</title>
-        <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css" integrity="sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5" crossorigin="anonymous"/>
-        <link  rel="stylesheet" href="{{ asset('css/form.css') }}?{{ random() }}"/> 
-        <link  rel="stylesheet" href="{{ asset('css/main.css') }}"/> 
+        <link  rel="stylesheet" href="{{ asset('purecss/pure-min.css') }}"/> 
+        <link  rel="stylesheet" href="{{ asset('css/form.css') }}"/> 
+        <link  rel="stylesheet" href="{{ asset('css/main.css') }}?{{ random() }}"/> 
         <link  rel="stylesheet" href="{{ asset('fontello/css/fontello.css') }}"/> 
         <link  rel="stylesheet" href="{{ asset('fontello/css/animation.css') }}"/> 
         {% block stylesheets %}
@@ -14,12 +14,38 @@
     </head>
     <body>
         {% block body %}
-            <h1 class="big-title">{% block header_title %}{% endblock %}</h1>       
-            <article>
-                {% block content %}{% endblock %}
-            </article>
+            <h1 class="big-title">{% block header_title %}{% endblock %}</h1>
+            <div class="pure-g">
+                <div class="pure-u-1-5">
+                    {% block menu %}
+                        <nav class="pure-menu">
+                            <span class="pure-menu-heading">Eclipse Savage</span>
+                            <ul class="pure-menu-list">
+                                <li class="pure-menu-item">
+                                    <a href="{{ path('app_gmhelper_loveletter') }}" class="pure-menu-link">Love letter</a>
+                                </li>
+                                <li class="pure-menu-item">
+                                    <a href="{{ path('app_npcgenerator_list') }}" class="pure-menu-link">Liste PNJ</a>
+                                </li>
+                                <li class="pure-menu-item">
+                                    <a href="{{ path('app_npcgenerator_create') }}" class="pure-menu-link">Créer un PNJ</a>
+                                </li>
+                                <li class="pure-menu-item">
+                                    <a href="{{ path('app_dump_edge') }}" class="pure-menu-link">Tableau Atouts</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    {% endblock %}
+                </div>
+                <div class="pure-u-4-5">
+                    <article>
+                        {% block content %}{% endblock %}
+                    </article>
+                </div>
+            </div>
         {% endblock %}
         <script defer src="{{ asset('alpine/cdn.min.js') }}"></script>
+        <script defer src="{{ asset('js/DicePool.js') }}"></script>
         {% block javascripts %}
         {% endblock %}
     </body>

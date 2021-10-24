@@ -1,6 +1,6 @@
 /* title */
 h1.big-title {
-    font-size: 3em;
+    font-size: 2em;
     border: none;
     text-align: center;
     margin: 0;
@@ -55,8 +55,4 @@ nav.listing-action a {
 
 h2 {
     font-weight: lighter;
-}
-
-.character-show .rollable {
-    cursor: pointer;
 }
