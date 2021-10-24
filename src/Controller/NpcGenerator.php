@@ -12,6 +12,7 @@ use App\Repository\BackgroundProvider;
 use App\Repository\FactionProvider;
 use App\Repository\MorphProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -120,11 +121,22 @@ class NpcGenerator extends AbstractController
     /**
      * @Route("/npc/delete/{pk}", methods={"GET","DELETE"})
      */
-    public function delete(string $pk): Response
+    public function delete(string $pk, Request $request): Response
     {
         $npc = $this->repository->load($pk);
+        $form = $this->createFormBuilder($npc)
+            ->add('delete', SubmitType::class)
+            ->setMethod('DELETE')
+            ->getForm();
 
-        return $this->render('npc/delete.html.twig', ['npc' => $npc]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->repository->delete($npc);
+            
+            return $this->redirectToRoute('app_npcgenerator_list');
+        }
+
+        return $this->render('npc/delete.html.twig', ['form' => $form->createView()]);
     }
 
 }

@@ -1,0 +1,9 @@
+{% extends "base.html.twig" %}
+
+{% set npc = form.vars.data %}
+{% block header_title %}PNJ : {{ npc.name }} {% if npc.wildCard %}<i class="icon-wildcard"></i>{% endif %}{% endblock %}
+
+{% block content %}
+    <h2>Êtes-vous sûr de vouloir supprimer {{ npc.name }} ({{ npc.background.title }} × {{ npc.faction.title }}) ?</h2>
+    {{ form(form) }}
+{% endblock %}
