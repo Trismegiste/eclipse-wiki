@@ -56,3 +56,12 @@ nav.listing-action a {
 h2 {
     font-weight: lighter;
 }
+
+.info {
+    margin: 1em;
+}
+
+.diceroller {
+    font-size: 250%;
+    text-align: center;
+}

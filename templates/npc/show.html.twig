@@ -11,10 +11,37 @@
 
 {% block header_title %}PNJ : {{ npc.name }}{% endblock %}
 
+{% block info %}
+    <h2>Lancer de dés</h2>
+    <div class="diceroller" 
+         x-data="{dice:null, modifier:0, result:null, diceService: new DicePool()}" 
+         @roll.window="dice = $event.detail.dice;
+         modifier = $event.detail.modifier;
+         result = null;
+         diceService.rollPool([dice, 6]).then(function(rolled) {
+            console.log(rolled)
+            setTimeout(function () {
+                result = Math.max.apply(null, rolled) + modifier
+            }, 300)                
+         })
+         ">
+        <div x-show="dice">
+            <i x-bind:class="'icon-d' + dice"></i>
+            <i class="icon-d6"></i>
+            <span x-text="'+' + modifier"></span>
+        </div>
+        <div x-show="(dice !== null) && (result === null)">
+            <i class="icon-spin3 animate-spin"></i>
+        </div>
+        <div x-show="(dice !== null) && (result !== null)" x-text="result">
+        </div>        
+    </div>
+{% endblock %}
+
 {% block content %}
     <div class="character-show" x-data="{
          roll(dice, modifier) {
-         alert(dice)
+         $dispatch('roll', { dice: dice, modifier: modifier })
          }
          }">
         <div class="pure-g">

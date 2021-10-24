@@ -17,7 +17,7 @@
             <h1 class="big-title">{% block header_title %}{% endblock %}</h1>
             <div class="pure-g">
                 <div class="pure-u-1-5">
-                    {% block menu %}
+                    {% block sidebar %}
                         <nav class="pure-menu">
                             <span class="pure-menu-heading">Eclipse Savage</span>
                             <ul class="pure-menu-list">
@@ -35,6 +35,9 @@
                                 </li>
                             </ul>
                         </nav>
+                        <section class="info">
+                            {% block info %}{% endblock %}
+                        </section>
                     {% endblock %}
                 </div>
                 <div class="pure-u-4-5">
@@ -45,7 +48,7 @@
             </div>
         {% endblock %}
         <script defer src="{{ asset('alpine/cdn.min.js') }}"></script>
-        <script defer src="{{ asset('js/DicePool.js') }}"></script>
+        <script src="{{ asset('js/DicePool.js') }}"></script>
         {% block javascripts %}
         {% endblock %}
     </body>
