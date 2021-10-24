@@ -1,65 +1,74 @@
 {% extends "base.html.twig" %}
 
 {% macro print_trait(trait) %}
-    {{ trait.name }}
-    d{{ trait.dice }}
-    {% if trait.modifier > 0 %}
-        + {{ trait.modifier }}
-    {% endif %}
+    <button x-on:click="roll({{ trait.dice }},{{ trait.modifier }})" class="pure-button">
+        d{{ trait.dice }}
+        {% if trait.modifier > 0 %}
+            + {{ trait.modifier }}
+        {% endif %}
+    </button>
 {% endmacro %}
 
 {% block header_title %}PNJ : {{ npc.name }}{% endblock %}
 
 {% block content %}
-    <div class="pure-g">
-        <div class="pure-u-1-3">
-            {{ include('fragment/background_detail.html.twig', {background: npc.background}) }}
+    <div class="character-show" x-data="{
+         roll(dice, modifier) {
+         alert(dice)
+         }
+         }">
+        <div class="pure-g">
+            <div class="pure-u-1-3">
+                {{ include('fragment/background_detail.html.twig', {background: npc.background}) }}
+            </div>
+            <div class="pure-u-1-3">
+                {{ include('fragment/faction_detail.html.twig', {faction: npc.faction}) }}
+            </div>
+            <div class="pure-u-1-3">
+                {{ include('fragment/morph_detail.html.twig', {morph: npc.morph}) }}
+            </div>
         </div>
-        <div class="pure-u-1-3">
-            {{ include('fragment/faction_detail.html.twig', {faction: npc.faction}) }}
-        </div>
-        <div class="pure-u-1-3">
-            {{ include('fragment/morph_detail.html.twig', {morph: npc.morph}) }}
-        </div>
-    </div>
-    <div class="pure-g">
-        <div class="pure-u-1-3">
-            <h2>Attributs</h2>
-            <ul>
-                {% for attr in npc.attributes %}
-                    <li>
-                        {{ _self.print_trait(attr) }}
-                    </li>
-                {% endfor %}
-            </ul>
-            <h2>Handicaps</h2>
-            <ul>
-                {% for hind in npc.hindrances %}
-                    <li>
-                        {{ hind.name }} ({{ level_hindrance(hind.level) }})
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-        <div class="pure-u-1-3">
-            <h2>Compétences</h2>
-            <ul>
-                {% for skill in npc.skills %}
-                    <li>
-                        {{ _self.print_trait(skill) }}
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-        <div class="pure-u-1-3">
-            <h2>Atouts</h2>
-            <ul>
-                {% for edge in npc.edges %}
-                    <li>
-                        {{ edge.name }}
-                    </li>
-                {% endfor %}
-            </ul>
+        <div class="pure-g">
+            <div class="pure-u-1-3">
+                <h2>Attributs</h2>
+                <table>
+                    {% for attr in npc.attributes %}
+                        <tr>
+                            <td>{{ attr.name }}</td>
+                            <td>{{ _self.print_trait(attr) }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <h2>Handicaps</h2>
+                <ul>
+                    {% for hind in npc.hindrances %}
+                        <li>
+                            <a href="{{ wikilink(hind.name) }}">{{ hind.name }} ({{ level_hindrance(hind.level) }})</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="pure-u-1-3">
+                <h2>Compétences</h2>
+                <table>
+                    {% for skill in npc.skills %}
+                        <tr>
+                            <td>{{ skill.name }}</td>
+                            <td>{{ _self.print_trait(skill) }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="pure-u-1-3">
+                <h2>Atouts</h2>
+                <ul>
+                    {% for edge in npc.edges %}
+                        <li>
+                            <a href="{{ wikilink(edge.name) }}">{{ edge.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
 {% endblock %}

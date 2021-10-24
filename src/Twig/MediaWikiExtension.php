@@ -12,10 +12,12 @@ class MediaWikiExtension extends AbstractExtension
 {
 
     protected $api;
+    protected $wikiSource;
 
-    public function __construct(MediaWiki $api)
+    public function __construct(MediaWiki $api, string $src)
     {
         $this->api = $api;
+        $this->wikiSource = $src;
     }
 
     public function getFunctions()
@@ -23,7 +25,8 @@ class MediaWikiExtension extends AbstractExtension
         return [
             new \Twig\TwigFunction('dump_page', [$this, 'dumpPage'], ['is_safe' => ['html']]),
             new \Twig\TwigFunction('dump_category', [$this, 'dumpCategory'], ['is_safe' => ['html']]),
-            new \Twig\TwigFunction('level_hindrance', [$this, 'printLevelHindrance'])
+            new \Twig\TwigFunction('level_hindrance', [$this, 'printLevelHindrance']),
+            new \Twig\TwigFunction('wikilink', [$this, 'externalWikiLink'])
         ];
     }
 
@@ -55,6 +58,11 @@ class MediaWikiExtension extends AbstractExtension
     public function printLevelHindrance(int $level): string
     {
         return \App\Repository\HindranceProvider::paramType[$level];
+    }
+
+    public function externalWikiLink(string $key): string
+    {
+        return "https://{$this->wikiSource}/fr/wiki/$key";
     }
 
 }

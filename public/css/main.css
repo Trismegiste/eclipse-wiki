@@ -52,3 +52,11 @@ nav.listing-action a {
     display: inline-block;
     margin: 0 0.5em;
 }
+
+h2 {
+    font-weight: lighter;
+}
+
+.character-show .rollable {
+    cursor: pointer;
+}

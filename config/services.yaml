@@ -45,4 +45,7 @@ services:
         factory: ['@Trismegiste\Toolbox\MongoDb\RepositoryFactory', 'create']
         arguments: ['mwpage']
     Trismegiste\Toolbox\MongoDb\Repository $pageRepo: '@app.mwpage.repository'
-                        
+                     
+    App\Twig\MediaWikiExtension:
+        arguments:
+            $src: '%env(resolve:WIKISOURCE)%'
