@@ -46,3 +46,9 @@ article {
     display: block;
     margin-left: 0.8em;
 }
+
+nav.listing-action a {
+    font-size: 150%;
+    display: inline-block;
+    margin: 0 0.5em;
+}

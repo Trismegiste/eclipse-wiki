@@ -22,7 +22,8 @@ class MediaWikiExtension extends AbstractExtension
     {
         return [
             new \Twig\TwigFunction('dump_page', [$this, 'dumpPage'], ['is_safe' => ['html']]),
-            new \Twig\TwigFunction('dump_category', [$this, 'dumpCategory'], ['is_safe' => ['html']])
+            new \Twig\TwigFunction('dump_category', [$this, 'dumpCategory'], ['is_safe' => ['html']]),
+            new \Twig\TwigFunction('level_hindrance', [$this, 'printLevelHindrance'])
         ];
     }
 
@@ -49,6 +50,11 @@ class MediaWikiExtension extends AbstractExtension
         $content = $this->api->getPageByName($title);
 
         return "<article><h1>$title</h1>\n$content</article>\n";
+    }
+
+    public function printLevelHindrance(int $level): string
+    {
+        return \App\Repository\HindranceProvider::paramType[$level];
     }
 
 }
