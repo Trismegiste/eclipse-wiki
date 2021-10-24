@@ -9,7 +9,7 @@
     </button>
 {% endmacro %}
 
-{% block header_title %}PNJ : {{ npc.name }}{% endblock %}
+{% block header_title %}PNJ : {{ npc.name }} {% if npc.wildCard %}<i class="icon-wildcard"></i>{% endif %}{% endblock %}
 
 {% block info %}
     <h2>Lancer de dés</h2>
@@ -18,13 +18,13 @@
          x-on:roll.window="rolling($event)">
         <div x-show="dice">
             <i x-bind:class="'icon-d' + dice"></i>
-            <i class="icon-d6"></i>
+            <i class="icon-d6" x-bind:class="{ 'extra-dice': !wildcard }"></i>
             <span x-text="'+' + modifier"></span>
         </div>
-        <div x-show="(dice !== null) && (result === null)">
+        <div x-show="(dice !== null) && (result === null)" class="roll-result">
             <i class="icon-spin3 animate-spin"></i>
         </div>
-        <div x-show="(dice !== null) && (result !== null)" x-text="result">
+        <div x-show="(dice !== null) && (result !== null)" x-text="result" class="roll-result" x-bind:class="{ fumble: result===1 }">
         </div>        
     </div>
 {% endblock %}
@@ -114,7 +114,7 @@
                         this.result = null;
                         var data = this
                         this.diceService.rollPool([this.dice, 6]).then(function (rolled) {
-                            console.log(data.wildcard,rolled)
+                            console.log(rolled)
                             setTimeout(function () {
                                 let maxi = Math.max.apply(null, rolled)
 

@@ -117,4 +117,14 @@ class NpcGenerator extends AbstractController
         return $this->render('npc/show.html.twig', ['npc' => $npc]);
     }
 
+    /**
+     * @Route("/npc/delete/{pk}", methods={"GET","DELETE"})
+     */
+    public function delete(string $pk): Response
+    {
+        $npc = $this->repository->load($pk);
+
+        return $this->render('npc/delete.html.twig', ['npc' => $npc]);
+    }
+
 }

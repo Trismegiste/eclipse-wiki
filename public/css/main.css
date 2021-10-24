@@ -47,10 +47,14 @@ article {
     margin-left: 0.8em;
 }
 
-nav.listing-action a {
+.character-listing i {
     font-size: 150%;
+}
+
+.character-listing nav.listing-action a {
     display: inline-block;
     margin: 0 0.5em;
+    color: #777;
 }
 
 h2 {
@@ -64,4 +68,18 @@ h2 {
 .diceroller {
     font-size: 240%;
     text-align: center;
+}
+
+.diceroller .roll-result {
+    font-size: 150%;
+    margin-top: 0.3em;
+    padding: 0.2em;
+}
+
+.roll-result.fumble {
+    background-color: pink;
+}
+
+.icon-d6.extra-dice {
+    color: #aaa;
 }

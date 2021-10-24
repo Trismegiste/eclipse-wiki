@@ -1,7 +1,7 @@
 {% extends "base.html.twig" %}
 {% block header_title %}PNJ{% endblock %}
 {% block content %}
-    <table class="pure-table pure-table-striped">
+    <table class="pure-table pure-table-striped character-listing">
         <tr>
             <th>Nom</th>
             <th>Background</th>
@@ -11,14 +11,15 @@
         </tr>
         {% for npc in listing %}
             <tr>
-                <td>{{ npc.name }}</td>
+                <td>{{ npc.name }} {% if npc.wildCard %}<i class="icon-wildcard"></i>{% endif %}</td>
                 <td>{{ npc.background.title }}</td>
                 <td>{{ npc.faction.title }}</td>
                 <td>{{ npc.morph.title }}</td>
                 <td>
                     <nav class="listing-action">
-                        <a href="{{ path('app_npcgenerator_show', {pk: npc.pk}) }}"><i class="icon-eye"></i></a>
-                        <a href="{{ path('app_npcgenerator_edit', {pk: npc.pk}) }}"><i class="icon-edit"></i></a>
+                        <a href="{{ path('app_npcgenerator_show', {pk: npc.pk}) }}" title="Voir"><i class="icon-eye"></i></a>
+                        <a href="{{ path('app_npcgenerator_edit', {pk: npc.pk}) }}" title="Modifier"><i class="icon-edit"></i></a>
+                        <a href="{{ path('app_npcgenerator_delete', {pk: npc.pk}) }}" title="Effacer"><i class="icon-trash-empty"></i></a>
                     </nav>
                 </td>
             </tr>
