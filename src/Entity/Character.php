@@ -20,7 +20,7 @@ class Character implements Root, \JsonSerializable
     }
     use EdgeContainer;
 
-    protected $wildCard = false;
+    public $wildCard = false;
     protected $background;
     protected $faction;
     protected $morph;

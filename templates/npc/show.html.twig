@@ -14,27 +14,8 @@
 {% block info %}
     <h2>Lancer de dés</h2>
     <div class="diceroller" 
-         x-data="{dice:null, modifier:0, result:null, diceService: new DicePool()}" 
-         @roll.window="dice = $event.detail.dice;
-         modifier = $event.detail.modifier;
-         result = null;
-         diceService.rollPool([dice, 6]).then(function(rolled) {
-         console.log(rolled)
-         setTimeout(function () {
-         maxi = Math.max.apply(null, rolled)
-
-         // sound
-         if (maxi == 1) {
-         inceptionSound.seek(0.8)
-         inceptionSound.play();
-         } else {
-         rollSound.play()
-         }
-
-         result = maxi + modifier
-         }, 300)                
-         })
-         ">
+         x-data="diceroller" 
+         x-on:roll.window="rolling($event)">
         <div x-show="dice">
             <i x-bind:class="'icon-d' + dice"></i>
             <i class="icon-d6"></i>
@@ -118,6 +99,42 @@
         })
         const rollSound = new Howl({
             src: ['{{ asset('sound/roll.webm')}}', '{{ asset('sound/roll.ogg') }}']
+        })
+
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('diceroller', () => ({
+                    dice: null,
+                    wildcard: {{ npc.wildCard ? 'true' : 'false' }},
+                    modifier: 0,
+                    result: null,
+                    diceService: new DicePool(),
+                    rolling(ev) {
+                        this.dice = ev.detail.dice;
+                        this.modifier = ev.detail.modifier;
+                        this.result = null;
+                        var data = this
+                        this.diceService.rollPool([this.dice, 6]).then(function (rolled) {
+                            console.log(data.wildcard,rolled)
+                            setTimeout(function () {
+                                let maxi = Math.max.apply(null, rolled)
+
+                                // sound
+                                if (maxi == 1) {
+                                    inceptionSound.seek(0.8)
+                                    inceptionSound.play();
+                                } else {
+                                    rollSound.play()
+                                }
+                                
+                                if (data.wildcard) {
+                                    data.result = maxi + data.modifier
+                                } else {
+                                    data.result = rolled[0] + data.modifier
+                                }
+                            }, 300)
+                        })
+                    }
+                }))
         })
     </script>
 {% endblock %}
