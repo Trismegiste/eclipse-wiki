@@ -19,10 +19,20 @@
          modifier = $event.detail.modifier;
          result = null;
          diceService.rollPool([dice, 6]).then(function(rolled) {
-            console.log(rolled)
-            setTimeout(function () {
-                result = Math.max.apply(null, rolled) + modifier
-            }, 300)                
+         console.log(rolled)
+         setTimeout(function () {
+         maxi = Math.max.apply(null, rolled)
+
+         // sound
+         if (maxi == 1) {
+         inceptionSound.seek(0.8)
+         inceptionSound.play();
+         } else {
+         rollSound.play()
+         }
+
+         result = maxi + modifier
+         }, 300)                
          })
          ">
         <div x-show="dice">
@@ -98,4 +108,16 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/howler.core.min.js') }}"></script>    
+    <script>
+        const inceptionSound = new Howl({
+            src: ['{{ asset('sound/foghorn.webm')}}', '{{ asset('sound/foghorn.ogg') }}']
+        })
+        const rollSound = new Howl({
+            src: ['{{ asset('sound/roll.webm')}}', '{{ asset('sound/roll.ogg') }}']
+        })
+    </script>
 {% endblock %}

@@ -44,7 +44,7 @@ class NpcStats extends AbstractType
                     'entry_type' => Type\AttributeType::class,
                     'entry_options' => [
                         'expanded' => true,
-                        'max_modif' => 0
+                        'max_modif' => 2
                     ]
                 ])
                 ->add('skill_list', Type\TraitType::class, [
@@ -57,7 +57,7 @@ class NpcStats extends AbstractType
                     'entry_type' => Type\SkillType::class,
                     'entry_options' => [
                         'expanded' => true,
-                        'max_modif' => 0
+                        'max_modif' => 2
                     ],
                     'allow_add' => true,
                     'allow_delete' => true,
