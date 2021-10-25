@@ -1,3 +1,7 @@
+:root {
+  --sawo-color: #c60000;
+}
+
 /* title */
 h1.big-title {
     font-size: 2em;
@@ -6,7 +10,7 @@ h1.big-title {
     margin: 0;
     padding: 0.3em;
     color: white;
-    background-color: #c60000;
+    background-color: var(--sawo-color);
     font-weight: lighter;
 }
 

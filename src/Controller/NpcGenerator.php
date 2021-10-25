@@ -142,16 +142,6 @@ class NpcGenerator extends AbstractController
     }
 
     /**
-     * @Route("/npc/gear/{pk}", methods={"GET","PUT"})
-     */
-    public function gear(string $pk, Request $request): Response
-    {
-        $npc = $this->repository->load($pk);
-
-        return $this->render('npc/gear.html.twig', ['form' => $form->createView()]);
-    }
-
-    /**
      * @Route("/npc/duplicate/{pk}", methods={"GET","POST"})
      */
     public function duplicate(string $pk, Request $request): Response
@@ -173,6 +163,16 @@ class NpcGenerator extends AbstractController
         }
 
         return $this->render('form.html.twig', ['title' => 'Duplicate ' . $npc->name, 'form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/npc/gear/{pk}", methods={"GET","PUT"})
+     */
+    public function gear(string $pk, Request $request): Response
+    {
+        $npc = $this->repository->load($pk);
+
+        return $this->render('npc/gear.html.twig', ['form' => $form->createView()]);
     }
 
     /**

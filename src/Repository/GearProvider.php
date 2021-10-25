@@ -6,6 +6,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Gear;
 use App\Entity\Indexable;
 use App\Entity\MediaWikiPage;
 

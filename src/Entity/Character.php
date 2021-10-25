@@ -110,4 +110,22 @@ class Character implements Root, \JsonSerializable
         $this->_id = null;
     }
 
+    public function getAttributePoints(): int
+    {
+        $cpt = 0;
+        foreach ($this->attributes as $item) {
+            /** @var \App\Entity\Attribute $item */
+            $cpt += $item->dice / 2 - 2 + $item->modifier;
+        }
+
+        return $cpt;
+    }
+
+    public function getPowerIndex(): int
+    {
+        return ($this->getAttributePoints() - 5) +
+                ($this->getSkillPoints() - 12) / 2 +
+                (count($this->edges) - 1);
+    }
+
 }
