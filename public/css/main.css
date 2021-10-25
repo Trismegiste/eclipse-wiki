@@ -1,5 +1,5 @@
 :root {
-  --sawo-color: #c60000;
+    --sawo-color: #c60000;
 }
 
 /* title */
@@ -30,19 +30,19 @@ article {
     margin: 0.2em;
 }
 
-#npc_stats nav {
+form .collection nav {
     text-align: center;
 }
 
-#npc_stats nav i {
+form .collection nav i {
     font-size: 180%;
 }
 
-#npc_stats nav a i {
+form .collection nav a i {
     color: #888;
 }
 
-#npc_stats nav a {
+form .collection nav a {
     cursor: pointer;
 }
 
@@ -90,4 +90,8 @@ h2 {
 
 aside > nav.pure-menu {
     margin-top: 1em;
+}
+
+td.centered {
+    text-align: center;
 }

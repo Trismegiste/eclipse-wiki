@@ -6,13 +6,14 @@
 
 namespace App\Entity;
 
+use JsonSerializable;
 use MongoDB\BSON\Persistable;
 use Trismegiste\Toolbox\MongoDb\PersistableImpl;
 
 /**
  * A gear or stuff
  */
-class Gear implements Indexable, Persistable
+class Gear implements Indexable, Persistable, JsonSerializable
 {
 
     use PersistableImpl;
@@ -32,6 +33,11 @@ class Gear implements Indexable, Persistable
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->bsonSerialize();
     }
 
 }

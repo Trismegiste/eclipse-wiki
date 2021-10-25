@@ -4,7 +4,7 @@
 {% block header_title %}PNJ : {{ form.vars.data.name }} {% if form.vars.data.wildCard %}<i class="icon-wildcard"></i>{% endif %}{% endblock %}
 
 {% block _npc_stats_edges_widget %}
-    <div id="npc_stats_edges" x-data="{
+    <div id="npc_stats_edges" class="collection" x-data="{
         removeEdge(k) { 
             edges.splice(k, 1) 
         },
@@ -53,7 +53,7 @@
 {% endblock %}
 
 {% block _npc_stats_hindrances_widget %}
-    <div id="npc_stats_hindrances" x-data="{
+    <div id="npc_stats_hindrances" class="collection" x-data="{
         removeHindrance(k) { 
             hindrances.splice(k, 1) 
         }

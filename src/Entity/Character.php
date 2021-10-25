@@ -21,12 +21,13 @@ class Character implements Root, \JsonSerializable
     use EdgeContainer;
 
     public $wildCard = false;
+    public $name; // the name of this character
+    public $attributes = [];
     protected $background;
     protected $faction;
     protected $morph;
-    public $attributes = [];
     protected $skills = [];
-    public $name; // the name of this character
+    protected $gears = [];
 
     public function __construct(Background $bg, Faction $fac)
     {
@@ -124,8 +125,18 @@ class Character implements Root, \JsonSerializable
     public function getPowerIndex(): int
     {
         return ($this->getAttributePoints() - 5) +
-                ($this->getSkillPoints() - 12) / 2 +
-                (count($this->edges) - 1);
+            ($this->getSkillPoints() - 12) / 2 +
+            (count($this->edges) - 1);
+    }
+
+    public function getGears(): array
+    {
+        return $this->gears;
+    }
+
+    public function setGears(array $listing)
+    {
+        $this->gears = $listing;
     }
 
 }

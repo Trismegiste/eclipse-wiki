@@ -1,0 +1,28 @@
+{% extends "base.html.twig" %}
+{% form_theme form _self %}
+
+{% block header_title %}Matériel : {{ form.vars.data.name }} {% if form.vars.data.wildCard %}<i class="icon-wildcard"></i>{% endif %}{% endblock %}
+
+{% block _npc_gears_gears_widget %}
+    <div id="{{ form.vars.id }}" class="collection" x-data="{
+         removeGear(k) { 
+            gears.splice(k, 1) 
+         }
+         }">
+        <template x-for="(gear, idx) in gears">
+            <div class="pure-g">
+                <div class="pure-u-3-4">
+                    <input type="text" x-bind:name="'npc_gears[gears][' + idx + '][name]'" x-model="gear.name" class="pure-input-1"/>
+                </div>
+                <nav class="pure-u-1-4">
+                    <a x-on:click="removeGear(idx)"><i class="icon-trash-empty"></i></a>
+                </nav>
+            </div>
+        </template>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    {{ form(form, {attr: {'x-data': form.vars.data|json_encode()}}) }}
+{% endblock %}

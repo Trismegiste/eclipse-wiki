@@ -88,6 +88,16 @@
                 </ul>
             </div>
         </div>
+        <div class="pure-g">
+            <div class="pure-u-1-2">
+                <h2>Équipement</h2>
+                <ul>
+                    {% for item in npc.gears %}
+                        <li>{{ item.name }}</li>
+                        {% endfor %}
+                </ul>
+            </div>
+        </div>
     </div>
 {% endblock %}
 
@@ -124,7 +134,7 @@
                                 } else {
                                     rollSound.play()
                                 }
-                                
+
                                 if (data.wildcard) {
                                     data.result = maxi + data.modifier
                                 } else {

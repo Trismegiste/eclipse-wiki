@@ -7,7 +7,7 @@
 namespace App\Entity;
 
 /**
- * Container for a list of Edges
+ * Container for a list of Edges & Hindrances
  */
 trait EdgeContainer
 {

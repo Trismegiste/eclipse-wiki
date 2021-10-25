@@ -127,9 +127,9 @@ class NpcGenerator extends AbstractController
     {
         $npc = $this->repository->load($pk);
         $form = $this->createFormBuilder($npc)
-                ->add('delete', SubmitType::class)
-                ->setMethod('DELETE')
-                ->getForm();
+            ->add('delete', SubmitType::class)
+            ->setMethod('DELETE')
+            ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -150,10 +150,10 @@ class NpcGenerator extends AbstractController
         $newNpc = clone $npc;
 
         $form = $this->createFormBuilder($newNpc)
-                ->add('name', TextType::class)
-                ->add('wildCard', CheckboxType::class, ['required' => false])
-                ->add('copy', SubmitType::class)
-                ->getForm();
+            ->add('name', TextType::class)
+            ->add('wildCard', CheckboxType::class, ['required' => false])
+            ->add('copy', SubmitType::class)
+            ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -171,7 +171,15 @@ class NpcGenerator extends AbstractController
     public function gear(string $pk, Request $request): Response
     {
         $npc = $this->repository->load($pk);
+        $form = $this->createForm(\App\Form\NpcGears::class, $npc);
 
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $npc = $form->getData();
+            $this->repository->save($npc);
+
+            return $this->redirectToRoute('app_npcgenerator_list');
+        }
         return $this->render('npc/gear.html.twig', ['form' => $form->createView()]);
     }
 

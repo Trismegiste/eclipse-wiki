@@ -7,9 +7,7 @@
             <th>Background</th>
             <th>Faction</th>
             <th>Morph</th>
-            <th>Skills</th>
-            <th>Edges</th>
-            <th>Power index</th>
+            <th>Power</th>
             <th>Actions</th>
         </tr>
         {% for npc in listing %}
@@ -18,9 +16,7 @@
                 <td>{{ npc.background.title }}</td>
                 <td>{{ npc.faction.title }}</td>
                 <td>{{ npc.morph.title }}</td>
-                <td>{{ npc.skills|length }} (&sum;={{ npc.skillPoints }})</td>
-                <td>{{ npc.edges|length }}</td>
-                <td>{{ npc.powerIndex }}</td>
+                <td class="centered">{{ npc.powerIndex }}</td>
                 <td>
                     <nav class="listing-action">
                         <a href="{{ path('app_npcgenerator_show', {pk: npc.pk}) }}" title="Voir"><i class="icon-eye"></i></a>
