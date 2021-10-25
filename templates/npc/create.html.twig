@@ -1,4 +1,14 @@
 {% extends "base.html.twig" %}
+{% form_theme form _self %}
+
+{% block _npc_wildCard_widget %}
+    <div class="wild-card">
+        {{ form_widget(form) }}
+        <label for="{{ form.vars.id }}">
+            <i class="icon-wildcard"></i>
+        </label>
+    </div>
+{% endblock %}
 
 {% block header_title %}Création de PNJ{% endblock %}
 
@@ -6,7 +16,8 @@
     {{ form_start(form) }}
     <div class="pure-g character">
         <div class="pure-u-1">
-            {{ form_widget(form['name'], {attr:{class:'pure-input-1'}}) }}
+            {{ form_widget(form['wildCard']) }}
+            {{ form_widget(form['name'], {attr:{class:'pure-input-3-4'}}) }}
         </div>
         <div class="pure-u-1-3">
             <h2>Historique</h2>
@@ -58,4 +69,28 @@
             document.getElementById('npc_morph').addEventListener('change', selectUpdate)
         })
     </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        #npc_name {
+            font-size: 200%;
+        }
+        .wild-card {
+            display: inline-block;
+        }
+        .wild-card i {
+            font-size: 400%;
+            vertical-align: middle;
+            cursor: pointer;
+            color: #bbb;
+        }
+        .wild-card input {
+            display: none;
+        }
+        .wild-card > input:checked + label i {
+            color: #d00;
+        }
+    </style>
 {% endblock %}

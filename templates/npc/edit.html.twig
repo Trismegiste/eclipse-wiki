@@ -1,7 +1,7 @@
 {% extends "base.html.twig" %}
 {% form_theme form _self %}
 
-{% block header_title %}PNJ : {{ form.vars.data.name }}{% endblock %}
+{% block header_title %}PNJ : {{ form.vars.data.name }} {% if form.vars.data.wildCard %}<i class="icon-wildcard"></i>{% endif %}{% endblock %}
 
 {% block _npc_stats_edges_widget %}
     <div id="npc_stats_edges" x-data="{
