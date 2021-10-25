@@ -12,7 +12,9 @@ use App\Repository\BackgroundProvider;
 use App\Repository\FactionProvider;
 use App\Repository\MorphProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -155,8 +157,32 @@ class NpcGenerator extends AbstractController
     public function duplicate(string $pk, Request $request): Response
     {
         $npc = $this->repository->load($pk);
+        $newNpc = clone $npc;
 
-        return $this->render('npc/gear.html.twig', ['form' => $form->createView()]);
+        $form = $this->createFormBuilder($newNpc)
+                ->add('name', TextType::class)
+                ->add('wildCard', CheckboxType::class, ['required' => false])
+                ->add('copy', SubmitType::class)
+                ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->repository->save($newNpc);
+
+            return $this->redirectToRoute('app_npcgenerator_list');
+        }
+
+        return $this->render('form.html.twig', ['title' => 'Duplicate ' . $npc->name, 'form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/npc/battle/{pk}", methods={"GET","PUT"})
+     */
+    public function battle(string $pk, Request $request): Response
+    {
+        $npc = $this->repository->load($pk);
+
+        return $this->render('npc/battle.html.twig', ['form' => $form->createView()]);
     }
 
 }

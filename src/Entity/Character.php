@@ -105,4 +105,9 @@ class Character implements Root, \JsonSerializable
         return $cpt;
     }
 
+    public function __clone()
+    {
+        $this->_id = null;
+    }
+
 }

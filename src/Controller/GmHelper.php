@@ -19,6 +19,14 @@ class GmHelper extends AbstractController
 {
 
     /**
+     * @Route("/")
+     */
+    public function index(): Response
+    {
+        return $this->render('base.html.twig');
+    }
+
+    /**
      * @Route("/gm/loveletter")
      */
     public function loveLetter(Request $request): Response
