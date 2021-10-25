@@ -105,7 +105,8 @@ class NpcStats extends AbstractType
                     'allow_add' => true,
                     'allow_delete' => true
                 ])
-                ->add('edit', SubmitType::class);
+                ->add('edit', SubmitType::class)
+                ->setMethod('PUT');
     }
 
     public function configureOptions(OptionsResolver $resolver)

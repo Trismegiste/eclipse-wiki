@@ -59,7 +59,7 @@ class NpcGenerator extends AbstractController
     }
 
     /**
-     * @Route("/npc/edit/{pk}", methods={"GET","POST"})
+     * @Route("/npc/edit/{pk}", methods={"GET","PUT"})
      */
     public function edit(string $pk, Request $request): Response
     {
