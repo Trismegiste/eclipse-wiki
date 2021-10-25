@@ -83,3 +83,7 @@ h2 {
 .icon-d6.extra-dice {
     color: #aaa;
 }
+
+aside > nav.pure-menu {
+    margin-top: 1em;
+}

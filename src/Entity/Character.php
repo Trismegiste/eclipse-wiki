@@ -94,4 +94,15 @@ class Character implements Root, \JsonSerializable
         return $this->bsonSerialize();
     }
 
+    public function getSkillPoints(): int
+    {
+        $cpt = 0;
+        foreach ($this->skills as $item) {
+            /** @var \App\Entity\Skill $item */
+            $cpt += $item->dice / 2 - 1 + $item->modifier;
+        }
+
+        return $cpt;
+    }
+
 }

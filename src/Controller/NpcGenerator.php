@@ -125,18 +125,38 @@ class NpcGenerator extends AbstractController
     {
         $npc = $this->repository->load($pk);
         $form = $this->createFormBuilder($npc)
-            ->add('delete', SubmitType::class)
-            ->setMethod('DELETE')
-            ->getForm();
+                ->add('delete', SubmitType::class)
+                ->setMethod('DELETE')
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->repository->delete($npc);
-            
+
             return $this->redirectToRoute('app_npcgenerator_list');
         }
 
         return $this->render('npc/delete.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/npc/gear/{pk}", methods={"GET","PUT"})
+     */
+    public function gear(string $pk, Request $request): Response
+    {
+        $npc = $this->repository->load($pk);
+
+        return $this->render('npc/gear.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/npc/duplicate/{pk}", methods={"GET","POST"})
+     */
+    public function duplicate(string $pk, Request $request): Response
+    {
+        $npc = $this->repository->load($pk);
+
+        return $this->render('npc/gear.html.twig', ['form' => $form->createView()]);
     }
 
 }
