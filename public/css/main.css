@@ -95,3 +95,7 @@ aside > nav.pure-menu {
 td.centered {
     text-align: center;
 }
+
+.character-show li {
+    line-height: 135%;
+}
