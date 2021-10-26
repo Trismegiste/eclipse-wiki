@@ -127,9 +127,9 @@ class NpcGenerator extends AbstractController
     {
         $npc = $this->repository->load($pk);
         $form = $this->createFormBuilder($npc)
-            ->add('delete', SubmitType::class)
-            ->setMethod('DELETE')
-            ->getForm();
+                ->add('delete', SubmitType::class)
+                ->setMethod('DELETE')
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -150,10 +150,10 @@ class NpcGenerator extends AbstractController
         $newNpc = clone $npc;
 
         $form = $this->createFormBuilder($newNpc)
-            ->add('name', TextType::class)
-            ->add('wildCard', CheckboxType::class, ['required' => false])
-            ->add('copy', SubmitType::class)
-            ->getForm();
+                ->add('name', TextType::class)
+                ->add('wildCard', CheckboxType::class, ['required' => false])
+                ->add('copy', SubmitType::class)
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -190,7 +190,18 @@ class NpcGenerator extends AbstractController
     {
         $npc = $this->repository->load($pk);
 
-        return $this->render('npc/battle.html.twig', ['form' => $form->createView()]);
+        $attack = new \App\Entity\Attack();
+        $attack->roll = new \App\Entity\Skill('Combat', 'AGI');
+        $attack->roll->dice = 8;
+
+        $form = $this->createFormBuilder(['attacks' => [$attack]])
+                ->add('attacks', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
+                    'entry_type' => \App\Form\Type\AttackType::class,
+                ])
+                ->add('add', SubmitType::class)
+                ->getForm();
+
+        return $this->render('form.html.twig', ['title' => 'essai', 'form' => $form->createView()]);
     }
 
 }
