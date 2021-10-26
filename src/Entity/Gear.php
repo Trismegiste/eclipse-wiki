@@ -25,7 +25,7 @@ class Gear implements Indexable, Persistable, JsonSerializable
         return $this->getName();
     }
 
-    public function __construct(string $name)
+    public function setName(string $name)
     {
         $this->name = $name;
     }

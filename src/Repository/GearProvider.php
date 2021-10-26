@@ -18,7 +18,10 @@ class GearProvider extends MongoDbProvider
 
     protected function createFromPage(MediaWikiPage $page): Indexable
     {
-        return new Gear($page->getTitle());
+        $obj = new Gear();
+        $obj->setName($page->getTitle());
+
+        return $obj;
     }
 
     protected function getCategory(): string
