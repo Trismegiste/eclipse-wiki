@@ -28,6 +28,7 @@ class Character implements Root, \JsonSerializable
     protected $morph;
     protected $skills = [];
     protected $gears = [];
+    protected $attacks = [];
 
     public function __construct(Background $bg, Faction $fac)
     {
@@ -137,6 +138,16 @@ class Character implements Root, \JsonSerializable
     public function setGears(array $listing)
     {
         $this->gears = $listing;
+    }
+
+    public function getAttacks(): array
+    {
+        return $this->attacks;
+    }
+
+    public function setAttacks(array $listing)
+    {
+        $this->attacks = $listing;
     }
 
 }
