@@ -41,7 +41,7 @@ class MeleeWeaponProvider implements GenericProvider
         array_shift($rows);
 
         $listing = [];
-        foreach ($rows as $idx => $row) {
+        foreach ($rows as $row) {
             $cells = explode('|', $row);
             $listing[] = new MeleeWeapon(
                 trim($cells[1]),

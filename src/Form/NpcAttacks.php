@@ -42,8 +42,9 @@ class NpcAttacks extends AbstractType
                     return json_encode($weap);
                 },
                 'choice_label' => function ($weap) {
-                    return "{$weap->name} : {$weap->damage} ({$weap->ap})";
-                }
+                    return "{$weap->name} : {$weap->damage} (PA {$weap->ap})";
+                },
+                'attr' => ['x-on:change' => 'attacks.push(JSON.parse($event.target.value)); $el.value=""']
             ])
             ->add('attacks', CollectionType::class, [
                 'entry_type' => AttackType::class,
