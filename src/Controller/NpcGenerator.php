@@ -197,7 +197,8 @@ class NpcGenerator extends AbstractController
         $attack = new Attack();
         $attack->roll = new Skill('Combat', 'AGI');
         $attack->roll->dice = 8;
-        $attack->title='yolo';
+        $attack->title = 'yolo';
+        $attack->damage['pool'] = [6, 6, 8];
 
         $npc->setAttacks([$attack]);
 

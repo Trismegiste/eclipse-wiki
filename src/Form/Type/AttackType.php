@@ -26,6 +26,7 @@ class AttackType extends AbstractType
                 ->add('roll', SkillType::class, ['expanded' => true])
                 ->add('rollBonus', IntegerType::class)
                 ->add('rateOfFire', IntegerType::class)
+                ->add('damage', DamagePoolType::class)
         ;
     }
 

@@ -21,8 +21,7 @@ class Attack implements Persistable
     public $roll; // a skill 
     public $rollBonus = 0;
     public $rateOfFire = 1;
-    public $damageDice = []; // an array of sides
-    public $damageBonus = 0;
+    public $damage = ['pool' => [], 'bonus' => 0]; // an array of sides and a modifier
     public $armorPiercing = 0;
     public $reach; // a string
 
