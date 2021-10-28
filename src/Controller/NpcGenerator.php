@@ -131,9 +131,9 @@ class NpcGenerator extends AbstractController
     {
         $npc = $this->repository->load($pk);
         $form = $this->createFormBuilder($npc)
-            ->add('delete', SubmitType::class)
-            ->setMethod('DELETE')
-            ->getForm();
+                ->add('delete', SubmitType::class)
+                ->setMethod('DELETE')
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -154,10 +154,10 @@ class NpcGenerator extends AbstractController
         $newNpc = clone $npc;
 
         $form = $this->createFormBuilder($newNpc)
-            ->add('name', TextType::class)
-            ->add('wildCard', CheckboxType::class, ['required' => false])
-            ->add('copy', SubmitType::class)
-            ->getForm();
+                ->add('name', TextType::class)
+                ->add('wildCard', CheckboxType::class, ['required' => false])
+                ->add('copy', SubmitType::class)
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -198,7 +198,8 @@ class NpcGenerator extends AbstractController
         $attack->roll = new Skill('Combat', 'AGI');
         $attack->roll->dice = 8;
         $attack->title = 'yolo';
-        $attack->damage['pool'] = [6, 6, 8];
+        $attack->damage = [6, 6, 8];
+        $attack->reach = 'Mêlée';
 
         $npc->setAttacks([$attack]);
 
