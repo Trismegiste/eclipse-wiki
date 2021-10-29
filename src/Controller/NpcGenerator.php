@@ -188,7 +188,7 @@ class NpcGenerator extends AbstractController
     }
 
     /**
-     * @Route("/npc/battle/{pk}", methods={"GET","PUT"})
+     * @Route("/npc/battle/{pk}", methods={"GET","POST"})
      */
     public function battle(string $pk, Request $request): Response
     {
@@ -198,12 +198,18 @@ class NpcGenerator extends AbstractController
         $attack->roll = new Skill('Combat', 'AGI');
         $attack->roll->dice = 8;
         $attack->title = 'yolo';
-        $attack->damage = \App\Entity\DamageRoll::createFromString('1d4');
+        $attack->damage = new \App\Entity\DamageRoll(); //\App\Entity\DamageRoll::createFromString('1d4');
+        $attack->damage->addDice(4);
         $attack->reach = 'Mêlée';
 
         $npc->setAttacks([$attack]);
 
-        $form = $this->createForm(NpcAttacks::class, $npc);
+        $form = $this->createForm(\App\Form\Type\AttackType::class, $attack);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            return $this->redirectToRoute('app_npcgenerator_list');
+        }
 
         return $this->render('form.html.twig', ['title' => 'essai', 'form' => $form->createView()]);
     }

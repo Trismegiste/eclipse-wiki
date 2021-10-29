@@ -29,6 +29,7 @@ class AttackType extends AbstractType
                 ->add('damage', DamageRollType::class)
                 ->add('armorPiercing', IntegerType::class)
                 ->add('reach', TextType::class)
+                ->add('save', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
         ;
     }
 
