@@ -29,7 +29,7 @@ class DamageRollTest extends TestCase
         $this->assertEquals(1, $obj->getDieCount(4));
     }
 
-    public function testParsingOneDieWithBonus()
+    public function testParsingDiceWithBonus()
     {
         $obj = DamageRoll::createFromString('2d4+3d6+4');
         $this->assertEquals(2, $obj->getDieCount(4));
@@ -68,6 +68,16 @@ class DamageRollTest extends TestCase
         $this->sut->addDice(12, 4);
         $this->assertEquals(4, $this->sut->getDieCount(12));
         $this->assertEquals([4 => 0, 6 => 0, 8 => 0, 10 => 0, 12 => 4], $this->sut->getDiceCount());
+    }
+
+    public function testToString()
+    {
+        $this->sut->addDice(4, 1);
+        $this->assertEquals('1d4', (string) $this->sut);
+        $this->sut->addDice(10, 5);
+        $this->assertEquals('1d4+5d10', (string) $this->sut);
+        $this->sut->incBonus(3);
+        $this->assertEquals('1d4+5d10+3', (string) $this->sut);
     }
 
 }

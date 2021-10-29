@@ -34,25 +34,26 @@ class NpcAttacks extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('melee_weapon_list', ChoiceType::class, [
-                'mapped' => false,
-                'required' => false,
-                'choices' => $this->melee->getListing(),
-                'choice_value' => function ($weap) {
-                    return json_encode($weap);
-                },
-                'choice_label' => function ($weap) {
-                    return "{$weap->name} : {$weap->damage} (PA {$weap->ap})";
-                },
-                'attr' => ['x-on:change' => 'attacks.push(JSON.parse($event.target.value)); $el.value=""']
-            ])
-            ->add('attacks', CollectionType::class, [
-                'entry_type' => AttackType::class,
-                'allow_add' => true,
-                'allow_delete' => true,
-                'prototype' => false
-            ])
-            ->add('edit', SubmitType::class)
+                ->add('melee_weapon_list', ChoiceType::class, [
+                    'mapped' => false,
+                    'required' => false,
+                    'choices' => $this->melee->getListing(),
+                    'choice_value' => function ($weap) {
+                        return json_encode($weap);
+                    },
+                    'choice_label' => function ($weap) {
+                        return "{$weap->name} : {$weap->damage} (PA {$weap->ap})";
+                    },
+                    'attr' => ['x-on:change' => 'attacks.push(JSON.parse($event.target.value)); $el.value=""']
+                ])
+                ->add('attacks', CollectionType::class, [
+                    'entry_type' => AttackType::class,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'prototype' => false
+                ])
+                ->setMethod('PUT')
+                ->add('edit', SubmitType::class)
         ;
     }
 

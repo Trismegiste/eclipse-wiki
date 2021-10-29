@@ -198,7 +198,7 @@ class NpcGenerator extends AbstractController
         $attack->roll = new Skill('Combat', 'AGI');
         $attack->roll->dice = 8;
         $attack->title = 'yolo';
-        $attack->damage = [6, 6, 8];
+        $attack->damage = \App\Entity\DamageRoll::createFromString('1d4');
         $attack->reach = 'Mêlée';
 
         $npc->setAttacks([$attack]);
