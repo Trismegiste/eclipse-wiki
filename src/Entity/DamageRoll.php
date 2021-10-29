@@ -12,7 +12,7 @@ use Trismegiste\Toolbox\MongoDb\PersistableImpl;
 /**
  * A damage roll in SaWo RPG
  */
-class DamageRoll implements Persistable
+class DamageRoll implements Persistable, \JsonSerializable
 {
 
     use PersistableImpl;
@@ -79,6 +79,11 @@ class DamageRoll implements Persistable
         }
 
         return $roll;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->bsonSerialize();
     }
 
 }
