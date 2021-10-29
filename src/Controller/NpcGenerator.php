@@ -188,26 +188,19 @@ class NpcGenerator extends AbstractController
     }
 
     /**
-     * @Route("/npc/battle/{pk}", methods={"GET","POST"})
+     * @Route("/npc/battle/{pk}", methods={"GET","PUT"})
      */
     public function battle(string $pk, Request $request): Response
     {
         $npc = $this->repository->load($pk);
 
-        $attack = new Attack();
-        $attack->roll = new Skill('Combat', 'AGI');
-        $attack->roll->dice = 8;
-        $attack->title = 'yolo';
-        $attack->damage = new \App\Entity\DamageRoll(); //\App\Entity\DamageRoll::createFromString('1d4');
-        $attack->damage->addDice(4);
-        $attack->reach = 'Mêlée';
-
-        $npc->setAttacks([$attack]);
-
-        $form = $this->createForm(\App\Form\Type\AttackType::class, $attack);
+        $form = $this->createForm(NpcAttacks::class, $npc);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $npc = $form->getData();
+            $this->repository->save($npc);
+
             return $this->redirectToRoute('app_npcgenerator_list');
         }
 

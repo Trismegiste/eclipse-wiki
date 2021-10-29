@@ -6,11 +6,16 @@
 
 namespace App\Entity;
 
+use MongoDB\BSON\Persistable;
+use Trismegiste\Toolbox\MongoDb\PersistableImpl;
+
 /**
  * A damage roll in SaWo RPG
  */
-class DamageRoll
+class DamageRoll implements Persistable
 {
+
+    use PersistableImpl;
 
     protected $diceCount = [4 => 0, 6 => 0, 8 => 0, 10 => 0, 12 => 0];
     protected $bonus = 0;
