@@ -22,7 +22,7 @@ class Armor implements Persistable
     public $special;
     public $zone;
 
-    public function __construct(string $name, int $protect, string $spe, string $z)
+    public function __construct(string $name = '', int $protect = 0, string $spe = '', string $z = '')
     {
         $this->name = $name;
         $this->protect = $protect;

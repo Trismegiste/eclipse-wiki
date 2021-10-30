@@ -72,7 +72,19 @@ class NpcAttacks extends AbstractType
                 'prototype' => true,
                 'prototype_data' => $this->createPrototypeData()
             ])
-            ->add('armor', IntegerType::class)
+            ->add('armor_list', ChoiceType::class, [
+                'mapped' => false,
+                'required' => false,
+                'choices' => $this->armor->getListing(),
+                'choice_value' => function ($arm) {
+                    return json_encode($arm);
+                },
+                'choice_label' => function ($arm) {
+                    return "{$arm->name} : {$arm->protect}+{$arm->special} (zone: {$arm->zone})";
+                },
+                'attr' => ['x-on:change' => 'addArmor']
+            ])
+            ->add('armor', Type\ArmorType::class, ['attr' => ['x-ref' => 'armorform']])
             ->setMethod('PUT')
             ->add('edit', SubmitType::class)
         ;

@@ -169,6 +169,14 @@
                     },
                     removeAttack(k) {
                         this.attacks.splice(k, 1)
+                    },
+                    addArmor(ev) {
+                        let armor = JSON.parse(ev.target.value)
+                        const form = this.$refs.armorform
+                        form.querySelector('input[name$="[name]"]').value = armor.name
+                        form.querySelector('input[name$="[protect]"]').value = armor.protect
+                        form.querySelector('input[name$="[special]"]').value = armor.special
+                        form.querySelector('input[name$="[zone]"]').value = armor.zone
                     }
                 }))
         })
