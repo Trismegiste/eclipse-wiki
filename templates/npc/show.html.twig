@@ -171,23 +171,37 @@
                         this.result = null;
                         var data = this
 
-                        this.diceService.rollPool([this.dice, 6]).then(function (rolled) {
+                        let pool = Array(this.rateOfFire).fill(this.dice)
+                        pool.push(6) // wild die
+                        this.diceService.rollPool(pool).then(function (rolled) {
                             console.log(rolled)
                             setTimeout(function () {
-                                let maxi = Math.max.apply(null, rolled)
+
+                                let wildDie = 0
+                                if (data.wildcard) {
+                                    wildDie = rolled[rolled.length - 1]
+                                    rolled.sort(function (a, b) {
+                                        return b - a
+                                    })
+                                    rolled.pop()
+                                } else {
+                                    wildDie = rolled.pop()
+                                    rolled.sort(function (a, b) {
+                                        return b - a
+                                    })
+                                }
+                                let maxi = rolled[rolled.length - 1]
 
                                 // sound
-                                if (maxi == 1) {
+                                if ((maxi == 1) && (wildDie == 1)) {
                                     inceptionSound.play();
                                 } else {
                                     rollSound.play()
                                 }
 
-                                if (data.wildcard) {
-                                    data.result = [maxi + data.modifier]
-                                } else {
-                                    data.result = [rolled[0] + data.modifier]
-                                }
+                                data.result = rolled.map(function (val) {
+                                    return val + data.modifier
+                                })
                             }, 300)
                         })
                     }
