@@ -16,44 +16,46 @@
                             'class': 'pure-input-1'
                         } 
                     }) }}
-                    {{ form_widget(form.vars.prototype.roll.name, {
-                        attr: {
-                            'x-bind:name': "'npc_attacks[attacks][' + idx + '][roll][name]'",
-                            'x-model': "attack.roll.name"
-                        } 
-                    }) }}
                 </div>
                 <div class="pure-u-1-4">
-                    <label x-text="attack.roll.name"></label>
-                    {{ form_widget(form.vars.prototype.roll.roll, {
-                        attr: {
-                            'x-bind:name': "'npc_attacks[attacks][' + idx + '][roll][roll]'",
-                            'x-model': "attack.roll.dice"
-                        } 
-                    }) }}                    
-                </div>
-                <nav class="pure-u-1-4">
-                    <a x-on:click="removeAttack(idx)"><i class="icon-trash-empty"></i></a>
-                </nav>
-                <div class="pure-u-1-1">
-                    {{ form_widget(form.vars.prototype.rollBonus, {
-                        attr: {
-                            'x-bind:name': "'npc_attacks[attacks][' + idx + '][rollBonus]'",
-                            'x-model': "attack.rollBonus"
-                        } 
-                    }) }}
-                    {{ form_widget(form.vars.prototype.rateOfFire, {
-                        attr: {
-                            'x-bind:name': "'npc_attacks[attacks][' + idx + '][rateOfFire]'",
-                            'x-model': "attack.rateOfFire"
-                        } 
-                    }) }}
                     {{ form_widget(form.vars.prototype.reach, {
                         attr: {
                             'x-bind:name': "'npc_attacks[attacks][' + idx + '][reach]'",
                             'x-model': "attack.reach"
                         } 
                     }) }}
+                </div>
+                <nav class="pure-u-1-4">
+                    <a x-on:click="removeAttack(idx)"><i class="icon-trash-empty"></i></a>
+                </nav>
+                <div class="pure-u-1-1">
+                    {{ form_widget(form.vars.prototype.rateOfFire, {
+                        attr: {
+                            'x-bind:name': "'npc_attacks[attacks][' + idx + '][rateOfFire]'",
+                            'x-model': "attack.rateOfFire"
+                        } 
+                    }) }}
+                    ×
+                    <label x-text="attack.roll.name"></label>
+                    {{ form_widget(form.vars.prototype.roll.name, {
+                        attr: {
+                            'x-bind:name': "'npc_attacks[attacks][' + idx + '][roll][name]'",
+                            'x-model': "attack.roll.name"
+                        } 
+                    }) }}
+                    {{ form_widget(form.vars.prototype.roll.roll, {
+                        attr: {
+                            'x-bind:name': "'npc_attacks[attacks][' + idx + '][roll][roll]'",
+                            'x-model': "attack.roll.dice"
+                        } 
+                    }) }}     
+                    +
+                    {{ form_widget(form.vars.prototype.rollBonus, {
+                        attr: {
+                            'x-bind:name': "'npc_attacks[attacks][' + idx + '][rollBonus]'",
+                            'x-model': "attack.rollBonus"
+                        } 
+                    }) }}                    
                 </div>
                 <div class="pure-u-1-1">
                     {{ form_widget(form.vars.prototype.damage, {
@@ -62,6 +64,7 @@
                             'x-bind:value': "damageToString(attack.damage)"
                         } 
                     }) }}
+                    PA
                     {{ form_widget(form.vars.prototype.armorPiercing, {
                         attr: {
                             'x-bind:name': "'npc_attacks[attacks][' + idx + '][armorPiercing]'",
@@ -94,6 +97,8 @@
                                 return skill
                             }
                         }
+
+                        return {dice: 4, modifier: -2}
                     },
                     getSaWoAttribute(name) {
                         for (let idx = 0; idx < this.attributes.length; idx++) {
@@ -134,6 +139,24 @@
                             rollBonus: 0,
                             rateOfFire: 1,
                             damage: dmg
+                        })
+
+                        ev.target.value = ""
+
+                    },
+                    addRangedWeapon(ev) {
+                        let weapon = JSON.parse(ev.target.value)
+                        this.attacks.push({
+                            title: weapon.name,
+                            roll: {
+                                name: "Tir",
+                                dice: this.getSkill("Tir").dice
+                            },
+                            armorPiercing: weapon.ap,
+                            reach: weapon.reach,
+                            rollBonus: 0,
+                            rateOfFire: weapon.rof,
+                            damage: weapon.damage
                         })
 
                         ev.target.value = ""
