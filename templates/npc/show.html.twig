@@ -10,7 +10,7 @@
 {% endmacro %}
 
 {% macro print_damage(damage) %}
-    <button class="pure-button">
+    <button class="pure-button" x-on:click="$dispatch('damage', {{ damage|json_encode() }} )">
         {{ damage }}
     </button>
 {% endmacro %}
@@ -18,20 +18,40 @@
 {% block header_title %}PNJ : {{ npc.name }} {% if npc.wildCard %}<i class="icon-wildcard"></i>{% endif %}{% endblock %}
 
 {% block info %}
-    <h2>Lancer de dés</h2>
-    <div class="diceroller" 
-         x-data="diceroller" 
-         x-on:roll.window="rolling($event)">
-        <div x-show="dice">
-            <i x-bind:class="'icon-d' + dice"></i>
-            <i class="icon-d6" x-bind:class="{ 'extra-dice': !wildcard }"></i>
-            <span x-text="'+' + modifier"></span>
+    <div x-data="{ diceService: new DicePool() }">
+        <h2>Lancer de trait</h2>
+        <div class="diceroller" 
+             x-data="traitroller" 
+             x-on:roll.window="rolling($event)">
+            <div x-show="dice">
+                <i x-bind:class="'icon-d' + dice"></i>
+                <i class="icon-d6" x-bind:class="{ 'extra-dice': !wildcard }"></i>
+                <span x-text="'+' + modifier"></span>
+            </div>
+            <div x-show="(dice !== null) && (result === null)" class="roll-result">
+                <i class="icon-spin3 animate-spin"></i>
+            </div>
+            <div x-show="(dice !== null) && (result !== null)" x-text="result" class="roll-result" x-bind:class="{ fumble: result===1 }">
+            </div>        
+        </div>    
+        <h2>Lancer de dégâts</h2>
+        <div class="diceroller" 
+             x-data="damageroller" 
+             x-on:damage.window="rollDamage($event)">
+            <div x-show="dice">
+                <template x-for="(cnt,side) in dice">
+                    <template x-for="i in cnt">
+                        <i x-bind:class="'icon-d' + side"></i>
+                    </template>
+                </template>
+                <span x-text="'+' + modifier"></span>
+            </div>
+            <div x-show="(dice !== null) && (result === null)" class="roll-result">
+                <i class="icon-spin3 animate-spin"></i>
+            </div>
+            <div x-show="(dice !== null) && (result !== null)" x-text="result" class="roll-result">
+            </div>        
         </div>
-        <div x-show="(dice !== null) && (result === null)" class="roll-result">
-            <i class="icon-spin3 animate-spin"></i>
-        </div>
-        <div x-show="(dice !== null) && (result !== null)" x-text="result" class="roll-result" x-bind:class="{ fumble: result===1 }">
-        </div>        
     </div>
 {% endblock %}
 
@@ -134,19 +154,19 @@
         })
 
         document.addEventListener('alpine:init', () => {
-            Alpine.data('diceroller', () => ({
+            Alpine.data('traitroller', () => ({
                     dice: null,
                     wildcard: {{ npc.wildCard ? 'true' : 'false' }},
                     modifier: 0,
                     result: null,
-                    diceService: new DicePool(),
                     rolling(ev) {
                         this.dice = ev.detail.dice;
                         this.modifier = ev.detail.modifier;
                         this.result = null;
                         var data = this
+
                         this.diceService.rollPool([this.dice, 6]).then(function (rolled) {
-                            console.log(rolled)
+                            //console.log(rolled)
                             setTimeout(function () {
                                 let maxi = Math.max.apply(null, rolled)
 
@@ -166,6 +186,38 @@
                         })
                     }
                 }))
+
+            Alpine.data('damageroller', () => ({
+                    dice: null,
+                    modifier: 0,
+                    result: null,
+                    rollDamage(ev) {
+                        let damage = ev.detail
+                        this.dice = damage.diceCount;
+                        this.modifier = damage.bonus;
+                        this.result = null;
+                        var data = this
+
+                        let pool = []
+                        Object.keys(damage.diceCount).forEach(function (key, index) {
+                            let val = damage.diceCount[key]
+                            for (let k = 0; k < val; k++) {
+                                pool.push(key)
+                            }
+                        })
+                        this.diceService.rollPool(pool).then(function (rolled) {
+                            setTimeout(function () {
+                                console.log(rolled)
+                                const sum = rolled.reduce((a, b) => a + b, 0)
+
+                                // sound
+                                rollSound.play()
+                                data.result = sum + data.modifier
+                            }, 300)
+                        })
+                    }
+                }))
+
         })
     </script>
 {% endblock %}
