@@ -10,11 +10,13 @@ use App\Entity\Attack;
 use App\Entity\Character;
 use App\Entity\Skill;
 use App\Form\Type\AttackType;
+use App\Repository\ArmorProvider;
 use App\Repository\MeleeWeaponProvider;
 use App\Repository\RangedWeaponProvider;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -27,11 +29,13 @@ class NpcAttacks extends AbstractType
 
     protected $melee;
     protected $ranged;
+    protected $armor;
 
-    public function __construct(MeleeWeaponProvider $m, RangedWeaponProvider $r)
+    public function __construct(MeleeWeaponProvider $m, RangedWeaponProvider $r, ArmorProvider $armor)
     {
         $this->melee = $m;
         $this->ranged = $r;
+        $this->armor = $armor;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -68,6 +72,7 @@ class NpcAttacks extends AbstractType
                 'prototype' => true,
                 'prototype_data' => $this->createPrototypeData()
             ])
+            ->add('armor', IntegerType::class)
             ->setMethod('PUT')
             ->add('edit', SubmitType::class)
         ;

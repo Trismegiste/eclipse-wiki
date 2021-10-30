@@ -29,6 +29,7 @@ class Character implements Root, \JsonSerializable
     protected $skills = [];
     protected $gears = [];
     protected $attacks = [];
+    public $armor = 0;
 
     public function __construct(Background $bg, Faction $fac)
     {
