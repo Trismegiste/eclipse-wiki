@@ -75,7 +75,7 @@ class NpcGenerator extends AbstractController
             $npc = $form->getData();
             $this->repository->save($npc);
 
-            return $this->redirectToRoute('app_npcgenerator_list');
+            return $this->redirectToRoute('app_npcgenerator_show', ['pk' => $npc->getPk()]);
         }
 
         return $this->render('npc/edit.html.twig', ['form' => $form->createView()]);
@@ -182,7 +182,7 @@ class NpcGenerator extends AbstractController
             $npc = $form->getData();
             $this->repository->save($npc);
 
-            return $this->redirectToRoute('app_npcgenerator_list');
+            return $this->redirectToRoute('app_npcgenerator_show', ['pk' => $npc->getPk()]);
         }
         return $this->render('npc/gear.html.twig', ['form' => $form->createView()]);
     }
@@ -201,7 +201,7 @@ class NpcGenerator extends AbstractController
             $npc = $form->getData();
             $this->repository->save($npc);
 
-            return $this->redirectToRoute('app_npcgenerator_list');
+            return $this->redirectToRoute('app_npcgenerator_show', ['pk' => $npc->getPk()]);
         }
 
         return $this->render('npc/battle.html.twig', ['title' => 'essai', 'form' => $form->createView()]);
