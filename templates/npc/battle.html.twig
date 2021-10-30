@@ -28,7 +28,7 @@
                     {{ form_widget(form.vars.prototype.roll.roll, {
                         attr: {
                             'x-bind:name': "'npc_attacks[attacks][' + idx + '][roll][roll]'",
-                            'x-model': "attack.roll.roll"
+                            'x-model': "attack.roll.dice"
                         } 
                     }) }}                    
                 </div>
@@ -59,7 +59,7 @@
                     {{ form_widget(form.vars.prototype.damage, {
                         attr: {
                             'x-bind:name': "'npc_attacks[attacks][' + idx + '][damage]'",
-                            'x-model': "attack.damage"
+                            'x-bind:value': "damageToString(attack.damage)"
                         } 
                     }) }}
                     {{ form_widget(form.vars.prototype.armorPiercing, {
@@ -127,13 +127,13 @@
                             title: weapon.name,
                             roll: {
                                 name: "Combat",
-                                roll: this.getSkill("Combat").dice
+                                dice: this.getSkill("Combat").dice
                             },
                             armorPiercing: weapon.ap,
                             reach: 'Mêlée',
                             rollBonus: 0,
                             rateOfFire: 1,
-                            damage: this.damageToString(dmg)
+                            damage: dmg
                         })
 
                         ev.target.value = ""
