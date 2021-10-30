@@ -46,7 +46,7 @@
                     {{ form_widget(form.vars.prototype.roll.roll, {
                         attr: {
                             'x-bind:name': "'npc_attacks[attacks][' + idx + '][roll][roll]'",
-                            'x-model': "attack.roll.dice"
+                            'x-bind:value': "attack.roll.dice + attack.roll.modifier"
                         } 
                     }) }}     
                     +
@@ -127,12 +127,14 @@
                         let dmg = weapon.damage
                         let strength = this.getSaWoAttribute('Force')
                         dmg.diceCount[strength.dice]++
+                        let fighting = this.getSkill("Combat")
 
                         this.attacks.push({
                             title: weapon.name,
                             roll: {
                                 name: "Combat",
-                                dice: this.getSkill("Combat").dice
+                                dice: fighting.dice,
+                                modifier: fighting.modifier
                             },
                             armorPiercing: weapon.ap,
                             reach: 'Mêlée',
@@ -146,11 +148,14 @@
                     },
                     addRangedWeapon(ev) {
                         let weapon = JSON.parse(ev.target.value)
+                        let shooting = this.getSkill("Tir")
+
                         this.attacks.push({
                             title: weapon.name,
                             roll: {
                                 name: "Tir",
-                                dice: this.getSkill("Tir").dice
+                                dice: shooting.dice,
+                                modifier: shooting.modifier
                             },
                             armorPiercing: weapon.ap,
                             reach: weapon.reach,
