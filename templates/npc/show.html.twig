@@ -13,6 +13,9 @@
     <button class="pure-button" x-on:click="$dispatch('damage', {{ damage|json_encode() }} )">
         {{ damage }}
     </button>
+    <button class="pure-button" x-on:click="$dispatch('damage', {{ add_raise(damage)|json_encode() }} )">
+        +d6
+    </button>
 {% endmacro %}
 
 {% block header_title %}PNJ : {{ npc.name }} {% if npc.wildCard %}<i class="icon-wildcard"></i>{% endif %}{% endblock %}

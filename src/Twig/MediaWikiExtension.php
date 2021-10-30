@@ -26,7 +26,8 @@ class MediaWikiExtension extends AbstractExtension
             new \Twig\TwigFunction('dump_page', [$this, 'dumpPage'], ['is_safe' => ['html']]),
             new \Twig\TwigFunction('dump_category', [$this, 'dumpCategory'], ['is_safe' => ['html']]),
             new \Twig\TwigFunction('level_hindrance', [$this, 'printLevelHindrance']),
-            new \Twig\TwigFunction('wikilink', [$this, 'externalWikiLink'])
+            new \Twig\TwigFunction('wikilink', [$this, 'externalWikiLink']),
+            new \Twig\TwigFunction('add_raise', [$this, 'addRaise'])
         ];
     }
 
@@ -63,6 +64,13 @@ class MediaWikiExtension extends AbstractExtension
     public function externalWikiLink(string $key): string
     {
         return "https://{$this->wikiSource}/fr/wiki/$key";
+    }
+
+    public function addRaise(\App\Entity\DamageRoll $damage): \App\Entity\DamageRoll
+    {
+        $damage->addDice(6);
+        
+        return $damage;
     }
 
 }
