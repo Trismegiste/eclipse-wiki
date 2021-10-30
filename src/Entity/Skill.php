@@ -12,7 +12,7 @@ use Trismegiste\Toolbox\MongoDb\PersistableImpl;
 /**
  * A SaWo Skill
  */
-class Skill extends SaWoTrait implements Persistable, Indexable
+class Skill extends SaWoTrait implements Persistable, Indexable, \JsonSerializable
 {
 
     use PersistableImpl;
@@ -30,6 +30,15 @@ class Skill extends SaWoTrait implements Persistable, Indexable
     public function getUId(): string
     {
         return $this->name;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'name' => $this->name,
+            'dice' => $this->dice,
+            'modifier' => $this->modifier
+        ];
     }
 
 }

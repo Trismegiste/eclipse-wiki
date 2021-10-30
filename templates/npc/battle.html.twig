@@ -4,19 +4,36 @@
 {% block header_title %}Guerre : {{ form.vars.data.name }} {% if form.vars.data.wildCard %}<i class="icon-wildcard"></i>{% endif %}{% endblock %}
 
 {% block _npc_attacks_attacks_widget %}
-    <div id="{{ form.vars.id }}" class="collection" x-data="{
-         removeAttack(k) { 
-         attacks.splice(k, 1) 
-         }
-         }">
+    <div id="{{ form.vars.id }}" class="collection">
         <template x-for="(attack, idx) in attacks">
 
             <div class="pure-g">
-                <div class="pure-u-3-4">
-                    <input type="text" x-bind:name="'npc_attacks[attacks][' + idx + '][title]'" x-model="attack.title" class="pure-input-1"/>
+                <div class="pure-u-1-2">
+                    {{ form_widget(form.vars.prototype.title, {
+                        attr: {
+                            'x-bind:name': "'npc_attacks[attacks][' + idx + '][title]'",
+                            'x-model': "attack.title",
+                            'class': 'pure-input-1'
+                        } 
+                    }) }}
+                    {{ form_widget(form.vars.prototype.roll.name, {
+                        attr: {
+                            'x-bind:name': "'npc_attacks[attacks][' + idx + '][roll][name]'",
+                            'x-model': "attack.roll.name"
+                        } 
+                    }) }}
+                </div>
+                <div class="pure-u-1-4">
+                    <label x-text="attack.roll.name"></label>
+                    {{ form_widget(form.vars.prototype.roll.roll, {
+                        attr: {
+                            'x-bind:name': "'npc_attacks[attacks][' + idx + '][roll][roll]'",
+                            'x-model': "attack.roll.roll"
+                        } 
+                    }) }}                    
                 </div>
                 <nav class="pure-u-1-4">
-                    <a x-on:click="removeGear(idx)"><i class="icon-trash-empty"></i></a>
+                    <a x-on:click="removeAttack(idx)"><i class="icon-trash-empty"></i></a>
                 </nav>
             </div>
         </template>
@@ -25,7 +42,9 @@
 
 
 {% block content %}
-    {{ form(form, {attr: {'x-data': form.vars.data|json_encode()}}) }}
+    <div x-data="{{ form.vars.data|json_encode()|escape('html_attr') }}">
+        {{ form(form, {attr: {'x-data': 'behavior'}}) }}
+    </div>
 
     <div id="npc_attacks_attacks_0" class="pure-input-1">
 
@@ -84,4 +103,38 @@
 
     </div>
 
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('behavior', () => ({
+                    getSkill(name) {
+                        for(let idx=0; idx<this.skills.length; idx++) {
+                            let skill = this.skills[idx]
+                            if (skill.name === name) {
+                                return skill.dice
+                            }
+                        }
+                    },
+                    addMeleeWeapon(ev) {
+                        let weapon = JSON.parse(ev.target.value)
+                        this.attacks.push({
+                            title: weapon.name,
+                            roll: {
+                                name: "Combat",
+                                roll: this.getSkill("Combat")
+                            }
+                        })
+                        ev.target.value = ""
+
+                    },
+                    removeAttack(k) {
+                        this.attacks.splice(k, 1)
+                    }
+                }))
+        })
+    </script>
 {% endblock %}

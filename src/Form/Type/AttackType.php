@@ -23,7 +23,7 @@ class AttackType extends AbstractType
     {
         $builder
                 ->add('title', TextType::class)
-                ->add('roll', SkillType::class, ['expanded' => true])
+                ->add('roll', SkillType::class, ['expanded' => false])
                 ->add('rollBonus', IntegerType::class)
                 ->add('rateOfFire', IntegerType::class)
                 ->add('damage', DamageRollType::class)
