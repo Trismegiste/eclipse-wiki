@@ -32,9 +32,9 @@
             <div x-show="(dice !== null) && (result === null)" class="roll-result">
                 <i class="icon-spin3 animate-spin"></i>
             </div>
-            <div x-show="(dice !== null) && (result !== null)" class="roll-result" x-bind:class="{ fumble: result===1 }">
+            <div x-show="(dice !== null) && (result !== null)" class="roll-result">
                 <template x-for="roll in result">
-                    <div x-text="roll"></div>
+                    <div x-text="roll" x-bind:class="{ fumble: roll===1 }"></div>
                 </template>
             </div>        
         </div>    
@@ -179,18 +179,18 @@
 
                                 let wildDie = 0
                                 if (data.wildcard) {
-                                    wildDie = rolled[rolled.length - 1]
+                                    wildDie = rolled[rolled.length - 1] // keep the wild die
                                     rolled.sort(function (a, b) {
                                         return b - a
                                     })
-                                    rolled.pop()
+                                    rolled.pop() // remove the weakest value
                                 } else {
-                                    wildDie = rolled.pop()
+                                    wildDie = rolled.pop() // remove the wild die
                                     rolled.sort(function (a, b) {
                                         return b - a
                                     })
                                 }
-                                let maxi = rolled[rolled.length - 1]
+                                let maxi = rolled[0]
 
                                 // sound
                                 if ((maxi == 1) && (wildDie == 1)) {

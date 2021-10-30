@@ -80,7 +80,7 @@ h2 {
     padding: 0.2em;
 }
 
-.roll-result.fumble {
+.roll-result .fumble {
     background-color: pink;
 }
 
