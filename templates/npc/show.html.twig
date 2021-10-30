@@ -1,7 +1,7 @@
 {% extends "base.html.twig" %}
 
-{% macro print_trait(trait) %}
-    <button x-on:click="$dispatch('roll', { dice: {{ trait.dice }}, modifier: {{ trait.modifier }} })" class="pure-button">
+{% macro print_trait(trait, rof = 1) %}
+    <button x-on:click="$dispatch('roll', { dice: {{ trait.dice }}, modifier: {{ trait.modifier }}, rof: {{ rof }} })" class="pure-button">
         d{{ trait.dice }}
         {% if trait.modifier > 0 %}
             + {{ trait.modifier }}
@@ -24,14 +24,18 @@
              x-data="traitroller" 
              x-on:roll.window="rolling($event)">
             <div x-show="dice">
+                <span x-show="rateOfFire > 1" x-text="rateOfFire + '×'"></span>
                 <i x-bind:class="'icon-d' + dice"></i>
                 <i class="icon-d6" x-bind:class="{ 'extra-dice': !wildcard }"></i>
-                <span x-text="'+' + modifier"></span>
+                <span x-show="modifier > 0" x-text="'+' + modifier"></span>
             </div>
             <div x-show="(dice !== null) && (result === null)" class="roll-result">
                 <i class="icon-spin3 animate-spin"></i>
             </div>
-            <div x-show="(dice !== null) && (result !== null)" x-text="result" class="roll-result" x-bind:class="{ fumble: result===1 }">
+            <div x-show="(dice !== null) && (result !== null)" class="roll-result" x-bind:class="{ fumble: result===1 }">
+                <template x-for="roll in result">
+                    <div x-text="roll"></div>
+                </template>
             </div>        
         </div>    
         <h2>Lancer de dégâts</h2>
@@ -44,7 +48,7 @@
                         <i x-bind:class="'icon-d' + side"></i>
                     </template>
                 </template>
-                <span x-text="'+' + modifier"></span>
+                <span x-show="modifier > 0" x-text="'+' + modifier"></span>
             </div>
             <div x-show="(dice !== null) && (result === null)" class="roll-result">
                 <i class="icon-spin3 animate-spin"></i>
@@ -110,7 +114,7 @@
                             <td>{{ item.reach }}</td>
                             <td>{{ item.rateOfFire }}×</td>
                             <td>{{ item.roll.name }}</td>
-                            <td>{{ _self.print_trait(item.roll) }}+{{ item.rollBonus }}</td>
+                            <td>{{ _self.print_trait(item.roll, item.rateOfFire) }}+{{ item.rollBonus }}</td>
                             <td>{{ _self.print_damage(item.damage) }}</td>
                             <td>PA {{ item.armorPiercing }}</td>                            
                         </tr>
@@ -159,14 +163,16 @@
                     wildcard: {{ npc.wildCard ? 'true' : 'false' }},
                     modifier: 0,
                     result: null,
+                    rateOfFire: 1,
                     rolling(ev) {
                         this.dice = ev.detail.dice;
                         this.modifier = ev.detail.modifier;
+                        this.rateOfFire = ev.detail.rof
                         this.result = null;
                         var data = this
 
                         this.diceService.rollPool([this.dice, 6]).then(function (rolled) {
-                            //console.log(rolled)
+                            console.log(rolled)
                             setTimeout(function () {
                                 let maxi = Math.max.apply(null, rolled)
 
@@ -178,9 +184,9 @@
                                 }
 
                                 if (data.wildcard) {
-                                    data.result = maxi + data.modifier
+                                    data.result = [maxi + data.modifier]
                                 } else {
-                                    data.result = rolled[0] + data.modifier
+                                    data.result = [rolled[0] + data.modifier]
                                 }
                             }, 300)
                         })
