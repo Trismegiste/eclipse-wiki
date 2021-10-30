@@ -12,8 +12,18 @@ use Trismegiste\Toolbox\MongoDb\PersistableImpl;
 /**
  * A SaWo Attribute
  */
-class Attribute extends SaWoTrait implements Persistable
+class Attribute extends SaWoTrait implements Persistable, \JsonSerializable
 {
 
     use PersistableImpl;
+
+    public function jsonSerialize()
+    {
+        return [
+            'name' => $this->name,
+            'dice' => $this->dice,
+            'modifier' => $this->modifier
+        ];
+    }
+
 }

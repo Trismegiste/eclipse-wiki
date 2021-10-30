@@ -35,6 +35,40 @@
                 <nav class="pure-u-1-4">
                     <a x-on:click="removeAttack(idx)"><i class="icon-trash-empty"></i></a>
                 </nav>
+                <div class="pure-u-1-1">
+                    {{ form_widget(form.vars.prototype.rollBonus, {
+                        attr: {
+                            'x-bind:name': "'npc_attacks[attacks][' + idx + '][rollBonus]'",
+                            'x-model': "attack.rollBonus"
+                        } 
+                    }) }}
+                    {{ form_widget(form.vars.prototype.rateOfFire, {
+                        attr: {
+                            'x-bind:name': "'npc_attacks[attacks][' + idx + '][rateOfFire]'",
+                            'x-model': "attack.rateOfFire"
+                        } 
+                    }) }}
+                    {{ form_widget(form.vars.prototype.reach, {
+                        attr: {
+                            'x-bind:name': "'npc_attacks[attacks][' + idx + '][reach]'",
+                            'x-model': "attack.reach"
+                        } 
+                    }) }}
+                </div>
+                <div class="pure-u-1-1">
+                    {{ form_widget(form.vars.prototype.damage, {
+                        attr: {
+                            'x-bind:name': "'npc_attacks[attacks][' + idx + '][damage]'",
+                            'x-model': "attack.damage"
+                        } 
+                    }) }}
+                    {{ form_widget(form.vars.prototype.armorPiercing, {
+                        attr: {
+                            'x-bind:name': "'npc_attacks[attacks][' + idx + '][armorPiercing]'",
+                            'x-model': "attack.armorPiercing"
+                        } 
+                    }) }}
+                </div>
             </div>
         </template>
     </div>
@@ -45,64 +79,6 @@
     <div x-data="{{ form.vars.data|json_encode()|escape('html_attr') }}">
         {{ form(form, {attr: {'x-data': 'behavior'}}) }}
     </div>
-
-    <div id="npc_attacks_attacks_0" class="pure-input-1">
-
-        <div class="pure-g">
-            <div class="pure-u-1-3">
-                <label for="npc_attacks_attacks_0_title" class="required">Title</label>
-            </div>
-            <div class="pure-u-2-3">
-                <input type="text" id="npc_attacks_attacks_0_title" name="npc_attacks[attacks][0][title]" required="required" class="pure-input-1" value="gun">
-            </div>
-        </div>   
-
-        <div class="pure-g">
-            <div class="pure-u-1-3"><label>Combat</label></div>
-            <div class="pure-u-2-3">
-                <div id="npc_attacks_attacks_0_roll_roll">
-                    <input type="radio" id="npc_attacks_attacks_0_roll_roll_0" name="npc_attacks[attacks][0][roll][roll]" required="required" value="4">
-                    <label for="npc_attacks_attacks_0_roll_roll_0" class="required">d4</label>
-                    <input type="radio" id="npc_attacks_attacks_0_roll_roll_1" name="npc_attacks[attacks][0][roll][roll]" required="required" value="6">
-                    <label for="npc_attacks_attacks_0_roll_roll_1" class="required">d6</label>
-                    <input type="radio" id="npc_attacks_attacks_0_roll_roll_2" name="npc_attacks[attacks][0][roll][roll]" required="required" value="8" checked="checked">
-                    <label for="npc_attacks_attacks_0_roll_roll_2" class="required">d8</label>
-                    <input type="radio" id="npc_attacks_attacks_0_roll_roll_3" name="npc_attacks[attacks][0][roll][roll]" required="required" value="10">
-                    <label for="npc_attacks_attacks_0_roll_roll_3" class="required">d10</label>
-                    <input type="radio" id="npc_attacks_attacks_0_roll_roll_4" name="npc_attacks[attacks][0][roll][roll]" required="required" value="12">
-                    <label for="npc_attacks_attacks_0_roll_roll_4" class="required">d12</label>
-                    <input type="radio" id="npc_attacks_attacks_0_roll_roll_5" name="npc_attacks[attacks][0][roll][roll]" required="required" value="13">
-                    <label for="npc_attacks_attacks_0_roll_roll_5" class="required">d12+1</label>
-                    <input type="radio" id="npc_attacks_attacks_0_roll_roll_6" name="npc_attacks[attacks][0][roll][roll]" required="required" value="14">
-                    <label for="npc_attacks_attacks_0_roll_roll_6" class="required">d12+2</label>
-                </div>
-                <input type="hidden" id="npc_attacks_attacks_0_roll_name" name="npc_attacks[attacks][0][roll][name]" value="Combat">
-            </div>
-        </div>
-
-        <div class="pure-g">
-            <div class="pure-u-1-3"><label for="npc_attacks_attacks_0_rollBonus" class="required">Roll bonus</label></div>
-            <div class="pure-u-2-3"><input type="number" id="npc_attacks_attacks_0_rollBonus" name="npc_attacks[attacks][0][rollBonus]" required="required" class="pure-input-1" value="0"></div>
-        </div>
-        <div class="pure-g">
-            <div class="pure-u-1-3"><label for="npc_attacks_attacks_0_rateOfFire" class="required">Rate of fire</label></div>
-            <div class="pure-u-2-3"><input type="number" id="npc_attacks_attacks_0_rateOfFire" name="npc_attacks[attacks][0][rateOfFire]" required="required" class="pure-input-1" value="1"></div>
-        </div>
-        <div class="pure-g">
-            <div class="pure-u-1-3"><label for="npc_attacks_attacks_0_damage" class="required">Damage</label></div>
-            <div class="pure-u-2-3"><input type="text" id="npc_attacks_attacks_0_damage" name="npc_attacks[attacks][0][damage]" required="required" class="pure-input-1" value="3d8+3"></div>
-        </div>
-        <div class="pure-g">
-            <div class="pure-u-1-3"><label for="npc_attacks_attacks_0_armorPiercing" class="required">Armor piercing</label></div>
-            <div class="pure-u-2-3"><input type="number" id="npc_attacks_attacks_0_armorPiercing" name="npc_attacks[attacks][0][armorPiercing]" required="required" class="pure-input-1" value="0"></div>
-        </div>
-        <div class="pure-g">
-            <div class="pure-u-1-3"><label for="npc_attacks_attacks_0_reach" class="required">Reach</label></div>
-            <div class="pure-u-2-3"><input type="text" id="npc_attacks_attacks_0_reach" name="npc_attacks[attacks][0][reach]" required="required" class="pure-input-1" value="Mêlée"></div>
-        </div>
-
-    </div>
-
 {% endblock %}
 
 
@@ -112,22 +88,54 @@
         document.addEventListener('alpine:init', () => {
             Alpine.data('behavior', () => ({
                     getSkill(name) {
-                        for(let idx=0; idx<this.skills.length; idx++) {
+                        for (let idx = 0; idx < this.skills.length; idx++) {
                             let skill = this.skills[idx]
                             if (skill.name === name) {
-                                return skill.dice
+                                return skill
                             }
                         }
                     },
+                    getSaWoAttribute(name) {
+                        for (let idx = 0; idx < this.attributes.length; idx++) {
+                            let attr = this.attributes[idx]
+                            if (attr.name === name) {
+                                return attr
+                            }
+                        }
+                    },
+                    damageToString(damage) {
+                        let str = []
+                        Object.keys(damage.diceCount).forEach(function (key, index) {
+                            let val = damage.diceCount[key]
+                            if (val > 0) {
+                                str.push(val + 'd' + key)
+                            }
+                        })
+                        if (damage.bonus > 0) {
+                            str.push(damage.bonus)
+                        }
+
+                        return str.join('+')
+                    },
                     addMeleeWeapon(ev) {
                         let weapon = JSON.parse(ev.target.value)
+                        let dmg = weapon.damage
+                        let strength = this.getSaWoAttribute('Force')
+                        dmg.diceCount[strength.dice]++
+
                         this.attacks.push({
                             title: weapon.name,
                             roll: {
                                 name: "Combat",
-                                roll: this.getSkill("Combat")
-                            }
+                                roll: this.getSkill("Combat").dice
+                            },
+                            armorPiercing: weapon.ap,
+                            reach: 'Mêlée',
+                            rollBonus: 0,
+                            rateOfFire: 1,
+                            damage: this.damageToString(dmg)
                         })
+
                         ev.target.value = ""
 
                     },
