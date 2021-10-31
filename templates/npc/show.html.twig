@@ -18,6 +18,11 @@
     </button>
 {% endmacro %}
 
+{% macro wound_level(idx) %}
+    <input type="radio" name="wound_level" id="wound_level_{{ idx }}"/>
+    <label for="wound_level_{{ idx }}">{{ idx }}</label>
+{% endmacro %}
+
 {% block header_title %}
     {{ include('npc/menu.html.twig') }}
 {% endblock %}
@@ -124,6 +129,23 @@
                         <td>{{ npc.toughness }} ({{ npc.totalArmor }})</td>
                     </tr>
                 </table>
+                <h2>Blessures</h2>
+                <p>
+                    Secoué <input type="checkbox" name="shaken"/>
+                </p>
+                <p>
+                    Niveau
+                    {{ _self.wound_level(0) }}
+                    {{ _self.wound_level(1) }}
+                    {{ _self.wound_level(2) }}
+                    {{ _self.wound_level(3) }}
+                </p>
+                <h2>Fatigue</h2>
+                <p>
+                    Niveau
+                    {{ _self.wound_level(0) }}
+                    {{ _self.wound_level(1) }}
+                    {{ _self.wound_level(2) }}
             </div>
         </div>
         <div class="pure-g">
