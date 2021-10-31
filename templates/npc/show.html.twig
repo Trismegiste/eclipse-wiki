@@ -18,16 +18,6 @@
     </button>
 {% endmacro %}
 
-{% macro wound_level(idx) %}
-    <input type="radio" name="wound_level" id="wound_level_{{ idx }}"/>
-    <label for="wound_level_{{ idx }}">{{ idx }}</label>
-{% endmacro %}
-
-{% macro fatigue_level(idx) %}
-    <input type="radio" name="fatigue_level" id="fatigue_level_{{ idx }}"/>
-    <label for="fatigue_level_{{ idx }}">{{ idx }}</label>
-{% endmacro %}
-
 {% block header_title %}
     {{ include('npc/menu.html.twig') }}
 {% endblock %}
@@ -136,21 +126,22 @@
                 </table>
                 <h2>Blessures</h2>
                 <p>
-                    Secoué <input type="checkbox" name="shaken"/>
+                    <label>Secoué</label><input type="checkbox" name="shaken"/>
                 </p>
                 <p>
                     Niveau
-                    {{ _self.wound_level(0) }}
-                    {{ _self.wound_level(1) }}
-                    {{ _self.wound_level(2) }}
-                    {{ _self.wound_level(3) }}
+                    {% for idx in 0..3 %}
+                        <input type="radio" name="wound_level" id="wound_level_{{ idx }}"/>
+                        <label for="wound_level_{{ idx }}">{{ idx }}</label>
+                    {% endfor %}
                 </p>
                 <h2>Fatigue</h2>
                 <p>
                     Niveau
-                    {{ _self.fatigue_level(0) }}
-                    {{ _self.fatigue_level(1) }}
-                    {{ _self.fatigue_level(2) }}
+                    {% for idx in 0..2 %}
+                        <input type="radio" name="fatigue_level" id="fatigue_level_{{ idx }}"/>
+                        <label for="fatigue_level_{{ idx }}">{{ idx }}</label>
+                    {% endfor %}
             </div>
         </div>
         <div class="pure-g">
@@ -173,16 +164,20 @@
             <div class="pure-u-1-5">
                 <h2>Armures</h2>
                 <table>
-                    <tr>
-                        <td>Morphe</td>
-                        <td>{{ npc.morphArmor }}</td>
-                        <td class="right-text">T/B/J/H</td>
-                    </tr>
-                    <tr>
-                        <td>{{ npc.armor.name }}</td>
-                        <td>{{ npc.armor.protect }}+{{ npc.armor.special }}</td>
-                        <td class="right-text">{{ npc.armor.zone }}</td>
-                    </tr>
+                    {% if npc.morphArmor > 0 %}
+                        <tr>
+                            <td>Morphe</td>
+                            <td>{{ npc.morphArmor }}</td>
+                            <td class="right-text">T/B/J/H</td>
+                        </tr>
+                    {% endif %}
+                    {% if npc.armor is not null and npc.armor.protect > 0 %}
+                        <tr>
+                            <td>{{ npc.armor.name }}</td>
+                            <td>{{ npc.armor.protect }}+{{ npc.armor.special }}</td>
+                            <td class="right-text">{{ npc.armor.zone }}</td>
+                        </tr>
+                    {% endif %}
                 </table>
             </div> 
         </div>

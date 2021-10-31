@@ -173,6 +173,8 @@ class Character implements Root, \JsonSerializable
                 return $skill;
             }
         }
+
+        return null;
     }
 
     public function getAttributeByName(string $name): ?Attribute
@@ -203,10 +205,14 @@ class Character implements Root, \JsonSerializable
 
     public function getTotalArmor(): int
     {
-        $cumul = [$this->armor->protect, $this->morphArmor];
-        sort($cumul);
+        if ($this->armor) {
+            $cumul = [$this->armor->protect, $this->morphArmor];
+            sort($cumul);
 
-        return $cumul[1] + (int) floor($cumul[0] / 2);
+            return $cumul[1] + (int) floor($cumul[0] / 2);
+        } else {
+            return 0;
+        }
     }
 
 }
