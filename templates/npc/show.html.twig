@@ -18,7 +18,9 @@
     </button>
 {% endmacro %}
 
-{% block header_title %}PNJ : {{ npc.name }} {% if npc.wildCard %}<i class="icon-wildcard"></i>{% endif %}{% endblock %}
+{% block header_title %}
+    {{ include('npc/menu.html.twig') }}
+{% endblock %}
 
 {% block info %}
     <div x-data="{ diceService: new DicePool() }">

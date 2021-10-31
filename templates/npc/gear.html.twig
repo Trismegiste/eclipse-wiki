@@ -1,7 +1,9 @@
 {% extends "base.html.twig" %}
 {% form_theme form _self %}
 
-{% block header_title %}Matériel : {{ form.vars.data.name }} {% if form.vars.data.wildCard %}<i class="icon-wildcard"></i>{% endif %}{% endblock %}
+{% block header_title %}
+    {{ include('npc/menu.html.twig', {npc: form.vars.data}) }}
+{% endblock %}
 
 {% block _npc_gears_gears_widget %}
     <div id="{{ form.vars.id }}" class="collection" x-data="{
