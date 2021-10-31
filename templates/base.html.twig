@@ -18,36 +18,24 @@
             <div class="pure-g">
                 <aside class="pure-u-1-6">
                     {% block sidebar %}
+                        {% macro menu_item(route, icon, label) %}
+                            <li class="pure-menu-item">
+                                <a href="{{ path(route) }}" class="pure-menu-link">
+                                    <i class="icon-{{ icon }}"></i>
+                                    {{ label }}
+                                </a>
+                            </li>
+                        {% endmacro %}
                         <nav class="pure-menu">
                             <span class="pure-menu-heading">
                                 <i class="icon-menu"></i>
                                 Eclipse Savage
                             </span>
                             <ul class="pure-menu-list">
-                                <li class="pure-menu-item">
-                                    <a href="{{ path('app_gmhelper_loveletter') }}" class="pure-menu-link">
-                                        <i class="icon-heartbeat"></i>
-                                        Love letter
-                                    </a>
-                                </li>
-                                <li class="pure-menu-item">
-                                    <a href="{{ path('app_npcgenerator_list') }}" class="pure-menu-link">
-                                        <i class="icon-list"></i>
-                                        Liste PNJ
-                                    </a>
-                                </li>
-                                <li class="pure-menu-item">
-                                    <a href="{{ path('app_npcgenerator_create') }}" class="pure-menu-link">
-                                        <i class="icon-user-plus"></i>
-                                        Créer un PNJ
-                                    </a>
-                                </li>
-                                <li class="pure-menu-item">
-                                    <a href="{{ path('app_dump_edge') }}" class="pure-menu-link">
-                                        <i class="icon-database"></i>
-                                        Tableau Atouts
-                                    </a>
-                                </li>
+                                {{ _self.menu_item('app_gmhelper_loveletter', 'heartbeat', 'Love letter') }}
+                                {{ _self.menu_item('app_npcgenerator_list', 'list', 'Liste PNJ') }}
+                                {{ _self.menu_item('app_npcgenerator_create', 'user-plus', 'Créer un PNJ') }}
+                                {{ _self.menu_item('app_dump_edge', 'database', 'Tableau Atouts') }}
                             </ul>
                         </nav>
                         <section class="info">
