@@ -99,3 +99,7 @@ td.centered {
 .character-show li {
     line-height: 135%;
 }
+
+.right-text {
+    text-align: right;
+}

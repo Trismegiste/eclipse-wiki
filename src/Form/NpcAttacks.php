@@ -41,6 +41,8 @@ class NpcAttacks extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('morphArmor', IntegerType::class)
+            ->add('rangedMalus', IntegerType::class)
             ->add('melee_weapon_list', ChoiceType::class, [
                 'mapped' => false,
                 'required' => false,

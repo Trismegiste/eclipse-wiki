@@ -29,7 +29,9 @@ class Character implements Root, \JsonSerializable
     protected $skills = [];
     protected $gears = [];
     protected $attacks = [];
-    public $armor = 0;
+    public $armor;
+    public $morphArmor = 0;
+    public $rangedMalus = 0;
 
     public function __construct(Background $bg, Faction $fac)
     {
@@ -149,6 +151,62 @@ class Character implements Root, \JsonSerializable
     public function setAttacks(array $listing)
     {
         $this->attacks = $listing;
+    }
+
+    public function getParry(): int
+    {
+        $parry = 2;
+        $fighting = $this->searchSkillByName('Combat');
+        if (!is_null($fighting)) {
+            /** @var Skill $fighting */
+            $parry = 2 + $fighting->dice / 2 + (int) floor($fighting->modifier / 2);
+        }
+
+        return $parry;
+    }
+
+    public function searchSkillByName(string $name): ?Skill
+    {
+        foreach ($this->skills as $skill) {
+            /** @var Skill $skill */
+            if ($name === $skill->getName()) {
+                return $skill;
+            }
+        }
+    }
+
+    public function getAttributeByName(string $name): ?Attribute
+    {
+        foreach ($this->attributes as $attr) {
+            /** @var Attribute $attr */
+            if ($name === $attr->getName()) {
+                return $attr;
+            }
+        }
+
+        throw new \InvalidArgumentException("$name is not an valid attribute");
+    }
+
+    /**
+     * As per rules, Toughness should includes armor values
+     * @return int
+     */
+    public function getToughness(): int
+    {
+        $vigor = $this->getAttributeByName('Vigueur');
+
+        $toughness = 2 + $vigor->dice / 2 + (int) floor($vigor->modifier / 2);
+        $toughness += $this->getTotalArmor();
+
+        return $toughness;
+    }
+
+    public function getTotalArmor(): int
+    {
+        $cumul = [$this->armor->protect, $this->morphArmor];
+        sort($cumul);
+
+        return $cumul[1] + (int) floor($cumul[0] / 2);
     }
 
 }
