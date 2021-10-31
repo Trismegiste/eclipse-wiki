@@ -205,13 +205,15 @@ class Character implements Root, \JsonSerializable
 
     public function getTotalArmor(): int
     {
+        // if there are two armors :
         if ($this->armor) {
+            // take the max and add half of the second
             $cumul = [$this->armor->protect, $this->morphArmor];
             sort($cumul);
 
             return $cumul[1] + (int) floor($cumul[0] / 2);
         } else {
-            return 0;
+            return $this->morphArmor;
         }
     }
 
