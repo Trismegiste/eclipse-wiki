@@ -32,6 +32,7 @@ class Character implements Root, \JsonSerializable
     public $armor;
     public $morphArmor = 0;
     public $rangedMalus = 0;
+    public $toughnessBonus = 0;
 
     public function __construct(Background $bg, Faction $fac)
     {
@@ -198,6 +199,7 @@ class Character implements Root, \JsonSerializable
         $vigor = $this->getAttributeByName('Vigueur');
 
         $toughness = 2 + $vigor->dice / 2 + (int) floor($vigor->modifier / 2);
+        $toughness += $this->toughnessBonus;
         $toughness += $this->getTotalArmor();
 
         return $toughness;

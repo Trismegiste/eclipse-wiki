@@ -43,6 +43,7 @@ class NpcAttacks extends AbstractType
         $builder
             ->add('morphArmor', IntegerType::class, ['attr' => ['class' => 'pure-input-4']])
             ->add('rangedMalus', IntegerType::class, ['attr' => ['class' => 'pure-input-4']])
+            ->add('toughnessBonus', IntegerType::class, ['attr' => ['class' => 'pure-input-4']])
             ->add('melee_weapon_list', ChoiceType::class, [
                 'mapped' => false,
                 'required' => false,
