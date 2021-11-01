@@ -29,7 +29,7 @@ class CharacterFactory
 
     public function create(Background $bg, Faction $fac): Character
     {
-        $obj = new Character($bg, $fac);
+        $obj = new \App\Entity\Transhuman($bg, $fac);
         foreach ($this->attributes as $label) {
             $obj->attributes[] = new Attribute($label);
         }

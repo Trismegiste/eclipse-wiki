@@ -4,8 +4,7 @@
     <table class="pure-table pure-table-striped character-listing">
         <tr>
             <th>Name</th>
-            <th>Background</th>
-            <th>Faction</th>
+            <th>Origine</th>
             <th>Morph</th>
             <th>Power</th>
             <th>Actions</th>
@@ -13,8 +12,7 @@
         {% for npc in listing %}
             <tr>
                 <td>{{ npc.name }} {% if npc.wildCard %}<i class="icon-wildcard"></i>{% endif %}</td>
-                <td>{{ npc.background.title }}</td>
-                <td>{{ npc.faction.title }}</td>
+                <td>{{ npc.description }}</td>
                 <td>{{ npc.morph.title }}</td>
                 <td class="centered">{{ npc.powerIndex }}</td>
                 <td>

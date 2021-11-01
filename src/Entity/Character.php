@@ -12,7 +12,7 @@ use Trismegiste\Toolbox\MongoDb\RootImpl;
 /**
  * A Character
  */
-class Character implements Root, \JsonSerializable
+abstract class Character implements Root, \JsonSerializable
 {
 
     use RootImpl {
@@ -23,8 +23,6 @@ class Character implements Root, \JsonSerializable
     public $wildCard = false;
     public $name; // the name of this character
     public $attributes = [];
-    protected $background;
-    protected $faction;
     protected $morph;
     protected $skills = [];
     protected $gears = [];
@@ -33,22 +31,6 @@ class Character implements Root, \JsonSerializable
     public $morphArmor = 0;
     public $rangedMalus = 0;
     public $toughnessBonus = 0;
-
-    public function __construct(Background $bg, Faction $fac)
-    {
-        $this->background = $bg;
-        $this->faction = $fac;
-    }
-
-    public function getBackground(): Background
-    {
-        return $this->background;
-    }
-
-    public function getFaction(): Faction
-    {
-        return $this->faction;
-    }
 
     public function setMorph(Morph $mrp)
     {
@@ -219,4 +201,5 @@ class Character implements Root, \JsonSerializable
         }
     }
 
+    abstract public function getDescription(): string;
 }

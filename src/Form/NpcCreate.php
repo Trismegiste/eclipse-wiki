@@ -6,7 +6,7 @@
 
 namespace App\Form;
 
-use App\Entity\Character;
+use App\Entity\Transhuman;
 use App\Repository\BackgroundProvider;
 use App\Repository\CharacterFactory;
 use App\Repository\FactionProvider;
@@ -41,17 +41,17 @@ class NpcCreate extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('wildCard', CheckboxType::class, ['required' => false])
-                ->add('name', TextType::class, ['attr' => ['placeholder' => 'Choisissez un nom']])
-                ->add('background', Type\ProviderChoiceType::class, ['provider' => $this->background, 'placeholder' => '--- Choisissez un Historique ---'])
-                ->add('faction', Type\ProviderChoiceType::class, ['provider' => $this->faction, 'placeholder' => '--- Choisissez une Faction ---'])
-                ->add('morph', Type\ProviderChoiceType::class, ['provider' => $this->morph, 'placeholder' => '--- Choisissez un Morphe ---'])
-                ->add('generate', SubmitType::class);
+            ->add('wildCard', CheckboxType::class, ['required' => false])
+            ->add('name', TextType::class, ['attr' => ['placeholder' => 'Choisissez un nom']])
+            ->add('background', Type\ProviderChoiceType::class, ['provider' => $this->background, 'placeholder' => '--- Choisissez un Historique ---'])
+            ->add('faction', Type\ProviderChoiceType::class, ['provider' => $this->faction, 'placeholder' => '--- Choisissez une Faction ---'])
+            ->add('morph', Type\ProviderChoiceType::class, ['provider' => $this->morph, 'placeholder' => '--- Choisissez un Morphe ---'])
+            ->add('generate', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('data_class', Character::class);
+        $resolver->setDefault('data_class', Transhuman::class);
         $resolver->setDefault('empty_data', function (FormInterface $form) {
             $bg = $form->get('background')->getData();
             $fac = $form->get('faction')->getData();
