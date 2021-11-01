@@ -4,6 +4,7 @@ namespace App\Twig;
 
 use App\Service\MediaWiki;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 /**
  * Description of MediaWikiExtension
@@ -23,11 +24,9 @@ class MediaWikiExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new \Twig\TwigFunction('dump_page', [$this, 'dumpPage'], ['is_safe' => ['html']]),
-            new \Twig\TwigFunction('dump_category', [$this, 'dumpCategory'], ['is_safe' => ['html']]),
-            new \Twig\TwigFunction('level_hindrance', [$this, 'printLevelHindrance']),
-            new \Twig\TwigFunction('wikilink', [$this, 'externalWikiLink']),
-            new \Twig\TwigFunction('add_raise', [$this, 'addRaise'])
+            new TwigFunction('dump_page', [$this, 'dumpPage'], ['is_safe' => ['html']]),
+            new TwigFunction('dump_category', [$this, 'dumpCategory'], ['is_safe' => ['html']]),
+            new TwigFunction('wikilink', [$this, 'externalWikiLink']),
         ];
     }
 
@@ -56,21 +55,9 @@ class MediaWikiExtension extends AbstractExtension
         return "<article><h1>$title</h1>\n$content</article>\n";
     }
 
-    public function printLevelHindrance(int $level): string
-    {
-        return \App\Repository\HindranceProvider::paramType[$level];
-    }
-
     public function externalWikiLink(string $key): string
     {
         return "https://{$this->wikiSource}/fr/wiki/$key";
-    }
-
-    public function addRaise(\App\Entity\DamageRoll $damage): \App\Entity\DamageRoll
-    {
-        $damage->addDice(6);
-        
-        return $damage;
     }
 
 }

@@ -30,11 +30,24 @@ class CharacterFactory
     public function create(Background $bg, Faction $fac): Character
     {
         $obj = new \App\Entity\Transhuman($bg, $fac);
+        $this->addAttributes($obj);
+
+        return $obj;
+    }
+
+    public function createAli(): Character
+    {
+        $char = new \App\Entity\Ali();
+        $this->addAttributes($char);
+
+        return $char;
+    }
+
+    protected function addAttributes(Character $obj): void
+    {
         foreach ($this->attributes as $label) {
             $obj->attributes[] = new Attribute($label);
         }
-
-        return $obj;
     }
 
 }
