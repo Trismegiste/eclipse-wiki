@@ -52,7 +52,7 @@ class NpcAttacks extends AbstractType
                     return json_encode($weap);
                 },
                 'choice_label' => function ($weap) {
-                    return "{$weap->name} : {$weap->damage} (PA {$weap->ap})";
+                    return "{$weap->name} : {$weap->damage} (PA {$weap->ap}) minFOR=d{$weap->minStr}";
                 },
                 'attr' => ['x-on:change' => 'addMeleeWeapon']
             ])
@@ -64,7 +64,7 @@ class NpcAttacks extends AbstractType
                     return json_encode($weap);
                 },
                 'choice_label' => function ($weap) {
-                    return "{$weap->name} : CdT×{$weap->rof} {$weap->damage} (PA {$weap->ap})";
+                    return "{$weap->name} : CdT×{$weap->rof} {$weap->damage} (PA {$weap->ap}) minFOR=d{$weap->minStr}";
                 },
                 'attr' => ['x-on:change' => 'addRangedWeapon']
             ])

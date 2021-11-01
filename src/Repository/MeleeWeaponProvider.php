@@ -43,11 +43,13 @@ class MeleeWeaponProvider implements GenericProvider
         $listing = [];
         foreach ($rows as $row) {
             $cells = explode('|', $row);
-            $listing[] = new MeleeWeapon(
+            $w = new MeleeWeapon(
                 trim($cells[1]),
                 trim($cells[2]),
                 (int) trim($cells[3])
             );
+            $w->minStr = substr(trim($cells[4]), 1);
+            $listing[] = $w;
         }
 
         return $listing;

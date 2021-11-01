@@ -75,11 +75,7 @@ class NpcStats extends AbstractType
                 'choice_value' => function (?Edge $edge) {
                     return json_encode($edge);
                 },
-                'choice_label' => function (?Edge $edge) {
-                    return $edge ? ($edge->getName()
-                        . ' (' . strtoupper($edge->getRank()) . ') : '
-                        . str_replace(['[[', ']]'], '', $edge->getPrerequisite())) : '';
-                },
+                'choice_label' => [$this, 'printEdge'],
                 'attr' => ['x-on:change' => 'edges.push(JSON.parse($event.target.value)); $el.value=""']
             ])
             ->add('edges', CollectionType::class, [
@@ -95,13 +91,7 @@ class NpcStats extends AbstractType
                 'choice_value' => function (?Hindrance $hind) {
                     return json_encode($hind);
                 },
-                'choice_label' => function (?Hindrance $hind) {
-                    return $hind->getName() . ' (' . HindranceProvider::paramType[$hind->getChoices()] . ') : [ '
-                        . ($hind->isEgo() ? 'Ego ' : '')
-                        . ($hind->isBio() ? 'Bio ' : '')
-                        . ($hind->isSynth() ? 'Synth ' : '')
-                        . ']';
-                },
+                'choice_label' => [$this, 'printHindrance'],
                 'attr' => ['x-on:change' => 'hindrances.push(JSON.parse($event.target.value)); $el.value=""']
             ])
             ->add('hindrances', CollectionType::class, [
@@ -124,6 +114,43 @@ class NpcStats extends AbstractType
         $obj->dice = 4;
 
         return $obj;
+    }
+
+    public function printHindrance(Hindrance $hind): string
+    {
+        $str = $hind->getName() . ' (' . HindranceProvider::paramType[$hind->getChoices()] . ')';
+        $type = [];
+        if ($hind->isEgo()) {
+            $type[] = 'Ego';
+        }
+        if ($hind->isBio()) {
+            $type[] = 'Bio';
+        }
+        if ($hind->isSynth()) {
+            $type[] = 'Synth';
+        }
+        $str .= ' : ' . implode(' ', $type);
+
+        return $str;
+    }
+
+    public function printEdge(Edge $edge): string
+    {
+        $type = [];
+        if ($edge->isEgo()) {
+            $type[] = 'Ego';
+        }
+        if ($edge->isBio()) {
+            $type[] = 'Bio';
+        }
+        if ($edge->isSynth()) {
+            $type[] = 'Synth';
+        }
+
+        return $edge->getName()
+            . ' (' . strtoupper($edge->getRank()) . ') : ['
+            . implode(' ', $type) . '] '
+            . str_replace(['[[', ']]'], '', $edge->getPrerequisite());
     }
 
 }

@@ -43,13 +43,15 @@ class RangedWeaponProvider implements GenericProvider
         $listing = [];
         foreach ($rows as $row) {
             $cells = explode('|', $row);
-            $listing[] = new RangedWeapon(
+            $w = new RangedWeapon(
                 trim($cells[1]) . ' ' . trim($cells[2]) . ' (' . trim($cells[12]) . ')',
                 trim($cells[4]),
                 (int) trim($cells[5]),
                 (int) trim($cells[6]),
                 trim($cells[3])
             );
+            $w->minStr = substr(trim($cells[8]), 1);
+            $listing[] = $w;
         }
 
         return $listing;
