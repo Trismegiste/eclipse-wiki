@@ -163,7 +163,7 @@ class NpcGenerator extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->repository->save($newNpc);
 
-            return $this->redirectToRoute('app_npcgenerator_list');
+            return $this->redirectToRoute('app_npcgenerator_edit', ['pk' => $newNpc->getPk()]);
         }
 
         return $this->render('form.html.twig', ['title' => 'Duplicate ' . $npc->name, 'form' => $form->createView()]);

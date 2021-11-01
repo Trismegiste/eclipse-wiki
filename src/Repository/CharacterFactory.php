@@ -39,6 +39,9 @@ class CharacterFactory
     {
         $char = new \App\Entity\Ali();
         $this->addAttributes($char);
+        foreach ($char->attributes as $attr) {
+            $attr->dice = 4;
+        }
 
         return $char;
     }
