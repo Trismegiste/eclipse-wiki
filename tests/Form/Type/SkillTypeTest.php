@@ -23,10 +23,10 @@ class SkillTypeTest extends TypeTestCase
         // mock any dependencies
         $this->provider = $this->createMock(SkillProvider::class);
         $this->provider->expects($this->any())
-            ->method('findOne')
-            ->willReturnCallback(function($name) {
-                return new Skill($name, 'DUM');
-            });
+                ->method('findOne')
+                ->willReturnCallback(function ($name) {
+                    return new Skill($name, 'DUM');
+                });
 
         parent::setUp();
     }
@@ -65,13 +65,28 @@ class SkillTypeTest extends TypeTestCase
 
     public function testChangedName()
     {
-        $old = new Skill('Essai', 'YOLO');
+        $old = new Skill('Combat', 'YOLO');
         $form = $this->factory->create(SkillType::class, $old);
         $form->submit(['name' => 'Tir', 'roll' => 8]);
         $skill = $form->getData();
         $this->assertEquals('Tir', $skill->getName());
         $this->assertEquals(8, $skill->dice);
         $this->assertEquals(0, $skill->modifier);
+    }
+
+    public function testCustomFormView()
+    {
+        $formData = new Skill('Perception', 'INT', true);
+        $formData->dice = 12;
+        $formData->modifier = 3;
+
+        $view = $this->factory->create(SkillType::class, $formData)
+                ->createView();
+
+        $this->assertArrayHasKey('name', $view->children);
+        $this->assertSame('Perception', $view->children['name']->vars['data']);
+        $this->assertArrayHasKey('roll', $view->children);
+        $this->assertSame(15, $view->children['roll']->vars['data']);
     }
 
 }

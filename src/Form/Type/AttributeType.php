@@ -12,7 +12,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Description of AttributeType
+ * Value for an Attribute
  */
 class AttributeType extends AbstractType
 {

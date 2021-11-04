@@ -36,21 +36,22 @@ class SaWoTraitType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-
         $resolver->setRequired('provider');
-        $resolver->setDefault('data_class', SaWoTrait::class);
-        $resolver->setDefault('expanded', false);
-        $resolver->setDefault('max_modif', 2);
-        $resolver->setDefault('empty_data', function (Options $opt) {
-            /** @var GenericProvider $provider */
-            $provider = $opt['provider'];
-            return function (FormInterface $form) use ($provider) {
-                return $provider->findOne($form->get('name')->getData());
-            };
-        });
+        $resolver->setDefaults([
+            'data_class' => SaWoTrait::class,
+            'expanded' => false,
+            'max_modif' => 2,
+            'empty_data' => function (Options $opt) {
+                /** @var GenericProvider $provider */
+                $provider = $opt['provider'];
+                return function (FormInterface $form) use ($provider) {
+                    return $provider->findOne($form->get('name')->getData());
+                };
+            }
+        ]);
     }
 
-    protected function getChoices($max): array
+    protected function getChoices(int $max): array
     {
         $choices = [];
         for ($k = 4; $k <= 12; $k += 2) {
