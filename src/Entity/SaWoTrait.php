@@ -9,7 +9,7 @@ namespace App\Entity;
 /**
  * A Trait in SaWo
  */
-abstract class SaWoTrait
+abstract class SaWoTrait implements Indexable
 {
 
     protected $name;
@@ -22,6 +22,11 @@ abstract class SaWoTrait
     }
 
     public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getUId(): string
     {
         return $this->name;
     }
