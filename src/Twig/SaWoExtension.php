@@ -27,7 +27,8 @@ class SaWoExtension extends AbstractExtension
         return [
             new TwigFunction('level_hindrance', [$this, 'printLevelHindrance']),
             new TwigFunction('add_raise', [$this, 'addRaise']),
-            new TwigFunction('char_info_template', [$this, 'getInfoTemplate'])
+            new TwigFunction('char_info_template', [$this, 'getInfoTemplate']),
+            new TwigFunction('dice_icon', [$this, 'diceIcon'], ['is_safe' => ['html']])
         ];
     }
 
@@ -46,6 +47,21 @@ class SaWoExtension extends AbstractExtension
     public function getInfoTemplate(\App\Entity\Character $char): string
     {
         return self::infoTemplate[get_class($char)];
+    }
+
+    public function diceIcon(string $roll): string
+    {
+        $dump = [];
+        if (preg_match('#^d(\d{1,2})\+?(\d*)$#', $roll, $dump, PREG_UNMATCHED_AS_NULL)) {
+            $str = '<i class="icon-d' . $dump[1] . '"></i>';
+            if (!empty($dump[2])) {
+                $str .= '+' . $dump[2];
+            }
+
+            return $str;
+        }
+
+        return $roll;
     }
 
 }
