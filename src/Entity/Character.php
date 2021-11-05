@@ -146,7 +146,7 @@ abstract class Character implements Root, \JsonSerializable
             $parry = 2 + $fighting->dice / 2 + (int) floor($fighting->modifier / 2);
         }
 
-        return $parry;
+        return $parry + $this->parryBonus;
     }
 
     public function searchSkillByName(string $name): ?Skill
