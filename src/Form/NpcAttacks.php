@@ -41,10 +41,9 @@ class NpcAttacks extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('morphArmor', IntegerType::class, ['attr' => ['class' => 'pure-input-4']])
+            ->add('parryBonus', IntegerType::class, ['attr' => ['class' => 'pure-input-4']])
             ->add('rangedMalus', IntegerType::class, ['attr' => ['class' => 'pure-input-4']])
             ->add('toughnessBonus', IntegerType::class, ['attr' => ['class' => 'pure-input-4']])
-            ->add('parryBonus', IntegerType::class, ['attr' => ['class' => 'pure-input-4']])
             ->add('melee_weapon_list', ChoiceType::class, [
                 'mapped' => false,
                 'required' => false,
@@ -79,7 +78,7 @@ class NpcAttacks extends AbstractType
             ->add('armor_list', ChoiceType::class, [
                 'mapped' => false,
                 'required' => false,
-                'choices' => $this->armor->getListing(),
+                'choices' => $this->getArmor(),
                 'choice_value' => function ($arm) {
                     return json_encode($arm);
                 },
@@ -131,6 +130,15 @@ class NpcAttacks extends AbstractType
     {
         $listing = $this->ranged->getListing();
         $generic = new \App\Entity\RangedWeapon('Attaque distance générique', '2d6', 0, 1, '12/24/48');
+        array_unshift($listing, $generic);
+
+        return $listing;
+    }
+
+    protected function getArmor(): array
+    {
+        $listing = $this->armor->getListing();
+        $generic = new \App\Entity\Armor('Morphe', 4, '', 'T/B/J/H');
         array_unshift($listing, $generic);
 
         return $listing;

@@ -22,8 +22,8 @@ class ArmorType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, ['required' => false])
-            ->add('protect', IntegerType::class, ['required' => false])
+            ->add('name', TextType::class, ['required' => true])
+            ->add('protect', IntegerType::class, ['required' => true])
             ->add('special', TextType::class, ['required' => false])
             ->add('zone', TextType::class, ['required' => false])
         ;
