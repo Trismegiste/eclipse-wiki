@@ -86,7 +86,7 @@
                                x-bind:checked="(skill.dice + skill.modifier) == {{ child.vars.value }}"
                                value="{{ child.vars.value }}"
                                required="required"><label x-bind:for="'npc_stats_skills_' + idx + '_roll_{{ num }}'"
-                               class="required">{{ child.vars.label }}</label>
+                               class="required">{{ dice_icon(child.vars.label) }}</label>
                     {% endfor -%}
                     {{ form_widget(form.vars.prototype.name, {
                         attr: {
@@ -163,4 +163,13 @@
                 }))
         })
     </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        #npc_stats_skills i {
+            font-size: 140%;
+        }
+    </style>
 {% endblock %}
