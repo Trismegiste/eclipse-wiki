@@ -47,7 +47,7 @@ class NpcAttacks extends AbstractType
             ->add('melee_weapon_list', ChoiceType::class, [
                 'mapped' => false,
                 'required' => false,
-                'choices' => $this->melee->getListing(),
+                'choices' => $this->getMelee(),
                 'choice_value' => function ($weap) {
                     return json_encode($weap);
                 },
@@ -59,7 +59,7 @@ class NpcAttacks extends AbstractType
             ->add('ranged_weapon_list', ChoiceType::class, [
                 'mapped' => false,
                 'required' => false,
-                'choices' => $this->ranged->getListing(),
+                'choices' => $this->getRanged(),
                 'choice_value' => function ($weap) {
                     return json_encode($weap);
                 },
@@ -101,9 +101,27 @@ class NpcAttacks extends AbstractType
     protected function createPrototypeData()
     {
         $attack = new Attack();
-        $attack->roll = new Skill('yolo', 'ZOB');
+        $attack->roll = new Skill('yolo', 'DUM');
 
         return $attack;
+    }
+
+    protected function getMelee(): array
+    {
+        $listing = $this->melee->getListing();
+        $generic = new \App\Entity\MeleeWeapon('Attaque contact générique', 'FOR+d4', 0);
+        array_unshift($listing, $generic);
+
+        return $listing;
+    }
+
+    protected function getRanged(): array
+    {
+        $listing = $this->ranged->getListing();
+        $generic = new \App\Entity\RangedWeapon('Attaque distance générique', '2d6', 0, 1, '12/24/48');
+        array_unshift($listing, $generic);
+
+        return $listing;
     }
 
 }
