@@ -18,8 +18,8 @@ class SaWoExtension extends AbstractExtension
 {
 
     const infoTemplate = [
-        \App\Entity\Ali::class => 'npc/info_ali.html.twig',
-        \App\Entity\Transhuman::class => 'npc/info_transhuman.html.twig'
+        \App\Entity\Ali::class => 'npc/ali/info.html.twig',
+        \App\Entity\Transhuman::class => 'npc/transhuman/info.html.twig'
     ];
 
     public function getFunctions()
