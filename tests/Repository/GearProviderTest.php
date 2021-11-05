@@ -3,32 +3,27 @@
 use App\Entity\Gear;
 use App\Entity\MediaWikiPage;
 use App\Repository\GearProvider;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\TestCase;
+use Trismegiste\Toolbox\MongoDb\Repository;
 
 /*
  * eclipse-wiki
  */
 
-class GearProviderTest extends KernelTestCase
+class GearProviderTest extends TestCase
 {
+
+    protected $sut;
+    protected $repo;
 
     protected function setUp(): void
     {
-        self::createKernel();
-        $this->sut = new GearProvider(self::getContainer()->get('app.mwpage.repository'));
-    }
+        $this->repo = $this->createMock(Repository::class);
+        $this->repo->expects($this->any())
+                ->method('search')
+                ->willReturn(new ArrayIterator([$this->createPage()]));
 
-    public function testInsertData()
-    {
-        $repo = self::getContainer()->get('app.mwpage.repository');
-        $it = $repo->search();
-        $repo->delete(iterator_to_array($it));
-
-        $dummy = new MediaWikiPage('Dummy', 'Matériel');
-        $dummy->content = "zzzzzzzz";
-        $repo->save($dummy);
-        $it = $repo->search();
-        $this->assertCount(1, iterator_to_array($it));
+        $this->sut = new GearProvider($this->repo);
     }
 
     public function testFindOne()
@@ -44,6 +39,14 @@ class GearProviderTest extends KernelTestCase
         $this->assertArrayHasKey('Dummy', $edge);
         $this->assertInstanceOf(Gear::class, $edge['Dummy']);
         $this->assertEquals('Dummy', $edge['Dummy']->getName());
+    }
+
+    protected function createPage(): MediaWikiPage
+    {
+        $dummy = new MediaWikiPage('Dummy', 'Matériel');
+        $dummy->content = "zzzzzzzz";
+
+        return $dummy;
     }
 
 }
