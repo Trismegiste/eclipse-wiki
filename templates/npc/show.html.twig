@@ -147,7 +147,7 @@
             </div>
         </div>
         <div class="pure-g">
-            <div class="pure-u-4-5">
+            <div class="pure-u-3-4">
                 <h2>Attaques</h2>
                 <table class="pure-table">
                     {% for item in npc.attacks %}
@@ -163,23 +163,16 @@
                     {% endfor %}
                 </table>
             </div>
-            <div class="pure-u-1-5">
+            <div class="pure-u-1-4">
                 <h2>Armures</h2>
-                <table>
-                    {% if npc.morphArmor > 0 %}
+                <table class="pure-table">
+                    {% for item in npc.armors %}
                         <tr>
-                            <td>Morphe</td>
-                            <td>{{ npc.morphArmor }}</td>
-                            <td class="right-text">T/B/J/H</td>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.protect }} {{ item.special }}</td>
+                            <td class="right-text">{{ item.zone }}</td>
                         </tr>
-                    {% endif %}
-                    {% if npc.armor is not null and npc.armor.protect > 0 %}
-                        <tr>
-                            <td>{{ npc.armor.name }}</td>
-                            <td>{{ npc.armor.protect }}+{{ npc.armor.special }}</td>
-                            <td class="right-text">{{ npc.armor.zone }}</td>
-                        </tr>
-                    {% endif %}
+                    {% endfor %}
                 </table>
             </div> 
         </div>

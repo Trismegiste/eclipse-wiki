@@ -199,15 +199,20 @@ abstract class Character implements Root, \JsonSerializable
 
     public function getTotalArmor(): int
     {
-        // if there are two armors :
-        if ($this->armor) {
-            // take the max and add half of the second
-            $cumul = [$this->armor->protect, $this->morphArmor];
-            sort($cumul);
+        // only torso armors, as per SaWo rules
+        $torso = array_filter($this->armors, function(Armor $a) {
+            return false !== strpos($a->zone, 'T');
+        });
 
-            return $cumul[1] + (int) floor($cumul[0] / 2);
-        } else {
-            return $this->morphArmor;
+        // reverse order
+        usort($torso, function (Armor $a, Armor $b) {
+            return $b->protect - $a->protect;
+        });
+
+        switch (count($torso)) {
+            case 0 : return 0;
+            case 1 : return $torso[0]->protect;
+            default : return $torso[0]->protect + (int) floor($torso[1]->protect / 2);
         }
     }
 
