@@ -74,7 +74,7 @@ class NpcAttacks extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'prototype' => true,
-                'prototype_data' => $this->createPrototypeData()
+                'prototype_data' => $this->createProtoAttackData()
             ])
             ->add('armor_list', ChoiceType::class, [
                 'mapped' => false,
@@ -88,7 +88,13 @@ class NpcAttacks extends AbstractType
                 },
                 'attr' => ['x-on:change' => 'addArmor']
             ])
-            ->add('armor', Type\ArmorType::class, ['attr' => ['x-ref' => 'armorform']])
+            ->add('armors', CollectionType::class, [
+                'entry_type' => Type\ArmorType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
+                'prototype_data' => $this->createProtoArmorData()
+            ])
             ->setMethod('PUT')
             ->add('edit', SubmitType::class)
         ;
@@ -99,12 +105,17 @@ class NpcAttacks extends AbstractType
         $resolver->setDefault('data_class', Character::class);
     }
 
-    protected function createPrototypeData()
+    protected function createProtoAttackData()
     {
         $attack = new Attack();
         $attack->roll = new Skill('yolo', 'DUM');
 
         return $attack;
+    }
+
+    protected function createProtoArmorData()
+    {
+        return new \App\Entity\Armor();
     }
 
     protected function getMelee(): array

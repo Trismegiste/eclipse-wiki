@@ -27,8 +27,7 @@ abstract class Character implements Root, \JsonSerializable
     protected $skills = [];
     protected $gears = [];
     protected $attacks = [];
-    public $armor;
-    public $morphArmor = 0;
+    protected $armors = [];
     public $rangedMalus = 0;
     public $toughnessBonus = 0;
     public $parryBonus = 0;
@@ -135,6 +134,16 @@ abstract class Character implements Root, \JsonSerializable
     public function setAttacks(array $listing)
     {
         $this->attacks = $listing;
+    }
+
+    public function getArmors(): array
+    {
+        return $this->armors;
+    }
+
+    public function setArmors(array $listing)
+    {
+        $this->armors = $listing;
     }
 
     public function getParry(): int
