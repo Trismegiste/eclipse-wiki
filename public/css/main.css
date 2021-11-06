@@ -107,3 +107,7 @@ td.centered {
 .right-text {
     text-align: right;
 }
+
+input[type=text].highlight {
+    color: var(--sawo-color);
+}
