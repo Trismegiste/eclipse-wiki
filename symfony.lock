@@ -541,5 +541,11 @@
     },
     "webmozart/assert": {
         "version": "1.10.0"
+    },
+    "wikimedia/little-wikitext": {
+        "version": "dev-main"
+    },
+    "wikimedia/wikipeg": {
+        "version": "2.0.6"
     }
 }

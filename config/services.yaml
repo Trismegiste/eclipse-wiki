@@ -49,3 +49,9 @@ services:
     App\Twig\MediaWikiExtension:
         arguments:
             $src: '%env(resolve:WIKISOURCE)%'
+            
+    app.document.repository:
+        class: Trismegiste\Toolbox\MongoDb\Repository
+        factory: ['@Trismegiste\Toolbox\MongoDb\RepositoryFactory', 'create']
+        arguments: ['document']
+    Trismegiste\Toolbox\MongoDb\Repository $documentRepo: '@app.document.repository'            

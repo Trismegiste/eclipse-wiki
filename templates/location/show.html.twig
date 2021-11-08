@@ -1,0 +1,11 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ location.title }}{% endblock %}
+
+{% block header_title %}
+    {{ location.title }}
+{% endblock %}
+
+{% block content %}
+    {{ dump(location) }}
+{% endblock %}
