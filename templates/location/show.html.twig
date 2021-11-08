@@ -3,9 +3,10 @@
 {% block title %}{{ location.title }}{% endblock %}
 
 {% block header_title %}
-    {{ location.title }}
+    Lieu : {{ location.title }}
 {% endblock %}
 
 {% block content %}
-    {{ dump(location) }}
+    <h1>{{ location.title }}</h1>
+    {{ littlewiki(location.content) }}
 {% endblock %}
