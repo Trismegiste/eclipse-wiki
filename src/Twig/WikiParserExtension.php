@@ -25,7 +25,9 @@ class WikiParserExtension extends AbstractExtension
 
     public function printWikiText(string $wikitext): string
     {
-        return WikitextParser::parse($wikitext);
+        $parser = new WikitextParser(new \Mike42\Wikitext\DefaultParserBackend());
+
+        return $parser->parse($wikitext);
     }
 
 }
