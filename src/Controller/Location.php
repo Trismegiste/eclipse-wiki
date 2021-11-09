@@ -8,6 +8,7 @@ namespace App\Controller;
 
 use App\Form\LocationType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -73,6 +74,54 @@ class Location extends AbstractController
         }
 
         return $this->render('location/show.html.twig', ['location' => $loc]);
+    }
+
+    /**
+     * @Route("/location/list", methods={"GET"})
+     */
+    public function list(): Response
+    {
+        return $this->render('location/list.html.twig', ['listing' => $this->repository->search()]);
+    }
+
+    /**
+     * @Route("/location/edit/{pk}", methods={"GET","PUT"})
+     */
+    public function edit(string $pk, Request $request): Response
+    {
+        $loc = $this->repository->load($pk);
+        $form = $this->createForm(LocationType::class, $loc);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $loc = $form->getData();
+            $this->repository->save($loc);
+
+            return $this->redirectToRoute('app_location_show', ['pk' => $npc->getPk()]);
+        }
+
+        return $this->render('form.html.twig', ['title' => 'Edit', 'form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/location/delete/{pk}", methods={"GET","DELETE"})
+     */
+    public function delete(string $pk, Request $request): Response
+    {
+        $loc = $this->repository->load($pk);
+        $form = $this->createFormBuilder($loc)
+            ->add('delete', SubmitType::class)
+            ->setMethod('DELETE')
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->repository->delete($loc);
+
+            return $this->redirectToRoute('app_location_list');
+        }
+
+        return $this->render('form.html.twig', ['title' => 'Delete', 'form' => $form->createView()]);
     }
 
 }

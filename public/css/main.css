@@ -55,11 +55,11 @@ form .collection nav a {
     margin-left: 0.8em;
 }
 
-.character-listing i {
+.entity-listing i {
     font-size: 150%;
 }
 
-.character-listing nav.listing-action a {
+.entity-listing nav.listing-action a {
     display: inline-block;
     margin: 0 0.5em;
     color: #777;

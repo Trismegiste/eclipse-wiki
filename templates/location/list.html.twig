@@ -1,0 +1,24 @@
+{% extends "base.html.twig" %}
+{% block header_title %}Location{% endblock %}
+{% block content %}
+    <table class="pure-table pure-table-striped entity-listing">
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Actions</th>
+        </tr>
+        {% for loc in listing %}
+            <tr>
+                <td>{{ loc.title }}</td>
+                <td>Location</td>
+                <td>
+                    <nav class="listing-action">
+                        <a href="{{ path('app_location_show', {pk: loc.pk}) }}" title="Voir"><i class="icon-eye"></i></a>
+                        <a href="{{ path('app_location_edit', {pk: loc.pk}) }}" title="Modifier"><i class="icon-edit"></i></a>
+                        <a href="{{ path('app_location_delete', {pk: loc.pk}) }}" title="Effacer"><i class="icon-trash-empty"></i></a>
+                    </nav>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
