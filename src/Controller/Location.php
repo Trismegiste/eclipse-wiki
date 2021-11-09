@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Trismegiste\Toolbox\MongoDb\Repository;
-use Wikimedia\LittleWikitext\LittleWikitext;
 
 /**
  * CRUD for Location
@@ -32,7 +31,13 @@ class Location extends AbstractController
      */
     public function create(Request $request): Response
     {
-        $form = $this->createForm(LocationType::class);
+        $obj = null;
+        if ($request->query->has('title')) {
+            $obj = new \App\Entity\Location();
+            $obj->title = $request->query->get('title');
+        }
+
+        $form = $this->createForm(LocationType::class, $obj);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -51,6 +56,21 @@ class Location extends AbstractController
     public function show(string $pk): Response
     {
         $loc = $this->repository->load($pk);
+
+        return $this->render('location/show.html.twig', ['location' => $loc]);
+    }
+
+    /**
+     * @Route("/wiki/{title}", methods={"GET"}, name="app_wiki")
+     */
+    public function wikiShow(string $title): Response
+    {
+        $it = $this->repository->search(['title' => $title]);
+        $it->rewind();
+        $loc = $it->current();
+        if (is_null($loc)) {
+            return $this->redirectToRoute('app_location_create', ['title' => $title]);
+        }
 
         return $this->render('location/show.html.twig', ['location' => $loc]);
     }

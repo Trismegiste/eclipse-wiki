@@ -16,6 +16,13 @@ use Twig\TwigFunction;
 class WikiParserExtension extends AbstractExtension
 {
 
+    protected $parser;
+
+    public function __construct(WikitextParser $wikiParser)
+    {
+        $this->parser = $wikiParser;
+    }
+
     public function getFunctions()
     {
         return [
@@ -25,9 +32,7 @@ class WikiParserExtension extends AbstractExtension
 
     public function printWikiText(string $wikitext): string
     {
-        $parser = new WikitextParser(new \Mike42\Wikitext\DefaultParserBackend());
-
-        return $parser->parse($wikitext);
+        return $this->parser->parse($wikitext);
     }
 
 }

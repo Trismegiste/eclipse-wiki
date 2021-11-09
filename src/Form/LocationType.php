@@ -24,7 +24,7 @@ class LocationType extends AbstractType
     {
         $builder
             ->add('title', TextType::class)
-            ->add('content', TextareaType::class)
+            ->add('content', TextareaType::class, ['attr' => ['rows' => 15]])
             ->add('create', SubmitType::class);
     }
 

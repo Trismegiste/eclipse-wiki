@@ -54,4 +54,8 @@ services:
         class: Trismegiste\Toolbox\MongoDb\Repository
         factory: ['@Trismegiste\Toolbox\MongoDb\RepositoryFactory', 'create']
         arguments: ['document']
-    Trismegiste\Toolbox\MongoDb\Repository $documentRepo: '@app.document.repository'            
+    Trismegiste\Toolbox\MongoDb\Repository $documentRepo: '@app.document.repository'
+    
+    Mike42\Wikitext\WikitextParser:
+        arguments:
+            - '@App\Twig\LinkRender'
