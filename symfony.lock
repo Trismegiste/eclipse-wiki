@@ -35,6 +35,9 @@
     "laminas/laminas-zendframework-bridge": {
         "version": "1.4.0"
     },
+    "mike42/wikitext": {
+        "version": "dev-master"
+    },
     "monolog/monolog": {
         "version": "2.3.4"
     },
@@ -541,11 +544,5 @@
     },
     "webmozart/assert": {
         "version": "1.10.0"
-    },
-    "wikimedia/little-wikitext": {
-        "version": "dev-main"
-    },
-    "wikimedia/wikipeg": {
-        "version": "2.0.6"
     }
 }

@@ -41,7 +41,7 @@
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0",
         "trismegiste/toolbox": "dev-master",   
-        "wikimedia/little-wikitext": "dev-main"        
+        "mike42/wikitext": "dev-master"        
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
@@ -100,11 +100,6 @@
         {
             "type": "vcs",
             "url": "https://github.com/Trismegiste/toolbox/"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/Trismegiste/little-wikitext.git"
         }
-
     ]
 }
