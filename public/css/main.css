@@ -2,6 +2,10 @@
     --sawo-color: #c60000;
 }
 
+h1, h2, h3, h4 {
+    font-weight: lighter;
+}
+
 /* title */
 h1.big-title {
     font-size: 2em;
@@ -11,7 +15,6 @@ h1.big-title {
     padding: 0.3em;
     color: white;
     background-color: var(--sawo-color);
-    font-weight: lighter;
 }
 
 .big-title a i {

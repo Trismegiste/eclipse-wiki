@@ -6,15 +6,18 @@
 
 namespace App\Twig;
 
+use Mike42\Wikitext\HtmlRenderer;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 /**
  * Description of LinkRender
  */
-class LinkRender extends \Mike42\Wikitext\HtmlRenderer
+class LinkRender extends HtmlRenderer
 {
 
     protected $routing;
 
-    public function __construct(\Symfony\Component\Routing\Generator\UrlGeneratorInterface $routing)
+    public function __construct(UrlGeneratorInterface $routing)
     {
         $this->routing = $routing;
     }

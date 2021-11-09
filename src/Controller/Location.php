@@ -85,7 +85,7 @@ class Location extends AbstractController
     }
 
     /**
-     * @Route("/location/edit/{pk}", methods={"GET","PUT"})
+     * @Route("/location/edit/{pk}", methods={"GET","POST"})
      */
     public function edit(string $pk, Request $request): Response
     {
@@ -97,7 +97,7 @@ class Location extends AbstractController
             $loc = $form->getData();
             $this->repository->save($loc);
 
-            return $this->redirectToRoute('app_location_show', ['pk' => $npc->getPk()]);
+            return $this->redirectToRoute('app_location_show', ['pk' => $loc->getPk()]);
         }
 
         return $this->render('form.html.twig', ['title' => 'Edit', 'form' => $form->createView()]);
