@@ -6,6 +6,7 @@
 
 namespace App\Twig;
 
+use App\Repository\VertexRepository;
 use Mike42\Wikitext\HtmlRenderer;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -16,10 +17,12 @@ class LinkRender extends HtmlRenderer
 {
 
     protected $routing;
+    protected $repository;
 
-    public function __construct(UrlGeneratorInterface $routing)
+    public function __construct(UrlGeneratorInterface $routing, VertexRepository $repository)
     {
         $this->routing = $routing;
+        $this->repository = $repository;
     }
 
     public function getImageInfo($info): array
@@ -30,8 +33,14 @@ class LinkRender extends HtmlRenderer
     public function getInternalLinkInfo($info): array
     {
         $info['url'] = $this->routing->generate('app_wiki', ['title' => $info['title']]);
+        $info['exists'] = $this->documentExists($info['title']);
 
         return $info;
+    }
+
+    protected function documentExists(string $title): bool
+    {
+        return (bool) $this->repository->findByTitle($title);
     }
 
 }

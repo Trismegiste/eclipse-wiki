@@ -64,11 +64,9 @@ class Location extends AbstractController
     /**
      * @Route("/wiki/{title}", methods={"GET"}, name="app_wiki")
      */
-    public function wikiShow(string $title): Response
+    public function wikiShow(string $title, \App\Repository\VertexRepository $vr): Response
     {
-        $it = $this->repository->search(['title' => $title]);
-        $it->rewind();
-        $loc = $it->current();
+        $loc = $vr->findByTitle($title);
         if (is_null($loc)) {
             return $this->redirectToRoute('app_location_create', ['title' => $title]);
         }
@@ -110,9 +108,9 @@ class Location extends AbstractController
     {
         $loc = $this->repository->load($pk);
         $form = $this->createFormBuilder($loc)
-            ->add('delete', SubmitType::class)
-            ->setMethod('DELETE')
-            ->getForm();
+                ->add('delete', SubmitType::class)
+                ->setMethod('DELETE')
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

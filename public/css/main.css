@@ -114,3 +114,7 @@ td.centered {
 input[type=text].highlight {
     color: var(--sawo-color);
 }
+
+a.new {
+    color: red;
+}
