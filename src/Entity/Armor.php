@@ -12,7 +12,7 @@ use Trismegiste\Toolbox\MongoDb\PersistableImpl;
 /**
  * Description of Armor
  */
-class Armor implements Persistable
+class Armor implements Persistable, Indexable
 {
 
     use PersistableImpl;
@@ -28,6 +28,11 @@ class Armor implements Persistable
         $this->protect = $protect;
         $this->special = $spe;
         $this->zone = $z;
+    }
+
+    public function getUId(): string
+    {
+        return $this->name;
     }
 
 }

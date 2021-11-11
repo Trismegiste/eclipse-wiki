@@ -6,28 +6,27 @@
 
 use App\Repository\MorphProvider;
 use App\Service\MediaWiki;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Cache\CacheInterface;
 
-class MorphProviderTest extends KernelTestCase
+class MorphProviderTest extends TestCase
 {
 
     protected $sut;
 
     protected function setUp(): void
     {
-        static::createKernel();
-        $this->sut = new MorphProvider(static::getContainer()->get(MediaWiki::class), static::getContainer()->get(CacheInterface::class));
+        $api = $this->createMock(MediaWiki::class);
+        $cache = $this->createMock(CacheInterface::class);
+        $cache->expects($this->once())
+            ->method('get')
+            ->willReturn([]);
+        $this->sut = new MorphProvider($api, $cache);
     }
 
-    public function _testListing()
+    public function testListing()
     {
-        var_dump($this->sut->getListing());
-    }
-
-    public function _testFindOne()
-    {
-        var_dump($this->sut->findOne('Nuéenoïde'));
+        $this->assertIsArray($this->sut->getListing());
     }
 
 }

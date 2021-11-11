@@ -19,13 +19,13 @@ class SkillProviderTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        self::createKernel();
-        $this->sut = self::getContainer()->get(SkillProvider::class);
+        static::createKernel();
+        $this->sut = static::getContainer()->get(SkillProvider::class);
     }
 
     public function testInsertData()
     {
-        $repo = self::getContainer()->get('app.mwpage.repository');
+        $repo = static::getContainer()->get('app.mwpage.repository');
         $it = $repo->search();
         $repo->delete(iterator_to_array($it));
 

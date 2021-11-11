@@ -2,7 +2,7 @@
 
 use App\Repository\BackgroundProvider;
 use App\Service\MediaWiki;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /*
@@ -12,25 +12,24 @@ use Symfony\Contracts\Cache\CacheInterface;
 /**
  * Description of BackgroundProviderTest
  */
-class BackgroundProviderTest extends KernelTestCase
+class BackgroundProviderTest extends TestCase
 {
 
     protected $sut;
 
     protected function setUp(): void
     {
-        static::createKernel();
-        $this->sut = new BackgroundProvider(static::getContainer()->get(MediaWiki::class), static::getContainer()->get(CacheInterface::class));
+        $api = $this->createMock(MediaWiki::class);
+        $cache = $this->createMock(CacheInterface::class);
+        $cache->expects($this->once())
+            ->method('get')
+            ->willReturn([]);
+        $this->sut = new BackgroundProvider($api, $cache);
     }
 
-    public function _testFindOne()
+    public function testListing()
     {
-        var_dump($this->sut->findOne('Néo-octopus'));
-    }
-
-    public function _testListing()
-    {
-        var_dump($this->sut->getListing());
+        $this->assertIsArray($this->sut->getListing());
     }
 
 }

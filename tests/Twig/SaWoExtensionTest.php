@@ -8,16 +8,14 @@ use App\Twig\SaWoExtension;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class SaWoExtensionTest extends KernelTestCase
+class SaWoExtensionTest extends PHPUnit\Framework\TestCase
 {
 
     protected $sut;
 
     protected function setUp(): void
     {
-        static::bootKernel();
-        $trans = self::getContainer()->get(TranslatorInterface::class);
-        $this->sut = new SaWoExtension($trans);
+        $this->sut = new SaWoExtension();
     }
 
     public function testDiceIcon()
