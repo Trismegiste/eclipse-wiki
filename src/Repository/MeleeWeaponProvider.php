@@ -26,7 +26,12 @@ class MeleeWeaponProvider implements GenericProvider
 
     public function findOne(string $key): Indexable
     {
-        
+        $lst = $this->getListing();
+        foreach ($lst as $w) {
+            if ($w->name === $key) {
+                return $w;
+            }
+        }
     }
 
     public function getListing(): array

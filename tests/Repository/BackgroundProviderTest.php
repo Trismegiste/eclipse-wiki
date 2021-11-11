@@ -23,12 +23,12 @@ class BackgroundProviderTest extends KernelTestCase
         $this->sut = new BackgroundProvider(static::getContainer()->get(MediaWiki::class), static::getContainer()->get(CacheInterface::class));
     }
 
-    public function testFindOne()
+    public function _testFindOne()
     {
         var_dump($this->sut->findOne('Néo-octopus'));
     }
 
-    public function testListing()
+    public function _testListing()
     {
         var_dump($this->sut->getListing());
     }

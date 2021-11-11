@@ -19,9 +19,9 @@ class VertexRepository
 
     protected $collection;
 
-    public function __construct(Repository $documentRepo)
+    public function __construct(Repository $vertexRepo)
     {
-        $this->collection = $documentRepo;
+        $this->collection = $vertexRepo;
     }
 
     public function findByTitle(string $title)

@@ -9,7 +9,7 @@ namespace App\Entity;
 /**
  * Generic Weapon
  */
-class Weapon implements \JsonSerializable
+class Weapon implements \JsonSerializable, Indexable
 {
 
     public $name;
@@ -29,6 +29,11 @@ class Weapon implements \JsonSerializable
         $dump['damage'] = DamageRoll::createFromString(str_replace('FOR+', '1', $this->damage));
 
         return $dump;
+    }
+
+    public function getUId(): string
+    {
+        return $this->name;
     }
 
 }

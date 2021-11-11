@@ -25,7 +25,7 @@ class MorphProviderTest extends KernelTestCase
         var_dump($this->sut->getListing());
     }
 
-    public function testFindOne()
+    public function _testFindOne()
     {
         var_dump($this->sut->findOne('Nuéenoïde'));
     }

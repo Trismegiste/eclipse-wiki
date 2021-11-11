@@ -22,9 +22,9 @@ class Location extends AbstractController
 
     protected $repository;
 
-    public function __construct(Repository $documentRepo)
+    public function __construct(Repository $vertexRepo)
     {
-        $this->repository = $documentRepo;
+        $this->repository = $vertexRepo;
     }
 
     /**
