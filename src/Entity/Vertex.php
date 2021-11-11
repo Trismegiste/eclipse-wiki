@@ -7,7 +7,7 @@
 namespace App\Entity;
 
 /**
- * Description of Vertex
+ * A generic document or node 
  */
 class Vertex implements \Trismegiste\Toolbox\MongoDb\Root
 {
@@ -41,7 +41,7 @@ class Vertex implements \Trismegiste\Toolbox\MongoDb\Root
     {
         $fqcn = get_class($this);
         $match = [];
-        preg_match('#([^\\]+)$#', $fqcn, $match);
+        preg_match('#([^\\\\]+)$#', $fqcn, $match);
 
         return strtolower($match[1]);
     }
