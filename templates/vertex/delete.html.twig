@@ -1,0 +1,6 @@
+{% extends "vertex/change.html.twig" %}
+
+{% block content %}
+    <h2>Êtes-vous sûr de vouloir supprimer le {{ form.vars.data.category }} {{ form.vars.data.title }} ?</h2>
+    {{ form(form) }}
+{% endblock %}

@@ -3,11 +3,13 @@
 {% block title %}{{ vertex.title }}{% endblock %}
 
 {% block header_title %}
-    Vertex : {{ vertex.title }}
+    <nav style="float: right">
+        {{ include('vertex/actions.html.twig') }}
+    </nav>   
+    {{ vertex.title }}
 {% endblock %}
 
 {% block content %}
-    <h1>{{ vertex.title }}</h1>
     <article>
         {{ wiki(vertex.content) }}
     </article>

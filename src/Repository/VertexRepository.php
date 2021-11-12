@@ -28,7 +28,7 @@ class VertexRepository
      * @param string $title
      * @return type
      */
-    public function findByTitle(string $title): Vertex
+    public function findByTitle(string $title): ?Vertex
     {
         $tmp = preg_split('//u', $title, null, PREG_SPLIT_NO_EMPTY);
         $firstLetter = array_shift($tmp);

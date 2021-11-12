@@ -86,11 +86,11 @@ class VertexCrud extends AbstractController
     }
 
     /**
-     * @Route("/vertex/edit/{pk}", methods={"GET","PUT"})
+     * @Route("/vertex/edit/{pk}", methods={"GET","POST"})
      */
     public function edit(string $pk, Request $request): Response
     {
-        $vertex = $this->repository->load($pk);
+        $vertex = $this->repository->findByPk($pk);
         $form = $this->createForm(VertexType::class, $vertex);
 
         $form->handleRequest($request);
@@ -109,7 +109,7 @@ class VertexCrud extends AbstractController
      */
     public function delete(string $pk, Request $request): Response
     {
-        $vertex = $this->repository->load($pk);
+        $vertex = $this->repository->findByPk($pk);
         $form = $this->createFormBuilder($vertex)
             ->add('delete', SubmitType::class)
             ->setMethod('DELETE')
