@@ -1,0 +1,24 @@
+{% extends "base.html.twig" %}
+{% block header_title %}Vertex{% endblock %}
+{% block content %}
+    <table class="pure-table pure-table-striped entity-listing">
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Actions</th>
+        </tr>
+        {% for v in listing %}
+            <tr>
+                <td>{{ v.title }}</td>
+                <td>{{ v.category }}</td>
+                <td>
+                    <nav class="listing-action">
+                        <a href="{{ path('app_vertex_show', {pk: v.pk}) }}" title="Voir"><i class="icon-eye"></i></a>
+                        <a href="{{ path('app_vertex_edit', {pk: v.pk}) }}" title="Modifier"><i class="icon-edit"></i></a>
+                        <a href="{{ path('app_vertex_delete', {pk: v.pk}) }}" title="Effacer"><i class="icon-trash-empty"></i></a>
+                    </nav>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

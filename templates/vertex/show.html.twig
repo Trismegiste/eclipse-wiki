@@ -1,0 +1,14 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ vertex.title }}{% endblock %}
+
+{% block header_title %}
+    Vertex : {{ vertex.title }}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ vertex.title }}</h1>
+    <article>
+        {{ wiki(vertex.content) }}
+    </article>
+{% endblock %}
