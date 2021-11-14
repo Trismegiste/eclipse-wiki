@@ -17,7 +17,8 @@ class LocalInterwiki implements \Mike42\Wikitext\InterwikiRepository
     public function __construct(string $host)
     {
         $this->interwiki = [
-            'ep' => 'https://' . $host . '/fr/wiki/$1'
+            'ep' => 'https://' . $host . '/fr/wiki/$1',
+            'pnj' => '/npc/wiki/$1'
         ];
     }
 

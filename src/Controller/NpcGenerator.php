@@ -46,10 +46,13 @@ class NpcGenerator extends AbstractController
     }
 
     /**
+     * Creates a transhuman
      * @Route("/npc/create", methods={"GET","POST"})
      */
     public function create(Request $request): Response
     {
+        $title = $request->query->get('title', '');
+
         $form = $this->createForm(NpcCreate::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -59,7 +62,7 @@ class NpcGenerator extends AbstractController
             return $this->redirectToRoute('app_npcgenerator_edit', ['pk' => $npc->getPk()]);
         }
 
-        return $this->render('npc/create.html.twig', ['form' => $form->createView()]);
+        return $this->render('npc/create.html.twig', ['form' => $form->createView(), 'default_name' => $title]);
     }
 
     /**
@@ -222,6 +225,22 @@ class NpcGenerator extends AbstractController
         }
 
         return $this->render('form.html.twig', ['title' => 'IAL', 'form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/npc/wiki/{title}", methods={"GET"})
+     */
+    public function wikiShow(string $title): Response
+    {
+        $it = $this->repository->search(['name' => $title]);
+        $it->rewind();
+        $npc = $it->current();
+
+        if (is_null($npc)) {
+            return $this->redirectToRoute('app_npcgenerator_create', ['title' => $title]);
+        }
+
+        return $this->render('npc/show.html.twig', ['npc' => $npc]);
     }
 
 }
