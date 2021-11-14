@@ -11,3 +11,30 @@
         {{ form(form) }}
     </article>
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        var Textarea = Textcomplete.editors.Textarea
+        var editor = new Textarea(document.getElementById('vertex_content'));
+        var textcomplete = new Textcomplete(editor);
+        textcomplete.register([{
+                // Link strategy
+                match: /(.*)\[\[([^\]]+)$/,
+                search: function (term, callback) {
+                    fetch('{{ path('app_vertexcrud_search') }}' + '?q=' + term)
+                            .then((response) => {
+                                return response.json();
+                            })
+                            .then((data) => {
+                                callback(data);
+                        console.log(data)
+                            });
+                },
+                replace: function (value) {
+                    return '$1[[' + value + ']] ';
+                }
+            }]);
+    </script>
+{% endblock %}

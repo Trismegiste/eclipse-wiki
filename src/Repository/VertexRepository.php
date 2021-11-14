@@ -70,4 +70,9 @@ class VertexRepository
         $this->collection->delete($obj);
     }
 
+    public function searchStartingWith(string $title): array
+    {
+        return $this->collection->searchAutocomplete('title', $title);
+    }
+
 }

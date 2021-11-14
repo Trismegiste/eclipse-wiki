@@ -125,4 +125,20 @@ class VertexCrud extends AbstractController
         return $this->render('vertex/delete.html.twig', ['form' => $form->createView()]);
     }
 
+    /**
+     * @Route("/vertex/search", methods={"GET"})
+     */
+    public function search(Request $request): \Symfony\Component\HttpFoundation\JsonResponse
+    {
+        $title = $request->query->get('q', '');
+
+        $choice = $this->repository->searchStartingWith($title);
+
+        array_walk($choice, function(&$v, $k) {
+            $v = $v->title;
+        });
+
+        return new \Symfony\Component\HttpFoundation\JsonResponse($choice);
+    }
+
 }
