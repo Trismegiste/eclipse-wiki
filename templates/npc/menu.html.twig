@@ -1,6 +1,7 @@
 {# the header menu with title #}
 <div style="float: right">
     <a href="{{ path('app_npcgenerator_show', {pk: npc.pk}) }}" title="Voir"><i class="icon-eye"></i></a>
+    <a href="{{ path('app_npcgenerator_info', {pk: npc.pk}) }}" title="Informations"><i class="icon-info-circled"></i></a>
     <a href="{{ path('app_npcgenerator_edit', {pk: npc.pk}) }}" title="Statistiques"><i class="icon-edit"></i></a>
     <a href="{{ path('app_npcgenerator_gear', {pk: npc.pk}) }}" title="Équipement"><i class="icon-wrench"></i></a>
     <a href="{{ path('app_npcgenerator_battle', {pk: npc.pk}) }}" title="Combat"><i class="icon-gun"></i></a>

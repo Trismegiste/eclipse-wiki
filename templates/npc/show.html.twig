@@ -194,6 +194,14 @@
                 <h2>Économies</h2>
             </div>
         </div>
+        {% if npc.information is not empty %}
+            <div class="pure-g">
+                <div class="pure-u-1">
+                    <h1>Informations</h1>
+                    {{ wiki(npc.information) }}
+                </div>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
 

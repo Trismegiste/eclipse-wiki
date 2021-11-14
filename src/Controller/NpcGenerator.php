@@ -207,7 +207,7 @@ class NpcGenerator extends AbstractController
             return $this->redirectToRoute('app_npcgenerator_show', ['pk' => $npc->getPk()]);
         }
 
-        return $this->render('npc/battle.html.twig', ['title' => 'essai', 'form' => $form->createView()]);
+        return $this->render('npc/battle.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -241,6 +241,26 @@ class NpcGenerator extends AbstractController
         }
 
         return $this->render('npc/show.html.twig', ['npc' => $npc]);
+    }
+
+    /**
+     * @Route("/npc/info/{pk}", methods={"GET","PUT"})
+     */
+    public function info(string $pk, Request $request): Response
+    {
+        $npc = $this->repository->load($pk);
+
+        $form = $this->createForm(\App\Form\NpcInfo::class, $npc);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $npc = $form->getData();
+            $this->repository->save($npc);
+
+            return $this->redirectToRoute('app_npcgenerator_show', ['pk' => $npc->getPk()]);
+        }
+
+        return $this->render('form.html.twig', ['title' => 'Info', 'form' => $form->createView()]);
     }
 
 }
