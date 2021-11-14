@@ -19,8 +19,9 @@ class LinkRender extends HtmlRenderer
     protected $routing;
     protected $repository;
 
-    public function __construct(UrlGeneratorInterface $routing, VertexRepository $repository)
+    public function __construct(UrlGeneratorInterface $routing, VertexRepository $repository, \App\Service\LocalInterwiki $wiki)
     {
+        parent::__construct($wiki);
         $this->routing = $routing;
         $this->repository = $repository;
     }
@@ -32,8 +33,10 @@ class LinkRender extends HtmlRenderer
 
     public function getInternalLinkInfo($info): array
     {
-        $info['url'] = $this->routing->generate('app_wiki', ['title' => $info['title']]);
-        $info['exists'] = $this->documentExists($info['title']);
+        if (!$info['external']) {
+            $info['url'] = $this->routing->generate('app_wiki', ['title' => $info['title']]);
+            $info['exists'] = $this->documentExists($info['title']);
+        }
 
         return $info;
     }

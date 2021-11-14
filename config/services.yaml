@@ -26,6 +26,10 @@ services:
     App\Service\MediaWiki:
         arguments:
             $host: '%env(resolve:WIKISOURCE)%'
+
+    App\Service\LocalInterwiki:
+        arguments:
+            $host: '%env(resolve:WIKISOURCE)%'            
             
     MongoDB\Driver\Manager:
         arguments:
