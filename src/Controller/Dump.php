@@ -11,9 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Description of Dump
- *
- * @author flo
+ * Dump table for importing in other software
  */
 class Dump extends AbstractController
 {
