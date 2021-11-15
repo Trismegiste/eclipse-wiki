@@ -1,0 +1,38 @@
+{# fragment to initialize a textarea with textcomplete JS #}
+<script>
+    var Textarea = Textcomplete.editors.Textarea
+    var editor = new Textarea(document.getElementById('{{ element_id }}'));
+    var textcomplete = new Textcomplete(editor);
+    textcomplete.register([{
+            // Link strategy for PNJ
+            match: /(.*)\[\[pnj\:([^\]]+)$/,
+            search: function (term, callback) {
+                fetch('{{ path('app_npcgenerator_search') }}' + '?q=' + term)
+                        .then((response) => {
+                            return response.json();
+                        })
+                        .then((data) => {
+                            callback(data);
+                        });
+            },
+            replace: function (value) {
+                return '$1[[pnj:' + value + ']] ';
+            }
+        },
+        {
+            // Link strategy for Vertex
+            match: /(.*)\[\[([^\]]+)$/,
+            search: function (term, callback) {
+                fetch('{{ path('app_vertexcrud_search') }}' + '?q=' + term)
+                        .then((response) => {
+                            return response.json();
+                        })
+                        .then((data) => {
+                            callback(data);
+                        });
+            },
+            replace: function (value) {
+                return '$1[[' + value + ']] ';
+            }
+        }]);
+</script>

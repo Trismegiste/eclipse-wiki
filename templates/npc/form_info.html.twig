@@ -1,0 +1,10 @@
+{% extends "form.html.twig" %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ include('fragment/init_autocomplete.html.twig', {element_id:'npc_info_information'}) }}
+{% endblock %}
+
+{% block header_title %}
+    {{ include('npc/menu.html.twig', {npc: form.vars.data}) }}
+{% endblock %}
