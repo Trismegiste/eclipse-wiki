@@ -80,4 +80,9 @@ class DamageRollTest extends TestCase
         $this->assertEquals('1d4+5d10+3', (string) $this->sut);
     }
 
+    public function testJson()
+    {
+        $this->assertJson(json_encode($this->sut));
+    }
+
 }

@@ -14,7 +14,7 @@ use UnexpectedValueException;
 /**
  * Hindrance 
  */
-class Hindrance extends Modifier implements Persistable, Indexable, JsonSerializable
+class Hindrance extends Modifier implements Persistable, JsonSerializable
 {
 
     use PersistableImpl;

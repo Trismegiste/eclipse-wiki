@@ -10,7 +10,9 @@ use App\Entity\Armor;
 use App\Entity\Attack;
 use App\Entity\Attribute;
 use App\Entity\Character;
+use App\Entity\Edge;
 use App\Entity\Gear;
+use App\Entity\Hindrance;
 use App\Entity\Morph;
 use App\Entity\Skill;
 use InvalidArgumentException;
@@ -121,6 +123,63 @@ abstract class CharacterTest extends TestCase
         }
         $this->sut->setArmors($stack);
         $this->assertEquals(6, $this->sut->getTotalArmor());
+    }
+
+    public function testEdges()
+    {
+        $this->sut->setEdges([new Edge('smth', 'N', 'dum')]);
+        $this->assertCount(1, $this->sut->getEdges());
+    }
+
+    public function testHindrances()
+    {
+        $this->sut->setHindrances([new Hindrance('smth')]);
+        $this->assertCount(1, $this->sut->getHindrances());
+    }
+
+    public function testJsonAndBson()
+    {
+        $this->assertJson(json_encode($this->sut));
+    }
+
+    public function testClone()
+    {
+        $obj = clone $this->sut;
+        $this->assertTrue($obj->isNew());
+    }
+
+    public function testAttributePoints()
+    {
+        $this->sut->attributes[] = new Attribute('dum');
+        $this->sut->attributes[0]->dice = 12;
+        $this->assertEquals(4, $this->sut->getAttributePoints());
+    }
+
+    public function testSkillPoints()
+    {
+        $sk = new Skill('test', 'cat');
+        $sk->dice = 12;
+        $this->sut->addSkill($sk);
+        $this->assertEquals(5, $this->sut->getSkillPoints());
+    }
+
+    public function testPowerIndex()
+    {
+        $this->sut->attributes[] = new Attribute('dum');
+        $this->sut->attributes[0]->dice = 12;
+        $sk = new Skill('test', 'cat');
+        $sk->dice = 12;
+        $this->sut->addSkill($sk);
+
+        $this->assertEquals(-5, $this->sut->getPowerIndex());
+    }
+
+    public function testSortingSkills()
+    {
+        $this->sut->addSkill(new Skill('zzzz', 'cat'));
+        $this->sut->addSkill(new Skill('aaaa', 'cat'));
+        $dump = $this->sut->bsonSerialize();
+        $this->assertEquals('aaaa', $dump['skills'][0]->getName());
     }
 
 }
