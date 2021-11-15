@@ -15,4 +15,7 @@
 {% block javascripts %}
     {{ parent() }}
     {{ include('fragment/init_autocomplete.html.twig', {element_id:'vertex_content'}) }}
+    <script>
+        document.getElementById('vertex_title').focus()
+    </script>
 {% endblock %}
