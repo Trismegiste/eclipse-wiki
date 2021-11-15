@@ -17,7 +17,7 @@
     <div class="pure-g character">
         <div class="pure-u-1">
             {{ form_widget(form['wildCard']) }}
-            {{ form_widget(form['name'], {value: default_name, attr:{class:'pure-input-3-4'}}) }}
+            {{ form_widget(form['name'], {value: default_name|capitalize, attr:{class:'pure-input-3-4'}}) }}
         </div>
         <div class="pure-u-1-3">
             <h2>Historique</h2>

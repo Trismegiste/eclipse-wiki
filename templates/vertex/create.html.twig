@@ -20,7 +20,23 @@
         var editor = new Textarea(document.getElementById('vertex_content'));
         var textcomplete = new Textcomplete(editor);
         textcomplete.register([{
-                // Link strategy
+                // Link strategy for PNJ
+                match: /(.*)\[\[pnj\:([^\]]+)$/,
+                search: function (term, callback) {
+                    fetch('{{ path('app_npcgenerator_search') }}' + '?q=' + term)
+                            .then((response) => {
+                                return response.json();
+                            })
+                            .then((data) => {
+                                callback(data);
+                            });
+                },
+                replace: function (value) {
+                    return '$1[[pnj:' + value + ']] ';
+                }
+            },
+            {
+                // Link strategy for Vertex
                 match: /(.*)\[\[([^\]]+)$/,
                 search: function (term, callback) {
                     fetch('{{ path('app_vertexcrud_search') }}' + '?q=' + term)
@@ -29,7 +45,6 @@
                             })
                             .then((data) => {
                                 callback(data);
-                        console.log(data)
                             });
                 },
                 replace: function (value) {

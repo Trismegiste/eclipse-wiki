@@ -6,8 +6,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Attack;
-use App\Entity\Skill;
 use App\Form\NpcAttacks;
 use App\Form\NpcCreate;
 use App\Form\NpcGears;
@@ -19,6 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -134,9 +133,9 @@ class NpcGenerator extends AbstractController
     {
         $npc = $this->repository->load($pk);
         $form = $this->createFormBuilder($npc)
-            ->add('delete', SubmitType::class)
-            ->setMethod('DELETE')
-            ->getForm();
+                ->add('delete', SubmitType::class)
+                ->setMethod('DELETE')
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -157,10 +156,10 @@ class NpcGenerator extends AbstractController
         $newNpc = clone $npc;
 
         $form = $this->createFormBuilder($newNpc)
-            ->add('name', TextType::class)
-            ->add('wildCard', CheckboxType::class, ['required' => false])
-            ->add('copy', SubmitType::class)
-            ->getForm();
+                ->add('name', TextType::class)
+                ->add('wildCard', CheckboxType::class, ['required' => false])
+                ->add('copy', SubmitType::class)
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -261,6 +260,20 @@ class NpcGenerator extends AbstractController
         }
 
         return $this->render('form.html.twig', ['title' => 'Info', 'form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/npc/search", methods={"GET"})
+     */
+    public function search(Request $request): JsonResponse
+    {
+        $title = $request->query->get('q', '');
+        $choice = $this->repository->searchAutocomplete('name', $title);
+        array_walk($choice, function (&$v, $k) {
+            $v = $v->name;
+        });
+
+        return new JsonResponse($choice);
     }
 
 }

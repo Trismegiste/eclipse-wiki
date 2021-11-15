@@ -11,6 +11,7 @@ use App\Form\VertexType;
 use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -111,9 +112,9 @@ class VertexCrud extends AbstractController
     {
         $vertex = $this->repository->findByPk($pk);
         $form = $this->createFormBuilder($vertex)
-            ->add('delete', SubmitType::class)
-            ->setMethod('DELETE')
-            ->getForm();
+                ->add('delete', SubmitType::class)
+                ->setMethod('DELETE')
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -128,17 +129,15 @@ class VertexCrud extends AbstractController
     /**
      * @Route("/vertex/search", methods={"GET"})
      */
-    public function search(Request $request): \Symfony\Component\HttpFoundation\JsonResponse
+    public function search(Request $request): JsonResponse
     {
         $title = $request->query->get('q', '');
-
         $choice = $this->repository->searchStartingWith($title);
-
-        array_walk($choice, function(&$v, $k) {
+        array_walk($choice, function (&$v, $k) {
             $v = $v->title;
         });
 
-        return new \Symfony\Component\HttpFoundation\JsonResponse($choice);
+        return new JsonResponse($choice);
     }
 
 }
