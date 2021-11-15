@@ -19,3 +19,5 @@
 .phpunit.result.cache
 ###< phpunit/phpunit ###
 /nbproject
+/doc/coverage
+
