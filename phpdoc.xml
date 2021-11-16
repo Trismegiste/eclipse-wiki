@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdocumentor
+    configVersion="3"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://www.phpdoc.org">
+    <title>Eclipse Savage</title>
+    <paths>
+        <output>doc/api/</output>
+        <cache>var/phpdoc</cache>
+    </paths>
+    <version number="0.7.0">
+        <api>
+            <source dsn=".">
+                <path>src</path>
+            </source>
+        </api>
+    </version>
+</phpdocumentor>

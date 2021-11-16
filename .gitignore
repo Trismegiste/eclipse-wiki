@@ -20,4 +20,4 @@
 ###< phpunit/phpunit ###
 /nbproject
 /doc/coverage
-
+/doc/api
