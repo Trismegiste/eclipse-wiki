@@ -41,61 +41,62 @@ class NpcAttacks extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('parryBonus', IntegerType::class, ['attr' => ['class' => 'pure-input-4']])
-            ->add('rangedMalus', IntegerType::class, ['attr' => ['class' => 'pure-input-4']])
-            ->add('toughnessBonus', IntegerType::class, ['attr' => ['class' => 'pure-input-4']])
-            ->add('melee_weapon_list', ChoiceType::class, [
-                'mapped' => false,
-                'required' => false,
-                'choices' => $this->getMelee(),
-                'choice_value' => function ($weap) {
-                    return json_encode($weap);
-                },
-                'choice_label' => function ($weap) {
-                    return "{$weap->name} : {$weap->damage} (PA {$weap->ap}) minFOR=d{$weap->minStr}";
-                },
-                'attr' => ['x-on:change' => 'addMeleeWeapon']
-            ])
-            ->add('ranged_weapon_list', ChoiceType::class, [
-                'mapped' => false,
-                'required' => false,
-                'choices' => $this->getRanged(),
-                'choice_value' => function ($weap) {
-                    return json_encode($weap);
-                },
-                'choice_label' => function ($weap) {
-                    return "{$weap->name} : CdT×{$weap->rof} {$weap->damage} (PA {$weap->ap}) minFOR=d{$weap->minStr}";
-                },
-                'attr' => ['x-on:change' => 'addRangedWeapon']
-            ])
-            ->add('attacks', CollectionType::class, [
-                'entry_type' => AttackType::class,
-                'allow_add' => true,
-                'allow_delete' => true,
-                'prototype' => true,
-                'prototype_data' => $this->createProtoAttackData()
-            ])
-            ->add('armor_list', ChoiceType::class, [
-                'mapped' => false,
-                'required' => false,
-                'choices' => $this->getArmor(),
-                'choice_value' => function ($arm) {
-                    return json_encode($arm);
-                },
-                'choice_label' => function ($arm) {
-                    return "{$arm->name} : {$arm->protect}+{$arm->special} (zone: {$arm->zone})";
-                },
-                'attr' => ['x-on:change' => 'addArmor']
-            ])
-            ->add('armors', CollectionType::class, [
-                'entry_type' => Type\ArmorType::class,
-                'allow_add' => true,
-                'allow_delete' => true,
-                'prototype' => true,
-                'prototype_data' => $this->createProtoArmorData()
-            ])
-            ->setMethod('PUT')
-            ->add('edit', SubmitType::class)
+                ->add('parryBonus', IntegerType::class, ['attr' => ['class' => 'pure-input-4']])
+                ->add('rangedMalus', IntegerType::class, ['attr' => ['class' => 'pure-input-4']])
+                ->add('toughnessBonus', IntegerType::class, ['attr' => ['class' => 'pure-input-4']])
+                ->add('melee_weapon_list', ChoiceType::class, [
+                    'mapped' => false,
+                    'required' => false,
+                    'choices' => $this->getMelee(),
+                    'choice_value' => function ($weap) {
+                        return json_encode($weap);
+                    },
+                    'choice_label' => function ($weap) {
+                        return "{$weap->name} : {$weap->damage} (PA {$weap->ap}) minFOR=d{$weap->minStr}";
+                    },
+                    'attr' => ['x-on:change' => 'addMeleeWeapon']
+                ])
+                ->add('ranged_weapon_list', ChoiceType::class, [
+                    'mapped' => false,
+                    'required' => false,
+                    'choices' => $this->getRanged(),
+                    'choice_value' => function ($weap) {
+                        return json_encode($weap);
+                    },
+                    'choice_label' => function ($weap) {
+                        return "{$weap->name} : CdT×{$weap->rof} {$weap->damage} (PA {$weap->ap}) minFOR=d{$weap->minStr}";
+                    },
+                    'attr' => ['x-on:change' => 'addRangedWeapon']
+                ])
+                ->add('attacks', CollectionType::class, [
+                    'entry_type' => AttackType::class,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'prototype' => true,
+                    'prototype_data' => $this->createProtoAttackData()
+                ])
+                ->add('armor_list', ChoiceType::class, [
+                    'mapped' => false,
+                    'required' => false,
+                    'choices' => $this->getArmor(),
+                    'choice_value' => function ($arm) {
+                        return json_encode($arm);
+                    },
+                    'choice_label' => function ($arm) {
+                        $spe = !empty($arm->special) ? "+{$arm->special}" : '';
+                        return "{$arm->name} : {$arm->protect}$spe (zone: {$arm->zone})";
+                    },
+                    'attr' => ['x-on:change' => 'addArmor']
+                ])
+                ->add('armors', CollectionType::class, [
+                    'entry_type' => Type\ArmorType::class,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'prototype' => true,
+                    'prototype_data' => $this->createProtoArmorData()
+                ])
+                ->setMethod('PUT')
+                ->add('edit', SubmitType::class)
         ;
     }
 

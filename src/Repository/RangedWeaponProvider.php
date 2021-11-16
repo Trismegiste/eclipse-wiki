@@ -36,27 +36,30 @@ class RangedWeaponProvider implements GenericProvider
 
     public function getListing(): array
     {
+        $listing = [];
         /** @var MediaWikiPage $page */
         $it = $this->repository->search(['title' => 'Armes à distance']);
         $it->rewind();
         $page = $it->current();
-        preg_match('#\{\|([^\}]+)\|\}#', $page->content, $table);
-        $rows = explode('|-', $table[1]);
-        array_shift($rows);
-        array_shift($rows);
 
-        $listing = [];
-        foreach ($rows as $row) {
-            $cells = explode('|', $row);
-            $w = new RangedWeapon(
-                trim($cells[1]) . ' ' . trim($cells[2]) . ' (' . trim($cells[12]) . ')',
-                trim($cells[4]),
-                (int) trim($cells[5]),
-                (int) trim($cells[6]),
-                trim($cells[3])
-            );
-            $w->minStr = substr(trim($cells[8]), 1);
-            $listing[] = $w;
+        if (!is_null($page)) {
+            preg_match('#\{\|([^\}]+)\|\}#', $page->content, $table);
+            $rows = explode('|-', $table[1]);
+            array_shift($rows);
+            array_shift($rows);
+
+            foreach ($rows as $row) {
+                $cells = explode('|', $row);
+                $w = new RangedWeapon(
+                        trim($cells[1]) . ' ' . trim($cells[2]) . ' (' . trim($cells[12]) . ')',
+                        trim($cells[4]),
+                        (int) trim($cells[5]),
+                        (int) trim($cells[6]),
+                        trim($cells[3])
+                );
+                $w->minStr = substr(trim($cells[8]), 1);
+                $listing[] = $w;
+            }
         }
 
         return $listing;

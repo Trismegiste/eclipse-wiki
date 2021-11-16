@@ -36,24 +36,27 @@ class ArmorProvider implements GenericProvider
 
     public function getListing(): array
     {
+        $listing = [];
         /** @var MediaWikiPage $page */
         $it = $this->repository->search(['title' => 'Armures']);
         $it->rewind();
         $page = $it->current();
-        preg_match('#\{\|([^\}]+)\|\}#', $page->content, $table);
-        $rows = explode('|-', $table[1]);
-        array_shift($rows);
-        array_shift($rows);
 
-        $listing = [];
-        foreach ($rows as $row) {
-            $cells = explode('|', $row);
-            $listing[] = new Armor(
-                trim($cells[1]),
-                trim($cells[2]),
-                trim($cells[3]),
-                trim($cells[4])
-            );
+        if (!is_null($page)) {
+            preg_match('#\{\|([^\}]+)\|\}#', $page->content, $table);
+            $rows = explode('|-', $table[1]);
+            array_shift($rows);
+            array_shift($rows);
+
+            foreach ($rows as $row) {
+                $cells = explode('|', $row);
+                $listing[] = new Armor(
+                        trim($cells[1]),
+                        trim($cells[2]),
+                        trim($cells[3]),
+                        trim($cells[4])
+                );
+            }
         }
 
         return $listing;

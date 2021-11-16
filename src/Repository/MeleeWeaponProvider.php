@@ -36,25 +36,28 @@ class MeleeWeaponProvider implements GenericProvider
 
     public function getListing(): array
     {
+        $listing = [];
         /** @var MediaWikiPage $page */
         $it = $this->repository->search(['title' => 'Armes de mêlée']);
         $it->rewind();
         $page = $it->current();
-        preg_match('#\{\|([^\}]+)\|\}#', $page->content, $table);
-        $rows = explode('|-', $table[1]);
-        array_shift($rows);
-        array_shift($rows);
 
-        $listing = [];
-        foreach ($rows as $row) {
-            $cells = explode('|', $row);
-            $w = new MeleeWeapon(
-                trim($cells[1]),
-                trim($cells[2]),
-                (int) trim($cells[3])
-            );
-            $w->minStr = substr(trim($cells[4]), 1);
-            $listing[] = $w;
+        if (!is_null($page)) {
+            preg_match('#\{\|([^\}]+)\|\}#', $page->content, $table);
+            $rows = explode('|-', $table[1]);
+            array_shift($rows);
+            array_shift($rows);
+
+            foreach ($rows as $row) {
+                $cells = explode('|', $row);
+                $w = new MeleeWeapon(
+                        trim($cells[1]),
+                        trim($cells[2]),
+                        (int) trim($cells[3])
+                );
+                $w->minStr = substr(trim($cells[4]), 1);
+                $listing[] = $w;
+            }
         }
 
         return $listing;
