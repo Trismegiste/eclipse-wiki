@@ -32,6 +32,7 @@ abstract class Character implements Root, \JsonSerializable
     public $toughnessBonus = 0;
     public $parryBonus = 0;
     public $information;
+    public $economy = [];
 
     public function setMorph(Morph $mrp)
     {

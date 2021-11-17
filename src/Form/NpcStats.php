@@ -40,71 +40,72 @@ class NpcStats extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('attributes', CollectionType::class, [
-                    'entry_type' => Type\AttributeType::class,
-                    'entry_options' => [
-                        'expanded' => true,
-                        'max_modif' => 2
-                    ]
-                ])
-                ->add('skill_list', Type\TraitType::class, [
-                    'mapped' => false,
-                    'category' => 'skill',
+            ->add('attributes', CollectionType::class, [
+                'entry_type' => Type\AttributeType::class,
+                'entry_options' => [
                     'expanded' => true,
-                    'multiple' => true,
-                    'attr' => ['x-on:change' => 'checkingSkill($event.target)'],
-                    'choice_attr' => function (string $idx) {
-                        return ['x-bind:checked' => "hasSkill('$idx')"];
-                    }
-                ])
-                ->add('skills', CollectionType::class, [
-                    'entry_type' => Type\SkillType::class,
-                    'entry_options' => [
-                        'expanded' => true,
-                        'max_modif' => 2
-                    ],
-                    'allow_add' => true,
-                    'allow_delete' => true,
-                    'prototype_data' => $this->getProtoSkill(),
-                    'by_reference' => false
-                ])
-                ->add('edge_list', ChoiceType::class, [
-                    'placeholder' => '-------------',
-                    'mapped' => false,
-                    'required' => false,
-                    'choices' => $this->edge->getListing(),
-                    'group_by' => function (Edge $edge) {
-                        return $edge->getCategory();
-                    },
-                    'choice_value' => function (?Edge $edge) {
-                        return json_encode($edge);
-                    },
-                    'choice_label' => [$this, 'printEdge'],
-                    'attr' => ['x-on:change' => 'edges.push(JSON.parse($event.target.value)); $el.value=""']
-                ])
-                ->add('edges', CollectionType::class, [
-                    'entry_type' => Type\EdgeType::class,
-                    'allow_add' => true,
-                    'allow_delete' => true
-                ])
-                ->add('hindrance_list', ChoiceType::class, [
-                    'placeholder' => '-------------',
-                    'mapped' => false,
-                    'required' => false,
-                    'choices' => $this->hindrance->getListing(),
-                    'choice_value' => function (?Hindrance $hind) {
-                        return json_encode($hind);
-                    },
-                    'choice_label' => [$this, 'printHindrance'],
-                    'attr' => ['x-on:change' => 'hindrances.push(JSON.parse($event.target.value)); $el.value=""']
-                ])
-                ->add('hindrances', CollectionType::class, [
-                    'entry_type' => Type\HindranceType::class,
-                    'allow_add' => true,
-                    'allow_delete' => true
-                ])
-                ->add('edit', SubmitType::class)
-                ->setMethod('PUT');
+                    'max_modif' => 2
+                ]
+            ])
+            ->add('skill_list', Type\TraitType::class, [
+                'mapped' => false,
+                'category' => 'skill',
+                'expanded' => true,
+                'multiple' => true,
+                'attr' => ['x-on:change' => 'checkingSkill($event.target)'],
+                'choice_attr' => function (string $idx) {
+                    return ['x-bind:checked' => "hasSkill('$idx')"];
+                }
+            ])
+            ->add('skills', CollectionType::class, [
+                'entry_type' => Type\SkillType::class,
+                'entry_options' => [
+                    'expanded' => true,
+                    'max_modif' => 2
+                ],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype_data' => $this->getProtoSkill(),
+                'by_reference' => false
+            ])
+            ->add('edge_list', ChoiceType::class, [
+                'placeholder' => '-------------',
+                'mapped' => false,
+                'required' => false,
+                'choices' => $this->edge->getListing(),
+                'group_by' => function (Edge $edge) {
+                    return $edge->getCategory();
+                },
+                'choice_value' => function (?Edge $edge) {
+                    return json_encode($edge);
+                },
+                'choice_label' => [$this, 'printEdge'],
+                'attr' => ['x-on:change' => 'edges.push(JSON.parse($event.target.value)); $el.value=""']
+            ])
+            ->add('edges', CollectionType::class, [
+                'entry_type' => Type\EdgeType::class,
+                'allow_add' => true,
+                'allow_delete' => true
+            ])
+            ->add('hindrance_list', ChoiceType::class, [
+                'placeholder' => '-------------',
+                'mapped' => false,
+                'required' => false,
+                'choices' => $this->hindrance->getListing(),
+                'choice_value' => function (?Hindrance $hind) {
+                    return json_encode($hind);
+                },
+                'choice_label' => [$this, 'printHindrance'],
+                'attr' => ['x-on:change' => 'hindrances.push(JSON.parse($event.target.value)); $el.value=""']
+            ])
+            ->add('hindrances', CollectionType::class, [
+                'entry_type' => Type\HindranceType::class,
+                'allow_add' => true,
+                'allow_delete' => true
+            ])
+            ->add('economy', Type\EconomyType::class)
+            ->add('edit', SubmitType::class)
+            ->setMethod('PUT');
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -152,9 +153,9 @@ class NpcStats extends AbstractType
         }
 
         return $edge->getName()
-                . ' (' . strtoupper($edge->getRank()) . ') : ['
-                . implode('/', $type) . '] '
-                . str_replace(['[[', ']]'], '', $edge->getPrerequisite());
+            . ' (' . strtoupper($edge->getRank()) . ') : ['
+            . implode('/', $type) . '] '
+            . str_replace(['[[', ']]'], '', $edge->getPrerequisite());
     }
 
 }
