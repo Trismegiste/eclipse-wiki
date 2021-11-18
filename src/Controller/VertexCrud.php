@@ -11,6 +11,7 @@ use App\Form\VertexType;
 use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -87,12 +88,16 @@ class VertexCrud extends AbstractController
     }
 
     /**
-     * @Route("/vertex/edit/{pk}", methods={"GET","POST"})
+     * @Route("/vertex/edit/{pk}", methods={"GET","PUT"})
      */
     public function edit(string $pk, Request $request): Response
     {
         $vertex = $this->repository->findByPk($pk);
-        $form = $this->createForm(VertexType::class, $vertex);
+        $form = $this->createFormBuilder($vertex)
+                ->add('content', TextareaType::class, ['attr' => ['rows' => 32]])
+                ->add('edit', SubmitType::class)
+                ->setMethod('PUT')
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

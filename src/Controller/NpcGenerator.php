@@ -61,7 +61,7 @@ class NpcGenerator extends AbstractController
             return $this->redirectToRoute('app_npcgenerator_edit', ['pk' => $npc->getPk()]);
         }
 
-        return $this->render('npc/create.html.twig', ['form' => $form->createView(), 'default_name' => $title]);
+        return $this->render('npc/create.html.twig', ['form' => $form->createView(), 'default_name' => mb_convert_case($title, MB_CASE_TITLE)]);
     }
 
     /**
