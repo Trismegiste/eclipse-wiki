@@ -14,6 +14,7 @@ use App\Repository\MorphProvider;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -41,12 +42,13 @@ class NpcCreate extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('wildCard', CheckboxType::class, ['required' => false])
-            ->add('name', TextType::class, ['attr' => ['placeholder' => 'Choisissez un nom']])
-            ->add('background', Type\ProviderChoiceType::class, ['provider' => $this->background, 'placeholder' => '--- Choisissez un Historique ---'])
-            ->add('faction', Type\ProviderChoiceType::class, ['provider' => $this->faction, 'placeholder' => '--- Choisissez une Faction ---'])
-            ->add('morph', Type\ProviderChoiceType::class, ['provider' => $this->morph, 'placeholder' => '--- Choisissez un Morphe ---'])
-            ->add('generate', SubmitType::class);
+                ->add('wildCard', CheckboxType::class, ['required' => false])
+                ->add('name', TextType::class, ['attr' => ['placeholder' => 'Choisissez un nom']])
+                ->add('background', Type\ProviderChoiceType::class, ['provider' => $this->background, 'placeholder' => '--- Choisissez un Historique ---'])
+                ->add('faction', Type\ProviderChoiceType::class, ['provider' => $this->faction, 'placeholder' => '--- Choisissez une Faction ---'])
+                ->add('morph', Type\ProviderChoiceType::class, ['provider' => $this->morph, 'placeholder' => '--- Choisissez un Morphe ---'])
+                ->add('information', TextareaType::class, ['required' => false])
+                ->add('generate', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

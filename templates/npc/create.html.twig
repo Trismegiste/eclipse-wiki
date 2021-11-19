@@ -42,6 +42,9 @@
                                                     'data-detail': 'morph_detail'
                                                 }}) }}
             <section id="morph_detail"></section>
+        </div>
+        <div class="pure-u-1-1">
+            {{ form_widget(form['information'],  {attr: {'class':'pure-input-1', 'placeholder': 'Information au format WikiText'}}) }}
         </div>            
     </div>
     {{ form_end(form) }}
@@ -71,6 +74,7 @@
 
         document.getElementById('npc_name').focus()
     </script>
+    {{ include('fragment/init_autocomplete.html.twig', {element_id:'npc_information'}) }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -93,6 +97,9 @@
         }
         .wild-card > input:checked + label i {
             color: var(--sawo-color);
+        }
+        textarea {
+            margin: 1em 0;
         }
     </style>
 {% endblock %}
