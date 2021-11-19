@@ -80,7 +80,10 @@ class NpcStats extends AbstractType
                     return json_encode($edge);
                 },
                 'choice_label' => [$this, 'printEdge'],
-                'attr' => ['x-on:change' => 'edges.push(JSON.parse($event.target.value)); $el.value=""']
+                'attr' => ['x-on:change' => 'edges.push(JSON.parse($event.target.value)); $el.value=""'],
+                'choice_attr' => function (?Edge $edge) {
+                    return ['data-key' => $edge->getName()];
+                }
             ])
             ->add('edges', CollectionType::class, [
                 'entry_type' => Type\EdgeType::class,

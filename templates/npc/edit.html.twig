@@ -109,9 +109,13 @@
 
 {% block content %}
     {{ include(char_info_template(form.vars.data)) }}
-    <div x-data="{{ form.vars.data|json_encode()|escape('html_attr') }}">
-        {{ form(form, {attr: {'x-data': 'behavior', 'x-on:profile.window': 'addProfile($event.detail)'}}) }}
-    </div>
+    <section x-data="{{ form.vars.data|json_encode()|escape('html_attr') }}">
+        <section x-data="behavior">
+            <section x-on:profile.window="addProfile($event.detail)">
+                {{ form(form) }}
+            </section>
+        </section>
+    </section>
 {% endblock %}
 
 {% block javascripts %}
@@ -162,12 +166,22 @@
                         return false !== this.searchSkillIdxByName(name)
                     },
                     addProfile(model) {
-                        model = {'Agilité': 6, 'Force': 6, 'Vigueur': 6, 'Intellect': 6, 'Âme': 6}
-                        for (const attr in model) {
-                            document.querySelector('input[value="' + attr + '"]')
+                        let attribute = {'Agilité': 6, 'Force': 6, 'Vigueur': 6, 'Intellect': 6, 'Âme': 6}
+                        for (const label in attribute) {
+                            document.querySelector('input[value="' + label + '"]')
                                     .parentElement
-                                    .querySelector('input[value="' + model[attr] + '"]')
+                                    .querySelector('input[value="' + attribute[label] + '"]')
                                     .checked = true
+                        }
+                        let skill = {'Athlétisme': 4, 'Culture générale': 4, 'Discrétion': 4, 'Kinésique': 4, 'Perception': 4, 'Persuasion': 4}
+                        for (const label in skill) {
+                            if (!this.hasSkill(label)) {
+                                this.skills.push({name: label, dice: skill[label], modifier: 0})
+                            }
+                        }
+                        let edge = ['Frénésie']
+                        for (const label of edge) {
+                            this.edges.push(JSON.parse(document.querySelector('option[data-key="' + label + '"]').value))
                         }
                     }
                 }))
