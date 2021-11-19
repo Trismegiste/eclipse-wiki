@@ -100,11 +100,17 @@
     </div>
 {% endblock %}
 
+{% block info %}
+    <div x-data>
+        <h2>Profils</h2>
+        <button class="pure-button" x-on:click="$dispatch('profile', {})">Défaut</button>
+    </div>
+{% endblock %}
 
 {% block content %}
     {{ include(char_info_template(form.vars.data)) }}
     <div x-data="{{ form.vars.data|json_encode()|escape('html_attr') }}">
-        {{ form(form, {attr: {'x-data': 'behavior'}}) }}
+        {{ form(form, {attr: {'x-data': 'behavior', 'x-on:profile.window': 'addProfile($event.detail)'}}) }}
     </div>
 {% endblock %}
 
@@ -154,6 +160,15 @@
                     },
                     hasSkill(name) {
                         return false !== this.searchSkillIdxByName(name)
+                    },
+                    addProfile(model) {
+                        model = {'Agilité': 6, 'Force': 6, 'Vigueur': 6, 'Intellect': 6, 'Âme': 6}
+                        for (const attr in model) {
+                            document.querySelector('input[value="' + attr + '"]')
+                                    .parentElement
+                                    .querySelector('input[value="' + model[attr] + '"]')
+                                    .checked = true
+                        }
                     }
                 }))
         })
