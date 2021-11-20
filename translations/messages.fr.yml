@@ -9,7 +9,35 @@ Hindrance list: Choix de Handicaps
 Economy: Économies
 Edit: Enregistrer
 Generate: Générer
-Delete: Supprrimer
+Delete: Supprimer
 Create: Créer
 Title: Titre
 Content: Contenu
+Player: Joueur
+Context: Contexte
+Drama: Problème
+Roll1: Épreuve 1
+Roll2: Épreuve 2
+Roll3: Épreuve 3
+Choice1: Choix 1
+Choice2: Choix 2
+Choice3: Choix 3
+Choice4: Choix 4
+Choice5: Choix 5
+Name: Nom
+Origin: Origine
+Morph: Morphe
+Power: Puissance
+Gear list: Choix d'équipements
+Gears: Équipement
+Parry bonus: Bonus de parade
+Ranged malus: Malus contre les tirs
+Toughness bonus: Bonus de Résistance
+Melee weapon list: Choix d'armes de mêlée
+Ranged weapon list: Choix d'armes à distance
+Attacks: Liste des attaques
+Armor list: Choix d'armures
+Armors: Armures portées
+Copy: Dupliquer
+Wild card: Personnage Joker
+Category: Catégorie
