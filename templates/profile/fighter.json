@@ -1,0 +1,24 @@
+{
+    "name": "Pack mêlée",
+    "attributes": {
+        "Agilité": 6,
+        "Force": 8,
+        "Vigueur": 8,
+        "Intellect": 4,
+        "Âme": 6
+    },
+    "skills": {
+        "Combat": 10
+    },
+    "edges": [
+        "Arme fétiche",        
+        "Frénésie",
+        "Frénésie suprême",
+        "Balayage",
+        "Grand balayage",
+        "Blocage",
+        "Grand blocage",
+        "Contre-attaque",
+        "Grande contre-attaque"
+    ]
+}
