@@ -101,9 +101,19 @@
 {% endblock %}
 
 {% block info %}
-    <div x-data>
-        <h2>Profils</h2>
-        <button class="pure-button" x-on:click="$dispatch('profile', {})">Défaut</button>
+    <div x-data class="pure-g">
+        <div class="pure-u-1">
+            <h2>Profils</h2>
+        </div>
+        {% for file in profile %}
+            <button class="pure-button pure-u-1" 
+                    data-profile="{{ include('profile/' ~ file.filename)|escape('html_attr') }}"
+                    x-on:click="$dispatch('profile', JSON.parse($el.dataset.profile))"
+                    x-text="JSON.parse($el.dataset.profile).name"
+                    >
+                <i class="icon-spin3 animate-spin"></i>
+            </button>
+        {% endfor %}
     </div>
 {% endblock %}
 
@@ -166,20 +176,20 @@
                         return false !== this.searchSkillIdxByName(name)
                     },
                     addProfile(model) {
-                        let attribute = {'Agilité': 6, 'Force': 6, 'Vigueur': 6, 'Intellect': 6, 'Âme': 6}
+                        let attribute = model.attributes
                         for (const label in attribute) {
                             document.querySelector('input[value="' + label + '"]')
                                     .parentElement
                                     .querySelector('input[value="' + attribute[label] + '"]')
                                     .checked = true
                         }
-                        let skill = {'Athlétisme': 4, 'Culture générale': 4, 'Discrétion': 4, 'Kinésique': 4, 'Perception': 4, 'Persuasion': 4}
+                        let skill = model.skills
                         for (const label in skill) {
                             if (!this.hasSkill(label)) {
                                 this.skills.push({name: label, dice: skill[label], modifier: 0})
                             }
                         }
-                        let edge = ['Frénésie']
+                        let edge = model.edges
                         for (const label of edge) {
                             this.edges.push(JSON.parse(document.querySelector('option[data-key="' + label + '"]').value))
                         }
