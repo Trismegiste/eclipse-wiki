@@ -132,6 +132,7 @@
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('behavior', () => ({
+                    edgeFilter: {cbt: true, soc: true, pro: true},
                     removeHindrance(k) {
                         this.hindrances.splice(k, 1)
                     },
@@ -201,16 +202,6 @@
                             if (!this.hasEdge(label)) {
                                 this.edges.push(JSON.parse(document.querySelector('option[data-key="' + label + '"]').value))
                             }
-                        }
-                    },
-                    checkingEdgeFilter(node) {
-                        if ('checkbox' === node.type) {
-                            const val = node.value
-                            this.$refs.edge_choice
-                                    .querySelectorAll('option[data-category="' + val + '"]')
-                                    .forEach(function (opt) {
-                                        opt.hidden = !node.checked
-                                    })
                         }
                     }
                 }))

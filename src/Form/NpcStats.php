@@ -73,7 +73,9 @@ class NpcStats extends AbstractType
                 'expanded' => true,
                 'multiple' => true,
                 'choices' => $this->getFilterEdge(),
-                'attr' => ['x-on:click' => 'checkingEdgeFilter($event.target)']
+                'choice_attr' => function($choice, $key, $value) {
+                    return ['x-model' => 'edgeFilter.' . $value];
+                }
             ])
             ->add('edge_list', ChoiceType::class, [
                 'placeholder' => '-------------',
@@ -85,13 +87,12 @@ class NpcStats extends AbstractType
                 },
                 'choice_label' => [$this, 'printEdge'],
                 'attr' => [
-                    'x-on:change' => 'edges.push(JSON.parse($event.target.value)); $el.value=""',
-                    'x-ref' => 'edge_choice'
+                    'x-on:change' => 'edges.push(JSON.parse($event.target.value)); $el.value=""'
                 ],
                 'choice_attr' => function (?Edge $edge) {
                     return [
                         'data-key' => $edge->getName(),
-                        'data-category' => $edge->getCategory()
+                        'x-show' => 'edgeFilter.' . $edge->getCategory()
                     ];
                 }
             ])
