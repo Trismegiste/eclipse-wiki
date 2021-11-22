@@ -207,6 +207,12 @@
       "search": [
         "d4"
       ]
+    },
+    {
+      "uid": "0ddd3e8201ccc7d41f7b7c9d27eca6c1",
+      "css": "link",
+      "code": 59394,
+      "src": "fontawesome"
     }
   ]
 }

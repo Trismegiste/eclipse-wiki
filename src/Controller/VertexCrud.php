@@ -46,8 +46,9 @@ class VertexCrud extends AbstractController
     public function show(string $pk): Response
     {
         $vertex = $this->repository->findByPk($pk);
+        $backlinks = $this->repository->searchByBacklinks($vertex->getTitle());
 
-        return $this->render('vertex/show.html.twig', ['vertex' => $vertex]);
+        return $this->render('vertex/show.html.twig', ['vertex' => $vertex, 'backlinks' => $backlinks]);
     }
 
     /**
@@ -60,7 +61,7 @@ class VertexCrud extends AbstractController
             return $this->redirectToRoute('app_vertexcrud_create', ['title' => $title]);
         }
 
-        return $this->render('vertex/show.html.twig', ['vertex' => $vertex]);
+        return $this->show($vertex->getPk());
     }
 
     /**

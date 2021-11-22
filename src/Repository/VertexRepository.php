@@ -75,4 +75,21 @@ class VertexRepository
         return $this->collection->searchAutocomplete('title', $title);
     }
 
+    public function searchByBacklinks(string $title): array
+    {
+        $tmp = preg_split('//u', $title, null, PREG_SPLIT_NO_EMPTY);
+        $firstLetter = array_shift($tmp);
+
+        $it = $this->collection->search([
+            'content' => new Regex("\[\[(?i:$firstLetter)" . implode('', $tmp) . "\]\]")
+        ]);
+
+        $linked = [];
+        foreach ($it as $vertex) {
+            $linked[] = $vertex->getTitle();
+        }
+
+        return $linked;
+    }
+
 }

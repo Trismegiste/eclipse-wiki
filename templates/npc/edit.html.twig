@@ -101,7 +101,7 @@
 {% endblock %}
 
 {% block info %}
-    <div x-data class="pure-g">
+    <div x-data class="pure-g profile">
         <div class="pure-u-1">
             <h2>Profils</h2>
         </div>
@@ -109,8 +109,7 @@
             <button class="pure-button pure-u-1" 
                     data-profile="{{ include('profile/' ~ file.filename)|escape('html_attr') }}"
                     x-on:click="$dispatch('profile', JSON.parse($el.dataset.profile))"
-                    x-text="JSON.parse($el.dataset.profile).name"
-                    >
+                    x-text="JSON.parse($el.dataset.profile).name">
                 <i class="icon-spin3 animate-spin"></i>
             </button>
         {% endfor %}
@@ -175,6 +174,14 @@
                     hasSkill(name) {
                         return false !== this.searchSkillIdxByName(name)
                     },
+                    hasEdge(name) {
+                        for (const edge of this.edges) {
+                            if (name === edge.name) {
+                                return true
+                            }
+                        }
+                        return false
+                    },
                     addProfile(model) {
                         let attribute = model.attributes
                         for (const label in attribute) {
@@ -191,7 +198,9 @@
                         }
                         let edge = model.edges
                         for (const label of edge) {
-                            this.edges.push(JSON.parse(document.querySelector('option[data-key="' + label + '"]').value))
+                            if (!this.hasEdge(label)) {
+                                this.edges.push(JSON.parse(document.querySelector('option[data-key="' + label + '"]').value))
+                            }
                         }
                     }
                 }))
@@ -207,6 +216,9 @@
         }
         #npc_stats_skills input:checked + label {
             color: var(--sawo-color);
+        }
+        .profile button {
+            margin-bottom: 1em;
         }
     </style>
 {% endblock %}
