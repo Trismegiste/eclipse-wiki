@@ -68,21 +68,31 @@ class NpcStats extends AbstractType
                 'prototype_data' => $this->getProtoSkill(),
                 'by_reference' => false
             ])
+            ->add('edge_filter', ChoiceType::class, [
+                'mapped' => false,
+                'expanded' => true,
+                'multiple' => true,
+                'choices' => $this->getFilterEdge(),
+                'attr' => ['x-on:click' => 'checkingEdgeFilter($event.target)']
+            ])
             ->add('edge_list', ChoiceType::class, [
                 'placeholder' => '-------------',
                 'mapped' => false,
                 'required' => false,
                 'choices' => $this->edge->getListing(),
-                'group_by' => function (Edge $edge) {
-                    return $edge->getCategory();
-                },
                 'choice_value' => function (?Edge $edge) {
                     return json_encode($edge);
                 },
                 'choice_label' => [$this, 'printEdge'],
-                'attr' => ['x-on:change' => 'edges.push(JSON.parse($event.target.value)); $el.value=""'],
+                'attr' => [
+                    'x-on:change' => 'edges.push(JSON.parse($event.target.value)); $el.value=""',
+                    'x-ref' => 'edge_choice'
+                ],
                 'choice_attr' => function (?Edge $edge) {
-                    return ['data-key' => $edge->getName()];
+                    return [
+                        'data-key' => $edge->getName(),
+                        'data-category' => $edge->getCategory()
+                    ];
                 }
             ])
             ->add('edges', CollectionType::class, [
@@ -159,6 +169,19 @@ class NpcStats extends AbstractType
             . ' (' . strtoupper($edge->getRank()) . ') : ['
             . implode('/', $type) . '] '
             . str_replace(['[[', ']]'], '', $edge->getPrerequisite());
+    }
+
+    private function getFilterEdge(): array
+    {
+        return [
+            'Combat' => 'cbt',
+            'Légendaire' => 'leg',
+            'Social' => 'soc',
+            'Professionnel' => 'pro',
+            'Background' => 'bak',
+            'Command.' => 'cmd',
+            'Étrange' => 'etr',
+        ];
     }
 
 }

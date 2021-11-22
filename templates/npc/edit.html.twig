@@ -202,6 +202,16 @@
                                 this.edges.push(JSON.parse(document.querySelector('option[data-key="' + label + '"]').value))
                             }
                         }
+                    },
+                    checkingEdgeFilter(node) {
+                        if ('checkbox' === node.type) {
+                            const val = node.value
+                            this.$refs.edge_choice
+                                    .querySelectorAll('option[data-category="' + val + '"]')
+                                    .forEach(function (opt) {
+                                        opt.hidden = !node.checked
+                                    })
+                        }
                     }
                 }))
         })
