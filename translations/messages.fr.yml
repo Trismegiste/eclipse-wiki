@@ -3,9 +3,9 @@ Attributes: Attributs
 Edges: Atouts
 Skills: Compétences
 Skill list: Choix de compétences
-Edge list: Choix d'Atouts
+Edge list: Choix d'atouts
 Hindrances: Handicaps
-Hindrance list: Choix de Handicaps
+Hindrance list: Choix de handicaps
 Economy: Économies
 Edit: Enregistrer
 Generate: Générer
@@ -41,3 +41,4 @@ Armors: Armures portées
 Copy: Dupliquer
 Wild card: Personnage Joker
 Category: Catégorie
+Edge filter: Filtre atouts

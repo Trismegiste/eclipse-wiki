@@ -1,0 +1,22 @@
+{
+    "name": "Pack jamming",
+    "attributes": {
+        "Agilité": 4,
+        "Force": 4,
+        "Vigueur": 8,
+        "Intellect": 8,
+        "Âme": 8
+    },
+    "skills": {
+        "Informatique": 8,
+        "Informatique": 8,
+        "Stratégie": 10
+    },
+    "edges": [
+        "Commandement",
+        "Inspiration",
+        "Serrez les Rang !",
+        "Ferveur",
+        "Jammer"
+    ]
+}

@@ -1,0 +1,21 @@
+{
+    "name": "Pack social",
+    "attributes": {
+        "Agilité": 6,
+        "Force": 4,
+        "Vigueur": 6,
+        "Intellect": 8,
+        "Âme": 8
+    },
+    "skills": {
+        "Culture générale": 6,
+        "Kinésique": 8,
+        "Persuasion": 10,
+        "Performance": 8
+    },
+    "edges": [
+        "Charismatique",
+        "Connecté",
+        "Mentaliste"
+    ]
+}
