@@ -1,0 +1,22 @@
+{
+    "name": "Pack hacking",
+    "attributes": {
+        "Agilité": 4,
+        "Force": 4,
+        "Vigueur": 6,
+        "Intellect": 10,
+        "Âme": 6
+    },
+    "skills": {
+        "Électronique": 8,
+        "Recherche": 10,
+        "Informatique": 12,
+        "Sciences": 6
+    },
+    "edges": [
+        "Infosec",
+        "ID-Faker",
+        "Illusionniste",
+        "Psychochirurgien"
+    ]
+}

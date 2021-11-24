@@ -1,0 +1,16 @@
+{
+    "name": "Pack commandant",
+    "attributes": {
+        "Intellect": 8,
+        "Âme": 8
+    },
+    "skills": {
+        "Stratégie": 10
+    },
+    "edges": [
+        "Commandement",
+        "Inspiration",
+        "Serrez les Rang !",
+        "Ferveur"
+    ]
+}
