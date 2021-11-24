@@ -533,6 +533,9 @@
     "theseer/tokenizer": {
         "version": "1.2.1"
     },
+    "trismegiste/rpg-name-generator": {
+        "version": "dev-master"
+    },
     "trismegiste/toolbox": {
         "version": "dev-master"
     },

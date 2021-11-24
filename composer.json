@@ -41,6 +41,7 @@
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0",
         "trismegiste/toolbox": "dev-master",   
+        "trismegiste/rpg-name-generator": "dev-master",   
         "mike42/wikitext": "dev-master"   
     },
     "require-dev": {
@@ -104,6 +105,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/Trismegiste/wikitext/"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/Trismegiste/rpg-name-generator/"
         }
     ]
 }

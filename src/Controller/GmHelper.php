@@ -11,6 +11,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Trismegiste\NameGenerator\FileRepository;
+use Trismegiste\NameGenerator\RandomizerDecorator;
 
 /**
  * Description of GmHelper
@@ -38,6 +40,24 @@ class GmHelper extends AbstractController
         }
 
         return $this->render('form.html.twig', ['title' => 'Love letter', 'form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/gm/name")
+     */
+    public function nameGenerate($card = 84): Response
+    {
+        $repo = new RandomizerDecorator(new FileRepository());
+        $female = [];
+        for ($k = 0; $k < $card; $k++) {
+            $female[] = $repo->getRandomGivenNameFor('female', 'random') . ' ' . $repo->getRandomSurnameFor('random');
+        }
+        $male = [];
+        for ($k = 0; $k < $card; $k++) {
+            $male[] = $repo->getRandomGivenNameFor('male', 'random') . ' ' . $repo->getRandomSurnameFor('random');
+        }
+
+        return $this->render('random_name.html.twig', ['male' => $male, 'female' => $female]);
     }
 
 }

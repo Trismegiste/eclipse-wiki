@@ -1,0 +1,24 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Random names{% endblock %}
+
+{% block header_title %}Liste de noms{% endblock %}
+
+{% block content %}
+    <h2>Femme</h2>
+    <section class="pure-g">
+        {% for name in female %}
+            <div class="pure-u-1-6">
+                <a href="{{ path('app_npcgenerator_wikishow', {title: name}) }}">{{ name }}</a>
+            </div>
+        {% endfor %}
+    </section>
+    <h2>Homme</h2>
+    <section class="pure-g">
+        {% for name in male %}
+            <div class="pure-u-1-6">
+                <a href="{{ path('app_npcgenerator_wikishow', {title: name}) }}">{{ name }}</a>
+            </div>
+        {% endfor %}
+    </section>
+{% endblock %}
