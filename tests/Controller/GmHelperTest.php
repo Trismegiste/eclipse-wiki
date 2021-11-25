@@ -36,4 +36,11 @@ class GmHelperTest extends WebTestCase
         $this->assertEquals('Cher ABCD,', $crawler->filterXPath("//article/p[1]")->text());
     }
 
+    public function testNameGenerate()
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/gm/name');
+        $this->assertResponseIsSuccessful();
+    }
+
 }
