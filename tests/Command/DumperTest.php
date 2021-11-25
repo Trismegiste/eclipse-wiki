@@ -18,9 +18,7 @@ class DumperTest extends KernelTestCase
 
         $command = $application->find('mw:dump');
         $commandTester = new CommandTester($command);
-        $commandTester->execute([
-            'category' => 'Réseau social',
-        ]);
+        $commandTester->execute(['category' => 'Wiki Eclipse Savage']);
 
         // the output of the command in the console
         $output = $commandTester->getDisplay();
