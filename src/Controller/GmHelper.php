@@ -45,19 +45,21 @@ class GmHelper extends AbstractController
     /**
      * @Route("/gm/name")
      */
-    public function nameGenerate($card = 84): Response
+    public function nameGenerate($card = 15): Response
     {
         $repo = new RandomizerDecorator(new FileRepository());
-        $female = [];
-        for ($k = 0; $k < $card; $k++) {
-            $female[] = $repo->getRandomGivenNameFor('female', 'random') . ' ' . $repo->getRandomSurnameFor('random');
-        }
-        $male = [];
-        for ($k = 0; $k < $card; $k++) {
-            $male[] = $repo->getRandomGivenNameFor('male', 'random') . ' ' . $repo->getRandomSurnameFor('random');
+        $config = $this->getParameter('generator');
+        $listing = [];
+
+        foreach (['female', 'male'] as $gender) {
+            foreach ($config as $idx => $combo) {
+                for ($k = 0; $k < $card; $k++) {
+                    $listing[$gender][$idx][] = $repo->getRandomGivenNameFor($gender, $combo[0]) . ' ' . $repo->getRandomSurnameFor($combo[1]);
+                }
+            }
         }
 
-        return $this->render('random_name.html.twig', ['male' => $male, 'female' => $female]);
+        return $this->render('random_name.html.twig', ['listing' => $listing]);
     }
 
 }
