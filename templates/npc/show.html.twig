@@ -128,15 +128,18 @@
                 </table>
                 <h2>Blessures</h2>
                 <p>
-                    <label>Secoué</label><input type="checkbox" name="shaken"/>
+                    <label>Secoué</label>
+                    <input type="checkbox" name="shaken"/>
                 </p>
-                <p>
-                    Niveau
-                    {% for idx in 0..3 %}
-                        <input type="radio" name="wound_level" id="wound_level_{{ idx }}"/>
-                        <label for="wound_level_{{ idx }}">{{ idx }}</label>
-                    {% endfor %}
-                </p>
+                {% if npc.wildCard %}
+                    <p>
+                        Niveau
+                        {% for idx in 0..3 %}
+                            <input type="radio" name="wound_level" id="wound_level_{{ idx }}"/>
+                            <label for="wound_level_{{ idx }}">{{ idx }}</label>
+                        {% endfor %}
+                    </p>
+                {% endif %}
                 <h2>Fatigue</h2>
                 <p>
                     Niveau
