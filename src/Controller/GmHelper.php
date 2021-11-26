@@ -43,9 +43,9 @@ class GmHelper extends AbstractController
     }
 
     /**
-     * @Route("/gm/name")
+     * @Route("/gm/name/{card}")
      */
-    public function nameGenerate($card = 15): Response
+    public function nameGenerate(int $card = 15): Response
     {
         $repo = new RandomizerDecorator(new FileRepository());
         $config = $this->getParameter('generator');
