@@ -81,7 +81,7 @@ class VertexRepository
         $firstLetter = array_shift($tmp);
 
         $it = $this->collection->search([
-            'content' => new Regex("\[\[(?i:$firstLetter)" . implode('', $tmp) . "\]\]")
+            'content' => new Regex("\[\[(?i:$firstLetter)" . implode('', $tmp) . "(\]\]|\|)")
         ]);
 
         $linked = [];
