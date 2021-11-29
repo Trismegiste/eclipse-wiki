@@ -121,6 +121,11 @@ a.new {
 
 /* WIKI image */
 .thumb img {
-    max-height: 250px;
-    max-width: 250px;
+    max-height: 200px;
+    max-width: 200px;
+}
+
+li.textcomplete-item img {
+    max-height: 100px;
+    max-width: 100px;
 }

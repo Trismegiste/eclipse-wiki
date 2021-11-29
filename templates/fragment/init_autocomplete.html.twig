@@ -33,6 +33,9 @@
             },
             replace: function (value) {
                 return '$1[[file:' + value + ']] ';
+            },
+            template: function (key, value) {
+                return '<img src="/upload/' + key + '"/>'
             }
         },
         {
