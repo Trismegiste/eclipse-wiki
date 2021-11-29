@@ -118,3 +118,9 @@ input[type=text].highlight {
 a.new {
     color: red;
 }
+
+/* WIKI image */
+.thumb img {
+    max-height: 250px;
+    max-width: 250px;
+}

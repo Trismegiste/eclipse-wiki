@@ -20,6 +20,22 @@
             }
         },
         {
+            // Link strategy for image
+            match: /(.*)\[\[file\:([^\]]+)$/,
+            search: function (term, callback) {
+                fetch('{{ path('app_vertexcrud_image') }}' + '?q=' + term)
+                        .then((response) => {
+                            return response.json();
+                        })
+                        .then((data) => {
+                            callback(data);
+                        });
+            },
+            replace: function (value) {
+                return '$1[[file:' + value + ']] ';
+            }
+        },
+        {
             // Link strategy for Vertex
             match: /(.*)\[\[([^\]]+)$/,
             search: function (term, callback) {

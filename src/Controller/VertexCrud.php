@@ -146,4 +146,24 @@ class VertexCrud extends AbstractController
         return new JsonResponse($choice);
     }
 
+    /**
+     * @Route("/image/search", methods={"GET"})
+     */
+    public function image(Request $request): JsonResponse
+    {
+        $title = $request->query->get('q', '');
+
+        $finder = new \Symfony\Component\Finder\Finder();
+        $it = $finder->in(join_paths($this->getParameter('kernel.project_dir'), 'public/upload'))
+                ->files()
+                ->name("$title*");
+
+        $choice = [];
+        foreach ($it as $fch) {
+            $choice[] = $fch->getBasename();
+        }
+
+        return new JsonResponse($choice);
+    }
+
 }

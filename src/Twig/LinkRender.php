@@ -28,6 +28,11 @@ class LinkRender extends HtmlRenderer
 
     public function getImageInfo($info): array
     {
+        $info['thumb'] = '/upload/' . $info['url'];
+        $info['url'] = '/upload/' . $info['url'];
+        $info['thumbnail'] = true;
+        $info['caption'] = false;
+
         return $info;
     }
 
