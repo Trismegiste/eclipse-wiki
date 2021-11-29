@@ -9,7 +9,11 @@
         </tr>
         {% for vertex in listing %}
             <tr>
-                <td>{{ vertex.title }}</td>
+                <td>
+                    <a href="{{ path('app_vertexcrud_show', {pk: vertex.pk}) }}" title="Voir">
+                        {{ vertex.title }}
+                    </a>
+                </td>
                 <td>{{ vertex.category }}</td>
                 <td>
                     <nav class="listing-action">

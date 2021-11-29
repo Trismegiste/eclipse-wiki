@@ -20,11 +20,7 @@
                 <td class="centered">{{ npc.powerIndex }}</td>
                 <td>
                     <nav class="listing-action">
-                        <a href="{{ path('app_npcgenerator_edit', {pk: npc.pk}) }}" title="Modifier"><i class="icon-edit"></i></a>
-                        <a href="{{ path('app_npcgenerator_gear', {pk: npc.pk}) }}" title="Matériel"><i class="icon-wrench"></i></a>
-                        <a href="{{ path('app_npcgenerator_battle', {pk: npc.pk}) }}" title="Combat"><i class="icon-gun"></i></a>
-                        <a href="{{ path('app_npcgenerator_duplicate', {pk: npc.pk}) }}" title="Dupliquer"><i class="icon-duplicate"></i></a>
-                        <a href="{{ path('app_npcgenerator_delete', {pk: npc.pk}) }}" title="Effacer"><i class="icon-trash-empty"></i></a>
+                        {{ include('npc/actions.html.twig') }}
                     </nav>
                 </td>
             </tr>
