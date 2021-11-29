@@ -6,7 +6,6 @@
             <th>{% trans %}Name{% endtrans %}</th>
             <th>{% trans %}Origin{% endtrans %}</th>
             <th>{% trans %}Morph{% endtrans %}</th>
-            <th>{% trans %}Power{% endtrans %}</th>
             <th>Actions</th>
         </tr>
         {% for npc in listing %}
@@ -15,9 +14,8 @@
                     <a href="{{ path('app_npcgenerator_show', {pk: npc.pk}) }}" title="Voir">{{ npc.name }}</a>
                     {% if npc.wildCard %}<i class="icon-wildcard"></i>{% endif %}
                 </td>
-                <td>{{ npc.description }}</td>
+                <td>{{ npc.description }} ({{ npc.powerIndex }})</td>
                 <td>{{ npc.morph.title }}</td>
-                <td class="centered">{{ npc.powerIndex }}</td>
                 <td>
                     <nav class="listing-action">
                         {{ include('npc/actions.html.twig') }}
