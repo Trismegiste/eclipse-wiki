@@ -2,9 +2,9 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {{ include('fragment/init_autocomplete.html.twig', {element_id:'npc_info_information'}) }}
+    {{ include('fragment/init_autocomplete.html.twig', {element_id:'npc_info_content'}) }}
     <script>
-        document.getElementById('npc_info_information').focus()
+        document.getElementById('npc_info_content').focus()
     </script>
 {% endblock %}
 

@@ -22,7 +22,7 @@ class NpcInfo extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('information', TextareaType::class, ['attr' => ['rows' => 30]])
+            ->add('content', TextareaType::class, ['attr' => ['rows' => 30]])
             ->add('edit', SubmitType::class)
             ->setMethod('PUT');
     }

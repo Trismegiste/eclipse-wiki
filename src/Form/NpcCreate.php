@@ -47,7 +47,7 @@ class NpcCreate extends AbstractType
             ->add('background', Type\ProviderChoiceType::class, ['provider' => $this->background, 'placeholder' => '--- Choisissez un Historique ---'])
             ->add('faction', Type\ProviderChoiceType::class, ['provider' => $this->faction, 'placeholder' => '--- Choisissez une Faction ---'])
             ->add('morph', Type\ProviderChoiceType::class, ['provider' => $this->morph, 'placeholder' => '--- Choisissez un Morphe ---'])
-            ->add('information', TextareaType::class, ['required' => false])
+            ->add('content', TextareaType::class, ['required' => false])
             ->add('generate', SubmitType::class);
     }
 

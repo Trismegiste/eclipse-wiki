@@ -29,7 +29,6 @@ abstract class Character extends Vertex implements \JsonSerializable
     public $rangedMalus = 0;
     public $toughnessBonus = 0;
     public $parryBonus = 0;
-    public $information;
     public $economy = [];
 
     public function setMorph(Morph $mrp)
