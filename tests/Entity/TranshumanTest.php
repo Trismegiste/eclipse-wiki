@@ -12,7 +12,7 @@ class TranshumanTest extends App\Tests\Entity\CharacterTest
         $bg = $this->createStub(\App\Entity\Background::class);
         $fac = $this->createStub(App\Entity\Faction::class);
 
-        return new App\Entity\Transhuman($bg, $fac);
+        return new App\Entity\Transhuman('test', $bg, $fac);
     }
 
     public function testProperties()

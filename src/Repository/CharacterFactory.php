@@ -27,9 +27,9 @@ class CharacterFactory
         }
     }
 
-    public function create(Background $bg, Faction $fac): Character
+    public function create(string $title, Background $bg, Faction $fac): Character
     {
-        $obj = new \App\Entity\Transhuman($bg, $fac);
+        $obj = new \App\Entity\Transhuman($title, $bg, $fac);
         $this->addAttributes($obj);
 
         return $obj;

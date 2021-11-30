@@ -42,13 +42,13 @@ class NpcCreate extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('wildCard', CheckboxType::class, ['required' => false])
-                ->add('name', TextType::class, ['attr' => ['placeholder' => 'Choisissez un nom']])
-                ->add('background', Type\ProviderChoiceType::class, ['provider' => $this->background, 'placeholder' => '--- Choisissez un Historique ---'])
-                ->add('faction', Type\ProviderChoiceType::class, ['provider' => $this->faction, 'placeholder' => '--- Choisissez une Faction ---'])
-                ->add('morph', Type\ProviderChoiceType::class, ['provider' => $this->morph, 'placeholder' => '--- Choisissez un Morphe ---'])
-                ->add('information', TextareaType::class, ['required' => false])
-                ->add('generate', SubmitType::class);
+            ->add('wildCard', CheckboxType::class, ['required' => false])
+            ->add('name', TextType::class, ['attr' => ['placeholder' => 'Choisissez un nom']])
+            ->add('background', Type\ProviderChoiceType::class, ['provider' => $this->background, 'placeholder' => '--- Choisissez un Historique ---'])
+            ->add('faction', Type\ProviderChoiceType::class, ['provider' => $this->faction, 'placeholder' => '--- Choisissez une Faction ---'])
+            ->add('morph', Type\ProviderChoiceType::class, ['provider' => $this->morph, 'placeholder' => '--- Choisissez un Morphe ---'])
+            ->add('information', TextareaType::class, ['required' => false])
+            ->add('generate', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -57,9 +57,10 @@ class NpcCreate extends AbstractType
         $resolver->setDefault('empty_data', function (FormInterface $form) {
             $bg = $form->get('background')->getData();
             $fac = $form->get('faction')->getData();
+            $name = $form->get('name')->getData();
 
-            if (!is_null($bg) && !is_null($fac)) {
-                return $this->factory->create($bg, $fac);
+            if (!is_null($name) && !is_null($bg) && !is_null($fac)) {
+                return $this->factory->create($name, $bg, $fac);
             }
 
             return null;
