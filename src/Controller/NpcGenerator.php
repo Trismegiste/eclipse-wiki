@@ -166,7 +166,7 @@ class NpcGenerator extends AbstractController
         $newNpc = clone $npc;
 
         $form = $this->createFormBuilder($newNpc)
-            ->add('name', TextType::class)
+            ->add('title', TextType::class)
             ->add('wildCard', CheckboxType::class, ['required' => false])
             ->add('copy', SubmitType::class)
             ->getForm();
@@ -178,7 +178,7 @@ class NpcGenerator extends AbstractController
             return $this->redirectToRoute('app_npcgenerator_edit', ['pk' => $newNpc->getPk()]);
         }
 
-        return $this->render('form.html.twig', ['title' => 'Duplicate ' . $npc->name, 'form' => $form->createView()]);
+        return $this->render('form.html.twig', ['title' => 'Duplicate ' . $npc->getTitle(), 'form' => $form->createView()]);
     }
 
     /**
@@ -241,7 +241,7 @@ class NpcGenerator extends AbstractController
      */
     public function wikiShow(string $title): Response
     {
-        $it = $this->repository->search(['name' => $title]);
+        $it = $this->repository->search(['title' => $title]);
         $it->rewind();
         $npc = $it->current();
 
@@ -278,9 +278,9 @@ class NpcGenerator extends AbstractController
     public function search(Request $request): JsonResponse
     {
         $title = $request->query->get('q', '');
-        $choice = $this->repository->searchAutocomplete('name', $title);
+        $choice = $this->repository->searchAutocomplete('title', $title);
         array_walk($choice, function (&$v, $k) {
-            $v = $v->name;
+            $v = $v->title;
         });
 
         return new JsonResponse($choice);

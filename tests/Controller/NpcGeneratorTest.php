@@ -27,7 +27,7 @@ class NpcGeneratorTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $form = $crawler->selectButton('npc_generate')->form();
         $form->setValues(['npc' => [
-                'name' => 'Luke',
+                'title' => 'Luke',
                 'background' => 'Hilote',
                 'faction' => 'Tamiseur',
                 'morph' => 'Basique'

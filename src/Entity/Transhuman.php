@@ -14,11 +14,10 @@ class Transhuman extends Character
 
     protected $background;
     protected $faction;
-    protected $title;
 
     public function __construct(string $title, Background $bg, Faction $fac)
     {
-        $this->title = $title;
+        parent::__construct($title);
         $this->background = $bg;
         $this->faction = $fac;
     }

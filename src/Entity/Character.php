@@ -6,13 +6,12 @@
 
 namespace App\Entity;
 
-use Trismegiste\Toolbox\MongoDb\Root;
 use Trismegiste\Toolbox\MongoDb\RootImpl;
 
 /**
  * A Character
  */
-abstract class Character implements Root, \JsonSerializable
+abstract class Character extends Vertex implements \JsonSerializable
 {
 
     use RootImpl {
@@ -21,7 +20,6 @@ abstract class Character implements Root, \JsonSerializable
     use EdgeContainer;
 
     public $wildCard = false;
-    public $name; // the name of this character
     public $attributes = [];
     protected $morph;
     protected $skills = [];
@@ -88,7 +86,7 @@ abstract class Character implements Root, \JsonSerializable
     {
         $cpt = 0;
         foreach ($this->skills as $item) {
-            /** @var \App\Entity\Skill $item */
+            /** @var Skill $item */
             $cpt += $item->dice / 2 - 1 + $item->modifier;
         }
 
@@ -104,7 +102,7 @@ abstract class Character implements Root, \JsonSerializable
     {
         $cpt = 0;
         foreach ($this->attributes as $item) {
-            /** @var \App\Entity\Attribute $item */
+            /** @var Attribute $item */
             $cpt += $item->dice / 2 - 2 + $item->modifier;
         }
 

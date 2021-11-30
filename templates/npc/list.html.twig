@@ -11,7 +11,7 @@
         {% for npc in listing %}
             <tr>
                 <td>
-                    <a href="{{ path('app_npcgenerator_show', {pk: npc.pk}) }}" title="Voir">{{ npc.name }}</a>
+                    <a href="{{ path('app_npcgenerator_show', {pk: npc.pk}) }}" title="Voir">{{ npc.title }}</a>
                     {% if npc.wildCard %}<i class="icon-wildcard"></i>{% endif %}
                 </td>
                 <td>{{ npc.description }} ({{ npc.powerIndex }})</td>

@@ -17,7 +17,7 @@
     <div class="pure-g character">
         <div class="pure-u-1">
             {{ form_widget(form['wildCard']) }}
-            {{ form_widget(form['name'], {value: default_name, attr:{class:'pure-input-3-4'}}) }}
+            {{ form_widget(form['title'], {value: default_name, attr:{class:'pure-input-3-4'}}) }}
         </div>
         <div class="pure-u-1-3">
             <h2>Historique</h2>
@@ -72,7 +72,7 @@
             document.getElementById('npc_morph').addEventListener('change', selectUpdate)
         })
 
-        document.getElementById('npc_name').focus()
+        document.getElementById('npc_title').focus()
     </script>
     {{ include('fragment/init_autocomplete.html.twig', {element_id:'npc_information'}) }}
 {% endblock %}
@@ -80,7 +80,7 @@
 {% block stylesheets %}
     {{ parent() }}
     <style>
-        #npc_name {
+        #npc_title {
             font-size: 200%;
         }
         .wild-card {

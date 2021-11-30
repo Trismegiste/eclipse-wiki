@@ -37,7 +37,7 @@ class AliCreate extends AbstractType
     {
         $builder
             ->add('wildCard', CheckboxType::class, ['required' => false])
-            ->add('name', TextType::class, ['attr' => ['placeholder' => 'Choisissez un nom']])
+            ->add('title', TextType::class, ['attr' => ['placeholder' => 'Choisissez un nom']])
             ->add('morph', ProviderChoiceType::class, ['provider' => $this->shell, 'placeholder' => '--- Choisissez une coquille ---'])
             ->add('generate', SubmitType::class);
     }
@@ -46,7 +46,7 @@ class AliCreate extends AbstractType
     {
         $resolver->setDefault('data_class', Ali::class);
         $resolver->setDefault('empty_data', function (FormInterface $form) {
-            $name = $form->get('name')->getData();
+            $name = $form->get('title')->getData();
             return $this->factory->createAli($name);
         });
     }
