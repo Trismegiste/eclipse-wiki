@@ -35,9 +35,9 @@ class CharacterFactory
         return $obj;
     }
 
-    public function createAli(): Character
+    public function createAli(string $title): Character
     {
-        $char = new \App\Entity\Ali();
+        $char = new \App\Entity\Ali($title);
         $this->addAttributes($char);
         foreach ($char->attributes as $attr) {
             $attr->dice = 4;

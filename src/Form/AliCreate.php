@@ -46,7 +46,8 @@ class AliCreate extends AbstractType
     {
         $resolver->setDefault('data_class', Ali::class);
         $resolver->setDefault('empty_data', function (FormInterface $form) {
-            return $this->factory->createAli();
+            $name = $form->get('name')->getData();
+            return $this->factory->createAli($name);
         });
     }
 

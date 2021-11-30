@@ -12,6 +12,13 @@ namespace App\Entity;
 class Ali extends Character
 {
 
+    protected $title;
+
+    public function __construct(string $title)
+    {
+        $this->title = $title;
+    }
+
     public function getDescription(): string
     {
         return 'IAL';
