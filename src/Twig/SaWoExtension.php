@@ -26,6 +26,11 @@ class SaWoExtension extends AbstractExtension
         Ali::class => 'npc/ali/info.html.twig',
         Transhuman::class => 'npc/transhuman/info.html.twig'
     ];
+    const rowTemplate = [
+        Ali::class => 'npc/row.html.twig',
+        Transhuman::class => 'npc/row.html.twig',
+        Vertex::class => 'vertex/row.html.twig'
+    ];
 
     public function getFunctions()
     {
@@ -33,7 +38,7 @@ class SaWoExtension extends AbstractExtension
             new TwigFunction('level_hindrance', [$this, 'printLevelHindrance']),
             new TwigFunction('add_raise', [$this, 'addRaise']),
             new TwigFunction('char_info_template', [$this, 'getInfoTemplate']),
-            new TwigFunction('choose_vertex_template', [$this, 'getVertexTemplate']),
+            new TwigFunction('select_row_template', [$this, 'getVertexTemplate']),
             new TwigFunction('dice_icon', [$this, 'diceIcon'], ['is_safe' => ['html']]),
             new TwigFunction('char_icon', [$this, 'iconForCharacter']),
             new TwigFunction('vertex_icon', [$this, 'iconForVertex'])
@@ -91,7 +96,7 @@ class SaWoExtension extends AbstractExtension
 
     public function getVertexTemplate(Vertex $v): string
     {
-        
+        return self::rowTemplate[get_class($v)];
     }
 
 }

@@ -2,23 +2,8 @@
 {% block header_title %}PNJ{% endblock %}
 {% block content %}
     <section class="entity-listing">
-        {% for npc in listing %}
-            <div class="pure-g">
-                <div class="pure-u-1-12 thumb">
-                    <i class="{{ char_icon(npc) }}"></i>
-                </div>
-                <div class="pure-u-17-24">
-                    <a href="{{ path('app_npcgenerator_show', {pk: npc.pk}) }}" class="block-link">
-                        <h2>{{ npc.title }}</h2>
-                        <span>{{ npc.description }}. Morphe: {{ npc.morph.title }} ({{ npc.powerIndex }})</span>
-                    </a>
-                </div>
-                <div class="pure-u-5-24">
-                    <nav class="listing-action">
-                        {{ include('npc/actions.html.twig') }}
-                    </nav>
-                </div>
-            </div>
+        {% for item in listing %}
+          {{ include(select_row_template(item)) }}
         {% endfor %}
     </section>
 {% endblock %}
