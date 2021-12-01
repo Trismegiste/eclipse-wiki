@@ -11,7 +11,7 @@
             {% for combo in gender %}
                 <div class="pure-u-1-6">
                     {% for name in combo %}
-                        <a href="{{ path('app_npcgenerator_wikishow', {title: name}) }}">{{ name }}</a><br/>
+                        <a href="{{ path('app_npcgenerator_create', {title: name}) }}">{{ name }}</a><br/>
                     {% endfor %}
                 </div>
             {% endfor %}

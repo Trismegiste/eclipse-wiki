@@ -1,5 +1,5 @@
 {% extends "base.html.twig" %}
-
+{% set npc = vertex %}
 {% macro print_trait(trait, rof = 1, bonus = 0) %}
     <button x-on:click="$dispatch('roll', { dice: {{ trait.dice }}, modifier: {{ trait.modifier + bonus }}, rof: {{ rof }} })" class="pure-button">
         d{{ trait.dice }}

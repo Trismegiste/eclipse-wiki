@@ -47,8 +47,9 @@ class VertexCrud extends AbstractController
     {
         $vertex = $this->repository->findByPk($pk);
         $backlinks = $this->repository->searchByBacklinks($vertex->getTitle());
+        $template = \App\Twig\SaWoExtension::showTemplate[get_class($vertex)];
 
-        return $this->render('vertex/show.html.twig', ['vertex' => $vertex, 'backlinks' => $backlinks]);
+        return $this->render($template, ['vertex' => $vertex, 'backlinks' => $backlinks]);
     }
 
     /**
@@ -95,10 +96,10 @@ class VertexCrud extends AbstractController
     {
         $vertex = $this->repository->findByPk($pk);
         $form = $this->createFormBuilder($vertex)
-                ->add('content', TextareaType::class, ['attr' => ['rows' => 32]])
-                ->add('edit', SubmitType::class)
-                ->setMethod('PUT')
-                ->getForm();
+            ->add('content', TextareaType::class, ['attr' => ['rows' => 32]])
+            ->add('edit', SubmitType::class)
+            ->setMethod('PUT')
+            ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -118,9 +119,9 @@ class VertexCrud extends AbstractController
     {
         $vertex = $this->repository->findByPk($pk);
         $form = $this->createFormBuilder($vertex)
-                ->add('delete', SubmitType::class)
-                ->setMethod('DELETE')
-                ->getForm();
+            ->add('delete', SubmitType::class)
+            ->setMethod('DELETE')
+            ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -155,8 +156,8 @@ class VertexCrud extends AbstractController
 
         $finder = new \Symfony\Component\Finder\Finder();
         $it = $finder->in(join_paths($this->getParameter('kernel.project_dir'), 'public/upload'))
-                ->files()
-                ->name("$title*");
+            ->files()
+            ->name("$title*");
 
         $choice = [];
         foreach ($it as $fch) {

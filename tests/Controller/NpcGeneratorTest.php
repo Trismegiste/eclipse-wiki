@@ -78,16 +78,6 @@ class NpcGeneratorTest extends WebTestCase
         return $listing[0];
     }
 
-    /**
-     * @depends testSearch
-     */
-    public function testWiki(string $name)
-    {
-        $this->client->request('GET', "/npc/wiki/$name");
-        $this->assertResponseIsSuccessful();
-        $this->assertPageTitleContains('Luke');
-    }
-
     public function testAjaxBackground()
     {
         $this->client->request('GET', "/npc/background/info?key=Hilote");
