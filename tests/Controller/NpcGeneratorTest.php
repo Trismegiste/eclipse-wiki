@@ -41,7 +41,7 @@ class NpcGeneratorTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', '/npc/list');
         $this->assertResponseIsSuccessful();
-        $url = $crawler->filterXPath('//td/nav/a/i[@class="icon-eye"]/parent::a')->attr('href');
+        $url = $crawler->filterXPath('//nav/a/i[@class="icon-eye"]/parent::a')->attr('href');
 
         $this->assertStringContainsString('show', $url);
 

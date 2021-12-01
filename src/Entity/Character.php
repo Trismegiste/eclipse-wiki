@@ -111,8 +111,8 @@ abstract class Character extends Vertex implements \JsonSerializable
     public function getPowerIndex(): int
     {
         return ($this->getAttributePoints() - 5) +
-            ($this->getSkillPoints() - 12) / 2 +
-            (count($this->edges) - 1);
+                ($this->getSkillPoints() - 12) / 2 +
+                (count($this->edges) - 1);
     }
 
     public function getGears(): array
@@ -199,7 +199,7 @@ abstract class Character extends Vertex implements \JsonSerializable
     public function getTotalArmor(): int
     {
         // only torso armors, as per SaWo rules
-        $torso = array_filter($this->armors, function(Armor $a) {
+        $torso = array_filter($this->armors, function (Armor $a) {
             return false !== strpos($a->zone, 'T');
         });
 
@@ -216,4 +216,10 @@ abstract class Character extends Vertex implements \JsonSerializable
     }
 
     abstract public function getDescription(): string;
+
+    public function setTitle(string $newTitle): void
+    {
+        $this->title = $newTitle;
+    }
+
 }

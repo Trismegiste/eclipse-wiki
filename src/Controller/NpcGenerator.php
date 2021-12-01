@@ -41,7 +41,7 @@ class NpcGenerator extends AbstractController
      */
     public function list(): Response
     {
-        return $this->render('npc/list.html.twig', ['listing' => $this->repository->search()]);
+        return $this->render('npc/list.html.twig', ['listing' => $this->repository->search([], [], '_id')]);
     }
 
     /**
@@ -87,8 +87,8 @@ class NpcGenerator extends AbstractController
     {
         $profile = new \Symfony\Component\Finder\Finder();
         $profile->files()
-            ->in(join_paths($this->getParameter('twig.default_path'), 'profile'))
-            ->name('*.json');
+                ->in(join_paths($this->getParameter('twig.default_path'), 'profile'))
+                ->name('*.json');
 
         return $profile;
     }
@@ -143,9 +143,9 @@ class NpcGenerator extends AbstractController
     {
         $npc = $this->repository->load($pk);
         $form = $this->createFormBuilder($npc)
-            ->add('delete', SubmitType::class)
-            ->setMethod('DELETE')
-            ->getForm();
+                ->add('delete', SubmitType::class)
+                ->setMethod('DELETE')
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -164,12 +164,13 @@ class NpcGenerator extends AbstractController
     {
         $npc = $this->repository->load($pk);
         $newNpc = clone $npc;
+        $newNpc->setTitle($npc->getTitle() . ' (copie)');
 
         $form = $this->createFormBuilder($newNpc)
-            ->add('title', TextType::class)
-            ->add('wildCard', CheckboxType::class, ['required' => false])
-            ->add('copy', SubmitType::class)
-            ->getForm();
+                ->add('title', TextType::class)
+                ->add('wildCard', CheckboxType::class, ['required' => false])
+                ->add('copy', SubmitType::class)
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

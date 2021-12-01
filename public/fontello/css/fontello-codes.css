@@ -13,8 +13,15 @@
 .icon-d20:before { content: '\e809'; } /* '' */
 .icon-wildcard:before { content: '\e80a'; } /* '' */
 .icon-gun:before { content: '\e80b'; } /* '' */
+.icon-video:before { content: '\e80c'; } /* '' */
+.icon-picture:before { content: '\e80d'; } /* '' */
+.icon-location:before { content: '\e80e'; } /* '' */
 .icon-doc-add:before { content: '\e810'; } /* '' */
 .icon-info-circled:before { content: '\e811'; } /* '' */
+.icon-sleeve:before { content: '\e814'; } /* '' */
+.icon-rename:before { content: '\e815'; } /* '' */
+.icon-ali:before { content: '\e816'; } /* '' */
+.icon-extra:before { content: '\e817'; } /* '' */
 .icon-spin3:before { content: '\e832'; } /* '' */
 .icon-duplicate:before { content: '\f0c5'; } /* '' */
 .icon-menu:before { content: '\f0c9'; } /* '' */

@@ -1,27 +1,42 @@
 {% extends "base.html.twig" %}
 {% block header_title %}PNJ{% endblock %}
 {% block content %}
-    <table class="pure-table pure-table-striped entity-listing">
-        <tr>
-            <th>{% trans %}Name{% endtrans %}</th>
-            <th>{% trans %}Origin{% endtrans %}</th>
-            <th>{% trans %}Morph{% endtrans %}</th>
-            <th>Actions</th>
-        </tr>
+    <section class="entity-listing">
         {% for npc in listing %}
-            <tr>
-                <td>
-                    <a href="{{ path('app_npcgenerator_show', {pk: npc.pk}) }}" title="Voir">{{ npc.title }}</a>
-                    {% if npc.wildCard %}<i class="icon-wildcard"></i>{% endif %}
-                </td>
-                <td>{{ npc.description }} ({{ npc.powerIndex }})</td>
-                <td>{{ npc.morph.title }}</td>
-                <td>
+            <div class="pure-g">
+                <div class="pure-u-1-12 thumb">
+                    <i class="{{ vertex_icon(npc) }}"></i>
+                </div>
+                <div class="pure-u-17-24">
+                    <a href="{{ path('app_npcgenerator_show', {pk: npc.pk}) }}" class="block-link">
+                        <h2>{{ npc.title }}</h2>
+                        <span>{{ npc.description }}. Morphe: {{ npc.morph.title }} ({{ npc.powerIndex }})</span>
+                    </a>
+                </div>
+                <div class="pure-u-5-24">
                     <nav class="listing-action">
                         {{ include('npc/actions.html.twig') }}
                     </nav>
-                </td>
-            </tr>
+                </div>
+            </div>
         {% endfor %}
-    </table>
+    </section>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .block-link {
+            text-decoration: none;
+            color: #333;
+            display: block;
+            margin-bottom: 0.5em;
+        }
+        .block-link h2 {
+            margin: 0 0 0.3em;
+        }
+        .thumb i {
+            font-size: 3em;
+        }
+    </style>
 {% endblock %}

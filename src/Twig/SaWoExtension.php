@@ -28,7 +28,8 @@ class SaWoExtension extends AbstractExtension
             new TwigFunction('level_hindrance', [$this, 'printLevelHindrance']),
             new TwigFunction('add_raise', [$this, 'addRaise']),
             new TwigFunction('char_info_template', [$this, 'getInfoTemplate']),
-            new TwigFunction('dice_icon', [$this, 'diceIcon'], ['is_safe' => ['html']])
+            new TwigFunction('dice_icon', [$this, 'diceIcon'], ['is_safe' => ['html']]),
+            new TwigFunction('vertex_icon', [$this, 'iconForVertex'])
         ];
     }
 
@@ -62,6 +63,18 @@ class SaWoExtension extends AbstractExtension
         }
 
         return $roll;
+    }
+
+    public function iconForVertex(\App\Entity\Vertex $v): string
+    {
+        switch (get_class($v)) {
+            case \App\Entity\Ali::class:
+                return 'icon-ali';
+            case \App\Entity\Transhuman::class:
+                return $v->wildCard ? 'icon-wildcard' : 'icon-extra';
+            default :
+                return 'icon-video';
+        }
     }
 
 }
