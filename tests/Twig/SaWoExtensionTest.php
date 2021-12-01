@@ -18,6 +18,11 @@ class SaWoExtensionTest extends PHPUnit\Framework\TestCase
         $this->sut = new SaWoExtension();
     }
 
+    public function testGetFunctions()
+    {
+        $this->assertIsArray($this->sut->getFunctions());
+    }
+
     public function testDiceIcon()
     {
         $this->assertEquals('<i class="icon-d4"></i>', $this->sut->diceIcon('d4'));
