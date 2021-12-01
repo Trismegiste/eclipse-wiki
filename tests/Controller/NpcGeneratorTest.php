@@ -16,7 +16,7 @@ class NpcGeneratorTest extends WebTestCase
 
     public function testClean()
     {
-        $repo = static::getContainer()->get('app.character.repository');
+        $repo = static::getContainer()->get('app.vertex.repository');
         $repo->delete(iterator_to_array($repo->search()));
         $this->assertCount(0, iterator_to_array($repo->search()));
     }

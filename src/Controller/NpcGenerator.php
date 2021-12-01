@@ -17,11 +17,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Trismegiste\Toolbox\MongoDb\Repository;
 
 /**
  * Generator for NPC
@@ -31,9 +29,9 @@ class NpcGenerator extends AbstractController
 
     protected $repository;
 
-    public function __construct(Repository $characterRepo)
+    public function __construct(\App\Repository\VertexRepository $repo)
     {
-        $this->repository = $characterRepo;
+        $this->repository = $repo;
     }
 
     /**
@@ -61,7 +59,7 @@ class NpcGenerator extends AbstractController
      */
     public function edit(string $pk, Request $request): Response
     {
-        $npc = $this->repository->load($pk);
+        $npc = $this->repository->findByPk($pk);
         $form = $this->createForm(NpcStats::class, $npc);
 
         $form->handleRequest($request);
@@ -123,7 +121,7 @@ class NpcGenerator extends AbstractController
      */
     public function duplicate(string $pk, Request $request): Response
     {
-        $npc = $this->repository->load($pk);
+        $npc = $this->repository->findByPk($pk);
         $newNpc = clone $npc;
         $newNpc->setTitle($npc->getTitle() . ' (copie)');
 
@@ -148,7 +146,7 @@ class NpcGenerator extends AbstractController
      */
     public function gear(string $pk, Request $request): Response
     {
-        $npc = $this->repository->load($pk);
+        $npc = $this->repository->findByPk($pk);
         $form = $this->createForm(NpcGears::class, $npc);
 
         $form->handleRequest($request);
@@ -166,7 +164,7 @@ class NpcGenerator extends AbstractController
      */
     public function battle(string $pk, Request $request): Response
     {
-        $npc = $this->repository->load($pk);
+        $npc = $this->repository->findByPk($pk);
 
         $form = $this->createForm(NpcAttacks::class, $npc);
 
@@ -203,7 +201,7 @@ class NpcGenerator extends AbstractController
      */
     public function info(string $pk, Request $request): Response
     {
-        $npc = $this->repository->load($pk);
+        $npc = $this->repository->findByPk($pk);
 
         $form = $this->createForm(\App\Form\NpcInfo::class, $npc);
 
