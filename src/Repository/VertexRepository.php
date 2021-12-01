@@ -47,7 +47,7 @@ class VertexRepository
      */
     public function findAll(): \IteratorIterator
     {
-        return $this->collection->search();
+        return $this->collection->search([], [], '_id');
     }
 
     /**

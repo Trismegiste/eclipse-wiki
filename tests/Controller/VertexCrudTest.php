@@ -50,7 +50,7 @@ class VertexCrudTest extends WebTestCase
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/vertex/list');
-        $url = $crawler->filterXPath('//td/nav/a/i[@class="icon-eye"]/parent::a')->attr('href');
+        $url = $crawler->filterXPath('//nav/a/i[@class="icon-eye"]/parent::a')->attr('href');
         $crawler = $client->request('GET', $url);
         $this->assertPageTitleContains('A title');
     }
@@ -59,7 +59,7 @@ class VertexCrudTest extends WebTestCase
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/vertex/list');
-        $url = $crawler->filterXPath('//td/nav/a/i[@class="icon-edit"]/parent::a')->attr('href');
+        $url = $crawler->filterXPath('//nav/a/i[@class="icon-edit"]/parent::a')->attr('href');
 
         $crawler = $client->request('GET', $url);
         $form = $crawler->selectButton('form_edit')->form();
@@ -96,7 +96,7 @@ class VertexCrudTest extends WebTestCase
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/vertex/list');
-        $url = $crawler->filterXPath('//td/nav/a/i[@class="icon-trash-empty"]/parent::a')->attr('href');
+        $url = $crawler->filterXPath('//nav/a/i[@class="icon-trash-empty"]/parent::a')->attr('href');
 
         $crawler = $client->request('GET', $url);
         $form = $crawler->selectButton('form_delete')->form();

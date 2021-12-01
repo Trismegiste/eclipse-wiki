@@ -37,14 +37,6 @@ class NpcGenerator extends AbstractController
     }
 
     /**
-     * @Route("/npc/list", methods={"GET"})
-     */
-    public function list(): Response
-    {
-        return $this->render('npc/list.html.twig', ['listing' => $this->repository->search([], [], '_id')]);
-    }
-
-    /**
      * Creates a transhuman
      * @Route("/npc/create", methods={"GET","POST"})
      */
@@ -77,7 +69,7 @@ class NpcGenerator extends AbstractController
             $npc = $form->getData();
             $this->repository->save($npc);
 
-            return $this->redirectToRoute('app_npcgenerator_show', ['pk' => $npc->getPk()]);
+            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $npc->getPk()]);
         }
 
         return $this->render('npc/edit.html.twig', ['profile' => $this->getProfileList(), 'form' => $form->createView()]);
@@ -127,16 +119,6 @@ class NpcGenerator extends AbstractController
     }
 
     /**
-     * @Route("/npc/show/{pk}", methods={"GET"})
-     */
-    public function show(string $pk): Response
-    {
-        $npc = $this->repository->load($pk);
-
-        return $this->render('npc/show.html.twig', ['npc' => $npc]);
-    }
-
-    /**
      * @Route("/npc/delete/{pk}", methods={"GET","DELETE"})
      */
     public function delete(string $pk, Request $request): Response
@@ -151,7 +133,7 @@ class NpcGenerator extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->repository->delete($npc);
 
-            return $this->redirectToRoute('app_npcgenerator_list');
+            return $this->redirectToRoute('app_vertexcrud_list');
         }
 
         return $this->render('npc/delete.html.twig', ['form' => $form->createView()]);
@@ -195,7 +177,7 @@ class NpcGenerator extends AbstractController
             $npc = $form->getData();
             $this->repository->save($npc);
 
-            return $this->redirectToRoute('app_npcgenerator_show', ['pk' => $npc->getPk()]);
+            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $npc->getPk()]);
         }
         return $this->render('npc/gear.html.twig', ['form' => $form->createView()]);
     }
@@ -214,7 +196,7 @@ class NpcGenerator extends AbstractController
             $npc = $form->getData();
             $this->repository->save($npc);
 
-            return $this->redirectToRoute('app_npcgenerator_show', ['pk' => $npc->getPk()]);
+            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $npc->getPk()]);
         }
 
         return $this->render('npc/battle.html.twig', ['form' => $form->createView()]);
@@ -251,7 +233,7 @@ class NpcGenerator extends AbstractController
             $npc = $form->getData();
             $this->repository->save($npc);
 
-            return $this->redirectToRoute('app_npcgenerator_show', ['pk' => $npc->getPk()]);
+            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $npc->getPk()]);
         }
 
         return $this->render('npc/form_info.html.twig', ['title' => 'Info', 'form' => $form->createView()]);
