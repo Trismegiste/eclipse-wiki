@@ -37,7 +37,7 @@ class VertexCrud extends AbstractController
     {
         $it = $this->repository->findAll();
 
-        return $this->render('npc/list.html.twig', ['listing' => $it]);
+        return $this->render('vertex/list.html.twig', ['listing' => $it]);
     }
 
     /**

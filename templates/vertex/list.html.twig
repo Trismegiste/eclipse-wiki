@@ -1,26 +1,27 @@
 {% extends "base.html.twig" %}
-{% block header_title %}Vertex{% endblock %}
+{% block header_title %}PNJ{% endblock %}
 {% block content %}
-    <table class="pure-table pure-table-striped entity-listing">
-        <tr>
-            <th>{% trans %}Name{% endtrans %}</th>
-            <th>{% trans %}Category{% endtrans %}</th>
-            <th>Actions</th>
-        </tr>
-        {% for vertex in listing %}
-            <tr>
-                <td>
-                    <a href="{{ path('app_vertexcrud_show', {pk: vertex.pk}) }}" title="Voir">
-                        {{ vertex.title }}
-                    </a>
-                </td>
-                <td>{{ vertex.category }}</td>
-                <td>
-                    <nav class="listing-action">
-                        {{ include('vertex/actions.html.twig') }}
-                    </nav>
-                </td>
-            </tr>
+    <section class="entity-listing">
+        {% for item in listing %}
+          {{ include(select_row_template(item)) }}
         {% endfor %}
-    </table>
+    </section>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .block-link {
+            text-decoration: none;
+            color: #333;
+            display: block;
+            margin-bottom: 1em;
+        }
+        .block-link h2 {
+            margin: 0 0 0.3em;
+        }
+        .thumb i {
+            font-size: 3em;
+        }
+    </style>
 {% endblock %}
