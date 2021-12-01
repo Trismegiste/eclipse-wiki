@@ -112,7 +112,7 @@ class NpcGeneratorTest extends WebTestCase
     /** @depends testInfo */
     public function testDelete(string $pk)
     {
-        $crawler = $this->client->request('GET', "/npc/delete/$pk");
+        $crawler = $this->client->request('GET', "/vertex/delete/$pk");
         $this->assertCount(1, $crawler->selectButton('form_delete'));
     }
 
