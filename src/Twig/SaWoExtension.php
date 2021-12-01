@@ -6,8 +6,13 @@
 
 namespace App\Twig;
 
+use App\Entity\Ali;
+use App\Entity\Character;
 use App\Entity\DamageRoll;
+use App\Entity\Transhuman;
+use App\Entity\Vertex;
 use App\Repository\HindranceProvider;
+use OutOfBoundsException;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -18,8 +23,8 @@ class SaWoExtension extends AbstractExtension
 {
 
     const infoTemplate = [
-        \App\Entity\Ali::class => 'npc/ali/info.html.twig',
-        \App\Entity\Transhuman::class => 'npc/transhuman/info.html.twig'
+        Ali::class => 'npc/ali/info.html.twig',
+        Transhuman::class => 'npc/transhuman/info.html.twig'
     ];
 
     public function getFunctions()
@@ -28,7 +33,9 @@ class SaWoExtension extends AbstractExtension
             new TwigFunction('level_hindrance', [$this, 'printLevelHindrance']),
             new TwigFunction('add_raise', [$this, 'addRaise']),
             new TwigFunction('char_info_template', [$this, 'getInfoTemplate']),
+            new TwigFunction('choose_vertex_template', [$this, 'getVertexTemplate']),
             new TwigFunction('dice_icon', [$this, 'diceIcon'], ['is_safe' => ['html']]),
+            new TwigFunction('char_icon', [$this, 'iconForCharacter']),
             new TwigFunction('vertex_icon', [$this, 'iconForVertex'])
         ];
     }
@@ -45,7 +52,7 @@ class SaWoExtension extends AbstractExtension
         return HindranceProvider::paramType[$level];
     }
 
-    public function getInfoTemplate(\App\Entity\Character $char): string
+    public function getInfoTemplate(Character $char): string
     {
         return self::infoTemplate[get_class($char)];
     }
@@ -65,16 +72,26 @@ class SaWoExtension extends AbstractExtension
         return $roll;
     }
 
-    public function iconForVertex(\App\Entity\Vertex $v): string
+    public function iconForVertex(Vertex $v): string
+    {
+        return 'icon-video';
+    }
+
+    public function iconForCharacter(Character $v): string
     {
         switch (get_class($v)) {
-            case \App\Entity\Ali::class:
+            case Ali::class:
                 return 'icon-ali';
-            case \App\Entity\Transhuman::class:
+            case Transhuman::class:
                 return $v->wildCard ? 'icon-wildcard' : 'icon-extra';
             default :
-                return 'icon-video';
+                throw new OutOfBoundsException("No icon for " . get_class($v));
         }
+    }
+
+    public function getVertexTemplate(Vertex $v): string
+    {
+        
     }
 
 }
