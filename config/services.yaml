@@ -58,7 +58,7 @@ services:
     app.vertex.repository:
         class: Trismegiste\Toolbox\MongoDb\Repository
         factory: ['@Trismegiste\Toolbox\MongoDb\RepositoryFactory', 'create']
-        arguments: ['character']
+        arguments: ['vertex']
     Trismegiste\Toolbox\MongoDb\Repository $vertexRepo: '@app.vertex.repository'
     
     Mike42\Wikitext\WikitextParser:
