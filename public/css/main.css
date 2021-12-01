@@ -62,10 +62,29 @@ form .collection nav a {
     font-size: 150%;
 }
 
+.entity-listing nav.listing-action {
+    text-align: right;
+}
+
 .entity-listing nav.listing-action a {
     display: inline-block;
     margin: 0 0.2em;
     color: #777;
+}
+
+.entity-listing .block-link {
+    text-decoration: none;
+    color: #333;
+    display: block;
+    margin-bottom: 1em;
+}
+
+.entity-listing .block-link h2 {
+    margin: 0 0 0.3em;
+}
+
+.entity-listing .thumb i {
+    font-size: 3em;
 }
 
 h2 {
