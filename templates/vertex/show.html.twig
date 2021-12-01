@@ -11,9 +11,5 @@
 
 {% block content %}
     {{ wiki(vertex.content) }}
-    <nav>
-        {% for title in backlinks %}
-            <a href="{{ path('app_wiki', {title:title}) }}"><i class="icon-link"></i> {{ title }}</a>
-        {% endfor %}
-    </nav>
+    {{ include('fragment/wiki_backlinks.html.twig') }}
 {% endblock %}
