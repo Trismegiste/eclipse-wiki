@@ -239,18 +239,4 @@ class NpcGenerator extends AbstractController
         return $this->render('npc/form_info.html.twig', ['title' => 'Info', 'form' => $form->createView()]);
     }
 
-    /**
-     * @Route("/npc/search", methods={"GET"})
-     */
-    public function search(Request $request): JsonResponse
-    {
-        $title = $request->query->get('q', '');
-        $choice = $this->repository->searchAutocomplete('title', $title);
-        array_walk($choice, function (&$v, $k) {
-            $v = $v->title;
-        });
-
-        return new JsonResponse($choice);
-    }
-
 }

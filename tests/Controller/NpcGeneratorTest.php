@@ -71,7 +71,7 @@ class NpcGeneratorTest extends WebTestCase
 
     public function testSearch()
     {
-        $this->client->request('GET', '/npc/search?q=Lu');
+        $this->client->request('GET', '/vertex/search?q=Lu');
         $listing = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(1, $listing);
 
