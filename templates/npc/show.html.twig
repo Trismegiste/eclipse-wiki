@@ -229,17 +229,6 @@
             src: ['{{ asset('sound/roll.webm')}}', '{{ asset('sound/roll.ogg') }}']
         })
 
-        Mousetrap.bind(['left'], function () {
-            location.assign('{{ path('app_vertexcrud_seekprevious', {pk: npc.pk}) }}')
-            return false
-        });
-
-        Mousetrap.bind(['right'], function () {
-            location.assign('{{ path('app_vertexcrud_seeknext', {pk: npc.pk}) }}')
-            return false
-        });
-
-
         document.addEventListener('alpine:init', () => {
             Alpine.data('traitroller', () => ({
                     dice: null,
