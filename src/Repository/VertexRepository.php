@@ -79,23 +79,23 @@ class VertexRepository extends DefaultRepository
     public function searchPreviousOf(string $pk): ?Vertex
     {
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                        ['_id' => ['$gt' => new \MongoDB\BSON\ObjectId($pk)]],
-                        ['limit' => 1, 'sort' => ['_id' => 1]]));
+                ['_id' => ['$gt' => new \MongoDB\BSON\ObjectId($pk)]],
+                ['limit' => 1, 'sort' => ['_id' => 1]]));
 
-        $cursor->rewind();
+        $item = $cursor->toArray();
 
-        return $cursor->current();
+        return count($item) ? $item[0] : null;
     }
 
     public function searchNextOf(string $pk): ?Vertex
     {
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                        ['_id' => ['$lt' => new \MongoDB\BSON\ObjectId($pk)]],
-                        ['limit' => 1, 'sort' => ['_id' => -1]]));
+                ['_id' => ['$lt' => new \MongoDB\BSON\ObjectId($pk)]],
+                ['limit' => 1, 'sort' => ['_id' => -1]]));
 
-        $cursor->rewind();
+        $item = $cursor->toArray();
 
-        return $cursor->current();
+        return count($item) ? $item[0] : null;
     }
 
 }
