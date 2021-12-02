@@ -220,6 +220,7 @@
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }} 
     <script src="{{ asset('js/howler.core.min.js') }}"></script>    
     <script>
         const inceptionSound = new Howl({
@@ -228,6 +229,11 @@
         const rollSound = new Howl({
             src: ['{{ asset('sound/roll.webm')}}', '{{ asset('sound/roll.ogg') }}']
         })
+
+        Mousetrap.bind(['left'], function () {
+            location.assign('{{ path('app_vertexcrud_list') }}')
+            return false
+        });
 
         document.addEventListener('alpine:init', () => {
             Alpine.data('traitroller', () => ({
