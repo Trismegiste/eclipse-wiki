@@ -13,15 +13,8 @@ use Trismegiste\Toolbox\MongoDb\Repository;
 /**
  * Repository for Vertices
  */
-class VertexRepository
+class VertexRepository extends \Trismegiste\Toolbox\MongoDb\DefaultRepository
 {
-
-    protected $collection;
-
-    public function __construct(Repository $vertexRepo)
-    {
-        $this->collection = $vertexRepo;
-    }
 
     /**
      * Find the first vertex by its title. First letter is case-insensitive
@@ -33,7 +26,7 @@ class VertexRepository
         $tmp = preg_split('//u', $title, null, PREG_SPLIT_NO_EMPTY);
         $firstLetter = array_shift($tmp);
 
-        $it = $this->collection->search([
+        $it = $this->search([
             'title' => new Regex("(?i:$firstLetter)" . implode('', $tmp))
         ]);
         $it->rewind();
@@ -47,7 +40,7 @@ class VertexRepository
      */
     public function findAll(): \IteratorIterator
     {
-        return $this->collection->search([], [], '_id');
+        return $this->search([], [], '_id');
     }
 
     /**
@@ -57,22 +50,12 @@ class VertexRepository
      */
     public function findByPk(string $pk): Vertex
     {
-        return $this->collection->load($pk);
-    }
-
-    public function save(Vertex $v): void
-    {
-        $this->collection->save($v);
-    }
-
-    public function delete(Vertex $obj): void
-    {
-        $this->collection->delete($obj);
+        return $this->load($pk);
     }
 
     public function searchStartingWith(string $title): array
     {
-        return $this->collection->searchAutocomplete('title', $title);
+        return $this->searchAutocomplete('title', $title);
     }
 
     public function searchByBacklinks(string $title): array
@@ -80,7 +63,7 @@ class VertexRepository
         $tmp = preg_split('//u', $title, null, PREG_SPLIT_NO_EMPTY);
         $firstLetter = array_shift($tmp);
 
-        $it = $this->collection->search([
+        $it = $this->search([
             'content' => new Regex("\[\[(?i:$firstLetter)" . implode('', $tmp) . "(\]\]|\|)")
         ]);
 

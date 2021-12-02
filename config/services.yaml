@@ -55,11 +55,10 @@ services:
         arguments:
             $src: '%env(resolve:WIKISOURCE)%'
             
-    app.vertex.repository:
-        class: Trismegiste\Toolbox\MongoDb\Repository
-        factory: ['@Trismegiste\Toolbox\MongoDb\RepositoryFactory', 'create']
-        arguments: ['vertex']
-    Trismegiste\Toolbox\MongoDb\Repository $vertexRepo: '@app.vertex.repository'
+    App\Repository\VertexRepository:
+        arguments:
+            $dbName: '%env(resolve:DATABASE_NAME)%'
+            $collectionName: 'vertex'
     
     Mike42\Wikitext\WikitextParser:
         arguments:

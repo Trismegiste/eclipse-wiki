@@ -10,7 +10,7 @@ class VertexCrudTest extends WebTestCase
     public function testClean()
     {
         $client = static::createClient();
-        $repo = static::getContainer()->get('app.vertex.repository');
+        $repo = static::getContainer()->get(\App\Repository\VertexRepository::class);
         $repo->delete(iterator_to_array($repo->search()));
         $this->assertCount(0, iterator_to_array($repo->search()));
     }
