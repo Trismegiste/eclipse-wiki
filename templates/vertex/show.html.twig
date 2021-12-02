@@ -31,5 +31,10 @@
             location.assign('{{ path('app_vertexcrud_list') }}')
             return false
         });
+
+        Mousetrap.bind(['e'], function () {
+            location.assign('{{ path('app_vertexcrud_edit', {pk: vertex.pk}) }}')
+            return false
+        });
     </script>
 {% endblock %}
