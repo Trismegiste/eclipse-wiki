@@ -31,4 +31,26 @@ class VertexRepositoryTest extends KernelTestCase
         $this->assertEquals('one doc', $backlinked[0]);
     }
 
+    public function testPrevious()
+    {
+        $doc = new Vertex('doc 2');
+        $this->sut->save($doc);
+        $pk = $doc->getPk();
+        $doc = new Vertex('doc 3');
+        $this->sut->save($doc);
+
+        $found = $this->sut->searchPreviousOf($pk);
+        $this->assertEquals('doc 3', $found->getTitle());
+        $this->assertNull($this->sut->searchPreviousOf($doc->getPk()));
+
+        return (string) $pk;
+    }
+
+    /** @depends testPrevious */
+    public function testNext(string $pk)
+    {
+        $found = $this->sut->searchNextOf($pk);
+        $this->assertEquals('one doc', $found->getTitle());
+    }
+
 }

@@ -96,10 +96,10 @@ class VertexCrud extends AbstractController
     {
         $vertex = $this->repository->findByPk($pk);
         $form = $this->createFormBuilder($vertex)
-            ->add('content', TextareaType::class, ['attr' => ['rows' => 32]])
-            ->add('edit', SubmitType::class)
-            ->setMethod('PUT')
-            ->getForm();
+                ->add('content', TextareaType::class, ['attr' => ['rows' => 32]])
+                ->add('edit', SubmitType::class)
+                ->setMethod('PUT')
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -119,9 +119,9 @@ class VertexCrud extends AbstractController
     {
         $vertex = $this->repository->findByPk($pk);
         $form = $this->createFormBuilder($vertex)
-            ->add('delete', SubmitType::class)
-            ->setMethod('DELETE')
-            ->getForm();
+                ->add('delete', SubmitType::class)
+                ->setMethod('DELETE')
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -156,8 +156,8 @@ class VertexCrud extends AbstractController
 
         $finder = new \Symfony\Component\Finder\Finder();
         $it = $finder->in(join_paths($this->getParameter('kernel.project_dir'), 'public/upload'))
-            ->files()
-            ->name("$title*");
+                ->files()
+                ->name("$title*");
 
         $choice = [];
         foreach ($it as $fch) {
@@ -165,6 +165,32 @@ class VertexCrud extends AbstractController
         }
 
         return new JsonResponse($choice);
+    }
+
+    /**
+     * @Route("/vertex/previous/{pk}", methods={"GET"})
+     */
+    public function seekPrevious(string $pk): Response
+    {
+        $vertex = $this->repository->searchPreviousOf($pk);
+        if (!is_null($vertex)) {
+            $pk = $vertex->getPk();
+        }
+
+        return $this->show($pk);
+    }
+
+    /**
+     * @Route("/vertex/next/{pk}", methods={"GET"})
+     */
+    public function seekNext(string $pk): Response
+    {
+        $vertex = $this->repository->searchNextOf($pk);
+        if (!is_null($vertex)) {
+            $pk = $vertex->getPk();
+        }
+
+        return $this->show($pk);
     }
 
 }

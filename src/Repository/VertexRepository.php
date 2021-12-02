@@ -8,12 +8,13 @@ namespace App\Repository;
 
 use App\Entity\Vertex;
 use MongoDB\BSON\Regex;
-use Trismegiste\Toolbox\MongoDb\Repository;
+use MongoDB\Driver\Query;
+use Trismegiste\Toolbox\MongoDb\DefaultRepository;
 
 /**
  * Repository for Vertices
  */
-class VertexRepository extends \Trismegiste\Toolbox\MongoDb\DefaultRepository
+class VertexRepository extends DefaultRepository
 {
 
     /**
@@ -73,6 +74,28 @@ class VertexRepository extends \Trismegiste\Toolbox\MongoDb\DefaultRepository
         }
 
         return $linked;
+    }
+
+    public function searchPreviousOf(string $pk): ?Vertex
+    {
+        $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
+                        ['_id' => ['$gt' => new \MongoDB\BSON\ObjectId($pk)]],
+                        ['limit' => 1, 'sort' => ['_id' => 1]]));
+
+        $cursor->rewind();
+
+        return $cursor->current();
+    }
+
+    public function searchNextOf(string $pk): ?Vertex
+    {
+        $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
+                        ['_id' => ['$lt' => new \MongoDB\BSON\ObjectId($pk)]],
+                        ['limit' => 1, 'sort' => ['_id' => -1]]));
+
+        $cursor->rewind();
+
+        return $cursor->current();
     }
 
 }

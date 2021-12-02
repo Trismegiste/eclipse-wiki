@@ -1,4 +1,4 @@
-{% extends "base.html.twig" %}
+{% extends "vertex/show.html.twig" %}
 {% set npc = vertex %}
 {% macro print_trait(trait, rof = 1, bonus = 0) %}
     <button x-on:click="$dispatch('roll', { dice: {{ trait.dice }}, modifier: {{ trait.modifier + bonus }}, rof: {{ rof }} })" class="pure-button">
@@ -212,8 +212,7 @@
         <div class="pure-g">
             <div class="pure-u-1">
                 <h1>Informations</h1>
-                {{ wiki(npc.content) }}
-                {{ include('fragment/wiki_backlinks.html.twig') }}
+                {{ parent() }}
             </div>
         </div>
     </div>
@@ -231,9 +230,15 @@
         })
 
         Mousetrap.bind(['left'], function () {
-            location.assign('{{ path('app_vertexcrud_list') }}')
+            location.assign('{{ path('app_vertexcrud_seekprevious', {pk: npc.pk}) }}')
             return false
         });
+
+        Mousetrap.bind(['right'], function () {
+            location.assign('{{ path('app_vertexcrud_seeknext', {pk: npc.pk}) }}')
+            return false
+        });
+
 
         document.addEventListener('alpine:init', () => {
             Alpine.data('traitroller', () => ({

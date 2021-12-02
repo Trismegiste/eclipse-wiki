@@ -13,3 +13,23 @@
     {{ wiki(vertex.content) }}
     {{ include('fragment/wiki_backlinks.html.twig') }}
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }} 
+    <script>
+        Mousetrap.bind(['left'], function () {
+            location.assign('{{ path('app_vertexcrud_seekprevious', {pk: vertex.pk}) }}')
+            return false
+        });
+
+        Mousetrap.bind(['right'], function () {
+            location.assign('{{ path('app_vertexcrud_seeknext', {pk: vertex.pk}) }}')
+            return false
+        });
+
+        Mousetrap.bind(['up'], function () {
+            location.assign('{{ path('app_vertexcrud_list') }}')
+            return false
+        });
+    </script>
+{% endblock %}
