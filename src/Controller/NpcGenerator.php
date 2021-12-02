@@ -77,8 +77,8 @@ class NpcGenerator extends AbstractController
     {
         $profile = new \Symfony\Component\Finder\Finder();
         $profile->files()
-            ->in(join_paths($this->getParameter('twig.default_path'), 'profile'))
-            ->name('*.json');
+                ->in(join_paths($this->getParameter('twig.default_path'), 'profile'))
+                ->name('*.json');
 
         return $profile;
     }
@@ -126,10 +126,10 @@ class NpcGenerator extends AbstractController
         $newNpc->setTitle($npc->getTitle() . ' (copie)');
 
         $form = $this->createFormBuilder($newNpc)
-            ->add('title', TextType::class)
-            ->add('wildCard', CheckboxType::class, ['required' => false])
-            ->add('copy', SubmitType::class)
-            ->getForm();
+                ->add('title', TextType::class)
+                ->add('wildCard', CheckboxType::class, ['required' => false])
+                ->add('copy', SubmitType::class)
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -194,26 +194,6 @@ class NpcGenerator extends AbstractController
         }
 
         return $this->render('form.html.twig', ['title' => 'IAL', 'form' => $form->createView()]);
-    }
-
-    /**
-     * @Route("/npc/info/{pk}", methods={"GET","PUT"})
-     */
-    public function info(string $pk, Request $request): Response
-    {
-        $npc = $this->repository->findByPk($pk);
-
-        $form = $this->createForm(\App\Form\NpcInfo::class, $npc);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $npc = $form->getData();
-            $this->repository->save($npc);
-
-            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $npc->getPk()]);
-        }
-
-        return $this->render('npc/form_info.html.twig', ['title' => 'Info', 'form' => $form->createView()]);
     }
 
 }

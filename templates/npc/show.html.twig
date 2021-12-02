@@ -229,6 +229,16 @@
             src: ['{{ asset('sound/roll.webm')}}', '{{ asset('sound/roll.ogg') }}']
         })
 
+        Mousetrap.bind(['s'], function () {
+            location.assign('{{ path('app_npcgenerator_edit', {pk: npc.pk}) }}')
+            return false
+        });
+
+        Mousetrap.bind(['w'], function () {
+            location.assign('{{ path('app_npcgenerator_battle', {pk: npc.pk}) }}')
+            return false
+        });
+
         document.addEventListener('alpine:init', () => {
             Alpine.data('traitroller', () => ({
                     dice: null,
