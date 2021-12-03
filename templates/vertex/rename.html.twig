@@ -1,0 +1,12 @@
+{% extends "vertex/delete.html.twig" %}
+
+{% block content %}
+    <h2>Voulez-vous renommer {{ form.vars.data.title }} ?</h2>
+    <span>Ce vertex est mentionné dans les documents suivants :</span>
+    <ul>
+        {% for title in backlinks %}
+            <li><a href="{{ path('app_wiki', {title:title}) }}"><i class="icon-link"></i> {{ title }}</a></li>
+            {% endfor %}
+    </ul>
+    {{ form(form) }}
+{% endblock %}

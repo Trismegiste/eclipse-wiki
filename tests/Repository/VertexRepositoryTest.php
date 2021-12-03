@@ -58,7 +58,7 @@ class VertexRepositoryTest extends KernelTestCase
         $doc = new Vertex('Backlink');
         $this->sut->save($doc);
 
-        $modified = $this->sut->renameTitle($doc, 'Newlink');
+        $modified = $this->sut->renameTitle('Backlink', 'Newlink');
         $this->assertEquals(2, $modified);
 
         // check backlink

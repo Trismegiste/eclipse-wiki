@@ -9,9 +9,12 @@ namespace App\Controller;
 use App\Entity\Vertex;
 use App\Form\VertexType;
 use App\Repository\VertexRepository;
+use App\Twig\SaWoExtension;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,7 +50,7 @@ class VertexCrud extends AbstractController
     {
         $vertex = $this->repository->findByPk($pk);
         $backlinks = $this->repository->searchByBacklinks($vertex->getTitle());
-        $template = \App\Twig\SaWoExtension::showTemplate[get_class($vertex)];
+        $template = SaWoExtension::showTemplate[get_class($vertex)];
 
         return $this->render($template, ['vertex' => $vertex, 'backlinks' => $backlinks]);
     }
@@ -154,7 +157,7 @@ class VertexCrud extends AbstractController
     {
         $title = $request->query->get('q', '');
 
-        $finder = new \Symfony\Component\Finder\Finder();
+        $finder = new Finder();
         $it = $finder->in(join_paths($this->getParameter('kernel.project_dir'), 'public/upload'))
                 ->files()
                 ->name("$title*");
@@ -191,6 +194,31 @@ class VertexCrud extends AbstractController
         }
 
         return $this->show($pk);
+    }
+
+    /**
+     * @Route("/vertex/rename/{pk}", methods={"GET","PUT"})
+     */
+    public function rename(string $pk, Request $request): Response
+    {
+        $vertex = $this->repository->findByPk($pk);
+        $oldTitle = $vertex->getTitle();
+        $backlinks = $this->repository->searchByBacklinks($vertex->getTitle());
+
+        $form = $this->createFormBuilder($vertex)
+                ->add('title', TextType::class, ['label' => 'Nouveau nom'])
+                ->add('edit', SubmitType::class)
+                ->setMethod('PUT')
+                ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->repository->renameTitle($oldTitle, $form->getData()->getTitle());
+
+            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
+        }
+
+        return $this->render('vertex/rename.html.twig', ['form' => $form->createView(), "backlinks" => $backlinks]);
     }
 
 }

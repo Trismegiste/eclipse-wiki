@@ -98,8 +98,9 @@ class VertexRepository extends DefaultRepository
         return count($item) ? $item[0] : null;
     }
 
-    public function renameTitle(Vertex $vertex, string $newTitle): int
+    public function renameTitle(string $oldTitle, string $newTitle): int
     {
+        $vertex = $this->findByTitle($oldTitle);
         // build the regex with insensitive case on the first letter
         $tmp = preg_split('//u', $vertex->getTitle(), null, PREG_SPLIT_NO_EMPTY);
         $firstLetter = array_shift($tmp);
