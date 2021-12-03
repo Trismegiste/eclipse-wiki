@@ -216,10 +216,4 @@ abstract class Character extends Vertex implements \JsonSerializable
     }
 
     abstract public function getDescription(): string;
-
-    public function setTitle(string $newTitle): void
-    {
-        $this->title = $newTitle;
-    }
-
 }

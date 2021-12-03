@@ -79,8 +79,8 @@ class VertexRepository extends DefaultRepository
     public function searchPreviousOf(string $pk): ?Vertex
     {
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                ['_id' => ['$gt' => new \MongoDB\BSON\ObjectId($pk)]],
-                ['limit' => 1, 'sort' => ['_id' => 1]]));
+                        ['_id' => ['$gt' => new \MongoDB\BSON\ObjectId($pk)]],
+                        ['limit' => 1, 'sort' => ['_id' => 1]]));
 
         $item = $cursor->toArray();
 
@@ -90,12 +90,36 @@ class VertexRepository extends DefaultRepository
     public function searchNextOf(string $pk): ?Vertex
     {
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                ['_id' => ['$lt' => new \MongoDB\BSON\ObjectId($pk)]],
-                ['limit' => 1, 'sort' => ['_id' => -1]]));
+                        ['_id' => ['$lt' => new \MongoDB\BSON\ObjectId($pk)]],
+                        ['limit' => 1, 'sort' => ['_id' => -1]]));
 
         $item = $cursor->toArray();
 
         return count($item) ? $item[0] : null;
+    }
+
+    public function renameTitle(Vertex $vertex, string $newTitle): int
+    {
+        // build the regex with insensitive case on the first letter
+        $tmp = preg_split('//u', $vertex->getTitle(), null, PREG_SPLIT_NO_EMPTY);
+        $firstLetter = array_shift($tmp);
+        $regex = "\[\[(?i:$firstLetter)" . implode('', $tmp) . "(\]\]|\|)";
+
+        // search for vertex with links to $vertex
+        $iter = $this->search(['content' => new Regex($regex)]);
+        $updated = [];
+        foreach ($iter as $inbound) {
+            $content = $inbound->getContent();
+            $replacing = preg_replace('#' . $regex . '#', "[[$newTitle" . '$1', $content);
+            $inbound->setContent($replacing);
+            $updated[] = $inbound;
+        }
+        $vertex->setTitle($newTitle);
+        $updated[] = $vertex;
+
+        $this->save($updated);
+
+        return count($updated);
     }
 
 }

@@ -53,4 +53,17 @@ class VertexRepositoryTest extends KernelTestCase
         $this->assertEquals('one doc', $found->getTitle());
     }
 
+    public function testRenameTitle()
+    {
+        $doc = new Vertex('Backlink');
+        $this->sut->save($doc);
+
+        $modified = $this->sut->renameTitle($doc, 'Newlink');
+        $this->assertEquals(2, $modified);
+
+        // check backlink
+        $changed = $this->sut->findByTitle('one doc');
+        $this->assertEquals('some [[Newlink]].', $changed->getContent());
+    }
+
 }

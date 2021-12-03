@@ -7,15 +7,14 @@
 namespace App\Entity;
 
 /**
- * Description of a location
+ * Interior scene
  */
-class Location extends Vertex
+class Interior extends Vertex
 {
 
     public $lighting;
     public $hearing;
     public $atmosphere;
-    public $sight;
     public $smell;
     public $parent = null;
     public $youtubeUrl = null;

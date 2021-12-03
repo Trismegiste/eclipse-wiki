@@ -46,4 +46,9 @@ class Vertex implements \Trismegiste\Toolbox\MongoDb\Root
         return strtolower($match[1]);
     }
 
+    public function setTitle(string $newTitle): void
+    {
+        $this->title = $newTitle;
+    }
+
 }
