@@ -207,7 +207,7 @@ class VertexCrud extends AbstractController
 
         $form = $this->createFormBuilder($vertex)
                 ->add('title', TextType::class, ['label' => 'Nouveau nom'])
-                ->add('edit', SubmitType::class)
+                ->add('rename', SubmitType::class)
                 ->setMethod('PUT')
                 ->getForm();
 

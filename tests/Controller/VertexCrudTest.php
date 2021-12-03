@@ -132,6 +132,21 @@ class VertexCrudTest extends WebTestCase
         $this->assertPageTitleContains('vertex0');
     }
 
+    public function testRename()
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/wiki/vertex0');
+        $this->assertResponseIsSuccessful();
+        $url = $crawler->filterXPath('//nav/a/i[@class="icon-rename"]/parent::a')->attr('href');
+        $crawler = $client->request('GET', $url);
+        $form = $crawler->selectButton('form_rename')->form();
+        $form['form[title]'] = 'vertex3';
+        $crawler = $client->submit($form);
+        $this->assertResponseRedirects();
+        $client->followRedirect();
+        $this->assertPageTitleContains('vertex3');
+    }
+
     public function testDelete()
     {
         $client = static::createClient();
