@@ -63,3 +63,8 @@ services:
     Mike42\Wikitext\WikitextParser:
         arguments:
             - '@App\Twig\LinkRender'
+
+    App\Service\OpenAi:
+        arguments:
+            $secret: '%env(resolve:OPENAI_SECRETKEY)%'
+            $engine: 'ada'
