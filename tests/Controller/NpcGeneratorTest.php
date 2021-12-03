@@ -143,4 +143,11 @@ class NpcGeneratorTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    /** @depends testInfo */
+    public function testSleeve(string $pk)
+    {
+        $crawler = $this->client->request('GET', "/npc/sleeve/$pk");
+        $this->assertCount(1, $crawler->selectButton('form_sleeve'));
+    }
+
 }
