@@ -92,6 +92,46 @@ class VertexCrudTest extends WebTestCase
         $this->assertResponseRedirects();
     }
 
+    public function testTopBarMenuLink()
+    {
+        $client = static::createClient();
+        for ($k = 0; $k < 3; $k++) {
+            $crawler = $client->request('GET', '/vertex/create');
+            $form = $crawler->selectButton('vertex_create')->form();
+            $client->submit($form, ['vertex' => [
+                    'title' => "vertex$k",
+                    'content' => 'contenu ' . $k
+            ]]);
+            $this->assertResponseRedirects();
+        }
+
+        // navigation
+        $crawler = $client->request('GET', '/wiki/vertex1');
+        $this->assertResponseIsSuccessful();
+        $url = $crawler->filterXPath('//nav/a/i[@class="icon-eye"]/parent::a')->attr('href');
+        $crawler = $client->request('GET', $url);
+        $this->assertPageTitleContains('vertex1');
+        $pk = $client->getRequest()->get('pk');
+
+        return $pk;
+    }
+
+    /** @depends testTopBarMenuLink */
+    public function testNavigationPrevious(string $pk)
+    {
+        $client = static::createClient();
+        $client->request('GET', '/vertex/previous/' . $pk);
+        $this->assertPageTitleContains('vertex2');
+    }
+
+    /** @depends testTopBarMenuLink */
+    public function testNavigationNext(string $pk)
+    {
+        $client = static::createClient();
+        $client->request('GET', '/vertex/next/' . $pk);
+        $this->assertPageTitleContains('vertex0');
+    }
+
     public function testDelete()
     {
         $client = static::createClient();
