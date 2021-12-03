@@ -2,13 +2,13 @@
     <div class="pure-u-1-12 thumb">
         <i class="{{ char_icon(item) }}"></i>
     </div>
-    <div class="pure-u-15-24">
+    <div class="pure-u-7-12">
         <a href="{{ path('app_vertexcrud_show', {pk: item.pk}) }}" class="block-link">
             <h2>{{ item.title }}</h2>
             <span>{{ item.description }}. Morphe: {{ item.morph.title }} ({{ item.powerIndex }})</span>
         </a>
     </div>
-    <div class="pure-u-7-24">
+    <div class="pure-u-1-3">
         <nav class="listing-action">
             {{ include('npc/actions.html.twig', {npc:item}) }}
         </nav>
