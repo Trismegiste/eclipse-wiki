@@ -6,14 +6,18 @@
 
 namespace App\Controller;
 
+use App\Form\AliCreate;
 use App\Form\NpcAttacks;
 use App\Form\NpcCreate;
 use App\Form\NpcGears;
 use App\Form\NpcStats;
+use App\Form\Type\ProviderChoiceType;
 use App\Repository\BackgroundProvider;
 use App\Repository\FactionProvider;
 use App\Repository\MorphProvider;
+use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -29,7 +33,7 @@ class NpcGenerator extends AbstractController
 
     protected $repository;
 
-    public function __construct(\App\Repository\VertexRepository $repo)
+    public function __construct(VertexRepository $repo)
     {
         $this->repository = $repo;
     }
@@ -75,7 +79,7 @@ class NpcGenerator extends AbstractController
 
     private function getProfileList()
     {
-        $profile = new \Symfony\Component\Finder\Finder();
+        $profile = new Finder();
         $profile->files()
                 ->in(join_paths($this->getParameter('twig.default_path'), 'profile'))
                 ->name('*.json');
@@ -184,7 +188,7 @@ class NpcGenerator extends AbstractController
      */
     public function ali(Request $request): Response
     {
-        $form = $this->createForm(\App\Form\AliCreate::class);
+        $form = $this->createForm(AliCreate::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $npc = $form->getData();
@@ -203,7 +207,10 @@ class NpcGenerator extends AbstractController
     {
         $npc = $this->repository->findByPk($pk);
         $form = $this->createFormBuilder($npc)
-                ->add('morph', \App\Form\Type\ProviderChoiceType::class, ['provider' => $morph, 'placeholder' => '--- Choisissez un Morphe ---'])
+                ->add('morph', ProviderChoiceType::class, [
+                    'provider' => $morph,
+                    'placeholder' => '--- Choisissez un Morphe ---'
+                ])
                 ->add('sleeve', SubmitType::class)
                 ->setMethod('PATCH')
                 ->getForm();
