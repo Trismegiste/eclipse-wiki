@@ -196,4 +196,27 @@ class NpcGenerator extends AbstractController
         return $this->render('form.html.twig', ['title' => 'IAL', 'form' => $form->createView()]);
     }
 
+    /**
+     * @Route("/npc/sleeve/{pk}", methods={"GET","PATCH"})
+     */
+    public function sleeve(string $pk, Request $request, MorphProvider $morph): Response
+    {
+        $npc = $this->repository->findByPk($pk);
+        $form = $this->createFormBuilder($npc)
+                ->add('morph', \App\Form\Type\ProviderChoiceType::class, ['provider' => $morph, 'placeholder' => '--- Choisissez un Morphe ---'])
+                ->add('sleeve', SubmitType::class)
+                ->setMethod('PATCH')
+                ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $npc = $form->getData();
+            $this->repository->save($npc);
+
+            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $npc->getPk()]);
+        }
+
+        return $this->render('npc/sleeve.html.twig', ['form' => $form->createView()]);
+    }
+
 }

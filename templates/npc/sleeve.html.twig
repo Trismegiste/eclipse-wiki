@@ -1,0 +1,45 @@
+{% extends "base.html.twig" %}
+{% form_theme form _self %}
+
+{% block header_title %}
+    {{ include('npc/menu.html.twig', {npc: form.vars.data}) }}
+{% endblock %}
+
+{% block content %}
+    {{ form_start(form) }}
+    <div class="pure-g character">
+        <div class="pure-u-1-2">
+            <h2>Changement de morphe</h2>
+            {{ form_widget(form['morph'],  {attr: {
+                                                    'data-url': path('app_npcgenerator_getmorph'), 
+                                                    'data-detail': 'morph_detail'
+                                                }}) }}
+        </div>
+        <section class="pure-u-1-2" id="morph_detail">
+            {{ include('fragment/morph_detail.html.twig', {morph: form.vars.data.morph}) }}
+        </section>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            function selectUpdate(event) {
+                let param = event.target.dataset
+                document.getElementById(param.detail).innerHTML = '<i class="icon-spin3 animate-spin"></i>'
+                fetch(param.url + '?key=' + event.target.value)
+                        .then(function (resp) {
+                            return resp.text()
+                        })
+                        .then(function (data) {
+                            document.getElementById(param.detail).innerHTML = data
+                        })
+            }
+
+            document.getElementById('form_morph').addEventListener('change', selectUpdate)
+        })
+    </script>
+{% endblock %}
