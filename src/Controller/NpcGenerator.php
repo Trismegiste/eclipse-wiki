@@ -84,7 +84,7 @@ class NpcGenerator extends AbstractController
     }
 
     /**
-     * @Route("/npc/background/info")
+     * @Route("/npc/background/info", methods={"GET"})
      */
     public function getBackground(Request $request, BackgroundProvider $provider): Response
     {
@@ -95,7 +95,7 @@ class NpcGenerator extends AbstractController
     }
 
     /**
-     * @Route("/npc/faction/info", name="app_npcgenerator_getfaction")
+     * @Route("/npc/faction/info", name="app_npcgenerator_getfaction", methods={"GET"})
      */
     public function getFaction(Request $request, FactionProvider $provider): Response
     {
@@ -106,7 +106,7 @@ class NpcGenerator extends AbstractController
     }
 
     /**
-     * @Route("/npc/morph/info")
+     * @Route("/npc/morph/info", methods={"GET"})
      */
     public function getMorph(Request $request, MorphProvider $provider): Response
     {

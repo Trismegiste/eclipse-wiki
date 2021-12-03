@@ -17,7 +17,7 @@ class Dump extends AbstractController
 {
 
     /**
-     * @Route("/dump/edge")
+     * @Route("/dump/edge", methods={"GET"})
      */
     public function edge(EdgeProvider $repo)
     {
