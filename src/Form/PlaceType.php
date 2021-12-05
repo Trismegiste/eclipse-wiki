@@ -8,6 +8,7 @@ namespace App\Form;
 
 use App\Entity\Place;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -21,7 +22,10 @@ class PlaceType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('youtubeUrl');
+        $builder->add('youtubeUrl', TextType::class, [
+            'required' => false,
+            'attr' => ['class' => 'pure-input-1-3']
+        ]);
 
         if ($options['edit']) {
             $builder->remove('title');
