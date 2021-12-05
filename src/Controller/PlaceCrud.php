@@ -48,7 +48,7 @@ class PlaceCrud extends AbstractController
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
         }
 
-        return $this->render('place/edit.html.twig', ['form' => $form->createView()]);
+        return $this->render('place/create.html.twig', ['form' => $form->createView()]);
     }
 
     /**
