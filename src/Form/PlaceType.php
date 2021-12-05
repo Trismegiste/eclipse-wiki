@@ -16,7 +16,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Form for creating a Place
  */
-class PlaceCreate extends AbstractType
+class PlaceType extends AbstractType
 {
 
     public function buildForm(FormBuilderInterface $builder, array $options)

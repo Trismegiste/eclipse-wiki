@@ -5,16 +5,16 @@
 {% block header_title %}
     {# the header menu with title #}
     <nav style="float: right">
-        {{ include('vertex/actions.html.twig', {vertex:form.vars.data}) }}
+        {{ include('place/actions.html.twig', {vertex:form.vars.data}) }}
     </nav>   
     {% block header_big_title %}{{ form.vars.data.title }}{% endblock %}
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    {{ include('fragment/init_autocomplete.html.twig', {element_id:'form_content'}) }}
+    {{ include('fragment/init_autocomplete.html.twig', {element_id:'place_content'}) }}
     <script>
-        document.getElementById('form_content').focus()
+        document.getElementById('place_content').focus()
     </script>
 {% endblock %}
 

@@ -7,7 +7,7 @@
 namespace App\Controller;
 
 use App\Entity\Place;
-use App\Form\PlaceCreate;
+use App\Form\PlaceType;
 use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,7 +38,7 @@ class PlaceCrud extends AbstractController
             $obj = new Place(ucfirst($title));
         }
 
-        $form = $this->createForm(PlaceCreate::class, $obj);
+        $form = $this->createForm(PlaceType::class, $obj);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -48,7 +48,7 @@ class PlaceCrud extends AbstractController
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
         }
 
-        return $this->render('vertex/create.html.twig', ['form' => $form->createView()]);
+        return $this->render('place/edit.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -57,7 +57,7 @@ class PlaceCrud extends AbstractController
     public function edit(string $pk, Request $request): Response
     {
         $vertex = $this->repository->findByPk($pk);
-        $form = $this->createForm(PlaceCreate::class, $vertex, ['edit' => true]);
+        $form = $this->createForm(PlaceType::class, $vertex, ['edit' => true]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -67,7 +67,7 @@ class PlaceCrud extends AbstractController
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
         }
 
-        return $this->render('vertex/edit.html.twig', ['form' => $form->createView()]);
+        return $this->render('place/edit.html.twig', ['form' => $form->createView()]);
     }
 
 }
