@@ -15,6 +15,7 @@ use App\Repository\HindranceProvider;
 use OutOfBoundsException;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
+use App\Entity\Place;
 
 /**
  * Extension for SaWo specifics
@@ -29,12 +30,14 @@ class SaWoExtension extends AbstractExtension
     const rowTemplate = [
         Ali::class => 'npc/row.html.twig',
         Transhuman::class => 'npc/row.html.twig',
-        Vertex::class => 'vertex/row.html.twig'
+        Vertex::class => 'vertex/row.html.twig',
+        Place::class => 'place/row.html.twig'
     ];
     const showTemplate = [
         Ali::class => 'npc/show.html.twig',
         Transhuman::class => 'npc/show.html.twig',
-        Vertex::class => 'vertex/show.html.twig'
+        Vertex::class => 'vertex/show.html.twig',
+        Place::class => 'place/show.html.twig'
     ];
 
     public function getFunctions()

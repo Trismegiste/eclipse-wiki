@@ -7,15 +7,14 @@
 namespace App\Entity;
 
 /**
- * Exterior scene
+ * Stage scene
  */
-class Exterior extends Vertex
+class Place extends Vertex
 {
 
-    public $lighting;
+    public $temperature;
     public $pressure;
     public $gravity;
-    public $parent = null;
     public $youtubeUrl = null;
 
 }
