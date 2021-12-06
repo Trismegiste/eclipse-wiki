@@ -52,7 +52,7 @@ class PlaceType extends AbstractType
 
         $item = $view['youtubeUrl'];
         unset($view['youtubeUrl']);
-        array_splice($view->children, 1, 0, ['youtubeUrl' => $item]);
+        array_splice($view->children, 1, 0, [$item]);
     }
 
 }
