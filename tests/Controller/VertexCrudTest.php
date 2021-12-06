@@ -42,14 +42,14 @@ class VertexCrudTest extends WebTestCase
     public function testList(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/vertex/list');
+        $client->request('GET', '/vertex/filter');
         $this->assertResponseIsSuccessful();
     }
 
     public function testShow()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/vertex/list');
+        $crawler = $client->request('GET', '/vertex/filter');
         $url = $crawler->filterXPath('//nav/a/i[@class="icon-eye"]/parent::a')->attr('href');
         $crawler = $client->request('GET', $url);
         $this->assertPageTitleContains('A title');
@@ -58,7 +58,7 @@ class VertexCrudTest extends WebTestCase
     public function testEdit()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/vertex/list');
+        $crawler = $client->request('GET', '/vertex/filter');
         $url = $crawler->filterXPath('//nav/a/i[@class="icon-edit"]/parent::a')->attr('href');
 
         $crawler = $client->request('GET', $url);
@@ -150,7 +150,7 @@ class VertexCrudTest extends WebTestCase
     public function testDelete()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/vertex/list');
+        $crawler = $client->request('GET', '/vertex/filter');
         $url = $crawler->filterXPath('//nav/a/i[@class="icon-trash-empty"]/parent::a')->attr('href');
 
         $crawler = $client->request('GET', $url);

@@ -39,7 +39,7 @@ class NpcGeneratorTest extends WebTestCase
 
     public function testList()
     {
-        $crawler = $this->client->request('GET', '/vertex/list');
+        $crawler = $this->client->request('GET', '/vertex/filter');
         $this->assertResponseIsSuccessful();
         $url = $crawler->filterXPath('//nav/a/i[@class="icon-eye"]/parent::a')->attr('href');
 
