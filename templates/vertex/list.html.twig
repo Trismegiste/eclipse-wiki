@@ -1,9 +1,35 @@
 {% extends "base.html.twig" %}
 {% block header_title %}PNJ{% endblock %}
 {% block content %}
-    <section class="entity-listing">
-        {% for item in listing %}
-          {{ include(select_row_template(item)) }}
-        {% endfor %}
-    </section>
+    <div x-data="{keyword:''}">
+        <form class="pure-form">
+            <input type="text" x-model="keyword" id="search" class="pure-input-1"/>
+        </form>
+        <section class="entity-listing" x-html="await filter(keyword)">
+        </section>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        async function filter(input) {
+            let response = await fetch('{{ path('app_vertexcrud_filter') }}?query=' + input)
+
+            return await response.text()
+        }
+
+        document.getElementById('search').focus()
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .pure-form {
+            margin-bottom: 1em;
+        }
+
+        .pure-form input {
+            font-size: 150%;
+        }
+    </style>
 {% endblock %}

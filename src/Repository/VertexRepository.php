@@ -123,4 +123,16 @@ class VertexRepository extends DefaultRepository
         return count($updated);
     }
 
+    public function filterBy(string $keyword): \IteratorIterator
+    {
+        $it = $this->search(
+                ['$or' => [
+                        ['title' => new Regex($keyword, 'i')],
+                        ['content' => new Regex($keyword, 'i')]
+                    ]],
+                [], '_id');
+
+        return $it;
+    }
+
 }

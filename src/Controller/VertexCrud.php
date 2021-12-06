@@ -221,4 +221,15 @@ class VertexCrud extends AbstractController
         return $this->render('vertex/rename.html.twig', ['form' => $form->createView(), "backlinks" => $backlinks]);
     }
 
+    /**
+     * @Route("/vertex/filter", methods={"GET"})
+     */
+    public function filter(Request $request): Response
+    {
+        $keyword = $request->query->get('query', '');
+        $found = $this->repository->filterBy($keyword);
+
+        return $this->render('fragment/listing_only.html.twig', ['listing' => $found]);
+    }
+
 }
