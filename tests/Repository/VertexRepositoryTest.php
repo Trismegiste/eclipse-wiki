@@ -66,4 +66,19 @@ class VertexRepositoryTest extends KernelTestCase
         $this->assertEquals('some [[Newlink]].', $changed->getContent());
     }
 
+    public function testFilterByContent()
+    {
+        $it = $this->sut->filterBy('some');
+        $it->rewind();
+        $obj = $it->current();
+        $this->assertInstanceOf(Vertex::class, $obj);
+        $this->assertEquals('one doc', $obj->getTitle());
+    }
+
+    public function testFilterEmpty()
+    {
+        $it = $this->sut->filterBy('wxzwxzwxz');
+        $this->assertEquals([], iterator_to_array($it));
+    }
+
 }

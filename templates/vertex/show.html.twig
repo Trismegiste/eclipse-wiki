@@ -17,22 +17,22 @@
 {% block javascripts %}
     {{ parent() }} 
     <script>
-        Mousetrap.bind(['left'], function () {
+        Mousetrap.bind('left', function () {
             location.assign('{{ path('app_vertexcrud_seekprevious', {pk: vertex.pk}) }}')
             return false
         });
 
-        Mousetrap.bind(['right'], function () {
+        Mousetrap.bind('right', function () {
             location.assign('{{ path('app_vertexcrud_seeknext', {pk: vertex.pk}) }}')
             return false
         });
 
-        Mousetrap.bind(['up'], function () {
+        Mousetrap.bind('up', function () {
             location.assign('{{ path('app_vertexcrud_list') }}')
             return false
         });
 
-        Mousetrap.bind(['e'], function () {
+        Mousetrap.bind('e', function () {
             location.assign('{{ path('app_vertexcrud_edit', {pk: vertex.pk}) }}')
             return false
         });

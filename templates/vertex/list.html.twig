@@ -1,9 +1,9 @@
 {% extends "base.html.twig" %}
-{% block header_title %}PNJ{% endblock %}
+{% block header_title %}Liste des Vertex{% endblock %}
 {% block content %}
-    <div x-data="{keyword:''}">
+    <div x-data="searchEngine">
         <form class="pure-form">
-            <input type="text" x-model="keyword" id="search" class="pure-input-1"/>
+            <input type="text" x-model="keyword" id="search" class="pure-input-1 mousetrap"/>
         </form>
         <section class="entity-listing" x-html="await filter(keyword)">
         </section>
@@ -19,6 +19,19 @@
         }
 
         document.getElementById('search').focus()
+
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('searchEngine', () => ({
+                    keyword: '',
+                    init() {
+                        let current = this
+                        Mousetrap.bind('escape', function () {
+                            current.keyword = ''
+                            return false
+                        })
+                    }
+                }))
+        })
     </script>
 {% endblock %}
 
