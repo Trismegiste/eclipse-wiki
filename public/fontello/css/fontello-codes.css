@@ -15,8 +15,11 @@
 .icon-gun:before { content: '\e80b'; } /* '' */
 .icon-video:before { content: '\e80c'; } /* '' */
 .icon-place:before { content: '\e80d'; } /* '' */
+.icon-gravity:before { content: '\e80e'; } /* '' */
+.icon-pressure:before { content: '\e80f'; } /* '' */
 .icon-doc-add:before { content: '\e810'; } /* '' */
 .icon-info-circled:before { content: '\e811'; } /* '' */
+.icon-temperature:before { content: '\e812'; } /* '' */
 .icon-sleeve:before { content: '\e814'; } /* '' */
 .icon-rename:before { content: '\e815'; } /* '' */
 .icon-ali:before { content: '\e816'; } /* '' */
