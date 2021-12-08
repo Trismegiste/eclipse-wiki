@@ -16,9 +16,10 @@ class YoutubeTypeTest extends TypeTestCase
     {
         return [
             ['01234567890', '01234567890'],
-            ['https://youtu.be/0123456789_', '0123456789_'],
+            ['https://youtu.be/NiNTrKsQ8TU', 'NiNTrKsQ8TU'],
             ['https://youtube.com/watch?v=0123456789-', '0123456789-'],
-            ['https://www.youtube.com/watch?v=0123456789a', '0123456789a']
+            ['https://www.youtube.com/watch?v=0123456789a', '0123456789a'],
+            ['https://www.youtube.com/watch?v=PQlhC0lEKzw&ab_channel=bestbass42', 'PQlhC0lEKzw']
         ];
     }
 
