@@ -3,7 +3,7 @@
 {% block info %}
     {% if vertex.youtubeUrl is not empty %}
         <iframe width="220" height="150" src="https://www.youtube.com/embed/{{ vertex.youtubeUrl }}"
-                title="YouTube video player" 
+                title="{{ vertex.title }}" 
                 frameborder="0" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                 allowfullscreen>
