@@ -68,3 +68,14 @@ services:
         arguments:
             $secret: '%env(resolve:OPENAI_SECRETKEY)%'
             $engine: 'ada'
+            
+   # FLAT FILE SECTION
+    app.choicetype.repository:
+        class: App\Repository\YamlRepository
+        arguments: 
+            $path: '%kernel.project_dir%/database/choicetype.yml'
+            
+   # Custom Types
+    App\Form\Type\FullTextChoice:
+        arguments:
+            $repo: '@app.choicetype.repository'                        

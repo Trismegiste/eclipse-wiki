@@ -21,9 +21,13 @@ class PlaceType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('youtubeUrl', Type\YoutubeType::class, [
-            'required' => false,
-            'attr' => ['class' => 'pure-input-1-2']
+        $builder
+                ->add('gravity', Type\FullTextChoice::class, ['category' => 'gravity'])
+                ->add('temperature', Type\FullTextChoice::class, ['category' => 'temperature'])
+                ->add('pressure', Type\FullTextChoice::class, ['category' => 'pressure'])
+                ->add('youtubeUrl', Type\YoutubeType::class, [
+                    'required' => false,
+                    'attr' => ['class' => 'pure-input-1-2']
         ]);
 
         if ($options['edit']) {

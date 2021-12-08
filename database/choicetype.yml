@@ -1,0 +1,19 @@
+gravity:
+    - 'Terre (1 g)'
+    - 'Mars (1/3 g)'
+    - 'Lune (1/6 g)'
+    - 'Titan (1/7 g)'
+    - 'Éris (1/12 g)'
+    - 'Pluton (1/16 g)'
+    - 'Microgravité (0 g)'
+    
+temperature:
+    - ambiante
+    - froide (-75° C)
+    - ultra-froide (-150° C)
+    - cryogénique (-200° C)
+    
+pressure:
+    - Terre (1 bar)
+    - Mars (1/10 bar)
+    - Vide (0 bar)
