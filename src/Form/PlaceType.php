@@ -52,10 +52,15 @@ class PlaceType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         parent::finishView($view, $form, $options);
+        $this->moveAtEnd($view->children, 'content');
+        $this->moveAtEnd($view->children, 'create');
+    }
 
-        $item = $view['youtubeUrl'];
-        unset($view['youtubeUrl']);
-        array_splice($view->children, 1, 0, [$item]);
+    private function moveAtEnd(array &$arr, string $key): void
+    {
+        $item = $arr[$key];
+        unset($arr[$key]);
+        array_push($arr, $item);
     }
 
 }

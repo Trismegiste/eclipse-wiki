@@ -8,10 +8,10 @@ gravity:
     - 'Microgravité (0 g)'
     
 temperature:
-    - ambiante
-    - froide (-75° C)
-    - ultra-froide (-150° C)
-    - cryogénique (-200° C)
+    - Ambiante
+    - Froide (-75° C)
+    - Ultra-froide (-150° C)
+    - Cryogénique (-200° C)
     
 pressure:
     - Terre (1 bar)
