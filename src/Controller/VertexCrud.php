@@ -160,7 +160,7 @@ class VertexCrud extends AbstractController
         $finder = new Finder();
         $it = $finder->in(join_paths($this->getParameter('kernel.project_dir'), 'public/upload'))
                 ->files()
-                ->name("$title*");
+                ->name("/$title/i");
 
         $choice = [];
         foreach ($it as $fch) {
