@@ -27,7 +27,11 @@ class PlaceType extends AbstractType
                 ->add('pressure', Type\FullTextChoice::class, ['category' => 'pressure'])
                 ->add('youtubeUrl', Type\YoutubeType::class, [
                     'required' => false,
-                    'attr' => ['class' => 'pure-input-1-2']
+                    'label' => 'Youtube ID',
+                    'attr' => [
+                        'class' => 'pure-input-1-2',
+                        'placeholder' => 'ID unique de Youtube ou url de la vidéo'
+                    ]
         ]);
 
         if ($options['edit']) {
@@ -51,7 +55,10 @@ class PlaceType extends AbstractType
 
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
-        $view['create']->vars['label'] = 'Edit';
+        if ($options['edit']) {
+            $view['create']->vars['label'] = 'Edit';
+        }
+        $view['content']->vars['attr']['rows'] = 24;
         parent::finishView($view, $form, $options);
         $this->moveAtEnd($view->children, 'content');
         $this->moveAtEnd($view->children, 'create');
