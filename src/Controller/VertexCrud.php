@@ -34,6 +34,7 @@ class VertexCrud extends AbstractController
     }
 
     /**
+     * Lists all vertex (and subclasses). The page calls the VertexCrud::filter controller with AJAX
      * @Route("/vertex/list", methods={"GET"})
      */
     public function list(/* some filters */): Response
@@ -44,6 +45,7 @@ class VertexCrud extends AbstractController
     }
 
     /**
+     * Showing a vertex vertex by its primary key
      * @Route("/vertex/show/{pk}", methods={"GET"})
      */
     public function show(string $pk): Response
@@ -56,6 +58,7 @@ class VertexCrud extends AbstractController
     }
 
     /**
+     * Showing a vertex by its title. If it does not exist, redirect to creation
      * @Route("/wiki/{title}", methods={"GET"}, name="app_wiki")
      */
     public function wikiShow(string $title): Response
@@ -69,6 +72,7 @@ class VertexCrud extends AbstractController
     }
 
     /**
+     * Creates a new vertex
      * @Route("/vertex/create", methods={"GET","POST"})
      */
     public function create(Request $request): Response
@@ -93,6 +97,7 @@ class VertexCrud extends AbstractController
     }
 
     /**
+     * Editing a vertex (simple : title & content)
      * @Route("/vertex/edit/{pk}", methods={"GET","PUT"})
      */
     public function edit(string $pk, Request $request): Response
@@ -116,6 +121,7 @@ class VertexCrud extends AbstractController
     }
 
     /**
+     * Deleting a vertex
      * @Route("/vertex/delete/{pk}", methods={"GET","DELETE"})
      */
     public function delete(string $pk, Request $request): Response
@@ -137,6 +143,7 @@ class VertexCrud extends AbstractController
     }
 
     /**
+     * Ajax for searching vertices by title
      * @Route("/vertex/search", methods={"GET"})
      */
     public function search(Request $request): JsonResponse
@@ -151,6 +158,7 @@ class VertexCrud extends AbstractController
     }
 
     /**
+     * Ajax for searching local images
      * @Route("/image/search", methods={"GET"})
      */
     public function image(Request $request): JsonResponse
@@ -171,6 +179,7 @@ class VertexCrud extends AbstractController
     }
 
     /**
+     * Show previous vertex from a PK
      * @Route("/vertex/previous/{pk}", methods={"GET"})
      */
     public function seekPrevious(string $pk): Response
@@ -184,6 +193,7 @@ class VertexCrud extends AbstractController
     }
 
     /**
+     * Show next vertex from a PK
      * @Route("/vertex/next/{pk}", methods={"GET"})
      */
     public function seekNext(string $pk): Response
@@ -197,6 +207,7 @@ class VertexCrud extends AbstractController
     }
 
     /**
+     * Renaming a vertex
      * @Route("/vertex/rename/{pk}", methods={"GET","PUT"})
      */
     public function rename(string $pk, Request $request): Response
@@ -222,6 +233,7 @@ class VertexCrud extends AbstractController
     }
 
     /**
+     * Ajax for the listing
      * @Route("/vertex/filter", methods={"GET"})
      */
     public function filter(Request $request): Response

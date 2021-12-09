@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Generator for NPC
+ * CRUD for NPC
  */
 class NpcGenerator extends AbstractController
 {
@@ -59,6 +59,7 @@ class NpcGenerator extends AbstractController
     }
 
     /**
+     * Edits a NPC
      * @Route("/npc/edit/{pk}", methods={"GET","PUT"})
      */
     public function edit(string $pk, Request $request): Response
@@ -88,6 +89,7 @@ class NpcGenerator extends AbstractController
     }
 
     /**
+     * AJAX for getting background info
      * @Route("/npc/background/info", methods={"GET"})
      */
     public function getBackground(Request $request, BackgroundProvider $provider): Response
@@ -99,6 +101,7 @@ class NpcGenerator extends AbstractController
     }
 
     /**
+     * AJAX for getting faction info
      * @Route("/npc/faction/info", name="app_npcgenerator_getfaction", methods={"GET"})
      */
     public function getFaction(Request $request, FactionProvider $provider): Response
@@ -110,6 +113,7 @@ class NpcGenerator extends AbstractController
     }
 
     /**
+     * AJAX for getting morph info
      * @Route("/npc/morph/info", methods={"GET"})
      */
     public function getMorph(Request $request, MorphProvider $provider): Response
@@ -121,6 +125,7 @@ class NpcGenerator extends AbstractController
     }
 
     /**
+     * Duplicate a NPC
      * @Route("/npc/duplicate/{pk}", methods={"GET","POST"})
      */
     public function duplicate(string $pk, Request $request): Response
@@ -146,6 +151,7 @@ class NpcGenerator extends AbstractController
     }
 
     /**
+     * Form for editing gears & stuff of NPC
      * @Route("/npc/gear/{pk}", methods={"GET","PUT"})
      */
     public function gear(string $pk, Request $request): Response
@@ -164,6 +170,7 @@ class NpcGenerator extends AbstractController
     }
 
     /**
+     * Form for editing attacks and armors of NPC
      * @Route("/npc/battle/{pk}", methods={"GET","PUT"})
      */
     public function battle(string $pk, Request $request): Response
@@ -184,6 +191,7 @@ class NpcGenerator extends AbstractController
     }
 
     /**
+     * Creates an A.L.I
      * @Route("/npc/ali", methods={"GET","POST"})
      */
     public function ali(Request $request): Response
@@ -201,6 +209,7 @@ class NpcGenerator extends AbstractController
     }
 
     /**
+     * Resleeves a NPC with a new morph
      * @Route("/npc/sleeve/{pk}", methods={"GET","PATCH"})
      */
     public function sleeve(string $pk, Request $request, MorphProvider $morph): Response

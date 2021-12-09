@@ -21,6 +21,7 @@ class GmHelper extends AbstractController
 {
 
     /**
+     * Landing page
      * @Route("/", methods={"GET"})
      */
     public function index(): Response
@@ -29,6 +30,7 @@ class GmHelper extends AbstractController
     }
 
     /**
+     * Creates a Love Letter
      * @Route("/gm/loveletter")
      */
     public function loveLetter(Request $request): Response
@@ -43,6 +45,7 @@ class GmHelper extends AbstractController
     }
 
     /**
+     * Names generator
      * @Route("/gm/name/{card}", methods={"GET"})
      */
     public function nameGenerate(int $card = 15): Response

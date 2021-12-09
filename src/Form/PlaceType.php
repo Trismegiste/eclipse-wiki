@@ -14,7 +14,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Form for creating a Place
+ * Form for creating and editing a Place
  */
 class PlaceType extends AbstractType
 {
@@ -51,6 +51,7 @@ class PlaceType extends AbstractType
 
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
+        $view['create']->vars['label'] = 'Edit';
         parent::finishView($view, $form, $options);
         $this->moveAtEnd($view->children, 'content');
         $this->moveAtEnd($view->children, 'create');

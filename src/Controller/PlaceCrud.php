@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Description of PlaceCrud
+ * CRUD for Place
  */
 class PlaceCrud extends AbstractController
 {
@@ -28,6 +28,7 @@ class PlaceCrud extends AbstractController
     }
 
     /**
+     * Creates a Place
      * @Route("/place/create", methods={"GET","POST"})
      */
     public function create(Request $request): Response
@@ -52,6 +53,7 @@ class PlaceCrud extends AbstractController
     }
 
     /**
+     * Edits a Place
      * @Route("/place/edit/{pk}", methods={"GET","PUT"})
      */
     public function edit(string $pk, Request $request): Response
