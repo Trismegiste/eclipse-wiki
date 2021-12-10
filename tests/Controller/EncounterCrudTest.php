@@ -9,7 +9,12 @@ namespace App\Tests\Controller;
 use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class PlaceCrudTest extends WebTestCase
+/**
+ * Description of EncounterCrudTest
+ *
+ * @author flo
+ */
+class EncounterCrudTest extends WebTestCase
 {
 
     protected $client;
@@ -28,10 +33,10 @@ class PlaceCrudTest extends WebTestCase
 
     public function testCreate()
     {
-        $crawler = $this->client->request('GET', '/place/create');
+        $crawler = $this->client->request('GET', '/encounter/create');
         $this->assertResponseIsSuccessful();
-        $form = $crawler->selectButton('place_create')->form();
-        $form->setValues(['place' => [
+        $form = $crawler->selectButton('encounter_create')->form();
+        $form->setValues(['encounter' => [
                 'title' => 'Tatooine',
                 'content' => 'Some link to [[Luke]]'
         ]]);
@@ -64,7 +69,7 @@ class PlaceCrudTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', $edit);
         $this->assertPageTitleContains('Tatooine');
-        $this->assertCount(1, $crawler->selectButton('place_create'));
+        $this->assertCount(1, $crawler->selectButton('encounter_create'));        
     }
 
 }

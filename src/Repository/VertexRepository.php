@@ -137,10 +137,24 @@ class VertexRepository extends DefaultRepository
         return $it;
     }
 
-    public function findByClass(string $fqcn): \IteratorIterator
+    public function findByClass($fqcn): \IteratorIterator
     {
+        // managing parameters
+        if (is_string($fqcn)) {
+            $fqcn = [$fqcn];
+        }
+        if (!is_array($fqcn)) {
+            throw new \InvalidArgumentException('Not an array');
+        }
+
+        // convert to MongoDb
+        array_walk($fqcn, function (&$val) {
+            $val = new Binary($val, Binary::TYPE_USER_DEFINED);
+        });
+
+        // returning query
         return $this->search([
-                    '__pclass' => new Binary($fqcn, Binary::TYPE_USER_DEFINED)
+                    '__pclass' => ['$in' => $fqcn]
         ]);
     }
 
