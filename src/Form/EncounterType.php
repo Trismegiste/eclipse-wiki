@@ -6,8 +6,11 @@
 
 namespace App\Form;
 
-use App\Entity\Place;
+use App\Entity\Encounter;
+use App\Repository\VertexRepository;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\ChoiceList\ChoiceList;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -19,8 +22,22 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class EncounterType extends AbstractType
 {
 
+    protected $repository;
+
+    public function __construct(VertexRepository $repo)
+    {
+        $this->repository = $repo;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->add('npc', ChoiceType::class, [
+            'choices' => $this->repository->findByClass(\App\Entity\Ali::class),
+            'expanded' => true,
+            'multiple' => true,
+            'choice_label' => ChoiceList::label($this, 'title'),
+            'choice_value' => ChoiceList::value($this, 'pk')
+        ]);
         if ($options['edit']) {
             $builder->remove('title');
             $builder->setMethod('PUT');
@@ -30,7 +47,7 @@ class EncounterType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefault('empty_data', function (FormInterface $form) {
-            return new \App\Entity\Encounter($form->get('title')->getData());
+            return new Encounter($form->get('title')->getData());
         });
         $resolver->setDefault('edit', false);
     }
@@ -47,6 +64,7 @@ class EncounterType extends AbstractType
         }
         $view['content']->vars['attr']['rows'] = 5;
         parent::finishView($view, $form, $options);
+        $this->moveAtEnd($view->children, 'create');
     }
 
     private function moveAtEnd(array &$arr, string $key): void

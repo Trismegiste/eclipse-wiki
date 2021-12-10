@@ -7,6 +7,8 @@
 namespace App\Repository;
 
 use App\Entity\Vertex;
+use MongoDB\BSON\Binary;
+use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\Regex;
 use MongoDB\Driver\Query;
 use Trismegiste\Toolbox\MongoDb\DefaultRepository;
@@ -79,7 +81,7 @@ class VertexRepository extends DefaultRepository
     public function searchPreviousOf(string $pk): ?Vertex
     {
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                        ['_id' => ['$gt' => new \MongoDB\BSON\ObjectId($pk)]],
+                        ['_id' => ['$gt' => new ObjectId($pk)]],
                         ['limit' => 1, 'sort' => ['_id' => 1]]));
 
         $item = $cursor->toArray();
@@ -90,7 +92,7 @@ class VertexRepository extends DefaultRepository
     public function searchNextOf(string $pk): ?Vertex
     {
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                        ['_id' => ['$lt' => new \MongoDB\BSON\ObjectId($pk)]],
+                        ['_id' => ['$lt' => new ObjectId($pk)]],
                         ['limit' => 1, 'sort' => ['_id' => -1]]));
 
         $item = $cursor->toArray();
@@ -133,6 +135,13 @@ class VertexRepository extends DefaultRepository
                 [], '_id');
 
         return $it;
+    }
+
+    public function findByClass(string $fqcn): \IteratorIterator
+    {
+        return $this->search([
+                    '__pclass' => new Binary($fqcn, Binary::TYPE_USER_DEFINED)
+        ]);
     }
 
 }
