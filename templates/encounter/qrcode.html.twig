@@ -1,0 +1,20 @@
+{% extends "encounter/show.html.twig" %}
+
+{% block content %}
+    <article>
+        <canvas id="qrious" class="pure-img"></canvas>
+    </article>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('neocotic/qrious.min.js') }}"></script>
+    <script>
+        var qr = window.qr = new QRious({
+            element: document.getElementById('qrious'),
+            size: Math.min(innerWidth, innerHeight),
+            // the double quotes + space below are here for forcing some QR code reader to detect it's full UTF-8 and not JIS
+            value: 'yolo'
+        })
+    </script>
+{% endblock %}

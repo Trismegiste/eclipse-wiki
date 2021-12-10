@@ -32,11 +32,12 @@ class EncounterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('npc', ChoiceType::class, [
-            'choices' => $this->repository->findByClass(\App\Entity\Ali::class),
+            'choices' => $this->repository->findByClass([\App\Entity\Ali::class, \App\Entity\Transhuman::class]),
             'expanded' => true,
             'multiple' => true,
             'choice_label' => ChoiceList::label($this, 'title'),
-            'choice_value' => ChoiceList::value($this, 'pk')
+            'choice_value' => ChoiceList::value($this, 'pk'),
+            'mapped' => false
         ]);
         if ($options['edit']) {
             $builder->remove('title');

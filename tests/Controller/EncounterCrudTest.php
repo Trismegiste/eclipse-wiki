@@ -9,11 +9,6 @@ namespace App\Tests\Controller;
 use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-/**
- * Description of EncounterCrudTest
- *
- * @author flo
- */
 class EncounterCrudTest extends WebTestCase
 {
 
@@ -29,6 +24,10 @@ class EncounterCrudTest extends WebTestCase
         $repo = static::getContainer()->get(VertexRepository::class);
         $repo->delete(iterator_to_array($repo->search()));
         $this->assertCount(0, iterator_to_array($repo->search()));
+
+        $npc = new \App\Entity\Ali('test');
+        $npc->setMorph(new \App\Entity\Morph('dummy'));
+        $repo->save($npc);
     }
 
     public function testCreate()
@@ -37,7 +36,7 @@ class EncounterCrudTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $form = $crawler->selectButton('encounter_create')->form();
         $form->setValues(['encounter' => [
-                'title' => 'Tatooine',
+                'title' => 'Astroport',
                 'content' => 'Some link to [[Luke]]'
         ]]);
         $this->client->submit($form);
@@ -58,7 +57,7 @@ class EncounterCrudTest extends WebTestCase
     public function testShow(string $show)
     {
         $crawler = $this->client->request('GET', $show);
-        $this->assertPageTitleContains('Tatooine');
+        $this->assertPageTitleContains('Astroport');
         $url = $crawler->filterXPath('//nav/a/i[@class="icon-edit"]/parent::a')->attr('href');
 
         return $url;
@@ -68,8 +67,17 @@ class EncounterCrudTest extends WebTestCase
     public function testEdit(string $edit)
     {
         $crawler = $this->client->request('GET', $edit);
-        $this->assertPageTitleContains('Tatooine');
-        $this->assertCount(1, $crawler->selectButton('encounter_create'));        
+        $this->assertPageTitleContains('Astroport');
+        $this->assertCount(1, $crawler->selectButton('encounter_create'));
+
+        return $this->client->getRequest()->get('pk');
+    }
+
+    /** @depends testEdit */
+    public function testQrCode(string $pk)
+    {
+        $crawler = $this->client->request('GET', '/encounter/qrcode/' . $pk);
+        $this->assertPageTitleContains('Astroport');
     }
 
 }
