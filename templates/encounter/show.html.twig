@@ -1,0 +1,8 @@
+{% extends "vertex/show.html.twig" %}
+
+{% block header_title %}
+    <nav style="float: right">
+        {{ include('encounter/actions.html.twig') }}
+    </nav>   
+    {{ vertex.title }}
+{% endblock %}

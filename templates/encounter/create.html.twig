@@ -1,0 +1,17 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Création d'une Rencontre{% endblock %}
+
+{% block header_title %}Création d'une Rencontre{% endblock %}
+
+{% block content %}
+    {{ form(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ include('fragment/init_autocomplete.html.twig', {element_id:'encounter_content'}) }}
+    <script>
+        document.getElementById('encounter_title').focus()
+    </script>
+{% endblock %}
