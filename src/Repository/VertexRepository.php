@@ -30,7 +30,7 @@ class VertexRepository extends DefaultRepository
         $firstLetter = array_shift($tmp);
 
         $it = $this->search([
-            'title' => new Regex("(?i:$firstLetter)" . implode('', $tmp))
+            'title' => new Regex("^(?i:$firstLetter)" . preg_quote(implode('', $tmp)))
         ]);
         $it->rewind();
 
@@ -67,7 +67,7 @@ class VertexRepository extends DefaultRepository
         $firstLetter = array_shift($tmp);
 
         $it = $this->search([
-            'content' => new Regex("\[\[(?i:$firstLetter)" . implode('', $tmp) . "(\]\]|\|)")
+            'content' => new Regex("\[\[(?i:$firstLetter)" . preg_quote(implode('', $tmp)) . "(\]\]|\|)")
         ]);
 
         $linked = [];
@@ -81,8 +81,8 @@ class VertexRepository extends DefaultRepository
     public function searchPreviousOf(string $pk): ?Vertex
     {
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                        ['_id' => ['$gt' => new ObjectId($pk)]],
-                        ['limit' => 1, 'sort' => ['_id' => 1]]));
+                ['_id' => ['$gt' => new ObjectId($pk)]],
+                ['limit' => 1, 'sort' => ['_id' => 1]]));
 
         $item = $cursor->toArray();
 
@@ -92,8 +92,8 @@ class VertexRepository extends DefaultRepository
     public function searchNextOf(string $pk): ?Vertex
     {
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                        ['_id' => ['$lt' => new ObjectId($pk)]],
-                        ['limit' => 1, 'sort' => ['_id' => -1]]));
+                ['_id' => ['$lt' => new ObjectId($pk)]],
+                ['limit' => 1, 'sort' => ['_id' => -1]]));
 
         $item = $cursor->toArray();
 
@@ -106,7 +106,7 @@ class VertexRepository extends DefaultRepository
         // build the regex with insensitive case on the first letter
         $tmp = preg_split('//u', $vertex->getTitle(), null, PREG_SPLIT_NO_EMPTY);
         $firstLetter = array_shift($tmp);
-        $regex = "\[\[(?i:$firstLetter)" . implode('', $tmp) . "(\]\]|\|)";
+        $regex = "\[\[(?i:$firstLetter)" . preg_quote(implode('', $tmp)) . "(\]\]|\|)";
 
         // search for vertex with links to $vertex
         $iter = $this->search(['content' => new Regex($regex)]);
@@ -128,11 +128,11 @@ class VertexRepository extends DefaultRepository
     public function filterBy(string $keyword): \IteratorIterator
     {
         $it = $this->search(
-                ['$or' => [
-                        ['title' => new Regex($keyword, 'i')],
-                        ['content' => new Regex($keyword, 'i')]
-                    ]],
-                [], '_id');
+            ['$or' => [
+                    ['title' => new Regex(preg_quote($keyword), 'i')],
+                    ['content' => new Regex(preg_quote($keyword), 'i')]
+                ]],
+            [], '_id');
 
         return $it;
     }
@@ -154,7 +154,7 @@ class VertexRepository extends DefaultRepository
 
         // returning query
         return $this->search([
-                    '__pclass' => ['$in' => $fqcn]
+                '__pclass' => ['$in' => $fqcn]
         ]);
     }
 
