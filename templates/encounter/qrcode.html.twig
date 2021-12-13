@@ -2,13 +2,20 @@
 
 {% block content %}
     <div x-data="behavior" class="pure-g">
-        <section class="pure-u-2-3">
+        <section class="pure-u-1-2">
             <ul>
                 {% for npc in listing %}
                     <li>
-                        <a x-on:click="push('{{ npc.title }}','{{ npc.wildCard ? '[J]' : '' }}',{{ npc.parry }},{{ npc.toughness }},{{ npc.totalArmor }})">{{ npc.title }}</a>
+                        <a x-on:click="push('{{ npc.title }}',{{ npc.wildCard ? 'true' : 'false' }},{{ npc.parry }},{{ npc.rangedMalus }},{{ npc.toughness }},{{ npc.totalArmor }})">{{ npc.title }}</a>
                     </li>
                 {% endfor %}
+            </ul>
+        </section>
+        <section class="pure-u-1-6">
+            <ul>
+                <template x-for="npc in encounter">
+                    <li x-text="npc.name"></li>
+                </template>
             </ul>
         </section>
         <canvas x-ref="qrious" class="pure-u-1-3"></canvas>
@@ -30,14 +37,22 @@
                             value: '-Vide-'
                         })
                     },
-                    push(name, wc, par, tough, arm) {
-                        this.encounter.push({name: name, tough: tough})
-                        let str = '';
-                        for(const npc of this.encounter) {
-                            str = `${str} ${npc.name}\n`
+                    push(name, wc, par, rgm, tough, arm) {
+                        this.encounter.push({name: name, w: wc, p: par, r: rgm, t: tough, a: arm})
+                        let param = new URLSearchParams()
+                        for (const npc of this.encounter) {
+                            param.append('name', npc.name)
+                            param.append('w', npc.w)
+                            param.append('p', npc.p)
+                            param.append('r', npc.r)
+                            param.append('t', npc.t)
+                            param.append('a', npc.a)
                         }
-                        this.qrCode.value = str
-                        //console.log(str)
+
+                   //     this.qrCode.value = 'https://trismegiste.github.io/eclipse-wiki/public/initiative.html?' 
+                        this.qrCode.value = 'http://localhost:8000/initiative.html?' 
+                                + param.toString()
+                        console.log(this.qrCode.value)
                     }
                 }))
         })

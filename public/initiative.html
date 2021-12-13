@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Initiative tracker</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link  rel="stylesheet" href="/purecss/pure-min.css"/> 
+    </head>
+    <body>
+        <div x-data="model">
+            <ul>
+                <template x-for="npc in encounter">
+                    <li x-text="npc.name"></li>
+                </template>
+            </ul>
+        </div>
+        <script defer src="/alpine/cdn.min.js"></script>        
+        <script>
+
+
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('model', () => ({
+                        encounter: [],
+                        init() {
+                            let param = new URLSearchParams(location.search)
+                            let names = param.getAll('name')
+                            for (let idx = 0; idx < names.length; idx++) {
+                                let npc = {name: names[idx]}
+                                npc.wc = param.getAll('w')[idx] != 'true'
+                                npc.parry = param.getAll('p')[idx]
+                                npc.rangedMalus = param.getAll('r')[idx]
+                                npc.toughness = param.getAll('t')[idx]
+                                npc.armor = param.getAll('a')[idx]
+                                this.encounter.push(npc)
+                            }
+                        }
+                    }))
+            })
+        </script>
+    </body>
+</html>
