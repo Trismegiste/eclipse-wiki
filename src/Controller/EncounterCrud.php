@@ -44,13 +44,13 @@ class EncounterCrud extends GenericCrud
 
     /**
      * Generates the QR Code for the Encounter
-     * @Route("/encounter/qrcode/{pk}", methods={"GET"})
+     * @Route("/encounter/qrcode", methods={"GET"})
      */
-    public function qrCode(string $pk): Response
+    public function qrCode(): Response
     {
-        $vertex = $this->repository->findByPk($pk);
+        $listing = $this->repository->findByClass([\App\Entity\Ali::class, \App\Entity\Transhuman::class]);
 
-        return $this->render('encounter/qrcode.html.twig', ['vertex' => $vertex]);
+        return $this->render('encounter/qrcode.html.twig', ['listing' => $listing]);
     }
 
 }

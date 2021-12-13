@@ -1,20 +1,44 @@
-{% extends "encounter/show.html.twig" %}
+{% extends "base.html.twig" %}
 
 {% block content %}
-    <article>
-        <canvas id="qrious" class="pure-img"></canvas>
-    </article>
+    <div x-data="behavior" class="pure-g">
+        <section class="pure-u-2-3">
+            <ul>
+                {% for npc in listing %}
+                    <li>
+                        <a x-on:click="push('{{ npc.title }}',{{ npc.parry }}, {{ npc.toughness }})">{{ npc.title }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+        <canvas x-ref="qrious" class="pure-u-1-3"></canvas>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('neocotic/qrious.min.js') }}"></script>
     <script>
-        var qr = window.qr = new QRious({
-            element: document.getElementById('qrious'),
-            size: Math.min(innerWidth, innerHeight),
-            // the double quotes + space below are here for forcing some QR code reader to detect it's full UTF-8 and not JIS
-            value: 'yolo'
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('behavior', () => ({
+                    encounter: [],
+                    qrCode: null,
+                    init() {
+                        this.qrCode = new QRious({
+                            element: this.$refs.qrious,
+                            size: Math.min(innerWidth, innerHeight),
+                            value: 'yolo'
+                        })
+                    },
+                    push(name, tough) {
+                        this.encounter.push({name: name, tough: tough})
+                        let str = '';
+                        for(const npc of this.encounter) {
+                            str = str + npc.name + "\n"
+                        }
+                        this.qrCode.value = str
+                    }
+                }))
         })
     </script>
 {% endblock %}
