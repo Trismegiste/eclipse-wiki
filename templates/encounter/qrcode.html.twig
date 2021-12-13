@@ -6,7 +6,7 @@
             <ul>
                 {% for npc in listing %}
                     <li>
-                        <a x-on:click="push('{{ npc.title }}',{{ npc.parry }}, {{ npc.toughness }})">{{ npc.title }}</a>
+                        <a x-on:click="push('{{ npc.title }}','{{ npc.wildCard ? '[J]' : '' }}',{{ npc.parry }},{{ npc.toughness }},{{ npc.totalArmor }})">{{ npc.title }}</a>
                     </li>
                 {% endfor %}
             </ul>
@@ -27,16 +27,17 @@
                         this.qrCode = new QRious({
                             element: this.$refs.qrious,
                             size: Math.min(innerWidth, innerHeight),
-                            value: 'yolo'
+                            value: '-Vide-'
                         })
                     },
-                    push(name, tough) {
+                    push(name, wc, par, tough, arm) {
                         this.encounter.push({name: name, tough: tough})
                         let str = '';
                         for(const npc of this.encounter) {
-                            str = str + npc.name + "\n"
+                            str = `${str} ${npc.name}\n`
                         }
                         this.qrCode.value = str
+                        //console.log(str)
                     }
                 }))
         })
