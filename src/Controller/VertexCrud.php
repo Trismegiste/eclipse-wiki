@@ -104,10 +104,10 @@ class VertexCrud extends AbstractController
     {
         $vertex = $this->repository->findByPk($pk);
         $form = $this->createFormBuilder($vertex)
-                ->add('content', TextareaType::class, ['attr' => ['rows' => 32]])
-                ->add('edit', SubmitType::class)
-                ->setMethod('PUT')
-                ->getForm();
+            ->add('content', TextareaType::class, ['attr' => ['rows' => 32]])
+            ->add('edit', SubmitType::class)
+            ->setMethod('PUT')
+            ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -128,9 +128,9 @@ class VertexCrud extends AbstractController
     {
         $vertex = $this->repository->findByPk($pk);
         $form = $this->createFormBuilder($vertex)
-                ->add('delete', SubmitType::class)
-                ->setMethod('DELETE')
-                ->getForm();
+            ->add('delete', SubmitType::class)
+            ->setMethod('DELETE')
+            ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -167,8 +167,8 @@ class VertexCrud extends AbstractController
 
         $finder = new Finder();
         $it = $finder->in(join_paths($this->getParameter('kernel.project_dir'), 'public/upload'))
-                ->files()
-                ->name("/$title/i");
+            ->files()
+            ->name("/$title/i");
 
         $choice = [];
         foreach ($it as $fch) {
@@ -217,10 +217,10 @@ class VertexCrud extends AbstractController
         $backlinks = $this->repository->searchByBacklinks($vertex->getTitle());
 
         $form = $this->createFormBuilder($vertex)
-                ->add('title', TextType::class, ['label' => 'Nouveau nom'])
-                ->add('rename', SubmitType::class)
-                ->setMethod('PUT')
-                ->getForm();
+            ->add('title', TextType::class, ['label' => 'Nouveau nom'])
+            ->add('rename', SubmitType::class)
+            ->setMethod('PUT')
+            ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -242,6 +242,17 @@ class VertexCrud extends AbstractController
         $found = $this->repository->filterBy($keyword);
 
         return $this->render('fragment/listing_only.html.twig', ['listing' => $found]);
+    }
+
+    /**
+     * Generates a QR Code for external initiative tracker
+     * @Route("/tracker", methods={"GET"})
+     */
+    public function tracker(): Response
+    {
+        $listing = $this->repository->findByClass([\App\Entity\Ali::class, \App\Entity\Transhuman::class]);
+
+        return $this->render('tracker.html.twig', ['listing' => $listing]);
     }
 
 }

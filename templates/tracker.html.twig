@@ -49,10 +49,9 @@
                             param.append('a', npc.a)
                         }
 
-                   //     this.qrCode.value = 'https://trismegiste.github.io/eclipse-wiki/public/initiative.html?' 
-                        this.qrCode.value = 'http://localhost:8000/initiative.html?' 
+                        this.qrCode.value = 'https://trismegiste.github.io/eclipse-wiki/public/initiative.html?'
                                 + param.toString()
-                        console.log(this.qrCode.value)
+                        console.log('http://localhost:8000/initiative.html?' + param.toString())
                     }
                 }))
         })
