@@ -3,20 +3,23 @@
 {% block content %}
     <div x-data="behavior" class="pure-g">
         <section class="pure-u-1-2">
-            <ul>
+            <div class="npc-list pure-g">
                 {% for npc in listing %}
-                    <li>
-                        <a x-on:click="push('{{ npc.title }}',{{ npc.wildCard ? 'true' : 'false' }},{{ npc.parry }},{{ npc.rangedMalus }},{{ npc.toughness }},{{ npc.totalArmor }})">{{ npc.title }}</a>
-                    </li>
+                    <div class="pure-u-1-3">
+                        <a x-on:click="push('{{ npc.title }}',{{ npc.wildCard ? 'true' : 'false' }},{{ npc.parry }},{{ npc.rangedMalus }},{{ npc.toughness }},{{ npc.totalArmor }})">
+                            <i class="{{ char_icon(npc) }}"></i>
+                            {{ npc.title }}
+                        </a>
+                    </div>
                 {% endfor %}
-            </ul>
+            </div>
         </section>
         <section class="pure-u-1-6">
-            <ul>
-                <template x-for="npc in encounter">
-                    <li x-text="npc.name"></li>
+            <div class="pure-g npc-list">
+                <template x-for="(npc,idx) in encounter">
+                    <div class="pure-u-1"><p x-text="npc.name" x-on:click="remove(idx)"></p></div>
                 </template>
-            </ul>
+            </div>
         </section>
         <canvas x-ref="qrious" class="pure-u-1-3" x-init="$watch('encounter', value => qrCode.value = staticUrl + getParameters())">
         </canvas>
@@ -59,8 +62,24 @@
                         }
 
                         return param.toString()
+                    },
+                    remove(idx) {
+                        this.encounter.splice(idx, 1)
                     }
                 }))
         })
     </script>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .npc-list {
+            font-size: 120%;
+        }
+        .npc-list a, .npc-list p {
+            margin: 0.5em;
+            display: inline-block;
+            cursor: pointer;
+        }
+    </style>
 {% endblock %}

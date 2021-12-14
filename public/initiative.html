@@ -5,14 +5,29 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link  rel="stylesheet" href="./purecss/pure-min.css"/> 
+        <link  rel="stylesheet" href="./fontello/css/fontello.css"/> 
+        <style>
+            .npc-list {
+                font-size: 120%;
+            }
+            .npc-list p {
+                margin: 0.5em;
+                display: inline-block;
+            }
+        </style>        
     </head>
     <body>
-        <div x-data="model">
-            <ul>
-                <template x-for="npc in encounter">
-                    <li x-text="npc.name"></li>
-                </template>
-            </ul>
+        <div x-data="model" class="pure-g npc-list">
+            <template x-for="npc in encounter">
+                <div class="pure-u-1">
+                    <p>
+                        <span x-text="npc.name"></span>
+                        <template x-if="npc.wc">
+                            <i class="icon-wildcard"></i>
+                        </template>
+                    </p>
+                </div>
+            </template>
         </div>
         <script defer src="./alpine/cdn.min.js"></script>        
         <script>
@@ -24,7 +39,7 @@
                             let names = param.getAll('name')
                             for (let idx = 0; idx < names.length; idx++) {
                                 let npc = {name: names[idx]}
-                                npc.wc = param.getAll('w')[idx] != 'true'
+                                npc.wc = param.getAll('w')[idx] == 'true'
                                 npc.parry = param.getAll('p')[idx]
                                 npc.rangedMalus = param.getAll('r')[idx]
                                 npc.toughness = param.getAll('t')[idx]
