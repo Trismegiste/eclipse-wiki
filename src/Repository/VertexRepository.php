@@ -81,8 +81,8 @@ class VertexRepository extends DefaultRepository
     public function searchPreviousOf(string $pk): ?Vertex
     {
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                ['_id' => ['$gt' => new ObjectId($pk)]],
-                ['limit' => 1, 'sort' => ['_id' => 1]]));
+                        ['_id' => ['$gt' => new ObjectId($pk)]],
+                        ['limit' => 1, 'sort' => ['_id' => 1]]));
 
         $item = $cursor->toArray();
 
@@ -92,8 +92,8 @@ class VertexRepository extends DefaultRepository
     public function searchNextOf(string $pk): ?Vertex
     {
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                ['_id' => ['$lt' => new ObjectId($pk)]],
-                ['limit' => 1, 'sort' => ['_id' => -1]]));
+                        ['_id' => ['$lt' => new ObjectId($pk)]],
+                        ['limit' => 1, 'sort' => ['_id' => -1]]));
 
         $item = $cursor->toArray();
 
@@ -128,11 +128,11 @@ class VertexRepository extends DefaultRepository
     public function filterBy(string $keyword): \IteratorIterator
     {
         $it = $this->search(
-            ['$or' => [
-                    ['title' => new Regex(preg_quote($keyword), 'i')],
-                    ['content' => new Regex(preg_quote($keyword), 'i')]
-                ]],
-            [], '_id');
+                ['$or' => [
+                        ['title' => new Regex(preg_quote($keyword), 'i')],
+                        ['content' => new Regex(preg_quote($keyword), 'i')]
+                    ]],
+                [], '_id');
 
         return $it;
     }
@@ -153,9 +153,12 @@ class VertexRepository extends DefaultRepository
         });
 
         // returning query
-        return $this->search([
-                '__pclass' => ['$in' => $fqcn]
-        ]);
+        $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
+                        ['__pclass' => ['$in' => $fqcn]],
+                        ['sort' => ['title' => 1]]
+        ));
+
+        return new \IteratorIterator($cursor);
     }
 
 }
