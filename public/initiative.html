@@ -7,25 +7,64 @@
         <link  rel="stylesheet" href="./purecss/pure-min.css"/> 
         <link  rel="stylesheet" href="./fontello/css/fontello.css"/> 
         <style>
-            .npc-list {
-                font-size: 120%;
+            .npc-list article {
+                margin: 0.5em 0.5em 0;
             }
-            .npc-list p {
-                margin: 0.5em;
-                display: inline-block;
+            .npc-list form {
+                margin: 0 0.5em 1em;
+            }
+            .parry {
+                text-align: center;
+                background-color: lightblue;
+            }
+            .toughness {
+                text-align: center;
+                background-color: orange;
+            }
+            h1 {
+                font-size: 120%;
+                font-weight: lighter;
+                margin: 0 0 0.3em;
             }
         </style>        
     </head>
     <body>
-        <div x-data="model" class="pure-g npc-list">
-            <template x-for="npc in encounter">
-                <div class="pure-u-1">
-                    <p>
-                        <span x-text="npc.name"></span>
-                        <template x-if="npc.wc">
-                            <i class="icon-wildcard"></i>
-                        </template>
-                    </p>
+        <div x-data="model" class="npc-list">
+            <template x-for="(npc, idx) in encounter">
+                <div class="pure-g">
+                    <div class="pure-u-2-3">
+                        <article>
+                            <h1><span x-text="npc.name"></span><i class="icon-wildcard" x-show="npc.wc"></i></h1>
+                            
+                        </article>
+                    </div>    
+                    <div class="pure-u-1-6">
+                        <article x-text="npc.parry" class="parry">
+                        </article>
+                    </div>    
+                    <div class="pure-u-1-6">  
+                        <article x-text="npc.toughness" class="toughness">
+                        </article>
+                    </div>    
+                    <div class="pure-u-1">
+                        <form>
+                            <div>
+                                <label>Secoué</label>
+                                <input type="checkbox" name="shaken">
+                            </div>
+                            <div>
+                                Blessures
+                                <input type="radio" name="wound_level" id="wound_level_0">
+                                <label for="wound_level_0">0</label>
+                                <input type="radio" name="wound_level" id="wound_level_1">
+                                <label for="wound_level_1">1</label>
+                                <input type="radio" name="wound_level" id="wound_level_2">
+                                <label for="wound_level_2">2</label>
+                                <input type="radio" name="wound_level" id="wound_level_3">
+                                <label for="wound_level_3">3</label>
+                            </div>
+                        </form> 
+                    </div>
                 </div>
             </template>
         </div>
