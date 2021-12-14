@@ -71,8 +71,8 @@
 
                     <div class="pure-u-1">
                         Blessures
-                        <input type="radio" x-bind:name="'wound_level'+idx" x-bind:id="'wound_level_0_'+idx" x-show="npc.wc" x-model="npc.wound" value="0"/>
-                        <label x-bind:for="'wound_level_0_'+idx" x-show="npc.wc">0</label>
+                        <input type="radio" x-bind:name="'wound_level'+idx" x-bind:id="'wound_level_0_'+idx" x-model="npc.wound" value="0"/>
+                        <label x-bind:for="'wound_level_0_'+idx">0</label>
                         <input type="radio" x-bind:name="'wound_level'+idx" x-bind:id="'wound_level_1_'+idx" x-show="npc.wc" x-model="npc.wound" value="1"/>
                         <label x-bind:for="'wound_level_1_'+idx" x-show="npc.wc">1</label>
                         <input type="radio" x-bind:name="'wound_level'+idx" x-bind:id="'wound_level_2_'+idx" x-show="npc.wc" x-model="npc.wound" value="2"/>
