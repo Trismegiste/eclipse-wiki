@@ -18,11 +18,14 @@
                 </template>
             </ul>
         </section>
-        <canvas x-ref="qrious" class="pure-u-1-3"></canvas>
+        <canvas x-ref="qrious" class="pure-u-1-3" x-init="$watch('encounter', value => qrCode.value = staticUrl + getParameters())">
+        </canvas>
+        {% if app.debug %}
+            <div class="pure-u-1">
+                <p><a x-bind:href="'http://localhost:8000/initiative.html?' + getParameters()">Local test</a></p>
+            </div>
+        {% endif %}  
     </div>     
-    {% if app.debug %}
-        <div><p><a href="#" x-ref="link">Local test</a></p></div>
-    {% endif %}
 {% endblock %}
 
 {% block javascripts %}
@@ -31,6 +34,7 @@
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('behavior', () => ({
+                    staticUrl: 'https://trismegiste.github.io/eclipse-wiki/public/initiative.html?',
                     encounter: [],
                     qrCode: null,
                     init() {
@@ -42,6 +46,8 @@
                     },
                     push(name, wc, par, rgm, tough, arm) {
                         this.encounter.push({name: name, w: wc, p: par, r: rgm, t: tough, a: arm})
+                    },
+                    getParameters() {
                         let param = new URLSearchParams()
                         for (const npc of this.encounter) {
                             param.append('name', npc.name)
@@ -52,9 +58,7 @@
                             param.append('a', npc.a)
                         }
 
-                        this.qrCode.value = 'https://trismegiste.github.io/eclipse-wiki/public/initiative.html?'
-                                + param.toString()
-                        this.$refs.link.href = 'http://localhost:8000/initiative.html?' + param.toString()
+                        return param.toString()
                     }
                 }))
         })
