@@ -17,7 +17,12 @@
         <section class="pure-u-1-6">
             <div class="pure-g npc-list">
                 <template x-for="(npc,idx) in encounter">
-                    <div class="pure-u-1"><p x-text="npc.name" x-on:click="remove(idx)"></p></div>
+                    <div class="pure-u-1">
+                        <p x-on:click="remove(idx)">
+                            <i class="icon-token"></i>
+                            <span x-text="npc.name"></span>
+                        </p>
+                    </div>
                 </template>
             </div>
         </section>

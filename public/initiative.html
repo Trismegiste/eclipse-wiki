@@ -42,7 +42,6 @@
                     <div class="pure-u-5-8">
                         <article>
                             <h1><span x-text="npc.name"></span><i class="icon-wildcard" x-show="npc.wc"></i></h1>
-
                         </article>
                     </div>    
                     <div class="pure-u-1-8">
@@ -65,8 +64,8 @@
                             </div>
                             <div>
                                 Blessures
-                                <input type="radio" x-bind:name="'wound_level'+idx" x-bind:id="'wound_level_0_'+idx">
-                                <label x-bind:for="'wound_level_0_'+idx">0</label>
+                                <input type="radio" x-bind:name="'wound_level'+idx" x-bind:id="'wound_level_0_'+idx" x-show="npc.wc">
+                                <label x-bind:for="'wound_level_0_'+idx" x-show="npc.wc">0</label>
                                 <input type="radio" x-bind:name="'wound_level'+idx" x-bind:id="'wound_level_1_'+idx" x-show="npc.wc">
                                 <label x-bind:for="'wound_level_1_'+idx" x-show="npc.wc">1</label>
                                 <input type="radio" x-bind:name="'wound_level'+idx" x-bind:id="'wound_level_2_'+idx" x-show="npc.wc">
@@ -74,7 +73,7 @@
                                 <input type="radio" x-bind:name="'wound_level'+idx" x-bind:id="'wound_level_3_'+idx" x-show="npc.wc">
                                 <label x-bind:for="'wound_level_3_'+idx" x-show="npc.wc">3</label>
                                 <input type="radio" x-bind:name="'wound_level'+idx" x-bind:id="'wound_level_d_'+idx">
-                                <label x-bind:for="'wound_level_d_'+idx"><i class="icon-heartbeat"></i></label>
+                                <label x-bind:for="'wound_level_d_'+idx"><i class="icon-dead"></i></label>
                             </div>
                         </form> 
                     </div>
