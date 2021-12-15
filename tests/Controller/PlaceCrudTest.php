@@ -40,6 +40,13 @@ class PlaceCrudTest extends WebTestCase
         $this->client->followRedirect();
     }
 
+    public function testCreateWithTitle()
+    {
+        $crawler = $this->client->request('GET', '/place/create?title=alderaan');
+        $form = $crawler->selectButton('place_create')->form();
+        $this->assertEquals('Alderaan', $form['place']['title']->getValue());
+    }
+
     public function testList()
     {
         $crawler = $this->client->request('GET', '/vertex/filter');
