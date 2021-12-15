@@ -79,7 +79,9 @@
                         <label x-bind:for="'wound_level_2_'+idx" x-show="npc.wc">2</label>
                         <input type="radio" x-bind:name="'wound_level'+idx" x-bind:id="'wound_level_3_'+idx" x-show="npc.wc" x-model="npc.wound" value="3"/>
                         <label x-bind:for="'wound_level_3_'+idx" x-show="npc.wc">3</label>
-                        <input type="radio" x-bind:name="'wound_level'+idx" x-bind:id="'wound_level_d_'+idx" x-model="npc.wound" value="4"/>
+                        <input type="radio" x-bind:name="'wound_level'+idx" x-bind:id="'wound_level_d_'+idx" 
+                               x-model="npc.wound" value="4"
+                               x-on:click="killIt(idx)"/>
                         <label x-bind:for="'wound_level_d_'+idx"><i class="icon-dead"></i></label>
                     </div>
                 </div>
@@ -102,6 +104,12 @@
                                 npc.armor = param.getAll('a')[idx]
                                 npc.wound = 0
                                 this.encounter.push(npc)
+                            }
+                        },
+                        killIt(idx) {
+                            let npc = this.encounter[idx]
+                            if (npc.wound == 4) {
+                                this.encounter.splice(idx, 1)
                             }
                         }
                     }))
