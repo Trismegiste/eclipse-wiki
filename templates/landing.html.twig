@@ -1,0 +1,24 @@
+{% extends "base.html.twig" %}
+
+{% block header_title %}Aide{% endblock %}
+
+{% block content %}
+    <h2>Raccourcis sur la page de listing des vertex</h2>
+    <ul>
+        <li><strong>ESC</strong> : Reset du filtre de recherche</li>
+    </ul>
+    <h2>Raccourcis clavier dans une page 'Voir'</h2>
+    <ul>
+        <li><strong>Flèche droite</strong> : Vertex précédent (plus ancien)</li>
+        <li><strong>Flèche gauche</strong> : Vertex suivant (plus récent)</li>
+        <li><strong>Flèche haute</strong> : Liste des vertex</li>
+        <li><strong>E</strong> : Édition du contenu WikiText du vertex</li>
+        <li><strong>S</strong> : Édition des caractéristiques d'un PNJ</li>
+        <li><strong>W</strong> : Édition des paramètres de combat d'un PNJ</li>
+    </ul>
+    <h2>Page du tracker d'initiative</h2>
+    <ul>
+        <li><strong>Clic sur la case mort</strong> : PNJ grisé</li>
+        <li><strong>2e clic sur la case mort</strong> : PNJ effacé</li>
+    </ul>
+{% endblock %}
