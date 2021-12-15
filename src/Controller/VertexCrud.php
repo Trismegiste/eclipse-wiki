@@ -219,17 +219,6 @@ class VertexCrud extends GenericCrud
         return $this->render('fragment/listing_only.html.twig', ['listing' => $found]);
     }
 
-    /**
-     * Generates a QR Code for external initiative tracker
-     * @Route("/tracker", methods={"GET"})
-     */
-    public function tracker(): Response
-    {
-        $listing = $this->repository->findByClass([\App\Entity\Ali::class, \App\Entity\Transhuman::class]);
-
-        return $this->render('tracker.html.twig', ['listing' => $listing]);
-    }
-
     protected function createEntity(string $title): Vertex
     {
         return new Vertex($title);

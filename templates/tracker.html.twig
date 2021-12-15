@@ -1,9 +1,11 @@
 {% extends "base.html.twig" %}
 
+{% block header_title %}Tracker{% endblock %}
+
 {% block content %}
     <div x-data="behavior" class="pure-g">
         <section class="pure-u-1-2">
-            <div class="npc-list pure-g">
+            <div class="npc-list pure-g choices">
                 {% for npc in listing %}
                     <div class="pure-u-1-3">
                         <a x-on:click="push('{{ npc.title }}',{{ npc.wildCard ? 'true' : 'false' }},{{ npc.parry }},{{ npc.rangedMalus }},{{ npc.toughness }},{{ npc.totalArmor }})">
@@ -85,6 +87,9 @@
             margin: 0.5em;
             display: inline-block;
             cursor: pointer;
+        }
+        .choices {
+            background-color: #eaeaea;
         }
     </style>
 {% endblock %}

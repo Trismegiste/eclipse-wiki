@@ -6,7 +6,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Ali;
+use App\Entity\Transhuman;
 use App\Form\LoveLetter;
+use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -63,6 +66,17 @@ class GmHelper extends AbstractController
         }
 
         return $this->render('random_name.html.twig', ['listing' => $listing]);
+    }
+
+    /**
+     * Generates a QR Code for external initiative tracker
+     * @Route("/tracker", methods={"GET"})
+     */
+    public function tracker(VertexRepository $repo): Response
+    {
+        $listing = $repo->findByClass([Ali::class, Transhuman::class]);
+
+        return $this->render('tracker.html.twig', ['listing' => $listing]);
     }
 
 }
