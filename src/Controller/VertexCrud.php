@@ -8,9 +8,7 @@ namespace App\Controller;
 
 use App\Entity\Vertex;
 use App\Form\VertexType;
-use App\Repository\VertexRepository;
 use App\Twig\SaWoExtension;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -23,15 +21,8 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * CRUD for Vertex
  */
-class VertexCrud extends AbstractController
+class VertexCrud extends GenericCrud
 {
-
-    protected $repository;
-
-    public function __construct(VertexRepository $repo)
-    {
-        $this->repository = $repo;
-    }
 
     /**
      * Lists all vertex (and subclasses). The page calls the VertexCrud::filter controller with AJAX
@@ -77,23 +68,7 @@ class VertexCrud extends AbstractController
      */
     public function create(Request $request): Response
     {
-        $obj = null;
-        if ($request->query->has('title')) {
-            $title = $request->query->get('title');
-            $obj = new Vertex(ucfirst($title));
-        }
-
-        $form = $this->createForm(VertexType::class, $obj);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $vertex = $form->getData();
-            $this->repository->save($vertex);
-
-            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
-        }
-
-        return $this->render('vertex/create.html.twig', ['form' => $form->createView()]);
+        return $this->handleCreate(VertexType::class, 'vertex/create.html.twig', $request);
     }
 
     /**
@@ -104,10 +79,10 @@ class VertexCrud extends AbstractController
     {
         $vertex = $this->repository->findByPk($pk);
         $form = $this->createFormBuilder($vertex)
-            ->add('content', TextareaType::class, ['attr' => ['rows' => 32]])
-            ->add('edit', SubmitType::class)
-            ->setMethod('PUT')
-            ->getForm();
+                ->add('content', TextareaType::class, ['attr' => ['rows' => 32]])
+                ->add('edit', SubmitType::class)
+                ->setMethod('PUT')
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -128,9 +103,9 @@ class VertexCrud extends AbstractController
     {
         $vertex = $this->repository->findByPk($pk);
         $form = $this->createFormBuilder($vertex)
-            ->add('delete', SubmitType::class)
-            ->setMethod('DELETE')
-            ->getForm();
+                ->add('delete', SubmitType::class)
+                ->setMethod('DELETE')
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -167,8 +142,8 @@ class VertexCrud extends AbstractController
 
         $finder = new Finder();
         $it = $finder->in(join_paths($this->getParameter('kernel.project_dir'), 'public/upload'))
-            ->files()
-            ->name("/$title/i");
+                ->files()
+                ->name("/$title/i");
 
         $choice = [];
         foreach ($it as $fch) {
@@ -217,10 +192,10 @@ class VertexCrud extends AbstractController
         $backlinks = $this->repository->searchByBacklinks($vertex->getTitle());
 
         $form = $this->createFormBuilder($vertex)
-            ->add('title', TextType::class, ['label' => 'Nouveau nom'])
-            ->add('rename', SubmitType::class)
-            ->setMethod('PUT')
-            ->getForm();
+                ->add('title', TextType::class, ['label' => 'Nouveau nom'])
+                ->add('rename', SubmitType::class)
+                ->setMethod('PUT')
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -253,6 +228,11 @@ class VertexCrud extends AbstractController
         $listing = $this->repository->findByClass([\App\Entity\Ali::class, \App\Entity\Transhuman::class]);
 
         return $this->render('tracker.html.twig', ['listing' => $listing]);
+    }
+
+    protected function createEntity(string $title): Vertex
+    {
+        return new Vertex($title);
     }
 
 }
