@@ -67,7 +67,7 @@ services:
     App\Service\OpenAi:
         arguments:
             $secret: '%env(resolve:OPENAI_SECRETKEY)%'
-            $engine: 'ada'
+            $engine: 'davinci'
             
    # FLAT FILE SECTION
     app.choicetype.repository:
