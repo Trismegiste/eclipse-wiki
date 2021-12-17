@@ -33,7 +33,7 @@ class GmHelperTest extends WebTestCase
                 "choice4" => "4"
         ]]);
         $crawler = $client->submit($form);
-        $this->assertEquals('Cher ABCD,', $crawler->filterXPath("//article/p[1]")->text());
+        $this->assertEquals('Cher ABCD,', $crawler->filterXPath("//p[1]")->text());
     }
 
     public function testNameGenerate()
