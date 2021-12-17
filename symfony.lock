@@ -350,6 +350,9 @@
     "symfony/polyfill-php81": {
         "version": "v1.23.0"
     },
+    "symfony/process": {
+        "version": "v5.3.12"
+    },
     "symfony/profiler-pack": {
         "version": "v1.0.6"
     },
