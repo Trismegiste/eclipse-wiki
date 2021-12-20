@@ -7,7 +7,7 @@
             // Link strategy for image
             match: /(.*)\[\[file\:([^\]]+)$/,
             search: function (term, callback) {
-                fetch('{{ path('app_vertexcrud_image') }}' + '?q=' + term)
+                fetch('{{ path('app_picture_search') }}' + '?q=' + term)
                         .then((response) => {
                             return response.json();
                         })

@@ -9,7 +9,6 @@ namespace App\Controller;
 use App\Entity\Vertex;
 use App\Form\VertexType;
 use App\Twig\SaWoExtension;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -128,27 +127,6 @@ class VertexCrud extends GenericCrud
         array_walk($choice, function (&$v, $k) {
             $v = $v->title;
         });
-
-        return new JsonResponse($choice);
-    }
-
-    /**
-     * Ajax for searching local images
-     * @Route("/image/search", methods={"GET"})
-     */
-    public function image(Request $request): JsonResponse
-    {
-        $title = $request->query->get('q', '');
-
-        $finder = new Finder();
-        $it = $finder->in(join_paths($this->getParameter('kernel.project_dir'), 'public/upload'))
-                ->files()
-                ->name("/$title/i");
-
-        $choice = [];
-        foreach ($it as $fch) {
-            $choice[] = $fch->getBasename();
-        }
 
         return new JsonResponse($choice);
     }

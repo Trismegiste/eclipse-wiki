@@ -1,0 +1,19 @@
+{# show picture #}
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <h1 class="big-title">{{ img }}</h1>
+    <img src="/upload/{{ img }}"/>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        img {
+            display: block;
+            max-height: 90vh;
+            max-width: 90vw;
+            margin: 0 auto;
+        }
+    </style>
+{% endblock %}
