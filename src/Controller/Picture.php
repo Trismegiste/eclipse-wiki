@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -43,9 +45,28 @@ class Picture extends AbstractController
      * Show image
      * @Route("/picture/show/{title}", methods={"GET"})
      */
-    public function show(string $title): \Symfony\Component\HttpFoundation\Response
+    public function show(string $title): Response
     {
         return $this->render('picture/show.html.twig', ['img' => $title]);  // @todo security issue
+    }
+
+    /**
+     * Send an image to external device
+     * @Route("/picture/send/{title}", methods={"GET"})
+     */
+    public function bluetooth(string $title): Response
+    {
+        $process = new Process(['obexftp',
+            '--nopath',
+            '--noconn',
+            '--uuid', 'none',
+            '--bluetooth', '90:78:B2:34:3C:58',
+            '--channel', 12,
+            '--put', join_paths($this->getParameter('kernel.project_dir'), 'public/upload', $title)
+        ]);
+        $process->run();
+
+        return $this->render('picture/show.html.twig', ['img' => $title]);
     }
 
 }

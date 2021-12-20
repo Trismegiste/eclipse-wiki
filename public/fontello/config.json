@@ -373,6 +373,12 @@
       "search": [
         "stopwatch"
       ]
+    },
+    {
+      "uid": "9a0873ae5167deefbf38061b7cddbe34",
+      "css": "bluetooth",
+      "code": 62100,
+      "src": "fontawesome"
     }
   ]
 }

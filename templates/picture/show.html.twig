@@ -2,7 +2,12 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    <h1 class="big-title">{{ img }}</h1>
+    <h1 class="big-title">
+        <nav style="float: right">
+            <a href="{{ path('app_picture_bluetooth', {title: img}) }}" title="Envoyer en Bluetooth"><i class="icon-bluetooth"></i></a>
+        </nav>   
+        {{ img }}
+    </h1>
     <img src="/upload/{{ img }}"/>
 {% endblock %}
 

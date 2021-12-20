@@ -36,5 +36,14 @@
             location.assign('{{ path('app_vertexcrud_edit', {pk: vertex.pk}) }}')
             return false
         });
+
+        let pictures = document.querySelectorAll('.thumb a')
+        pictures.forEach((picture) => {
+            let url = picture.href
+            picture.addEventListener('click', (event) => {
+                fetch(url)
+                event.preventDefault()
+            })
+        })
     </script>
 {% endblock %}
