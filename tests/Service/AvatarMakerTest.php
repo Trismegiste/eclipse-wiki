@@ -22,7 +22,10 @@ class AvatarMakerTest extends TestCase
 
     protected function createNpc(): Transhuman
     {
-        return new Transhuman('test', $this->createStub(Background::class), $this->createStub(Faction::class));
+        $obj = new Transhuman('test', $this->createStub(Background::class), $this->createStub(Faction::class));
+        $obj->economy = ['Toto' => 1, 'Yolo' => 2, 'Zog' => 3];
+
+        return $obj;
     }
 
     public function testFindImage()
@@ -46,7 +49,7 @@ class AvatarMakerTest extends TestCase
         $res = $this->sut->generate($npc, join_paths(__DIR__, 'avatar.png'));
         imagejpeg($res, $target);
         $this->assertFileExists($target);
-        unlink($target);
+        //    unlink($target);
     }
 
 }
