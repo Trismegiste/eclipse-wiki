@@ -54,19 +54,20 @@ class Picture extends AbstractController
      * Send an image to external device
      * @Route("/picture/send/{title}", methods={"GET"})
      */
-    public function bluetooth(string $title): Response
+    public function bluetooth(string $title): JsonResponse
     {
+        $bluetooth = $this->getParameter('auxiliary_screen');
         $process = new Process(['obexftp',
             '--nopath',
             '--noconn',
             '--uuid', 'none',
-            '--bluetooth', '90:78:B2:34:3C:58',
-            '--channel', 12,
+            '--bluetooth', $bluetooth['mac'],
+            '--channel', $bluetooth['channel'],
             '--put', join_paths($this->getParameter('kernel.project_dir'), 'public/upload', $title)
         ]);
         $process->run();
 
-        return $this->render('picture/show.html.twig', ['img' => $title]);
+        return new JsonResponse(null, 200);
     }
 
 }
