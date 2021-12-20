@@ -25,9 +25,10 @@ class Bluetooth extends Command
     protected function configure(): void
     {
         $this
-                ->addArgument('addr', InputArgument::REQUIRED)
-                ->addArgument('file', InputArgument::REQUIRED)
-                ->setDescription('Bluetooth');
+            ->addArgument('addr', InputArgument::REQUIRED)
+            ->addArgument('channel', InputArgument::REQUIRED)
+            ->addArgument('file', InputArgument::REQUIRED)
+            ->setDescription('Bluetooth');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -37,12 +38,13 @@ class Bluetooth extends Command
             '--noconn',
             '--uuid', 'none',
             '--bluetooth', $input->getArgument('addr'),
-            '--channel', 12,
+            '--channel', $input->getArgument('channel'),
             '--put', $input->getArgument('file')]);
         $process->run();
 
         // sdptool search --bdaddr 90:78:B2:34:3C:58 OPUSH | grep "Channel"
-
+        // https://doc.ubuntu-fr.org/bluetooth
+        
         return 0;
     }
 
