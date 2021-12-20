@@ -12,10 +12,6 @@ parameters:
         - [chinese, random]
         - [random, random]
         
-    auxiliary_screen:
-        mac: '%env(resolve:BLUETOOTH_MAC)%'
-        channel: '%env(resolve:BLUETOOTH_CHANNEL)%'
-        
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -82,4 +78,9 @@ services:
    # Custom Types
     App\Form\Type\FullTextChoice:
         arguments:
-            $repo: '@app.choicetype.repository'                        
+            $repo: '@app.choicetype.repository'
+            
+    App\Service\ObjectPushProcessFactory:
+        arguments:
+            $mac: '%env(resolve:BLUETOOTH_MAC)%'
+            $chan: '%env(resolve:BLUETOOTH_CHANNEL)%'

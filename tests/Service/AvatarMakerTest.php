@@ -49,7 +49,7 @@ class AvatarMakerTest extends TestCase
         $res = $this->sut->generate($npc, join_paths(__DIR__, 'avatar.png'));
         imagejpeg($res, $target);
         $this->assertFileExists($target);
-        //    unlink($target);
+        unlink($target);
     }
 
 }

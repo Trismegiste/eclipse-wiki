@@ -6,12 +6,12 @@
 
 namespace App\Controller;
 
+use App\Service\ObjectPushProcessFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -29,9 +29,9 @@ class Picture extends AbstractController
         $title = $request->query->get('q', '');
 
         $finder = new Finder();
-        $it = $finder->in(join_paths($this->getParameter('kernel.project_dir'), 'public/upload'))
-                ->files()
-                ->name("/$title/i");
+        $it = $finder->in(\join_paths($this->getParameter('kernel.project_dir'), 'public/upload'))
+            ->files()
+            ->name("/$title/i");
 
         $choice = [];
         foreach ($it as $fch) {
@@ -54,17 +54,9 @@ class Picture extends AbstractController
      * Send an image to external device
      * @Route("/picture/send/{title}", methods={"GET"})
      */
-    public function bluetooth(string $title): JsonResponse
+    public function bluetooth(string $title, ObjectPushProcessFactory $fac): JsonResponse
     {
-        $bluetooth = $this->getParameter('auxiliary_screen');
-        $process = new Process(['obexftp',
-            '--nopath',
-            '--noconn',
-            '--uuid', 'none',
-            '--bluetooth', $bluetooth['mac'],
-            '--channel', $bluetooth['channel'],
-            '--put', join_paths($this->getParameter('kernel.project_dir'), 'public/upload', $title)
-        ]);
+        $process = $fac->create(\join_paths($this->getParameter('kernel.project_dir'), 'public/upload', $title));
         $process->run();
 
         return new JsonResponse(null, 200);
