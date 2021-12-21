@@ -30,7 +30,7 @@ class AvatarMaker
         return $found;
     }
 
-    public function generate(Transhuman $npc, string $image)
+    public function generate(Transhuman $npc, string $image, string $socNetFolder)
     {
         if (!file_exists($image)) {
             throw new \RuntimeException("$image does not exist");
@@ -49,15 +49,15 @@ class AvatarMaker
         $txt = sprintf('Follow %s', $npc->getTitle());
         list($left,, $right,,, ) = imageftbbox($size, 0, $this->font, $txt);
         $calcSize = $size / ($right - $left) * $this->width * 0.9;
-        if ($calcSize > 80) {
-            $calcSize = 80;
+        if ($calcSize > 100) {
+            $calcSize = 100;
         }
         list($left,, $right,,, ) = imageftbbox($calcSize, 0, $this->font, $txt);
         imagefttext($target, $calcSize, 0, $this->width / 2 - ($right - $left) / 2, $this->height * 0.7, $fg, $this->font, $txt);
 
         // economy
         $economy = $npc->economy;
-        array_shift($economy);
+        unset($economy['Ressource']);
         uasort($economy, function ($a, $b) {
             return $b - $a;
         });
@@ -74,7 +74,7 @@ class AvatarMaker
             $txtPos += $this->width / 3;
 
             // icon
-            $socnet = imagecreatefromstring(file_get_contents('/home/flo/Develop/eclipse-wiki/public/socnet/' . $key . '.png'));
+            $socnet = imagecreatefromstring(file_get_contents(join_paths($socNetFolder, $key . '.png')));
             $resized = imagescale($socnet, $this->width / 4, -1, IMG_GAUSSIAN);
             imagecopy($target, $resized, $imgPos, $this->height * 0.78, 0, 0, $this->width / 4, $this->width / 4);
             $imgPos += $this->width / 3;
