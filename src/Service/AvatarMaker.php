@@ -42,22 +42,8 @@ class AvatarMaker
         $resized = imagescale($source, $this->width, -1, IMG_GAUSSIAN);
         imagecopy($target, $resized, 0, 0, 0, 0, $this->width, $this->width);
 
-        // economy
-        $economy = $npc->economy;
-        uasort($economy, function ($a, $b) {
-            return $b - $a;
-        });
-        $economy = array_slice($economy, 0, 3);
-
-        $fg = imagecolorallocate($target, 0x00, 0x00, 0x00);
-        $xPos = $this->width / 6;
         $size = 80;
-        foreach ($economy as $key => $val) {
-            $txt = sprintf('%d', $val);
-            list($left,, $right,,, ) = imageftbbox($size, 0, $this->font, $txt);
-            imagefttext($target, $size, 0, $xPos - ($right - $left) / 2, $this->height * 0.9, $fg, $this->font, $txt);
-            $xPos += $this->width / 3;
-        }
+        $fg = imagecolorallocate($target, 0x00, 0x00, 0x00);
 
         // title
         $txt = sprintf('Follow %s', $npc->getTitle());
@@ -67,9 +53,43 @@ class AvatarMaker
             $calcSize = 80;
         }
         list($left,, $right,,, ) = imageftbbox($calcSize, 0, $this->font, $txt);
-        imagefttext($target, $calcSize, 0, $this->width / 2 - ($right - $left) / 2, $this->height * 0.65, $fg, $this->font, $txt);
+        imagefttext($target, $calcSize, 0, $this->width / 2 - ($right - $left) / 2, $this->height * 0.7, $fg, $this->font, $txt);
+
+        // economy
+        $economy = $npc->economy;
+        array_shift($economy);
+        uasort($economy, function ($a, $b) {
+            return $b - $a;
+        });
+        $economy = array_slice($economy, 0, 3);
+
+        $txtPos = $this->width / 6;
+        $imgPos = $this->width / 24;
+        $size = 40;
+        foreach ($economy as $key => $val) {
+            // text
+            $txt = $this->printFollowers(10 ** ($val - random_int(15, 75) / 100.0));
+            list($left,, $right,,, ) = imageftbbox($size, 0, $this->font, $txt);
+            imagefttext($target, $size, 0, $txtPos - ($right - $left) / 2, $this->height * 0.97, $fg, $this->font, $txt);
+            $txtPos += $this->width / 3;
+
+            // icon
+            $socnet = imagecreatefromstring(file_get_contents('/home/flo/Develop/eclipse-wiki/public/socnet/' . $key . '.png'));
+            $resized = imagescale($socnet, $this->width / 4, -1, IMG_GAUSSIAN);
+            imagecopy($target, $resized, $imgPos, $this->height * 0.78, 0, 0, $this->width / 4, $this->width / 4);
+            $imgPos += $this->width / 3;
+        }
 
         return $target;
+    }
+
+    const coeff = ['', 'k', 'M', 'G', 'T', 'P'];
+
+    private function printFollowers(int $num): string
+    {
+        $multiplier = (int) floor(log10($num) / 3);
+
+        return sprintf($multiplier !== 0 ? '%.1f%s' : '%d', \round($num / (10 ** (3 * $multiplier)), 2), self::coeff[$multiplier]);
     }
 
 }

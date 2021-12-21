@@ -12,15 +12,17 @@ use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 
 /**
- * Description of TraitProvider
- *
- * @author flo
+ * Provider for all Traits : Attributes, Skills & Social Networks
  */
 class TraitProvider
 {
 
     protected $wiki;
     protected $cache;
+
+    const skillCategory = 'Compétence';
+    const attributesPage = 'Attributs';
+    const socNetCategory = 'Réseau social';
 
     public function __construct(MediaWiki $param, CacheInterface $cache)
     {
@@ -33,7 +35,7 @@ class TraitProvider
         $skills = $this->cache->get('skill_list', function (ItemInterface $item) {
             $item->expiresAfter(DateInterval::createFromDateString('1 day'));
 
-            return $this->wiki->searchPageFromCategory('Compétence', 50);
+            return $this->wiki->searchPageFromCategory(self::skillCategory, 50);
         });
 
         $listing = [];
@@ -47,21 +49,21 @@ class TraitProvider
     public function findAttributes(): array
     {
         return $this->cache->get('attribute_list', function (ItemInterface $item) {
-                $item->expiresAfter(DateInterval::createFromDateString('1 day'));
+                    $item->expiresAfter(DateInterval::createFromDateString('1 day'));
 
-                $content = $this->wiki->getPageByName('Attributs');
-                $doc = new \DOMDocument("1.0", "utf-8");
-                $doc->loadXML($content);
-                $xpath = new \DOMXpath($doc);
-                $elements = $xpath->query("//tr/td[1]");
+                    $content = $this->wiki->getPageByName(self::attributesPage);
+                    $doc = new \DOMDocument("1.0", "utf-8");
+                    $doc->loadXML($content);
+                    $xpath = new \DOMXpath($doc);
+                    $elements = $xpath->query("//tr/td[1]");
 
-                for ($k = 0; $k < 5; $k++) {
-                    $name = trim($elements->item($k)->textContent);
-                    $listing[$name] = $name;
-                }
+                    for ($k = 0; $k < 5; $k++) {
+                        $name = trim($elements->item($k)->textContent);
+                        $listing[$name] = $name;
+                    }
 
-                return $listing;
-            });
+                    return $listing;
+                });
     }
 
     public function findSocialNetworks(): array
@@ -69,7 +71,7 @@ class TraitProvider
         $skills = $this->cache->get('socialnetwork_list', function (ItemInterface $item) {
             $item->expiresAfter(DateInterval::createFromDateString('1 day'));
 
-            return $this->wiki->searchPageFromCategory('Réseau social', 10);
+            return $this->wiki->searchPageFromCategory(self::socNetCategory, 10);
         });
 
         $listing = [];

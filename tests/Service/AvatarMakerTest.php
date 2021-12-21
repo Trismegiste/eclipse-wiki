@@ -22,8 +22,8 @@ class AvatarMakerTest extends TestCase
 
     protected function createNpc(): Transhuman
     {
-        $obj = new Transhuman('Motoko', $this->createStub(Background::class), $this->createStub(Faction::class));
-        $obj->economy = ['Toto' => 1, 'Yolo' => 2, 'Zog' => 3];
+        $obj = new Transhuman('Alice Blue', $this->createStub(Background::class), $this->createStub(Faction::class));
+        $obj->economy = ['Ressource' => 0, 'L\'Œil' => 4, 'CivicNet' => 6, 'Guanxi' => 9];
 
         return $obj;
     }
