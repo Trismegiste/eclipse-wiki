@@ -16,7 +16,7 @@ class AvatarMaker
 
     protected $height = 1600;
     protected $width = 900;
-    protected $font = '/usr/share/fonts/truetype/freefont/FreeSans.ttf';
+    protected $font = __DIR__ . '/OpenSansCondensed-Light.ttf';
 
     public function getImageChoice(Transhuman $npc): array
     {
@@ -37,7 +37,7 @@ class AvatarMaker
         }
         $source = imagecreatefromstring(file_get_contents($image));
         $target = imagecreatetruecolor($this->width, $this->height);
-        $bg = imagecolorallocate($target, 0xf0, 0xf0, 0xf0);
+        $bg = imagecolorallocate($target, 0xf7, 0xf7, 0xf7);
         imagefill($target, 0, 0, $bg);
         $resized = imagescale($source, $this->width, -1, IMG_GAUSSIAN);
         imagecopy($target, $resized, 0, 0, 0, 0, $this->width, $this->width);
