@@ -58,8 +58,16 @@ class AvatarMaker
         imagefttext($target, $calcSize, 0, $this->width / 2 - ($right - $left) / 2, $this->height * 0.7, $fg, $this->font, $txt);
 
         // economy
-        $economy = $npc->economy;
-        unset($economy['Ressource']);
+        $economy = array_filter($npc->economy, function ($val, $key) {
+            if ($key === 'Ressource') {
+                return false;
+            }
+            if (empty($val)) {
+                return false;
+            }
+
+            return true;
+        }, ARRAY_FILTER_USE_BOTH);
         uasort($economy, function ($a, $b) {
             return $b - $a;
         });

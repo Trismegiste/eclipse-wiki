@@ -27,6 +27,7 @@
 .icon-dead:before { content: '\e820'; } /* '' */
 .icon-token:before { content: '\e821'; } /* '' */
 .icon-stopwatch:before { content: '\e822'; } /* '' */
+.icon-loveletter:before { content: '\e828'; } /* '' */
 .icon-spin3:before { content: '\e832'; } /* '' */
 .icon-duplicate:before { content: '\f0c5'; } /* '' */
 .icon-menu:before { content: '\f0c9'; } /* '' */
@@ -36,4 +37,5 @@
 .icon-heartbeat:before { content: '\f21e'; } /* '' */
 .icon-user-plus:before { content: '\f234'; } /* '' */
 .icon-bluetooth:before { content: '\f294'; } /* '' */
+.icon-profile:before { content: '\f2bc'; } /* '' */
 .icon-eye:before { content: '🔧'; } /* '\1f527' */

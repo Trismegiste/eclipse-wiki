@@ -45,7 +45,6 @@ class AvatarMakerTest extends TestCase
         }
 
         $npc = $this->createNpc();
-        $npc->economy;
         $res = $this->sut->generate($npc, join_paths(__DIR__, 'avatar.png'), './public/socnet/');
         imagejpeg($res, $target);
         $this->assertFileExists($target);

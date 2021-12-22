@@ -29,9 +29,9 @@ class Picture extends AbstractController
         $title = $request->query->get('q', '');
 
         $finder = new Finder();
-        $it = $finder->in(\join_paths($this->getParameter('kernel.project_dir'), 'public/upload'))
-            ->files()
-            ->name("/$title/i");
+        $it = $finder->in($this->getUploadDir())
+                ->files()
+                ->name("/$title/i");
 
         $choice = [];
         foreach ($it as $fch) {
@@ -56,10 +56,38 @@ class Picture extends AbstractController
      */
     public function bluetooth(string $title, ObjectPushProcessFactory $fac): JsonResponse
     {
-        $process = $fac->create(\join_paths($this->getParameter('kernel.project_dir'), 'public/upload', $title));
+        $process = $fac->create(\join_paths($this->getUploadDir(), $title));
         $process->run();
 
         return new JsonResponse(null, 200);
+    }
+
+    protected function getUploadDir(): string
+    {
+        return \join_paths($this->getParameter('kernel.project_dir'), 'public/upload');
+    }
+
+    /**
+     * Create an avatar for NPC
+     * @Route("/profile/generate/{pk}", methods={"GET","POST"})
+     */
+    public function avatar(string $pk, Request $request, \App\Repository\VertexRepository $repo): Response
+    {
+        $npc = $repo->findByPk($pk);
+
+        $maker = new \App\Service\AvatarMaker();
+        $image = $maker->getImageChoice($npc);
+        if (count($image) !== 0) {
+            $choice = array_key_first($image);
+            $avatar = $maker->generate($npc, \join_paths($this->getUploadDir(), $choice), \join_paths($this->getParameter('kernel.project_dir'), 'public/socnet'));
+            $filename = $npc->getTitle() . '-avatar.jpg';
+            imagejpeg($avatar, \join_paths($this->getUploadDir(), $filename));
+
+            $npc->setContent($npc->getContent() . "\n==Avatar==\n[[file:$filename]]\n");
+            $repo->save($npc);
+        }
+
+        return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $pk]);
     }
 
 }
