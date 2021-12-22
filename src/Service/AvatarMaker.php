@@ -39,7 +39,9 @@ class AvatarMaker
         $target = imagecreatetruecolor($this->width, $this->height);
         $bg = imagecolorallocate($target, 0xf7, 0xf7, 0xf7);
         imagefill($target, 0, 0, $bg);
-        $resized = imagescale($source, $this->width, -1, IMG_GAUSSIAN);
+
+        $filter = new \Trismegiste\ImageTools\Entropy\Filter\SmartCrop($this->width, $this->width);
+        $resized = $filter->apply($source);
         imagecopy($target, $resized, 0, 0, 0, 0, $this->width, $this->width);
 
         $size = 80;

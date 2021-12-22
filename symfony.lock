@@ -470,6 +470,9 @@
     "trismegiste/rpg-name-generator": {
         "version": "dev-master"
     },
+    "trismegiste/smart-crop": {
+        "version": "v1.0"
+    },
     "trismegiste/toolbox": {
         "version": "dev-master"
     },

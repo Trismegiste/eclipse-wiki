@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f5263da9e30af3de0511b5c6dfbcf20c",
+    "content-hash": "ebee1759ca4a2ab550336ef59dfd425f",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -4724,6 +4724,39 @@
                 "source": "https://github.com/Trismegiste/rpg-name-generator/tree/v1.0"
             },
             "time": "2021-11-24T19:43:07+00:00"
+        },
+        {
+            "name": "trismegiste/smart-crop",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Trismegiste/PHP-Smart-Crop.git",
+                "reference": "dfdecaf8f8afeb91c540df2cce71d0df97db5ea1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Trismegiste/PHP-Smart-Crop/zipball/dfdecaf8f8afeb91c540df2cce71d0df97db5ea1",
+                "reference": "dfdecaf8f8afeb91c540df2cce71d0df97db5ea1",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Trismegiste\\ImageTools\\Entropy\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Image smart crop filter based on entropy",
+            "support": {
+                "source": "https://github.com/Trismegiste/PHP-Smart-Crop/tree/v1.0"
+            },
+            "time": "2021-12-22T09:47:28+00:00"
         },
         {
             "name": "trismegiste/toolbox",
