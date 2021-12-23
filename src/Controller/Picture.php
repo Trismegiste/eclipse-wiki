@@ -126,9 +126,15 @@ class Picture extends AbstractController
                     'width' => min($width, $height),
                     'height' => min($width, $height)
                 ]);
+
                 return new StreamedResponse(function () use ($crop) {
                             imagejpeg($crop);
                         }, Response::HTTP_OK, ['Content-type' => 'image/jpeg']);
+
+            case 'face':
+                $detector = new \Sensi\Facial\Detector();
+                $detector->faceDetect($source);
+                $detector->toJpeg();
         }
     }
 
