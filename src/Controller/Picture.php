@@ -6,13 +6,18 @@
 
 namespace App\Controller;
 
+use App\Repository\VertexRepository;
+use App\Service\AvatarMaker;
 use App\Service\ObjectPushProcessFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Trismegiste\ImageTools\Entropy\Filter\SmartCrop;
 
 /**
  * Controller for pictures
@@ -71,11 +76,11 @@ class Picture extends AbstractController
      * Create an avatar for NPC
      * @Route("/profile/generate/{pk}", methods={"GET","POST"})
      */
-    public function avatar(string $pk, Request $request, \App\Repository\VertexRepository $repo): Response
+    public function avatar(string $pk, Request $request, VertexRepository $repo): Response
     {
         $npc = $repo->findByPk($pk);
 
-        $maker = new \App\Service\AvatarMaker();
+        $maker = new AvatarMaker();
         $image = $maker->getImageChoice($npc);
         if (count($image) !== 0) {
             $choice = array_key_first($image);
@@ -88,6 +93,43 @@ class Picture extends AbstractController
         }
 
         return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $pk]);
+    }
+
+    /**
+     * Get a picture with a format/filter
+     * @Route("/picture/{title}/{filter}", methods={"GET"})
+     */
+    public function sendPicture(string $title, string $filter): Response
+    {
+        $source = \join_paths($this->getUploadDir(), $title);
+
+        if ($filter === 'original') {
+            return new BinaryFileResponse($source);
+        }
+
+        list($width, $height, $image_type) = getimagesize($source);
+        $img = imagecreatefromstring(file_get_contents($source));
+        switch ($filter) {
+            case 'entropy' :
+                $edge = min($width, $height);
+                $filter = new SmartCrop($edge, $edge);
+                $resized = $filter->apply($img);
+
+                return new StreamedResponse(function () use ($resized) {
+                            imagejpeg($resized);
+                        }, Response::HTTP_OK, ['Content-type' => 'image/jpeg']);
+
+            case 'center' :
+                $crop = imagecrop($img, [
+                    'x' => max(($width - $height) / 2, 0),
+                    'y' => max(($height - $width) / 2, 0),
+                    'width' => min($width, $height),
+                    'height' => min($width, $height)
+                ]);
+                return new StreamedResponse(function () use ($crop) {
+                            imagejpeg($crop);
+                        }, Response::HTTP_OK, ['Content-type' => 'image/jpeg']);
+        }
     }
 
 }

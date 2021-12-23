@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ebee1759ca4a2ab550336ef59dfd425f",
+    "content-hash": "237303a4d99e5369d7a2153665d93b67",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -421,20 +421,20 @@
         },
         {
             "name": "psr/container",
-            "version": "1.1.1",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/container.git",
-                "reference": "8622567409010282b7aeebe4bb841fe98b58dcaf"
+                "reference": "513e0666f7216c7459170d56df27dfcefe1689ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/container/zipball/8622567409010282b7aeebe4bb841fe98b58dcaf",
-                "reference": "8622567409010282b7aeebe4bb841fe98b58dcaf",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/513e0666f7216c7459170d56df27dfcefe1689ea",
+                "reference": "513e0666f7216c7459170d56df27dfcefe1689ea",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2.0"
+                "php": ">=7.4.0"
             },
             "type": "library",
             "autoload": {
@@ -463,9 +463,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-fig/container/issues",
-                "source": "https://github.com/php-fig/container/tree/1.1.1"
+                "source": "https://github.com/php-fig/container/tree/1.1.2"
             },
-            "time": "2021-03-05T17:36:06+00:00"
+            "time": "2021-11-05T16:50:12+00:00"
         },
         {
             "name": "psr/event-dispatcher",
@@ -566,6 +566,55 @@
                 "source": "https://github.com/php-fig/log/tree/1.1.4"
             },
             "time": "2021-05-03T11:20:27+00:00"
+        },
+        {
+            "name": "sensimedia/facial",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Sensi-Media/facial.git",
+                "reference": "fb857ce4d2f354140302d0a03cf7a8f641ebb96e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Sensi-Media/facial/zipball/fb857ce4d2f354140302d0a03cf7a8f641ebb96e",
+                "reference": "fb857ce4d2f354140302d0a03cf7a8f641ebb96e",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gd": "*",
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "toast/unit": "^2.1"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Sensi\\Facial\\": "./src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Maurice Svay",
+                    "homepage": "https://github.com/mauricesvay/php-facedetection/graphs/contributors"
+                },
+                {
+                    "name": "Marijn Ophorst",
+                    "homepage": "https://github.com/Sensi-Media/facial/graphs/contributors"
+                }
+            ],
+            "description": "PHP class to detect one face in images. A pure PHP port of an existing JS code from Karthik Tharavad.",
+            "homepage": "https://github.com/Sensi-Media/facial",
+            "support": {
+                "source": "https://github.com/Sensi-Media/facial/tree/0.4.0"
+            },
+            "time": "2020-04-11T15:18:45+00:00"
         },
         {
             "name": "sensio/framework-extra-bundle",
@@ -7674,7 +7723,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "mike42/wikitext": 20
+        "mike42/wikitext": 20,
+        "sensimedia/facial": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
