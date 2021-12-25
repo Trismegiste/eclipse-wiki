@@ -6,18 +6,18 @@
 
 namespace App\Controller;
 
+use App\Form\ProfilePic;
 use App\Repository\VertexRepository;
 use App\Service\AvatarMaker;
 use App\Service\ObjectPushProcessFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Trismegiste\ImageTools\Entropy\Filter\SmartCrop;
 
 /**
  * Controller for pictures
@@ -81,25 +81,18 @@ class Picture extends AbstractController
         $npc = $repo->findByPk($pk);
         $maker = new AvatarMaker();
 
-        $form = $this->createFormBuilder($npc)
-            ->add('avatar', \Symfony\Component\Form\Extension\Core\Type\FileType::class, [
-                'mapped' => false,
-                'attr' => ['x-on:change' => 'readFile($el)']
-            ])
-            ->add('content', \Symfony\Component\Form\Extension\Core\Type\HiddenType::class)
-            ->add('generate', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
-            ->getForm();
+        $form = $this->createForm(ProfilePic::class, $npc);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $avatarFile */
+            /** @var UploadedFile $avatarFile */
             $avatarFile = $form->get('avatar')->getData();
             $socNetFolder = \join_paths($this->getParameter('kernel.project_dir'), 'public/socnet');
             $profilePic = $maker->generate($npc, $avatarFile->getPathname(), $socNetFolder);
             $filename = $npc->getTitle() . '-avatar.jpg';
             imagejpeg($profilePic, \join_paths($this->getUploadDir(), $filename));
 
-            return new \Symfony\Component\HttpFoundation\RedirectResponse($this->generateUrl('app_vertexcrud_show', ['pk' => $pk]));
+            return new RedirectResponse($this->generateUrl('app_vertexcrud_show', ['pk' => $pk]));
         }
 
         return $this->render('picture/profile.html.twig', ['form' => $form->createView()]);

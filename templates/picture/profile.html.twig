@@ -2,7 +2,7 @@
 {% extends "base.html.twig" %}
 {% form_theme form _self %}
 
-{% block _form_avatar_row %}
+{% block _profile_pic_avatar_row %}
     {{ block('form_row') }}
     <div id="cropper"></div>
 {% endblock %}
@@ -54,13 +54,13 @@
         }
 
         // sending form in ajax
-        document.getElementById('form_generate').addEventListener('click', function (e) {
+        document.getElementById('profile_pic_generate').addEventListener('click', function (e) {
             e.preventDefault()
             let uploadForm = document.querySelector('article form')
             let data = new FormData(uploadForm)
 
             uploadCrop.result('base64').then(function (dataUrl) {
-                data.set('form[avatar]', dataURLtoFile(dataUrl, 'avatar.png'))
+                data.set('profile_pic[avatar]', dataURLtoFile(dataUrl, 'avatar.png'))
                 fetch(uploadForm.action, {
                     method: 'post',
                     body: data,
