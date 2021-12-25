@@ -14,8 +14,8 @@ use App\Entity\Transhuman;
 class AvatarMaker
 {
 
-    protected $height = 1600;
-    protected $width = 900;
+    protected $height = 1066;
+    protected $width = 600;
     protected $font = __DIR__ . '/OpenSansCondensed-Light.ttf';
 
     public function getImageChoice(Transhuman $npc): array
@@ -78,7 +78,7 @@ class AvatarMaker
         $size = 40;
         foreach ($economy as $key => $val) {
             // text
-            $txt = $this->printFollowers(10 ** ($val - random_int(15, 75) / 100.0));
+            $txt = $this->printFollowers(10 ** ($val - random_int(10, 90) / 100.0));
             list($left,, $right,,, ) = imageftbbox($size, 0, $this->font, $txt);
             imagefttext($target, $size, 0, $txtPos - ($right - $left) / 2, $this->height * 0.97, $fg, $this->font, $txt);
             $txtPos += $this->width / 3;

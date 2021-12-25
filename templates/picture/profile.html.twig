@@ -1,0 +1,27 @@
+{# generate profile picture #}
+{% extends "base.html.twig" %}
+{% form_theme form _self %}
+
+{% block _form_avatar_widget %}
+    {{ parent() }}
+    yolo
+{% endblock %}
+
+{% block header_title %}
+    {{ include('npc/menu.html.twig', {npc: form.vars.data}) }}
+{% endblock %}
+
+{% block content %}
+    {{ form(form) }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('foliotek/croppie.css') }}" />
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('foliotek/croppie.min.js') }}"></script>
+{% endblock %}
+

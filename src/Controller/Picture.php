@@ -35,8 +35,8 @@ class Picture extends AbstractController
 
         $finder = new Finder();
         $it = $finder->in($this->getUploadDir())
-                ->files()
-                ->name("/$title/i");
+            ->files()
+            ->name("/$title/i");
 
         $choice = [];
         foreach ($it as $fch) {
@@ -99,7 +99,7 @@ class Picture extends AbstractController
      * Get a picture with a format/filter
      * @Route("/picture/{title}/{filter}", methods={"GET"})
      */
-    public function sendPicture(string $title, string $filter): Response
+    public function send(string $title, string $filter): Response
     {
         $source = \join_paths($this->getUploadDir(), $title);
 
@@ -116,8 +116,8 @@ class Picture extends AbstractController
                 $resized = $filter->apply($img);
 
                 return new StreamedResponse(function () use ($resized) {
-                            imagejpeg($resized);
-                        }, Response::HTTP_OK, ['Content-type' => 'image/jpeg']);
+                    imagejpeg($resized);
+                }, Response::HTTP_OK, ['Content-type' => 'image/jpeg']);
 
             case 'center' :
                 $crop = imagecrop($img, [
@@ -128,14 +128,30 @@ class Picture extends AbstractController
                 ]);
 
                 return new StreamedResponse(function () use ($crop) {
-                            imagejpeg($crop);
-                        }, Response::HTTP_OK, ['Content-type' => 'image/jpeg']);
-
-            case 'face':
-                $detector = new \Sensi\Facial\Detector();
-                $detector->faceDetect($source);
-                $detector->toJpeg();
+                    imagejpeg($crop);
+                }, Response::HTTP_OK, ['Content-type' => 'image/jpeg']);
         }
+    }
+
+    /**
+     * Create an avatar for NPC
+     * @Route("/profile/create/{pk}", methods={"GET","POST"})
+     */
+    public function profile(string $pk, Request $request, VertexRepository $repo): Response
+    {
+        $npc = $repo->findByPk($pk);
+        $maker = new AvatarMaker();
+
+        $form = $this->createFormBuilder($npc)
+            ->add('avatar', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+                'mapped' => false,
+                'choices' => $maker->getImageChoice($npc)
+            ])
+            ->add('content', \Symfony\Component\Form\Extension\Core\Type\HiddenType::class)
+            ->add('Generate', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+            ->getForm();
+
+        return $this->render('picture/profile.html.twig', ['form' => $form->createView()]);
     }
 
 }

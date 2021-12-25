@@ -142,9 +142,6 @@
     "sebastian/version": {
         "version": "3.0.2"
     },
-    "sensimedia/facial": {
-        "version": "dev-master"
-    },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
         "recipe": {
