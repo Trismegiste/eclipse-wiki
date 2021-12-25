@@ -91,6 +91,9 @@ class Picture extends AbstractController
             $profilePic = $maker->generate($npc, $avatarFile->getPathname(), $socNetFolder);
             $filename = $npc->getTitle() . '-avatar.jpg';
             imagejpeg($profilePic, \join_paths($this->getUploadDir(), $filename));
+            $append = "\n==Avatar==\n[[file:$filename]]\n";
+            $npc->setContent($npc->getContent() . $append);
+            $repo->save($npc);
 
             return new RedirectResponse($this->generateUrl('app_vertexcrud_show', ['pk' => $pk]));
         }

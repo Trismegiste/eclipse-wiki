@@ -237,6 +237,11 @@
             return false
         });
 
+        Mousetrap.bind('p', function () {
+            location.assign('{{ path('app_picture_profile', {pk: npc.pk}) }}')
+            return false
+        });
+
         document.addEventListener('alpine:init', () => {
             Alpine.data('traitroller', () => ({
                     dice: null,
