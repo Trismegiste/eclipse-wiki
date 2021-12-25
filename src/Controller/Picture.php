@@ -74,67 +74,6 @@ class Picture extends AbstractController
 
     /**
      * Create an avatar for NPC
-     * @Route("/profile/generate/{pk}", methods={"GET","POST"})
-     */
-    public function avatar(string $pk, Request $request, VertexRepository $repo): Response
-    {
-        $npc = $repo->findByPk($pk);
-
-        $maker = new AvatarMaker();
-        $image = $maker->getImageChoice($npc);
-        if (count($image) !== 0) {
-            $choice = array_key_first($image);
-            $avatar = $maker->generate($npc, \join_paths($this->getUploadDir(), $choice), \join_paths($this->getParameter('kernel.project_dir'), 'public/socnet'));
-            $filename = $npc->getTitle() . '-avatar.jpg';
-            imagejpeg($avatar, \join_paths($this->getUploadDir(), $filename));
-
-            $npc->setContent($npc->getContent() . "\n==Avatar==\n[[file:$filename]]\n");
-            $repo->save($npc);
-        }
-
-        return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $pk]);
-    }
-
-    /**
-     * Get a picture with a format/filter
-     * @Route("/picture/{title}/{filter}", methods={"GET"})
-     */
-    public function send(string $title, string $filter): Response
-    {
-        $source = \join_paths($this->getUploadDir(), $title);
-
-        if ($filter === 'original') {
-            return new BinaryFileResponse($source);
-        }
-
-        list($width, $height, $image_type) = getimagesize($source);
-        $img = imagecreatefromstring(file_get_contents($source));
-        switch ($filter) {
-            case 'entropy' :
-                $edge = min($width, $height);
-                $filter = new SmartCrop($edge, $edge);
-                $resized = $filter->apply($img);
-
-                return new StreamedResponse(function () use ($resized) {
-                    imagejpeg($resized);
-                }, Response::HTTP_OK, ['Content-type' => 'image/jpeg']);
-
-            case 'center' :
-                $crop = imagecrop($img, [
-                    'x' => max(($width - $height) / 2, 0),
-                    'y' => max(($height - $width) / 2, 0),
-                    'width' => min($width, $height),
-                    'height' => min($width, $height)
-                ]);
-
-                return new StreamedResponse(function () use ($crop) {
-                    imagejpeg($crop);
-                }, Response::HTTP_OK, ['Content-type' => 'image/jpeg']);
-        }
-    }
-
-    /**
-     * Create an avatar for NPC
      * @Route("/profile/create/{pk}", methods={"GET","POST"})
      */
     public function profile(string $pk, Request $request, VertexRepository $repo): Response
@@ -162,7 +101,15 @@ class Picture extends AbstractController
             return new \Symfony\Component\HttpFoundation\RedirectResponse($this->generateUrl('app_vertexcrud_show', ['pk' => $pk]));
         }
 
-        return $this->render('picture/profile.html.twig', ['form' => $form->createView()]);
+        $img = $maker->getImageChoice($npc);
+        $defaultPic = null;
+        if (count($img)) {
+            $defaultPic = array_key_first($img);
+        }
+        return $this->render('picture/profile.html.twig', [
+                'form' => $form->createView(),
+                'default_pic' => $defaultPic
+        ]);
     }
 
 }

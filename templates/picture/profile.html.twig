@@ -83,6 +83,10 @@
 
             return new File([u8arr], filename, {type: mime});
         }
+
+        {% if default_pic is not empty %}
+            uploadCrop.bind({url: '/upload/{{ default_pic }}'});
+        {% endif %}
     </script>
 {% endblock %}
 
