@@ -14,8 +14,8 @@ use App\Entity\Transhuman;
 class AvatarMaker
 {
 
-    protected $height = 1066;
-    protected $width = 600;
+    protected $height = 894;
+    protected $width = 503;
     protected $font = __DIR__ . '/OpenSansCondensed-Light.ttf';
 
     public function getImageChoice(Transhuman $npc): array
@@ -37,12 +37,9 @@ class AvatarMaker
         }
         $source = imagecreatefromstring(file_get_contents($image));
         $target = imagecreatetruecolor($this->width, $this->height);
-        $bg = imagecolorallocate($target, 0xf7, 0xf7, 0xf7);
+        $bg = imagecolorallocate($target, 0xf0, 0xf0, 0xf0);
         imagefill($target, 0, 0, $bg);
-
-        $filter = new \Trismegiste\ImageTools\Entropy\Filter\SmartCrop($this->width, $this->width);
-        $resized = $filter->apply($source);
-        imagecopy($target, $resized, 0, 0, 0, 0, $this->width, $this->width);
+        imagecopy($target, $source, 0, 0, 0, 0, $this->width, $this->width);
 
         $size = 80;
         $fg = imagecolorallocate($target, 0x00, 0x00, 0x00);
@@ -75,7 +72,7 @@ class AvatarMaker
 
         $txtPos = $this->width / 6;
         $imgPos = $this->width / 24;
-        $size = 40;
+        $size = 32;
         foreach ($economy as $key => $val) {
             // text
             $txt = $this->printFollowers(10 ** ($val - random_int(10, 90) / 100.0));

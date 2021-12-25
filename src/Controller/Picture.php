@@ -148,8 +148,19 @@ class Picture extends AbstractController
                 'attr' => ['x-on:change' => 'readFile($el)']
             ])
             ->add('content', \Symfony\Component\Form\Extension\Core\Type\HiddenType::class)
-            ->add('Generate', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+            ->add('generate', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
             ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $avatarFile */
+            $avatarFile = $form->get('avatar')->getData();
+            $socNetFolder = \join_paths($this->getParameter('kernel.project_dir'), 'public/socnet');
+            $profilePic = $maker->generate($npc, $avatarFile->getPathname(), $socNetFolder);
+            imagejpeg($profilePic, \join_paths($this->getUploadDir(), $npc->getTitle() . '-avatar.jpg'));
+
+            return new \Symfony\Component\HttpFoundation\RedirectResponse($this->generateUrl('app_vertexcrud_show', ['pk' => $pk]));
+        }
 
         return $this->render('picture/profile.html.twig', ['form' => $form->createView()]);
     }

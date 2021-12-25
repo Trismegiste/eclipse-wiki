@@ -25,11 +25,11 @@
     <script>
         var uploadCrop = new Croppie(document.getElementById('cropper'), {
             viewport: {
-                width: 600,
-                height: 600,
+                width: 500,
+                height: 500,
                 type: 'circle'
             },
-            boundary: {width: 600, height: 600},
+            boundary: {width: 500, height: 500},
             enableExif: true
         })
 
@@ -40,7 +40,7 @@
                 reader.onload = function (e) {
                     uploadCrop.bind({url: e.target.result})
                             .then(function () {
-                                console.log('jQuery bind complete')
+                                console.log('Bind complete')
                             })
                 }
 
@@ -48,6 +48,40 @@
             } else {
                 console.log("Sorry - you're browser doesn't support the FileReader API");
             }
+        }
+
+        // sending form in ajax
+        document.getElementById('form_generate').addEventListener('click', function (e) {
+            e.preventDefault()
+            let uploadForm = document.querySelector('article form')
+            let data = new FormData(uploadForm)
+
+            uploadCrop.result('base64').then(function (dataUrl) {
+                data.set('form[avatar]', dataURLtoFile(dataUrl, 'avatar.png'))
+                fetch(uploadForm.action, {
+                    method: 'post',
+                    body: data,
+                    redirect: 'follow'
+                }).then(function (response) {
+                    location.href = response.url
+                })
+            })
+
+        }) // fin du form
+
+        // convert a DataURL to File for sending to symfony Form (with CSRF and all)
+        function dataURLtoFile(dataurl, filename) {
+            var arr = dataurl.split(','),
+                    mime = arr[0].match(/:(.*?);/)[1],
+                    bstr = atob(arr[1]),
+                    n = bstr.length,
+                    u8arr = new Uint8Array(n);
+
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+
+            return new File([u8arr], filename, {type: mime});
         }
     </script>
 {% endblock %}
