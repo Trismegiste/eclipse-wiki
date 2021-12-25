@@ -143,9 +143,9 @@ class Picture extends AbstractController
         $maker = new AvatarMaker();
 
         $form = $this->createFormBuilder($npc)
-            ->add('avatar', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+            ->add('avatar', \Symfony\Component\Form\Extension\Core\Type\FileType::class, [
                 'mapped' => false,
-                'choices' => $maker->getImageChoice($npc)
+                'attr' => ['x-on:change' => 'readFile($el)']
             ])
             ->add('content', \Symfony\Component\Form\Extension\Core\Type\HiddenType::class)
             ->add('Generate', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)

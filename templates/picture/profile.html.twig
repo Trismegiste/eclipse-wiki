@@ -2,17 +2,16 @@
 {% extends "base.html.twig" %}
 {% form_theme form _self %}
 
-{% block _form_avatar_widget %}
-    {{ parent() }}
-    yolo
-{% endblock %}
-
 {% block header_title %}
     {{ include('npc/menu.html.twig', {npc: form.vars.data}) }}
 {% endblock %}
 
 {% block content %}
-    {{ form(form) }}
+    <div x-data>
+        <div id="cropper">
+        </div>
+        {{ form(form) }}
+    </div>
 {% endblock %}
 
 {% block stylesheets %}
@@ -23,5 +22,33 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('foliotek/croppie.min.js') }}"></script>
+    <script>
+        var uploadCrop = new Croppie(document.getElementById('cropper'), {
+            viewport: {
+                width: 600,
+                height: 600,
+                type: 'circle'
+            },
+            boundary: {width: 600, height: 600},
+            enableExif: true
+        })
+
+        function readFile(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    uploadCrop.bind({url: e.target.result})
+                            .then(function () {
+                                console.log('jQuery bind complete')
+                            })
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                console.log("Sorry - you're browser doesn't support the FileReader API");
+            }
+        }
+    </script>
 {% endblock %}
 
