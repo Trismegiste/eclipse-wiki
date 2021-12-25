@@ -14,9 +14,15 @@ use App\Entity\Transhuman;
 class AvatarMaker
 {
 
-    protected $height = 894;
-    protected $width = 503;
+    protected $height;
+    protected $width;
     protected $font = __DIR__ . '/OpenSansCondensed-Light.ttf';
+
+    public function __construct(int $width = 503, int $height = 894)
+    {
+        $this->height = $height;
+        $this->width = $width;
+    }
 
     public function generate(Transhuman $npc, string $image, string $socNetFolder)
     {
@@ -47,11 +53,7 @@ class AvatarMaker
             if ($key === 'Ressource') {
                 return false;
             }
-            if (empty($val)) {
-                return false;
-            }
-
-            return true;
+            return !empty($val);
         }, ARRAY_FILTER_USE_BOTH);
         uasort($economy, function ($a, $b) {
             return $b - $a;
