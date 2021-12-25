@@ -28,15 +28,6 @@ class AvatarMakerTest extends TestCase
         return $obj;
     }
 
-    public function testFindImage()
-    {
-        $npc = $this->createNpc();
-        $npc->setContent('aaaa [[file:image.jpg]] [[link-avatar.jpg]] [[file:avatar.jpg]] end');
-
-        $found = $this->sut->getImageChoice($npc);
-        $this->assertCount(2, $found);
-    }
-
     public function testGenerate()
     {
         $target = 'dump.jpg';

@@ -18,18 +18,6 @@ class AvatarMaker
     protected $width = 503;
     protected $font = __DIR__ . '/OpenSansCondensed-Light.ttf';
 
-    public function getImageChoice(Transhuman $npc): array
-    {
-        $found = [];
-        if (preg_match_all('#\[\[file:([^\]]+)\]\]#', $npc->getContent(), $match)) {
-            foreach ($match[1] as $image) {
-                $found[$image] = $image;
-            }
-        }
-
-        return $found;
-    }
-
     public function generate(Transhuman $npc, string $image, string $socNetFolder)
     {
         if (!file_exists($image)) {

@@ -38,4 +38,15 @@ class VertexTest extends PHPUnit\Framework\TestCase
         $this->assertEquals('vertex', $this->sut->getCategory());
     }
 
+    public function testExtractFirstPictureEmpty()
+    {
+        $this->assertNull($this->sut->extractFirstPicture());
+    }
+
+    public function testExtractFirstPicture()
+    {
+        $this->sut->setContent('aaaa [[link-avatar.jpg]] [[file:image.jpg]] [[file:avatar.jpg]] end');
+        $this->assertEquals('image.jpg', $this->sut->extractFirstPicture());
+    }
+
 }

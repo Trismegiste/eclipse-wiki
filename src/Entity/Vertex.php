@@ -51,4 +51,13 @@ class Vertex implements \Trismegiste\Toolbox\MongoDb\Root
         $this->title = $newTitle;
     }
 
+    public function extractFirstPicture(): ?string
+    {
+        if (preg_match('#\[\[file:([^\]]+)\]\]#', $this->getContent(), $match)) {
+            return $match[1];
+        }
+
+        return null;
+    }
+
 }

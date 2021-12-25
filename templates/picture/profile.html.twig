@@ -2,14 +2,17 @@
 {% extends "base.html.twig" %}
 {% form_theme form _self %}
 
+{% block _form_avatar_row %}
+    {{ block('form_row') }}
+    <div id="cropper"></div>
+{% endblock %}
+
 {% block header_title %}
     {{ include('npc/menu.html.twig', {npc: form.vars.data}) }}
 {% endblock %}
 
 {% block content %}
     <div x-data>
-        <div id="cropper">
-        </div>
         {{ form(form) }}
     </div>
 {% endblock %}
@@ -66,7 +69,6 @@
                     location.href = response.url
                 })
             })
-
         }) // fin du form
 
         // convert a DataURL to File for sending to symfony Form (with CSRF and all)
@@ -84,8 +86,8 @@
             return new File([u8arr], filename, {type: mime});
         }
 
-        {% if default_pic is not empty %}
-            uploadCrop.bind({url: '/upload/{{ default_pic }}'});
+        {% if form.vars.data.extractFirstPicture is not empty %}
+            uploadCrop.bind({url: '/upload/{{ form.vars.data.extractFirstPicture }}'});
         {% endif %}
     </script>
 {% endblock %}

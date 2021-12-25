@@ -96,20 +96,13 @@ class Picture extends AbstractController
             $avatarFile = $form->get('avatar')->getData();
             $socNetFolder = \join_paths($this->getParameter('kernel.project_dir'), 'public/socnet');
             $profilePic = $maker->generate($npc, $avatarFile->getPathname(), $socNetFolder);
-            imagejpeg($profilePic, \join_paths($this->getUploadDir(), $npc->getTitle() . '-avatar.jpg'));
+            $filename = $npc->getTitle() . '-avatar.jpg';
+            imagejpeg($profilePic, \join_paths($this->getUploadDir(), $filename));
 
             return new \Symfony\Component\HttpFoundation\RedirectResponse($this->generateUrl('app_vertexcrud_show', ['pk' => $pk]));
         }
 
-        $img = $maker->getImageChoice($npc);
-        $defaultPic = null;
-        if (count($img)) {
-            $defaultPic = array_key_first($img);
-        }
-        return $this->render('picture/profile.html.twig', [
-                'form' => $form->createView(),
-                'default_pic' => $defaultPic
-        ]);
+        return $this->render('picture/profile.html.twig', ['form' => $form->createView()]);
     }
 
 }
