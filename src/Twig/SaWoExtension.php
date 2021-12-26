@@ -32,15 +32,13 @@ class SaWoExtension extends AbstractExtension
         Ali::class => 'npc/row.html.twig',
         Transhuman::class => 'npc/row.html.twig',
         Vertex::class => 'vertex/row.html.twig',
-        Place::class => 'place/row.html.twig',
-        Encounter::class => 'encounter/row.html.twig'
+        Place::class => 'place/row.html.twig'
     ];
     const showTemplate = [
         Ali::class => 'npc/ali/show.html.twig',
         Transhuman::class => 'npc/transhuman/show.html.twig',
         Vertex::class => 'vertex/show.html.twig',
-        Place::class => 'place/show.html.twig',
-        Encounter::class => 'encounter/show.html.twig'
+        Place::class => 'place/show.html.twig'
     ];
 
     public function getFunctions()
