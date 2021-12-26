@@ -68,45 +68,51 @@
     <div class="character-show" x-data="{}">
         <div class="pure-g">
             <div class="pure-u-1-4">
-                <h2>Attributs</h2>
-                <table class="pure-table">
-                    {% for attr in npc.attributes %}
-                        <tr>
-                            <td>{{ attr.name }}</td>
-                            <td>{{ _self.print_trait(attr) }}</td>
-                        </tr>
-                    {% endfor %}
-                </table>
-                <h2>Handicaps</h2>
-                <ul>
-                    {% for hind in npc.hindrances %}
-                        <li>
-                            {{ hind.origin }}
-                            <a href="{{ wikilink(hind.name) }}">{{ hind.name }} ({{ level_hindrance(hind.level) }})</a>
-                        </li>
-                    {% endfor %}
-                </ul>
+                {% block attributes_dice %}
+                    <h2>Attributs</h2>
+                    <table class="pure-table">
+                        {% for attr in npc.attributes %}
+                            <tr>
+                                <td>{{ attr.name }}</td>
+                                <td>{{ _self.print_trait(attr) }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    <h2>Handicaps</h2>
+                    <ul>
+                        {% for hind in npc.hindrances %}
+                            <li>
+                                {{ hind.origin }}
+                                <a href="{{ wikilink(hind.name) }}">{{ hind.name }} ({{ level_hindrance(hind.level) }})</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endblock %}
             </div>
             <div class="pure-u-1-4">
-                <h2>Compétences</h2>
-                <table class="pure-table">
-                    {% for skill in npc.skills %}
-                        <tr>
-                            <td>{{ skill.name }}</td>
-                            <td>{{ _self.print_trait(skill) }}</td>
-                        </tr>
-                    {% endfor %}
-                </table>
+                {% block skills_dice %}
+                    <h2>Compétences</h2>
+                    <table class="pure-table">
+                        {% for skill in npc.skills %}
+                            <tr>
+                                <td>{{ skill.name }}</td>
+                                <td>{{ _self.print_trait(skill) }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% endblock %}
             </div>
             <div class="pure-u-1-4">
-                <h2>Atouts</h2>
-                <ul>
-                    {% for edge in npc.edges %}
-                        <li>
-                            <a href="{{ wikilink(edge.name) }}">{{ edge.name }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
+                {% block abilities_list %}
+                    <h2>Atouts</h2>
+                    <ul>
+                        {% for edge in npc.edges %}
+                            <li>
+                                <a href="{{ wikilink(edge.name) }}">{{ edge.name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endblock %}
             </div>
             <div class="pure-u-1-4">
                 <h2>Carac. 2<sup>ndaires</sup></h2>
@@ -124,31 +130,20 @@
                         <td>{{ npc.toughness }} ({{ npc.totalArmor }})</td>
                     </tr>
                 </table>
-                <h2>Blessures</h2>
-                <p>
-                    <label>Secoué</label>
-                    <input type="checkbox" name="shaken"/>
-                </p>
-                {% if npc.wildCard %}
-                    <p>
-                        Niveau
-                        {% for idx in 0..3 %}
-                            <input type="radio" name="wound_level" id="wound_level_{{ idx }}"/>
-                            <label for="wound_level_{{ idx }}">{{ idx }}</label>
-                        {% endfor %}
-                    </p>
-                {% endif %}
-                <h2>Fatigue</h2>
-                <p>
-                    Niveau
-                    {% for idx in 0..2 %}
-                        <input type="radio" name="fatigue_level" id="fatigue_level_{{ idx }}"/>
-                        <label for="fatigue_level_{{ idx }}">{{ idx }}</label>
+                <h2>Armures</h2>
+                <table class="pure-table">
+                    {% for item in npc.armors %}
+                        <tr>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.protect }} {{ item.special }}</td>
+                            <td class="right-text">{{ item.zone }}</td>
+                        </tr>
                     {% endfor %}
+                </table>
             </div>
         </div>
         <div class="pure-g">
-            <div class="pure-u-3-4">
+            <div class="pure-u-1">
                 <h2>Attaques</h2>
                 <table class="pure-table">
                     {% for item in npc.attacks %}
@@ -164,31 +159,9 @@
                     {% endfor %}
                 </table>
             </div>
-            <div class="pure-u-1-4">
-                <h2>Armures</h2>
-                <table class="pure-table">
-                    {% for item in npc.armors %}
-                        <tr>
-                            <td>{{ item.name }}</td>
-                            <td>{{ item.protect }} {{ item.special }}</td>
-                            <td class="right-text">{{ item.zone }}</td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </div> 
         </div>
         <div class="pure-g">
-            <div class="pure-u-1-3">
-                <h2>Équipement</h2>
-                <ul>
-                    {% for item in npc.gears %}
-                        <li>
-                            {{ item.name }}
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="pure-u-1-3">
+            <div class="pure-u-2-3">
                 {{ include('fragment/morph_detail.html.twig', {morph: npc.morph}) }}
             </div>
             <div class="pure-u-1-3">
@@ -205,6 +178,14 @@
                         {% endfor %}
                     </table>
                 {% endif %}
+                <h2>Équipement</h2>
+                <ul>
+                    {% for item in npc.gears %}
+                        <li>
+                            {{ item.name }}
+                        </li>
+                    {% endfor %}
+                </ul>                
             </div>
         </div>
         <div class="pure-g">
