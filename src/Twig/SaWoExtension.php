@@ -36,8 +36,8 @@ class SaWoExtension extends AbstractExtension
         Encounter::class => 'encounter/row.html.twig'
     ];
     const showTemplate = [
-        Ali::class => 'npc/show.html.twig',
-        Transhuman::class => 'npc/show.html.twig',
+        Ali::class => 'npc/ali/show.html.twig',
+        Transhuman::class => 'npc/transhuman/show.html.twig',
         Vertex::class => 'vertex/show.html.twig',
         Place::class => 'place/show.html.twig',
         Encounter::class => 'encounter/show.html.twig'
