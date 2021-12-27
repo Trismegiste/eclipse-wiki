@@ -59,10 +59,11 @@ class Picture extends AbstractController
      * Send an image to external device
      * @Route("/picture/send/{title}", methods={"GET"})
      */
-    public function bluetooth(string $title, ObjectPushProcessFactory $fac): JsonResponse
+    public function bluetooth(string $title, \App\Repository\BluetoothMsgRepository $repo): JsonResponse
     {
-        $process = $fac->create(\join_paths($this->getUploadDir(), $title));
-        $process->run();
+        $msg = new \App\Entity\BtMessage('90:78:B2:34:3C:58', 12);
+        $msg->body = \join_paths($this->getUploadDir(), $title);
+        $repo->save($msg);
 
         return new JsonResponse(null, 200);
     }

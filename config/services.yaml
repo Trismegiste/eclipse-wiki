@@ -28,16 +28,7 @@ services:
             - '../src/Kernel.php'
             - '../src/Tests/'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
-    App\Service\MediaWiki:
-        arguments:
-            $host: '%env(resolve:WIKISOURCE)%'
-
-    App\Service\LocalInterwiki:
-        arguments:
-            $host: '%env(resolve:WIKISOURCE)%'            
-            
+    # MongoDB
     MongoDB\Driver\Manager:
         arguments:
             - '%env(resolve:DATABASE_URL)%'
@@ -51,19 +42,34 @@ services:
         arguments: ['mwpage']
     Trismegiste\Toolbox\MongoDb\Repository $pageRepo: '@app.mwpage.repository'
                      
-    App\Twig\MediaWikiExtension:
-        arguments:
-            $src: '%env(resolve:WIKISOURCE)%'
-            
     App\Repository\VertexRepository:
         arguments:
             $dbName: '%env(resolve:DATABASE_NAME)%'
             $collectionName: 'vertex'
+            
+    App\Repository\BluetoothMsgRepository:
+        arguments:
+            $dbName: '%env(resolve:DATABASE_NAME)%'
+            $collectionName: 'bluetooth'            
     
+    # WIKI
+    App\Service\MediaWiki:
+        arguments:
+            $host: '%env(resolve:WIKISOURCE)%'
+
+    App\Service\LocalInterwiki:
+        arguments:
+            $host: '%env(resolve:WIKISOURCE)%'            
+                        
+    App\Twig\MediaWikiExtension:
+        arguments:
+            $src: '%env(resolve:WIKISOURCE)%'
+            
     Mike42\Wikitext\WikitextParser:
         arguments:
             - '@App\Twig\LinkRender'
 
+    # Open AI
     App\Service\OpenAi:
         arguments:
             $secret: '%env(resolve:OPENAI_SECRETKEY)%'
