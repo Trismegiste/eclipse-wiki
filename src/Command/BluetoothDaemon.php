@@ -14,13 +14,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 /**
- * sdptool search --bdaddr 90:78:B2:34:3C:58 OPUSH | grep "Channel"
+ * sdptool search --bdaddr FF:FF:B2:34:3C:58 OPUSH | grep "Channel"
  * https://doc.ubuntu-fr.org/bluetooth
  */
-class Bluetooth extends Command
+class BluetoothDaemon extends Command
 {
 
-    protected static $defaultName = 'app:bt';
+    protected static $defaultName = 'bt:daemon';
     protected $repository;
 
     public function __construct(BluetoothMsgRepository $repo)
@@ -31,11 +31,14 @@ class Bluetooth extends Command
 
     protected function configure(): void
     {
-        $this->setDescription('Bluetooth');
+        $this->setDescription('Bluetooth daemon');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $io = new \Symfony\Component\Console\Style\SymfonyStyle($input, $output);
+        $io->title("Starting daemon");
+
         $this->repository->reset();
         $this->repository->save(new BtMessage('End', 0));
         $iterator = $this->repository->getTailableCursor();

@@ -86,7 +86,7 @@ services:
         arguments:
             $repo: '@app.choicetype.repository'
             
-    App\Service\ObjectPushProcessFactory:
+    App\Service\ObjectPushFactory:
         arguments:
             $mac: '%env(resolve:BLUETOOTH_MAC)%'
             $chan: '%env(resolve:BLUETOOTH_CHANNEL)%'
