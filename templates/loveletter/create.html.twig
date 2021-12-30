@@ -1,0 +1,18 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Création d'une Love letter{% endblock %}
+
+{% block header_title %}Création d'une Love letter{% endblock %}
+
+{% block content %}
+    {{ form(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ include('fragment/init_autocomplete.html.twig', {element_id:'loveletter_content'}) }}
+    {{ include('fragment/init_autocomplete.html.twig', {element_id:'loveletter_drama'}) }}
+    <script>
+        document.getElementById('loveletter_player').focus()
+    </script>
+{% endblock %}

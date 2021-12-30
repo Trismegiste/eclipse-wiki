@@ -33,21 +33,6 @@ class GmHelper extends AbstractController
     }
 
     /**
-     * Creates a Love Letter
-     * @Route("/gm/loveletter")
-     */
-    public function loveLetter(Request $request): Response
-    {
-        $form = $this->createForm(LoveLetter::class);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            return $this->render('loveletter.html.twig', $form->getData());
-        }
-
-        return $this->render('form.html.twig', ['title' => 'Love letter', 'form' => $form->createView()]);
-    }
-
-    /**
      * Names generator
      * @Route("/gm/name/{card}", methods={"GET"})
      */
