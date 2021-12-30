@@ -10,6 +10,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "composer/package-versions-deprecated": "1.11.99.4",
+        "knplabs/knp-snappy-bundle": "^1.8",
         "mike42/wikitext": "dev-master",
         "sensio/framework-extra-bundle": "^6.1",
         "symfony/asset": "5.3.*",

@@ -3,6 +3,7 @@
 {% block title %}{{ vertex.title }}{% endblock %}
 
 {% block stylesheets %}
+    {{ parent() }}
     <style>
         .rules {
             background-color: #eee;
@@ -33,35 +34,5 @@
 {% endblock %}
 
 {% block content %}
-    <p>Cher {{ vertex.player }},</p>
-    <section class="intro">
-        <p><strong>Contexte</strong> : {{ wiki(vertex.content) }}</p>
-        <p><strong>Drame</strong> : {{ wiki(vertex.drama) }}</p>
-    </section>
-
-    <section class="rules">
-        <p>Effectue une Rencontre Rapide par Étape, c'est-à-dire, compte un Marqueur pour chaque Succès & Prouesse sur ces 3 tests :</p>
-
-        <ul>
-            <li>{{ vertex.roll1.trait }} à {{ vertex.roll1.difficulty }}</li>
-            <li>{{ vertex.roll2.trait }} à {{ vertex.roll2.difficulty }}</li>
-            <li>{{ vertex.roll3.trait }} à {{ vertex.roll3.difficulty }}</li>
-        </ul>
-    </section>
-
-    <section class="choices">
-        <p>Avec 5 Marqueurs ou plus, choisis une des possibilités ci-dessous.
-            Avec 3 ou 4 Marqueurs, choisis-en 2. Avec 2 Marqueurs, en choisir une et le MJ en choisit une.
-            Avec 1 Marqueur ou moins, le MJ en choisit 2 :</p>
-
-        <ul>
-            <li>{{ vertex.choice1 }}</li>
-            <li>{{ vertex.choice2 }}</li>
-            <li>{{ vertex.choice3 }}</li>
-            <li>{{ vertex.choice4 }}</li>
-            {% if vertex.choice5 is not empty %}<li>{{ vertex.choice5 }}</li>{% endif %}
-        </ul>
-    </section>
-
-    <p class="signature">Ton MJ</p>
+    {{ include('loveletter/pdf.html.twig') }}
 {% endblock %}

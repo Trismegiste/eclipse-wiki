@@ -9,6 +9,8 @@ namespace App\Controller;
 use App\Entity\Loveletter;
 use App\Entity\Vertex;
 use App\Form\LoveletterType;
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
+use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -44,11 +46,17 @@ class LoveletterCrud extends GenericCrud
 
     /**
      * Generate PDF for a Love letter
-     * @Route("/loveletter/pdf/{pk}", methods={"GET"})
+     * @Route("/loveletter/pdf/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function pdf(string $pk): Response
+    public function pdf(string $pk, Pdf $knpSnappyPdf): Response
     {
-        return new Response('ok');
+        $vertex = $this->repository->findByPk($pk);
+        $html = $this->renderView('loveletter/wk_pdf.html.twig', ['vertex' => $vertex]);
+
+        return new PdfResponse(
+            $knpSnappyPdf->getOutputFromHtml($html),
+            $vertex->getTitle() . '.pdf'
+        );
     }
 
 }
