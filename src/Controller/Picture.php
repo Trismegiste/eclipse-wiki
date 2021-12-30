@@ -9,12 +9,11 @@ namespace App\Controller;
 use App\Form\ProfilePic;
 use App\Repository\VertexRepository;
 use App\Service\AvatarMaker;
-use App\Service\ObjectPushProcessFactory;
+use App\Service\ObjectPushFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -59,7 +58,7 @@ class Picture extends AbstractController
      * Send an image to external device
      * @Route("/picture/send/{title}", methods={"GET"})
      */
-    public function bluetooth(string $title, \App\Service\ObjectPushFactory $fac): JsonResponse
+    public function bluetooth(string $title, ObjectPushFactory $fac): JsonResponse
     {
         $fac->send(\join_paths($this->getUploadDir(), $title));
 
@@ -94,7 +93,7 @@ class Picture extends AbstractController
             $npc->setContent($npc->getContent() . $append);
             $repo->save($npc);
 
-            return new RedirectResponse($this->generateUrl('app_vertexcrud_show', ['pk' => $pk]));
+            return $this->redirectToRoute($this->generateUrl('app_vertexcrud_show', ['pk' => $pk]));
         }
 
         return $this->render('picture/profile.html.twig', ['form' => $form->createView()]);

@@ -37,7 +37,7 @@ class BluetoothDaemon extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new \Symfony\Component\Console\Style\SymfonyStyle($input, $output);
-        $io->title("Starting daemon");
+        $io->title("Starting daemon with PID = " . getmypid());
 
         $this->repository->reset();
         $this->repository->save(new BtMessage('End', 0));
