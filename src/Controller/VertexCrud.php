@@ -29,9 +29,7 @@ class VertexCrud extends GenericCrud
      */
     public function list(/* some filters */): Response
     {
-        $it = $this->repository->findAll();
-
-        return $this->render('vertex/list.html.twig', ['listing' => $it]);
+        return $this->render('vertex/list.html.twig');
     }
 
     /**
@@ -78,10 +76,10 @@ class VertexCrud extends GenericCrud
     {
         $vertex = $this->repository->findByPk($pk);
         $form = $this->createFormBuilder($vertex)
-                ->add('content', TextareaType::class, ['attr' => ['rows' => 32]])
-                ->add('edit', SubmitType::class)
-                ->setMethod('PUT')
-                ->getForm();
+            ->add('content', TextareaType::class, ['attr' => ['rows' => 32]])
+            ->add('edit', SubmitType::class)
+            ->setMethod('PUT')
+            ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -102,9 +100,9 @@ class VertexCrud extends GenericCrud
     {
         $vertex = $this->repository->findByPk($pk);
         $form = $this->createFormBuilder($vertex)
-                ->add('delete', SubmitType::class)
-                ->setMethod('DELETE')
-                ->getForm();
+            ->add('delete', SubmitType::class)
+            ->setMethod('DELETE')
+            ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -170,10 +168,10 @@ class VertexCrud extends GenericCrud
         $backlinks = $this->repository->searchByBacklinks($vertex->getTitle());
 
         $form = $this->createFormBuilder($vertex)
-                ->add('title', TextType::class, ['label' => 'Nouveau nom'])
-                ->add('rename', SubmitType::class)
-                ->setMethod('PUT')
-                ->getForm();
+            ->add('title', TextType::class, ['label' => 'Nouveau nom'])
+            ->add('rename', SubmitType::class)
+            ->setMethod('PUT')
+            ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
