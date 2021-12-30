@@ -35,11 +35,20 @@ class LoveletterCrud extends GenericCrud
 
     /**
      * Edits a Love letter
-     * @Route("/loveletter/loveletter/{pk}", methods={"GET","PUT"})
+     * @Route("/loveletter/edit/{pk}", methods={"GET","PUT"})
      */
     public function edit(string $pk, Request $request): Response
     {
         return $this->handleEdit(LoveletterType::class, 'loveletter/edit.html.twig', $pk, $request);
+    }
+
+    /**
+     * Generate PDF for a Love letter
+     * @Route("/loveletter/pdf/{pk}", methods={"GET"})
+     */
+    public function pdf(string $pk): Response
+    {
+        return new Response('ok');
     }
 
 }
