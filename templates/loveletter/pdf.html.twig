@@ -1,10 +1,8 @@
 {# PDF content #}
 <p>Cher {{ vertex.player }},</p>
 <section class="intro">
-    <h2>Contexte</h2>
-    {{ wiki_for_pdf(vertex.content) }}
-    <h2>Drame</h2>
-    {{ wiki_for_pdf(vertex.drama) }}
+    {{ wiki_for_pdf("'''Contexte''' : " ~ vertex.content) }}
+    {{ wiki_for_pdf("'''Drame''' : " ~ vertex.drama) }}
 </section>
 
 <section class="rules">

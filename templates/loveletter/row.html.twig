@@ -2,13 +2,13 @@
     <div class="pure-u-1-12 thumb">
         <i class="icon-loveletter"></i>
     </div>
-    <div class="pure-u-17-24">
+    <div class="pure-u-2-3">
         <a href="{{ path('app_vertexcrud_show', {pk: item.pk}) }}" class="block-link">
             <h2>{{ item.title }}</h2>
             <span>{{ item.category|capitalize }} pour {{ item.player }}</span>
         </a>
     </div>
-    <div class="pure-u-5-24">
+    <div class="pure-u-1-4">
         <nav class="listing-action">
             {{ include('loveletter/actions.html.twig', {vertex:item}) }}
         </nav>

@@ -9,6 +9,8 @@ namespace App\Controller;
 use App\Entity\Loveletter;
 use App\Entity\Vertex;
 use App\Form\LoveletterType;
+use App\Repository\VertexRepository;
+use App\Service\ObjectPushFactory;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +22,14 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class LoveletterCrud extends GenericCrud
 {
+
+    protected $knpPdf;
+
+    public function __construct(VertexRepository $repo, Pdf $knpSnappyPdf)
+    {
+        parent::__construct($repo);
+        $this->knpPdf = $knpSnappyPdf;
+    }
 
     protected function createEntity(string $title): Vertex
     {
@@ -48,15 +58,38 @@ class LoveletterCrud extends GenericCrud
      * Generate PDF for a Love letter
      * @Route("/loveletter/pdf/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function pdf(string $pk, Pdf $knpSnappyPdf): Response
+    public function pdf(string $pk): Response
     {
         $vertex = $this->repository->findByPk($pk);
-        $html = $this->renderView('loveletter/wk_pdf.html.twig', ['vertex' => $vertex]);
 
         return new PdfResponse(
-            $knpSnappyPdf->getOutputFromHtml($html),
-            sprintf("Loveletter-%s-%s.pdf", $vertex->player, $vertex->getTitle())
+            $this->knpPdf->getOutputFromHtml($this->generateHtmlFor($vertex), ['page-size' => 'A5']),
+            $this->getFilenameAfter($vertex)
         );
+    }
+
+    /**
+     * Send a Love letter PDF to bluetooth
+     * @Route("/loveletter/send/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
+     */
+    public function send(string $pk, ObjectPushFactory $fac): Response
+    {
+        $vertex = $this->repository->findByPk($pk);
+        $path = \join_paths($this->getParameter('kernel.cache_dir'), 'pdf', $this->getFilenameAfter($vertex));
+        $this->knpPdf->generateFromHtml($this->generateHtmlFor($vertex), $path, ['page-size' => 'A5'], true);
+        $fac->send($path);
+
+        return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
+    }
+
+    protected function generateHtmlFor(Loveletter $vertex): string
+    {
+        return $this->renderView('loveletter/wk_pdf.html.twig', ['vertex' => $vertex]);
+    }
+
+    protected function getFilenameAfter(Loveletter $vertex): string
+    {
+        return iconv('UTF-8', 'ASCII//TRANSLIT', sprintf("Loveletter-%s-%s.pdf", $vertex->player, $vertex->getTitle()));
     }
 
 }
