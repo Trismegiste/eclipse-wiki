@@ -5,7 +5,10 @@
     <div class="pure-u-17-24">
         <a href="{{ path('app_vertexcrud_show', {pk: item.pk}) }}" class="block-link">
             <h2>{{ item.title }}</h2>
-            <span>{{ item.category }}</span>
+            <span>Lieu : </span>
+            {{ item.gravity }},
+            {{ item.pressure }},
+            {{ item.temperature }}
         </a>
     </div>
     <div class="pure-u-5-24">
