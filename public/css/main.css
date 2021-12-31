@@ -163,3 +163,8 @@ li.textcomplete-item img {
 .loveletter .choices li {
     margin-bottom: 1em;            
 }
+
+.loveletter a[href=""] {
+    text-decoration: none;
+    color: black;
+}

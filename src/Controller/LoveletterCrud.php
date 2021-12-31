@@ -55,7 +55,7 @@ class LoveletterCrud extends GenericCrud
 
         return new PdfResponse(
             $knpSnappyPdf->getOutputFromHtml($html),
-            $vertex->getTitle() . '.pdf'
+            sprintf("Loveletter-%s-%s.pdf", $vertex->player, $vertex->getTitle())
         );
     }
 

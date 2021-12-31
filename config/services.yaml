@@ -68,6 +68,16 @@ services:
     Mike42\Wikitext\WikitextParser:
         arguments:
             - '@App\Twig\LinkRender'
+            
+    # PDF
+    app.wikiparser.pdf:
+        class: Mike42\Wikitext\WikitextParser
+        arguments:
+            - '@App\Twig\PdfLinkRender'
+            
+    App\Twig\PdfWikiParserExtension:
+        arguments:
+            $wikiParser: '@app.wikiparser.pdf'
 
     # Open AI
     App\Service\OpenAi:
