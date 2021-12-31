@@ -4,30 +4,13 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{{ vertex.title }}</title>
-        <link rel="stylesheet" href="http://localhost:8000/purecss/pure-min.css"/>
-        <link rel="stylesheet" href="http://localhost:8000/css/main.css"/>
-        <style>
-            .rules {
-                background-color: #eee;
-                padding: 0.3em 1em;
-            }
-
-            .signature {
-                text-align: right;
-                padding-right: 10em;
-            }
-
-            p, li {
-                line-height: 140%;
-            }
-
-            .choices li {
-                margin-bottom: 1em;            
-            }
-        </style>   
+        <link rel="stylesheet" href="{{ absolute_url(asset('purecss/pure-min.css')) }}"/>
+        <link rel="stylesheet" href="{{ absolute_url(asset('css/main.css')) }}"/>
     </head>
     <body>
-        <h1 class="big-title">{{ vertex.title }}</h1>
-        {{ include('loveletter/pdf.html.twig') }}
+        <h1 class="big-title bg-color">{{ vertex.title }}</h1>
+        <div class="loveletter">
+            {{ include('loveletter/pdf.html.twig') }}
+        </div>
     </body>
 </html>

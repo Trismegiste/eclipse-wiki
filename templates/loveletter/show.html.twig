@@ -2,30 +2,6 @@
 
 {% block title %}{{ vertex.title }}{% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    <style>
-        .rules {
-            background-color: #eee;
-            padding: 0.3em 1em;
-        }
-
-        .signature {
-            text-align: right;
-            padding-right: 10em;
-        }
-
-        p, li {
-            line-height: 140%;
-        }
-
-        .choices li {
-            margin-bottom: 1em;            
-        }
-    </style>   
-{% endblock %}
-
-
 {% block header_title %}
     <nav style="float: right">
         {{ include('loveletter/actions.html.twig') }}
@@ -34,5 +10,7 @@
 {% endblock %}
 
 {% block content %}
-    {{ include('loveletter/pdf.html.twig') }}
+    <div class="loveletter">
+        {{ include('loveletter/pdf.html.twig') }}
+    </div>
 {% endblock %}
