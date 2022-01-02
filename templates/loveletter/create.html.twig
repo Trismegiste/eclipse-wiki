@@ -1,8 +1,17 @@
 {% extends "base.html.twig" %}
+{% form_theme form _self %}
 
 {% block title %}Création d'une Love letter{% endblock %}
 
 {% block header_title %}Création d'une Love letter{% endblock %}
+
+{% block _loveletter_resolution_widget %}
+    {% for idx in 0..4 %}
+        <textarea id="loveletter_resolution_{{ idx }}" 
+                  name="loveletter[resolution][{{ idx }}]"
+                  class="pure-input-1"></textarea>
+    {% endfor %}
+{% endblock %}
 
 {% block content %}
     {{ form(form) }}

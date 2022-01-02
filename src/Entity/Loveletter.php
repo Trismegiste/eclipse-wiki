@@ -17,10 +17,7 @@ class Loveletter extends Vertex
     public $roll1;
     public $roll2;
     public $roll3;
-    public $choice1;
-    public $choice2;
-    public $choice3;
-    public $choice4;
-    public $choice5;
+    public $resolution = [];
+    public $pcChoice = [];
 
 }

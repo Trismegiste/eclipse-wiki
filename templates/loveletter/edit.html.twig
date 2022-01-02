@@ -1,4 +1,5 @@
-{% extends "loveletter/create.html.twig" %}
+{% extends "base.html.twig" %}
+{% form_theme form _self %}
 
 {% block title %}{{ form.vars.data.title }}{% endblock %}
 
@@ -8,4 +9,25 @@
         {{ include('loveletter/actions.html.twig', {vertex:form.vars.data}) }}
     </nav>   
     {% block header_big_title %}{{ form.vars.data.title }}{% endblock %}
+{% endblock %}
+
+{% block _loveletter_resolution_widget %}
+    {% for idx, child in form %}
+        <textarea id="loveletter_resolution_{{ idx }}" 
+                  name="loveletter[resolution][{{ idx }}]"
+                  class="pure-input-1">{{ child.vars.data }}</textarea>
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+    {{ form(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ include('fragment/init_autocomplete.html.twig', {element_id:'loveletter_content'}) }}
+    {{ include('fragment/init_autocomplete.html.twig', {element_id:'loveletter_drama'}) }}
+    <script>
+        document.getElementById('loveletter_player').focus()
+    </script>
 {% endblock %}

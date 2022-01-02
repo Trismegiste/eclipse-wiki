@@ -29,11 +29,10 @@ class LoveletterType extends AbstractType
             ->add('roll1', Type\RollType::class)
             ->add('roll2', Type\RollType::class)
             ->add('roll3', Type\RollType::class)
-            ->add('choice1', TextareaType::class, ['required' => true])
-            ->add('choice2', TextareaType::class, ['required' => true])
-            ->add('choice3', TextareaType::class, ['required' => true])
-            ->add('choice4', TextareaType::class, ['required' => true])
-            ->add('choice5', TextareaType::class, ['required' => false])
+            ->add('resolution', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
+                'entry_type' => TextareaType::class,
+                'allow_add' => true
+            ])
         ;
 
         if ($options['edit']) {
