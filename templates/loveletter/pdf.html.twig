@@ -19,9 +19,9 @@
         Avec 3 ou 4 Marqueurs, choisis-en 2. Avec 2 Marqueurs, en choisir une et le MJ en choisit une.
         Avec 1 Marqueur ou moins, le MJ en choisit 2 :</p>
     <ol>
-        {% for choice in vertex.resolution %}
+        {% for idx, choice in vertex.resolution %}
             {% if choice is not empty %}
-                <li>{{ choice }}
+                <li {% if idx in vertex.pcChoice %}class="select-choice"{% endif %}>{{ choice }}
                 </li>
             {% endif %}
         {% endfor %}

@@ -161,12 +161,17 @@ li.textcomplete-item img {
 }
 
 .loveletter .choices li {
-    margin-bottom: 1em;            
+    padding: 0.5em;
+    margin-bottom: 0.5em;            
 }
 
 .loveletter a[href=""] {
     text-decoration: none;
     color: black;
+}
+
+.loveletter .choices li.select-choice {
+    background-color: #c5f6c5;
 }
 
 /* FLASHH */
@@ -181,7 +186,7 @@ li.textcomplete-item img {
 }
 
 .notif .flash-success {
-    background-color: lightgreen;
+    background-color: #c5f6c5;
     color: green;
 }
 

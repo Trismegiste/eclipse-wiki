@@ -15,8 +15,8 @@
     <div {{ block('widget_container_attributes') }}>
         {%- for child in form %}
             <div>
-                {{- form_widget(child) -}}
-                {{- form_label(child, null, {translation_domain: choice_translation_domain}) -}}
+                {{ form_widget(child) }}
+                {{ form_label(child, null, {translation_domain: choice_translation_domain}) }}
             </div>
         {% endfor -%}
     </div>
@@ -24,4 +24,14 @@
 
 {% block content %}
     {{ form(form) }}
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        #form_pcChoice div {
+            margin-bottom: 1em;
+        }
+    </style>
 {% endblock %}

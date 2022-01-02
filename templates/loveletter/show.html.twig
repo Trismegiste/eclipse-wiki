@@ -14,3 +14,12 @@
         {{ include('loveletter/pdf.html.twig') }}
     </div>
 {% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        li.select-choice {
+            background-color: lightgreen;
+        }
+    </style>
+{% endblock %}
