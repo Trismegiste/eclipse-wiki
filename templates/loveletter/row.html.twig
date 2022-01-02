@@ -5,7 +5,10 @@
     <div class="pure-u-2-3">
         <a href="{{ path('app_vertexcrud_show', {pk: item.pk}) }}" class="block-link">
             <h2>{{ item.title }}</h2>
-            <span>{{ item.category|capitalize }} pour {{ item.player }}</span>
+            <span>
+                {{ item.category|capitalize }} pour {{ item.player }}
+                {% if item.pcChoice is not empty %}(résolue){% endif %}
+            </span>
         </a>
     </div>
     <div class="pure-u-1-4">
