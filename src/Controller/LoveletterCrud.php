@@ -23,6 +23,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class LoveletterCrud extends GenericCrud
 {
 
+    const pdfOptions = ['page-size' => 'A5'];
+
     protected $knpPdf;
 
     public function __construct(VertexRepository $repo, Pdf $knpSnappyPdf)
@@ -63,7 +65,7 @@ class LoveletterCrud extends GenericCrud
         $vertex = $this->repository->findByPk($pk);
 
         return new PdfResponse(
-            $this->knpPdf->getOutputFromHtml($this->generateHtmlFor($vertex), ['page-size' => 'A5']),
+            $this->knpPdf->getOutputFromHtml($this->generateHtmlFor($vertex), self::pdfOptions),
             $this->getFilenameAfter($vertex)
         );
     }
@@ -76,8 +78,9 @@ class LoveletterCrud extends GenericCrud
     {
         $vertex = $this->repository->findByPk($pk);
         $path = \join_paths($this->getParameter('kernel.cache_dir'), 'pdf', $this->getFilenameAfter($vertex));
-        $this->knpPdf->generateFromHtml($this->generateHtmlFor($vertex), $path, ['page-size' => 'A5'], true);
+        $this->knpPdf->generateFromHtml($this->generateHtmlFor($vertex), $path, self::pdfOptions, true);
         $fac->send($path);
+        $this->addFlash('success', 'PDF envoyé');
 
         return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
     }

@@ -1,0 +1,12 @@
+<section class="notif" x-data="{open:true}">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flash-{{ label }}" 
+                 x-show="open"
+                 x-on:click="open=!open" 
+                 x-transition.scale.origin.top>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+</section>

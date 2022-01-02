@@ -107,6 +107,7 @@ class VertexCrud extends GenericCrud
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->repository->delete($vertex);
+            $this->addFlash('success', $vertex->getTitle() . ' a été supprimé');
 
             return $this->redirectToRoute('app_vertexcrud_list');
         }
@@ -176,6 +177,7 @@ class VertexCrud extends GenericCrud
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->repository->renameTitle($oldTitle, $form->getData()->getTitle());
+            $this->addFlash('success', "'$oldTitle' a été renommé");
 
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
         }

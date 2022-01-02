@@ -16,6 +16,7 @@
     <body>
         {% block body %}
             <h1 class="big-title">{% block header_title %}{% endblock %}</h1>
+            {{ include('fragment/flashes.html.twig') }}
             <div class="pure-g">
                 <aside class="pure-u-1-6">
                     {% block sidebar %}
@@ -34,13 +35,13 @@
                             </span>
                             <ul class="pure-menu-list">
                                 {{ _self.menu_item('app_vertexcrud_list', 'list', 'Liste Vertex') }}
-                                {{ _self.menu_item('app_npcgenerator_create', 'user-plus', 'Créer un Transhumain') }}
-                                {{ _self.menu_item('app_npcgenerator_ali', 'ali', 'Créer un Robot') }}
-                                {{ _self.menu_item('app_vertexcrud_create', 'video', 'Créer un Scénario') }}
-                                {{ _self.menu_item('app_placecrud_create', 'place', 'Créer un Décor') }}
+                                {{ _self.menu_item('app_npcgenerator_create', 'user-plus', 'Créer Transhumain') }}
+                                {{ _self.menu_item('app_npcgenerator_ali', 'ali', 'Créer Robot') }}
+                                {{ _self.menu_item('app_vertexcrud_create', 'video', 'Créer Scénario') }}
+                                {{ _self.menu_item('app_placecrud_create', 'place', 'Créer Décor') }}
+                                {{ _self.menu_item('app_lovelettercrud_create', 'loveletter', 'Créer Love letter') }}
                                 {{ _self.menu_item('app_gmhelper_namegenerate', 'list', 'Générateur de noms') }}
-                                {{ _self.menu_item('app_gmhelper_tracker', 'stopwatch', 'Init. tracker') }}
-                                {{ _self.menu_item('app_lovelettercrud_create', 'loveletter', 'Love letter') }}
+                                {{ _self.menu_item('app_gmhelper_tracker', 'stopwatch', 'Init. Tracker') }}
                                 {{ _self.menu_item('app_dump_edge', 'database', 'Tableau Atouts') }}
                             </ul>
                         </nav>

@@ -168,3 +168,24 @@ li.textcomplete-item img {
     text-decoration: none;
     color: black;
 }
+
+/* FLASHH */
+.notif {
+    text-align: center;
+}
+
+.notif div {
+    padding: 1em;
+    margin: 0.5em;
+    border-radius: 0.5em;
+}
+
+.notif .flash-success {
+    background-color: lightgreen;
+    color: green;
+}
+
+.notif .flash-error {
+    background-color: lightpink;
+    color: red;
+}
