@@ -8,6 +8,7 @@ namespace App\Form;
 
 use App\Entity\Loveletter;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -29,7 +30,7 @@ class LoveletterType extends AbstractType
             ->add('roll1', Type\RollType::class)
             ->add('roll2', Type\RollType::class)
             ->add('roll3', Type\RollType::class)
-            ->add('resolution', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
+            ->add('resolution', CollectionType::class, [
                 'entry_type' => TextareaType::class,
                 'allow_add' => true
             ])

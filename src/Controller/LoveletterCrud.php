@@ -95,4 +95,36 @@ class LoveletterCrud extends GenericCrud
         return iconv('UTF-8', 'ASCII//TRANSLIT', sprintf("Loveletter-%s-%s.pdf", $vertex->player, $vertex->getTitle()));
     }
 
+    /**
+     * Selection of the PC for the different resolution of the love letter
+     * @Route("/loveletter/select/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
+     */
+    public function select(string $pk, Request $request): Response
+    {
+        $vertex = $this->repository->findByPk($pk);
+
+        $form = $this->createFormBuilder($vertex)
+            ->add('pcChoice', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+                'expanded' => true,
+                'multiple' => true,
+                'choices' => array_combine($vertex->resolution, range(0, 4)),
+                'choice_filter' => function($val)use($vertex) {
+                    return !empty($vertex->resolution[$val]);
+                }
+            ])
+            ->add('select', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+            ->setMethod('PUT')
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $vertex = $form->getData();
+            $this->repository->save($vertex);
+
+            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
+        }
+
+        return $this->render('loveletter/select.html.twig', ['form' => $form->createView()]);
+    }
+
 }

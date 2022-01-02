@@ -39,10 +39,12 @@ class LoveletterCrudTest extends WebTestCase
                 "roll1" => ["trait" => "Agilité", "difficulty" => -1],
                 "roll2" => ["trait" => "Agilité", "difficulty" => -1],
                 "roll3" => ["trait" => "Agilité", "difficulty" => -1],
-                "choice1" => "1",
-                "choice2" => "2",
-                "choice3" => "3",
-                "choice4" => "4"
+                "resolution" => [
+                    "choice1",
+                    "choice2",
+                    "choice3",
+                    "choice4"
+                ]
         ]]);
         $this->client->submit($form);
         $this->assertResponseRedirects();
