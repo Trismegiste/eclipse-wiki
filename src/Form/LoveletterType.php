@@ -24,8 +24,8 @@ class LoveletterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('player', TextType::class)
-            ->add('drama', TextareaType::class)
+            ->add('player', TextType::class, ['attr' => ['class' => 'pure-input-1-3']])
+            ->add('drama', TextareaType::class, ['attr' => ['rows' => 3]])
             ->add('roll1', Type\RollType::class)
             ->add('roll2', Type\RollType::class)
             ->add('roll3', Type\RollType::class)
@@ -59,7 +59,7 @@ class LoveletterType extends AbstractType
         if ($options['edit']) {
             $view['create']->vars['label'] = 'Edit';
         }
-        $view['content']->vars['attr']['rows'] = 2;
+        $view['content']->vars['attr']['rows'] = 3;
         $view['content']->vars['label'] = 'Context';
         parent::finishView($view, $form, $options);
         $this->moveAtEnd($view->children, 'create');
