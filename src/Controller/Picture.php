@@ -92,8 +92,9 @@ class Picture extends AbstractController
             $append = "\n==Avatar==\n[[file:$filename]]\n";
             $npc->setContent($npc->getContent() . $append);
             $repo->save($npc);
+            $this->addFlash('success', 'Profil réseaux sociaux généré');
 
-            return $this->redirectToRoute($this->generateUrl('app_vertexcrud_show', ['pk' => $pk]));
+            return new JsonResponse('', Response::HTTP_NO_CONTENT);
         }
 
         return $this->render('picture/profile.html.twig', ['form' => $form->createView()]);

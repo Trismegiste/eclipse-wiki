@@ -64,9 +64,10 @@
                 fetch(uploadForm.action, {
                     method: 'post',
                     body: data,
-                    redirect: 'follow'
+                    redirect: 'manual'
                 }).then(function (response) {
-                    location.href = response.url
+                    console.log(response.headers)
+                    location.href = '{{ path('app_vertexcrud_show', {pk: form.vars.data.pk}) }}'
                 })
             })
         }) // fin du form
