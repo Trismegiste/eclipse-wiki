@@ -85,4 +85,16 @@ class LoveletterCrudTest extends WebTestCase
         $this->assertCount(1, $crawler->selectButton('loveletter_create'));
     }
 
+    /** @depends testList */
+    public function testPdf(string $show)
+    {
+        $crawler = $this->client->request('GET', $show);
+        $this->assertPageTitleContains('Love letter');
+        $url = $crawler->filterXPath('//nav/a/i[@class="icon-file-pdf"]/parent::a')->attr('href');
+
+        $this->client->request('GET', $url);
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals('application/pdf', $this->client->getResponse()->headers->get('Content-type'));
+    }
+
 }

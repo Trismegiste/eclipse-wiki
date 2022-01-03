@@ -66,8 +66,9 @@
                     body: data,
                     redirect: 'manual'
                 }).then(function (response) {
-                    console.log(response.headers)
                     location.href = '{{ path('app_vertexcrud_show', {pk: form.vars.data.pk}) }}'
+                }).catch((error) => {
+                    console.error(error);
                 })
             })
         }) // fin du form
