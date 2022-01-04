@@ -55,7 +55,7 @@ class NpcGeneratorTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', $url);
         $this->assertPageTitleContains('Luke');
-        $url = $crawler->filterXPath('//a/i[@class="icon-edit"]/parent::a')->attr('href');
+        $url = $crawler->filterXPath('//a/i[@class="icon-d6"]/parent::a')->attr('href');
 
         return $url;
     }
@@ -102,7 +102,7 @@ class NpcGeneratorTest extends WebTestCase
     public function testInfo(string $url): string
     {
         $crawler = $this->client->request('GET', $url);
-        $url = $crawler->filterXPath('//a/i[@class="icon-info-circled"]/parent::a')->attr('href');
+        $url = $crawler->filterXPath('//a/i[@class="icon-edit"]/parent::a')->attr('href');
         $crawler = $this->client->request('GET', $url);
         $this->assertNotNull($crawler->selectButton('npc_info_edit'));
 
