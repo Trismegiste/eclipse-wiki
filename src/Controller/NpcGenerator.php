@@ -163,6 +163,7 @@ class NpcGenerator extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $npc = $form->getData();
             $this->repository->save($npc);
+            $this->addFlash('success', 'L\'équipement de ' . $npc->getTitle() . ' a été enregistré');
 
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $npc->getPk()]);
         }
@@ -183,6 +184,7 @@ class NpcGenerator extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $npc = $form->getData();
             $this->repository->save($npc);
+            $this->addFlash('success', 'Les paramètres de combat de ' . $npc->getTitle() . ' ont été enregistrés');
 
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $npc->getPk()]);
         }
@@ -228,6 +230,7 @@ class NpcGenerator extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $npc = $form->getData();
             $this->repository->save($npc);
+            $this->addFlash('success', 'La morphose de ' . $npc->getTitle() . ' a été enregistrée');
 
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $npc->getPk()]);
         }
