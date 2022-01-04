@@ -84,7 +84,7 @@ class LoveletterCrudTest extends WebTestCase
         $this->assertPageTitleContains('Love letter');
         $this->assertCount(1, $crawler->selectButton('loveletter_create'));
         $url = $crawler->filterXPath('//nav/a/i[@class="icon-file-pdf"]/parent::a')->attr('href');
-        
+
         return $url;
     }
 
@@ -94,6 +94,29 @@ class LoveletterCrudTest extends WebTestCase
         $this->client->request('GET', $pdf);
         $this->assertResponseIsSuccessful();
         $this->assertEquals('application/pdf', $this->client->getResponse()->headers->get('Content-type'));
+    }
+
+    /** @depends testShow */
+    public function testSelect(string $edit)
+    {
+        $crawler = $this->client->request('GET', $edit);
+        $url = $crawler->filterXPath('//nav/a/i[@class="icon-select-list"]/parent::a')->attr('href');
+
+        $crawler = $this->client->request('GET', $url);
+        $this->assertPageTitleContains('Love letter');
+        $button = $crawler->selectButton('loveletter_pc_choice_select');
+        $this->assertCount(1, $button);
+
+        $form = $button->form();
+        $form->setValues(['loveletter_pc_choice' => [
+                'pc_choice' => [
+                    0, 1, 2
+                ]
+        ]]);
+        $this->client->submit($form);
+        $this->assertResponseRedirects();
+        $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
     }
 
 }
