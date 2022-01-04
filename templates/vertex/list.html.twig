@@ -2,7 +2,7 @@
 {% block header_title %}Liste des Vertex{% endblock %}
 {% block content %}
     <div x-data="searchEngine">
-        <form class="pure-form">
+        <form class="pure-form" x-on:submit="goToFirst">
             <input type="text" x-model="keyword" id="search" class="pure-input-1 mousetrap"/>
         </form>
         <section class="entity-listing" x-html="await filter(keyword)">
@@ -29,6 +29,13 @@
                             current.keyword = ''
                             return false
                         })
+                    },
+                    goToFirst(e) {
+                        e.preventDefault();
+                        let elem = document.querySelector('.entity-listing a')
+                        if (elem) {
+                            location.href = elem.href
+                        }
                     }
                 }))
         })
