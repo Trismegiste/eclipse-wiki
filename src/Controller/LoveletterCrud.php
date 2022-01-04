@@ -8,6 +8,7 @@ namespace App\Controller;
 
 use App\Entity\Loveletter;
 use App\Entity\Vertex;
+use App\Form\LoveletterPcChoice;
 use App\Form\LoveletterType;
 use App\Repository\VertexRepository;
 use App\Service\ObjectPushFactory;
@@ -65,8 +66,8 @@ class LoveletterCrud extends GenericCrud
         $vertex = $this->repository->findByPk($pk);
 
         return new PdfResponse(
-            $this->knpPdf->getOutputFromHtml($this->generateHtmlFor($vertex), self::pdfOptions),
-            $this->getFilenameAfter($vertex)
+                $this->knpPdf->getOutputFromHtml($this->generateHtmlFor($vertex), self::pdfOptions),
+                $this->getFilenameAfter($vertex)
         );
     }
 
@@ -101,27 +102,7 @@ class LoveletterCrud extends GenericCrud
      */
     public function select(string $pk, Request $request): Response
     {
-        $vertex = $this->repository->findByPk($pk);
-
-        $form = $this->createFormBuilder($vertex)
-            ->add('pcChoice', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
-                'expanded' => true,
-                'multiple' => true,
-                'choices' => range(0, 4)
-            ])
-            ->add('select', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
-            ->setMethod('PUT')
-            ->getForm();
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $vertex = $form->getData();
-            $this->repository->save($vertex);
-
-            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
-        }
-
-        return $this->render('loveletter/select.html.twig', ['form' => $form->createView()]);
+        return $this->handleEdit(LoveletterPcChoice::class, 'loveletter/select.html.twig', $pk, $request);
     }
 
 }

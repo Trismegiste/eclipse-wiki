@@ -11,13 +11,13 @@
     {% block header_big_title %}{{ form.vars.data.title }}{% endblock %}
 {% endblock %}
 
-{%- block _form_pcChoice_row -%}
+{%- block _loveletter_pc_choice_pc_choice_row -%}
     <div {{ block('widget_container_attributes') }}>
         {# 
             this part is tricky : we do NOT iterate over the children in the form (a.k.a the 
             array of choices in the ChoiceType here) 
-            but we iterate over the resolution array in the object bound to the form
-            since we cannot access to the object before. 
+            but we iterate over the resolution array from the object bound to the form
+            since we cannot access to the object before (perhaps it's possible into the FormView, dunno)
             Note : the choices are only initialised with dummy labels in the form type
         #}
         {%- for idx, resolution in form.parent.vars.data.resolution %}
