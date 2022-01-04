@@ -107,10 +107,7 @@ class LoveletterCrud extends GenericCrud
             ->add('pcChoice', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
                 'expanded' => true,
                 'multiple' => true,
-                'choices' => array_combine($vertex->resolution, range(0, 4)),
-                'choice_filter' => function($val)use($vertex) {
-                    return !empty($vertex->resolution[$val]);
-                }
+                'choices' => range(0, 4)
             ])
             ->add('select', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
             ->setMethod('PUT')

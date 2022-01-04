@@ -13,11 +13,21 @@
 
 {%- block _form_pcChoice_row -%}
     <div {{ block('widget_container_attributes') }}>
-        {%- for child in form %}
-            <div>
-                {{ form_widget(child) }}
-                {{ form_label(child, null, {translation_domain: choice_translation_domain}) }}
-            </div>
+        {# 
+            this part is tricky : we do NOT iterate over the children in the form (a.k.a the 
+            array of choices in the ChoiceType here) 
+            but we iterate over the resolution array in the object bound to the form
+            since we cannot access to the object before. 
+            Note : the choices are only initialised with dummy labels in the form type
+        #}
+        {%- for idx, resolution in form.parent.vars.data.resolution %}
+            {% if resolution is not empty %}
+                {% set child = form[idx] %}  {# we fetch the real child in the ChoiceType #}
+                <div>
+                    {{ form_widget(child) }}
+                    <label for="{{ child.vars.id }}">{{ resolution }}</label> {# we print the child with the resolution label #}
+                </div>
+            {% endif %}
         {% endfor -%}
     </div>
 {%- endblock -%}
