@@ -9,7 +9,8 @@ namespace App\Twig;
 use App\Entity\Ali;
 use App\Entity\Character;
 use App\Entity\DamageRoll;
-use App\Entity\Encounter;
+use App\Entity\Handout;
+use App\Entity\Loveletter;
 use App\Entity\Place;
 use App\Entity\Transhuman;
 use App\Entity\Vertex;
@@ -17,7 +18,6 @@ use App\Repository\HindranceProvider;
 use OutOfBoundsException;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use App\Entity\Loveletter;
 
 /**
  * Extension for SaWo specifics
@@ -35,7 +35,7 @@ class SaWoExtension extends AbstractExtension
         Vertex::class => 'vertex/row.html.twig',
         Place::class => 'place/row.html.twig',
         Loveletter::class => 'loveletter/row.html.twig',
-        \App\Entity\Handout::class => 'vertex/row.html.twig'
+        Handout::class => 'handout/row.html.twig'
     ];
     const showTemplate = [
         Ali::class => 'npc/ali/show.html.twig',
@@ -43,7 +43,7 @@ class SaWoExtension extends AbstractExtension
         Vertex::class => 'vertex/show.html.twig',
         Place::class => 'place/show.html.twig',
         Loveletter::class => 'loveletter/show.html.twig',
-        \App\Entity\Handout::class => 'vertex/show.html.twig'
+        Handout::class => 'handout/show.html.twig'
     ];
 
     public function getFunctions()

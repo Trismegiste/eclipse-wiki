@@ -30,16 +30,21 @@ class HandoutType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('gm_part', TextareaType::class, [
+        $builder->add('gm_info', TextareaType::class, [
                     'required' => false,
                     'attr' => ['rows' => 10],
                     'property_path' => 'gmInfo'
                 ])
                 ->add('target', TextType::class);
+
+        if ($options['edit']) {
+            $builder->setMethod('PUT');
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setDefault('edit', false);
         $resolver->setDefault('data_class', Handout::class);
         $resolver->setDefault('empty_data', function (FormInterface $form) {
             return new Handout($form->get('title')->getData());
@@ -50,6 +55,10 @@ class HandoutType extends AbstractType
     {
         $this->moveChildAtBegin($view, 'target');
         $this->moveChildAtEnd($view, 'create');
+
+        if ($options['edit']) {
+            $this->changeLabel($view, 'create', 'Edit');
+        }
     }
 
 }

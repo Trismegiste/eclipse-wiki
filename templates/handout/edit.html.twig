@@ -1,0 +1,24 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ form.vars.data.title }}{% endblock %}
+
+{% block header_title %}
+    {# the header menu with title #}
+    <nav style="float: right">
+        {{ include('handout/actions.html.twig', {vertex:form.vars.data}) }}
+    </nav>   
+    {% block header_big_title %}{{ form.vars.data.title }}{% endblock %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ include('fragment/init_autocomplete.html.twig', {element_id:'handout_content'}) }}
+    {{ include('fragment/init_autocomplete.html.twig', {element_id:'handout_gm_info'}) }}
+    <script>
+        document.getElementById('handout_content').focus()
+    </script>
+{% endblock %}
+
+{% block content %}
+    {{ form(form) }}
+{% endblock %}

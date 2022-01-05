@@ -1,0 +1,20 @@
+{% extends "vertex/show.html.twig" %}
+
+{% block header_title %}
+    <nav style="float: right">
+        {{ include('handout/actions.html.twig') }}
+    </nav>
+    {{ vertex.title }}
+{% endblock %}
+
+{% block content %}
+    <h2>Pour {{ vertex.target }}</h2>
+    <div class="pure-g">
+        <section class="pure-u-1-2">
+            {{ parent() }}  
+        </section>
+        <section class="pure-u-1-2">
+            {{ wiki(vertex.gmInfo) }}
+        </section>
+    </div>
+{% endblock %}

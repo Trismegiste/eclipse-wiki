@@ -38,7 +38,7 @@ class HandoutCrud extends GenericCrud
      */
     public function edit(string $pk, Request $request): Response
     {
-        
+        return $this->handleEdit(\App\Form\HandoutType::class, 'handout/edit.html.twig', $pk, $request);
     }
 
 }
