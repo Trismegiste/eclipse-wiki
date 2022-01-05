@@ -34,7 +34,8 @@ abstract class GenericCrud extends AbstractController
     protected function handleCreate(string $formClass, string $template, Request $request): Response
     {
         $obj = null;
-        if ($request->query->has('title')) {
+        $fromLink = $request->query->has('title');
+        if ($fromLink) {
             $title = $request->query->get('title');
             $obj = $this->createEntity(ucfirst($title));
         }
@@ -49,7 +50,7 @@ abstract class GenericCrud extends AbstractController
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
         }
 
-        return $this->render($template, ['form' => $form->createView()]);
+        return $this->render($template, ['form' => $form->createView(), 'from_link' => $fromLink]);
     }
 
     protected function handleEdit(string $formClass, string $template, string $pk, Request $request): Response
