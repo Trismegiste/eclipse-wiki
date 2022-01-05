@@ -24,9 +24,9 @@ class VertexType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', TextType::class)
-            ->add('content', TextareaType::class, ['attr' => ['rows' => 30]])
-            ->add('create', SubmitType::class);
+                ->add('title', TextType::class, ['constraints' => [new \App\Validator\UniqueVertexTitle()]])
+                ->add('content', TextareaType::class, ['attr' => ['rows' => 30]])
+                ->add('create', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
