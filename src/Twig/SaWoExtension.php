@@ -34,14 +34,16 @@ class SaWoExtension extends AbstractExtension
         Transhuman::class => 'npc/row.html.twig',
         Vertex::class => 'vertex/row.html.twig',
         Place::class => 'place/row.html.twig',
-        Loveletter::class => 'loveletter/row.html.twig'
+        Loveletter::class => 'loveletter/row.html.twig',
+        \App\Entity\Handout::class => 'vertex/row.html.twig'
     ];
     const showTemplate = [
         Ali::class => 'npc/ali/show.html.twig',
         Transhuman::class => 'npc/transhuman/show.html.twig',
         Vertex::class => 'vertex/show.html.twig',
         Place::class => 'place/show.html.twig',
-        Loveletter::class => 'loveletter/show.html.twig'
+        Loveletter::class => 'loveletter/show.html.twig',
+        \App\Entity\Handout::class => 'vertex/show.html.twig'
     ];
 
     public function getFunctions()
