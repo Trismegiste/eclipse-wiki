@@ -10,8 +10,9 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {{ include('fragment/init_autocomplete.html.twig', {element_id:'place_content'}) }}
+    {{ include('fragment/init_autocomplete.html.twig', {element_id:'handout_content'}) }}
+    {{ include('fragment/init_autocomplete.html.twig', {element_id:'handout_gm_info'}) }}
     <script>
-        document.getElementById('place_title').focus()
+        document.getElementById('handout_title').focus()
     </script>
 {% endblock %}

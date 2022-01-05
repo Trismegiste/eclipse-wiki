@@ -8,6 +8,7 @@ namespace App\Controller;
 
 use App\Entity\Handout;
 use App\Entity\Vertex;
+use App\Form\HandoutType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,7 +30,7 @@ class HandoutCrud extends GenericCrud
      */
     public function create(Request $request): Response
     {
-        return $this->handleCreate(\App\Form\HandoutType::class, 'handout/create.html.twig', $request);
+        return $this->handleCreate(HandoutType::class, 'handout/create.html.twig', $request);
     }
 
     /**
@@ -38,7 +39,7 @@ class HandoutCrud extends GenericCrud
      */
     public function edit(string $pk, Request $request): Response
     {
-        return $this->handleEdit(\App\Form\HandoutType::class, 'handout/edit.html.twig', $pk, $request);
+        return $this->handleEdit(HandoutType::class, 'handout/edit.html.twig', $pk, $request);
     }
 
 }
