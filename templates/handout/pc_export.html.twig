@@ -1,0 +1,14 @@
+{% extends "base.pdf.twig" %}
+{% block content %}
+    <div class="handout">
+        {{ vertex.content }}
+    </div>
+{% endblock %}  
+
+{% block stylesheets %}
+    <style>
+        .handout {
+            margin-top:1em;
+        }
+    </style>    
+{% endblock %}
