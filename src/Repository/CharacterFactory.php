@@ -53,4 +53,21 @@ class CharacterFactory
         }
     }
 
+    public function createFreeform(string $title, string $type): Character
+    {
+        $char = new \App\Entity\Freeform($title);
+
+        $morph = new \App\Entity\Morph('Indissociable');
+        $morph->price = 0;
+        $morph->type = $type;
+        $char->setMorph($morph);
+
+        $this->addAttributes($char);
+        foreach ($char->attributes as $attr) {
+            $attr->dice = 4;
+        }
+
+        return $char;
+    }
+
 }

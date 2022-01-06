@@ -1,0 +1,16 @@
+{% extends "npc/show.html.twig" %}
+
+{% block abilities_list %}
+    <h2>{{ npc.morph.type }}</h2>
+{% endblock %}
+
+{% block content %}
+    {{ parent() }}
+    <div class="pure-g">
+        <div class="pure-u-1">
+            <h1>Informations</h1>
+            {{ wiki(vertex.content) }}
+            {{ include('fragment/wiki_backlinks.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

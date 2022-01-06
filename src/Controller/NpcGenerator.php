@@ -238,4 +238,22 @@ class NpcGenerator extends AbstractController
         return $this->render('npc/sleeve.html.twig', ['form' => $form->createView()]);
     }
 
+    /**
+     * Creates a freeform character
+     * @Route("/npc/freeform", methods={"GET","POST"})
+     */
+    public function freeform(Request $request): Response
+    {
+        $form = $this->createForm(\App\Form\FreeformCreate::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $npc = $form->getData();
+            $this->repository->save($npc);
+
+            return $this->redirectToRoute('app_npcgenerator_edit', ['pk' => $npc->getPk()]);
+        }
+
+        return $this->render('form.html.twig', ['title' => 'PNJ libre', 'form' => $form->createView()]);
+    }
+
 }

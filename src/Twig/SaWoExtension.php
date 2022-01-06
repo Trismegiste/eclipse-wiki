@@ -9,6 +9,7 @@ namespace App\Twig;
 use App\Entity\Ali;
 use App\Entity\Character;
 use App\Entity\DamageRoll;
+use App\Entity\Freeform;
 use App\Entity\Handout;
 use App\Entity\Loveletter;
 use App\Entity\Place;
@@ -27,11 +28,13 @@ class SaWoExtension extends AbstractExtension
 
     const infoTemplate = [
         Ali::class => 'npc/ali/info.html.twig',
-        Transhuman::class => 'npc/transhuman/info.html.twig'
+        Transhuman::class => 'npc/transhuman/info.html.twig',
+        Freeform::class => 'npc/freeform/info.html.twig'
     ];
     const rowTemplate = [
         Ali::class => 'npc/row.html.twig',
         Transhuman::class => 'npc/row.html.twig',
+        Freeform::class => 'npc/row.html.twig',
         Vertex::class => 'vertex/row.html.twig',
         Place::class => 'place/row.html.twig',
         Loveletter::class => 'loveletter/row.html.twig',
@@ -40,6 +43,7 @@ class SaWoExtension extends AbstractExtension
     const showTemplate = [
         Ali::class => 'npc/ali/show.html.twig',
         Transhuman::class => 'npc/transhuman/show.html.twig',
+        Freeform::class => 'npc/freeform/show.html.twig',
         Vertex::class => 'vertex/show.html.twig',
         Place::class => 'place/show.html.twig',
         Loveletter::class => 'loveletter/show.html.twig',
@@ -101,6 +105,7 @@ class SaWoExtension extends AbstractExtension
         switch (get_class($v)) {
             case Ali::class:
                 return 'icon-ali';
+            case Freeform::class:
             case Transhuman::class:
                 return $v->wildCard ? 'icon-wildcard' : 'icon-extra';
             default :
