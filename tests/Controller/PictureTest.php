@@ -28,4 +28,18 @@ class PictureTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    public function testSendBluetooth()
+    {
+        $this->client->request('GET', '/picture/send/notfound.jpg');
+        $this->assertResponseIsSuccessful();
+    }
+
+    public function testCreateProfile()
+    {
+        $npc = new \App\Entity\Ali('hal');
+        self::getContainer()->get(\App\Repository\VertexRepository::class)->save($npc);
+        $this->client->request('GET', '/profile/create/' . $npc->getPk());
+        $this->assertResponseIsSuccessful();
+    }
+
 }
