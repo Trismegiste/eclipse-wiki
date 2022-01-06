@@ -63,7 +63,7 @@ class HandoutCrud extends GenericCrud
     {
         $vertex = $this->repository->findByPk($pk);
         $path = \join_paths($this->getParameter('kernel.cache_dir'), 'pdf', $this->getFilenameAfter($vertex));
-        $html = $this->renderView('handout/pc_export.html.twig', ['vertex' => $vertex]);
+        $html = $this->renderView('handout/pc_export.pdf.twig', ['vertex' => $vertex]);
         $this->knpPdf->generateFromHtml($html, $path, self::pdfOptions, true);
         $fac->send($path);
         $this->addFlash('success', 'PDF envoyé');

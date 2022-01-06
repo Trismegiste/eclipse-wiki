@@ -165,7 +165,7 @@ li.textcomplete-item img {
     margin-bottom: 0.4em;            
 }
 
-.loveletter a[href=""] {
+a[href=""] {
     text-decoration: none;
     color: black;
 }

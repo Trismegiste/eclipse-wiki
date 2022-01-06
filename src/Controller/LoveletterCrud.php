@@ -88,7 +88,7 @@ class LoveletterCrud extends GenericCrud
 
     protected function generateHtmlFor(Loveletter $vertex): string
     {
-        return $this->renderView('loveletter/wk_pdf.html.twig', ['vertex' => $vertex]);
+        return $this->renderView('loveletter/export.pdf.twig', ['vertex' => $vertex]);
     }
 
     protected function getFilenameAfter(Loveletter $vertex): string
