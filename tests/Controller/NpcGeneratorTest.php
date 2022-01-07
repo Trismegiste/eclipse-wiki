@@ -120,7 +120,9 @@ class NpcGeneratorTest extends WebTestCase
     public function testBattle(string $pk)
     {
         $crawler = $this->client->request('GET', "/npc/battle/$pk");
-        $this->assertCount(1, $crawler->selectButton('npc_attacks_edit'));
+        $this->assertResponseIsSuccessful();
+        $form = $crawler->selectButton('npc_attacks_edit')->form();
+        $this->client->submit($form);
     }
 
     /** @depends testInfo */
@@ -140,7 +142,9 @@ class NpcGeneratorTest extends WebTestCase
     public function testGear(string $pk)
     {
         $crawler = $this->client->request('GET', "/npc/gear/$pk");
-        $this->assertCount(1, $crawler->selectButton('npc_gears_edit'));
+        $this->assertResponseIsSuccessful();
+        $form = $crawler->selectButton('npc_gears_edit')->form();
+        $this->client->submit($form);
     }
 
     public function testCreateALI()

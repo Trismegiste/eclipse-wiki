@@ -24,8 +24,16 @@ class PictureTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 
     public function testSearch()
     {
+        $filename = \join_paths(static::getContainer()->getParameter('kernel.project_dir'), 'public/upload', 'yolo.png');
+        $image = imagecreatetruecolor(200, 200);
+        imagepng($image, $filename);
+
         $this->client->request('GET', '/picture/search?q=yolo');
         $this->assertResponseIsSuccessful();
+        $listing = json_decode($this->client->getResponse()->getContent());
+        $this->assertCount(1, $listing);
+        $this->assertEquals('yolo.png', $listing[0]);
+        unlink($filename);
     }
 
     public function testSendBluetooth()
@@ -36,10 +44,21 @@ class PictureTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 
     public function testCreateProfile()
     {
-        $npc = new \App\Entity\Ali('hal');
+        $npc = new \App\Entity\Transhuman('tmp', new \App\Entity\Background('back'), new \App\Entity\Faction('fact'));
         self::getContainer()->get(\App\Repository\VertexRepository::class)->save($npc);
-        $this->client->request('GET', '/profile/create/' . $npc->getPk());
+        $crawler = $this->client->request('GET', '/profile/create/' . $npc->getPk());
         $this->assertResponseIsSuccessful();
+
+        $form = $crawler->selectButton('profile_pic_generate')->form();
+
+        $filename = 'tmp.png';
+        $image = imagecreatetruecolor(200, 200);
+        imagepng($image, $filename);
+
+        $form['profile_pic[avatar]']->upload($filename);
+        $this->client->submit($form);
+        $this->assertResponseIsSuccessful();
+        unlink($filename);
     }
 
 }
