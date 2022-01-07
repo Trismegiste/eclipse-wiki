@@ -2,6 +2,14 @@
 
 {% block abilities_list %}
     <h2>{{ npc.morph.type }}</h2>
+    <h2>Atouts</h2>
+    <ul>
+        {% for edge in npc.edges %}
+            <li>
+                <a href="{{ wikilink(edge.name) }}">{{ edge.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}
 
 {% block content %}
