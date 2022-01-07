@@ -10,7 +10,6 @@ use App\Entity\Freeform;
 use App\Repository\CharacterFactory;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -35,11 +34,8 @@ class FreeformCreate extends AbstractType
         $builder
                 ->add('wildCard', CheckboxType::class, ['required' => false])
                 ->add('title', TextType::class)
-                ->add('type', ChoiceType::class, [
-                    'choices' => [
-                        'Simulmorphe' => 'Simulmorphe',
-                        'Monstre' => 'Monstre',
-                    ],
+                ->add('type', Type\FullTextChoice::class, ['category' => 'freeform_type',
+                    'placeholder' => '-------------',
                     'mapped' => false
                 ])
                 ->add('create', SubmitType::class)

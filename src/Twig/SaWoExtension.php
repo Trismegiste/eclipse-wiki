@@ -106,6 +106,7 @@ class SaWoExtension extends AbstractExtension
             case Ali::class:
                 return 'icon-ali';
             case Freeform::class:
+                return $v->wildCard ? 'icon-wildcard' : 'icon-monster';
             case Transhuman::class:
                 return $v->wildCard ? 'icon-wildcard' : 'icon-extra';
             default :

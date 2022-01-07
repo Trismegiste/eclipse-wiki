@@ -17,3 +17,7 @@ pressure:
     - Terre (1 bar)
     - Mars (1/10 bar)
     - Vide (0 bar)
+    
+freeform_type:
+    - Simulmorphe
+    - Monstre    
