@@ -22,18 +22,20 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class LoveletterType extends AbstractType
 {
 
+    use FormTypeUtils;
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('player', TextType::class, ['attr' => ['class' => 'pure-input-1-3']])
-            ->add('drama', TextareaType::class, ['attr' => ['rows' => 3]])
-            ->add('roll1', Type\RollType::class)
-            ->add('roll2', Type\RollType::class)
-            ->add('roll3', Type\RollType::class)
-            ->add('resolution', CollectionType::class, [
-                'entry_type' => TextareaType::class,
-                'allow_add' => true
-            ])
+                ->add('player', TextType::class, ['attr' => ['class' => 'pure-input-1-3']])
+                ->add('drama', TextareaType::class, ['attr' => ['rows' => 3]])
+                ->add('roll1', Type\RollType::class)
+                ->add('roll2', Type\RollType::class)
+                ->add('roll3', Type\RollType::class)
+                ->add('resolution', CollectionType::class, [
+                    'entry_type' => TextareaType::class,
+                    'allow_add' => true
+                ])
         ;
 
         if ($options['edit']) {
@@ -57,27 +59,12 @@ class LoveletterType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         if ($options['edit']) {
-            $view['create']->vars['label'] = 'Edit';
+            $this->changeLabel($view, 'create', 'Edit');
         }
-        $view['content']->vars['attr']['rows'] = 3;
-        $view['content']->vars['label'] = 'Context';
-        parent::finishView($view, $form, $options);
-        $this->moveAtEnd($view->children, 'create');
-        $this->moveAtStart($view->children, 'player');
-    }
-
-    private function moveAtEnd(array &$arr, string $key): void
-    {
-        $item = $arr[$key];
-        unset($arr[$key]);
-        array_push($arr, $item);
-    }
-
-    private function moveAtStart(array &$arr, string $key): void
-    {
-        $item = $arr[$key];
-        unset($arr[$key]);
-        array_unshift($arr, $item);
+        $this->changeAttribute($view, 'content', 'rows', 3);
+        $this->changeLabel($view, 'content', 'Context');
+        $this->moveChildAtBegin($view, 'player');
+        $this->moveChildAtEnd($view, 'create');
     }
 
 }

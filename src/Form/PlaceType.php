@@ -19,6 +19,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class PlaceType extends AbstractType
 {
 
+    use FormTypeUtils;
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -56,19 +58,11 @@ class PlaceType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         if ($options['edit']) {
-            $view['create']->vars['label'] = 'Edit';
+            $this->changeLabel($view, 'create', 'Edit');
         }
-        $view['content']->vars['attr']['rows'] = 24;
-        parent::finishView($view, $form, $options);
-        $this->moveAtEnd($view->children, 'content');
-        $this->moveAtEnd($view->children, 'create');
-    }
-
-    private function moveAtEnd(array &$arr, string $key): void
-    {
-        $item = $arr[$key];
-        unset($arr[$key]);
-        array_push($arr, $item);
+        $this->changeAttribute($view, 'content', 'rows', 24);
+        $this->moveChildAtEnd($view, 'content');
+        $this->moveChildAtEnd($view, 'create');
     }
 
 }

@@ -2,6 +2,7 @@
 
 {% block abilities_list %}
     <h2>{{ npc.morph.type }}</h2>
+    {{ wiki(vertex.content) }}
     <h2>Atouts</h2>
     <ul>
         {% for edge in npc.edges %}
@@ -16,8 +17,7 @@
     {{ parent() }}
     <div class="pure-g">
         <div class="pure-u-1">
-            <h1>Informations</h1>
-            {{ wiki(vertex.content) }}
+            <h2>Backlinks</h2>
             {{ include('fragment/wiki_backlinks.html.twig') }}
         </div>
     </div>
