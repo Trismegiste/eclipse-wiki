@@ -127,7 +127,13 @@ class NpcGeneratorTest extends WebTestCase
     public function testDuplicate(string $pk)
     {
         $crawler = $this->client->request('GET', "/npc/duplicate/$pk");
-        $this->assertCount(1, $crawler->selectButton('form_copy'));
+        $button = $crawler->selectButton('form_copy');
+        $this->assertCount(1, $button);
+
+        $form = $button->form();
+        $this->client->submit($form);
+        $this->assertResponseRedirects();
+        $this->client->followRedirect();
     }
 
     /** @depends testInfo */
@@ -141,13 +147,34 @@ class NpcGeneratorTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', '/npc/ali');
         $this->assertResponseIsSuccessful();
+        $form = $crawler->selectButton('ali_generate')->form();
+        $this->client->submit($form, ['ali' => ['title' => 'New ALI']]);
+        $this->assertResponseRedirects();
+        $this->client->followRedirect();
     }
 
     /** @depends testInfo */
     public function testSleeve(string $pk)
     {
         $crawler = $this->client->request('GET', "/npc/sleeve/$pk");
-        $this->assertCount(1, $crawler->selectButton('form_sleeve'));
+        $this->assertResponseIsSuccessful();
+        $this->client->submitForm('form_sleeve');
+        $this->assertResponseRedirects();
+        $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
+    }
+
+    public function testCreateFreeform()
+    {
+        $this->client->request('GET', '/npc/freeform');
+        $this->assertResponseIsSuccessful();
+        $this->client->submitForm('freeform_create_create', ['freeform_create' => [
+                'title' => 'New monster',
+                'type' => 'Monstre'
+        ]]);
+        $this->assertResponseRedirects();
+        $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
     }
 
 }
