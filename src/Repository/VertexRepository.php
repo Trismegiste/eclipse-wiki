@@ -127,12 +127,15 @@ class VertexRepository extends DefaultRepository
 
     public function filterBy(string $keyword): \IteratorIterator
     {
-        $it = $this->search(
-                ['$or' => [
-                        ['title' => new Regex(preg_quote($keyword), 'i')],
-                        ['content' => new Regex(preg_quote($keyword), 'i')]
-                    ]],
-                [], '_id');
+        $filter = [];
+        if (!empty($keyword)) {
+            $filter = ['$or' => [
+                    ['title' => new Regex(preg_quote($keyword), 'i')],
+                    ['content' => new Regex(preg_quote($keyword), 'i')]
+            ]];
+        }
+
+        $it = $this->search($filter, [], '_id');
 
         return $it;
     }
