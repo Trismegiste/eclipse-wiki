@@ -119,4 +119,17 @@ class LoveletterCrudTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    /** @depends testShow */
+    public function testSend(string $show)
+    {
+        $crawler = $this->client->request('GET', $show);
+        $url = $crawler->filterXPath('//nav/a/i[@class="icon-bluetooth"]/parent::a')->attr('href');
+
+        $crawler = $this->client->request('GET', $url);
+        $this->assertResponseRedirects();
+        $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
+        $this->assertPageTitleContains('Love letter');
+    }
+
 }

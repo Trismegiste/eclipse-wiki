@@ -173,6 +173,20 @@ class NpcGeneratorTest extends WebTestCase
                 'type' => 'Monstre'
         ]]);
         $this->assertResponseRedirects();
+        $crawler = $this->client->followRedirect();
+
+        return $crawler->getUri();
+    }
+
+    /**
+     * @depends testCreateFreeform
+     */
+    public function testEditSubmitWithFreeform(string $edit)
+    {
+        $this->client->request('GET', $edit);
+        $this->assertResponseIsSuccessful();
+        $this->client->submitForm('npc_stats_edit');
+        $this->assertResponseRedirects();
         $this->client->followRedirect();
         $this->assertResponseIsSuccessful();
     }
