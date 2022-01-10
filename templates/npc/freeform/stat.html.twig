@@ -1,0 +1,11 @@
+{% extends "npc/edit.html.twig" %}
+
+{% block content %}
+    {# creation info for Freeform #}
+    <section class="pure-g">
+        <div class="pure-u-1-2">
+            <h2>{{ form.vars.data.morph.type }}</h2>
+        </div>
+    </section>
+    {{ parent() }}
+{% endblock %}

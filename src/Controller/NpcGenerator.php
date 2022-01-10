@@ -75,7 +75,7 @@ class NpcGenerator extends AbstractController
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $npc->getPk()]);
         }
 
-        return $this->render('npc/edit.html.twig', ['profile' => $this->getProfileList(), 'form' => $form->createView()]);
+        return $this->render(\App\Twig\SaWoExtension::editStatTemplate[get_class($npc)], ['profile' => $this->getProfileList(), 'form' => $form->createView()]);
     }
 
     private function getProfileList()

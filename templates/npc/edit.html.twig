@@ -117,7 +117,6 @@
 {% endblock %}
 
 {% block content %}
-    {{ include(char_info_template(form.vars.data)) }}
     <section x-data="{{ form.vars.data|json_encode()|escape('html_attr') }}">
         <section x-data="behavior">
             <section x-on:profile.window="addProfile($event.detail)">

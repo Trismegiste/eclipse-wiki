@@ -26,10 +26,10 @@ use Twig\TwigFunction;
 class SaWoExtension extends AbstractExtension
 {
 
-    const infoTemplate = [
-        Ali::class => 'npc/ali/info.html.twig',
-        Transhuman::class => 'npc/transhuman/info.html.twig',
-        Freeform::class => 'npc/freeform/info.html.twig'
+    const editStatTemplate = [
+        Ali::class => 'npc/ali/stat.html.twig',
+        Transhuman::class => 'npc/transhuman/stat.html.twig',
+        Freeform::class => 'npc/freeform/stat.html.twig'
     ];
     const rowTemplate = [
         Ali::class => 'npc/row.html.twig',
@@ -55,11 +55,9 @@ class SaWoExtension extends AbstractExtension
         return [
             new TwigFunction('level_hindrance', [$this, 'printLevelHindrance']),
             new TwigFunction('add_raise', [$this, 'addRaise']),
-            new TwigFunction('char_info_template', [$this, 'getInfoTemplate']),
             new TwigFunction('select_row_template', [$this, 'getVertexTemplate']),
             new TwigFunction('dice_icon', [$this, 'diceIcon'], ['is_safe' => ['html']]),
             new TwigFunction('char_icon', [$this, 'iconForCharacter']),
-            new TwigFunction('vertex_icon', [$this, 'iconForVertex'])
         ];
     }
 
@@ -73,11 +71,6 @@ class SaWoExtension extends AbstractExtension
     public function printLevelHindrance(int $level): string
     {
         return HindranceProvider::paramType[$level];
-    }
-
-    public function getInfoTemplate(Character $char): string
-    {
-        return self::infoTemplate[get_class($char)];
     }
 
     public function diceIcon(string $roll): string
@@ -95,18 +88,13 @@ class SaWoExtension extends AbstractExtension
         return $roll;
     }
 
-    public function iconForVertex(Vertex $v): string
-    {
-        return 'icon-video';
-    }
-
     public function iconForCharacter(Character $v): string
     {
         switch (get_class($v)) {
             case Ali::class:
                 return 'icon-ali';
             case Freeform::class:
-                return $v->wildCard ? 'icon-wildcard' : 'icon-monster';
+                return 'icon-monster';
             case Transhuman::class:
                 return $v->wildCard ? 'icon-wildcard' : 'icon-extra';
             default :
