@@ -39,6 +39,7 @@ class LoveletterType extends AbstractType
         ;
 
         if ($options['edit']) {
+            $builder->remove('title');
             $builder->setMethod('PUT');
         }
     }

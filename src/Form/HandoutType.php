@@ -38,6 +38,7 @@ class HandoutType extends AbstractType
                 ->add('target', TextType::class);
 
         if ($options['edit']) {
+            $builder->remove('title');
             $builder->setMethod('PUT');
         }
     }
