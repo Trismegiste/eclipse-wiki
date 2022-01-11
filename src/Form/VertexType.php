@@ -23,18 +23,28 @@ class VertexType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-                ->add('title', TextType::class, ['constraints' => [new \App\Validator\UniqueVertexTitle()]])
-                ->add('content', TextareaType::class, ['attr' => ['rows' => 30]])
-                ->add('create', SubmitType::class);
+        if (!$options['edit']) {
+            $builder
+                    ->add('title', TextType::class, ['constraints' => [new \App\Validator\UniqueVertexTitle()]])
+                    ->add('content', TextareaType::class, ['attr' => ['rows' => 30]])
+                    ->add('create', SubmitType::class);
+        } else {
+            $builder
+                    ->add('content', TextareaType::class, ['attr' => ['rows' => 30]])
+                    ->add('create', SubmitType::class, ['label' => 'Edit'])
+                    ->setMethod('PUT');
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('data_class', Vertex::class);
-        $resolver->setDefault('empty_data', function (FormInterface $form) {
-            return new Vertex($form->get('title')->getData());
-        });
+        $resolver->setDefaults([
+            'edit' => false,
+            'data_class' => Vertex::class,
+            'empty_data' => function (FormInterface $form) {
+                return new Vertex($form->get('title')->getData());
+            }
+        ]);
     }
 
 }

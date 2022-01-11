@@ -34,7 +34,7 @@ class ProfilePic extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('data__class', Transhuman::class);
+        $resolver->setDefault('data_class', Transhuman::class);
     }
 
 }

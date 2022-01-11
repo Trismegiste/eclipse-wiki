@@ -35,11 +35,6 @@ class PlaceType extends AbstractType
                         'placeholder' => 'ID unique de Youtube ou url de la vidéo'
                     ]
         ]);
-
-        if ($options['edit']) {
-            $builder->remove('title');
-            $builder->setMethod('PUT');
-        }
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -47,7 +42,6 @@ class PlaceType extends AbstractType
         $resolver->setDefault('empty_data', function (FormInterface $form) {
             return new Place($form->get('title')->getData());
         });
-        $resolver->setDefault('edit', false);
     }
 
     public function getParent()
@@ -57,9 +51,6 @@ class PlaceType extends AbstractType
 
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
-        if ($options['edit']) {
-            $this->changeLabel($view, 'create', 'Edit');
-        }
         $this->changeAttribute($view, 'content', 'rows', 24);
         $this->moveChildAtEnd($view, 'content');
         $this->moveChildAtEnd($view, 'create');

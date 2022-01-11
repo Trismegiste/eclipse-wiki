@@ -37,11 +37,6 @@ class LoveletterType extends AbstractType
                     'allow_add' => true
                 ])
         ;
-
-        if ($options['edit']) {
-            $builder->remove('title');
-            $builder->setMethod('PUT');
-        }
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -49,7 +44,6 @@ class LoveletterType extends AbstractType
         $resolver->setDefault('empty_data', function (FormInterface $form) {
             return new Loveletter($form->get('title')->getData());
         });
-        $resolver->setDefault('edit', false);
     }
 
     public function getParent()
@@ -59,9 +53,6 @@ class LoveletterType extends AbstractType
 
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
-        if ($options['edit']) {
-            $this->changeLabel($view, 'create', 'Edit');
-        }
         $this->changeAttribute($view, 'content', 'rows', 3);
         $this->changeLabel($view, 'content', 'Context');
         $this->moveChildAtBegin($view, 'player');
