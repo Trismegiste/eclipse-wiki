@@ -62,8 +62,8 @@ class VertexCrudTest extends WebTestCase
         $url = $crawler->filterXPath('//nav/a/i[@class="icon-edit"]/parent::a')->attr('href');
 
         $crawler = $client->request('GET', $url);
-        $form = $crawler->selectButton('form_edit')->form();
-        $form['form[content]'] = 'New content [[abcd]]';
+        $form = $crawler->selectButton('vertex_create')->form();
+        $form['vertex[content]'] = 'New content [[abcd]]';
         $crawler = $client->submit($form);
         $this->assertResponseRedirects();
         $client->followRedirect();

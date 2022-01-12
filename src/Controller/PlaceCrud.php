@@ -30,7 +30,7 @@ class PlaceCrud extends GenericCrud
 
     /**
      * Edits a Place
-     * @Route("/place/edit/{pk}", methods={"GET","PUT"})
+     * @Route("/place/edit/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
     public function edit(string $pk, Request $request): Response
     {

@@ -60,7 +60,7 @@ class NpcGenerator extends AbstractController
 
     /**
      * Edits a NPC
-     * @Route("/npc/edit/{pk}", methods={"GET","PUT"})
+     * @Route("/npc/edit/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
     public function edit(string $pk, Request $request): Response
     {
@@ -126,7 +126,7 @@ class NpcGenerator extends AbstractController
 
     /**
      * Duplicate a NPC
-     * @Route("/npc/duplicate/{pk}", methods={"GET","POST"})
+     * @Route("/npc/duplicate/{pk}", methods={"GET","POST"}, requirements={"pk"="[\da-f]{24}"})
      */
     public function duplicate(string $pk, Request $request): Response
     {
@@ -152,7 +152,7 @@ class NpcGenerator extends AbstractController
 
     /**
      * Form for editing gears & stuff of NPC
-     * @Route("/npc/gear/{pk}", methods={"GET","PUT"})
+     * @Route("/npc/gear/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
     public function gear(string $pk, Request $request): Response
     {
@@ -172,7 +172,7 @@ class NpcGenerator extends AbstractController
 
     /**
      * Form for editing attacks and armors of NPC
-     * @Route("/npc/battle/{pk}", methods={"GET","PUT"})
+     * @Route("/npc/battle/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
     public function battle(string $pk, Request $request): Response
     {
@@ -212,7 +212,7 @@ class NpcGenerator extends AbstractController
 
     /**
      * Resleeves a NPC with a new morph
-     * @Route("/npc/sleeve/{pk}", methods={"GET","PATCH"})
+     * @Route("/npc/sleeve/{pk}", methods={"GET","PATCH"}, requirements={"pk"="[\da-f]{24}"})
      */
     public function sleeve(string $pk, Request $request, MorphProvider $morph): Response
     {

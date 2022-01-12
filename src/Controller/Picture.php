@@ -72,7 +72,7 @@ class Picture extends AbstractController
 
     /**
      * Create an avatar for NPC
-     * @Route("/profile/create/{pk}", methods={"GET","POST"})
+     * @Route("/profile/create/{pk}", methods={"GET","POST"}, requirements={"pk"="[\da-f]{24}"})
      */
     public function profile(string $pk, Request $request, VertexRepository $repo): Response
     {

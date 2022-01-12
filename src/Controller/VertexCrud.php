@@ -10,7 +10,6 @@ use App\Entity\Vertex;
 use App\Form\VertexType;
 use App\Twig\SaWoExtension;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,7 +33,7 @@ class VertexCrud extends GenericCrud
 
     /**
      * Showing a vertex vertex by its primary key
-     * @Route("/vertex/show/{pk}", methods={"GET"})
+     * @Route("/vertex/show/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
     public function show(string $pk): Response
     {
@@ -70,39 +69,24 @@ class VertexCrud extends GenericCrud
 
     /**
      * Editing a vertex (simple : title & content)
-     * @Route("/vertex/edit/{pk}", methods={"GET","PUT"})
+     * @Route("/vertex/edit/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
     public function edit(string $pk, Request $request): Response
     {
-        $vertex = $this->repository->findByPk($pk);
-        $form = $this->createFormBuilder($vertex)
-            ->add('content', TextareaType::class, ['attr' => ['rows' => 32]])
-            ->add('edit', SubmitType::class)
-            ->setMethod('PUT')
-            ->getForm();
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $vertex = $form->getData();
-            $this->repository->save($vertex);
-
-            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
-        }
-
-        return $this->render('vertex/edit.html.twig', ['form' => $form->createView()]);
+        return $this->handleEdit(VertexType::class, 'vertex/edit.html.twig', $pk, $request);
     }
 
     /**
      * Deleting a vertex
-     * @Route("/vertex/delete/{pk}", methods={"GET","DELETE"})
+     * @Route("/vertex/delete/{pk}", methods={"GET","DELETE"}, requirements={"pk"="[\da-f]{24}"})
      */
     public function delete(string $pk, Request $request): Response
     {
         $vertex = $this->repository->findByPk($pk);
         $form = $this->createFormBuilder($vertex)
-            ->add('delete', SubmitType::class)
-            ->setMethod('DELETE')
-            ->getForm();
+                ->add('delete', SubmitType::class)
+                ->setMethod('DELETE')
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -132,7 +116,7 @@ class VertexCrud extends GenericCrud
 
     /**
      * Show previous vertex from a PK
-     * @Route("/vertex/previous/{pk}", methods={"GET"})
+     * @Route("/vertex/previous/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
     public function seekPrevious(string $pk): Response
     {
@@ -146,7 +130,7 @@ class VertexCrud extends GenericCrud
 
     /**
      * Show next vertex from a PK
-     * @Route("/vertex/next/{pk}", methods={"GET"})
+     * @Route("/vertex/next/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
     public function seekNext(string $pk): Response
     {
@@ -160,7 +144,7 @@ class VertexCrud extends GenericCrud
 
     /**
      * Renaming a vertex
-     * @Route("/vertex/rename/{pk}", methods={"GET","PUT"})
+     * @Route("/vertex/rename/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
     public function rename(string $pk, Request $request): Response
     {
@@ -169,10 +153,10 @@ class VertexCrud extends GenericCrud
         $backlinks = $this->repository->searchByBacklinks($vertex->getTitle());
 
         $form = $this->createFormBuilder($vertex)
-            ->add('title', TextType::class, ['label' => 'Nouveau nom'])
-            ->add('rename', SubmitType::class)
-            ->setMethod('PUT')
-            ->getForm();
+                ->add('title', TextType::class, ['label' => 'Nouveau nom'])
+                ->add('rename', SubmitType::class)
+                ->setMethod('PUT')
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

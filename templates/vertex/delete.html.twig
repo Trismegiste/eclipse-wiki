@@ -11,6 +11,6 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Êtes-vous sûr de vouloir supprimer le {{ form.vars.data.category }} {{ form.vars.data.title }} ?</h2>
+    <h2>Êtes-vous sûr de vouloir supprimer le {{ form.vars.data.category }} <strong>{{ form.vars.data.title }}</strong> ?</h2>
     {{ form(form) }}
 {% endblock %}

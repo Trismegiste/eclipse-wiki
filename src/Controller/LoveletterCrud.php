@@ -50,7 +50,7 @@ class LoveletterCrud extends GenericCrud
 
     /**
      * Edits a Love letter
-     * @Route("/loveletter/edit/{pk}", methods={"GET","PUT"})
+     * @Route("/loveletter/edit/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
     public function edit(string $pk, Request $request): Response
     {
