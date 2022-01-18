@@ -12,9 +12,9 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {{ include('fragment/init_autocomplete.html.twig', {element_id:'form_content'}) }}
+    {{ include('fragment/init_autocomplete.html.twig', {element_id:'vertex_content'}) }}
     <script>
-        document.getElementById('form_content').focus()
+        document.getElementById('vertex_content').focus()
     </script>
 {% endblock %}
 
