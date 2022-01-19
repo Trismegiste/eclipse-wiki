@@ -16,5 +16,7 @@ class Place extends Vertex
     public $pressure;
     public $gravity;
     public $youtubeUrl = null;
+    public $surnameLang = null;
+    public $npcTemplate = null;
 
 }
