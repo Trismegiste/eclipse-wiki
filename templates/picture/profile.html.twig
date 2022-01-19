@@ -51,7 +51,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('foliotek/croppie.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@multiavatar/multiavatar/multiavatar.min.js"></script>    
+    <script src="{{ asset('multiavatar/multiavatar.min.js') }}"></script>
     <script>
         var uploadCrop = new Croppie(document.getElementById('cropper'), {
             viewport: {
