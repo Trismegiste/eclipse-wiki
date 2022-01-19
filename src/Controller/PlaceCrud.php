@@ -42,4 +42,15 @@ class PlaceCrud extends GenericCrud
         return new Place($title);
     }
 
+    /**
+     * Easy generation NPC on a Place
+     * @Route("/place/npc/{pk}", methods={"GET","POST"}, requirements={"pk"="[\da-f]{24}"})
+     */
+    public function generateNpc(string $pk, Request $request): Response
+    {
+        // présente 2 listes en radiobox : avatar × nom masc/fem
+        // Possilité de générer une image profil avec le combo
+        // Possibilité de créer un NPC direct
+    }
+
 }

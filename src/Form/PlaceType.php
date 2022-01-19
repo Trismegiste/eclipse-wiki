@@ -40,7 +40,7 @@ class PlaceType extends AbstractType
         sort($tmpList);
         $language['-- Aléatoire --'] = 'random';
         foreach ($tmpList as $lang) {
-            $language[$lang] = $lang;
+            $language[ucfirst($lang)] = $lang;
         }
 
         $npcList = [];
