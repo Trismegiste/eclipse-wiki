@@ -12,6 +12,8 @@ use App\Form\PlaceType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Trismegiste\NameGenerator\FileRepository;
+use Trismegiste\NameGenerator\RandomizerDecorator;
 
 /**
  * CRUD for Place
@@ -48,9 +50,18 @@ class PlaceCrud extends GenericCrud
      */
     public function generateNpc(string $pk, Request $request): Response
     {
-        // présente 2 listes en radiobox : avatar × nom masc/fem
-        // Possilité de générer une image profil avec le combo
-        // Possibilité de créer un NPC direct
+        $repo = new RandomizerDecorator(new FileRepository());
+        $vertex = $this->repository->findByPk($pk);
+        $card = 16;
+
+        $listing = [];
+        foreach (['female', 'male'] as $gender) {
+            for ($k = 0; $k < $card; $k++) {
+                $listing[$gender][] = $repo->getRandomGivenNameFor($gender, 'random') . ' ' . $repo->getRandomSurnameFor($vertex->surnameLang);
+            }
+        }
+
+        return $this->render('place/npc_generate.html.twig', ['place' => $vertex, 'listing' => $listing]);
     }
 
 }

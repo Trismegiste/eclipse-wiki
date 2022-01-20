@@ -1,5 +1,8 @@
 {# default actions #}
 <a href="{{ path('app_vertexcrud_show', {pk: vertex.pk}) }}" title="Voir"><i class="icon-eye"></i></a>
 <a href="{{ path('app_placecrud_edit', {pk: vertex.pk}) }}" title="Modifier"><i class="icon-edit"></i></a>
+    {% if vertex.npcTemplate is not empty %}
+    <a href="{{ path('app_placecrud_generatenpc', {pk: vertex.pk}) }}" title="Créer des PNJ"><i class="icon-user-plus"></i></a>
+    {% endif %}
 <a href="{{ path('app_vertexcrud_rename', {pk: vertex.pk}) }}" title="Renommer"><i class="icon-rename"></i></a>
 <a href="{{ path('app_vertexcrud_delete', {pk: vertex.pk}) }}" title="Effacer"><i class="icon-trash-empty"></i></a>

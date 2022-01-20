@@ -1,0 +1,45 @@
+{% extends "base.html.twig" %}
+
+{% block title %}PNJ pour {{ place.title }}{% endblock %}
+
+{% block header_title %}
+    {# the header menu with title #}
+    <nav style="float: right">
+        {{ include('place/actions.html.twig', {vertex:place}) }}
+    </nav>   
+    {% block header_big_title %}PNJ pour {{ place.title }}{% endblock %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('multiavatar/multiavatar.min.js') }}"></script>
+    <script>
+        var avatarSample = document.querySelectorAll('[data-avatar]')
+
+        for (const sample of avatarSample) {
+            sample.innerHTML = multiavatar(sample.dataset.avatar)
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    {% for label, gender in listing %}
+        <section class="pure-g quick-npc">
+            {% for name in gender %}
+                <div class="pure-u-1-8">
+                    <figure data-avatar="{{ name }}"></figure>
+                    <a href="{{ path('app_npcgenerator_create', {title: name}) }}">{{ name }}</a><br/>
+                </div>
+            {% endfor %}
+        </section>
+    {% endfor %}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .quick-npc {
+            text-align: center;
+        }
+    </style>
+{% endblock %}
