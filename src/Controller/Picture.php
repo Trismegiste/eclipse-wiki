@@ -34,8 +34,8 @@ class Picture extends AbstractController
 
         $finder = new Finder();
         $it = $finder->in($this->getUploadDir())
-            ->files()
-            ->name("/$title/i");
+                ->files()
+                ->name("/$title/i");
 
         $choice = [];
         foreach ($it as $fch) {
@@ -74,19 +74,16 @@ class Picture extends AbstractController
      * Create an avatar for NPC
      * @Route("/profile/create/{pk}", methods={"GET","POST"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function profile(string $pk, Request $request, VertexRepository $repo): Response
+    public function profile(string $pk, Request $request, VertexRepository $repo, AvatarMaker $maker): Response
     {
         $npc = $repo->findByPk($pk);
-        $maker = new AvatarMaker();
-
         $form = $this->createForm(ProfilePic::class, $npc);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var UploadedFile $avatarFile */
             $avatarFile = $form->get('avatar')->getData();
-            $socNetFolder = \join_paths($this->getParameter('kernel.project_dir'), 'public/socnet');
-            $profilePic = $maker->generate($npc, $avatarFile->getPathname(), $socNetFolder);
+            $profilePic = $maker->generate($npc, $avatarFile->getPathname());
             $filename = $npc->getTitle() . '-avatar.jpg';
             imagejpeg($profilePic, \join_paths($this->getUploadDir(), $filename));
             $append = "\n==Avatar==\n[[file:$filename]]\n";

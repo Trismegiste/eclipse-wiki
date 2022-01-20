@@ -17,7 +17,7 @@ class AvatarMakerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->sut = new AvatarMaker();
+        $this->sut = new AvatarMaker('./public/socnet/');
     }
 
     protected function createNpc(): Transhuman
@@ -36,7 +36,7 @@ class AvatarMakerTest extends TestCase
         }
 
         $npc = $this->createNpc();
-        $res = $this->sut->generate($npc, join_paths(__DIR__, 'avatar.png'), './public/socnet/');
+        $res = $this->sut->generate($npc, join_paths(__DIR__, 'avatar.png'));
         imagejpeg($res, $target);
         $this->assertFileExists($target);
         unlink($target);

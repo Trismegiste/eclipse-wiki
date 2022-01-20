@@ -91,6 +91,11 @@ services:
         arguments: 
             $path: '%kernel.project_dir%/database/choicetype.yml'
             
+    # Picture
+    App\Service\AvatarMaker:
+        arguments:
+            $socNetFolder: '%kernel.project_dir%/public/socnet'
+            
    # Custom Types
     App\Form\Type\FullTextChoice:
         arguments:

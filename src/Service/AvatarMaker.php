@@ -17,14 +17,23 @@ class AvatarMaker
     protected $height;
     protected $width;
     protected $font = __DIR__ . '/OpenSansCondensed-Light.ttf';
+    protected $socNetFolder;
 
-    public function __construct(int $width = 503, int $height = 894)
+    public function __construct(string $socNetFolder, int $width = 503, int $height = 894)
     {
         $this->height = $height;
         $this->width = $width;
+        $this->socNetFolder = $socNetFolder;
     }
 
-    public function generate(Transhuman $npc, string $image, string $socNetFolder)
+    /**
+     * Create the profile pic
+     * @param Transhuman $npc
+     * @param string $image the absolute path to an avatar picture
+     * @return resource the GD2 image resource
+     * @throws \RuntimeException
+     */
+    public function generate(Transhuman $npc, string $image)
     {
         if (!file_exists($image)) {
             throw new \RuntimeException("$image does not exist");
@@ -71,7 +80,7 @@ class AvatarMaker
             $txtPos += $this->width / 3;
 
             // icon
-            $socnet = imagecreatefromstring(file_get_contents(join_paths($socNetFolder, $key . '.png')));
+            $socnet = imagecreatefromstring(file_get_contents(join_paths($this->socNetFolder, $key . '.png')));
             $resized = imagescale($socnet, $this->width / 4, -1, IMG_GAUSSIAN);
             imagecopy($target, $resized, $imgPos, $this->height * 0.78, 0, 0, $this->width / 4, $this->width / 4);
             $imgPos += $this->width / 3;
