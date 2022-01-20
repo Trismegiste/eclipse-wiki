@@ -57,7 +57,8 @@ class PlaceCrud extends GenericCrud
         $listing = [];
         foreach (['female', 'male'] as $gender) {
             for ($k = 0; $k < $card; $k++) {
-                $listing[$gender][] = $repo->getRandomGivenNameFor($gender, 'random') . ' ' . $repo->getRandomSurnameFor($vertex->surnameLang);
+                $lang = random_int(0, 100) < 75 ? $vertex->surnameLang : 'random';
+                $listing[$gender][] = $repo->getRandomGivenNameFor($gender, 'random') . ' ' . $repo->getRandomSurnameFor($lang);
             }
         }
 
