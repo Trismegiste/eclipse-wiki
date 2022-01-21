@@ -11,6 +11,7 @@ use App\Entity\Vertex;
 use App\Form\PlaceType;
 use App\Form\ProfileOnTheFly;
 use App\Service\AvatarMaker;
+use App\Service\ObjectPushFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -75,7 +76,7 @@ class PlaceCrud extends GenericCrud
      * AJAX Create a social network profile for a NPC
      * @Route("/place/profile/create", methods={"POST"})
      */
-    public function generateProfile(Request $request, AvatarMaker $maker): JsonResponse
+    public function generateProfile(Request $request, AvatarMaker $maker, ObjectPushFactory $fac): JsonResponse
     {
         $form = $this->createForm(ProfileOnTheFly::class);
 
@@ -85,8 +86,9 @@ class PlaceCrud extends GenericCrud
             $npc = $this->repository->findByTitle($param['template']);
             $npc->setTitle($param['name']);
             $profile = $maker->generate($npc, $this->convertSvgToPng($param['svg']));
-            $path = \join_paths($this->getParameter('kernel.cache_dir'), $param['name'] . '.jpg');
+            $path = \join_paths($this->getParameter('kernel.cache_dir'), 'profile', $param['name'] . '.jpg');
             imagejpeg($profile, $path);
+            $fac->send($path);
 
             return new JsonResponse(null, Response::HTTP_CREATED);
         }
@@ -102,7 +104,7 @@ class PlaceCrud extends GenericCrud
             '-background', 'none',
             '-strokewidth', 0,
             '-density', 200,
-            '-resize', '500x500',
+            '-resize', '503x503',
             'svg:-', 'png:-'
         ]);
         $process->setInput($input);
@@ -110,6 +112,10 @@ class PlaceCrud extends GenericCrud
         $input->write($svg);
         $input->close();
         $process->wait();
+
+        if (0 !== $process->getExitCode()) {
+            throw new \RuntimeException($process->getErrorOutput());
+        }
 
         return imagecreatefromstring($process->getOutput());
     }
