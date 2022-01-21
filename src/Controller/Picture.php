@@ -83,7 +83,7 @@ class Picture extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var UploadedFile $avatarFile */
             $avatarFile = $form->get('avatar')->getData();
-            $profilePic = $maker->generate($npc, $avatarFile->getPathname());
+            $profilePic = $maker->generate($npc, imagecreatefromstring($avatarFile->getContent()));
             $filename = $npc->getTitle() . '-avatar.jpg';
             imagejpeg($profilePic, \join_paths($this->getUploadDir(), $filename));
             $append = "\n==Avatar==\n[[file:$filename]]\n";

@@ -29,16 +29,15 @@ class AvatarMaker
     /**
      * Create the profile pic
      * @param Transhuman $npc
-     * @param string $image the absolute path to an avatar picture
+     * @param resource $source the GD resource of an avatar picture
      * @return resource the GD2 image resource
      * @throws \RuntimeException
      */
-    public function generate(Transhuman $npc, string $image)
+    public function generate(Transhuman $npc, $source)
     {
-        if (!file_exists($image)) {
-            throw new \RuntimeException("$image does not exist");
+        if (!is_resource($source)) {
+            throw new \InvalidArgumentException('$image is not resource');
         }
-        $source = imagecreatefromstring(file_get_contents($image));
         $target = imagecreatetruecolor($this->width, $this->height);
         $bg = imagecolorallocate($target, 0xf0, 0xf0, 0xf0);
         imagefill($target, 0, 0, $bg);

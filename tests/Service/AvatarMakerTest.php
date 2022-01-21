@@ -30,16 +30,11 @@ class AvatarMakerTest extends TestCase
 
     public function testGenerate()
     {
-        $target = 'dump.jpg';
-        if (file_exists($target)) {
-            unlink($target);
-        }
-
         $npc = $this->createNpc();
-        $res = $this->sut->generate($npc, join_paths(__DIR__, 'avatar.png'));
-        imagejpeg($res, $target);
-        $this->assertFileExists($target);
-        unlink($target);
+        $res = $this->sut->generate($npc, imagecreatetruecolor(500, 500));
+        $this->assertIsResource($res);
+        $this->assertEquals(503, imagesx($res));
+        $this->assertEquals(894, imagesy($res));
     }
 
 }
