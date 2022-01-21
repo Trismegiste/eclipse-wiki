@@ -18,11 +18,30 @@
 
         for (const sample of avatarSample) {
             sample.innerHTML = multiavatar(sample.dataset.avatar)
+            // event for sending an avatar
+            sample.parentNode.addEventListener("click", function (e) {
+                document.getElementById('profile_on_the_fly_svg').value = sample.innerHTML
+                document.getElementById('profile_on_the_fly_name').value = sample.dataset.avatar
+                document.getElementById('profile_on_the_fly_template').value = '{{ place.npcTemplate }}'
+
+                let onTheFly = document.querySelector('form[name=profile_on_the_fly]')
+                let data = new FormData(onTheFly)
+                fetch(onTheFly.action, {
+                    method: 'post',
+                    body: data,
+                    redirect: 'manual'
+                }).then(function (response) {
+                    console.log('ok');
+                }).catch((error) => {
+                    console.error(error);
+                })
+            })
         }
     </script>
 {% endblock %}
 
 {% block content %}
+    {{ form(form) }}
     {% for label, gender in listing %}
         <section class="pure-g quick-npc">
             {% for name in gender %}

@@ -9,8 +9,13 @@ namespace App\Controller;
 use App\Entity\Place;
 use App\Entity\Vertex;
 use App\Form\PlaceType;
+use App\Form\ProfileOnTheFly;
+use App\Service\AvatarMaker;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Process\InputStream;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
 use Trismegiste\NameGenerator\FileRepository;
 use Trismegiste\NameGenerator\RandomizerDecorator;
@@ -45,10 +50,10 @@ class PlaceCrud extends GenericCrud
     }
 
     /**
-     * Easy generation NPC on a Place
-     * @Route("/place/npc/{pk}", methods={"GET","POST"}, requirements={"pk"="[\da-f]{24}"})
+     * Show a list of NPC profiles for a Place
+     * @Route("/place/npc/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function generateNpc(string $pk, Request $request): Response
+    public function showNpc(string $pk): Response
     {
         $repo = new RandomizerDecorator(new FileRepository());
         $vertex = $this->repository->findByPk($pk);
@@ -61,8 +66,52 @@ class PlaceCrud extends GenericCrud
                 $listing[$gender][] = $repo->getRandomGivenNameFor($gender, 'random') . ' ' . $repo->getRandomSurnameFor($lang);
             }
         }
+        $form = $this->createForm(ProfileOnTheFly::class, null, ['action' => $this->generateUrl('app_placecrud_generateprofile')]);
 
-        return $this->render('place/npc_generate.html.twig', ['place' => $vertex, 'listing' => $listing]);
+        return $this->render('place/npc_generate.html.twig', ['place' => $vertex, 'listing' => $listing, 'form' => $form->createView()]);
+    }
+
+    /**
+     * AJAX Create a social network profile for a NPC
+     * @Route("/place/profile/create", methods={"POST"})
+     */
+    public function generateProfile(Request $request, AvatarMaker $maker): JsonResponse
+    {
+        $form = $this->createForm(ProfileOnTheFly::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $param = $form->getData();
+            $npc = $this->repository->findByTitle($param['template']);
+            $npc->setTitle($param['name']);
+            $profile = $maker->generate($npc, $this->convertSvgToPng($param['svg']));
+            $path = \join_paths($this->getParameter('kernel.cache_dir'), $param['name'] . '.jpg');
+            imagejpeg($profile, $path);
+
+            return new JsonResponse(null, Response::HTTP_CREATED);
+        }
+
+        return new JsonResponse(null, Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+    private function convertSvgToPng(string $svg)
+    {
+        $input = new InputStream();
+        $process = new Process([
+            'convert',
+            '-background', 'none',
+            '-strokewidth', 0,
+            '-density', 200,
+            '-resize', '500x500',
+            'svg:-', 'png:-'
+        ]);
+        $process->setInput($input);
+        $process->start();
+        $input->write($svg);
+        $input->close();
+        $process->wait();
+
+        return imagecreatefromstring($process->getOutput());
     }
 
 }
