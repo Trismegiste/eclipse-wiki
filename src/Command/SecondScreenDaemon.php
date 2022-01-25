@@ -19,17 +19,24 @@ class SecondScreenDaemon extends Command
 {
 
     protected static $defaultName = 'popup:vnc';
+    protected $config;
+
+    public function __construct(array $popupConfig)
+    {
+        parent::__construct();
+        $this->config = $popupConfig;
+    }
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $io->title("VNC Server for the Popup");
-        $id = $this->getWindowIdentifier('PopupVNC - Mozilla Firefox');
+        $id = $this->getWindowIdentifier($this->config['name'] . $this->config['name_suffix']);
 
         $io->info('Connect VNC to ' . $this->getLocalIp());
         $vnc = new Process(['x11vnc', '-viewonly', '-nopw', '-avahi', '-id', $id]);
         $vnc->setTimeout(null);
-        $vnc->run(function ($type, $buffer)use ($io) {
+        $vnc->run(function ($type, $buffer) use ($io) {
             if (preg_match('#^PORT=(59[0-9]{2})#m', $buffer, $match)) {
                 $io->info('On port = ' . $match[1]);
             }

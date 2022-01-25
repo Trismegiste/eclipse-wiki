@@ -102,7 +102,7 @@ services:
         arguments:
             $socNetFolder: '%kernel.project_dir%/public/socnet'
             
-   # Custom Types
+    # Custom Types
     App\Form\Type\FullTextChoice:
         arguments:
             $repo: '@app.choicetype.repository'
@@ -111,3 +111,8 @@ services:
         arguments:
             $mac: '%env(resolve:BLUETOOTH_MAC)%'
             $chan: '%env(resolve:BLUETOOTH_CHANNEL)%'
+            
+    # Console command
+    App\Command\SecondScreenDaemon:
+        arguments:
+            - '%second_screen%'
