@@ -120,4 +120,16 @@ class PlaceCrud extends GenericCrud
         return imagecreatefromstring($process->getOutput());
     }
 
+    /**
+     * Popup for on the fly NPC avatar
+     * @Route("/place/profile/create", methods={"GET"})
+     */
+    public function npcPopup(Request $request): Response
+    {
+        $name = $request->query->get('name');
+        $npc = $this->repository->findByTitle($request->query->get('template'));
+
+        return $this->render('place/npc_popup.html.twig', ['name' => $name, 'npc' => $npc, 'sx' => 503, 'sy' => 894]);
+    }
+
 }

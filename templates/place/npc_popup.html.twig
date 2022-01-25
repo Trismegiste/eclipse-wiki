@@ -1,0 +1,34 @@
+{# show avatar on the fly #}
+{% extends "base.html.twig" %}
+
+{% block title %}PopupVNC{% endblock %}
+
+{% block body %}
+    <div class="pure-g">
+        <div id="avatar" class="pure-u-1">
+        </div>
+        <div  class="pure-u-1">
+            <h1>Follow {{ name }}</h1>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('multiavatar/multiavatar.min.js') }}"></script>
+    <script>
+        let figure = document.getElementById('avatar')
+        figure.innerHTML = multiavatar('{{ name }}')
+
+        window.resizeTo({{ sx }}, {{ sy }})
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+{% endblock %}
