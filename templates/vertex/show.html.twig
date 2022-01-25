@@ -41,8 +41,8 @@
         pictures.forEach((picture) => {
             let url = picture.href
             picture.addEventListener('click', (event) => {
-                fetch(url)
                 event.preventDefault()
+                window.open(url, 'PopupVNC', 'width=400,height=400,directories=0,titlebar=0,toolbar=0,location=0,status=0,menubar=0,scrollbars=no,resizable=no')
             })
         })
     </script>

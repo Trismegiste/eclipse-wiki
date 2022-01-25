@@ -1,0 +1,14 @@
+{# show picture #}
+{% extends "base.html.twig" %}
+
+{% block title %}PopupVNC{% endblock %}
+
+{% block body %}
+    <img src="/upload/{{ img }}" class="pure-img"/>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        window.resizeTo({{ sx }}, {{ sy + 42 }})
+    </script>
+{% endblock %}

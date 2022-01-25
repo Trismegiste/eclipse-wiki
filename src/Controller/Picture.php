@@ -46,12 +46,20 @@ class Picture extends AbstractController
     }
 
     /**
-     * Show image
-     * @Route("/picture/show/{title}", methods={"GET"})
+     * Show image in a popup
+     * @Route("/picture/popup/{title}", methods={"GET"})
      */
-    public function show(string $title): Response
+    public function popup(string $title): Response
     {
-        return $this->render('picture/show.html.twig', ['img' => $title]);  // @todo security issue
+        $path = \join_paths($this->getUploadDir(), $title);
+        list($width, $height) = getimagesize($path);
+        $sidePlus = max([$width, $height]);
+        if ($sidePlus > 900) {
+            $height = round(900 * $height / $sidePlus);
+            $width = round(900 * $width / $sidePlus);
+        }
+
+        return $this->render('picture/popup.html.twig', ['img' => $title, 'sx' => $width, 'sy' => $height]);
     }
 
     /**
@@ -62,7 +70,7 @@ class Picture extends AbstractController
     {
         $fac->send(\join_paths($this->getUploadDir(), $title));
 
-        return new JsonResponse(null, 200);
+        return new JsonResponse(null, Response::HTTP_OK);
     }
 
     protected function getUploadDir(): string

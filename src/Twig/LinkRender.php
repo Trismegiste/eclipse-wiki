@@ -29,7 +29,7 @@ class LinkRender extends HtmlRenderer
     public function getImageInfo($info): array
     {
         $info['thumb'] = '/upload/' . $info['url'];
-        $info['url'] = $this->routing->generate('app_picture_bluetooth', ['title' => $info['url']]);
+        $info['url'] = $this->routing->generate('app_picture_popup', ['title' => $info['url']]);
         $info['thumbnail'] = true;
         $info['caption'] = false;
 
