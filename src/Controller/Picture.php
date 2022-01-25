@@ -54,12 +54,13 @@ class Picture extends AbstractController
         $path = \join_paths($this->getUploadDir(), $title);
         list($width, $height) = getimagesize($path);
         $sidePlus = max([$width, $height]);
-        if ($sidePlus > 900) {
-            $height = round(900 * $height / $sidePlus);
-            $width = round(900 * $width / $sidePlus);
+        $coord = $this->getParameter('second_screen');
+        if ($sidePlus > $coord['max_size']) {
+            $height = round($coord['max_size'] * $height / $sidePlus);
+            $width = round($coord['max_size'] * $width / $sidePlus);
         }
 
-        return $this->render('picture/popup.html.twig', ['img' => $title, 'sx' => $width, 'sy' => $height]);
+        return $this->render('picture/popup.html.twig', ['img' => $title, 'sx' => $width + $coord['delta_x'], 'sy' => $height + $coord['delta_y']]);
     }
 
     /**
