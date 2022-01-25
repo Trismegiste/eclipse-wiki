@@ -18,8 +18,8 @@ class PictureTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 
     public function testShow()
     {
-        $this->client->request('GET', '/picture/show/notfound.jpg');
-        $this->assertResponseIsSuccessful();
+        $this->client->request('GET', '/picture/popup/notfound.jpg');
+        $this->assertResponseStatusCodeSame(404);
     }
 
     public function testSearch()

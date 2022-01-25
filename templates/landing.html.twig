@@ -18,6 +18,11 @@
         <li><strong>W</strong> : Édition des paramètres de combat d'un PNJ</li>
         <li><strong>P</strong> : Génération du profil réseau d'un Transhumain</li>
     </ul>
+    <h2>Partage par VNC</h2>
+    <ul>
+        <li><a href="#" id="popup" class="pure-button">Ouvrir cette popup</a></li>
+        <li>Lancer la commande popup:vnc</li>
+    </ul>
     <h2>Page du tracker d'initiative</h2>
     <ul>
         <li><strong>Clic sur la case mort</strong> : PNJ grisé</li>
@@ -34,4 +39,15 @@
             <a href="{{ path('app_dump_edge') }}">Tableau des Atouts</a>
         </li>
     </ul>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        let popup = document.getElementById('popup')
+        popup.addEventListener('click', (event) => {
+            event.preventDefault()
+            window.open('{{ path('app_picture_popup', {title: 'mire.png'}) }}', '{{ popup_param.name }}', '{{ popup_param.config }}')
+        })
+    </script>
 {% endblock %}

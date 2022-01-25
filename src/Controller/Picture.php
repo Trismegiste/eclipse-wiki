@@ -52,7 +52,11 @@ class Picture extends AbstractController
     public function popup(string $title): Response
     {
         $path = \join_paths($this->getUploadDir(), $title);
+        if (!file_exists($path)) {
+            throw $this->createNotFoundException($title);
+        }
         list($width, $height) = getimagesize($path);
+
         $sidePlus = max([$width, $height]);
         $coord = $this->getParameter('second_screen');
         if ($sidePlus > $coord['max_size']) {
