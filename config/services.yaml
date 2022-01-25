@@ -15,6 +15,8 @@ parameters:
         max_size: 900
         delta_x: 0
         delta_y: 42
+        name: 'PopupVNC'
+        name_suffix: ' - Mozilla Firefox'
         
 services:
     # default configuration for services in *this* file
