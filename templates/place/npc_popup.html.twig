@@ -4,6 +4,7 @@
 {% block title %}{{ popup_param.name }}{% endblock %}
 
 {% block body %}
+    {{ form(form) }}
     <div class="pure-g">
         <div id="avatar" class="pure-u-1">
         </div>
@@ -18,5 +19,38 @@
         let figure = document.getElementById('avatar')
         figure.innerHTML = multiavatar('{{ name }}')
 
+        document.getElementById('profile_on_the_fly_svg').value = figure.innerHTML
+        document.getElementById('profile_on_the_fly_name').value = '{{ name }}'
+        document.getElementById('profile_on_the_fly_template').value = '{{ npc.title }}'
+
+        let onTheFly = document.querySelector('form[name=profile_on_the_fly]')
+        let data = new FormData(onTheFly)
+        fetch(onTheFly.action, {
+            method: 'post',
+            body: data,
+            redirect: 'manual'
+        }).then(function (response) {
+            return response.blob()
+        }).then(function (blob) {
+            let imgTmp = new Image()
+            let reader = new FileReader();
+
+            reader.readAsDataURL(blob) // converts the blob to base64 and calls onload
+
+            reader.onload = function () {
+                imgTmp.src = reader.result
+                figure.replaceChildren(imgTmp)
+            }
+        }).catch((error) => {
+            console.error(error);
+        })
     </script>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        form {
+            display: none;
+        }
+    </style>
 {% endblock %}

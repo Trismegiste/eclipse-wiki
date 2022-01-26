@@ -76,7 +76,7 @@ class PlaceCrud extends GenericCrud
      * AJAX Create a social network profile for a NPC
      * @Route("/place/profile/create", methods={"POST"})
      */
-    public function generateProfile(Request $request, AvatarMaker $maker, ObjectPushFactory $fac): JsonResponse
+    public function generateProfile(Request $request, AvatarMaker $maker, ObjectPushFactory $fac): Response
     {
         $form = $this->createForm(ProfileOnTheFly::class);
 
@@ -86,14 +86,18 @@ class PlaceCrud extends GenericCrud
             $npc = $this->repository->findByTitle($param['template']);
             $npc->setTitle($param['name']);
             $profile = $maker->generate($npc, $this->convertSvgToPng($param['svg']));
-            $path = \join_paths($this->getParameter('kernel.cache_dir'), 'profile', $param['name'] . '.jpg');
-            imagejpeg($profile, $path);
-            $fac->send($path);
 
-            return new JsonResponse(null, Response::HTTP_CREATED);
+            $response = new \Symfony\Component\HttpFoundation\StreamedResponse(function () use ($profile) {
+                        imagepng($profile);
+                    },
+                    Response::HTTP_CREATED,
+                    ['Content-Type' => 'image/png']
+            );
+
+            return $response;
         }
 
-        return new JsonResponse(null, Response::HTTP_INTERNAL_SERVER_ERROR);
+        throw new \Symfony\Component\Form\Exception\RuntimeException('yolo');
     }
 
     private function convertSvgToPng(string $svg)
@@ -128,8 +132,15 @@ class PlaceCrud extends GenericCrud
     {
         $name = $request->query->get('name');
         $npc = $this->repository->findByTitle($request->query->get('template'));
+        $form = $this->createForm(ProfileOnTheFly::class);
 
-        return $this->render('place/npc_popup.html.twig', ['name' => $name, 'npc' => $npc, 'sx' => 503, 'sy' => 894]);
+        return $this->render('place/npc_popup.html.twig', [
+                    'name' => $name,
+                    'npc' => $npc,
+                    'sx' => 503,
+                    'sy' => 894 + 42,
+                    'form' => $form->createView()
+        ]);
     }
 
 }
