@@ -67,16 +67,15 @@ class PlaceCrud extends GenericCrud
                 $listing[$gender][] = $repo->getRandomGivenNameFor($gender, 'random') . ' ' . $repo->getRandomSurnameFor($lang);
             }
         }
-        $form = $this->createForm(ProfileOnTheFly::class, null, ['action' => $this->generateUrl('app_placecrud_generateprofile')]);
 
-        return $this->render('place/npc_generate.html.twig', ['place' => $vertex, 'listing' => $listing, 'form' => $form->createView()]);
+        return $this->render('place/npc_generate.html.twig', ['place' => $vertex, 'listing' => $listing]);
     }
 
     /**
      * AJAX Create a social network profile for a NPC
      * @Route("/place/profile/create", methods={"POST"})
      */
-    public function generateProfile(Request $request, AvatarMaker $maker, ObjectPushFactory $fac): Response
+    public function generateProfile(Request $request, AvatarMaker $maker): Response
     {
         $form = $this->createForm(ProfileOnTheFly::class);
 
@@ -137,8 +136,6 @@ class PlaceCrud extends GenericCrud
         return $this->render('place/npc_popup.html.twig', [
                     'name' => $name,
                     'npc' => $npc,
-                    'sx' => 503,
-                    'sy' => 894 + 42,
                     'form' => $form->createView()
         ]);
     }
