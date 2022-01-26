@@ -11,10 +11,10 @@ use App\Entity\Vertex;
 use App\Form\PlaceType;
 use App\Form\ProfileOnTheFly;
 use App\Service\AvatarMaker;
-use App\Service\ObjectPushFactory;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Form\Exception\RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Process\InputStream;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
@@ -86,17 +86,17 @@ class PlaceCrud extends GenericCrud
             $npc->setTitle($param['name']);
             $profile = $maker->generate($npc, $this->convertSvgToPng($param['svg']));
 
-            $response = new \Symfony\Component\HttpFoundation\StreamedResponse(function () use ($profile) {
-                        imagepng($profile);
+            $response = new StreamedResponse(function () use ($profile) {
+                        imagejpeg($profile);
                     },
                     Response::HTTP_CREATED,
-                    ['Content-Type' => 'image/png']
+                    ['Content-Type' => 'image/jpeg']
             );
 
             return $response;
         }
 
-        throw new \Symfony\Component\Form\Exception\RuntimeException('yolo');
+        throw new RuntimeException('Invalid form');
     }
 
     private function convertSvgToPng(string $svg)
@@ -129,15 +129,12 @@ class PlaceCrud extends GenericCrud
      */
     public function npcPopup(Request $request): Response
     {
-        $name = $request->query->get('name');
-        $npc = $this->repository->findByTitle($request->query->get('template'));
-        $form = $this->createForm(ProfileOnTheFly::class);
-
-        return $this->render('place/npc_popup.html.twig', [
-                    'name' => $name,
-                    'npc' => $npc,
-                    'form' => $form->createView()
+        $form = $this->createForm(ProfileOnTheFly::class, [
+            'name' => $request->query->get('name'),
+            'template' => $request->query->get('template')
         ]);
+
+        return $this->render('place/npc_popup.html.twig', ['form' => $form->createView()]);
     }
 
 }

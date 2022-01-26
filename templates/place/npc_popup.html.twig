@@ -16,12 +16,10 @@
     <script src="{{ asset('multiavatar/multiavatar.min.js') }}"></script>
     <script>
         window.resizeTo(503, 937)
-        let figure = document.getElementById('avatar')
-        figure.innerHTML = multiavatar('{{ name }}')
 
+        let figure = document.getElementById('avatar')
+        figure.innerHTML = multiavatar('{{ form.vars.data.name }}')
         document.getElementById('profile_on_the_fly_svg').value = figure.innerHTML
-        document.getElementById('profile_on_the_fly_name').value = '{{ name }}'
-        document.getElementById('profile_on_the_fly_template').value = '{{ npc.title }}'
 
         let onTheFly = document.querySelector('form[name=profile_on_the_fly]')
         let data = new FormData(onTheFly)
