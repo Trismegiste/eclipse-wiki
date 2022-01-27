@@ -15,7 +15,7 @@
     {{ parent() }}
     <script src="{{ asset('multiavatar/multiavatar.min.js') }}"></script>
     <script>
-        window.resizeTo(503, 937)
+        window.resizeTo(450, 800+42)
 
         let figure = document.getElementById('avatar')
         figure.innerHTML = multiavatar('{{ form.vars.data.name }}')

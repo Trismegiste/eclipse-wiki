@@ -19,7 +19,7 @@
         for (const sample of avatarSample) {
             sample.innerHTML = multiavatar(sample.dataset.avatar)
             // event for sending an avatar
-            sample.parentNode.addEventListener("click", function (e) {
+            sample.addEventListener("click", function (e) {
                 let url = '{{ path('app_placecrud_npcpopup') }}?name=' + sample.dataset.avatar + '&template=' + '{{ place.npcTemplate }}'
                 window.open(url, '{{ popup_param.name }}', '{{ popup_param.config }}')
             })
@@ -45,6 +45,9 @@
     <style>
         .quick-npc {
             text-align: center;
+        }
+        .quick-npc svg {
+            cursor: pointer;
         }
         .quick-npc *[data-avatar] + a {
             padding-bottom: 1em;

@@ -87,10 +87,10 @@ class PlaceCrud extends GenericCrud
             $profile = $maker->generate($npc, $this->convertSvgToPng($param['svg']));
 
             $response = new StreamedResponse(function () use ($profile) {
-                        imagejpeg($profile);
+                        imagepng($profile);
                     },
                     Response::HTTP_CREATED,
-                    ['Content-Type' => 'image/jpeg']
+                    ['Content-Type' => 'image/png']
             );
 
             return $response;
