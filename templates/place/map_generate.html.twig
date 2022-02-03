@@ -1,0 +1,36 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Map{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        let onTheFly = document.querySelector('form[name=one_block_map]')
+
+        onTheFly.addEventListener('change', function (e) {
+            let data = new FormData(onTheFly)
+            fetch(onTheFly.action, {
+                method: 'post',
+                body: data,
+                redirect: 'manual'
+            }).then(function (response) {
+                return response.text()
+            }).then(function (svg) {
+                document.getElementById('map').innerHTML = svg
+            }).catch((error) => {
+                console.error(error);
+            })
+        })
+        
+        document.getElementById('map').addEventListener('click', function (e) {
+          console.log(e.target)  
+        })
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="pure-g">
+        <div class="pure-u-1-5">{{ form(form) }}</div>
+        <div class="pure-u-4-5" id="map"></div>
+    </div>
+{% endblock %}

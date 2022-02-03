@@ -16,5 +16,8 @@
     },
     "symfony/expression-language": {
         "version": "v5.3.11"
+    },
+    "trismegiste/rpg-map-generator": {
+        "version": "dev-master"
     }
 }
