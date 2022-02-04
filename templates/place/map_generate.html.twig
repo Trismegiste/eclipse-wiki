@@ -21,9 +21,9 @@
                 console.error(error);
             })
         })
-        
+
         document.getElementById('map').addEventListener('click', function (e) {
-          console.log(e.target)  
+            console.log(e.target)
         })
     </script>
 {% endblock %}
@@ -33,4 +33,13 @@
         <div class="pure-u-1-5">{{ form(form) }}</div>
         <div class="pure-u-4-5" id="map"></div>
     </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        #map {
+            text-align: center;
+        }
+    </style>
 {% endblock %}

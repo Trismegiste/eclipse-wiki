@@ -98,7 +98,7 @@
         },
         {
             "type": "vcs",
-            "url": "/home/flo/Develop/iss/"
+            "url": "https://github.com/Trismegiste/rpg-map-generator"
         }
     ]
 }
