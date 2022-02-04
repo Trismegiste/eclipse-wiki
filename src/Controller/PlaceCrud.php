@@ -8,7 +8,6 @@ namespace App\Controller;
 
 use App\Entity\Place;
 use App\Entity\Vertex;
-use App\Form\OneBlockMap;
 use App\Form\PlaceType;
 use App\Form\ProfileOnTheFly;
 use App\Service\AvatarMaker;
@@ -19,11 +18,6 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Process\InputStream;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
-use Trismegiste\MapGenerator\Procedural\DoorLayer;
-use Trismegiste\MapGenerator\Procedural\FogOfWar;
-use Trismegiste\MapGenerator\Procedural\NpcPopulator;
-use Trismegiste\MapGenerator\Procedural\SpaceStation;
-use Trismegiste\MapGenerator\RpgMap;
 use Trismegiste\NameGenerator\FileRepository;
 use Trismegiste\NameGenerator\RandomizerDecorator;
 
@@ -93,10 +87,10 @@ class PlaceCrud extends GenericCrud
             $profile = $maker->generate($npc, $this->convertSvgToPng($param['svg']));
 
             $response = new StreamedResponse(function () use ($profile) {
-                imagepng($profile);
-            },
-                Response::HTTP_CREATED,
-                ['Content-Type' => 'image/png']
+                        imagepng($profile);
+                    },
+                    Response::HTTP_CREATED,
+                    ['Content-Type' => 'image/png']
             );
 
             return $response;
@@ -149,43 +143,16 @@ class PlaceCrud extends GenericCrud
      */
     public function mapCreate(Request $request): Response
     {
-        $form = $this->createForm(OneBlockMap::class);
+        $form = $this->createForm(\App\Form\ProceduralMap\OneBlockMap::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $param = $form->getData();
-
-            srand($param['seed']);
-            $side = $param['side'];
-            $iteration = $param['iteration'];
-
-            $gen = new SpaceStation($side);
-            $gen->set($side / 2, $side / 2, 1);
-
-            for ($idx = 0; $idx < $iteration; $idx++) {
-                $gen->iterate();
-            }
-            //    $gen->roomIterationCapping($capping);
-            $gen->roomIterationDivide(3);
-            $gen->blurry();
-            $gen->iterate();
-
-            $door = new DoorLayer($gen);
-            $door->findDoor();
-            $pop = new NpcPopulator($gen);
-            $pop->generate($param['npc']);
-            $fog = new FogOfWar($gen);
-
-            $map = new RpgMap($gen);
-            $map->appendLayer($door);
-            $map->appendLayer($pop);
-            // $map->appendLayer($fog);
-
+            $map = $form->getData();
             $response = new StreamedResponse(function () use ($map) {
-                $map->printSvg();
-            },
-                Response::HTTP_CREATED,
-                ['Content-Type' => 'image/svg+xml']
+                        $map->printSvg();
+                    },
+                    Response::HTTP_CREATED,
+                    ['Content-Type' => 'image/svg+xml']
             );
 
             return $response;
