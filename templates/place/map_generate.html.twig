@@ -23,7 +23,9 @@
         })
 
         document.getElementById('map').addEventListener('click', function (e) {
-            console.log(e.target)
+            console.log(e.target.parentNode.dataset.level)
+            // @todo need mar check
+            document.querySelector('g[data-level="' + e.target.parentNode.dataset.level + '"]').style = 'opacity:0%'
         })
     </script>
 {% endblock %}
@@ -40,6 +42,9 @@
     <style>
         #map {
             text-align: center;
+        }
+        #map svg {
+            border: 1px solid black;
         }
     </style>
 {% endblock %}
