@@ -124,7 +124,7 @@
         window.addEventListener("load", function () {
             var avatarSample = document.querySelectorAll('.avatar-sample')
 
-            for (const sample of avatarSample) {
+            for (const [idx, sample] of avatarSample.entries()) {
                 let hiddenCanvas = sample.querySelector('canvas')
                 let button = sample.querySelector('img')
                 let ctx = hiddenCanvas.getContext('2d')
@@ -132,7 +132,7 @@
                 imgTmp.onload = function () {
                     ctx.drawImage(this, 0, 0)
                 }
-                let avatarId = '{{ form.vars.data.title }}' + Math.random()
+                let avatarId = '{{ form.vars.data.title }}' + (idx === 0 ? '' : Math.random())
                 let svgCode = multiavatar(avatarId)
 
                 // adding height and width attributes of SVG root element to fix a bug in Firefox
