@@ -87,10 +87,10 @@ class PlaceCrud extends GenericCrud
             $profile = $maker->generate($npc, $this->convertSvgToPng($param['svg']));
 
             $response = new StreamedResponse(function () use ($profile) {
-                        imagepng($profile);
-                    },
-                    Response::HTTP_CREATED,
-                    ['Content-Type' => 'image/png']
+                imagepng($profile);
+            },
+                Response::HTTP_CREATED,
+                ['Content-Type' => 'image/png']
             );
 
             return $response;
@@ -135,30 +135,6 @@ class PlaceCrud extends GenericCrud
         ]);
 
         return $this->render('place/npc_popup.html.twig', ['form' => $form->createView()]);
-    }
-
-    /**
-     * Show the creating form of a map for a Place
-     * @Route("/place/map/create", methods={"GET","POST"})
-     */
-    public function mapCreate(Request $request): Response
-    {
-        $form = $this->createForm(\App\Form\ProceduralMap\OneBlockMap::class);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $map = $form->getData();
-            $response = new StreamedResponse(function () use ($map) {
-                        $map->printSvg();
-                    },
-                    Response::HTTP_CREATED,
-                    ['Content-Type' => 'image/svg+xml']
-            );
-
-            return $response;
-        }
-
-        return $this->render('place/map_generate.html.twig', ['form' => $form->createView()]);
     }
 
 }

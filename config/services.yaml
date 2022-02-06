@@ -12,7 +12,7 @@ parameters:
         - [chinese, random]
         - [random, random]
     second_screen:
-        max_size: 900
+        max_size: 800
         delta_x: 0
         delta_y: 42
         name: 'PopupVNC'

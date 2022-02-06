@@ -303,32 +303,32 @@
         },
         {
             "name": "knplabs/knp-snappy-bundle",
-            "version": "v1.9.0",
+            "version": "v1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpSnappyBundle.git",
-                "reference": "da11c2d083f5d8586c9bd59d2948ab7d39d57b34"
+                "reference": "0f81887b0379a2731b869289bf3d880f34dfd423"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpSnappyBundle/zipball/da11c2d083f5d8586c9bd59d2948ab7d39d57b34",
-                "reference": "da11c2d083f5d8586c9bd59d2948ab7d39d57b34",
+                "url": "https://api.github.com/repos/KnpLabs/KnpSnappyBundle/zipball/0f81887b0379a2731b869289bf3d880f34dfd423",
+                "reference": "0f81887b0379a2731b869289bf3d880f34dfd423",
                 "shasum": ""
             },
             "require": {
                 "knplabs/knp-snappy": "^1.2",
-                "php": ">=7.4",
-                "symfony/framework-bundle": "^4.4|^5.1|^6.0"
+                "php": ">=7.2.5",
+                "symfony/framework-bundle": "^4.4|^5.1"
             },
             "require-dev": {
                 "doctrine/annotations": "^1.11",
-                "symfony/asset": "^4.4|^5.1|^6.0",
-                "symfony/finder": "^4.4|^5.1|^6.0",
-                "symfony/phpunit-bridge": "^4.4|^5.1|^6.0",
-                "symfony/security-csrf": "^4.4|^5.1|^6.0",
-                "symfony/templating": "^4.4|^5.1|^6.0",
-                "symfony/validator": "^4.4|^5.1|^6.0",
-                "symfony/yaml": "^4.4|^5.1|^6.0"
+                "symfony/asset": "^4.4|^5.1",
+                "symfony/finder": "^4.4|^5.1",
+                "symfony/phpunit-bridge": "^4.4|^5.1",
+                "symfony/security-csrf": "^4.4|^5.1",
+                "symfony/templating": "^4.4|^5.1",
+                "symfony/validator": "^4.4|^5.1",
+                "symfony/yaml": "^4.4|^5.1"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -361,9 +361,9 @@
             ],
             "support": {
                 "issues": "https://github.com/KnpLabs/KnpSnappyBundle/issues",
-                "source": "https://github.com/KnpLabs/KnpSnappyBundle/tree/v1.9.0"
+                "source": "https://github.com/KnpLabs/KnpSnappyBundle/tree/v1.8.0"
             },
-            "time": "2022-01-05T15:50:51+00:00"
+            "time": "2020-11-16T07:45:16+00:00"
         },
         {
             "name": "mike42/wikitext",
@@ -555,20 +555,20 @@
         },
         {
             "name": "psr/container",
-            "version": "1.1.2",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/container.git",
-                "reference": "513e0666f7216c7459170d56df27dfcefe1689ea"
+                "reference": "8622567409010282b7aeebe4bb841fe98b58dcaf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/container/zipball/513e0666f7216c7459170d56df27dfcefe1689ea",
-                "reference": "513e0666f7216c7459170d56df27dfcefe1689ea",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/8622567409010282b7aeebe4bb841fe98b58dcaf",
+                "reference": "8622567409010282b7aeebe4bb841fe98b58dcaf",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.4.0"
+                "php": ">=7.2.0"
             },
             "type": "library",
             "autoload": {
@@ -597,9 +597,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-fig/container/issues",
-                "source": "https://github.com/php-fig/container/tree/1.1.2"
+                "source": "https://github.com/php-fig/container/tree/1.1.1"
             },
-            "time": "2021-11-05T16:50:12+00:00"
+            "time": "2021-03-05T17:36:06+00:00"
         },
         {
             "name": "psr/event-dispatcher",
@@ -4891,12 +4891,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Trismegiste/rpg-map-generator.git",
-                "reference": "1ed5a76dbb7cae30ec604d68b85bc8b7c85c9321"
+                "reference": "eb14cbe4969579372e154e109fc9ee52689ea8e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Trismegiste/rpg-map-generator/zipball/1ed5a76dbb7cae30ec604d68b85bc8b7c85c9321",
-                "reference": "1ed5a76dbb7cae30ec604d68b85bc8b7c85c9321",
+                "url": "https://api.github.com/repos/Trismegiste/rpg-map-generator/zipball/eb14cbe4969579372e154e109fc9ee52689ea8e7",
+                "reference": "eb14cbe4969579372e154e109fc9ee52689ea8e7",
                 "shasum": ""
             },
             "require-dev": {
@@ -4927,7 +4927,7 @@
                 "source": "https://github.com/Trismegiste/rpg-map-generator/tree/master",
                 "issues": "https://github.com/Trismegiste/rpg-map-generator/issues"
             },
-            "time": "2022-02-04T12:45:28+00:00"
+            "time": "2022-02-04T14:47:36+00:00"
         },
         {
             "name": "trismegiste/rpg-name-generator",

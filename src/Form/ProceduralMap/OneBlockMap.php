@@ -27,17 +27,17 @@ class OneBlockMap extends AbstractType implements DataMapperInterface
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('seed', IntegerType::class)
-                ->add('side', IntegerType::class)
-                ->add('iteration', IntegerType::class)
-                ->add('capping', IntegerType::class)
-                ->add('divide', IntegerType::class)
-                ->add('blurry', \Symfony\Component\Form\Extension\Core\Type\CheckboxType::class)
-                ->add('one_more', \Symfony\Component\Form\Extension\Core\Type\CheckboxType::class)
-                ->add('npc', IntegerType::class)
-                ->add('fog', \Symfony\Component\Form\Extension\Core\Type\CheckboxType::class)
-                ->add('create', SubmitType::class)
-                ->setDataMapper($this);
+            ->add('seed', IntegerType::class)
+            ->add('side', IntegerType::class)
+            ->add('iteration', IntegerType::class)
+            ->add('capping', IntegerType::class)
+            ->add('divide', IntegerType::class)
+            ->add('blurry', \Symfony\Component\Form\Extension\Core\Type\CheckboxType::class)
+            ->add('one_more', \Symfony\Component\Form\Extension\Core\Type\CheckboxType::class)
+            ->add('npc', IntegerType::class)
+            ->add('create', SubmitType::class)
+            ->setMethod('GET')
+            ->setDataMapper($this);
     }
 
     public function mapDataToForms($viewData, \Traversable $forms)
@@ -80,9 +80,7 @@ class OneBlockMap extends AbstractType implements DataMapperInterface
         $viewData = new RpgMap($gen);
         $viewData->appendLayer($door);
         $viewData->appendLayer($pop);
-        if ($param['fog']->getData()) {
-            $viewData->appendLayer($fog);
-        }
+        $viewData->appendLayer($fog);
     }
 
 }

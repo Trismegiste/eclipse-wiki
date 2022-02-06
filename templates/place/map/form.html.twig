@@ -5,15 +5,16 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        let onTheFly = document.querySelector('form[name=one_block_map]')
+        let onTheFly = document.querySelector('.map-generator form')
 
         onTheFly.addEventListener('change', function (e) {
             let data = new FormData(onTheFly)
-            fetch(onTheFly.action, {
-                method: 'post',
-                body: data,
+            fetch(onTheFly.action + '?' + new URLSearchParams(data), {
                 redirect: 'manual'
             }).then(function (response) {
+                if (!response.ok) {
+                    return Promise.reject(response.statusText);
+                }
                 return response.text()
             }).then(function (svg) {
                 document.getElementById('map').innerHTML = svg
@@ -24,15 +25,15 @@
 
         document.getElementById('map').addEventListener('click', function (e) {
             console.log(e.target.parentNode.dataset.level)
-            // @todo need mar check
+            // @todo need moar check
             document.querySelector('g[data-level="' + e.target.parentNode.dataset.level + '"]').style = 'opacity:0%'
         })
     </script>
 {% endblock %}
 
 {% block content %}
-    <div class="pure-g">
-        <div class="pure-u-1-5">{{ form(form) }}</div>
+    <div class="pure-g map-generator">
+        <div class="pure-u-1-5">{{ form(form, {'action': path('app_mapcrud_mapgenerate'), 'method': 'GET'}) }}</div>
         <div class="pure-u-4-5" id="map"></div>
     </div>
 {% endblock %}
@@ -45,6 +46,9 @@
         }
         #map svg {
             border: 1px solid black;
+        }
+        #map svg g.fog-of-war {
+            opacity: 0;
         }
     </style>
 {% endblock %}
