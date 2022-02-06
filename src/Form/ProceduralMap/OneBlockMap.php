@@ -8,6 +8,7 @@ namespace App\Form\ProceduralMap;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataMapperInterface;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -32,10 +33,10 @@ class OneBlockMap extends AbstractType implements DataMapperInterface
             ->add('iteration', IntegerType::class)
             ->add('capping', IntegerType::class)
             ->add('divide', IntegerType::class)
-            ->add('blurry', \Symfony\Component\Form\Extension\Core\Type\CheckboxType::class)
-            ->add('one_more', \Symfony\Component\Form\Extension\Core\Type\CheckboxType::class)
+            ->add('blurry', CheckboxType::class, ['required' => false])
+            ->add('one_more', CheckboxType::class, ['required' => false])
             ->add('npc', IntegerType::class)
-            ->add('create', SubmitType::class)
+            ->add('open', SubmitType::class)
             ->setMethod('GET')
             ->setDataMapper($this);
     }

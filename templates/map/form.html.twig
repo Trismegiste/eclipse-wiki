@@ -23,10 +23,12 @@
             })
         })
 
-        document.getElementById('map').addEventListener('click', function (e) {
-            console.log(e.target.parentNode.dataset.level)
-            // @todo need moar check
-            document.querySelector('g[data-level="' + e.target.parentNode.dataset.level + '"]').style = 'opacity:0%'
+        // event for sending an avatar
+        onTheFly.addEventListener("submit", function (e) {
+            let data = new FormData(onTheFly)
+            e.preventDefault()
+            let url = '{{ path('app_mapcrud_popup') }}?' + new URLSearchParams(data)
+            window.open(url, '{{ popup_param.name }}', '{{ popup_param.config }}')
         })
     </script>
 {% endblock %}

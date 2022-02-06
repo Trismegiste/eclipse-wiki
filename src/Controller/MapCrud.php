@@ -28,7 +28,7 @@ class MapCrud extends AbstractController
     {
         $form = $this->createForm(OneBlockMap::class);
 
-        return $this->render('place/map/form.html.twig', ['form' => $form->createView()]);
+        return $this->render('map/form.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -53,6 +53,18 @@ class MapCrud extends AbstractController
         }
 
         throw new RuntimeException('Invalid form');
+    }
+
+    /**
+     * Show map in a popup
+     * @Route("/map/popup", methods={"GET"})
+     */
+    public function popup(Request $request): Response
+    {
+        $data = $request->query->all();
+        $url = $this->generateUrl('app_mapcrud_mapgenerate') . '?' . http_build_query($data);
+
+        return $this->render('map/popup.html.twig', ['img' => $url]);
     }
 
 }

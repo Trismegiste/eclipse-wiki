@@ -1,0 +1,23 @@
+{# show picture #}
+{% extends "base.html.twig" %}
+
+{% block title %}{{ popup_param.name }}{% endblock %}
+
+{% block body %}
+    <img src="{{ img }}" class="pure-img"/>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        window.resizeTo({{ popup_param.max_size }}, {{ popup_param.max_size + popup_param.delta_y }})
+
+        document.querySelector('img').addEventListener('click', function (e) {
+            console.log(e.target)
+            console.log(e.target.parentNode.dataset.level)
+            // @todo need moar check
+            if (e.target.parentNode && e.target.parentNode.dataset.level) {
+                document.querySelector('g[data-level="' + e.target.parentNode.dataset.level + '"]').style = 'opacity:0%'
+            }
+        })
+    </script>
+{% endblock %}
