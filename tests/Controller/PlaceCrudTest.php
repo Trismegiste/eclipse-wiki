@@ -24,6 +24,10 @@ class PlaceCrudTest extends WebTestCase
         $repo = static::getContainer()->get(VertexRepository::class);
         $repo->delete(iterator_to_array($repo->search()));
         $this->assertCount(0, iterator_to_array($repo->search()));
+
+        $npc = new \App\Entity\Transhuman('Template', new \App\Entity\Background('back'), new \App\Entity\Faction('fact'));
+        $npc->setMorph(new \App\Entity\Morph('morph'));
+        $repo->save($npc);
     }
 
     public function testCreate()
@@ -33,7 +37,8 @@ class PlaceCrudTest extends WebTestCase
         $form = $crawler->selectButton('place_create')->form();
         $form->setValues(['place' => [
                 'title' => 'Tatooine',
-                'content' => 'Some link to [[Luke]]'
+                'content' => 'Some link to [[Luke]]',
+                'npcTemplate' => 'Template'
         ]]);
         $this->client->submit($form);
         $this->assertResponseRedirects();
@@ -72,6 +77,44 @@ class PlaceCrudTest extends WebTestCase
         $crawler = $this->client->request('GET', $edit);
         $this->assertPageTitleContains('Tatooine');
         $this->assertCount(1, $crawler->selectButton('place_create'));
+        $url = $crawler->filterXPath('//nav/a/i[@class="icon-user-plus"]/parent::a')->attr('href');
+
+        return $url;
+    }
+
+    /** @depends testEdit */
+    public function testShowNpcGeneration(string $useradd)
+    {
+        $crawler = $this->client->request('GET', $useradd);
+        $this->assertPageTitleContains('Tatooine');
+        $avatar = $crawler->filter('section.quick-npc figure');
+        $this->assertCount(32, $avatar);
+        $firstName = $avatar->first()->attr('data-avatar');
+        $this->assertMatchesRegularExpression('#[A-Z][a-z]+\s[A-Z][a-z]+#', $firstName);
+
+        return $firstName;
+    }
+
+    /** @depends testShowNpcGeneration */
+    public function testNpcPopUp(string $name)
+    {
+        $this->client->request('GET', '/place/profile/create?template=Template&name=' . $name);
+        $this->assertPageTitleContains('VNC');
+
+        return $name;
+    }
+
+    /** @depends testNpcPopUp */
+    public function testPngGeneration(string $name)
+    {
+        ob_start();
+        $this->client->request('POST', '/place/profile/create', ['profile_on_the_fly' => [
+                'svg' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 231 231"></svg>',
+                'name' => $name,
+                'template' => 'Template'
+        ]]);
+        ob_get_clean();
+        $this->assertEquals('image/png', $this->client->getResponse()->headers->get('Content-Type'));
     }
 
 }
