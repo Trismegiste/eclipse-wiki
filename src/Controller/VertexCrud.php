@@ -84,7 +84,7 @@ class VertexCrud extends GenericCrud
     {
         $vertex = $this->repository->findByPk($pk);
         $form = $this->createFormBuilder($vertex)
-                ->add('delete', SubmitType::class)
+                ->add('delete', SubmitType::class, ['attr' => ['class' => 'button-delete']])
                 ->setMethod('DELETE')
                 ->getForm();
 

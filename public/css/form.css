@@ -46,3 +46,11 @@
     list-style-type: none; 
     color: darkred;
 }
+
+.button-delete {
+    background-color: #ffb4b4;
+}
+
+.button-write {
+    background-color: #bcffe9;
+}

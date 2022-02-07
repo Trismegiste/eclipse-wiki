@@ -28,17 +28,18 @@ class OneBlockMap extends AbstractType implements DataMapperInterface
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('seed', IntegerType::class)
-            ->add('side', IntegerType::class)
-            ->add('iteration', IntegerType::class)
-            ->add('capping', IntegerType::class)
-            ->add('divide', IntegerType::class)
-            ->add('blurry', CheckboxType::class, ['required' => false])
-            ->add('one_more', CheckboxType::class, ['required' => false])
-            ->add('npc', IntegerType::class)
-            ->add('open', SubmitType::class)
-            ->setMethod('GET')
-            ->setDataMapper($this);
+                ->add('seed', IntegerType::class)
+                ->add('side', IntegerType::class)
+                ->add('iteration', IntegerType::class)
+                ->add('capping', IntegerType::class)
+                ->add('divide', IntegerType::class)
+                ->add('blurry', CheckboxType::class, ['required' => false])
+                ->add('one_more', CheckboxType::class, ['required' => false])
+                ->add('npc', IntegerType::class)
+                ->add('openPopUp', SubmitType::class)
+                ->add('writeMap', SubmitType::class, ['attr' => ['class' => 'button-write']])
+                ->setMethod('GET')
+                ->setDataMapper($this);
     }
 
     public function mapDataToForms($viewData, \Traversable $forms)
