@@ -9,7 +9,7 @@
 
         onTheFly.addEventListener('change', function (e) {
             let data = new FormData(onTheFly)
-            fetch(onTheFly.action + '?' + new URLSearchParams(data), {
+            fetch('{{ path('app_mapcrud_mapgenerate') }}?' + new URLSearchParams(data), {
                 redirect: 'manual'
             }).then(function (response) {
                 if (!response.ok) {
@@ -25,17 +25,19 @@
 
         // event for sending an avatar
         onTheFly.addEventListener("submit", function (e) {
-            let data = new FormData(onTheFly)
-            e.preventDefault()
-            let url = '{{ path('app_mapcrud_popup') }}?' + new URLSearchParams(data)
-            window.open(url, '{{ popup_param.name }}', '{{ popup_param.config }}')
+            if (e.submitter.id === 'mapgen_openPopUp') {
+                e.preventDefault()
+                let data = new FormData(onTheFly)
+                let url = '{{ path('app_mapcrud_popup') }}?' + new URLSearchParams(data)
+                window.open(url, '{{ popup_param.name }}', '{{ popup_param.config }}')
+            }
         })
     </script>
 {% endblock %}
 
 {% block content %}
     <div class="pure-g map-generator">
-        <div class="pure-u-1-5">{{ form(form, {'action': path('app_mapcrud_mapgenerate'), 'method': 'GET'}) }}</div>
+        <div class="pure-u-1-5">{{ form(form) }}</div>
         <div class="pure-u-4-5" id="map"></div>
     </div>
 {% endblock %}

@@ -84,5 +84,8 @@ class OneBlockMap extends AbstractType implements DataMapperInterface
         $viewData->appendLayer($pop);
         $viewData->appendLayer($fog);
     }
-
+    public function getBlockPrefix()
+    {
+        return 'mapgen';
+    }
 }
