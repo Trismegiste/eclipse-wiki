@@ -39,6 +39,7 @@ class OneBlockMap extends AbstractType implements DataMapperInterface
             ->add('one_more', CheckboxType::class, ['required' => false])
             ->add('npc', IntegerType::class)
             ->add('openPopUp', SubmitType::class)
+            ->add('map_name', \Symfony\Component\Form\Extension\Core\Type\TextType::class)
             ->add('writeMap', SubmitType::class, ['attr' => ['class' => 'button-write']])
             ->setMethod('GET')
             ->setDataMapper($this);
@@ -46,13 +47,15 @@ class OneBlockMap extends AbstractType implements DataMapperInterface
 
     public function configureOptions(OptionsResolver $resolver)
     {
+        $seed = random_int(10000, 99999);
         $resolver->setDefault('data', [
-            'seed' => random_int(1000, 9999),
+            'seed' => $seed,
             'side' => 20,
             'iteration' => 10,
             'divide' => 1,
             'capping' => 5,
-            'npc' => 0
+            'npc' => 0,
+            'map_name' => "map-$seed"
         ]);
     }
 

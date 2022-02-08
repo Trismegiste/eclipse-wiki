@@ -37,14 +37,15 @@ class MapCrud extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $map = $form->getData();
 
-            $ptr = fopen(__DIR__ . "/../../map-$model.svg", 'w');
+            $path = \join_paths($this->getUploadDir(), $form['map_name']->getData() . '.svg');
+            $ptr = fopen($path, 'w');
             ob_start(function (string $buffer) use ($ptr) {
                 fwrite($ptr, $buffer);
             });
             $map->printSvg();
             ob_end_clean();
 
-            $this->addFlash('success', 'Carte sauvegardée en ');
+            $this->addFlash('success', 'Plan sauvegardé en ' . $path);
         }
 
         return $this->render('map/form.html.twig', ['form' => $form->createView()]);
@@ -62,10 +63,10 @@ class MapCrud extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $map = $form->getData();
             $response = new StreamedResponse(function () use ($map) {
-                        $map->printSvg();
-                    },
-                    Response::HTTP_CREATED,
-                    ['Content-Type' => 'image/svg+xml']
+                $map->printSvg();
+            },
+                Response::HTTP_CREATED,
+                ['Content-Type' => 'image/svg+xml']
             );
 
             return $response;
@@ -84,6 +85,11 @@ class MapCrud extends AbstractController
         $url = $this->generateUrl('app_mapcrud_mapgenerate', ['model' => $model]) . '?' . http_build_query($data);
 
         return $this->render('map/popup.html.twig', ['img' => $url]);
+    }
+
+    protected function getUploadDir(): string
+    {
+        return \join_paths($this->getParameter('kernel.project_dir'), 'public/upload');
     }
 
 }
