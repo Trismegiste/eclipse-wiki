@@ -27,6 +27,10 @@ class MapCrud extends AbstractController
     public function mapCreate(Request $request): Response
     {
         $form = $this->createForm(OneBlockMap::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->addFlash('success', 'Create');
+        }
 
         return $this->render('map/form.html.twig', ['form' => $form->createView()]);
     }
