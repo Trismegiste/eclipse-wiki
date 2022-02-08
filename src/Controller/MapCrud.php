@@ -26,7 +26,7 @@ class MapCrud extends AbstractController
 
     /**
      * Show the creating form of a map
-     * @Route("/map/{model}/create", methods={"GET"})
+     * @Route("/map/{model}/create", methods={"GET"}, requirements={"model"="[a-z]+"})
      */
     public function mapCreate(string $model, Request $request): Response
     {
@@ -37,7 +37,7 @@ class MapCrud extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $map = $form->getData();
 
-            $ptr = fopen(__DIR__ . '/../../yolo.svg', 'w');
+            $ptr = fopen(__DIR__ . "/../../map-$model.svg", 'w');
             ob_start(function (string $buffer) use ($ptr) {
                 fwrite($ptr, $buffer);
             });
@@ -52,11 +52,11 @@ class MapCrud extends AbstractController
 
     /**
      * Returns SVG
-     * @Route("/map/generate", methods={"GET"})
+     * @Route("/map/{model}/generate", methods={"GET"}, requirements={"model"="[a-z]+"})
      */
-    public function mapGenerate(Request $request): Response
+    public function mapGenerate(string $model, Request $request): Response
     {
-        $form = $this->createForm(OneBlockMap::class);
+        $form = $this->createForm(self::model[$model]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -76,12 +76,12 @@ class MapCrud extends AbstractController
 
     /**
      * Show map in a popup
-     * @Route("/map/popup", methods={"GET"})
+     * @Route("/map/{model}/popup", methods={"GET"}, requirements={"model"="[a-z]+"})
      */
-    public function popup(Request $request): Response
+    public function popup(string $model, Request $request): Response
     {
         $data = $request->query->all();
-        $url = $this->generateUrl('app_mapcrud_mapgenerate') . '?' . http_build_query($data);
+        $url = $this->generateUrl('app_mapcrud_mapgenerate', ['model' => $model]) . '?' . http_build_query($data);
 
         return $this->render('map/popup.html.twig', ['img' => $url]);
     }

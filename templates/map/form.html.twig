@@ -9,7 +9,7 @@
 
         onTheFly.addEventListener('change', function (e) {
             let data = new FormData(onTheFly)
-            fetch('{{ path('app_mapcrud_mapgenerate') }}?' + new URLSearchParams(data), {
+            fetch('{{ path('app_mapcrud_mapgenerate', {model: app.request.attributes.get('model')}) }}?' + new URLSearchParams(data), {
                 redirect: 'manual'
             }).then(function (response) {
                 if (!response.ok) {
@@ -28,7 +28,7 @@
             if (e.submitter.id === 'mapgen_openPopUp') {
                 e.preventDefault()
                 let data = new FormData(onTheFly)
-                let url = '{{ path('app_mapcrud_popup') }}?' + new URLSearchParams(data)
+                let url = '{{ path('app_mapcrud_popup', {model: app.request.attributes.get('model')}) }}?' + new URLSearchParams(data)
                 window.open(url, '{{ popup_param.name }}', '{{ popup_param.config }}')
             }
         })
