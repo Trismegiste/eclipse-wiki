@@ -100,7 +100,6 @@ class OneBlockMap extends AbstractType implements DataMapperInterface
 
         $door = new DoorLayer($gen);
         $door->findDoor();
-
         $pop = new NpcPopulator($gen);
         $pop->generate($param['npc']->getData());
         $fog = new FogOfWar($gen);

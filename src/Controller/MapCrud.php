@@ -20,16 +20,31 @@ use Symfony\Component\Form\Exception\RuntimeException;
 class MapCrud extends AbstractController
 {
 
+    const model = [
+        'oneblock' => OneBlockMap::class
+    ];
+
     /**
      * Show the creating form of a map
-     * @Route("/map/create", methods={"GET"})
+     * @Route("/map/{model}/create", methods={"GET"})
      */
-    public function mapCreate(Request $request): Response
+    public function mapCreate(string $model, Request $request): Response
     {
-        $form = $this->createForm(OneBlockMap::class);
+        $formClass = self::model[$model];
+        $form = $this->createForm($formClass);
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->addFlash('success', 'Create');
+            $map = $form->getData();
+
+            $ptr = fopen(__DIR__ . '/../../yolo.svg', 'w');
+            ob_start(function (string $buffer) use ($ptr) {
+                fwrite($ptr, $buffer);
+            });
+            $map->printSvg();
+            ob_end_clean();
+
+            $this->addFlash('success', 'Carte sauvegardée en ');
         }
 
         return $this->render('map/form.html.twig', ['form' => $form->createView()]);
@@ -47,10 +62,10 @@ class MapCrud extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $map = $form->getData();
             $response = new StreamedResponse(function () use ($map) {
-                $map->printSvg();
-            },
-                Response::HTTP_CREATED,
-                ['Content-Type' => 'image/svg+xml']
+                        $map->printSvg();
+                    },
+                    Response::HTTP_CREATED,
+                    ['Content-Type' => 'image/svg+xml']
             );
 
             return $response;
