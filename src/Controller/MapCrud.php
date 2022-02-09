@@ -21,7 +21,8 @@ class MapCrud extends AbstractController
 {
 
     const model = [
-        'oneblock' => OneBlockMap::class
+        'oneblock' => OneBlockMap::class,
+        'street' => \App\Form\ProceduralMap\StreetMap::class
     ];
 
     /**
