@@ -12,26 +12,26 @@ use Trismegiste\MapGenerator\Procedural\CellularAutomaton;
 use Trismegiste\MapGenerator\Procedural\SpaceStation;
 
 /**
- * Form to generate a procedural map for streets
+ * Form to generate a procedural map for a district
  */
-class StreetMap extends MapRecipe
+class DistrictMap extends MapRecipe
 {
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('streetWidth', IntegerType::class)
-                ->add('streetCount', IntegerType::class)
+                ->add('sizePerBlock', IntegerType::class)
+                ->add('blockCount', IntegerType::class)
         ;
         parent::buildForm($builder, $options);
     }
 
     protected function createAutomaton(array $param): CellularAutomaton
     {
-        $side = $param['streetWidth'] * $param['streetCount'];
+        $side = $param['sizePerBlock'] * $param['blockCount'];
         $gen = new SpaceStation($side);
-        for ($col = $param['streetWidth'] / 2; $col < $side - 1; $col += $param['streetWidth']) {
-            for ($row = 1; $row < $side - 1; $row++) {
+        for ($col = $param['sizePerBlock'] / 2; $col < $side - 1; $col += $param['sizePerBlock']) {
+            for ($row = $param['sizePerBlock'] / 2; $row < $side - 1; $row += $param['sizePerBlock']) {
                 $gen->set($col, $row);
             }
         }
