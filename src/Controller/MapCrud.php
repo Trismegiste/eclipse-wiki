@@ -46,6 +46,8 @@ class MapCrud extends AbstractController
             ob_end_clean();
 
             $this->addFlash('success', 'Plan sauvegardé en ' . $path);
+
+            return $this->redirectToRoute('app_mapcrud_mapcreate', ['model' => $model]);
         }
 
         return $this->render('map/form.html.twig', ['form' => $form->createView()]);
@@ -63,10 +65,10 @@ class MapCrud extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $map = $form->getData();
             $response = new StreamedResponse(function () use ($map) {
-                $map->printSvg();
-            },
-                Response::HTTP_CREATED,
-                ['Content-Type' => 'image/svg+xml']
+                        $map->printSvg();
+                    },
+                    Response::HTTP_CREATED,
+                    ['Content-Type' => 'image/svg+xml']
             );
 
             return $response;
