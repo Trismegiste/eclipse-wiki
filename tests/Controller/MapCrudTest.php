@@ -18,10 +18,27 @@ class MapCrudTest extends WebTestCase
         $this->client = static::createClient();
     }
 
+    public function getRecipeKeys(): array
+    {
+        return [
+            ['oneblock'],
+            ['street'],
+            ['district']
+        ];
+    }
+
+    /**
+     * @dataProvider getRecipeKeys
+     */
+    public function testAllModelForm(string $key)
+    {
+        $crawler = $this->client->request('GET', "/map/$key/create");
+        $this->assertResponseIsSuccessful();
+    }
+
     public function testCreateForm()
     {
         $crawler = $this->client->request('GET', '/map/oneblock/create');
-        $this->assertResponseIsSuccessful();
 
         $form = $crawler->filter('.map-generator form')->form();
         $form->setValues(['mapgen' => ['side' => 20]]);
