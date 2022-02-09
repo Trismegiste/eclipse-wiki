@@ -16,10 +16,16 @@ class PictureTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $this->client = static::createClient();
     }
 
-    public function testShow()
+    public function testShowNotFound()
     {
         $this->client->request('GET', '/picture/popup/notfound.jpg');
         $this->assertResponseStatusCodeSame(404);
+    }
+
+    public function testShow()
+    {
+        $this->client->request('GET', '/picture/popup/mire.png');
+        $this->assertResponseStatusCodeSame(200);
     }
 
     public function testSearch()
