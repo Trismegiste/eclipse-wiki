@@ -29,7 +29,7 @@ class MapCrudTest extends WebTestCase
         $this->client->followRedirect();
     }
 
-    public function testMapGenerate()
+    public function testSvgGenerate()
     {
         $crawler = $this->client->request('GET', '/map/oneblock/create');
         $form = $crawler->filter('.map-generator form')->form();
@@ -43,10 +43,18 @@ class MapCrudTest extends WebTestCase
         $this->assertStringEndsWith('</svg>', $output);
     }
 
-    public function testBadFormGenerate()
+    public function testSvgBadForm()
     {
         $this->client->request('GET', '/map/oneblock/generate?yolo');
         $this->assertResponseStatusCodeSame(500);
+    }
+
+    public function testPopUp()
+    {
+        $this->client->request('GET', '/map/oneblock/popup?yolo');
+        $this->assertResponseIsSuccessful();
+        // since the popup only passthru query paramaters to the SVG controller (in javascript fetch)
+        // we don't care to pass carefully formed parameters
     }
 
 }
