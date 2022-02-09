@@ -24,6 +24,7 @@ class MapCrudTest extends WebTestCase
         $this->assertResponseIsSuccessful();
 
         $form = $crawler->filter('.map-generator form')->form();
+        $form->setValues(['mapgen' => ['side' => 20]]);
         $this->client->submit($form);
         $this->assertResponseRedirects();
         $this->client->followRedirect();
@@ -33,6 +34,7 @@ class MapCrudTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', '/map/oneblock/create');
         $form = $crawler->filter('.map-generator form')->form();
+        $form->setValues(['mapgen' => ['side' => 20]]);
         $param = $form->getValues();
         $url = '/map/oneblock/generate?' . http_build_query($param);
         ob_start();
