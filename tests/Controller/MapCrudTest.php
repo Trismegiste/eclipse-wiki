@@ -43,8 +43,7 @@ class MapCrudTest extends WebTestCase
         $form = $crawler->filter('.map-generator form')->form();
         $form->setValues(['mapgen' => ['side' => 20]]);
         $this->client->submit($form);
-        $this->assertResponseRedirects();
-        $this->client->followRedirect();
+        $this->assertResponseIsSuccessful(); // no redirection
     }
 
     public function testSvgGenerate()

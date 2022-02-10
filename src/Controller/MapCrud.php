@@ -48,8 +48,6 @@ class MapCrud extends AbstractController
             ob_end_clean();
 
             $this->addFlash('success', 'Plan sauvegardé en ' . $path);
-
-            return $this->redirectToRoute('app_mapcrud_mapcreate', ['model' => $model]);
         }
 
         return $this->render('map/form.html.twig', ['form' => $form->createView()]);

@@ -20,8 +20,8 @@ class DistrictMap extends MapRecipe
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('sizePerBlock', IntegerType::class)
-                ->add('blockCount', IntegerType::class)
+            ->add('sizePerBlock', IntegerType::class, ['data' => 23])
+            ->add('blockCount', IntegerType::class, ['data' => 5])
         ;
         parent::buildForm($builder, $options);
     }

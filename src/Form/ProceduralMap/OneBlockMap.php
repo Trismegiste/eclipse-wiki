@@ -19,7 +19,7 @@ class OneBlockMap extends MapRecipe
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('side', IntegerType::class);
+        $builder->add('side', IntegerType::class, ['data' => 25]);
         parent::buildForm($builder, $options);
     }
 
