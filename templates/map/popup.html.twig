@@ -20,17 +20,14 @@
             return response.text()
         }).then(function (svg) {
             document.getElementById('map').innerHTML = svg
+
+            document.querySelectorAll('#map g.fog-of-war').forEach(function (item) {
+                item.addEventListener('click', function (e) {
+                    e.target.parentNode.style = 'opacity:0%'
+                })
+            })
         }).catch((error) => {
             console.error(error);
-        })
-
-        document.getElementById('map').addEventListener('click', function (e) {
-            console.log(e.target)
-            console.log(e.target.parentNode.dataset.level)
-            // @todo need moar check
-            if (e.target.parentNode && e.target.parentNode.dataset.level) {
-                document.querySelector('g[data-level="' + e.target.parentNode.dataset.level + '"]').style = 'opacity:0%'
-            }
         })
     </script>
 {% endblock %}
