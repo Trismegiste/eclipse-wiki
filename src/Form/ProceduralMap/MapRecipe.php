@@ -111,6 +111,7 @@ abstract class MapRecipe extends AbstractType implements DataMapperInterface
         $viewData->appendLayer($door);
         $viewData->appendLayer($pop);
         $this->stackAdditionalLayers($viewData, $gen, $param);
+        $viewData->appendLayer(new \App\MapLayer\HexGrid($gen));
         $viewData->appendLayer($fog);
     }
 
