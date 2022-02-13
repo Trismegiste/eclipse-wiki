@@ -6,8 +6,12 @@
 
 namespace App\Form\ProceduralMap;
 
+use App\Form\FormTypeUtils;
+use App\MapLayer\RoomColor;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Trismegiste\MapGenerator\Procedural\CellularAutomaton;
 use Trismegiste\MapGenerator\Procedural\SpaceStation;
 use Trismegiste\MapGenerator\RpgMap;
@@ -18,6 +22,8 @@ use Trismegiste\MapGenerator\RpgMap;
 class DistrictMap extends MapRecipe
 {
 
+    use FormTypeUtils;
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -25,6 +31,10 @@ class DistrictMap extends MapRecipe
             ->add('blockCount', IntegerType::class, ['data' => 5])
         ;
         parent::buildForm($builder, $options);
+
+        $builder->add('blue', IntegerType::class, ['data' => 3, 'label' => '🔵']);
+        $builder->add('green', IntegerType::class, ['data' => 1, 'label' => '🟢']);
+        $builder->add('yellow', IntegerType::class, ['data' => 1, 'label' => '🟡']);
     }
 
     protected function createAutomaton(array $param): CellularAutomaton
@@ -42,9 +52,20 @@ class DistrictMap extends MapRecipe
 
     protected function stackAdditionalLayers(RpgMap $map, CellularAutomaton $cell, array $param): void
     {
-        $coloring = new \App\MapLayer\RoomColor($cell);
-        $coloring->generate(5);
+        $coloring = new RoomColor($cell);
+        $coloring->generate([
+            'blue' => $param['blue'],
+            'green' => $param['green'],
+            'yellow' => $param['yellow']
+        ]);
         $map->appendLayer($coloring);
+    }
+
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        $this->moveChildAtEnd($view, 'openPopUp');
+        $this->moveChildAtEnd($view, 'map_name');
+        $this->moveChildAtEnd($view, 'writeMap');
     }
 
 }
