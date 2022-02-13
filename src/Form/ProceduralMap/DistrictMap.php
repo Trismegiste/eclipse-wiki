@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Trismegiste\MapGenerator\Procedural\CellularAutomaton;
 use Trismegiste\MapGenerator\Procedural\SpaceStation;
+use Trismegiste\MapGenerator\RpgMap;
 
 /**
  * Form to generate a procedural map for a district
@@ -37,6 +38,13 @@ class DistrictMap extends MapRecipe
         }
 
         return $gen;
+    }
+
+    protected function stackAdditionalLayers(RpgMap $map, CellularAutomaton $cell, array $param): void
+    {
+        $coloring = new \App\MapLayer\RoomColor($cell);
+        $coloring->generate(5);
+        $map->appendLayer($coloring);
     }
 
 }

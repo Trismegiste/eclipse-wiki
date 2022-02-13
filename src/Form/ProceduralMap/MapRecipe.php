@@ -31,18 +31,18 @@ abstract class MapRecipe extends AbstractType implements DataMapperInterface
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('seed', IntegerType::class)
-                ->add('iteration', IntegerType::class)
-                ->add('capping', IntegerType::class)
-                ->add('divide', IntegerType::class)
-                ->add('blurry', CheckboxType::class, ['required' => false])
-                ->add('one_more', CheckboxType::class, ['required' => false])
-                ->add('npc', IntegerType::class)
-                ->add('openPopUp', SubmitType::class)
-                ->add('map_name', TextType::class)
-                ->add('writeMap', SubmitType::class, ['attr' => ['class' => 'button-write']])
-                ->setMethod('GET')
-                ->setDataMapper($this);
+            ->add('seed', IntegerType::class)
+            ->add('iteration', IntegerType::class)
+            ->add('capping', IntegerType::class)
+            ->add('divide', IntegerType::class)
+            ->add('blurry', CheckboxType::class, ['required' => false])
+            ->add('one_more', CheckboxType::class, ['required' => false])
+            ->add('npc', IntegerType::class)
+            ->add('openPopUp', SubmitType::class)
+            ->add('map_name', TextType::class)
+            ->add('writeMap', SubmitType::class, ['attr' => ['class' => 'button-write']])
+            ->setMethod('GET')
+            ->setDataMapper($this);
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -110,6 +110,7 @@ abstract class MapRecipe extends AbstractType implements DataMapperInterface
         $viewData = new RpgMap($gen);
         $viewData->appendLayer($door);
         $viewData->appendLayer($pop);
+        $this->stackAdditionalLayers($viewData, $gen, $param);
         $viewData->appendLayer($fog);
     }
 
@@ -119,4 +120,10 @@ abstract class MapRecipe extends AbstractType implements DataMapperInterface
     }
 
     abstract protected function createAutomaton(array $param): CellularAutomaton;
+
+    protected function stackAdditionalLayers(RpgMap $map, CellularAutomaton $cell, array $param): void
+    {
+        
+    }
+
 }
