@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block javascripts %}
+    <script src="{{ asset('bumbu/svg-pan-zoom.min.js') }}"></script>
     <script>
         window.resizeTo({{ popup_param.max_size }}, {{ popup_param.max_size + popup_param.delta_y }})
 
@@ -26,6 +27,8 @@
                     e.target.parentNode.style = 'opacity:0%'
                 })
             })
+
+            svgPanZoom(document.querySelector('#map svg'))
         }).catch((error) => {
             console.error(error);
         })
