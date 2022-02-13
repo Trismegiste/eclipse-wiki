@@ -23,12 +23,14 @@
             document.getElementById('map').innerHTML = svg
 
             document.querySelectorAll('#map g.fog-of-war').forEach(function (item) {
-                item.addEventListener('click', function (e) {
+                item.addEventListener('dblclick', function (e) {
                     e.target.parentNode.style = 'opacity:0%'
                 })
             })
 
-            svgPanZoom(document.querySelector('#map svg'))
+            svgPanZoom(document.querySelector('#map svg'), {
+                dblClickZoomEnabled: false
+            })
         }).catch((error) => {
             console.error(error);
         })
