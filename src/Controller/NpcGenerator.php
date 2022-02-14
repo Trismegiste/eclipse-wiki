@@ -82,7 +82,7 @@ class NpcGenerator extends AbstractController
     {
         $profile = new Finder();
         $profile->files()
-                ->in(join_paths($this->getParameter('twig.default_path'), 'profile'))
+                ->in(join_paths($this->getParameter('twig.default_path'), 'npc/profile'))
                 ->name('*.json');
 
         return $profile;

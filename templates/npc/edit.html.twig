@@ -107,7 +107,7 @@
         </div>
         {% for file in profile %}
             <button class="pure-button pure-u-1" 
-                    data-profile="{{ include('profile/' ~ file.filename)|escape('html_attr') }}"
+                    data-profile="{{ include('npc/profile/' ~ file.filename)|escape('html_attr') }}"
                     x-on:click="$dispatch('profile', JSON.parse($el.dataset.profile))"
                     x-text="JSON.parse($el.dataset.profile).name">
                 <i class="icon-spin3 animate-spin"></i>
