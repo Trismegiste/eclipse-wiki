@@ -10,7 +10,7 @@ use Trismegiste\MapGenerator\Procedural\GenericAutomaton;
 use Trismegiste\MapGenerator\SvgPrintable;
 
 /**
- * HexGrid a flot top hexmap grid
+ * HexGrid layer draws a flat-top hexmap grid
  */
 class HexGrid implements SvgPrintable
 {

@@ -24,17 +24,19 @@ class DistrictMap extends MapRecipe
 
     use FormTypeUtils;
 
+    const colors = ['blue', 'green', 'yellow'];
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('sizePerBlock', IntegerType::class, ['data' => 23])
-            ->add('blockCount', IntegerType::class, ['data' => 5])
+                ->add('sizePerBlock', IntegerType::class, ['data' => 23])
+                ->add('blockCount', IntegerType::class, ['data' => 5])
         ;
         parent::buildForm($builder, $options);
 
-        $builder->add('blue', IntegerType::class, ['data' => 3, 'label' => '🔵']);
-        $builder->add('green', IntegerType::class, ['data' => 1, 'label' => '🟢']);
-        $builder->add('yellow', IntegerType::class, ['data' => 1, 'label' => '🟡']);
+        $builder->add('color1', IntegerType::class, ['data' => 3, 'label_attr' => ['data-fill' => self::colors[0]]])
+                ->add('color2', IntegerType::class, ['data' => 1, 'label_attr' => ['style' => 'color: ' . self::colors[1]]])
+                ->add('color3', IntegerType::class, ['data' => 1, 'label_attr' => ['style' => 'color: ' . self::colors[2]]]);
     }
 
     protected function createAutomaton(array $param): CellularAutomaton
@@ -54,9 +56,9 @@ class DistrictMap extends MapRecipe
     {
         $coloring = new RoomColor($cell);
         $coloring->generate([
-            'blue' => $param['blue'],
-            'green' => $param['green'],
-            'yellow' => $param['yellow']
+            self::colors[0] => $param['color1'],
+            self::colors[1] => $param['color2'],
+            self::colors[2] => $param['color3']
         ]);
         $map->appendLayer($coloring);
     }
