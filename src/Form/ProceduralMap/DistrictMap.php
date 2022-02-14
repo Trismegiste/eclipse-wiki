@@ -35,8 +35,8 @@ class DistrictMap extends MapRecipe
         parent::buildForm($builder, $options);
 
         $builder->add('color1', IntegerType::class, ['data' => 3, 'label_attr' => ['data-fill' => self::colors[0]]])
-                ->add('color2', IntegerType::class, ['data' => 1, 'label_attr' => ['style' => 'color: ' . self::colors[1]]])
-                ->add('color3', IntegerType::class, ['data' => 1, 'label_attr' => ['style' => 'color: ' . self::colors[2]]]);
+                ->add('color2', IntegerType::class, ['data' => 1, 'label_attr' => ['data-fill' => self::colors[1]]])
+                ->add('color3', IntegerType::class, ['data' => 1, 'label_attr' => ['data-fill' => self::colors[2]]]);
     }
 
     protected function createAutomaton(array $param): CellularAutomaton

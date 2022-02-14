@@ -5,11 +5,18 @@
 {% block _mapgen_color1_label %}
     <label for="{{ id }}">{{ name|humanize }}
         <svg xmlns="http://www.w3.org/2000/svg" version="1.1"viewBox="0 0 2 2" height="1em">
-            <circle cx="1" cy="1" r="1" fill="{{ label_attr['data-fill'] }}"/>
+            <circle cx="1" cy="1" r="0.9" fill="{{ label_attr['data-fill'] }}" stroke="#777777" stroke-width="0.2"/>
         </svg>
     </label>
 {% endblock %}
 
+{# ugly #}
+{% block _mapgen_color2_label %}
+    {{ block('_mapgen_color1_label') }}
+{% endblock %}
+{% block _mapgen_color3_label %}
+    {{ block('_mapgen_color1_label') }}
+{% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
