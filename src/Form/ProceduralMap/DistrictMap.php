@@ -28,15 +28,22 @@ class DistrictMap extends MapRecipe
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-                ->add('sizePerBlock', IntegerType::class, ['data' => 23])
-                ->add('blockCount', IntegerType::class, ['data' => 5])
-        ;
+        $builder->add('sizePerBlock', IntegerType::class, ['data' => 23])
+                ->add('blockCount', IntegerType::class, ['data' => 5]);
+
         parent::buildForm($builder, $options);
 
-        $builder->add('color1', IntegerType::class, ['data' => 3, 'label_attr' => ['data-fill' => self::colors[0]]])
-                ->add('color2', IntegerType::class, ['data' => 1, 'label_attr' => ['data-fill' => self::colors[1]]])
-                ->add('color3', IntegerType::class, ['data' => 1, 'label_attr' => ['data-fill' => self::colors[2]]]);
+        $builder
+                ->add('color', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
+                    'entry_type' => \Symfony\Component\Form\Extension\Core\Type\HiddenType::class,
+                    'data' => self::colors,
+                    'mapped' => false
+                ])
+                ->add('highlight', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
+                    'entry_type' => IntegerType::class,
+                    'data' => [3, 2]
+                ])
+        ;
     }
 
     protected function createAutomaton(array $param): CellularAutomaton
@@ -55,11 +62,9 @@ class DistrictMap extends MapRecipe
     protected function stackAdditionalLayers(RpgMap $map, CellularAutomaton $cell, array $param): void
     {
         $coloring = new RoomColor($cell);
-        $coloring->generate([
-            self::colors[0] => $param['color1'],
-            self::colors[1] => $param['color2'],
-            self::colors[2] => $param['color3']
-        ]);
+        $cropped = self::colors;
+        array_splice($cropped, count($param['highlight']));
+        $coloring->generate(array_combine($cropped, $param['highlight']));
         $map->appendLayer($coloring);
     }
 
