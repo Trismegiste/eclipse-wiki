@@ -41,7 +41,7 @@ class DistrictMap extends MapRecipe
                 ])
                 ->add('highlight', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
                     'entry_type' => IntegerType::class,
-                    'data' => [3, 2]
+                    'data' => [3, 2, 1]
                 ])
         ;
     }

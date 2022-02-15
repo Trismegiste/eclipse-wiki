@@ -27,7 +27,11 @@ class PlaceChoiceType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('choices', $this->repo->findByClass(Place::class));
+        $resolver->setDefaults([
+            'choices' => $this->repo->findByClass(Place::class),
+            'choice_label' => 'title',
+            'choice_value' => 'pk',
+        ]);
     }
 
     public function getParent()
