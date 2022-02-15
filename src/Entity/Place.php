@@ -18,5 +18,6 @@ class Place extends Vertex
     public $youtubeUrl = null;
     public $surnameLang = null;
     public $npcTemplate = null;
+    public $battleMap = null;
 
 }

@@ -33,6 +33,11 @@
             <div><i class="icon-gravity"></i>{{ vertex.gravity }}</div>
             <div><i class="icon-pressure"></i>{{ vertex.pressure }}</div>
             <div><i class="icon-temperature"></i>{{ vertex.temperature }}</div>
+            <div class="pure-g" id="battlemap">
+                <div class="pure-u-1">
+                    <a href="#" class="pure-button">Générer une map</a>
+                </div>
+            </div>
         </aside>
     </div>
 {% endblock %}
@@ -53,5 +58,37 @@
             font-size: 170%;
             margin-bottom: 0.3em;
         }
+        #battlemap {
+            cursor: pointer;
+        }
+        #battlemap svg g.fog-of-war {
+            opacity: 0;
+        }
     </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% if vertex.battleMap is not empty %}
+        <script>
+            fetch('/upload/{{ vertex.battleMap }}', {
+                redirect: 'manual'
+            }).then(function (response) {
+                if (!response.ok) {
+                    return Promise.reject(response.statusText);
+                }
+                return response.text()
+            }).then(function (svg) {
+                document.getElementById('battlemap').innerHTML = svg
+                document.querySelector('#battlemap svg').attributes.removeNamedItem('height')
+            }).catch((error) => {
+                console.error(error);
+            })
+
+            document.getElementById('battlemap').addEventListener("click", function (e) {
+                let url = '{{ path('app_placecrud_mappopup', {pk: vertex.pk}) }}'
+                window.open(url, '{{ popup_param.name }}', '{{ popup_param.config }}')
+            })
+        </script>
+    {% endif %}
 {% endblock %}

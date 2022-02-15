@@ -6,13 +6,14 @@
 
 namespace App\Form\ProceduralMap;
 
+use App\Form\Type\PlaceChoiceType;
+use App\MapLayer\HexGrid;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -39,7 +40,12 @@ abstract class MapRecipe extends AbstractType implements DataMapperInterface
             ->add('one_more', CheckboxType::class, ['required' => false])
             ->add('npc', IntegerType::class)
             ->add('openPopUp', SubmitType::class)
-            ->add('map_name', TextType::class)
+            ->add('place', PlaceChoiceType::class, [
+                'placeholder' => '-- Écrire le fichier --',
+                'choice_label' => 'title',
+                'choice_value' => 'pk',
+                'required' => false
+            ])
             ->add('writeMap', SubmitType::class, ['attr' => ['class' => 'button-write']])
             ->setMethod('GET')
             ->setDataMapper($this);
@@ -53,8 +59,7 @@ abstract class MapRecipe extends AbstractType implements DataMapperInterface
             'iteration' => 10,
             'divide' => 1,
             'capping' => 5,
-            'npc' => 0,
-            'map_name' => "map-$seed"
+            'npc' => 0
         ]);
     }
 
@@ -111,7 +116,7 @@ abstract class MapRecipe extends AbstractType implements DataMapperInterface
         $viewData->appendLayer($door);
         $viewData->appendLayer($pop);
         $this->stackAdditionalLayers($viewData, $gen, $param);
-        $viewData->appendLayer(new \App\MapLayer\HexGrid($gen));
+        $viewData->appendLayer(new HexGrid($gen));
         $viewData->appendLayer($fog);
     }
 

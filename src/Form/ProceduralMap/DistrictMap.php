@@ -71,7 +71,7 @@ class DistrictMap extends MapRecipe
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         $this->moveChildAtEnd($view, 'openPopUp');
-        $this->moveChildAtEnd($view, 'map_name');
+        $this->moveChildAtEnd($view, 'place');
         $this->moveChildAtEnd($view, 'writeMap');
     }
 

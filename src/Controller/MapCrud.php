@@ -6,13 +6,16 @@
 
 namespace App\Controller;
 
+use App\Form\ProceduralMap\DistrictMap;
 use App\Form\ProceduralMap\OneBlockMap;
+use App\Form\ProceduralMap\StreetMap;
+use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Exception\RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Form\Exception\RuntimeException;
 
 /**
  * Description of MapCrud
@@ -22,15 +25,15 @@ class MapCrud extends AbstractController
 
     const model = [
         'oneblock' => OneBlockMap::class,
-        'street' => \App\Form\ProceduralMap\StreetMap::class,
-        'district' => \App\Form\ProceduralMap\DistrictMap::class
+        'street' => StreetMap::class,
+        'district' => DistrictMap::class
     ];
 
     /**
      * Show the creating form of a map
      * @Route("/map/{model}/create", methods={"GET"}, requirements={"model"="[a-z]+"})
      */
-    public function mapCreate(string $model, Request $request): Response
+    public function mapCreate(string $model, Request $request, VertexRepository $repo): Response
     {
         $formClass = self::model[$model];
         $form = $this->createForm($formClass);
@@ -39,13 +42,22 @@ class MapCrud extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $map = $form->getData();
 
-            $path = \join_paths($this->getUploadDir(), $form['map_name']->getData() . '.svg');
+            $place = $form['place']->getData();
+            $filename = empty($place) ? 'map-' . $form['seed']->getData() : 'map-' . $place->getPk();
+            $filename .= '.svg';
+            $path = \join_paths($this->getUploadDir(), $filename);
+
             $ptr = fopen($path, 'w');
             ob_start(function (string $buffer) use ($ptr) {
                 fwrite($ptr, $buffer);
             });
             $map->printSvg();
             ob_end_clean();
+
+            if (!empty($place)) {
+                $place->battleMap = $filename;
+                $repo->save($place);
+            }
 
             $this->addFlash('success', 'Plan sauvegardé en ' . $path);
         }
@@ -65,10 +77,10 @@ class MapCrud extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $map = $form->getData();
             $response = new StreamedResponse(function () use ($map) {
-                        $map->printSvg();
-                    },
-                    Response::HTTP_CREATED,
-                    ['Content-Type' => 'image/svg+xml']
+                $map->printSvg();
+            },
+                Response::HTTP_CREATED,
+                ['Content-Type' => 'image/svg+xml']
             );
 
             return $response;
