@@ -30,11 +30,11 @@ class StationMap extends MapRecipe
         $side = $param['side'];
         $gen = new SpaceStation($side);
 
-        $gen->set($side / 2, $side / 2, 1);
-        $gen->set($side / 2 + 4, $side / 2 + 4, 1);
-        $gen->set($side / 2 - 4, $side / 2 + 4, 1);
-        $gen->set($side / 2 + 4, $side / 2 - 4, 1);
-        $gen->set($side / 2 - 4, $side / 2 - 4, 1);
+        $gen->set($side / 2, $side / 2, 10);
+        $gen->set($side / 2 + 4, $side / 2 + 4, 5);
+        $gen->set($side / 2 - 4, $side / 2 + 4, 5);
+        $gen->set($side / 2 + 4, $side / 2 - 4, 5);
+        $gen->set($side / 2 - 4, $side / 2 - 4, 5);
         
         return $gen;
     }

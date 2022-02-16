@@ -30,11 +30,11 @@ class SpaceshipMap extends MapRecipe
         $side = $param['side'];
         $gen = new SpaceStation($side);
         for ($delta = -6; $delta <= 0; $delta++) {
-            $gen->set($side / 2, $side / 2 + $delta, 1);
+            $gen->set($side / 2, $side / 2 + $delta, 10);
         }
 
-        $gen->set($side / 2 - 4, $side / 2 + 6, 1);
-        $gen->set($side / 2 + 4, $side / 2 + 6, 1);
+        $gen->set($side / 2 - 4, $side / 2 + 6, 10);
+        $gen->set($side / 2 + 4, $side / 2 + 6, 10);
 
         return $gen;
     }
