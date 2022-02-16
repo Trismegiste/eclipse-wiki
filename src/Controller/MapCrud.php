@@ -26,7 +26,8 @@ class MapCrud extends AbstractController
     const model = [
         'oneblock' => OneBlockMap::class,
         'street' => StreetMap::class,
-        'district' => DistrictMap::class
+        'district' => DistrictMap::class,
+        'spaceship' => \App\Form\ProceduralMap\SpaceshipMap::class
     ];
 
     /**
@@ -77,10 +78,10 @@ class MapCrud extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $map = $form->getData();
             $response = new StreamedResponse(function () use ($map) {
-                $map->printSvg();
-            },
-                Response::HTTP_CREATED,
-                ['Content-Type' => 'image/svg+xml']
+                        $map->printSvg();
+                    },
+                    Response::HTTP_CREATED,
+                    ['Content-Type' => 'image/svg+xml']
             );
 
             return $response;

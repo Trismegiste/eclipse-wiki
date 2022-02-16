@@ -32,21 +32,21 @@ abstract class MapRecipe extends AbstractType implements DataMapperInterface
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('seed', IntegerType::class)
-            ->add('iteration', IntegerType::class)
-            ->add('capping', IntegerType::class)
-            ->add('divide', IntegerType::class)
-            ->add('blurry', CheckboxType::class, ['required' => false])
-            ->add('one_more', CheckboxType::class, ['required' => false])
-            ->add('npc', IntegerType::class)
-            ->add('openPopUp', SubmitType::class)
-            ->add('place', PlaceChoiceType::class, [
-                'placeholder' => '-- Écrire le fichier --',
-                'required' => false
-            ])
-            ->add('writeMap', SubmitType::class, ['attr' => ['class' => 'button-write']])
-            ->setMethod('GET')
-            ->setDataMapper($this);
+                ->add('seed', IntegerType::class)
+                ->add('iteration', IntegerType::class)
+                ->add('capping', IntegerType::class)
+                ->add('divide', IntegerType::class)
+                ->add('blurry', CheckboxType::class, ['required' => false])
+                ->add('one_more', CheckboxType::class, ['required' => false])
+                ->add('npc', IntegerType::class)
+                ->add('openPopUp', SubmitType::class)
+                ->add('place', PlaceChoiceType::class, [
+                    'placeholder' => '-- Écrire le fichier --',
+                    'required' => false
+                ])
+                ->add('writeMap', SubmitType::class, ['attr' => ['class' => 'button-write']])
+                ->setMethod('GET')
+                ->setDataMapper($this);
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -104,17 +104,20 @@ abstract class MapRecipe extends AbstractType implements DataMapperInterface
             $gen->iterate();
         }
 
+        $viewData = new RpgMap($gen);
+        $this->stackAdditionalLayers($viewData, $gen, $param);
+
         $door = new DoorLayer($gen);
         $door->findDoor();
+        $viewData->appendLayer($door);
+
         $pop = new NpcPopulator($gen);
         $pop->generate($param['npc']);
-        $fog = new FogOfWar($gen);
-
-        $viewData = new RpgMap($gen);
-        $viewData->appendLayer($door);
         $viewData->appendLayer($pop);
-        $this->stackAdditionalLayers($viewData, $gen, $param);
+
         $viewData->appendLayer(new HexGrid($gen));
+
+        $fog = new FogOfWar($gen);
         $viewData->appendLayer($fog);
     }
 
