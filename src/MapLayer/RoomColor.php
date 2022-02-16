@@ -15,7 +15,7 @@ use Trismegiste\MapGenerator\SvgPrintable;
 class RoomColor implements SvgPrintable
 {
 
-    const timeout = 0.1;
+    const timeout = 0.1; // one tenth of second
 
     protected $automat;
     protected $picked = [];
@@ -25,6 +25,14 @@ class RoomColor implements SvgPrintable
         $this->automat = $map;
     }
 
+    /**
+     * Searching rooms and randomly adding colors. The number of rooms are in SQUARES.
+     * If you give ['blue'=>10] it could be one room of 10 squares or 10 rooms of a 1 square
+     * 
+     * Note : it should be noted that, depending of the map, this method could fail.
+     * That's why there is a timeout to prevent infinite loop : self::timeout
+     * @param array $howManyPerColor a associative array of [color => how many squares]
+     */
     public function generate(array $howManyPerColor): void
     {
         $group = $this->automat->getSquaresPerRoomPerLevel();
