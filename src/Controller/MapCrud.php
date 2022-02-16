@@ -8,6 +8,8 @@ namespace App\Controller;
 
 use App\Form\ProceduralMap\DistrictMap;
 use App\Form\ProceduralMap\OneBlockMap;
+use App\Form\ProceduralMap\SpaceshipMap;
+use App\Form\ProceduralMap\StationMap;
 use App\Form\ProceduralMap\StreetMap;
 use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,7 +29,8 @@ class MapCrud extends AbstractController
         'oneblock' => OneBlockMap::class,
         'street' => StreetMap::class,
         'district' => DistrictMap::class,
-        'spaceship' => \App\Form\ProceduralMap\SpaceshipMap::class
+        'spaceship' => SpaceshipMap::class,
+        'station' => StationMap::class
     ];
 
     /**

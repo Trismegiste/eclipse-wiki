@@ -6,7 +6,7 @@
 
 namespace App\Form\ProceduralMap;
 
-use App\MapLayer\AxialSymmetry;
+use App\MapLayer\QuarterSymmetry;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Trismegiste\MapGenerator\Procedural\CellularAutomaton;
@@ -14,9 +14,9 @@ use Trismegiste\MapGenerator\Procedural\SpaceStation;
 use Trismegiste\MapGenerator\RpgMap;
 
 /**
- * Map for a spaceship
+ * Generator for Station
  */
-class SpaceshipMap extends MapRecipe
+class StationMap extends MapRecipe
 {
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -29,19 +29,19 @@ class SpaceshipMap extends MapRecipe
     {
         $side = $param['side'];
         $gen = new SpaceStation($side);
-        for ($delta = -6; $delta <= 0; $delta++) {
-            $gen->set($side / 2, $side / 2 + $delta, 1);
-        }
 
-        $gen->set($side / 2 - 4, $side / 2 + 6, 1);
-        $gen->set($side / 2 + 4, $side / 2 + 6, 1);
-
+        $gen->set($side / 2, $side / 2, 1);
+        $gen->set($side / 2 + 4, $side / 2 + 4, 1);
+        $gen->set($side / 2 - 4, $side / 2 + 4, 1);
+        $gen->set($side / 2 + 4, $side / 2 - 4, 1);
+        $gen->set($side / 2 - 4, $side / 2 - 4, 1);
+        
         return $gen;
     }
 
     protected function stackAdditionalLayers(RpgMap $map, CellularAutomaton $cell, array $param): void
     {
-        $symetry = new AxialSymmetry($cell);
+        $symetry = new QuarterSymmetry($cell);
         $symetry->duplicate();
         $map->appendLayer($symetry);
     }
