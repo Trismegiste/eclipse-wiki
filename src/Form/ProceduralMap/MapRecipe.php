@@ -105,6 +105,7 @@ abstract class MapRecipe extends AbstractType implements DataMapperInterface
         }
 
         $viewData = new RpgMap($gen);
+        $viewData->setParameters($param);
         $this->stackAdditionalLayers($viewData, $gen, $param);
 
         $door = new DoorLayer($gen);

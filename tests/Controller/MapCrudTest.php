@@ -57,7 +57,7 @@ class MapCrudTest extends WebTestCase
         $this->client->request('GET', $url);
         $output = ob_get_clean();
         $this->assertEquals('image/svg+xml', $this->client->getResponse()->headers->get('Content-Type'));
-        $this->assertStringStartsWith('<svg', $output);
+        $this->assertStringStartsWith('<?xml', $output);
         $this->assertStringEndsWith('</svg>', $output);
     }
 
