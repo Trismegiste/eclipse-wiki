@@ -6,36 +6,42 @@
 
 namespace App\MapLayer;
 
+use App\Controller\MapCrud;
+use DOMDocument;
+use DOMXPath;
+use Stringable;
+use Symfony\Component\Finder\SplFileInfo;
+
 /**
- * 
+ * Bridge for SVG
  */
-class ThumbnailMap implements \Stringable
+class ThumbnailMap implements Stringable
 {
+
+    const svgNS = 'http://www.w3.org/2000/svg';
 
     protected $mapInfo;
     protected $title;
     protected $desc;
     protected $thumb;
 
-    public function __construct(\Symfony\Component\Finder\SplFileInfo $svg)
+    public function __construct(SplFileInfo $svg)
     {
         $this->mapInfo = $svg;
 
-        $doc = new \DOMDocument();
-        $doc->loadXML($svg->getContents());
+        $doc = new DOMDocument();
+        $doc->load($svg->getPathname());
 
-        $xpath = new \DOMXPath($doc);
-        $xpath->registerNamespace('svg', 'http://www.w3.org/2000/svg');
+        $xpath = new DOMXPath($doc);
+        $xpath->registerNamespace('svg', self::svgNS);
         $this->title = trim($xpath->query('/svg:svg/svg:title')->item(0)->nodeValue);
         $this->desc = json_decode($xpath->query('/svg:svg/svg:desc')->item(0)->nodeValue, true);
 
         $content = $xpath->query('/svg:svg/svg:g[@class="building"]')->item(0);
 
-        $this->thumb = new \DOMDocument();
-        $root = $this->thumb->createElementNS('svg', 'svg');
+        $this->thumb = new DOMDocument();
+        $root = $this->thumb->createElementNS(self::svgNS, 'svg');
         $root->setAttribute('viewBox', $doc->firstChild->attributes->getNamedItem('viewBox')->nodeValue);
-        $root->setAttribute('width', 300);
-        $root->setAttribute('height', 300);
         $building = $this->thumb->importNode($content, true);
         $root->appendChild($building);
         $this->thumb->appendChild($root);
@@ -51,6 +57,21 @@ class ThumbnailMap implements \Stringable
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    public function __destruct()
+    {
+        unset($this->thumb);
+    }
+
+    public function getRecipe(): string
+    {
+        return array_search($this->desc['recipe'], MapCrud::model);
+    }
+
+    public function getFormData(): array
+    {
+        return $this->desc['form'];
     }
 
 }

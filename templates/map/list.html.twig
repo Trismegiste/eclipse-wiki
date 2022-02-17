@@ -4,8 +4,8 @@
     <div class="pure-g">
         {% for map in template %}
             <div class="pure-u-1-6">
-                {{ map.title }}
                 {{ map|raw }}
+                <a href="{{ path('app_mapcrud_mapcreate', {model:map.recipe }) }}?{{ map.formData|url_encode }}">{{ map.title }}</a>
             </div>
         {% endfor %}
     </div>
