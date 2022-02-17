@@ -11,7 +11,7 @@ use App\Form\ProceduralMap\OneBlockMap;
 use App\Form\ProceduralMap\SpaceshipMap;
 use App\Form\ProceduralMap\StationMap;
 use App\Form\ProceduralMap\StreetMap;
-use App\Repository\MapIteratorDecorator;
+use App\MapLayer\IteratorDecorator;
 use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Finder;
@@ -125,7 +125,7 @@ class MapCrud extends AbstractController
                 ->name('*.svg')
                 ->getIterator();
 
-        return $this->render('map/list.html.twig', ['template' => new MapIteratorDecorator($it)]);
+        return $this->render('map/list.html.twig', ['template' => new IteratorDecorator($it)]);
     }
 
 }

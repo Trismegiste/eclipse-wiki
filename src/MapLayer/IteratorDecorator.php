@@ -4,12 +4,12 @@
  * eclipse-wiki
  */
 
-namespace App\Repository;
+namespace App\MapLayer;
 
 /**
  * Decorates info from Map recipe iterator
  */
-class MapIteratorDecorator implements \Iterator
+class IteratorDecorator implements \Iterator
 {
 
     protected $iter;
