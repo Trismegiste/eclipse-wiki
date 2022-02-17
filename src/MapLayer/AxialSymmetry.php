@@ -26,9 +26,9 @@ class AxialSymmetry implements SvgPrintable
     {
         $side = $this->automat->getSize();
         $grid = $this->automat->getGrid();
-        for ($y = 0; $y < $side; $y++) {
-            for ($x = 0; $x < $side / 2; $x++) {
-                $this->automat->set($side - $x, $y, $grid[$x][$y]);
+        for ($y = 1; $y < $side - 1; $y++) {
+            for ($x = 1; $x < $side / 2; $x++) {
+                $this->automat->set($side - 1 - $x, $y, $grid[$x][$y]);
             }
         }
     }

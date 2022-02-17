@@ -31,12 +31,12 @@ class QuarterSymmetry implements SvgPrintable
     {
         $side = $this->automat->getSize();
         $grid = $this->automat->getGrid();
-        for ($y = 0; $y < $side / 2; $y++) {
-            for ($x = 0; $x < $side / 2; $x++) {
+        for ($y = 1; $y < $side / 2; $y++) {
+            for ($x = 1; $x < $side / 2; $x++) {
                 $cell = $grid[$x][$y];
-                $this->automat->set($side - $x, $y, $cell);
-                $this->automat->set($x, $side - $y, $cell);
-                $this->automat->set($side - $x, $side - $y, $cell);
+                $this->automat->set($side - 1 - $x, $y, $cell);
+                $this->automat->set($x, $side - 1 - $y, $cell);
+                $this->automat->set($side - 1 - $x, $side - 1 - $y, $cell);
             }
         }
     }
