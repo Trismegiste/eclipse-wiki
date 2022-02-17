@@ -4,7 +4,11 @@
 
 {% block _mapgen_color_label %}
 {% endblock %}
-
+{% block _mapgen_highlight_row %}
+    {% if form.children|length > 0 %}
+        {{ form_row(form) }}
+    {% endif %}
+{% endblock %}
 {% block _mapgen_highlight_widget %}
     <div class="pure-g">
         {% for idx,child in form %}
