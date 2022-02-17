@@ -32,13 +32,8 @@ class IteratorDecorator implements \Iterator
     {
         /** @var \Symfony\Component\Finder\SplFileInfo $info */
         $info = $this->iter->current();
-        $meta = \Trismegiste\MapGenerator\RpgMap::extractMetadata($info->getContents());
 
-        return [
-            'file' => $info,
-            'meta' => $meta,
-            'recipe' => array_search($meta->tagDesc['recipe'], \App\Controller\MapCrud::model)
-        ];
+        return new ThumbnailMap($info);
     }
 
     // next methods are just redirections

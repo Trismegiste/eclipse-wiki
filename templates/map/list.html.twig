@@ -4,8 +4,8 @@
     <div class="pure-g">
         {% for map in template %}
             <div class="pure-u-1-6">
-                {{ map.meta.tagTitle }}
-                ({{ map.recipe }})
+                {{ map.title }}
+                {{ map|raw }}
             </div>
         {% endfor %}
     </div>
