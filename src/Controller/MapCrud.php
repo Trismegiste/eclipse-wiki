@@ -11,13 +11,16 @@ use App\Form\ProceduralMap\OneBlockMap;
 use App\Form\ProceduralMap\SpaceshipMap;
 use App\Form\ProceduralMap\StationMap;
 use App\Form\ProceduralMap\StreetMap;
+use App\Repository\MapIteratorDecorator;
 use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\Exception\RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use function join_paths;
 
 /**
  * Description of MapCrud
@@ -108,6 +111,21 @@ class MapCrud extends AbstractController
     protected function getUploadDir(): string
     {
         return \join_paths($this->getParameter('kernel.project_dir'), 'public/upload');
+    }
+
+    /**
+     * Show listing of map templates
+     * @Route("/map/list", methods={"GET"})
+     */
+    public function list(): Response
+    {
+        $template = new Finder();
+        $it = $template->in(join_paths($this->getParameter('kernel.project_dir'), 'public/map'))
+                ->files()
+                ->name('*.svg')
+                ->getIterator();
+
+        return $this->render('map/list.html.twig', ['template' => new MapIteratorDecorator($it)]);
     }
 
 }
