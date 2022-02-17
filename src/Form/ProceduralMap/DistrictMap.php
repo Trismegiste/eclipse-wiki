@@ -62,7 +62,7 @@ class DistrictMap extends MapRecipe
     protected function stackAdditionalLayers(RpgMap $map, CellularAutomaton $cell, array $param): void
     {
         $coloring = new RoomColor($cell);
-        $cropped = self::colors;
+        $cropped = $param['color'];
         array_splice($cropped, count($param['highlight']));
         $coloring->generate(array_combine($cropped, $param['highlight']));
         $map->appendLayer($coloring);
