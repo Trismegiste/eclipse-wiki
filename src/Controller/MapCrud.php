@@ -38,9 +38,9 @@ class MapCrud extends AbstractController
 
     /**
      * Show the creating form of a map
-     * @Route("/map/{model}/create", methods={"GET"}, requirements={"model"="[a-z]+"})
+     * @Route("/map/create/{model}", methods={"GET"}, requirements={"model"="[a-z]+"})
      */
-    public function mapCreate(string $model, Request $request, VertexRepository $repo): Response
+    public function create(string $model, Request $request, VertexRepository $repo): Response
     {
         $formClass = self::model[$model];
         $form = $this->createForm($formClass);
@@ -74,9 +74,9 @@ class MapCrud extends AbstractController
 
     /**
      * Returns SVG
-     * @Route("/map/{model}/generate", methods={"GET"}, requirements={"model"="[a-z]+"})
+     * @Route("/map/generate/{model}", methods={"GET"}, requirements={"model"="[a-z]+"})
      */
-    public function mapGenerate(string $model, Request $request): Response
+    public function generate(string $model, Request $request): Response
     {
         $form = $this->createForm(self::model[$model]);
 
@@ -98,12 +98,12 @@ class MapCrud extends AbstractController
 
     /**
      * Show map in a popup
-     * @Route("/map/{model}/popup", methods={"GET"}, requirements={"model"="[a-z]+"})
+     * @Route("/map/popup/{model}", methods={"GET"}, requirements={"model"="[a-z]+"})
      */
     public function popup(string $model, Request $request): Response
     {
         $data = $request->query->all();
-        $url = $this->generateUrl('app_mapcrud_mapgenerate', ['model' => $model]) . '?' . http_build_query($data);
+        $url = $this->generateUrl('app_mapcrud_generate', ['model' => $model]) . '?' . http_build_query($data);
 
         return $this->render('map/popup.html.twig', ['img' => $url]);
     }

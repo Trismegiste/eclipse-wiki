@@ -23,7 +23,9 @@ class MapCrudTest extends WebTestCase
         return [
             ['oneblock'],
             ['street'],
-            ['district']
+            ['district'],
+            ['station'],
+            ['spaceship']
         ];
     }
 
@@ -32,13 +34,13 @@ class MapCrudTest extends WebTestCase
      */
     public function testAllModelForm(string $key)
     {
-        $crawler = $this->client->request('GET', "/map/$key/create");
+        $crawler = $this->client->request('GET', "/map/create/$key");
         $this->assertResponseIsSuccessful();
     }
 
     public function testCreateForm()
     {
-        $crawler = $this->client->request('GET', '/map/oneblock/create');
+        $crawler = $this->client->request('GET', '/map/create/oneblock');
 
         $form = $crawler->filter('.map-generator form')->form();
         $form->setValues(['mapgen' => ['side' => 20]]);
@@ -48,11 +50,11 @@ class MapCrudTest extends WebTestCase
 
     public function testSvgGenerate()
     {
-        $crawler = $this->client->request('GET', '/map/oneblock/create');
+        $crawler = $this->client->request('GET', '/map/create/oneblock');
         $form = $crawler->filter('.map-generator form')->form();
         $form->setValues(['mapgen' => ['side' => 20]]);
         $param = $form->getValues();
-        $url = '/map/oneblock/generate?' . http_build_query($param);
+        $url = '/map/generate/oneblock?' . http_build_query($param);
         ob_start();
         $this->client->request('GET', $url);
         $output = ob_get_clean();
@@ -63,13 +65,13 @@ class MapCrudTest extends WebTestCase
 
     public function testSvgBadForm()
     {
-        $this->client->request('GET', '/map/oneblock/generate?yolo');
+        $this->client->request('GET', '/map/generate/oneblock?yolo');
         $this->assertResponseStatusCodeSame(500);
     }
 
     public function testPopUp()
     {
-        $this->client->request('GET', '/map/oneblock/popup?yolo');
+        $this->client->request('GET', '/map/popup/oneblock?yolo');
         $this->assertResponseIsSuccessful();
         // since the popup only passthru query paramaters to the SVG controller (in javascript fetch)
         // we don't care to pass carefully formed parameters

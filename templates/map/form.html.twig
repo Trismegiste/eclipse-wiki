@@ -33,7 +33,7 @@
 
         onTheFly.addEventListener('change', function (e) {
             let data = new FormData(onTheFly)
-            fetch('{{ path('app_mapcrud_mapgenerate', {model: app.request.attributes.get('model')}) }}?' + new URLSearchParams(data), {
+            fetch('{{ path('app_mapcrud_generate', {model: app.request.attributes.get('model')}) }}?' + new URLSearchParams(data), {
                 redirect: 'manual'
             }).then(function (response) {
                 if (!response.ok) {
