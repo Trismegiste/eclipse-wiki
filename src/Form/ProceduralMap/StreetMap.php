@@ -20,8 +20,8 @@ class StreetMap extends MapRecipe
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('streetWidth', IntegerType::class, ['data' => 25])
-            ->add('streetCount', IntegerType::class, ['data' => 4])
+            ->add('streetWidth', IntegerType::class)
+            ->add('streetCount', IntegerType::class)
         ;
         parent::buildForm($builder, $options);
     }

@@ -28,8 +28,8 @@ class DistrictMap extends MapRecipe
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('sizePerBlock', IntegerType::class, ['data' => 23])
-                ->add('blockCount', IntegerType::class, ['data' => 5]);
+        $builder->add('sizePerBlock', IntegerType::class)
+                ->add('blockCount', IntegerType::class);
 
         parent::buildForm($builder, $options);
 
@@ -41,7 +41,7 @@ class DistrictMap extends MapRecipe
                 ])
                 ->add('highlight', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
                     'entry_type' => IntegerType::class,
-                    'data' => [3, 2, 1]
+                    'data' => [0, 0, 0]
                 ])
         ;
     }

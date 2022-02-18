@@ -21,7 +21,7 @@ class StationMap extends MapRecipe
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('side', IntegerType::class, ['data' => 35]);
+        $builder->add('side', IntegerType::class);
         parent::buildForm($builder, $options);
     }
 

@@ -50,18 +50,6 @@ abstract class MapRecipe extends AbstractType implements DataMapperInterface
                 ->setDataMapper($this);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $seed = random_int(10000, 99999);
-        $resolver->setDefault('data', [
-            'seed' => $seed,
-            'iteration' => 10,
-            'divide' => 1,
-            'capping' => 5,
-            'npc' => 0
-        ]);
-    }
-
     public function mapDataToForms($viewData, \Traversable $forms)
     {
         if (is_null($viewData)) {
