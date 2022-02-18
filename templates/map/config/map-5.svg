@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="800" height="800" viewBox="0 0 17 17">
+    <title>Un bâtiment</title>
+    <desc><![CDATA[{"recipe":"App\\Form\\ProceduralMap\\OneBlockMap","form":{"side":17,"seed":5,"iteration":15,"capping":23,"divide":2,"blurry":false,"one_more":false,"npc":0,"openPopUp":null,"place":null,"writeMap":null}}]]></desc>
+    <rect x="0" y="0" width="17" height="17" fill="white"/>
+    <g class="building">
+        <rect x="2" y="3" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="2" y="4" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="2" y="6" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="2" y="7" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="3" y="3" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="3" y="4" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="3" y="6" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="3" y="7" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="3" y="8" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="4" y="3" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="4" y="4" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="4" y="5" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="4" y="6" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="4" y="7" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="4" y="8" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="4" y="9" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="4" y="10" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="4" y="12" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="5" y="2" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="5" y="3" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="5" y="4" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="5" y="5" width="1" height="1" fill="hsl(0, 0%, 80%)"/>
+        <rect x="5" y="6" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="5" y="7" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="5" y="8" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="5" y="9" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="5" y="10" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="5" y="11" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="5" y="12" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="5" y="13" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="6" y="2" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="6" y="3" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="6" y="4" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="6" y="5" width="1" height="1" fill="hsl(0, 0%, 80%)"/>
+        <rect x="6" y="6" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="6" y="7" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="6" y="8" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="6" y="9" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="6" y="10" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="6" y="11" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="6" y="12" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="6" y="13" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="7" y="2" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="7" y="3" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="7" y="4" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="7" y="5" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="7" y="6" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="7" y="7" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="7" y="8" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="7" y="9" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="7" y="10" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="7" y="11" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="7" y="12" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="7" y="13" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="7" y="14" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="8" y="2" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="8" y="3" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="8" y="4" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="8" y="5" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="8" y="6" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="8" y="7" width="1" height="1" fill="hsl(0, 0%, 80%)"/>
+        <rect x="8" y="8" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="8" y="9" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="8" y="10" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="8" y="11" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="8" y="12" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="8" y="13" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="9" y="3" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="9" y="4" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="9" y="5" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="9" y="6" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="9" y="7" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="9" y="8" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="9" y="9" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="9" y="10" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="9" y="11" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="9" y="12" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="9" y="13" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="10" y="3" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="10" y="4" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="10" y="5" width="1" height="1" fill="hsl(0, 0%, 80%)"/>
+        <rect x="10" y="6" width="1" height="1" fill="hsl(0, 0%, 80%)"/>
+        <rect x="10" y="7" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="10" y="8" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="10" y="9" width="1" height="1" fill="hsl(0, 0%, 85%)"/>
+        <rect x="10" y="10" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="10" y="11" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="10" y="12" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="11" y="3" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="11" y="4" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="11" y="5" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="11" y="6" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="11" y="7" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="11" y="8" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="11" y="9" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="11" y="10" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="11" y="12" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="12" y="4" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="12" y="5" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="12" y="6" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="12" y="7" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="12" y="8" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="13" y="4" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="13" y="5" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="13" y="6" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="13" y="7" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <rect x="13" y="8" width="1" height="1" fill="hsl(0, 0%, 90%)"/>
+        <path style="stroke: black; stroke-width: 0.1" d=" M 2 3 h 1 M 2 3 v 1 M 2 4 v 1 M 2 5 h 1 M 2 6 h 1 M 2 6 v 1 M 2 7 v 1 M 2 8 h 1 M 3 3 h 1 M 3 5 h 1 M 3 6 h 1 M 3 8 v 1 M 3 9 h 1 M 4 3 h 1 M 4 5 v 1 M 4 7 h 1 M 4 7 v 1 M 4 8 h 1 M 4 9 v 1 M 4 10 v 1 M 4 11 h 1 M 4 12 h 1 M 4 12 v 1 M 4 13 h 1 M 5 2 h 1 M 5 2 v 1 M 5 5 h 1 M 5 5 v 1 M 5 6 h 1 M 5 6 v 1 M 5 8 v 1 M 5 9 h 1 M 5 11 v 1 M 5 13 v 1 M 5 14 h 1 M 6 2 h 1 M 6 5 h 1 M 6 6 h 1 M 6 9 h 1 M 6 10 h 1 M 6 10 v 1 M 6 11 v 1 M 6 12 v 1 M 6 13 h 1 M 6 14 h 1 M 7 2 h 1 M 7 5 h 1 M 7 5 v 1 M 7 9 v 1 M 7 13 h 1 M 7 14 v 1 M 7 15 h 1 M 8 2 h 1 M 8 5 v 1 M 8 6 h 1 M 8 7 h 1 M 8 7 v 1 M 8 8 h 1 M 8 8 v 1 M 8 9 v 1 M 8 10 v 1 M 8 11 v 1 M 8 12 h 1 M 8 13 h 1 M 8 14 h 1 M 8 14 v 1 M 9 2 v 1 M 9 3 h 1 M 9 5 h 1 M 9 5 v 1 M 9 7 v 1 M 9 8 v 1 M 9 9 v 1 M 9 10 v 1 M 9 11 h 1 M 9 12 v 1 M 9 14 h 1 M 10 3 h 1 M 10 5 h 1 M 10 5 v 1 M 10 6 v 1 M 10 7 h 1 M 10 7 v 1 M 10 8 h 1 M 10 10 h 1 M 10 10 v 1 M 10 13 h 1 M 10 13 v 1 M 11 3 h 1 M 11 5 v 1 M 11 6 v 1 M 11 8 v 1 M 11 9 v 1 M 11 11 h 1 M 11 11 v 1 M 11 12 h 1 M 11 13 h 1 M 12 3 v 1 M 12 4 h 1 M 12 9 h 1 M 12 9 v 1 M 12 10 v 1 M 12 12 v 1 M 13 4 h 1 M 13 9 h 1 M 14 4 v 1 M 14 5 v 1 M 14 6 v 1 M 14 7 v 1 M 14 8 v 1"/>
+    </g>
+    <path style="stroke: red; stroke-width: 0.15" d=" M 6.25 5 h 0.5 M 7.25 2 h 0.5 M 7 5.25 v 0.5 M 7.25 5 h 0.5 M 8 7.25 v 0.5 M 8.25 7 h 0.5 M 10.25 5 h 0.5 M 10 6.25 v 0.5 M 11 8.25 v 0.5 M 14 4.25 v 0.5"/>
+    <g fill="darkkhaki"></g>            
+    <defs>
+        <pattern id="hexmap" x="0" y="0" width="3" height="1.7320508075689" patternUnits="userSpaceOnUse">
+            <g style="stroke: black; stroke-width: 0.05; opacity: 30%">
+                <path d="M 0 0 h 1" transform="translate(1,0) rotate(60)"/>
+                <path d="M 0 0 h 1" transform="translate(1,1.7320508075689) rotate(-60)"/>
+                <path d="M 1.5 0.86602540378444 h 1 M 0 0 h 1" />
+                <path d="M 0 0 h 1" transform="translate(2.5,0.86602540378444) rotate(-60)"/>
+                <path d="M 0 0 h 1" transform="translate(2.5,0.86602540378444) rotate(60)"/>
+            </g>
+        </pattern>
+    </defs>
+        
+    <rect fill="url(#hexmap)" stroke="none" width="68" height="68" transform="scale(0.25,0.25)"/>
+    <g fill="black" class="fog-of-war" data-level="3">
+        <rect x="5" y="5" width="1" height="1"/>
+        <rect x="6" y="5" width="1" height="1"/>
+    </g>
+    <g fill="black" class="fog-of-war" data-level="3">
+        <rect x="8" y="7" width="1" height="1"/>
+    </g>
+    <g fill="black" class="fog-of-war" data-level="3">
+        <rect x="10" y="5" width="1" height="1"/>
+        <rect x="10" y="6" width="1" height="1"/>
+    </g>
+    <g fill="black" class="fog-of-war" data-level="2">
+        <rect x="4" y="7" width="1" height="1"/>
+        <rect x="5" y="7" width="1" height="1"/>
+        <rect x="6" y="7" width="1" height="1"/>
+        <rect x="7" y="7" width="1" height="1"/>
+        <rect x="7" y="8" width="1" height="1"/>
+        <rect x="6" y="8" width="1" height="1"/>
+        <rect x="5" y="8" width="1" height="1"/>
+        <rect x="7" y="9" width="1" height="1"/>
+        <rect x="7" y="10" width="1" height="1"/>
+        <rect x="6" y="10" width="1" height="1"/>
+        <rect x="6" y="11" width="1" height="1"/>
+        <rect x="7" y="11" width="1" height="1"/>
+        <rect x="7" y="12" width="1" height="1"/>
+        <rect x="8" y="12" width="1" height="1"/>
+        <rect x="6" y="12" width="1" height="1"/>
+        <rect x="7" y="6" width="1" height="1"/>
+        <rect x="8" y="6" width="1" height="1"/>
+        <rect x="9" y="6" width="1" height="1"/>
+        <rect x="9" y="7" width="1" height="1"/>
+        <rect x="9" y="8" width="1" height="1"/>
+        <rect x="10" y="8" width="1" height="1"/>
+        <rect x="10" y="9" width="1" height="1"/>
+        <rect x="9" y="9" width="1" height="1"/>
+        <rect x="9" y="10" width="1" height="1"/>
+        <rect x="9" y="5" width="1" height="1"/>
+        <rect x="6" y="6" width="1" height="1"/>
+        <rect x="5" y="6" width="1" height="1"/>
+        <rect x="7" y="5" width="1" height="1"/>
+    </g>
+    <g fill="black" class="fog-of-war" data-level="1">
+        <rect x="2" y="3" width="1" height="1"/>
+        <rect x="3" y="3" width="1" height="1"/>
+        <rect x="4" y="3" width="1" height="1"/>
+        <rect x="5" y="3" width="1" height="1"/>
+        <rect x="6" y="3" width="1" height="1"/>
+        <rect x="7" y="3" width="1" height="1"/>
+        <rect x="8" y="3" width="1" height="1"/>
+        <rect x="9" y="3" width="1" height="1"/>
+        <rect x="10" y="3" width="1" height="1"/>
+        <rect x="11" y="3" width="1" height="1"/>
+        <rect x="11" y="4" width="1" height="1"/>
+        <rect x="12" y="4" width="1" height="1"/>
+        <rect x="13" y="4" width="1" height="1"/>
+        <rect x="13" y="5" width="1" height="1"/>
+        <rect x="12" y="5" width="1" height="1"/>
+        <rect x="11" y="5" width="1" height="1"/>
+        <rect x="11" y="6" width="1" height="1"/>
+        <rect x="12" y="6" width="1" height="1"/>
+        <rect x="13" y="6" width="1" height="1"/>
+        <rect x="13" y="7" width="1" height="1"/>
+        <rect x="12" y="7" width="1" height="1"/>
+        <rect x="11" y="7" width="1" height="1"/>
+        <rect x="10" y="7" width="1" height="1"/>
+        <rect x="11" y="8" width="1" height="1"/>
+        <rect x="12" y="8" width="1" height="1"/>
+        <rect x="13" y="8" width="1" height="1"/>
+        <rect x="11" y="9" width="1" height="1"/>
+        <rect x="11" y="10" width="1" height="1"/>
+        <rect x="10" y="10" width="1" height="1"/>
+        <rect x="10" y="11" width="1" height="1"/>
+        <rect x="9" y="11" width="1" height="1"/>
+        <rect x="8" y="11" width="1" height="1"/>
+        <rect x="8" y="10" width="1" height="1"/>
+        <rect x="8" y="9" width="1" height="1"/>
+        <rect x="8" y="8" width="1" height="1"/>
+        <rect x="9" y="12" width="1" height="1"/>
+        <rect x="10" y="12" width="1" height="1"/>
+        <rect x="11" y="12" width="1" height="1"/>
+        <rect x="9" y="13" width="1" height="1"/>
+        <rect x="8" y="13" width="1" height="1"/>
+        <rect x="7" y="13" width="1" height="1"/>
+        <rect x="6" y="13" width="1" height="1"/>
+        <rect x="5" y="13" width="1" height="1"/>
+        <rect x="5" y="12" width="1" height="1"/>
+        <rect x="4" y="12" width="1" height="1"/>
+        <rect x="5" y="11" width="1" height="1"/>
+        <rect x="5" y="10" width="1" height="1"/>
+        <rect x="4" y="10" width="1" height="1"/>
+        <rect x="4" y="9" width="1" height="1"/>
+        <rect x="5" y="9" width="1" height="1"/>
+        <rect x="6" y="9" width="1" height="1"/>
+        <rect x="4" y="8" width="1" height="1"/>
+        <rect x="3" y="8" width="1" height="1"/>
+        <rect x="3" y="7" width="1" height="1"/>
+        <rect x="2" y="7" width="1" height="1"/>
+        <rect x="2" y="6" width="1" height="1"/>
+        <rect x="3" y="6" width="1" height="1"/>
+        <rect x="4" y="6" width="1" height="1"/>
+        <rect x="4" y="5" width="1" height="1"/>
+        <rect x="4" y="4" width="1" height="1"/>
+        <rect x="5" y="4" width="1" height="1"/>
+        <rect x="6" y="4" width="1" height="1"/>
+        <rect x="7" y="4" width="1" height="1"/>
+        <rect x="8" y="4" width="1" height="1"/>
+        <rect x="9" y="4" width="1" height="1"/>
+        <rect x="10" y="4" width="1" height="1"/>
+        <rect x="8" y="5" width="1" height="1"/>
+        <rect x="3" y="4" width="1" height="1"/>
+        <rect x="2" y="4" width="1" height="1"/>
+        <rect x="7" y="14" width="1" height="1"/>
+        <rect x="8" y="2" width="1" height="1"/>
+        <rect x="7" y="2" width="1" height="1"/>
+        <rect x="6" y="2" width="1" height="1"/>
+        <rect x="5" y="2" width="1" height="1"/>
+    </g>
+</svg>

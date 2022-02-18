@@ -120,7 +120,7 @@ class MapCrud extends AbstractController
     public function list(): Response
     {
         $template = new Finder();
-        $it = $template->in(join_paths($this->getParameter('kernel.project_dir'), 'public/map'))
+        $it = $template->in(join_paths($this->getParameter('twig.default_path'), 'map/config'))
                 ->files()
                 ->name('*.svg')
                 ->getIterator();
