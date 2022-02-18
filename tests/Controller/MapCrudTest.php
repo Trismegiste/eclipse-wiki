@@ -77,4 +77,10 @@ class MapCrudTest extends WebTestCase
         // we don't care to pass carefully formed parameters
     }
 
+    public function testList()
+    {
+        $this->client->request('GET', '/map/list');
+        $this->assertResponseIsSuccessful();
+    }
+
 }

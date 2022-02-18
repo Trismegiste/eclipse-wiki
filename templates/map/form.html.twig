@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 {% form_theme form _self %}
-{% block title %}Map{% endblock %}
+{% block title %}Création de Battle Map « {{ app.request.attributes.get('model') }} »{% endblock %}
 
 {% block _mapgen_color_label %}
 {% endblock %}

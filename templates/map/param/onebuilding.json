@@ -1,8 +1,0 @@
-{
-    "name": "Un bâtiment",
-    "form": "oneblock",
-    "data": {
-        "side": 25,
-        "iteration": 20
-    }
-}
