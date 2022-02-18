@@ -9,8 +9,8 @@ namespace App\MapLayer;
 use App\Controller\MapCrud;
 use DOMDocument;
 use DOMXPath;
+use SplFileInfo;
 use Stringable;
-use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * Bridge for SVG
@@ -20,15 +20,12 @@ class ThumbnailMap implements Stringable
 
     const svgNS = 'http://www.w3.org/2000/svg';
 
-    protected $mapInfo;
     protected $title;
     protected $desc;
     protected $thumb;
 
     public function __construct(SplFileInfo $svg)
     {
-        $this->mapInfo = $svg;
-
         $doc = new DOMDocument();
         $doc->load($svg->getPathname());
 
@@ -36,6 +33,7 @@ class ThumbnailMap implements Stringable
         $xpath->registerNamespace('svg', self::svgNS);
         $this->title = trim($xpath->query('/svg:svg/svg:title')->item(0)->nodeValue);
         $this->desc = json_decode($xpath->query('/svg:svg/svg:desc')->item(0)->nodeValue, true);
+        unset($this->desc['form']['seed']);
 
         $content = $xpath->query('/svg:svg/svg:g[@class="building"]')->item(0);
 
