@@ -35,7 +35,6 @@ class ThumbnailMap implements Stringable
         $xpath->registerNamespace('svg', self::svgNS);
         $this->title = trim($xpath->query('/svg:svg/svg:title')->item(0)->nodeValue);
         $this->desc = json_decode($xpath->query('/svg:svg/svg:desc')->item(0)->nodeValue, true);
-     //   unset($this->desc['form']['seed']);
 
         $content = $xpath->query('/svg:svg/svg:g[@class="building"]')->item(0);
 

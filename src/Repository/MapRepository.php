@@ -6,12 +6,15 @@
 
 namespace App\Repository;
 
+use App\MapLayer\IteratorDecorator;
 use App\MapLayer\ThumbnailMap;
+use Iterator;
 use SplFileInfo;
+use Symfony\Component\Finder\Finder;
 use function join_paths;
 
 /**
- * Description of MapRepository
+ * Repository for battle maps
  */
 class MapRepository
 {
@@ -34,6 +37,17 @@ class MapRepository
         unset($thumb);
 
         return $data;
+    }
+
+    public function findAll(): Iterator
+    {
+        $template = new Finder();
+        $it = $template->in($this->templateDir)
+            ->files()
+            ->name('*.svg')
+            ->getIterator();
+
+        return new IteratorDecorator($it);
     }
 
 }
