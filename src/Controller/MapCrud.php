@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Exception\ValidationFailedException;
 use function join_paths;
 
 /**
@@ -84,13 +85,15 @@ class MapCrud extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $map = $form->getData();
             $response = new StreamedResponse(function () use ($map) {
-                        $map->printSvg();
-                    },
-                    Response::HTTP_CREATED,
-                    ['Content-Type' => 'image/svg+xml']
+                $map->printSvg();
+            },
+                Response::HTTP_CREATED,
+                ['Content-Type' => 'image/svg+xml']
             );
 
             return $response;
+        } else {
+            throw new RuntimeException((string) $form->getErrors(true, true));
         }
 
         throw new RuntimeException('Invalid form');
@@ -121,9 +124,9 @@ class MapCrud extends AbstractController
     {
         $template = new Finder();
         $it = $template->in(join_paths($this->getParameter('twig.default_path'), 'map/config'))
-                ->files()
-                ->name('*.svg')
-                ->getIterator();
+            ->files()
+            ->name('*.svg')
+            ->getIterator();
 
         return $this->render('map/list.html.twig', ['template' => new IteratorDecorator($it)]);
     }

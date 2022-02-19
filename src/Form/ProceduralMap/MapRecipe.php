@@ -16,8 +16,8 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Positive;
 use Trismegiste\MapGenerator\Procedural\CellularAutomaton;
 use Trismegiste\MapGenerator\Procedural\DoorLayer;
 use Trismegiste\MapGenerator\Procedural\FogOfWar;
@@ -33,21 +33,21 @@ abstract class MapRecipe extends AbstractType implements DataMapperInterface
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('seed', IntegerType::class, ['constraints' => [new NotBlank()]])
-                ->add('iteration', IntegerType::class)
-                ->add('capping', IntegerType::class)
-                ->add('divide', IntegerType::class)
-                ->add('blurry', CheckboxType::class, ['required' => false, 'false_values' => [null, false, '0']])
-                ->add('one_more', CheckboxType::class, ['required' => false, 'false_values' => [null, false, '0']])
-                ->add('npc', IntegerType::class)
-                ->add('openPopUp', SubmitType::class)
-                ->add('place', PlaceChoiceType::class, [
-                    'placeholder' => '-- Écrire le fichier --',
-                    'required' => false
-                ])
-                ->add('writeMap', SubmitType::class, ['attr' => ['class' => 'button-write']])
-                ->setMethod('GET')
-                ->setDataMapper($this);
+            ->add('seed', IntegerType::class, ['constraints' => [new NotBlank, new Positive()]])
+            ->add('iteration', IntegerType::class, ['constraints' => [new NotBlank, new Positive()]])
+            ->add('capping', IntegerType::class, ['constraints' => [new NotBlank, new Positive()]])
+            ->add('divide', IntegerType::class, ['constraints' => [new NotBlank, new Positive()]])
+            ->add('blurry', CheckboxType::class, ['required' => false, 'false_values' => [null, false, '0']])
+            ->add('one_more', CheckboxType::class, ['required' => false, 'false_values' => [null, false, '0']])
+            ->add('npc', IntegerType::class)
+            ->add('openPopUp', SubmitType::class)
+            ->add('place', PlaceChoiceType::class, [
+                'placeholder' => '-- Écrire le fichier --',
+                'required' => false
+            ])
+            ->add('writeMap', SubmitType::class, ['attr' => ['class' => 'button-write']])
+            ->setMethod('GET')
+            ->setDataMapper($this);
     }
 
     public function mapDataToForms($viewData, \Traversable $forms)
