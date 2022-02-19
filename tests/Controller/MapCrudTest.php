@@ -43,7 +43,14 @@ class MapCrudTest extends WebTestCase
         $crawler = $this->client->request('GET', '/map/create/oneblock');
 
         $form = $crawler->filter('.map-generator form')->form();
-        $form->setValues(['mapgen' => ['side' => 20]]);
+        $form->setValues(['mapgen' => [
+                'side' => 20,
+                'iteration' => 15,
+                'divide' => 1,
+                'capping' => 5,
+                'npc' => 0,
+                'seed' => 666
+        ]]);
         $this->client->submit($form);
         $this->assertResponseIsSuccessful(); // no redirection
     }
@@ -52,7 +59,14 @@ class MapCrudTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', '/map/create/oneblock');
         $form = $crawler->filter('.map-generator form')->form();
-        $form->setValues(['mapgen' => ['side' => 20]]);
+        $form->setValues(['mapgen' => [
+                'side' => 20,
+                'iteration' => 15,
+                'divide' => 1,
+                'capping' => 5,
+                'npc' => 0,
+                'seed' => 666
+        ]]);
         $param = $form->getValues();
         $url = '/map/generate/oneblock?' . http_build_query($param);
         ob_start();
