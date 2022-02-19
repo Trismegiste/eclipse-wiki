@@ -12,6 +12,7 @@ use App\Form\ProceduralMap\SpaceshipMap;
 use App\Form\ProceduralMap\StationMap;
 use App\Form\ProceduralMap\StreetMap;
 use App\MapLayer\IteratorDecorator;
+use App\Repository\MapRepository;
 use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Finder;
@@ -20,7 +21,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Exception\ValidationFailedException;
 use function join_paths;
 
 /**
@@ -37,6 +37,13 @@ class MapCrud extends AbstractController
         'station' => StationMap::class
     ];
 
+    protected $mapRepo;
+
+    public function __construct(MapRepository $repo)
+    {
+        $this->mapRepo = $repo;
+    }
+
     /**
      * Show the creating form of a map
      * @Route("/map/create/{model}", methods={"GET"}, requirements={"model"="[a-z]+"})
@@ -44,7 +51,12 @@ class MapCrud extends AbstractController
     public function create(string $model, Request $request, VertexRepository $repo): Response
     {
         $formClass = self::model[$model];
-        $form = $this->createForm($formClass);
+        $data = null;
+        if ($request->query->has('prefill')) {
+            $data = $this->mapRepo->getTemplateParam($request->query->get('prefill'));
+        }
+
+        $form = $this->createForm($formClass, $data);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

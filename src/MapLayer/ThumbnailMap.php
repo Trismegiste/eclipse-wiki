@@ -23,17 +23,19 @@ class ThumbnailMap implements Stringable
     protected $title;
     protected $desc;
     protected $thumb;
+    protected $key;
 
     public function __construct(SplFileInfo $svg)
     {
         $doc = new DOMDocument();
         $doc->load($svg->getPathname());
+        $this->key = $svg->getBasename('.svg');
 
         $xpath = new DOMXPath($doc);
         $xpath->registerNamespace('svg', self::svgNS);
         $this->title = trim($xpath->query('/svg:svg/svg:title')->item(0)->nodeValue);
         $this->desc = json_decode($xpath->query('/svg:svg/svg:desc')->item(0)->nodeValue, true);
-        unset($this->desc['form']['seed']);
+     //   unset($this->desc['form']['seed']);
 
         $content = $xpath->query('/svg:svg/svg:g[@class="building"]')->item(0);
 
@@ -70,6 +72,11 @@ class ThumbnailMap implements Stringable
     public function getFormData(): array
     {
         return $this->desc['form'];
+    }
+
+    public function getKey(): string
+    {
+        return $this->key;
     }
 
 }
