@@ -6,11 +6,13 @@
 
 namespace App\Repository;
 
+use App\Entity\Place;
 use App\MapLayer\IteratorDecorator;
 use App\MapLayer\ThumbnailMap;
 use Iterator;
 use SplFileInfo;
 use Symfony\Component\Finder\Finder;
+use Trismegiste\MapGenerator\RpgMap;
 use function join_paths;
 
 /**
@@ -48,6 +50,25 @@ class MapRepository
             ->getIterator();
 
         return new IteratorDecorator($it);
+    }
+
+    public function writeAndSave(RpgMap $map, string $filename, ?Place $place): void
+    {
+        $path = \join_paths($this->uploadDir, $filename);
+
+        // persist file
+        $ptr = fopen($path, 'w');
+        ob_start(function (string $buffer) use ($ptr) {
+            fwrite($ptr, $buffer);
+        });
+        $map->printSvg();
+        ob_end_clean();
+
+        // persist vertex if any
+        if (!empty($place)) {
+            $place->battleMap = $filename;
+            $this->mongo->save($place);
+        }
     }
 
 }

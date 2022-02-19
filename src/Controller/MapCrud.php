@@ -11,17 +11,14 @@ use App\Form\ProceduralMap\OneBlockMap;
 use App\Form\ProceduralMap\SpaceshipMap;
 use App\Form\ProceduralMap\StationMap;
 use App\Form\ProceduralMap\StreetMap;
-use App\MapLayer\IteratorDecorator;
 use App\Repository\MapRepository;
 use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\Exception\RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use function join_paths;
 
 /**
  * Description of MapCrud
@@ -65,21 +62,10 @@ class MapCrud extends AbstractController
             $place = $form['place']->getData();
             $filename = empty($place) ? 'map-' . $form['seed']->getData() : 'map-' . $place->getPk();
             $filename .= '.svg';
-            $path = \join_paths($this->getUploadDir(), $filename);
 
-            $ptr = fopen($path, 'w');
-            ob_start(function (string $buffer) use ($ptr) {
-                fwrite($ptr, $buffer);
-            });
-            $map->printSvg();
-            ob_end_clean();
+            $this->mapRepo->writeAndSave($map, $filename, $place);
 
-            if (!empty($place)) {
-                $place->battleMap = $filename;
-                $repo->save($place);
-            }
-
-            $this->addFlash('success', 'Plan sauvegardé en ' . $path);
+            $this->addFlash('success', 'Plan sauvegardé dans ' . $filename);
         }
 
         return $this->render('map/form.html.twig', ['form' => $form->createView()]);
@@ -121,11 +107,6 @@ class MapCrud extends AbstractController
         $url = $this->generateUrl('app_mapcrud_generate', ['model' => $model]) . '?' . http_build_query($data);
 
         return $this->render('map/popup.html.twig', ['img' => $url]);
-    }
-
-    protected function getUploadDir(): string
-    {
-        return \join_paths($this->getParameter('kernel.project_dir'), 'public/upload');
     }
 
     /**
