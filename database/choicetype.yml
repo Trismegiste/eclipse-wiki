@@ -12,6 +12,7 @@ temperature:
     - Froide (-75° C)
     - Ultra-froide (-150° C)
     - Cryogénique (-200° C)
+    - Surchauffée (+50° C)
     
 pressure:
     - Terre (1 bar)

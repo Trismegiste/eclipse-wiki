@@ -79,15 +79,16 @@
                 }
                 return response.text()
             }).then(function (svg) {
-                document.getElementById('battlemap').innerHTML = svg
+                let battlemap = document.getElementById('battlemap')
+                battlemap.innerHTML = svg
                 document.querySelector('#battlemap svg').attributes.removeNamedItem('height')
+
+                battlemap.addEventListener("click", function (e) {
+                    let url = '{{ path('app_placecrud_mappopup', {pk: vertex.pk}) }}'
+                    window.open(url, '{{ popup_param.name }}', '{{ popup_param.config }}')
+                })
             }).catch((error) => {
                 console.error(error);
-            })
-
-            document.getElementById('battlemap').addEventListener("click", function (e) {
-                let url = '{{ path('app_placecrud_mappopup', {pk: vertex.pk}) }}'
-                window.open(url, '{{ popup_param.name }}', '{{ popup_param.config }}')
             })
         </script>
     {% endif %}
