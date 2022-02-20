@@ -123,3 +123,9 @@ services:
     App\Command\SecondScreenDaemon:
         arguments:
             - '%second_screen%'
+            
+    # Storage
+    App\Service\Storage:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+            $env: '%kernel.environment%'

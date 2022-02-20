@@ -28,14 +28,10 @@ class Picture extends AbstractController
      * Ajax for searching local images
      * @Route("/picture/search", methods={"GET"})
      */
-    public function search(Request $request): JsonResponse
+    public function search(Request $request, \App\Service\Storage $storage): JsonResponse
     {
         $title = $request->query->get('q', '');
-
-        $finder = new Finder();
-        $it = $finder->in($this->getUploadDir())
-                ->files()
-                ->name("/$title/i");
+        $it = $storage->searchByTitle($title);
 
         $choice = [];
         foreach ($it as $fch) {
@@ -108,6 +104,15 @@ class Picture extends AbstractController
         }
 
         return $this->render('picture/profile.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * Show image from storage
+     * @Route("/picture/get/{title}", methods={"GET"})
+     */
+    public function read(string $title, \App\Service\Storage $storage): Response
+    {
+        return $storage->createResponse($title);
     }
 
 }
