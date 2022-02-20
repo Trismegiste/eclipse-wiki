@@ -52,7 +52,24 @@ class MapCrudTest extends WebTestCase
                 'seed' => 666
         ]]);
         $this->client->submit($form);
-        $this->assertResponseIsSuccessful(); // no redirection
+        $this->assertResponseRedirects();
+        $this->client->followRedirect();
+        $pk = $this->client->getRequest()->attributes->get('pk');
+
+        return $pk;
+    }
+
+    /** @depends testCreateForm */
+    public function testCreatedPlace(string $pk)
+    {
+        $this->assertMatchesRegularExpression('#^[\da-f]{24}$#', $pk);
+        $repo = static::getContainer()->get(\App\Repository\VertexRepository::class);
+        $place = $repo->load($pk);
+        $this->assertInstanceOf(\App\Entity\Place::class, $place);
+        $this->assertNotNull($place->battleMap);
+        $filename = join_paths(static::getContainer()->getParameter('kernel.project_dir'), 'public/upload', $place->battleMap);
+        $this->assertFileExists($filename);
+        unlink($filename);
     }
 
     public function testSvgGenerate()

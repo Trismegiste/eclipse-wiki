@@ -42,7 +42,7 @@ abstract class MapRecipe extends AbstractType implements DataMapperInterface
             ->add('npc', IntegerType::class)
             ->add('openPopUp', SubmitType::class)
             ->add('place', PlaceChoiceType::class, [
-                'placeholder' => '-- Écrire le fichier --',
+                'placeholder' => '-- Créer nouvelle --',
                 'required' => false
             ])
             ->add('writeMap', SubmitType::class, ['attr' => ['class' => 'button-write']])

@@ -58,14 +58,19 @@ class MapCrud extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $map = $form->getData();
-
             $place = $form['place']->getData();
-            $filename = empty($place) ? 'map-' . $form['seed']->getData() : 'map-' . $place->getPk();
-            $filename .= '.svg';
+            $newPlace = empty($place);
 
+            if ($newPlace) {
+                $place = new \App\Entity\Place('map-' . $form['seed']->getData());
+                $repo->save($place);
+            }
+
+            $filename = 'map-' . $place->getPk() . '.svg';
             $this->mapRepo->writeAndSave($map, $filename, $place);
+            $this->addFlash('success', 'Plan sauvegardé dans ' . $place->getTitle());
 
-            $this->addFlash('success', 'Plan sauvegardé dans ' . $filename);
+            return $this->redirectToRoute($newPlace ? 'app_vertexcrud_rename' : 'app_vertexcrud_show', ['pk' => $place->getPk()]);
         }
 
         return $this->render('map/form.html.twig', ['form' => $form->createView()]);
