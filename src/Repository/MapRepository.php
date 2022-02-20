@@ -82,7 +82,7 @@ class MapRepository
         $place = [];
         foreach ($iter as $item) {
             $place[] = $item->battleMap;
-        }var_dump($place);
+        }
 
         $scan = new Finder();
         $scan->in($this->uploadDir)
@@ -93,7 +93,6 @@ class MapRepository
         foreach ($scan as $svg) {
             if (!in_array($svg->getBasename(), $place)) {
                 //unlink(join_paths($this->uploadDir, $svg->getBasename()));
-                echo join_paths($this->uploadDir, $svg->getBasename()) . PHP_EOL;
                 $cpt++;
             }
         }
