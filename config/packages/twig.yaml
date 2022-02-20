@@ -4,6 +4,7 @@ twig:
         - 'form/purecss_layout.html.twig'
         - 'form/rolltype.html.twig'
         - 'form/trait_type.html.twig'
+        - 'form/random_int_type.html.twig'
     globals:
         popup_param: '%second_screen%'
 

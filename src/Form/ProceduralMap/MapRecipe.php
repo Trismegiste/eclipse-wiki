@@ -7,6 +7,7 @@
 namespace App\Form\ProceduralMap;
 
 use App\Form\Type\PlaceChoiceType;
+use App\Form\Type\RandomIntegerType;
 use App\MapLayer\HexGrid;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataMapperInterface;
@@ -18,6 +19,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Positive;
+use Traversable;
 use Trismegiste\MapGenerator\Procedural\CellularAutomaton;
 use Trismegiste\MapGenerator\Procedural\DoorLayer;
 use Trismegiste\MapGenerator\Procedural\FogOfWar;
@@ -33,7 +35,7 @@ abstract class MapRecipe extends AbstractType implements DataMapperInterface
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('seed', IntegerType::class, ['constraints' => [new NotBlank, new Positive()]])
+            ->add('seed', RandomIntegerType::class, ['constraints' => [new NotBlank, new Positive()]])
             ->add('iteration', IntegerType::class, ['constraints' => [new NotBlank, new Positive()]])
             ->add('capping', IntegerType::class, ['constraints' => [new NotBlank, new Positive()]])
             ->add('divide', IntegerType::class, ['constraints' => [new NotBlank, new Positive()]])
@@ -50,7 +52,7 @@ abstract class MapRecipe extends AbstractType implements DataMapperInterface
             ->setDataMapper($this);
     }
 
-    public function mapDataToForms($viewData, \Traversable $forms)
+    public function mapDataToForms($viewData, Traversable $forms)
     {
         if (is_null($viewData)) {
             return;
@@ -67,7 +69,7 @@ abstract class MapRecipe extends AbstractType implements DataMapperInterface
         }
     }
 
-    final public function mapFormsToData(\Traversable $forms, &$viewData)
+    final public function mapFormsToData(Traversable $forms, &$viewData)
     {
         /** @var FormInterface[] $param */
         $param = [];
