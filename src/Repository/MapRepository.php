@@ -10,9 +10,10 @@ use App\Entity\Place;
 use App\MapLayer\IteratorDecorator;
 use App\MapLayer\ThumbnailMap;
 use Iterator;
+use MongoDB\BSON\Binary;
 use SplFileInfo;
 use Symfony\Component\Finder\Finder;
-use Trismegiste\MapGenerator\RpgMap;
+use Trismegiste\MapGenerator\SvgPrintable;
 use function join_paths;
 
 /**
@@ -52,7 +53,7 @@ class MapRepository
         return new IteratorDecorator($it);
     }
 
-    public function writeAndSave(RpgMap $map, string $filename, ?Place $place): void
+    public function writeAndSave(SvgPrintable $map, string $filename, ?Place $place): void
     {
         $path = \join_paths($this->uploadDir, $filename);
 
@@ -69,6 +70,35 @@ class MapRepository
             $place->battleMap = $filename;
             $this->mongo->save($place);
         }
+    }
+
+    public function deleteOrphanMap(): int
+    {
+        $iter = $this->mongo->search([
+            '__pclass' => new Binary(Place::class, Binary::TYPE_USER_DEFINED),
+            'battleMap' => ['$ne' => null]
+            ], ['content']);
+
+        $place = [];
+        foreach ($iter as $item) {
+            $place[] = $item->battleMap;
+        }var_dump($place);
+
+        $scan = new Finder();
+        $scan->in($this->uploadDir)
+            ->files()
+            ->name('*.svg');
+
+        $cpt = 0;
+        foreach ($scan as $svg) {
+            if (!in_array($svg->getBasename(), $place)) {
+                //unlink(join_paths($this->uploadDir, $svg->getBasename()));
+                echo join_paths($this->uploadDir, $svg->getBasename()) . PHP_EOL;
+                $cpt++;
+            }
+        }
+
+        return $cpt;
     }
 
 }
