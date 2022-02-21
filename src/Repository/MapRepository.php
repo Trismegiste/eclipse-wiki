@@ -9,6 +9,7 @@ namespace App\Repository;
 use App\Entity\Place;
 use App\MapLayer\IteratorDecorator;
 use App\MapLayer\ThumbnailMap;
+use App\Service\Storage;
 use Iterator;
 use MongoDB\BSON\Binary;
 use SplFileInfo;
@@ -26,7 +27,7 @@ class MapRepository
     protected $storage;
     protected $mongo;
 
-    public function __construct(string $template, \App\Service\Storage $storage, VertexRepository $repo)
+    public function __construct(string $template, Storage $storage, VertexRepository $repo)
     {
         $this->templateDir = $template;
         $this->storage = $storage;
@@ -84,10 +85,7 @@ class MapRepository
             $place[] = $item->battleMap;
         }
 
-        $scan = new Finder();
-        $scan->in($this->storage->getRootDir())
-                ->files()
-                ->name('*.svg');
+        $scan = $this->storage->searchByName('*.svg');
 
         foreach ($scan as $svg) {
             if (!in_array($svg->getFilename(), $place)) {

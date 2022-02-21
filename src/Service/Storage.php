@@ -40,15 +40,19 @@ class Storage
         return new BinaryFileResponse($path);
     }
 
-    public function searchByTitle(string $title): Iterator
+    public function searchByTitleContains(string $title, bool $caseInsensitive = true): Iterator
     {
-        $finder = new Finder();
-        $it = $finder->in($this->root)
-            ->files()
-            ->name("/$title/i")
-            ->getIterator();
+        return $this->searchByName("/$title/" . ($caseInsensitive ? 'i' : ''));
+    }
 
-        return $it;
+    public function searchByName(string $glob): \Iterator
+    {
+        $scan = new Finder();
+        $scan->in($this->root)
+                ->files()
+                ->name($glob);
+
+        return $scan->getIterator();
     }
 
 }

@@ -36,7 +36,7 @@ class PictureTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 
     public function testSearch()
     {
-        $this->client->request('GET', '/picture/search?q=yolo');
+        $this->client->request('GET', '/picture/search?q=yoLo');
         $this->assertResponseIsSuccessful();
         $listing = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(1, $listing);
