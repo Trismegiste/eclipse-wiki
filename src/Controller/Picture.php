@@ -24,14 +24,21 @@ use Symfony\Component\Routing\Annotation\Route;
 class Picture extends AbstractController
 {
 
+    protected $storage;
+
+    public function __construct(\App\Service\Storage $store)
+    {
+        $this->storage = $store;
+    }
+
     /**
      * Ajax for searching local images
      * @Route("/picture/search", methods={"GET"})
      */
-    public function search(Request $request, \App\Service\Storage $storage): JsonResponse
+    public function search(Request $request): JsonResponse
     {
         $title = $request->query->get('q', '');
-        $it = $storage->searchByTitle($title);
+        $it = $this->storage->searchByTitle($title);
 
         $choice = [];
         foreach ($it as $fch) {
@@ -47,7 +54,7 @@ class Picture extends AbstractController
      */
     public function popup(string $title): Response
     {
-        $path = \join_paths($this->getUploadDir(), $title);
+        $path = \join_paths($this->storage->getRootDir(), $title);
         if (!file_exists($path)) {
             throw $this->createNotFoundException($title);
         }
@@ -60,7 +67,11 @@ class Picture extends AbstractController
             $width = round($coord['max_size'] * $width / $sidePlus);
         }
 
-        return $this->render('picture/popup.html.twig', ['img' => $title, 'sx' => $width + $coord['delta_x'], 'sy' => $height + $coord['delta_y']]);
+        return $this->render('picture/popup.html.twig', [
+                    'img' => $this->generateUrl('get_picture', ['title' => $title]),
+                    'sx' => $width + $coord['delta_x'],
+                    'sy' => $height + $coord['delta_y']
+        ]);
     }
 
     /**
@@ -69,14 +80,9 @@ class Picture extends AbstractController
      */
     public function bluetooth(string $title, ObjectPushFactory $fac): JsonResponse
     {
-        $fac->send(\join_paths($this->getUploadDir(), $title));
+        $fac->send(\join_paths($this->storage->getRootDir(), $title));
 
         return new JsonResponse(null, Response::HTTP_OK);
-    }
-
-    protected function getUploadDir(): string
-    {
-        return \join_paths($this->getParameter('kernel.project_dir'), 'public/upload');
     }
 
     /**
@@ -94,7 +100,7 @@ class Picture extends AbstractController
             $avatarFile = $form->get('avatar')->getData();
             $profilePic = $maker->generate($npc, imagecreatefromstring($avatarFile->getContent()));
             $filename = $npc->getTitle() . '-avatar.jpg';
-            imagejpeg($profilePic, \join_paths($this->getUploadDir(), $filename));
+            imagejpeg($profilePic, \join_paths($this->storage->getRootDir(), $filename));
             $append = "\n==Avatar==\n[[file:$filename]]\n";
             $npc->setContent($npc->getContent() . $append);
             $repo->save($npc);
@@ -108,11 +114,11 @@ class Picture extends AbstractController
 
     /**
      * Show image from storage
-     * @Route("/picture/get/{title}", methods={"GET"})
+     * @Route("/picture/get/{title}", name="get_picture", methods={"GET"})
      */
-    public function read(string $title, \App\Service\Storage $storage): Response
+    public function read(string $title): Response
     {
-        return $storage->createResponse($title);
+        return $this->storage->createResponse($title);
     }
 
 }

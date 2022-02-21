@@ -116,7 +116,7 @@
         }
 
         {% if form.vars.data.extractFirstPicture is not empty %}
-            uploadCrop.bind({url: '/upload/{{ form.vars.data.extractFirstPicture }}'});
+            uploadCrop.bind({url: '{{ path('get_picture', {title: form.vars.data.extractFirstPicture}) }}'});
         {% endif %}
     </script>
 

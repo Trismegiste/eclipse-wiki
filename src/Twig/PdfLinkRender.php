@@ -16,7 +16,7 @@ class PdfLinkRender extends LinkRender
 
     public function getImageInfo($info): array
     {
-        $info['thumb'] = $this->routing->generate('app_gmhelper_index', [], UrlGeneratorInterface::ABSOLUTE_URL) . '/upload/' . $info['url'];
+        $info['thumb'] = $this->routing->generate('get_picture', ['title' => $info['url']], UrlGeneratorInterface::ABSOLUTE_URL);
         $info['url'] = '';
         $info['thumbnail'] = true;
         $info['caption'] = false;

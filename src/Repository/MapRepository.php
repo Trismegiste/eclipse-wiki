@@ -23,13 +23,13 @@ class MapRepository
 {
 
     protected $templateDir;
-    protected $uploadDir;
+    protected $storage;
     protected $mongo;
 
-    public function __construct(string $template, string $upload, VertexRepository $repo)
+    public function __construct(string $template, \App\Service\Storage $storage, VertexRepository $repo)
     {
         $this->templateDir = $template;
-        $this->uploadDir = $upload;
+        $this->storage = $storage;
         $this->mongo = $repo;
     }
 
@@ -46,16 +46,16 @@ class MapRepository
     {
         $template = new Finder();
         $it = $template->in($this->templateDir)
-            ->files()
-            ->name('*.svg')
-            ->getIterator();
+                ->files()
+                ->name('*.svg')
+                ->getIterator();
 
         return new IteratorDecorator($it);
     }
 
     public function writeAndSave(SvgPrintable $map, string $filename, ?Place $place): void
     {
-        $path = \join_paths($this->uploadDir, $filename);
+        $path = \join_paths($this->storage->getRootDir(), $filename);
 
         // persist file
         $ptr = fopen($path, 'w');
@@ -77,7 +77,7 @@ class MapRepository
         $iter = $this->mongo->search([
             '__pclass' => new Binary(Place::class, Binary::TYPE_USER_DEFINED),
             'battleMap' => ['$ne' => null]
-            ], ['content']);
+                ], ['content']);
 
         $place = [];
         foreach ($iter as $item) {
@@ -86,8 +86,8 @@ class MapRepository
 
         $scan = new Finder();
         $scan->in($this->uploadDir)
-            ->files()
-            ->name('*.svg');
+                ->files()
+                ->name('*.svg');
 
         $cpt = 0;
         foreach ($scan as $svg) {

@@ -87,10 +87,10 @@ class PlaceCrud extends GenericCrud
             $profile = $maker->generate($npc, $this->convertSvgToPng($param['svg']));
 
             $response = new StreamedResponse(function () use ($profile) {
-                imagepng($profile);
-            },
-                Response::HTTP_CREATED,
-                ['Content-Type' => 'image/png']
+                        imagepng($profile);
+                    },
+                    Response::HTTP_CREATED,
+                    ['Content-Type' => 'image/png']
             );
 
             return $response;
@@ -141,10 +141,10 @@ class PlaceCrud extends GenericCrud
      * Popup for the battlemap
      * @Route("/place/map/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function mapPopup(string $pk): Response
+    public function mapPopup(string $pk, \App\Service\Storage $storage): Response
     {
         $vertex = $this->repository->findByPk($pk);
-        $url = '/upload/' . $vertex->battleMap;
+        $url = $this->generateUrl('get_picture', ['title' => $vertex->battleMap]);
 
         return $this->render('map/popup.html.twig', ['img' => $url]);
     }

@@ -71,7 +71,7 @@
     {{ parent() }}
     {% if vertex.battleMap is not empty %}
         <script>
-            fetch('/upload/{{ vertex.battleMap }}', {
+            fetch('{{ path('get_picture', {title: vertex.battleMap}) }}', {
                 redirect: 'manual'
             }).then(function (response) {
                 if (!response.ok) {

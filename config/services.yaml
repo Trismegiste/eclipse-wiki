@@ -103,12 +103,6 @@ services:
         arguments:
             $socNetFolder: '%kernel.project_dir%/public/socnet'
 
-    # Storage
-    App\Repository\MapRepository:
-        arguments:
-            $upload: '%kernel.project_dir%/public/upload'
-            $template: '%twig.default_path%/map/config'
-
     # Custom Types
     App\Form\Type\FullTextChoice:
         arguments:
@@ -129,3 +123,8 @@ services:
         arguments:
             $projectDir: '%kernel.project_dir%'
             $env: '%kernel.environment%'
+            
+    App\Repository\MapRepository:
+        arguments:
+            $template: '%twig.default_path%/map/config'
+            
