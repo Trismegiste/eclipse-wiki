@@ -26,7 +26,7 @@ class PictureTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
     public function testShow()
     {
         $filename = \join_paths(static::getContainer()->get(\App\Service\Storage::class)->getRootDir(), 'yolo.png');
-        $image = imagecreatetruecolor(200, 200);
+        $image = $this->createTestChart(256);
         imagepng($image, $filename);
 
         $this->client->request('GET', '/picture/get/yolo.png');
@@ -59,13 +59,25 @@ class PictureTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $form = $crawler->selectButton('profile_pic_generate')->form();
 
         $filename = 'tmp.png';
-        $image = imagecreatetruecolor(200, 200);
+        $image = $this->createTestChart(256);
         imagepng($image, $filename);
 
         $form['profile_pic[avatar]']->upload($filename);
         $this->client->submit($form);
         $this->assertResponseIsSuccessful();
         unlink($filename);
+    }
+
+    protected function createTestChart(int $side)
+    {
+        $target = imagecreatetruecolor($side, $side);
+        $bg = imagecolorallocate($target, 0xff, 0xff, 0xff);
+        imagefill($target, 0, 0, $bg);
+
+        $fg = imagecolorallocate($target, 0xff, 0, 0);
+        imagefilledellipse($target, $side / 2, $side / 2, $side / 2, $side / 2, $fg);
+
+        return $target;
     }
 
 }
