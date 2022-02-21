@@ -72,7 +72,7 @@ class MapRepository
         }
     }
 
-    public function deleteOrphanMap(): int
+    public function deleteOrphanMap(): void
     {
         $iter = $this->mongo->search([
             '__pclass' => new Binary(Place::class, Binary::TYPE_USER_DEFINED),
@@ -89,15 +89,14 @@ class MapRepository
                 ->files()
                 ->name('*.svg');
 
-        $cpt = 0;
         foreach ($scan as $svg) {
-            if (!in_array($svg->getBasename(), $place)) {
-                //unlink(join_paths($this->uploadDir, $svg->getBasename()));
-                $cpt++;
+            if (!in_array($svg->getFilename(), $place)) {
+                $ret = unlink($svg->getPathname());
+                if (!$ret) {
+                    throw new \RuntimeException("unable to delete " . $svg->getFilename());
+                }
             }
         }
-
-        return $cpt;
     }
 
 }
