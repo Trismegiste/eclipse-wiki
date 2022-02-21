@@ -51,7 +51,7 @@
         let popup = document.getElementById('popup')
         popup.addEventListener('click', (event) => {
             event.preventDefault()
-            window.open('{{ path('app_picture_popup', {title: 'mire.png'}) }}', '{{ popup_param.name }}', '{{ popup_param.config }}')
+            window.open('{{ path('app_picture_popup', {title: 'no-signal'}) }}', '{{ popup_param.name }}', '{{ popup_param.config }}')
         })
     </script>
 {% endblock %}

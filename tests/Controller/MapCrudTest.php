@@ -67,7 +67,7 @@ class MapCrudTest extends WebTestCase
         $place = $repo->load($pk);
         $this->assertInstanceOf(\App\Entity\Place::class, $place);
         $this->assertNotNull($place->battleMap);
-        $filename = join_paths(static::getContainer()->getParameter('kernel.project_dir'), 'public/upload', $place->battleMap);
+        $filename = join_paths(static::getContainer()->get(\App\Service\Storage::class)->getRootDir(), $place->battleMap);
         $this->assertFileExists($filename);
         unlink($filename);
     }

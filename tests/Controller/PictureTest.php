@@ -18,28 +18,29 @@ class PictureTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 
     public function testShowNotFound()
     {
-        $this->client->request('GET', '/picture/popup/notfound.jpg');
-        $this->assertResponseStatusCodeSame(404);
+        $crawler = $this->client->request('GET', '/picture/popup/notfound.jpg');
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertEquals('/img/mire.svg', $crawler->filter('img')->first()->attr('src'));
     }
 
     public function testShow()
     {
-        $this->client->request('GET', '/picture/popup/mire.png');
+        $filename = \join_paths(static::getContainer()->get(\App\Service\Storage::class)->getRootDir(), 'yolo.png');
+        $image = imagecreatetruecolor(200, 200);
+        imagepng($image, $filename);
+
+        $this->client->request('GET', '/picture/get/yolo.png');
         $this->assertResponseStatusCodeSame(200);
+        $this->assertEquals('image/png', $this->client->getResponse()->headers->get('Content-Type'));
     }
 
     public function testSearch()
     {
-        $filename = \join_paths(static::getContainer()->getParameter('kernel.project_dir'), 'public/upload', 'yolo.png');
-        $image = imagecreatetruecolor(200, 200);
-        imagepng($image, $filename);
-
         $this->client->request('GET', '/picture/search?q=yolo');
         $this->assertResponseIsSuccessful();
         $listing = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(1, $listing);
         $this->assertEquals('yolo.png', $listing[0]);
-        unlink($filename);
     }
 
     public function testSendBluetooth()

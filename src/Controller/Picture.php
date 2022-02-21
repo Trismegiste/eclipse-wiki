@@ -54,21 +54,26 @@ class Picture extends AbstractController
      */
     public function popup(string $title): Response
     {
-        $path = \join_paths($this->storage->getRootDir(), $title);
-        if (!file_exists($path)) {
-            throw $this->createNotFoundException($title);
-        }
-        list($width, $height) = getimagesize($path);
-
-        $sidePlus = max([$width, $height]);
         $coord = $this->getParameter('second_screen');
-        if ($sidePlus > $coord['max_size']) {
-            $height = round($coord['max_size'] * $height / $sidePlus);
-            $width = round($coord['max_size'] * $width / $sidePlus);
+
+        $path = \join_paths($this->storage->getRootDir(), $title);
+        $target = '/img/mire.svg'; // default
+        $width = 768;
+        $height = 576;
+
+        if (file_exists($path)) {
+            list($width, $height) = getimagesize($path);
+
+            $sidePlus = max([$width, $height]);
+            if ($sidePlus > $coord['max_size']) {
+                $height = round($coord['max_size'] * $height / $sidePlus);
+                $width = round($coord['max_size'] * $width / $sidePlus);
+            }
+            $target = $this->generateUrl('get_picture', ['title' => $title]);
         }
 
         return $this->render('picture/popup.html.twig', [
-                    'img' => $this->generateUrl('get_picture', ['title' => $title]),
+                    'img' => $target,
                     'sx' => $width + $coord['delta_x'],
                     'sy' => $height + $coord['delta_y']
         ]);

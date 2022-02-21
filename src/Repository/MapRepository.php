@@ -85,7 +85,7 @@ class MapRepository
         }
 
         $scan = new Finder();
-        $scan->in($this->uploadDir)
+        $scan->in($this->storage->getRootDir())
                 ->files()
                 ->name('*.svg');
 
