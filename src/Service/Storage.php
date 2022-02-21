@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use function join_paths;
 
 /**
- * Storage
+ * Simple storage engine
  */
 class Storage
 {
@@ -25,11 +25,21 @@ class Storage
         $this->root = join_paths($projectDir, '/var/storage/', $env);
     }
 
+    /**
+     * The root directory where files are stored
+     * @return string
+     */
     public function getRootDir(): string
     {
         return $this->root;
     }
 
+    /**
+     * Create a binary response for a given filename stored on the local disk
+     * @param string $filename
+     * @return BinaryFileResponse
+     * @throws NotFoundHttpException
+     */
     public function createResponse(string $filename): BinaryFileResponse
     {
         $path = join_paths($this->root, $filename);
@@ -40,6 +50,12 @@ class Storage
         return new BinaryFileResponse($path);
     }
 
+    /**
+     * Searches files by its filename (case insensitive or not)
+     * @param string $title
+     * @param bool $caseInsensitive
+     * @return Iterator
+     */
     public function searchByTitleContains(string $title, bool $caseInsensitive = true): Iterator
     {
         return $this->searchByName("/$title/" . ($caseInsensitive ? 'i' : ''));
@@ -55,6 +71,11 @@ class Storage
         return $scan->getIterator();
     }
 
+    /**
+     * Deletes one file on the storage
+     * @param string $filename
+     * @throws \RuntimeException
+     */
     public function delete(string $filename): void
     {
         $path = join_paths($this->root, $filename);

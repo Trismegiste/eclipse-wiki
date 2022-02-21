@@ -34,6 +34,11 @@ class MapRepository
         $this->mongo = $repo;
     }
 
+    /**
+     * Gets form parameters from one battle map template
+     * @param string $key the battle map key (= filename without extension)
+     * @return array
+     */
     public function getTemplateParam(string $key): array
     {
         $thumb = new ThumbnailMap(new SplFileInfo(join_paths($this->templateDir, $key . '.svg')));
@@ -43,6 +48,10 @@ class MapRepository
         return $data;
     }
 
+    /**
+     * Gets all thumbnails for battle map Templates
+     * @return Iterator
+     */
     public function findAll(): Iterator
     {
         $template = new Finder();
@@ -54,6 +63,12 @@ class MapRepository
         return new IteratorDecorator($it);
     }
 
+    /**
+     * Writes the battle map SVG to the disk and update the Place vertex (if provided)
+     * @param SvgPrintable $map
+     * @param string $filename
+     * @param Place|null $place
+     */
     public function writeAndSave(SvgPrintable $map, string $filename, ?Place $place): void
     {
         $path = \join_paths($this->storage->getRootDir(), $filename);
@@ -73,6 +88,9 @@ class MapRepository
         }
     }
 
+    /**
+     * Deletes battle map SVG files that are not linked to a Place vertex
+     */
     public function deleteOrphanMap(): void
     {
         $iter = $this->mongo->search([
