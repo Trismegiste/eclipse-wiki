@@ -47,7 +47,11 @@ class Storage
             throw new NotFoundHttpException($filename . ' does not exist');
         }
 
-        return new BinaryFileResponse($path);
+        $file = new BinaryFileResponse($path);
+        $file->setAutoEtag();
+        $file->setAutoLastModified();
+
+        return $file;
     }
 
     /**
