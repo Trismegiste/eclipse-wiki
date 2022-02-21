@@ -16,22 +16,29 @@ class PictureTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $this->client = static::createClient();
     }
 
-    public function testShowNotFound()
+    public function testPopupNotFound()
     {
         $crawler = $this->client->request('GET', '/picture/popup/notfound.jpg');
         $this->assertResponseStatusCodeSame(200);
         $this->assertEquals('/img/mire.svg', $crawler->filter('img')->first()->attr('src'));
     }
 
-    public function testShow()
+    public function testPictureResponse()
     {
         $filename = \join_paths(static::getContainer()->get(\App\Service\Storage::class)->getRootDir(), 'yolo.png');
-        $image = $this->createTestChart(256);
+        $image = $this->createTestChart(1024);
         imagepng($image, $filename);
 
         $this->client->request('GET', '/picture/get/yolo.png');
         $this->assertResponseStatusCodeSame(200);
         $this->assertEquals('image/png', $this->client->getResponse()->headers->get('Content-Type'));
+    }
+
+    public function testPopupWithPng()
+    {
+        $crawler = $this->client->request('GET', '/picture/popup/yolo.png');
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertEquals('/picture/get/yolo.png', $crawler->filter('img')->first()->attr('src'));
     }
 
     public function testSearch()

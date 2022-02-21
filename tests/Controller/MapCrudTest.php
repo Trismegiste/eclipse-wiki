@@ -69,7 +69,15 @@ class MapCrudTest extends WebTestCase
         $this->assertNotNull($place->battleMap);
         $filename = join_paths(static::getContainer()->get(\App\Service\Storage::class)->getRootDir(), $place->battleMap);
         $this->assertFileExists($filename);
-        unlink($filename);
+
+        return $pk;
+    }
+
+    /** @depends testCreatedPlace */
+    public function testMapPopup(string $pk)
+    {
+        $this->client->request('GET', '/place/map/' . $pk);
+        $this->assertStringContainsString("/picture/get/map-$pk.svg", $this->client->getResponse()->getContent());
     }
 
     public function testSvgGenerate()
