@@ -25,7 +25,7 @@ class Dump extends AbstractController
     {
         $listing = $repo->getListing();
 
-        return $this->render('dump-edge.html.twig', ['listing' => $listing]);
+        return $this->render('dump/edge.html.twig', ['listing' => $listing]);
     }
 
     /**
@@ -36,7 +36,7 @@ class Dump extends AbstractController
     {
         $listing = $repo->getListing();
 
-        return $this->render('dump-skill.html.twig', ['listing' => $listing]);
+        return $this->render('dump/skill.html.twig', ['listing' => $listing]);
     }
 
 }
