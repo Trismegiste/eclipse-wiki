@@ -89,10 +89,7 @@ class MapRepository
 
         foreach ($scan as $svg) {
             if (!in_array($svg->getFilename(), $place)) {
-                $ret = unlink($svg->getPathname());
-                if (!$ret) {
-                    throw new \RuntimeException("unable to delete " . $svg->getFilename());
-                }
+                $this->storage->delete($svg->getBasename());
             }
         }
     }

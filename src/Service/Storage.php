@@ -55,4 +55,18 @@ class Storage
         return $scan->getIterator();
     }
 
+    public function delete(string $filename): void
+    {
+        $path = join_paths($this->root, $filename);
+
+        if (!file_exists($path)) {
+            throw new \RuntimeException("Cannot find " . $filename);
+        }
+
+        $ret = unlink($path);
+        if (!$ret) {
+            throw new \RuntimeException("Unable to delete " . $filename);
+        }
+    }
+
 }
