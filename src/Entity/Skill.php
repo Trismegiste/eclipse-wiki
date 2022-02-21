@@ -36,4 +36,14 @@ class Skill extends SaWoTrait implements Persistable, \JsonSerializable
         ];
     }
 
+    public function getLinkedAttribute(): string
+    {
+        return $this->linkedAttr;
+    }
+
+    public function isCore(): bool
+    {
+        return $this->core;
+    }
+
 }

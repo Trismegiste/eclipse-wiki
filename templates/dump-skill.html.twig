@@ -1,0 +1,18 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <table class="pare-table pure-table-striped">
+        <tr>
+            <th>Core</th>
+            <th>Nom</th>
+            <th>Attribut</th>
+        </tr>
+        {% for skill in listing %}
+            <tr>
+                <td>{% if skill.core %}<i class="icon-heartbeat"></i>{% endif %}</td>
+                <td>{{ skill.name }}</td>
+                <td>{{ skill.linkedAttribute|upper }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
