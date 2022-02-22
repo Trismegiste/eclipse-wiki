@@ -7,6 +7,7 @@
 namespace App\Controller;
 
 use App\Repository\EdgeProvider;
+use App\Repository\HindranceProvider;
 use App\Repository\SkillProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -37,6 +38,17 @@ class Dump extends AbstractController
         $listing = $repo->getListing();
 
         return $this->render('dump/skill.html.twig', ['listing' => $listing]);
+    }
+
+    /**
+     * Dumps all hindrances
+     * @Route("/dump/hindrance", methods={"GET"})
+     */
+    public function hindrance(HindranceProvider $repo)
+    {
+        $listing = $repo->getListing();
+
+        return $this->render('dump/hindrance.html.twig', ['listing' => $listing]);
     }
 
 }

@@ -1,0 +1,22 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <table class="pare-table pure-table-striped">
+        <tr>
+            <th>Nom</th>
+            <th>Ego</th>
+            <th>Biomorphe</th>
+            <th>Synthmorphe</th>
+            <th>Niveau</th>
+        </tr>
+        {% for hindrance in listing %}
+            <tr>
+                <td>{{ hindrance.name }}</td>
+                <td>{{ hindrance.ego ? 'Oui' : 'Non' }}</td>
+                <td>{{ hindrance.bio ? 'Oui' : 'Non' }}</td>
+                <td>{{ hindrance.synth ? 'Oui' : 'Non' }}</td>
+                <td>{{ level_hindrance(hindrance.choices) }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
