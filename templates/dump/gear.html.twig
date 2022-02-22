@@ -1,0 +1,14 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <table class="pare-table pure-table-striped">
+        <tr>
+            <th>Nom</th>
+        </tr>
+        {% for gear in listing %}
+            <tr>
+                <td>{{ gear.name }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

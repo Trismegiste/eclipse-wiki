@@ -51,4 +51,15 @@ class Dump extends AbstractController
         return $this->render('dump/hindrance.html.twig', ['listing' => $listing]);
     }
 
+    /**
+     * Dumps all gears
+     * @Route("/dump/gear", methods={"GET"})
+     */
+    public function gear(\App\Repository\GearProvider $repo)
+    {
+        $listing = $repo->getListing();
+
+        return $this->render('dump/gear.html.twig', ['listing' => $listing]);
+    }
+
 }
