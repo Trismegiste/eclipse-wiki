@@ -50,6 +50,10 @@ class PlaceType extends AbstractType
             }
         }
 
+        if (!$options['edit']) {
+            $builder->add('title', Type\RandomNameType::class);
+        }
+
         $builder
                 ->add('gravity', Type\FullTextChoice::class, ['category' => 'gravity'])
                 ->add('temperature', Type\FullTextChoice::class, ['category' => 'temperature'])

@@ -107,7 +107,12 @@ services:
     App\Form\Type\FullTextChoice:
         arguments:
             $repo: '@app.choicetype.repository'
-            
+
+    App\Form\Type\RandomNameType:
+        arguments:
+            $yaml: '%kernel.project_dir%/database/place_names.yml'
+
+    # BT
     App\Service\ObjectPushFactory:
         arguments:
             $mac: '%env(resolve:BLUETOOTH_MAC)%'
