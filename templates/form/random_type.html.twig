@@ -23,8 +23,9 @@
         </div>
         <div class="pure-u-1-3">
             <select id="{{ id }}_category" class="pure-input-1">
+                <option value="[]">-------------</option>
                 {% for key, choice in category %}
-                    <option value="{{ choice|json_encode()|escape('html_attr') }}">{{ key }}</option>
+                    <option value="{{ choice|json_encode()|escape('html_attr') }}">{{ key|trans }}</option>
                 {% endfor %}
             </select>
         </div>
