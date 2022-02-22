@@ -32,7 +32,7 @@ class RandomNameType extends AbstractType
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['category'] = array_combine(array_keys($this->category), array_keys($this->category));
+        $view->vars['category'] = $this->category;
     }
 
 }
