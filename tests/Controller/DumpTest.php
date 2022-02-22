@@ -15,4 +15,20 @@ class DumpTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    public function testDumpSkill(): void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/dump/skill');
+
+        $this->assertResponseIsSuccessful();
+    }
+
+    public function testDumpHindrance(): void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/dump/hindrance');
+
+        $this->assertResponseIsSuccessful();
+    }
+
 }
