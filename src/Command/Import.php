@@ -45,22 +45,34 @@ class Import extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title("Import from $filename");
 
+        $answer = $io->confirm("You're going to delete all existing vertices. Do you confirm ?", false);
+        if (!$answer) {
+            $io->warning('Exiting without any changes');
+            return Command::SUCCESS;
+        }
+
         $zip = new ZipArchive();
         if ($zip->open($filename) !== true) {
             throw new RuntimeException("cannot open <$filename>");
         }
+        $io->info('Extracting files into Storage');
         $zip->extractTo($this->store->getRootDir());
         $zip->close();
 
-        $importJson = join_paths($this->store->getRootDir(), 'vertex.json');
+        $importJson = join_paths($this->store->getRootDir(), Export::vertexFilename);
         $dump = \MongoDB\BSON\toPHP(\MongoDB\BSON\fromJSON(file_get_contents($importJson)));
 
+        $io->info('Delete old vertices');
         $this->repo->delete(iterator_to_array($this->repo->search()));
+
+        $io->info('Inserting vertices');
         foreach ($dump as $vertex) {
-            $io->writeln('Importing ' . get_class($vertex));
+            $io->writeln('Importing ' . $vertex->getCategory() . ' "' . $vertex->getTitle() . '"');
             $this->repo->save(clone $vertex);
         }
-        $this->store->delete('vertex.json');
+        $this->store->delete(Export::vertexFilename);
+
+        $io->success('Import succeed');
 
         return Command::SUCCESS;
     }

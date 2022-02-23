@@ -23,6 +23,8 @@ use ZipArchive;
 class Export extends Command
 {
 
+    const vertexFilename = 'vertex.json';
+
     protected static $defaultName = 'db:export';
     protected $repo;
     protected $store;
@@ -55,7 +57,7 @@ class Export extends Command
 
         // DB
         $io->info('Compress Vertices');
-        $zip->addFromString('vertex.json', $export);
+        $zip->addFromString(self::vertexFilename, $export);
         $io->success('Vertices Added');
 
         $io->info('Compress Storage');
