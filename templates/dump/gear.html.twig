@@ -4,10 +4,12 @@
     <table class="pare-table pure-table-striped">
         <tr>
             <th>Nom</th>
+            <th>Prix</th>
         </tr>
         {% for gear in listing %}
             <tr>
                 <td>{{ gear.name }}</td>
+                <td>{{ gear.price }}</td>
             </tr>
         {% endfor %}
     </table>
