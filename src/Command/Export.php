@@ -18,9 +18,7 @@ use Symfony\Component\Finder\SplFileInfo;
 use ZipArchive;
 
 /**
- * Description of Export
- *
- * @author trismegiste
+ * Export database into zip
  */
 class Export extends Command
 {
