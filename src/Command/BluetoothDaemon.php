@@ -11,7 +11,9 @@ use App\Repository\BluetoothMsgRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
+use UI\Exception\RuntimeException;
 
 /**
  * sdptool search --bdaddr FF:FF:B2:34:3C:58 OPUSH | grep "Channel"
@@ -36,7 +38,7 @@ class BluetoothDaemon extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new \Symfony\Component\Console\Style\SymfonyStyle($input, $output);
+        $io = new SymfonyStyle($input, $output);
         $io->title("Starting daemon with PID = " . getmypid());
 
         $this->repository->reset();
@@ -46,15 +48,16 @@ class BluetoothDaemon extends Command
 
         while (true) {
             if ($iterator->valid()) {
+                /** @var BtMessage $document */
                 $document = $iterator->current();
 
-                $output->writeln('Sending ' . $document->body . ' to ' . $document->btMac);
+                $output->writeln('Sending ' . $document->body . ' to ' . $document->getMacAddress());
                 $process = new Process(['obexftp',
                     '--nopath',
                     '--noconn',
                     '--uuid', 'none',
-                    '--bluetooth', $document->btMac,
-                    '--channel', $document->btChannel,
+                    '--bluetooth', $document->getMacAddress(),
+                    '--channel', $this->getChannelFor($document->getMacAddress()),
                     '--put', $document->body
                 ]);
                 $process->start();
@@ -64,6 +67,23 @@ class BluetoothDaemon extends Command
         }
 
         return 0;
+    }
+
+    protected function getChannelFor(string $btAddr): int
+    {
+        $scan = new Process([
+            'sdptool',
+            'search',
+            '--bdaddr', $btAddr,
+            'OPUSH'
+        ]);
+        $scan->mustRun();
+        $dump = $scan->getOutput();
+        if (!preg_match('#Channel:\s+(\d{1,2})#', $dump, $matches)) {
+            throw new RuntimeException("Could not find the OPUSH channel for $btAddr");
+        }
+
+        return (int) $matches[1];
     }
 
 }

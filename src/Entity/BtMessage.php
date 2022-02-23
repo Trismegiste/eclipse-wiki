@@ -14,14 +14,17 @@ class BtMessage implements \Trismegiste\Toolbox\MongoDb\Root
 
     use \Trismegiste\Toolbox\MongoDb\RootImpl;
 
-    public $btMac;
-    public $btChannel;
+    protected $macAddress;
     public $body;
 
-    public function __construct(string $mac, int $chan)
+    public function __construct(string $mac)
     {
-        $this->btChannel = $chan;
-        $this->btMac = $mac;
+        $this->macAddress = $mac;
+    }
+
+    public function getMacAddress(): string
+    {
+        return $this->macAddress;
     }
 
 }
