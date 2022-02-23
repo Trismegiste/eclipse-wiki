@@ -116,7 +116,6 @@ services:
     App\Service\ObjectPushFactory:
         arguments:
             $mac: '%env(resolve:BLUETOOTH_MAC)%'
-            $chan: '%env(resolve:BLUETOOTH_CHANNEL)%'
             
     # Console command
     App\Command\SecondScreenDaemon:
