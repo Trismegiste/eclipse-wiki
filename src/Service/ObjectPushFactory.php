@@ -29,16 +29,12 @@ class ObjectPushFactory
 
     public function send(string $filename): void
     {
-        if (is_null($this->deviceChannel)) {
-            $this->deviceChannel = $this->getChannelFor($this->deviceMac); // should be in construct but slow
-        }
-
-        $msg = new BtMessage($this->deviceMac, $this->deviceChannel);
+        $msg = new BtMessage($this->deviceMac, $this->getChannel());
         $msg->body = $filename;
         $this->repository->save($msg);
     }
 
-    protected function getChannelFor(string $btAddr): int
+    static protected function getChannelFor(string $btAddr): int
     {
         $scan = new Process([
             'sdptool',
@@ -53,6 +49,15 @@ class ObjectPushFactory
         }
 
         return (int) $matches[1];
+    }
+
+    public function getChannel(): int
+    {
+        if (is_null($this->deviceChannel)) {
+            $this->deviceChannel = static::getChannelFor($this->deviceMac);
+        }
+
+        return $this->deviceChannel;
     }
 
 }
