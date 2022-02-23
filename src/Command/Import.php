@@ -58,7 +58,7 @@ class Import extends Command
         $this->repo->delete(iterator_to_array($this->repo->search()));
         foreach ($dump as $vertex) {
             $io->writeln('Importing ' . get_class($vertex));
-            $this->repo->save($vertex);
+            $this->repo->save(clone $vertex);
         }
         $this->store->delete('vertex.json');
 

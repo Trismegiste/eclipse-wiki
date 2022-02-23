@@ -60,4 +60,9 @@ class Vertex implements \Trismegiste\Toolbox\MongoDb\Root
         return null;
     }
 
+    public function __clone()
+    {
+        $this->_id = null;
+    }
+
 }

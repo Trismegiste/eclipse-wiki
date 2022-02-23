@@ -92,11 +92,6 @@ abstract class Character extends Vertex implements \JsonSerializable
         return $cpt;
     }
 
-    public function __clone()
-    {
-        $this->_id = null;
-    }
-
     public function getAttributePoints(): int
     {
         $cpt = 0;
