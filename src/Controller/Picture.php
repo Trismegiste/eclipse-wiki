@@ -104,8 +104,8 @@ class Picture extends AbstractController
             /** @var UploadedFile $avatarFile */
             $avatarFile = $form->get('avatar')->getData();
             $profilePic = $maker->generate($npc, imagecreatefromstring($avatarFile->getContent()));
-            $filename = $npc->getTitle() . '-avatar.jpg';
-            imagejpeg($profilePic, \join_paths($this->storage->getRootDir(), $filename));
+            $filename = $npc->getTitle() . '-avatar.png';
+            imagepng($profilePic, \join_paths($this->storage->getRootDir(), $filename));
             $append = "\n==Avatar==\n[[file:$filename]]\n";
             $npc->setContent($npc->getContent() . $append);
             $repo->save($npc);
