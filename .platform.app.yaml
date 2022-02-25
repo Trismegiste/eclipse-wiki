@@ -33,6 +33,9 @@ disk: 512
 relationships:
     mongodatabase: 'database:mongodb'
 
+runtime:
+    extensions:
+        - mongodb
 
 hooks:
     build: |
