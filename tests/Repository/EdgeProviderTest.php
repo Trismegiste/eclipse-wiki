@@ -17,6 +17,8 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class EdgeProviderTest extends KernelTestCase
 {
 
+    protected $sut;
+
     protected function setUp(): void
     {
         self::createKernel();
@@ -30,7 +32,7 @@ class EdgeProviderTest extends KernelTestCase
         $repo->delete(iterator_to_array($it));
 
         $dummy = new MediaWikiPage('Dummy', 'Atout');
-        $dummy->content = "{{SaWoAtout|ego=1|type=pro|rang=n|src=EP}}xxxxxxxxxxxx{{PrérequisAtout|INT d8}}zzzzzzzz";
+        $dummy->content = "{{SaWoAtout|ego=1|type=pro|rang=n|type=bak|src=EP}}xxxxxxxxxxxx{{PrérequisAtout|INT d8}}zzzzzzzz";
         $repo->save($dummy);
         $it = $repo->search();
         $this->assertCount(1, iterator_to_array($it));
@@ -50,6 +52,13 @@ class EdgeProviderTest extends KernelTestCase
         $this->assertInstanceOf(Edge::class, $edge['Dummy']);
         $this->assertEquals('Dummy', $edge['Dummy']->getName());
         $this->assertEquals('INT d8', $edge['Dummy']->getPrerequisite());
+    }
+
+    public function testCategoryList()
+    {
+        $cat = $this->sut->getAllEdgeCategory();
+        $this->assertCount(1, $cat);
+        $this->assertEquals('bak', array_key_first($cat));
     }
 
 }

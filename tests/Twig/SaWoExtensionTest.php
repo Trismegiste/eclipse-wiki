@@ -5,8 +5,6 @@
  */
 
 use App\Twig\SaWoExtension;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SaWoExtensionTest extends PHPUnit\Framework\TestCase
 {
@@ -31,6 +29,16 @@ class SaWoExtensionTest extends PHPUnit\Framework\TestCase
         $this->assertEquals('<i class="icon-d12"></i>+2', $this->sut->diceIcon('d12+2'));
     }
 
+    public function testBadDiceIcon()
+    {
+        $this->assertEquals('666', $this->sut->diceIcon('666'));
+    }
+
+    public function testPrintLevelHindrance()
+    {
+        $this->assertEquals('M/m', $this->sut->printLevelHindrance(3));
+    }
+
     public function testAddRaise()
     {
         $roll = new App\Entity\DamageRoll();
@@ -38,6 +46,26 @@ class SaWoExtensionTest extends PHPUnit\Framework\TestCase
         $this->assertEquals(1, $roll->getDieCount(6));
         $roll = $this->sut->addRaise($roll);
         $this->assertEquals(2, $roll->getDieCount(6));
+    }
+
+    public function getNpc(): array
+    {
+        return [
+            [new App\Entity\Ali('ali')],
+            [new App\Entity\Freeform('free')]
+        ];
+    }
+
+    /** @dataProvider getNpc */
+    public function testIconForCharacter(App\Entity\Character $npc)
+    {
+        $this->assertStringStartsWith('icon', $this->sut->iconForCharacter($npc));
+    }
+
+    public function testBadCharIcon()
+    {
+        $this->expectException(OutOfBoundsException::class);
+        $this->assertStringStartsWith('icon', $this->sut->iconForCharacter($this->createStub(App\Entity\Character::class)));
     }
 
 }

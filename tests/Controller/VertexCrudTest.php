@@ -63,7 +63,7 @@ class VertexCrudTest extends WebTestCase
 
         $crawler = $client->request('GET', $url);
         $form = $crawler->selectButton('vertex_create')->form();
-        $form['vertex[content]'] = 'New content [[abcd]]';
+        $form['vertex[content]'] = 'New content [[file:abcd.png]]';
         $crawler = $client->submit($form);
         $this->assertResponseRedirects();
         $client->followRedirect();
