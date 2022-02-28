@@ -1,4 +1,4 @@
-{# show picture #}
+{# show battlemap #}
 {% extends "base.html.twig" %}
 
 {% block title %}{{ popup_param.name }}{% endblock %}
@@ -8,7 +8,9 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('bumbu/svg-pan-zoom.min.js') }}"></script>
+    <script src="{{ asset('svgdotjs/svg.min.js') }}"></script>
+    <script src="{{ asset('svgdotjs/svg.panzoom.min.js') }}"></script>
+    <script src="{{ asset('svgdotjs/svg.draggable.min.js') }}"></script>
     <script>
         window.resizeTo({{ popup_param.max_size }}, {{ popup_param.max_size + popup_param.delta_y }})
 
@@ -28,9 +30,13 @@
                 })
             })
 
-            svgPanZoom(document.querySelector('#map svg'), {
-                dblClickZoomEnabled: false
-            })
+            let svgElem = document.querySelector('#map svg')
+            let battlemap = SVG(svgElem)
+            battlemap.panZoom({zoomMin: 20, zoomMax: 200})
+            
+            var group = battlemap.group()
+            var token = group.circle(0.3).fill('#f06')
+            token.draggable()
         }).catch((error) => {
             console.error(error);
         })
