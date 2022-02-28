@@ -30,9 +30,8 @@ class NpcStats extends AbstractType
     protected $edge;
     protected $hindrance;
 
-    public function __construct(TraitProvider $pro, EdgeProvider $edge, HindranceProvider $hindrance)
+    public function __construct(EdgeProvider $edge, HindranceProvider $hindrance)
     {
-        $this->provider = $pro;
         $this->edge = $edge;
         $this->hindrance = $hindrance;
     }
