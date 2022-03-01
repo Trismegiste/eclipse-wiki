@@ -13,6 +13,7 @@
     <script src="{{ asset('svgdotjs/svg.draggable.min.js') }}"></script>
     <script>
         window.resizeTo({{ popup_param.max_size }}, {{ popup_param.max_size + popup_param.delta_y }})
+        var battlemap;
 
         fetch('{{ img|raw }}', {
             redirect: 'manual'
@@ -31,14 +32,19 @@
             })
 
             let svgElem = document.querySelector('#map svg')
-            let battlemap = SVG(svgElem)
+            battlemap = SVG(svgElem)
             battlemap.panZoom({zoomMin: 20, zoomMax: 200})
-            
-            var group = battlemap.group()
-            var token = group.circle(0.3).fill('#f06')
-            token.draggable()
         }).catch((error) => {
             console.error(error);
         })
+
+        Mousetrap.bind('t', function () {
+            let bbox = battlemap.viewbox()
+            battlemap.circle(0.3)
+                    .fill('red')
+                    .move(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2)
+                    .draggable()
+            return false
+        });
     </script>
 {% endblock %}
