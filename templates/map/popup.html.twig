@@ -13,7 +13,8 @@
     <script src="{{ asset('svgdotjs/svg.draggable.min.js') }}"></script>
     <script>
         window.resizeTo({{ popup_param.max_size }}, {{ popup_param.max_size + popup_param.delta_y }})
-        var battlemap;
+        var battlemap
+        var colorCycle = 0
 
         fetch('{{ img|raw }}', {
             redirect: 'manual'
@@ -40,8 +41,10 @@
 
         Mousetrap.bind('t', function () {
             let bbox = battlemap.viewbox()
+            let color = (30 * colorCycle) % 360
+            colorCycle++
             battlemap.circle(0.3)
-                    .fill('red')
+                    .fill("hsl(" + color + ", 100%, 50%)")
                     .move(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2)
                     .draggable()
             return false
