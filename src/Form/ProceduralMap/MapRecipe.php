@@ -35,21 +35,21 @@ abstract class MapRecipe extends AbstractType implements DataMapperInterface
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('seed', RandomIntegerType::class, ['constraints' => [new NotBlank, new Positive()]])
-            ->add('iteration', IntegerType::class, ['constraints' => [new NotBlank, new Positive()]])
-            ->add('capping', IntegerType::class, ['constraints' => [new NotBlank, new Positive()]])
-            ->add('divide', IntegerType::class, ['constraints' => [new NotBlank, new Positive()]])
-            ->add('blurry', CheckboxType::class, ['required' => false, 'false_values' => [null, false, '0']])
-            ->add('one_more', CheckboxType::class, ['required' => false, 'false_values' => [null, false, '0']])
-            ->add('npc', IntegerType::class)
-            ->add('openPopUp', SubmitType::class)
-            ->add('place', PlaceChoiceType::class, [
-                'placeholder' => '-- Create New --',
-                'required' => false
-            ])
-            ->add('writeMap', SubmitType::class, ['attr' => ['class' => 'button-write']])
-            ->setMethod('GET')
-            ->setDataMapper($this);
+                ->add('seed', RandomIntegerType::class, ['constraints' => [new NotBlank, new Positive()]])
+                ->add('iteration', IntegerType::class, ['constraints' => [new NotBlank, new Positive()]])
+                ->add('capping', IntegerType::class, ['constraints' => [new NotBlank, new Positive()]])
+                ->add('divide', IntegerType::class, ['constraints' => [new NotBlank, new Positive()]])
+                ->add('blurry', CheckboxType::class, ['required' => false, 'false_values' => [null, false, '0']])
+                ->add('one_more', CheckboxType::class, ['required' => false, 'false_values' => [null, false, '0']])
+                ->add('npc', IntegerType::class)
+                ->add('openPopUp', SubmitType::class)
+                ->add('place', PlaceChoiceType::class, [
+                    'placeholder' => '-- Create New --',
+                    'required' => false
+                ])
+                ->add('writeMap', SubmitType::class, ['attr' => ['class' => 'button-write']])
+                ->setMethod('GET')
+                ->setDataMapper($this);
     }
 
     public function mapDataToForms($viewData, Traversable $forms)
@@ -107,7 +107,7 @@ abstract class MapRecipe extends AbstractType implements DataMapperInterface
         $pop->generate($param['npc']);
         $viewData->appendLayer($pop);
 
-        $viewData->appendLayer(new HexGrid($gen));
+        $viewData->appendLayer(new HexGrid($gen, 0.5));
 
         $fog = new FogOfWar($gen);
         $viewData->appendLayer($fog);
