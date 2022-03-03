@@ -26,15 +26,23 @@
         }).then(function (svg) {
             document.getElementById('map').innerHTML = svg
 
+            // remove fog of war for one room on a double click event
             document.querySelectorAll('#map g.fog-of-war').forEach(function (item) {
                 item.addEventListener('dblclick', function (e) {
-                    e.target.parentNode.remove()
+                    e.target.parentNode.remove() // since the <g> is only a group, <rect> inside the <g> are catching the event
                 })
             })
 
+            // Pan & zoom the SVG
             let svgElem = document.querySelector('#map svg')
             battlemap = SVG(svgElem)
             battlemap.panZoom({zoomMin: 20, zoomMax: 200})
+
+            // make all NPC draggable
+            document.querySelectorAll('svg #token-layer circle').forEach(function (item) {
+                SVG(item).draggable()
+            })
+
         }).catch((error) => {
             console.error(error);
         })
@@ -43,7 +51,7 @@
             let bbox = battlemap.viewbox()
             let color = (36 * colorCycle) % 360
             colorCycle++
-            battlemap.circle(0.4)
+            battlemap.circle(0.6)
                     .fill("hsl(" + color + ", 100%, 50%)")
                     .move(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2)
                     .draggable()

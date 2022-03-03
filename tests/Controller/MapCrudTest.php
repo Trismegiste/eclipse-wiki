@@ -48,7 +48,8 @@ class MapCrudTest extends WebTestCase
                 'iteration' => 15,
                 'divide' => 1,
                 'capping' => 5,
-                'npc' => 0,
+                'outsider' => 0,
+                'insider' => 0,
                 'seed' => 666
         ]]);
         $this->client->submit($form);
@@ -89,7 +90,8 @@ class MapCrudTest extends WebTestCase
                 'iteration' => 15,
                 'divide' => 1,
                 'capping' => 5,
-                'npc' => 0,
+                'outsider' => 0,
+                'insider' => 0,
                 'seed' => 666
         ]]);
         $param = $form->getValues();

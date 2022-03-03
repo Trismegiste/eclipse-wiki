@@ -19,6 +19,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Positive;
+use Symfony\Component\Validator\Constraints\PositiveOrZero;
 use Traversable;
 use Trismegiste\MapGenerator\Procedural\CellularAutomaton;
 use Trismegiste\MapGenerator\Procedural\DoorLayer;
@@ -41,7 +42,8 @@ abstract class MapRecipe extends AbstractType implements DataMapperInterface
                 ->add('divide', IntegerType::class, ['constraints' => [new NotBlank, new Positive()]])
                 ->add('blurry', CheckboxType::class, ['required' => false, 'false_values' => [null, false, '0']])
                 ->add('one_more', CheckboxType::class, ['required' => false, 'false_values' => [null, false, '0']])
-                ->add('npc', IntegerType::class)
+                ->add('outsider', IntegerType::class, ['constraints' => [new NotBlank, new PositiveOrZero()]])
+                ->add('insider', IntegerType::class, ['constraints' => [new NotBlank, new PositiveOrZero()]])
                 ->add('openPopUp', SubmitType::class)
                 ->add('place', PlaceChoiceType::class, [
                     'placeholder' => '-- Create New --',
@@ -103,11 +105,11 @@ abstract class MapRecipe extends AbstractType implements DataMapperInterface
         $door->findDoor();
         $viewData->appendLayer($door);
 
-        $pop = new NpcPopulator($gen);
-        $pop->generate($param['npc'], $param['npc']);
-        $viewData->appendLayer($pop);
-
         $viewData->appendLayer(new HexGrid($gen, 0.5));
+
+        $pop = new NpcPopulator($gen);
+        $pop->generate($param['outsider'], $param['insider'], 0.3);
+        $viewData->appendLayer($pop);
 
         $fog = new FogOfWar($gen);
         $viewData->appendLayer($fog);

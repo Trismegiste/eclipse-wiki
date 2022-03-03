@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="800" height="800" viewBox="0 0 17 17">
     <title>Bâtiment isolé</title>
-    <desc><![CDATA[{"recipe":"App\\Form\\ProceduralMap\\OneBlockMap","form":{"side":17,"seed":5,"iteration":15,"capping":23,"divide":2,"blurry":false,"one_more":false,"npc":0,"openPopUp":null,"place":null,"writeMap":null}}]]></desc>
+    <desc><![CDATA[{"recipe":"App\\Form\\ProceduralMap\\OneBlockMap","form":{"side":17,"seed":5,"iteration":15,"capping":23,"divide":2,"blurry":false,"one_more":false,"outsider":0,"insider":0,"openPopUp":null,"place":null,"writeMap":null}}]]></desc>
     <rect x="0" y="0" width="17" height="17" fill="white"/>
     <g class="building">
         <rect x="2" y="3" width="1" height="1" fill="hsl(0, 0%, 90%)"/>

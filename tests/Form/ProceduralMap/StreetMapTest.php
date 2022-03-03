@@ -20,7 +20,8 @@ class StreetMapTest extends MapRecipeTestCase
             'iteration' => 15,
             'capping' => 5,
             'divide' => 1,
-            'npc' => 0,
+            'outsider' => 0,
+            'insider' => 0,
             'blurry' => true,
             'one_more' => true
         ];
