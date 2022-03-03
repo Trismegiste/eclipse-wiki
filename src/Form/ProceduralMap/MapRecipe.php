@@ -104,7 +104,7 @@ abstract class MapRecipe extends AbstractType implements DataMapperInterface
         $viewData->appendLayer($door);
 
         $pop = new NpcPopulator($gen);
-        $pop->generate($param['npc']);
+        $pop->generate($param['npc'], $param['npc']);
         $viewData->appendLayer($pop);
 
         $viewData->appendLayer(new HexGrid($gen, 0.5));

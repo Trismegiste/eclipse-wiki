@@ -7,7 +7,7 @@
 namespace App\MapLayer;
 
 /**
- * Decorates info from Map recipe iterator
+ * Decorates info from Map recipe iterator for thumbnailing SVG battlemap
  */
 class IteratorDecorator implements \Iterator
 {

@@ -43,7 +43,7 @@
             let bbox = battlemap.viewbox()
             let color = (36 * colorCycle) % 360
             colorCycle++
-            battlemap.circle(0.6)
+            battlemap.circle(0.4)
                     .fill("hsl(" + color + ", 100%, 50%)")
                     .move(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2)
                     .draggable()
