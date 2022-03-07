@@ -4,11 +4,11 @@
 {% block title %}PlayerCast{% endblock %}
 
 {% block body %}
-    <div class="pure-g" id="tv">
-        <div class="pure-u-1 waiting">
+    <div class="pure-g" id="tv" x-data="spa">
+        <div class="pure-u-1 waiting" x-show="!cast">
             <i class="icon-spin3 animate-spin"></i>
         </div>        
-        <div class="pure-u-1 cast" hidden="true">
+        <div class="pure-u-1 cast" x-show="cast">
             <img src="#" class="pure-img"/>
         </div>
     </div>
@@ -17,32 +17,32 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        var host = 'ws://{{ host }}:8889'
-        var socket = null
         var playerScreen = document.querySelector('#tv img')
 
-        try {
-            // open websocket
-            socket = new WebSocket(host);
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('spa', () => ({
+                    host: 'ws://{{ host }}:8889',
+                    cast: false,
+                    socket: null,
+                    init() {
+                        var _this = this
+                        this.socket = new WebSocket(this.host)
+                        this.socket.onopen = function (msg) {
+                            console.log('Connecting to ' + _this.host)
+                            _this.cast = true
+                        }
 
-            socket.onopen = function (msg) {
-                document.querySelector('.cast').hidden = false
-                document.querySelector('.waiting').hidden = true
-            }
+                        this.socket.onmessage = function (msg) {
+                            playerScreen.src = msg.data;
+                        }
 
-            socket.onmessage = function (msg) {
-                playerScreen.src = msg.data;
-            }
-
-            socket.onclose = function () {
-                document.querySelector('.cast').hidden = true
-                document.querySelector('.waiting').hidden = false
-            }
-
-        } catch (e) {
-            console.error(e);
-        }
-
+                        this.socket.onclose = function () {
+                            console.log('Disconnected')
+                            _this.cast = false
+                        }
+                    }
+                }))
+        })
     </script>
 {% endblock %}
 
