@@ -30,7 +30,7 @@ class WebSocketServer extends Command
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io = new SymfonyStyle($input, $output);
-        $this->io->title("WebSocket Server");
+        $this->io->title("WebSocket Server listenig on " . $this->localIp);
 
         $this->webSocketServer = new Server(
                 new SeSo('ws://' . $this->localIp . ':8889')
@@ -55,7 +55,7 @@ class WebSocketServer extends Command
 
     public function onOpen(Bucket $bucket)
     {
-        $this->io->writeln('Welcome');
+        $this->io->writeln('Welcome ' . $bucket->getSource()->getConnection()->getCurrentNode()->getId());
     }
 
 }

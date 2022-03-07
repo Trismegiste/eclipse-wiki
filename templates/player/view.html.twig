@@ -4,12 +4,12 @@
 {% block title %}PlayerCast{% endblock %}
 
 {% block body %}
-    <div class="pure-g" id="tv" x-data="spa">
-        <div class="pure-u-1 waiting" x-show="!cast">
+    <div class="pure-g" x-data="spa">
+        <div class="pure-u-1 waiting" x-show="!casting">
             <i class="icon-spin3 animate-spin"></i>
         </div>        
-        <div class="pure-u-1 cast" x-show="cast">
-            <img src="#" class="pure-img"/>
+        <div class="pure-u-1 screencast" x-show="casting">
+            <img src="#" class="pure-img" x-ref="tv"/>
         </div>
     </div>
 {% endblock %}
@@ -22,23 +22,23 @@
         document.addEventListener('alpine:init', () => {
             Alpine.data('spa', () => ({
                     host: 'ws://{{ host }}:8889',
-                    cast: false,
+                    casting: false,
                     socket: null,
                     init() {
                         var _this = this
                         this.socket = new WebSocket(this.host)
                         this.socket.onopen = function (msg) {
                             console.log('Connecting to ' + _this.host)
-                            _this.cast = true
+                            _this.casting = true
                         }
 
                         this.socket.onmessage = function (msg) {
-                            playerScreen.src = msg.data;
+                            $refs.tv.src = msg.data
                         }
 
                         this.socket.onclose = function () {
                             console.log('Disconnected')
-                            _this.cast = false
+                            _this.casting = false
                         }
                     }
                 }))
