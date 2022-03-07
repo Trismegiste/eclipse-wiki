@@ -19,9 +19,9 @@ class PlayerCast extends AbstractController
     /**
      * @Route("/player", methods={"GET"})
      */
-    public function playerView(): Response
+    public function playerView(\App\Service\NetTools $utils): Response
     {
-        return $this->render('player/view.html.twig');
+        return $this->render('player/view.html.twig', ['host' => $utils->getLocalIp()]);
     }
 
 }

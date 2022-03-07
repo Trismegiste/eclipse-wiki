@@ -23,6 +23,30 @@
     "doctrine/lexer": {
         "version": "1.2.2"
     },
+    "hoa/consistency": {
+        "version": "1.17.05.02"
+    },
+    "hoa/event": {
+        "version": "1.17.01.13"
+    },
+    "hoa/exception": {
+        "version": "1.17.01.16"
+    },
+    "hoa/http": {
+        "version": "1.17.01.13"
+    },
+    "hoa/protocol": {
+        "version": "1.17.01.14"
+    },
+    "hoa/socket": {
+        "version": "1.17.05.16"
+    },
+    "hoa/stream": {
+        "version": "1.17.02.21"
+    },
+    "hoa/websocket": {
+        "version": "3.17.01.09"
+    },
     "knplabs/knp-snappy": {
         "version": "v1.3.1"
     },

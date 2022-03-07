@@ -17,7 +17,32 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
+        var host = 'ws://{{ host }}:8889'
+        var socket = null
         var playerScreen = document.querySelector('#tv img')
+
+        try {
+            // open websocket
+            socket = new WebSocket(host);
+
+            socket.onopen = function (msg) {
+                document.querySelector('.cast').hidden = false
+                document.querySelector('.waiting').hidden = true
+            }
+
+            socket.onmessage = function (msg) {
+                playerScreen.src = msg.data;
+            }
+
+            socket.onclose = function () {
+                document.querySelector('.cast').hidden = true
+                document.querySelector('.waiting').hidden = false
+            }
+
+        } catch (e) {
+            console.error(e);
+        }
+
     </script>
 {% endblock %}
 
