@@ -42,7 +42,7 @@
             let url = picture.href
             picture.addEventListener('click', (event) => {
                 event.preventDefault()
-                window.open(url, '{{ popup_param.name }}', '{{ popup_param.config }}')
+                fetch(url)
             })
         })
     </script>

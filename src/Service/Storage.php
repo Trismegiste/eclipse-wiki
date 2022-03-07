@@ -69,8 +69,8 @@ class Storage
     {
         $scan = new Finder();
         $scan->in($this->root)
-                ->files()
-                ->name($glob);
+            ->files()
+            ->name($glob);
 
         return $scan->getIterator();
     }
@@ -92,6 +92,11 @@ class Storage
         if (!$ret) {
             throw new \RuntimeException("Unable to delete " . $filename);
         }
+    }
+
+    public function getFileInfo(string $filename): \SplFileInfo
+    {
+        return new \SplFileInfo(join_paths($this->root, $filename));
     }
 
 }
