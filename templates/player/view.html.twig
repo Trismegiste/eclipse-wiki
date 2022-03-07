@@ -21,7 +21,7 @@
 
         document.addEventListener('alpine:init', () => {
             Alpine.data('spa', () => ({
-                    host: 'ws://{{ host }}:8889',
+                    host: '{{ host }}',
                     casting: false,
                     socket: null,
                     init() {
