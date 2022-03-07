@@ -1,0 +1,33 @@
+{# show battlemap #}
+{% extends "base.html.twig" %}
+
+{% block title %}PlayerCast{% endblock %}
+
+{% block body %}
+    <div class="pure-g" id="tv">
+        <div class="pure-u-1 waiting">
+            <i class="icon-spin3 animate-spin"></i>
+        </div>        
+        <div class="pure-u-1 cast" hidden="true">
+            <img src="#" class="pure-img"/>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var playerScreen = document.querySelector('#tv img')
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .waiting {
+            font-size: 15em;
+            color: #bbb;
+            text-align: center;
+        }
+    </style>
+{% endblock %}
