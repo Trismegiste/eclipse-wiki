@@ -18,7 +18,8 @@ parameters:
         name: 'PopupVNC'
         name_suffix: ' - Mozilla Firefox'
         config: 'width=400,height=400,directories=0,titlebar=0,toolbar=0,location=0,status=0,menubar=0,scrollbars=no,resizable=no'
-        
+    websocket_port: 8889
+
 services:
     # default configuration for services in *this* file
     _defaults:

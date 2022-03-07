@@ -46,7 +46,7 @@ class PlayerCast extends AbstractController
 
     protected function getWebsocketHost(): string
     {
-        return 'ws://' . $this->ntools->getLocalIp() . ':8889';
+        return 'ws://' . $this->ntools->getLocalIp() . ':' . $this->getParameter('websocket_port');
     }
 
 }
