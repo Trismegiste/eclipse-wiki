@@ -69,9 +69,10 @@ class WebSocketServer extends Command
     {
         $data = $bucket->getData();
         $message = json_decode($data['message']);
-        $mime = mime_content_type($message->file);
-        $this->webSocketServer->broadcast('data:image/' . $mime . ';base64,' . base64_encode(file_get_contents($message->file)));
-        $this->io->writeln('Sending...');
+        $fileinfo = new \SplFileInfo($message->file);
+        $mime = mime_content_type($fileinfo->getPathname());
+        $this->webSocketServer->broadcast('data:' . $mime . ';base64,' . base64_encode(file_get_contents($fileinfo->getPathname())));
+        $this->io->writeln('Sending ' . $fileinfo->getBasename());
         $this->io->newLine();
     }
 
