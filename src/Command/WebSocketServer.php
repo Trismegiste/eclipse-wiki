@@ -38,24 +38,37 @@ class WebSocketServer extends Command
 
         $this->webSocketServer->on('open', [$this, 'onOpen']);
 
-        $this->webSocketServer->on('binary-message', function (Bucket $bucket) {
+        $this->webSocketServer->on('message', function (Bucket $bucket) {
             $data = $bucket->getData();
-            echo 'recieved ', "\n";
-            $this->webSocketServer->broadcast(base64_encode($data['message']));
+            echo 'received ', "\n";
+            $this->webSocketServer->broadcast($data['message']);
         });
 
-        $this->webSocketServer->on('close', function (Bucket $bucket) {
-            echo 'Bye', "\n";
-        });
+        $this->webSocketServer->on('close', [$this, 'onClose']);
 
         $this->webSocketServer->run();
 
         return self::SUCCESS;
     }
 
-    public function onOpen(Bucket $bucket)
+    public function onOpen(Bucket $bucket): void
     {
-        $this->io->writeln('Welcome ' . $bucket->getSource()->getConnection()->getCurrentNode()->getId());
+        $cnx = $bucket->getSource()->getConnection();
+        $this->io->writeln([
+            'Welcome ' . $cnx->getCurrentNode()->getId(),
+            'There are currently ' . count($cnx->getNodes()) . ' connected clients'
+        ]);
+        $this->io->newLine();
+    }
+
+    public function onClose(Bucket $bucket): void
+    {
+        $cnx = $bucket->getSource()->getConnection();
+        $this->io->writeln([
+            'Goodbye ' . $cnx->getCurrentNode()->getId(),
+            'There are currently ' . count($cnx->getNodes()) . ' connected clients'
+        ]);
+        $this->io->newLine();
     }
 
 }

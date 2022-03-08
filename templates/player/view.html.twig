@@ -5,10 +5,10 @@
 
 {% block body %}
     <div class="pure-g" x-data="spa">
-        <div class="pure-u-1 waiting" x-show="!casting">
+        <div class="pure-u-1 waiting" x-show="!onAir">
             <i class="icon-spin3 animate-spin"></i>
         </div>        
-        <div class="pure-u-1 screencast" x-show="casting">
+        <div class="pure-u-1 screencast" x-show="onAir">
             <img src="#" class="pure-img" x-ref="tv"/>
         </div>
     </div>
@@ -17,28 +17,26 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        var playerScreen = document.querySelector('#tv img')
-
         document.addEventListener('alpine:init', () => {
             Alpine.data('spa', () => ({
                     host: '{{ host }}',
-                    casting: false,
+                    onAir: false,
                     socket: null,
                     init() {
                         var _this = this
                         this.socket = new WebSocket(this.host)
                         this.socket.onopen = function (msg) {
                             console.log('Connecting to ' + _this.host)
-                            _this.casting = true
+                            _this.onAir = true
                         }
 
                         this.socket.onmessage = function (msg) {
-                            $refs.tv.src = msg.data
+                            _this.$refs.tv.src = msg.data
                         }
 
                         this.socket.onclose = function () {
                             console.log('Disconnected')
-                            _this.casting = false
+                            _this.onAir = false
                         }
                     }
                 }))

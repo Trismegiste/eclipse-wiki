@@ -60,7 +60,7 @@ class PlayerCast extends AbstractController
         $client = new Client(new SoCli($this->getWebsocketHost()));
         $client->setHost('localhost');
         $client->connect();
-        $client->send(file_get_contents($storage->getFileInfo($title)->getPathname()), null, Client::OPCODE_BINARY_FRAME);
+        $client->send('data:image/jpeg;base64,'. base64_encode(file_get_contents($storage->getFileInfo($title)->getPathname())));
         $client->close();
 
         return new \Symfony\Component\HttpFoundation\JsonResponse(null, Response::HTTP_OK);
