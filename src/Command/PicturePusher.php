@@ -2,9 +2,9 @@
 
 namespace App\Command;
 
+use App\Service\WebsocketFactory;
 use Hoa\Event\Bucket;
-use Hoa\Socket\Server as SeSo;
-use Hoa\Websocket\Server;
+use SplFileInfo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,25 +19,21 @@ class PicturePusher extends Command
     protected static $defaultName = "playercast:daemon";
     protected $webSocketServer;
     protected $io;
-    protected $localIp;
-    protected $wsPort;
     protected $currentFile = null;
+    protected $factory;
 
-    public function __construct(\App\Service\NetTools $nettools, int $websocketPort)
+    public function __construct(WebsocketFactory $fac)
     {
         parent::__construct();
-        $this->localIp = $nettools->getLocalIp();
-        $this->wsPort = $websocketPort;
+        $this->factory = $fac;
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io = new SymfonyStyle($input, $output);
-        $this->io->title("WebSocket Server listenig on " . $this->localIp);
+        $this->io->title("WebSocket Server listenig on " . $this->factory->getUrl());
 
-        $this->webSocketServer = new Server(
-            new SeSo('ws://' . $this->localIp . ':' . $this->wsPort)
-        );
+        $this->webSocketServer = $this->factory->createServer();
 
         $this->webSocketServer->on('open', [$this, 'onOpen']);
         $this->webSocketServer->on('message', [$this, 'onMessage']);
@@ -82,7 +78,7 @@ class PicturePusher extends Command
     {
         $data = $bucket->getData();
         $message = json_decode($data['message']);
-        $fileinfo = new \SplFileInfo($message->file);
+        $fileinfo = new SplFileInfo($message->file);
         $this->currentFile = $fileinfo;
         $mime = mime_content_type($fileinfo->getPathname());
         $this->webSocketServer->broadcast('data:' . $mime . ';base64,' . base64_encode(file_get_contents($fileinfo->getPathname())));

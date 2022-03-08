@@ -117,15 +117,16 @@ services:
     App\Service\ObjectPushFactory:
         arguments:
             $mac: '%env(resolve:BLUETOOTH_MAC)%'
+
+    # WS
+    App\Service\WebsocketFactory:
+        arguments:
+            $websocketPort: '%websocket_port%'   
             
     # Console command
     App\Command\SecondScreenDaemon:
         arguments:
             - '%second_screen%'
-            
-    App\Command\PicturePusher:
-        arguments:
-            $websocketPort: '%websocket_port%'   
             
     # Storage
     App\Service\Storage:
