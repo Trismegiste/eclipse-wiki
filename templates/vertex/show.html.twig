@@ -42,7 +42,18 @@
             let url = picture.href
             picture.addEventListener('click', (event) => {
                 event.preventDefault()
-                fetch(url)
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title: '{{ vertex.title|e('js') }}'
+                    })
+                })
+                        .then(res => res.json())
+                        .then(res => console.log(res));
             })
         })
     </script>

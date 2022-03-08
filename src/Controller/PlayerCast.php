@@ -53,14 +53,17 @@ class PlayerCast extends AbstractController
 
     /**
      * Pushes a picture to player screen
-     * @Route("/player/push/{title}", methods={"GET"})
+     * @Route("/player/push/{title}", methods={"POST"})
      */
     public function push(string $title, \App\Service\Storage $storage): \Symfony\Component\HttpFoundation\JsonResponse
     {
         $client = new Client(new SoCli($this->getWebsocketHost()));
         $client->setHost('localhost');
         $client->connect();
-        $client->send('data:image/jpeg;base64,'. base64_encode(file_get_contents($storage->getFileInfo($title)->getPathname())));
+        $client->send(json_encode([
+            'file' => $storage->getFileInfo($title)->getPathname(),
+            'title' => 'Toto'
+        ]));
         $client->close();
 
         return new \Symfony\Component\HttpFoundation\JsonResponse(null, Response::HTTP_OK);

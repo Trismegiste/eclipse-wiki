@@ -37,13 +37,7 @@ class WebSocketServer extends Command
         );
 
         $this->webSocketServer->on('open', [$this, 'onOpen']);
-
-        $this->webSocketServer->on('message', function (Bucket $bucket) {
-            $data = $bucket->getData();
-            echo 'received ', "\n";
-            $this->webSocketServer->broadcast($data['message']);
-        });
-
+        $this->webSocketServer->on('message', [$this, 'onMessage']);
         $this->webSocketServer->on('close', [$this, 'onClose']);
 
         $this->webSocketServer->run();
@@ -68,6 +62,16 @@ class WebSocketServer extends Command
             'Goodbye ' . $cnx->getCurrentNode()->getId(),
             'There are currently ' . count($cnx->getNodes()) . ' connected clients'
         ]);
+        $this->io->newLine();
+    }
+
+    public function onMessage(Bucket $bucket): void
+    {
+        $data = $bucket->getData();
+        $message = json_decode($data['message']);
+        $mime = mime_content_type($message->file);
+        $this->webSocketServer->broadcast('data:image/' . $mime . ';base64,' . base64_encode(file_get_contents($message->file)));
+        $this->io->writeln('Sending...');
         $this->io->newLine();
     }
 
