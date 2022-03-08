@@ -18,7 +18,7 @@ parameters:
         name: 'PopupVNC'
         name_suffix: ' - Mozilla Firefox'
         config: 'width=400,height=400,directories=0,titlebar=0,toolbar=0,location=0,status=0,menubar=0,scrollbars=no,resizable=no'
-    websocket_port: 8889
+    websocket_port: 9000
 
 services:
     # default configuration for services in *this* file
@@ -122,6 +122,10 @@ services:
     App\Command\SecondScreenDaemon:
         arguments:
             - '%second_screen%'
+            
+    App\Command\PicturePusher:
+        arguments:
+            $websocketPort: '%websocket_port%'   
             
     # Storage
     App\Service\Storage:

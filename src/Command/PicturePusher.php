@@ -11,20 +11,23 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Description of WebSocketServer
+ * This is a WebSocket server that pushes pictures to player clients
  */
-class WebSocketServer extends Command
+class PicturePusher extends Command
 {
 
-    protected static $defaultName = "websocket:server";
+    protected static $defaultName = "playercast:daemon";
     protected $webSocketServer;
     protected $io;
     protected $localIp;
+    protected $wsPort;
+    protected $currentFile = null;
 
-    public function __construct(\App\Service\NetTools $nettools)
+    public function __construct(\App\Service\NetTools $nettools, int $websocketPort)
     {
         parent::__construct();
         $this->localIp = $nettools->getLocalIp();
+        $this->wsPort = $websocketPort;
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int
@@ -33,7 +36,7 @@ class WebSocketServer extends Command
         $this->io->title("WebSocket Server listenig on " . $this->localIp);
 
         $this->webSocketServer = new Server(
-                new SeSo('ws://' . $this->localIp . ':8889')
+            new SeSo('ws://' . $this->localIp . ':' . $this->wsPort)
         );
 
         $this->webSocketServer->on('open', [$this, 'onOpen']);
@@ -52,6 +55,16 @@ class WebSocketServer extends Command
             'Welcome ' . $cnx->getCurrentNode()->getId(),
             'There are currently ' . count($cnx->getNodes()) . ' connected clients'
         ]);
+
+        if (!is_null($this->currentFile)) {
+            $this->io->writeln('And pushing last picture');
+            $mime = mime_content_type($this->currentFile->getPathname());
+            $this->webSocketServer->send('data:'
+                . $mime . ';base64,'
+                . base64_encode(file_get_contents($this->currentFile->getPathname())),
+                $cnx->getCurrentNode()
+            );
+        }
         $this->io->newLine();
     }
 
@@ -70,9 +83,10 @@ class WebSocketServer extends Command
         $data = $bucket->getData();
         $message = json_decode($data['message']);
         $fileinfo = new \SplFileInfo($message->file);
+        $this->currentFile = $fileinfo;
         $mime = mime_content_type($fileinfo->getPathname());
         $this->webSocketServer->broadcast('data:' . $mime . ';base64,' . base64_encode(file_get_contents($fileinfo->getPathname())));
-        $this->io->writeln('Sending ' . $fileinfo->getBasename());
+        $this->io->writeln('Pushing ' . $fileinfo->getBasename());
         $this->io->newLine();
     }
 
