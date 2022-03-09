@@ -26,6 +26,7 @@ class PicturePusher extends Command
     {
         parent::__construct();
         $this->factory = $fac;
+        $this->currentFile = new SplFileInfo(join_paths(__DIR__, 'mire.svg'));
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int
@@ -52,15 +53,13 @@ class PicturePusher extends Command
             'There are currently ' . count($cnx->getNodes()) . ' connected clients'
         ]);
 
-        if (!is_null($this->currentFile)) {
-            $this->io->writeln('And pushing last picture');
-            $mime = mime_content_type($this->currentFile->getPathname());
-            $this->webSocketServer->send('data:'
-                . $mime . ';base64,'
-                . base64_encode(file_get_contents($this->currentFile->getPathname())),
-                $cnx->getCurrentNode()
-            );
-        }
+        $this->io->writeln('And pushing last picture');
+        $mime = mime_content_type($this->currentFile->getPathname());
+        $this->webSocketServer->send('data:'
+            . $mime . ';base64,'
+            . base64_encode(file_get_contents($this->currentFile->getPathname())),
+            $cnx->getCurrentNode()
+        );
         $this->io->newLine();
     }
 
