@@ -1,16 +1,10 @@
-{% macro flash_list(label) %}
-    <template x-for="message in $data.{{ label }}">
-        <div class="flash-{{ label }}"
+<section class="notif" 
+         x-data="{{ alpinejs_flashes(app.flashes)|json_encode()|e('html_attr') }}"
+         x-on:flash.window="flashes.push($event.detail)">
+    <template x-for="flash in flashes">
+        <div x-bind:class="'flash-' + flash.level"
              x-on:click="$el.hidden=true"
-             x-text="message">
+             x-text="flash.message">
         </div>
     </template>
-{% endmacro %}
-
-<section class="notif" 
-         x-data="{{ app.flashes|json_encode()|e('html_attr') }}"
-         x-on:flash.window="console.log($event.detail)">
-    {# using a macro since we cannot iterate over keys from object #}
-    {{ _self.flash_list('success') }}
-    {{ _self.flash_list('error') }}
 </section>

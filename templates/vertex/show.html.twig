@@ -59,19 +59,16 @@
                     }
                     return response.json()
                 }).then(function (json) {
-                    console.log(json)
+                    pushFlash(picture, 'success', json.message)
                 }).catch(function (error) {
                     if (typeof error.json === "function") {
                         error.json().then(function (jsonError) {
-                            console.error("Json error from API")
-                            console.error(jsonError.message)
+                            pushFlash(picture, 'error', jsonError.message)
                         }).catch(function (genericError) {
-                            console.log("Generic error from API");
-                            console.log(error.statusText);
+                            pushFlash(picture, 'error', genericError.statusText);
                         })
                     } else {
-                        console.error("Fetch error")
-                        console.error(error)
+                        pushFlash(picture, 'error', error)
                     }
                 })
             })
