@@ -40,8 +40,10 @@
         let pictures = document.querySelectorAll('.thumb a')
         pictures.forEach((picture) => {
             let url = picture.href
-            picture.addEventListener('click', (event) => {
+            picture.addEventListener('click',function (event) {
+                // stop propagation
                 event.preventDefault()
+                // post image title for sending to external device
                 fetch(url, {
                     method: 'POST',
                     headers: {
@@ -51,9 +53,16 @@
                     body: JSON.stringify({
                         title: '{{ vertex.title|e('js') }}'
                     })
+                }).then(function (response) {
+                    if (!response.ok) {
+                        return Promise.reject(response.statusText)
+                    }
+                    return response.json()
+                }).then(function (json) {
+                    console.log(json)
+                }).catch(function (error) {
+                    console.error(error)
                 })
-                        .then(res => res.json())
-                        .then(res => console.log(res));
             })
         })
     </script>

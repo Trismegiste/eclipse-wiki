@@ -54,14 +54,18 @@ class PlayerCast extends AbstractController
     {
         $client = $this->factory->createClient();
         $client->setHost('localhost');
-        $client->connect();
-        $client->send(json_encode([
-            'file' => $storage->getFileInfo($title)->getPathname(),
-            'title' => 'Toto'
-        ]));
-        $client->close();
+        try {
+            $client->connect();
+            $client->send(json_encode([
+                'file' => $storage->getFileInfo($title)->getPathname(),
+                'title' => 'Toto'
+            ]));
+            $client->close();
 
-        return new JsonResponse(null, Response::HTTP_OK);
+            return new JsonResponse(null, Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

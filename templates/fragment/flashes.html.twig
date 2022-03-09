@@ -1,12 +1,14 @@
-<section class="notif" x-data="{open:true}">
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="flash-{{ label }}" 
-                 x-show="open"
-                 x-on:click="open=!open" 
-                 x-transition.scale.origin.top>
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endfor %}
+{% macro flash_list(label) %}
+    <template x-for="message in $data.{{ label }}">
+        <div class="flash-{{ label }}"
+             x-on:click="$el.hidden=true"
+             x-text="message">
+        </div>
+    </template>
+{% endmacro %}
+
+<section class="notif" x-data="{{ app.flashes|json_encode()|e('html_attr') }}">
+    {# using a macro since we cannot iterate over keys from object #}
+    {{ _self.flash_list('success') }}
+    {{ _self.flash_list('error') }}
 </section>
