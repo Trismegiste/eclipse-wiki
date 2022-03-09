@@ -52,9 +52,9 @@ class PlayerCast extends AbstractController
      */
     public function push(string $title, Storage $storage): JsonResponse
     {
-        $client = $this->factory->createClient();
-        $client->setHost('localhost');
         try {
+            $client = $this->factory->createClient();
+            $client->setHost('localhost');
             $client->connect();
             $client->send(json_encode([
                 'file' => $storage->getFileInfo($title)->getPathname(),
@@ -62,9 +62,9 @@ class PlayerCast extends AbstractController
             ]));
             $client->close();
 
-            return new JsonResponse(null, Response::HTTP_OK);
+            return new JsonResponse(['message' => "$title sent"], Response::HTTP_OK);
         } catch (\Exception $e) {
-            return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

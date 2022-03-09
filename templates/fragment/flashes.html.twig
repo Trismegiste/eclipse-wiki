@@ -7,7 +7,9 @@
     </template>
 {% endmacro %}
 
-<section class="notif" x-data="{{ app.flashes|json_encode()|e('html_attr') }}">
+<section class="notif" 
+         x-data="{{ app.flashes|json_encode()|e('html_attr') }}"
+         x-on:flash.window="console.log($event.detail)">
     {# using a macro since we cannot iterate over keys from object #}
     {{ _self.flash_list('success') }}
     {{ _self.flash_list('error') }}

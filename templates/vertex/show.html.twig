@@ -38,9 +38,9 @@
         });
 
         let pictures = document.querySelectorAll('.thumb a')
-        pictures.forEach((picture) => {
+        pictures.forEach(function (picture) {
             let url = picture.href
-            picture.addEventListener('click',function (event) {
+            picture.addEventListener('click', function (event) {
                 // stop propagation
                 event.preventDefault()
                 // post image title for sending to external device
@@ -55,15 +55,30 @@
                     })
                 }).then(function (response) {
                     if (!response.ok) {
-                        return Promise.reject(response.statusText)
+                        return Promise.reject(response)
                     }
                     return response.json()
                 }).then(function (json) {
                     console.log(json)
                 }).catch(function (error) {
-                    console.error(error)
+                    if (typeof error.json === "function") {
+                        error.json().then(function (jsonError) {
+                            console.error("Json error from API")
+                            console.error(jsonError.message)
+                        }).catch(function (genericError) {
+                            console.log("Generic error from API");
+                            console.log(error.statusText);
+                        })
+                    } else {
+                        console.error("Fetch error")
+                        console.error(error)
+                    }
                 })
             })
         })
+
+        function pushFlash(elem, level, msg) {
+            elem.dispatchEvent(new CustomEvent('flash', {"bubbles": true, detail: {level: level, message: msg}}))
+        }
     </script>
 {% endblock %}
