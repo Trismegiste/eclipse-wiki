@@ -11,10 +11,9 @@ use App\Entity\Vertex;
 use App\Form\PlaceType;
 use App\Form\ProfileOnTheFly;
 use App\Service\AvatarMaker;
-use Symfony\Component\Form\Exception\RuntimeException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Process\InputStream;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
@@ -57,6 +56,7 @@ class PlaceCrud extends GenericCrud
     public function showNpc(string $pk): Response
     {
         $repo = new RandomizerDecorator(new FileRepository());
+        /** @var Place $vertex */
         $vertex = $this->repository->findByPk($pk);
         $card = 16;
 
@@ -68,14 +68,23 @@ class PlaceCrud extends GenericCrud
             }
         }
 
-        return $this->render('place/npc_generate.html.twig', ['place' => $vertex, 'listing' => $listing]);
+        // form to post to generate profile on the fly
+        $form = $this->createForm(ProfileOnTheFly::class, [
+            'template' => $vertex->npcTemplate
+        ]);
+
+        return $this->render('place/npc_generate.html.twig', [
+                'place' => $vertex,
+                'listing' => $listing,
+                'form' => $form->createView()
+        ]);
     }
 
     /**
      * AJAX Create a social network profile for a NPC
-     * @Route("/place/profile/create", methods={"POST"})
+     * @Route("/place/npc/{pk}", methods={"POST"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function generateProfile(Request $request, AvatarMaker $maker): Response
+    public function pushProfile(string $pk, Request $request, AvatarMaker $maker, \App\Service\WebsocketFactory $factory): JsonResponse
     {
         $form = $this->createForm(ProfileOnTheFly::class);
 
@@ -85,18 +94,26 @@ class PlaceCrud extends GenericCrud
             $npc = $this->repository->findByTitle($param['template']);
             $npc->setTitle($param['name']);
             $profile = $maker->generate($npc, $this->convertSvgToPng($param['svg']));
+            $path = \join_paths($this->getParameter('kernel.cache_dir'), $param['name'] . '.png');
+            imagepng($profile, $path);
 
-            $response = new StreamedResponse(function () use ($profile) {
-                        imagepng($profile);
-                    },
-                    Response::HTTP_CREATED,
-                    ['Content-Type' => 'image/png']
-            );
+            try {
+                $client = $factory->createClient();
+                $client->setHost('localhost');
+                $client->connect();
+                $client->send(json_encode([
+                    'file' => $path,
+                    'title' => 'Toto'
+                ]));
+                $client->close();
 
-            return $response;
+                return new JsonResponse(['level' => 'success', 'message' => 'Profile for ' . $param['name'] . ' pushed'], Response::HTTP_OK);
+            } catch (\Exception $e) {
+                return new JsonResponse(['level' => 'error', 'message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
         }
 
-        throw new RuntimeException('Invalid form');
+        return new JsonResponse(['level' => 'error', 'message' => 'Invalid form'], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     private function convertSvgToPng(string $svg)

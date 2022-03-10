@@ -8,3 +8,8 @@
         </div>
     </template>
 </section>
+<script>
+    function pushFlash(elem, level, msg) {
+        elem.dispatchEvent(new CustomEvent('flash', {"bubbles": true, detail: {level: level, message: msg}}))
+    }
+</script>

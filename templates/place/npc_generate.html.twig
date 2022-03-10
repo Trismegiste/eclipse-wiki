@@ -14,20 +14,33 @@
     {{ parent() }}
     <script src="{{ asset('multiavatar/multiavatar.min.js') }}"></script>
     <script>
+        var onTheFly = document.querySelector('form[name=profile_on_the_fly]')
         var avatarSample = document.querySelectorAll('[data-avatar]')
 
         for (const sample of avatarSample) {
             sample.innerHTML = multiavatar(sample.dataset.avatar)
             // event for sending an avatar
             sample.addEventListener("click", function (e) {
-                let url = '{{ path('app_placecrud_npcpopup') }}?name=' + sample.dataset.avatar + '&template=' + '{{ place.npcTemplate }}'
-                window.open(url, '{{ popup_param.name }}', '{{ popup_param.config }}')
+                document.getElementById('profile_on_the_fly_svg').value = this.innerHTML
+                document.getElementById('profile_on_the_fly_name').value = this.dataset.avatar
+
+                let data = new FormData(onTheFly)
+                fetch(onTheFly.action, {
+                    method: 'post',
+                    body: data,
+                    redirect: 'manual'
+                }).then(function (response) {
+                    return response.json()
+                }).then(function (json) {
+                    pushFlash(onTheFly, json.level, json.message)
+                })
             })
         }
     </script>
 {% endblock %}
 
 {% block content %}
+    {{ form(form,{attr: {hidden:true}}) }}
     {% for label, gender in listing %}
         <section class="pure-g quick-npc">
             {% for name in gender %}
