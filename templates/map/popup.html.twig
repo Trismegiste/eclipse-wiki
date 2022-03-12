@@ -15,6 +15,7 @@
         window.resizeTo({{ popup_param.max_size }}, {{ popup_param.max_size + popup_param.delta_y }})
         var battlemap
         var colorCycle = 0
+        const palette = ['Red', 'DeepPink', 'DarkOrange', 'Yellow', 'Magenta', 'DarkViolet', 'Lime', 'MediumSeaGreen', 'Aqua', 'DeepSkyBlue', 'RosyBrown']
 
         fetch('{{ img|raw }}', {
             redirect: 'manual'
@@ -49,13 +50,27 @@
 
         Mousetrap.bind('t', function () {
             let bbox = battlemap.viewbox()
-            let color = (36 * colorCycle) % 360
-            colorCycle++
             battlemap.circle(0.6)
-                    .fill("hsl(" + color + ", 100%, 50%)")
+                    .fill(palette[colorCycle % palette.length])
                     .move(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2)
                     .draggable()
+            colorCycle++
             return false
-        });
+        })
+
+        Mousetrap.bind('p', function () {
+            const formData = new FormData()
+            formData.append('svg', battlemap.svg())
+
+            fetch('{{ path('app_mapcrud_pushplayerview') }}', {
+                method: 'post',
+                body: formData,
+                redirect: 'manual'
+            }).then(function (response) {
+                return response.json()
+            }).then(function (json) {
+                console.log(json.message)
+            })
+        })
     </script>
 {% endblock %}
