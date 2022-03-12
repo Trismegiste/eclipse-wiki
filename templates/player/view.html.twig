@@ -16,7 +16,12 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="{{ asset('js/howler.core.min.js') }}"></script>    
     <script>
+        const clicSound = new Howl({
+            src: ['{{ asset('sound/clic.webm')}}', '{{ asset('sound/clic.ogg') }}']
+        })
+
         document.addEventListener('alpine:init', () => {
             Alpine.data('spa', () => ({
                     host: '{{ host }}',
@@ -32,6 +37,7 @@
 
                         this.socket.onmessage = function (msg) {
                             _this.$refs.tv.src = msg.data
+                            clicSound.play()
                         }
 
                         this.socket.onclose = function () {

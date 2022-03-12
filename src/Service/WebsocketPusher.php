@@ -8,7 +8,7 @@ namespace App\Service;
 
 /**
  * A websocket client that pushes messages to Websocket server
- * (lazy connection for service working environment)
+ * (lazy connection for services working environment)
  */
 class WebsocketPusher
 {
