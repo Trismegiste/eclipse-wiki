@@ -11,6 +11,8 @@ use App\Entity\Vertex;
 use App\Form\PlaceType;
 use App\Form\ProfileOnTheFly;
 use App\Service\AvatarMaker;
+use App\Service\Storage;
+use App\Service\WebsocketPusher;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -84,7 +86,7 @@ class PlaceCrud extends GenericCrud
      * AJAX Create a social network profile for a NPC
      * @Route("/place/npc/{pk}", methods={"POST"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function pushProfile(string $pk, Request $request, AvatarMaker $maker, \App\Service\WebsocketFactory $factory): JsonResponse
+    public function pushProfile(string $pk, Request $request, AvatarMaker $maker, WebsocketPusher $client): JsonResponse
     {
         $form = $this->createForm(ProfileOnTheFly::class);
 
@@ -94,18 +96,14 @@ class PlaceCrud extends GenericCrud
             $npc = $this->repository->findByTitle($param['template']);
             $npc->setTitle($param['name']);
             $profile = $maker->generate($npc, $this->convertSvgToPng($param['svg']));
-            $path = \join_paths($this->getParameter('kernel.cache_dir'), $param['name'] . '.png');
+            $path = \join_paths($this->getParameter('kernel.cache_dir'), $param['name'] . '.png'); // @warmup cache dir
             imagepng($profile, $path);
 
             try {
-                $client = $factory->createClient();
-                $client->setHost('localhost');
-                $client->connect();
-                $client->send(json_encode([
+                $client->push(json_encode([
                     'file' => $path,
-                    'title' => 'Toto'
+                    'action' => 'pictureBroadcast'
                 ]));
-                $client->close();
 
                 return new JsonResponse(['level' => 'success', 'message' => 'Profile for ' . $param['name'] . ' pushed'], Response::HTTP_OK);
             } catch (\Exception $e) {
@@ -158,7 +156,7 @@ class PlaceCrud extends GenericCrud
      * Popup for the battlemap
      * @Route("/place/map/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function mapPopup(string $pk, \App\Service\Storage $storage): Response
+    public function mapPopup(string $pk, Storage $storage): Response
     {
         $vertex = $this->repository->findByPk($pk);
         $url = $this->generateUrl('get_picture', ['title' => $vertex->battleMap]);

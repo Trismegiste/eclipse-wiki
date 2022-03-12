@@ -13,11 +13,14 @@ use App\Form\ProceduralMap\StationMap;
 use App\Form\ProceduralMap\StreetMap;
 use App\Repository\MapRepository;
 use App\Repository\VertexRepository;
+use App\Service\WebsocketFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Exception\RuntimeException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -121,6 +124,36 @@ class MapCrud extends AbstractController
     public function list(): Response
     {
         return $this->render('map/list.html.twig', ['template' => $this->mapRepo->findAll()]);
+    }
+
+    /**
+     * AJAX Pushes the modified SVG to websocket server
+     * @Route("/place/broadcast", methods={"POST"})
+     */
+    public function pushPlayerView(Request $request, \App\Service\WebsocketPusher $client): JsonResponse
+    {
+        $svgContent = $request->request->get('svg');
+        $source = \join_paths($this->getParameter('kernel.cache_dir'), 'yolo.svg');
+        file_put_contents($source, $svgContent);
+
+        $target = \join_paths($this->getParameter('kernel.cache_dir'), 'yolo.jpg');
+        $process = new Process([
+            'wkhtmltoimage',
+            $source,
+            $target
+        ]);
+        $process->mustRun();
+
+        try {
+            $client->push(json_encode([
+                'file' => $target,
+                'title' => 'Toto'
+            ]));
+
+            return new JsonResponse(['level' => 'success', 'message' => 'Update pushed'], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return new JsonResponse(['level' => 'error', 'message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

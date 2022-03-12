@@ -6,8 +6,10 @@
 
 namespace App\Controller;
 
+use App\Service\NetTools;
 use App\Service\Storage;
 use App\Service\WebsocketFactory;
+use App\Service\WebsocketPusher;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,6 +30,7 @@ class PlayerCast extends AbstractController
     }
 
     /**
+     * The actual player screen updated with websocket
      * @Route("/player", methods={"GET"})
      */
     public function view(): Response
@@ -36,31 +39,28 @@ class PlayerCast extends AbstractController
     }
 
     /**
+     * Creates a QR Code for the link to player screen
      * @Route("/player/qrcode", methods={"GET"})
      */
-    public function qrCode(\App\Service\NetTools $ntools): Response
+    public function qrCode(NetTools $ntools): Response
     {
         $url = $this->generateUrl('app_playercast_view', [], UrlGeneratorInterface::ABSOLUTE_URL);
-        $lan = preg_replace('#//localhost#', '//' . $ntools->getLocalIp(), $url);
+        $lan = preg_replace('#//localhost#', '//' . $ntools->getLocalIp(), $url); // @todo hardcoded config
 
         return $this->render('player/qrcode.html.twig', ['url_cast' => $lan]);
     }
 
     /**
-     * Pushes a picture to player screen
+     * Pushes a picture (from the Storage) to player screen
      * @Route("/player/push/{title}", methods={"POST"})
      */
-    public function push(string $title, Storage $storage): JsonResponse
+    public function push(string $title, Storage $storage, WebsocketPusher $client): JsonResponse
     {
         try {
-            $client = $this->factory->createClient();
-            $client->setHost('localhost');
-            $client->connect();
-            $client->send(json_encode([
+            $client->push(json_encode([
                 'file' => $storage->getFileInfo($title)->getPathname(),
-                'title' => 'Toto'
+                'action' => 'pictureBroadcast'
             ]));
-            $client->close();
 
             return new JsonResponse(['message' => "$title sent"], Response::HTTP_OK);
         } catch (\Exception $e) {
