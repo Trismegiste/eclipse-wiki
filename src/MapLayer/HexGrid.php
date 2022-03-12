@@ -33,7 +33,7 @@ class HexGrid implements SvgPrintable
         echo <<<YOLO
             <defs>
                 <pattern id="hexmap" x="0" y="0" width="3" height="$doubleSin60" patternUnits="userSpaceOnUse">
-                    <g style="stroke: black; stroke-width: 0.05; opacity: 30%">
+                    <g style="stroke: black; stroke-width: 0.05" stroke-opacity="0.3">
                         <path d="M 0 0 h 1" transform="translate(1,0) rotate(60)"/>
                         <path d="M 0 0 h 1" transform="translate(1,$doubleSin60) rotate(-60)"/>
                         <path d="M 1.5 $sin60 h 1 M 0 0 h 1" />

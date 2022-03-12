@@ -62,7 +62,7 @@ class RoomColor implements SvgPrintable
     {
         foreach ($this->picked as $color => $roomList) {
             foreach ($roomList as $room) {
-                echo '<g fill="' . $color . '" class="hilite-room" fill-opacity="33%">';
+                echo '<g fill="' . $color . '" class="hilite-room" fill-opacity="0.33">';
                 foreach ($room as $square) {
                     $x = $square['x'];
                     $y = $square['y'];
