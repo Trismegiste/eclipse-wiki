@@ -13,7 +13,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * This is a WebSocket server that pushes pictures to player clients
  */
-class PicturePusher extends Command
+class PlayerCastDaemon extends Command
 {
 
     protected static $defaultName = "playercast:daemon";
