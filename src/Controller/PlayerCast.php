@@ -72,10 +72,9 @@ class PlayerCast extends AbstractController
      * Returns a generated document
      * @Route("/player/getdoc/{filename}", methods={"GET"})
      */
-    public function getDocument(string $filename): Response
+    public function getDocument(string $filename, \App\Service\DocumentBroadcaster $broad): Response
     {
-        $pathname = \join_paths($this->getParameter('kernel.cache_dir'), 'player', $filename); // @todo use service
-        return new \Symfony\Component\HttpFoundation\BinaryFileResponse($pathname);
+        return $broad->createResponseForFilename($filename);
     }
 
 }

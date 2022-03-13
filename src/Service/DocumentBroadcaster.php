@@ -7,6 +7,7 @@
 namespace App\Service;
 
 use Knp\Snappy\Pdf;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function join_paths;
 
@@ -46,6 +47,11 @@ class DocumentBroadcaster
     protected function sanitizeFilename(string $filename): string
     {
         return str_replace(' ', '-', iconv('UTF-8', 'ASCII//TRANSLIT', $filename));
+    }
+
+    public function createResponseForFilename(string $filename): BinaryFileResponse
+    {
+        return new BinaryFileResponse(join_paths($this->documentDir, $filename));
     }
 
 }
