@@ -66,24 +66,27 @@ class LoveletterCrud extends GenericCrud
         $vertex = $this->repository->findByPk($pk);
 
         return new PdfResponse(
-                $this->knpPdf->getOutputFromHtml($this->generateHtmlFor($vertex), self::pdfOptions),
-                $this->getFilenameAfter($vertex)
+            $this->knpPdf->getOutputFromHtml($this->generateHtmlFor($vertex), self::pdfOptions),
+            $this->getFilenameAfter($vertex)
         );
     }
 
     /**
-     * Send a Love letter PDF to bluetooth
-     * @Route("/loveletter/send/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
+     * Generates the Love letter PDF and print a QR Code for player
+     * @Route("/loveletter/qrcode/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function send(string $pk, ObjectPushFactory $fac): Response
+    public function qrcode(string $pk, \App\Service\NetTools $ntools): Response
     {
         $vertex = $this->repository->findByPk($pk);
-        $path = \join_paths($this->getParameter('kernel.cache_dir'), 'pdf', $this->getFilenameAfter($vertex));
+        $filename = $this->getFilenameAfter($vertex);
+        $path = \join_paths($this->getParameter('kernel.cache_dir'), 'player', $filename);
         $this->knpPdf->generateFromHtml($this->generateHtmlFor($vertex), $path, self::pdfOptions, true);
-        $fac->send($path);
-        $this->addFlash('success', 'PDF envoyé');
+        $url = $this->generateUrl('app_playercast_getdocument', ['filename' => $filename], \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL);
+        $lan = preg_replace('#//localhost#', '//' . $ntools->getLocalIp(), $url); // @todo hardcoded config
+        
+        $this->addFlash('success', 'PDF généré');
 
-        return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
+        return $this->render('player/getdocument.html.twig', ['url_cast' => $lan]);
     }
 
     protected function generateHtmlFor(Loveletter $vertex): string
