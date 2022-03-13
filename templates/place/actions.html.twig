@@ -4,5 +4,8 @@
     {% if vertex.npcTemplate is not empty %}
     <a href="{{ path('app_placecrud_shownpc', {pk: vertex.pk}) }}" title="Créer des PNJ"><i class="icon-user-plus"></i></a>
     {% endif %}
+    {% if vertex.battleMap is not empty %}
+    <a href="{{ path('app_placecrud_battlemap', {pk: vertex.pk}) }}" target="_blank" title="Lancer la Battlemap"><i class="icon-battlemap"></i></a>
+    {% endif %}
 <a href="{{ path('app_vertexcrud_rename', {pk: vertex.pk}) }}" title="Renommer"><i class="icon-rename"></i></a>
 <a href="{{ path('app_vertexcrud_delete', {pk: vertex.pk}) }}" title="Effacer"><i class="icon-trash-empty"></i></a>
