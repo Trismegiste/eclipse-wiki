@@ -56,24 +56,20 @@ class HandoutCrud extends GenericCrud
     }
 
     /**
-     * Send a Handout PDF to bluetooth
-     * @Route("/handout/send/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
+     * Generates the Handout PDF and prints a QR Code for player
+     * @Route("/handout/qrcode/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function send(string $pk, ObjectPushFactory $fac): Response
+    public function qrcode(string $pk, \App\Service\DocumentBroadcaster $broadcast): Response
     {
         $vertex = $this->repository->findByPk($pk);
-        $path = \join_paths($this->getParameter('kernel.cache_dir'), 'pdf', $this->getFilenameAfter($vertex));
+
+        $title = sprintf("Handout-%s.pdf", $vertex->getTitle());
         $html = $this->renderView('handout/pc_export.pdf.twig', ['vertex' => $vertex]);
-        $this->knpPdf->generateFromHtml($html, $path, self::pdfOptions, true);
-        $fac->send($path);
-        $this->addFlash('success', 'PDF envoyé');
+        $lan = $broadcast->getExternalLinkForGeneratedPdf($title, $html, self::pdfOptions);
 
-        return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
-    }
+        $this->addFlash('success', 'PDF généré');
 
-    protected function getFilenameAfter(Handout $vertex): string
-    {
-        return iconv('UTF-8', 'ASCII//TRANSLIT', sprintf("Handout-%s.pdf", $vertex->getTitle()));
+        return $this->render('player/getdocument.html.twig', ['url_cast' => $lan]);
     }
 
 }

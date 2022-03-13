@@ -74,7 +74,7 @@ class PlayerCast extends AbstractController
      */
     public function getDocument(string $filename): Response
     {
-        $pathname = \join_paths($this->getParameter('kernel.cache_dir'), 'player', $filename);
+        $pathname = \join_paths($this->getParameter('kernel.cache_dir'), 'player', $filename); // @todo use service
         return new \Symfony\Component\HttpFoundation\BinaryFileResponse($pathname);
     }
 

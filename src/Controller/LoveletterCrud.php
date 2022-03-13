@@ -72,7 +72,7 @@ class LoveletterCrud extends GenericCrud
     }
 
     /**
-     * Generates the Love letter PDF and print a QR Code for player
+     * Generates the Love letter PDF and prints a QR Code for player
      * @Route("/loveletter/qrcode/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
     public function qrcode(string $pk, \App\Service\DocumentBroadcaster $broadcast): Response
