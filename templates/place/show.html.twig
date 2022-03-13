@@ -29,11 +29,16 @@
                 avec un nom {{ vertex.surnameLang }}
             {% endif %}
         </div>
-        <aside class="pure-u-1-4 conditions">
-            <div><i class="icon-gravity"></i>{{ vertex.gravity }}</div>
-            <div><i class="icon-pressure"></i>{{ vertex.pressure }}</div>
-            <div><i class="icon-temperature"></i>{{ vertex.temperature }}</div>
-            <div class="pure-g" id="battlemap">
+        <aside class="pure-u-1-4">
+            <div class="conditions"><i class="icon-gravity"></i>{{ vertex.gravity }}</div>
+            <div class="conditions"><i class="icon-pressure"></i>{{ vertex.pressure }}</div>
+            <div class="conditions"><i class="icon-temperature"></i>{{ vertex.temperature }}</div>
+            <div class="pure-g">
+                <div class="pure-u-1">
+                    <a href="{{ path('app_placecrud_battlemap', {pk: vertex.pk}) }}" target="_blank">
+                        <div id="battlemap"></div>
+                    </a>
+                </div>
                 <div class="pure-u-1">
                     <a href="{{ path('app_mapcrud_list') }}" class="pure-button">Générer une map</a>
                 </div>
@@ -48,8 +53,6 @@
         .conditions {
             font-size: 140%;
             text-align: center;
-        }
-        .conditions div {
             margin-top: 1em;
             margin-bottom: 2em;
         }
@@ -82,11 +85,7 @@
                 let battlemap = document.getElementById('battlemap')
                 battlemap.innerHTML = svg
                 document.querySelector('#battlemap svg').attributes.removeNamedItem('height')
-
-                battlemap.addEventListener("click", function (e) {
-                    let url = '{{ path('app_placecrud_mappopup', {pk: vertex.pk}) }}'
-                    window.open(url, '{{ popup_param.name }}', '{{ popup_param.config }}')
-                })
+                document.querySelector('#battlemap svg').attributes.removeNamedItem('width')
             }).catch((error) => {
                 console.error(error);
             })

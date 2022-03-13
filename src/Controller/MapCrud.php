@@ -106,15 +106,15 @@ class MapCrud extends AbstractController
     }
 
     /**
-     * Show map in a popup
-     * @Route("/map/popup/{model}", methods={"GET"}, requirements={"model"="[a-z]+"})
+     * Show map to run it on the fly
+     * @Route("/map/running/{model}", methods={"GET"}, requirements={"model"="[a-z]+"})
      */
-    public function popup(string $model, Request $request): Response
+    public function running(string $model, Request $request): Response
     {
         $data = $request->query->all();
         $url = $this->generateUrl('app_mapcrud_generate', ['model' => $model]) . '?' . http_build_query($data);
 
-        return $this->render('map/popup.html.twig', ['img' => $url]);
+        return $this->render('map/running.html.twig', ['img' => $url]);
     }
 
     /**
@@ -134,7 +134,7 @@ class MapCrud extends AbstractController
     {
         /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $svgContent */
         $svgContent = $request->files->get('svg')
-            ->move($this->getParameter('kernel.cache_dir'), 'tmp-map.svg');
+            ->move($this->getParameter('kernel.cache_dir'), 'tmp-map.svg'); // the moving is necessary because wkhtmltoimage fails to load a SVG file without extension
         $target = \join_paths($this->getParameter('kernel.cache_dir'), 'tmp-map.png'); // @todo warmup cache dir
         $process = new Process([
             'wkhtmltoimage',

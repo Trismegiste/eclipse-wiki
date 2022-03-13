@@ -153,15 +153,15 @@ class PlaceCrud extends GenericCrud
     }
 
     /**
-     * Popup for the battlemap
-     * @Route("/place/map/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
+     * Page for the battlemap
+     * @Route("/place/battlemap/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function mapPopup(string $pk, Storage $storage): Response
+    public function battlemap(string $pk): Response
     {
         $vertex = $this->repository->findByPk($pk);
         $url = $this->generateUrl('get_picture', ['title' => $vertex->battleMap]);
 
-        return $this->render('map/popup.html.twig', ['img' => $url]);
+        return $this->render('map/running.html.twig', ['img' => $url]);
     }
 
 }

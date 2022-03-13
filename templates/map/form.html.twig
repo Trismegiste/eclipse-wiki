@@ -47,13 +47,13 @@
             })
         })
 
-        // event for posting a map
+        // event for running the map on the fly in a target blank
         onTheFly.addEventListener("submit", function (e) {
             if (e.submitter.id === 'mapgen_openPopUp') {
                 e.preventDefault()
                 let data = new FormData(onTheFly)
-                let url = '{{ path('app_mapcrud_popup', {model: app.request.attributes.get('model')}) }}?' + new URLSearchParams(data)
-                window.open(url, '{{ popup_param.name }}', '{{ popup_param.config }}')
+                let url = '{{ url('app_mapcrud_running', {model: app.request.attributes.get('model')}) }}?' + new URLSearchParams(data)
+                window.open(url, '_blank')
             }
         })
     </script>

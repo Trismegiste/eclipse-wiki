@@ -1,7 +1,7 @@
 {# show battlemap #}
 {% extends "base.html.twig" %}
 
-{% block title %}{{ popup_param.name }}{% endblock %}
+{% block title %}Running Battle Map{% endblock %}
 
 {% block body %}
     <div id="map"></div>
@@ -12,7 +12,6 @@
     <script src="{{ asset('svgdotjs/svg.panzoom.min.js') }}"></script>
     <script src="{{ asset('svgdotjs/svg.draggable.min.js') }}"></script>
     <script>
-        window.resizeTo({{ popup_param.max_size }}, {{ popup_param.max_size + popup_param.delta_y }})
         var battlemap
         var colorCycle = 0
         const palette = ['Red', 'DeepPink', 'DarkOrange', 'Yellow', 'Magenta', 'DarkViolet', 'Lime', 'MediumSeaGreen', 'Aqua', 'DeepSkyBlue', 'RosyBrown']
