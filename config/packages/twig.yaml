@@ -5,8 +5,6 @@ twig:
         - 'form/rolltype.html.twig'
         - 'form/trait_type.html.twig'
         - 'form/random_type.html.twig'
-    globals:
-        popup_param: '%second_screen%'
 
 when@test:
     twig:
