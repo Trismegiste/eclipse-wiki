@@ -60,7 +60,7 @@
 
         Mousetrap.bind('p', function () {
             const formData = new FormData()
-            formData.append('svg', battlemap.svg())
+            formData.append('svg', new Blob([battlemap.svg()], {type: 'image/svg+xml'}))
 
             fetch('{{ path('app_mapcrud_pushplayerview') }}', {
                 method: 'post',

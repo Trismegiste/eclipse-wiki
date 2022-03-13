@@ -132,16 +132,15 @@ class MapCrud extends AbstractController
      */
     public function pushPlayerView(Request $request, \App\Service\WebsocketPusher $client): JsonResponse
     {
-        $svgContent = $request->request->get('svg');
-        $source = \join_paths($this->getParameter('kernel.cache_dir'), 'tmp-map.svg');
-        file_put_contents($source, $svgContent);
-
+        /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $svgContent */
+        $svgContent = $request->files->get('svg')
+            ->move($this->getParameter('kernel.cache_dir'), 'tmp-map.svg');
         $target = \join_paths($this->getParameter('kernel.cache_dir'), 'tmp-map.png'); // @todo warmup cache dir
         $process = new Process([
             'wkhtmltoimage',
             '--quality', 50,
             '--crop-w', 800,
-            $source,
+            $svgContent->getPathname(),
             $target
         ]);
         $process->mustRun();
