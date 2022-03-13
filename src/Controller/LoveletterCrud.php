@@ -64,10 +64,12 @@ class LoveletterCrud extends GenericCrud
     public function pdf(string $pk): Response
     {
         $vertex = $this->repository->findByPk($pk);
+        $title = sprintf("Loveletter-%s-%s.pdf", $vertex->player, $vertex->getTitle());
+        $html = $this->renderView('loveletter/export.pdf.twig', ['vertex' => $vertex]);
 
         return new PdfResponse(
-            $this->knpPdf->getOutputFromHtml($this->generateHtmlFor($vertex), self::pdfOptions),
-            $this->getFilenameAfter($vertex)
+            $this->knpPdf->getOutputFromHtml($html, self::pdfOptions),
+            $title
         );
     }
 

@@ -77,16 +77,14 @@ class HandoutCrudTest extends WebTestCase
     }
 
     /** @depends testShow */
-    public function testBluetooth(string $edit)
+    public function testQrCode(string $edit)
     {
         $crawler = $this->client->request('GET', $edit);
-        $url = $crawler->filterXPath('//nav/a/i[@class="icon-bluetooth"]/parent::a')->attr('href');
+        $url = $crawler->filterXPath('//nav/a/i[@class="icon-qrcode"]/parent::a')->attr('href');
 
-        $crawler = $this->client->request('GET', $url);
-        $this->assertResponseRedirects();
-        $this->client->followRedirect();
+        $this->client->request('GET', $url);
         $this->assertResponseIsSuccessful();
-        $this->assertPageTitleContains('Handout1');
+        $this->assertStringContainsString('QRious', $this->client->getResponse()->getContent());
     }
 
 }

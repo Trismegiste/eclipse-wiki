@@ -95,26 +95,4 @@ class PlaceCrudTest extends WebTestCase
         return $firstName;
     }
 
-    /** @depends testShowNpcGeneration */
-    public function testNpcPopUp(string $name)
-    {
-        $this->client->request('GET', '/place/profile/create?template=Template&name=' . $name);
-        $this->assertPageTitleContains('VNC');
-
-        return $name;
-    }
-
-    /** @depends testNpcPopUp */
-    public function testPngGeneration(string $name)
-    {
-        ob_start();
-        $this->client->request('POST', '/place/profile/create', ['profile_on_the_fly' => [
-                'svg' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 231 231"></svg>',
-                'name' => $name,
-                'template' => 'Template'
-        ]]);
-        ob_get_clean();
-        $this->assertEquals('image/png', $this->client->getResponse()->headers->get('Content-Type'));
-    }
-
 }

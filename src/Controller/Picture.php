@@ -49,37 +49,6 @@ class Picture extends AbstractController
     }
 
     /**
-     * Show image in a popup
-     * @Route("/picture/popup/{title}", methods={"GET"})
-     */
-    public function popup(string $title): Response
-    {
-        $coord = $this->getParameter('second_screen');
-
-        $path = \join_paths($this->storage->getRootDir(), $title);
-        $target = '/img/mire.svg'; // default
-        $width = 768;
-        $height = 576;
-
-        if (file_exists($path)) {
-            list($width, $height) = getimagesize($path);
-
-            $sidePlus = max([$width, $height]);
-            if ($sidePlus > $coord['max_size']) {
-                $height = round($coord['max_size'] * $height / $sidePlus);
-                $width = round($coord['max_size'] * $width / $sidePlus);
-            }
-            $target = $this->generateUrl('get_picture', ['title' => $title]);
-        }
-
-        return $this->render('picture/popup.html.twig', [
-                    'img' => $target,
-                    'sx' => $width + $coord['delta_x'],
-                    'sy' => $height + $coord['delta_y']
-        ]);
-    }
-
-    /**
      * Create an avatar for NPC
      * @Route("/profile/create/{pk}", methods={"GET","POST"}, requirements={"pk"="[\da-f]{24}"})
      */

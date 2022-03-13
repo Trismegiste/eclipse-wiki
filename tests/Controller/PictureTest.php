@@ -16,13 +16,6 @@ class PictureTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $this->client = static::createClient();
     }
 
-    public function testPopupNotFound()
-    {
-        $crawler = $this->client->request('GET', '/picture/popup/notfound.jpg');
-        $this->assertResponseStatusCodeSame(200);
-        $this->assertEquals('/img/mire.svg', $crawler->filter('img')->first()->attr('src'));
-    }
-
     public function testPictureResponse()
     {
         $filename = \join_paths(static::getContainer()->get(\App\Service\Storage::class)->getRootDir(), 'yolo.png');
@@ -34,13 +27,6 @@ class PictureTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $this->assertEquals('image/png', $this->client->getResponse()->headers->get('Content-Type'));
     }
 
-    public function testPopupWithPng()
-    {
-        $crawler = $this->client->request('GET', '/picture/popup/yolo.png');
-        $this->assertResponseStatusCodeSame(200);
-        $this->assertEquals('/picture/get/yolo.png', $crawler->filter('img')->first()->attr('src'));
-    }
-
     public function testSearch()
     {
         $this->client->request('GET', '/picture/search?q=yoLo');
@@ -48,12 +34,6 @@ class PictureTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $listing = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(1, $listing);
         $this->assertEquals('yolo.png', $listing[0]);
-    }
-
-    public function testSendBluetooth()
-    {
-        $this->client->request('GET', '/picture/send/notfound.jpg');
-        $this->assertResponseIsSuccessful();
     }
 
     public function testCreateProfile()

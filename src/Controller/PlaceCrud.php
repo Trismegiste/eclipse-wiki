@@ -139,20 +139,6 @@ class PlaceCrud extends GenericCrud
     }
 
     /**
-     * Popup for on the fly NPC avatar
-     * @Route("/place/profile/create", methods={"GET"})
-     */
-    public function npcPopup(Request $request): Response
-    {
-        $form = $this->createForm(ProfileOnTheFly::class, [
-            'name' => $request->query->get('name'),
-            'template' => $request->query->get('template')
-        ]);
-
-        return $this->render('place/npc_popup.html.twig', ['form' => $form->createView()]);
-    }
-
-    /**
      * Page for the battlemap
      * @Route("/place/battlemap/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */

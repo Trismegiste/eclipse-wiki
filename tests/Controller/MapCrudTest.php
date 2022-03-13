@@ -77,7 +77,8 @@ class MapCrudTest extends WebTestCase
     /** @depends testCreatedPlace */
     public function testMapPopup(string $pk)
     {
-        $this->client->request('GET', '/place/map/' . $pk);
+        $this->client->request('GET', '/place/battlemap/' . $pk);
+        $this->assertResponseIsSuccessful();
         $this->assertStringContainsString("/picture/get/map-$pk.svg", $this->client->getResponse()->getContent());
     }
 
@@ -108,14 +109,6 @@ class MapCrudTest extends WebTestCase
     {
         $this->client->request('GET', '/map/generate/oneblock?yolo');
         $this->assertResponseStatusCodeSame(500);
-    }
-
-    public function testPopUp()
-    {
-        $this->client->request('GET', '/map/popup/oneblock?yolo');
-        $this->assertResponseIsSuccessful();
-        // since the popup only passthru query paramaters to the SVG controller (in javascript fetch)
-        // we don't care to pass carefully formed parameters
     }
 
     public function testList()

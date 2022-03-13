@@ -6,6 +6,7 @@
 
 namespace App\Controller;
 
+use App\Service\DocumentBroadcaster;
 use App\Service\NetTools;
 use App\Service\Storage;
 use App\Service\WebsocketFactory;
@@ -72,7 +73,7 @@ class PlayerCast extends AbstractController
      * Returns a generated document
      * @Route("/player/getdoc/{filename}", methods={"GET"})
      */
-    public function getDocument(string $filename, \App\Service\DocumentBroadcaster $broad): Response
+    public function getDocument(string $filename, DocumentBroadcaster $broad): Response
     {
         return $broad->createResponseForFilename($filename);
     }
