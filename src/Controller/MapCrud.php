@@ -114,7 +114,7 @@ class MapCrud extends AbstractController
         $data = $request->query->all();
         $url = $this->generateUrl('app_mapcrud_generate', ['model' => $model]) . '?' . http_build_query($data);
 
-        return $this->render('map/running.html.twig', ['img' => $url]);
+        return $this->render('map/running.html.twig', ['title' => 'on the fly ' . ucfirst($model), 'img' => $url]);
     }
 
     /**

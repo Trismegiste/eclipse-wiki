@@ -161,7 +161,7 @@ class PlaceCrud extends GenericCrud
         $vertex = $this->repository->findByPk($pk);
         $url = $this->generateUrl('get_picture', ['title' => $vertex->battleMap]);
 
-        return $this->render('map/running.html.twig', ['img' => $url]);
+        return $this->render('map/running.html.twig', ['title' => $vertex->getTitle(), 'img' => $url]);
     }
 
 }
