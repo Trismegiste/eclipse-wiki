@@ -49,7 +49,7 @@
 
         // event for running the map on the fly in a target blank
         onTheFly.addEventListener("submit", function (e) {
-            if (e.submitter.id === 'mapgen_openPopUp') {
+            if (e.submitter.id === 'mapgen_runMap') {
                 e.preventDefault()
                 let data = new FormData(onTheFly)
                 let url = '{{ url('app_mapcrud_running', {model: app.request.attributes.get('model')}) }}?' + new URLSearchParams(data)
@@ -78,7 +78,7 @@
         #map svg g.fog-of-war {
             opacity: 0;
         }
-        #mapgen_openPopUp {
+        #mapgen_runMap {
             margin-bottom: 3em;
         }
     </style>

@@ -44,7 +44,7 @@ abstract class MapRecipe extends AbstractType implements DataMapperInterface
                 ->add('one_more', CheckboxType::class, ['required' => false, 'false_values' => [null, false, '0']])
                 ->add('outsider', IntegerType::class, ['constraints' => [new NotBlank, new PositiveOrZero()]])
                 ->add('insider', IntegerType::class, ['constraints' => [new NotBlank, new PositiveOrZero()]])
-                ->add('openPopUp', SubmitType::class)
+                ->add('runMap', SubmitType::class)
                 ->add('place', PlaceChoiceType::class, [
                     'placeholder' => '-- Create New --',
                     'required' => false
