@@ -5477,12 +5477,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Trismegiste/rpg-map-generator.git",
-                "reference": "f0bf42bc4b684eb8a158654591ca0a72038ea2e4"
+                "reference": "88f5b8bbea5fed58fd53785d8b1ff21dd8a51587"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Trismegiste/rpg-map-generator/zipball/f0bf42bc4b684eb8a158654591ca0a72038ea2e4",
-                "reference": "f0bf42bc4b684eb8a158654591ca0a72038ea2e4",
+                "url": "https://api.github.com/repos/Trismegiste/rpg-map-generator/zipball/88f5b8bbea5fed58fd53785d8b1ff21dd8a51587",
+                "reference": "88f5b8bbea5fed58fd53785d8b1ff21dd8a51587",
                 "shasum": ""
             },
             "require-dev": {
@@ -5513,7 +5513,7 @@
                 "source": "https://github.com/Trismegiste/rpg-map-generator/tree/master",
                 "issues": "https://github.com/Trismegiste/rpg-map-generator/issues"
             },
-            "time": "2022-03-03T13:51:23+00:00"
+            "time": "2022-03-12T06:22:05+00:00"
         },
         {
             "name": "trismegiste/rpg-name-generator",
@@ -6730,16 +6730,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.17",
+            "version": "9.5.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "5c5abcfaa2cbd44b2203995d7a339ef910fe0c8f"
+                "reference": "1b5856028273bfd855e60a887278857d872ec67a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/5c5abcfaa2cbd44b2203995d7a339ef910fe0c8f",
-                "reference": "5c5abcfaa2cbd44b2203995d7a339ef910fe0c8f",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1b5856028273bfd855e60a887278857d872ec67a",
+                "reference": "1b5856028273bfd855e60a887278857d872ec67a",
                 "shasum": ""
             },
             "require": {
@@ -6817,7 +6817,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.17"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.18"
             },
             "funding": [
                 {
@@ -6829,7 +6829,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-03-05T16:54:31+00:00"
+            "time": "2022-03-08T06:52:28+00:00"
         },
         {
             "name": "sebastian/cli-parser",

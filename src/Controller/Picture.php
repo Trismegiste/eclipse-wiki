@@ -80,17 +80,6 @@ class Picture extends AbstractController
     }
 
     /**
-     * Send an image to external device
-     * @Route("/picture/send/{title}", methods={"GET"})
-     */
-    public function bluetooth(string $title, ObjectPushFactory $fac): JsonResponse
-    {
-        $fac->send(\join_paths($this->storage->getRootDir(), $title));
-
-        return new JsonResponse(null, Response::HTTP_OK);
-    }
-
-    /**
      * Create an avatar for NPC
      * @Route("/profile/create/{pk}", methods={"GET","POST"}, requirements={"pk"="[\da-f]{24}"})
      */

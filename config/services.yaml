@@ -55,11 +55,6 @@ services:
             $dbName: '%env(resolve:DATABASE_NAME)%'
             $collectionName: 'vertex'
             
-    App\Repository\BluetoothMsgRepository:
-        arguments:
-            $dbName: '%env(resolve:DATABASE_NAME)%'
-            $collectionName: 'bluetooth'            
-    
     # WIKI
     App\Service\MediaWiki:
         arguments:
@@ -112,11 +107,6 @@ services:
     App\Form\Type\RandomNameType:
         arguments:
             $yaml: '%kernel.project_dir%/database/place_names.yml'
-
-    # BT
-    App\Service\ObjectPushFactory:
-        arguments:
-            $mac: '%env(resolve:BLUETOOTH_MAC)%'
 
     # WS
     App\Service\WebsocketFactory:
