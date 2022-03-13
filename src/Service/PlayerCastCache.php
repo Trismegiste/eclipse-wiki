@@ -16,8 +16,6 @@ use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 class PlayerCastCache implements CacheWarmerInterface, CacheClearerInterface
 {
 
-    const subDir = 'player';
-
     protected $fs;
 
     public function __construct(Filesystem $fs)
@@ -27,7 +25,7 @@ class PlayerCastCache implements CacheWarmerInterface, CacheClearerInterface
 
     public function warmUp(string $cacheDir)
     {
-        $this->fs->mkdir(join_paths($cacheDir, self::subDir));
+        $this->fs->mkdir(join_paths($cacheDir, DocumentBroadcaster::subDir));
     }
 
     public function isOptional(): bool

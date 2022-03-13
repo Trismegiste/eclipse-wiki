@@ -75,28 +75,17 @@ class LoveletterCrud extends GenericCrud
      * Generates the Love letter PDF and print a QR Code for player
      * @Route("/loveletter/qrcode/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function qrcode(string $pk, \App\Service\NetTools $ntools): Response
+    public function qrcode(string $pk, \App\Service\DocumentBroadcaster $broadcast): Response
     {
         $vertex = $this->repository->findByPk($pk);
-        $filename = $this->getFilenameAfter($vertex);
-        $path = \join_paths($this->getParameter('kernel.cache_dir'), 'player', $filename);
-        $this->knpPdf->generateFromHtml($this->generateHtmlFor($vertex), $path, self::pdfOptions, true);
-        $url = $this->generateUrl('app_playercast_getdocument', ['filename' => $filename], \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL);
-        $lan = preg_replace('#//localhost#', '//' . $ntools->getLocalIp(), $url); // @todo hardcoded config
-        
+
+        $title = sprintf("Loveletter-%s-%s.pdf", $vertex->player, $vertex->getTitle());
+        $html = $this->renderView('loveletter/export.pdf.twig', ['vertex' => $vertex]);
+        $lan = $broadcast->getExternalLinkForGeneratedPdf($title, $html, self::pdfOptions);
+
         $this->addFlash('success', 'PDF généré');
 
         return $this->render('player/getdocument.html.twig', ['url_cast' => $lan]);
-    }
-
-    protected function generateHtmlFor(Loveletter $vertex): string
-    {
-        return $this->renderView('loveletter/export.pdf.twig', ['vertex' => $vertex]);
-    }
-
-    protected function getFilenameAfter(Loveletter $vertex): string
-    {
-        return iconv('UTF-8', 'ASCII//TRANSLIT', sprintf("Loveletter-%s-%s.pdf", $vertex->player, $vertex->getTitle()));
     }
 
     /**

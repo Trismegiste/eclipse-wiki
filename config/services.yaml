@@ -82,13 +82,17 @@ services:
         arguments:
             $wikiParser: '@app.wikiparser.pdf'
 
+    App\Service\DocumentBroadcaster:
+        arguments: 
+            $cacheDir: '%kernel.cache_dir%'
+            
     # Open AI
     App\Service\OpenAi:
         arguments:
             $secret: '%env(resolve:OPENAI_SECRETKEY)%'
             $engine: 'davinci'
             
-   # FLAT FILE SECTION
+   # FLAT FILE
     app.choicetype.repository:
         class: App\Repository\YamlRepository
         arguments: 
@@ -108,15 +112,10 @@ services:
         arguments:
             $yaml: '%kernel.project_dir%/database/place_names.yml'
 
-    # WS
+    # Websocket
     App\Service\WebsocketFactory:
         arguments:
             $websocketPort: '%websocket_port%'   
-            
-    # Console command
-    App\Command\SecondScreenDaemon:
-        arguments:
-            - '%second_screen%'
             
     # Storage
     App\Service\Storage:
