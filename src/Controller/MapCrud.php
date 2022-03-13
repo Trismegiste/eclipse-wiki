@@ -6,6 +6,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Place;
 use App\Form\ProceduralMap\DistrictMap;
 use App\Form\ProceduralMap\OneBlockMap;
 use App\Form\ProceduralMap\SpaceshipMap;
@@ -13,18 +14,20 @@ use App\Form\ProceduralMap\StationMap;
 use App\Form\ProceduralMap\StreetMap;
 use App\Repository\MapRepository;
 use App\Repository\VertexRepository;
-use App\Service\WebsocketFactory;
+use App\Service\WebsocketPusher;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Exception\RuntimeException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
+use function join_paths;
 
 /**
- * Description of MapCrud
+ * CRUD for battlemap
  */
 class MapCrud extends AbstractController
 {
@@ -65,7 +68,7 @@ class MapCrud extends AbstractController
             $newPlace = empty($place);
 
             if ($newPlace) {
-                $place = new \App\Entity\Place('map-' . $form['seed']->getData());
+                $place = new Place('map-' . $form['seed']->getData());
                 $repo->save($place);
             }
 
@@ -130,12 +133,12 @@ class MapCrud extends AbstractController
      * AJAX Pushes the modified SVG to websocket server
      * @Route("/place/broadcast", methods={"POST"})
      */
-    public function pushPlayerView(Request $request, \App\Service\WebsocketPusher $client): JsonResponse
+    public function pushPlayerView(Request $request, WebsocketPusher $client): JsonResponse
     {
-        /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $svgContent */
+        /** @var UploadedFile $svgContent */
         $svgContent = $request->files->get('svg')
             ->move($this->getParameter('kernel.cache_dir'), 'tmp-map.svg'); // the moving is necessary because wkhtmltoimage fails to load a SVG file without extension
-        $target = \join_paths($this->getParameter('kernel.cache_dir'), 'tmp-map.png'); // @todo warmup cache dir
+        $target = join_paths($this->getParameter('kernel.cache_dir'), 'tmp-map.png'); // @todo warmup cache dir
         $process = new Process([
             'wkhtmltoimage',
             '--quality', 50,

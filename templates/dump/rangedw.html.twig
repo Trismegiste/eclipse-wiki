@@ -1,0 +1,25 @@
+{# Ranged weapons dump #}
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <table class="pare-table pure-table-striped">
+        <tr>
+            <th>Nom</th>
+            <th>Dégâts</th>
+            <th>PA</th>
+            <th>CdT</th>
+            <th>Portée</th>
+            <th>FOR min.</th>
+        </tr>
+        {% for row in listing %}
+            <tr>
+                <td>{{ row.name }}</td>
+                <td>{{ row.damage }}</td>
+                <td>{{ row.ap }}</td>
+                <td>{{ row.rof }}</td>
+                <td>{{ row.reach }}</td>
+                <td>d{{ row.minStr }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

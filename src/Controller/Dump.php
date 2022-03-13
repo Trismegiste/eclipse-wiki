@@ -62,4 +62,15 @@ class Dump extends AbstractController
         return $this->render('dump/gear.html.twig', ['listing' => $listing]);
     }
 
+    /**
+     * Dumps all ranged weapons
+     * @Route("/dump/rw", methods={"GET"})
+     */
+    public function rangedWeapon(\App\Repository\RangedWeaponProvider $repo)
+    {
+        $listing = $repo->getListing();
+
+        return $this->render('dump/rangedw.html.twig', ['listing' => $listing]);
+    }
+
 }
