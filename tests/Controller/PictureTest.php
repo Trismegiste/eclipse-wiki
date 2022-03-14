@@ -67,4 +67,13 @@ class PictureTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         return $target;
     }
 
+    public function testPicturePush()
+    {
+        $this->client->request('POST', '/picture/push/yolo.png');
+        $this->assertResponseIsSuccessful();
+        $ret = json_decode($this->client->getResponse()->getContent());
+        $this->assertStringContainsString('yolo.png', $ret->message);
+        $this->assertStringContainsString('sent', $ret->message);
+    }
+
 }

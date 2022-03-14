@@ -151,7 +151,7 @@ class MapCrud extends AbstractController
         try {
             $client->push(json_encode([
                 'file' => $target,
-                'title' => 'Toto'
+                'action' => 'pictureBroadcast'
             ]));
 
             return new JsonResponse(['level' => 'success', 'message' => 'Update pushed'], Response::HTTP_OK);
