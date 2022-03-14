@@ -9,14 +9,16 @@ namespace App\Controller;
 use App\Form\ProfilePic;
 use App\Repository\VertexRepository;
 use App\Service\AvatarMaker;
-use App\Service\ObjectPushFactory;
+use App\Service\Storage;
+use App\Service\WebsocketPusher;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use function join_paths;
 
 /**
  * Controller for pictures
@@ -26,7 +28,7 @@ class Picture extends AbstractController
 
     protected $storage;
 
-    public function __construct(\App\Service\Storage $store)
+    public function __construct(Storage $store)
     {
         $this->storage = $store;
     }
@@ -63,7 +65,7 @@ class Picture extends AbstractController
             $avatarFile = $form->get('avatar')->getData();
             $profilePic = $maker->generate($npc, imagecreatefromstring($avatarFile->getContent()));
             $filename = $npc->getTitle() . '-avatar.png';
-            imagepng($profilePic, \join_paths($this->storage->getRootDir(), $filename));
+            imagepng($profilePic, join_paths($this->storage->getRootDir(), $filename));
             $append = "\n==Avatar==\n[[file:$filename]]\n";
             $npc->setContent($npc->getContent() . $append);
             $repo->save($npc);
@@ -82,6 +84,24 @@ class Picture extends AbstractController
     public function read(string $title): Response
     {
         return $this->storage->createResponse($title);
+    }
+
+    /**
+     * Pushes a picture (from the Storage) to player screen
+     * @Route("/picture/push/{title}", methods={"POST"})
+     */
+    public function push(string $title, Storage $storage, WebsocketPusher $client): JsonResponse
+    {
+        try {
+            $client->push(json_encode([
+                'file' => $storage->getFileInfo($title)->getPathname(),
+                'action' => 'pictureBroadcast'
+            ]));
+
+            return new JsonResponse(['message' => "$title sent"], Response::HTTP_OK);
+        } catch (Exception $e) {
+            return new JsonResponse(['message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

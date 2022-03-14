@@ -10,9 +10,11 @@ use App\Entity\Ali;
 use App\Entity\Freeform;
 use App\Entity\Transhuman;
 use App\Repository\VertexRepository;
+use App\Service\NetTools;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Trismegiste\NameGenerator\FileRepository;
 use Trismegiste\NameGenerator\RandomizerDecorator;
 
@@ -61,6 +63,18 @@ class GmHelper extends AbstractController
         $listing = $repo->findByClass([Ali::class, Freeform::class, Transhuman::class]);
 
         return $this->render('tracker.html.twig', ['listing' => $listing]);
+    }
+
+    /**
+     * Creates a QR Code for the link to player screen
+     * @Route("/broadcast/qrcode", methods={"GET"})
+     */
+    public function qrCode(NetTools $ntools): Response
+    {
+        $url = $this->generateUrl('app_playercast_view', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $lan = preg_replace('#//localhost#', '//' . $ntools->getLocalIp(), $url); // @todo hardcoded config
+
+        return $this->render('player/qrcode.html.twig', ['url_cast' => $lan]);
     }
 
 }
