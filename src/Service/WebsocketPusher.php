@@ -17,11 +17,13 @@ class WebsocketPusher
 
     protected $localIp;
     protected $wsPort;
+    protected $logger;
 
-    public function __construct(NetTools $nettools, int $websocketPort)
+    public function __construct(NetTools $nettools, \Psr\Log\LoggerInterface $logger, int $websocketPort)
     {
         $this->localIp = $nettools->getLocalIp();
         $this->wsPort = $websocketPort;
+        $this->logger = $logger;
     }
 
     public function getUrl(): string
@@ -32,7 +34,7 @@ class WebsocketPusher
     public function createServer(): App
     {
         $app = new App($this->localIp, $this->wsPort, '0.0.0.0');
-        $app->route('/', new PictureBroadcaster(), ['*']);
+        $app->route('/', new PictureBroadcaster($this->logger), ['*']);
 
         return $app;
     }
@@ -49,7 +51,7 @@ class WebsocketPusher
                     $conn->send($data);
                 },
                 function ($e) {
-                    echo "Could not connect: {$e->getMessage()}\n";
+                    echo "Could not connect: {$e->getMessage()}\n"; // @todo use logger (but how ?)
                 }
         );
     }
