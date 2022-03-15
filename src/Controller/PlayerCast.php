@@ -7,12 +7,10 @@
 namespace App\Controller;
 
 use App\Service\DocumentBroadcaster;
-use App\Service\NetTools;
-use App\Service\WebsocketFactory;
+use App\Service\WebsocketPusher;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Ctrl for WebSocket-controled Player Screen
@@ -20,11 +18,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class PlayerCast extends AbstractController
 {
 
-    protected $factory;
+    protected $pusher;
 
-    public function __construct(WebsocketFactory $fac)
+    public function __construct(WebsocketPusher $fac)
     {
-        $this->factory = $fac;
+        $this->pusher = $fac;
     }
 
     /**
@@ -33,7 +31,7 @@ class PlayerCast extends AbstractController
      */
     public function view(): Response
     {
-        return $this->render('player/view.html.twig', ['host' => $this->factory->getUrl()]);
+        return $this->render('player/view.html.twig', ['host' => $this->pusher->getUrl()]);
     }
 
     /**

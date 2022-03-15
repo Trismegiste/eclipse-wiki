@@ -106,7 +106,7 @@ services:
             $yaml: '%kernel.project_dir%/database/place_names.yml'
 
     # Websocket
-    App\Service\WebsocketFactory:
+    App\Service\WebsocketPusher:
         arguments:
             $websocketPort: '%websocket_port%'   
             

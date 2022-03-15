@@ -6,6 +6,8 @@
 
 namespace App\Service;
 
+use Ratchet\App;
+
 /**
  * A websocket client that pushes messages to Websocket server
  * (lazy connection for services working environment)
@@ -13,18 +15,31 @@ namespace App\Service;
 class WebsocketPusher
 {
 
-    protected $domain;
-    protected $factory;
+    protected $localIp;
+    protected $wsPort;
 
-    public function __construct(WebsocketFactory $fac, string $domain = 'localhost')
+    public function __construct(NetTools $nettools, int $websocketPort)
     {
-        $this->factory = $fac;
-        $this->domain = $domain;
+        $this->localIp = $nettools->getLocalIp();
+        $this->wsPort = $websocketPort;
+    }
+
+    public function getUrl(): string
+    {
+        return 'ws://' . $this->localIp . ':' . $this->wsPort;
+    }
+
+    public function createServer(): App
+    {
+        $app = new App($this->localIp, $this->wsPort, '0.0.0.0');
+        $app->route('/', new PictureBroadcaster(), ['*']);
+
+        return $app;
     }
 
     public function push(string $data): void
     {
-        \Ratchet\Client\connect($this->factory->getUrl())->then(
+        \Ratchet\Client\connect($this->getUrl())->then(
                 function ($conn) use ($data) {
                     $conn->on('message', function ($msg) use ($conn) {
                         echo "Received: {$msg}\n";
