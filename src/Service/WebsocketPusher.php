@@ -41,18 +41,19 @@ class WebsocketPusher
 
     public function push(string $data): void
     {
-        \Ratchet\Client\connect($this->getUrl())->then(
-                function ($conn) use ($data) {
-                    $conn->on('message', function ($msg) use ($conn) {
-                        echo "Received: {$msg}\n";
-                        $conn->close();
-                    });
-
-                    $conn->send($data);
-                },
-                function ($e) {
-                    echo "Could not connect: {$e->getMessage()}\n"; // @todo use logger (but how ?)
-                }
+        $log = $this->logger;
+        \Ratchet\Client\connect($this->getUrl(), [], ['X-Pusher' => 'Symfony'])
+            ->then(function (\Ratchet\Client\WebSocket $conn) use ($data, $log) {
+                // subscribing onMessage
+                $conn->on('message', function ($msg) use ($conn, $log) {
+                    $log->debug('Client receiving ' . strlen($msg) . ' characters');
+                    $conn->close();
+                });
+                // sending
+                $conn->send($data);
+            }, function ($e) use ($log) {
+                $log->error("Could not connect: " . $e->getMessage());
+            }
         );
     }
 
