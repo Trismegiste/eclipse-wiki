@@ -50,8 +50,6 @@ class PictureBroadcaster implements MessageComponentInterface
             $conn->send('data:'
                 . $mime . ';base64,'
                 . base64_encode(file_get_contents($this->currentFile->getPathname())));
-        } else {
-            $conn->send('that s it'); // @todo for the client to close the socket : that's sux
         }
     }
 
@@ -88,6 +86,9 @@ class PictureBroadcaster implements MessageComponentInterface
             $client->send($data);
         }
         unset($data); // to force GC asap
+        if ($this->isRequestFromSymfony($from->httpRequest)) {
+            $from->close();
+        }
     }
 
     public function onClose(ConnectionInterface $conn)
