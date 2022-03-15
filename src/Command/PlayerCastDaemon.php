@@ -34,33 +34,10 @@ class PlayerCastDaemon extends Command
         $this->io = new SymfonyStyle($input, $output);
         $this->io->title("WebSocket Server listenig on " . $this->factory->getUrl());
 
-        $this->webSocketServer = $this->factory->createServer();
-
-        $this->webSocketServer->on('open', [$this, 'onOpen']);
-        $this->webSocketServer->on('message', [$this, 'onMessage']);
-        $this->webSocketServer->on('close', [$this, 'onClose']);
-
-        $this->webSocketServer->run();
+        $app = $this->factory->createServer();
+        $app->run();
 
         return self::SUCCESS;
-    }
-
-    public function onOpen(Bucket $bucket): void
-    {
-        $cnx = $bucket->getSource()->getConnection();
-        $this->io->writeln([
-            'Welcome ' . $cnx->getCurrentNode()->getId(),
-            'There are currently ' . count($cnx->getNodes()) . ' connected clients'
-        ]);
-
-        $this->io->writeln('And pushing last picture');
-        $mime = mime_content_type($this->currentFile->getPathname());
-        $this->webSocketServer->send('data:'
-            . $mime . ';base64,'
-            . base64_encode(file_get_contents($this->currentFile->getPathname())),
-            $cnx->getCurrentNode()
-        );
-        $this->io->newLine();
     }
 
     public function onClose(Bucket $bucket): void

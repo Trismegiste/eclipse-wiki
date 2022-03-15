@@ -7,15 +7,18 @@
 namespace App\Service;
 
 use Hoa\Socket\Client as SoCli;
-use Hoa\Socket\Server as SeSo;
 use Hoa\Websocket\Client;
-use Hoa\Websocket\Server;
+use Ratchet\App;
+use Ratchet\Server\EchoServer;
 
 /**
  * Factory for Websocket communication
  */
 class WebsocketFactory
 {
+
+    protected $localIp;
+    protected $wsPort;
 
     public function __construct(NetTools $nettools, int $websocketPort)
     {
@@ -33,9 +36,12 @@ class WebsocketFactory
         return new Client(new SoCli($this->getUrl()));
     }
 
-    public function createServer(): Server
+    public function createServer(): App
     {
-        return new Server(new SeSo($this->getUrl()));
+        $app = new App($this->localIp, $this->wsPort, '0.0.0.0');
+        $app->route('/', new PictureBroadcaster(), ['*']);
+
+        return $app;
     }
 
 }

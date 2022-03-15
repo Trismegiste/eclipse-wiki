@@ -22,19 +22,22 @@
             Alpine.data('spa', () => ({
                     host: '{{ host }}',
                     onAir: false,
+                    clicSound: null,
                     socket: null,
                     init() {
                         var _this = this
+                        this.clicSound = new Howl({
+                            src: ['{{ asset('sound/clic.webm')}}', '{{ asset('sound/clic.ogg') }}']
+                        })
+                        
                         this.socket = new WebSocket(this.host)
                         this.socket.onopen = function (msg) {
                             console.log('Connecting to ' + _this.host)
                             _this.onAir = true
-                            _this.clicSound = new Howl({
-                                src: ['{{ asset('sound/clic.webm')}}', '{{ asset('sound/clic.ogg') }}']
-                            })
                         }
 
                         this.socket.onmessage = function (msg) {
+                            console.log('New picture')
                             _this.$refs.tv.src = msg.data
                             _this.clicSound.play()
                         }
@@ -43,8 +46,7 @@
                             console.log('Disconnected')
                             _this.onAir = false
                         }
-                    },
-                    clicSound: null
+                    }
                 }))
         })
     </script>

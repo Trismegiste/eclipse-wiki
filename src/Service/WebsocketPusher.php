@@ -22,13 +22,21 @@ class WebsocketPusher
         $this->domain = $domain;
     }
 
-    public function push(string $msg): void
+    public function push(string $data): void
     {
-        $client = $this->factory->createClient();
-        $client->setHost($this->domain);
-        $client->connect();
-        $client->send($msg);
-        $client->close();
+        \Ratchet\Client\connect($this->factory->getUrl())->then(
+                function ($conn) use ($data) {
+                    $conn->on('message', function ($msg) use ($conn) {
+                        echo "Received: {$msg}\n";
+                        $conn->close();
+                    });
+
+                    $conn->send($data);
+                },
+                function ($e) {
+                    echo "Could not connect: {$e->getMessage()}\n";
+                }
+        );
     }
 
 }
