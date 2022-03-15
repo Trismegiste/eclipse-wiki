@@ -2,9 +2,7 @@
 
 namespace App\Command;
 
-use App\Service\WebsocketFactory;
-use Hoa\Event\Bucket;
-use SplFileInfo;
+use App\Service\WebsocketPusher;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,7 +17,7 @@ class PlayerCastDaemon extends Command
     protected static $defaultName = "playercast:daemon";
     protected $factory;
 
-    public function __construct(\App\Service\WebsocketPusher $fac)
+    public function __construct(WebsocketPusher $fac)
     {
         parent::__construct();
         $this->factory = $fac;

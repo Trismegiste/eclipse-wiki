@@ -7,9 +7,13 @@
 namespace App\Service;
 
 use Exception;
-use Ratchet\WebSocket\MessageComponentInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Log\LoggerInterface;
 use Ratchet\ConnectionInterface;
+use Ratchet\WebSocket\MessageComponentInterface;
+use SplFileInfo;
 use SplObjectStorage;
+use function join_paths;
 
 /**
  * Server
@@ -21,10 +25,10 @@ class PictureBroadcaster implements MessageComponentInterface
     protected $currentFile = null;
     protected $logger;
 
-    public function __construct(\Psr\Log\LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger)
     {
         $this->clients = new SplObjectStorage();
-        $this->currentFile = new \SplFileInfo(join_paths(__DIR__, '../Command/mire.svg'));
+        $this->currentFile = new SplFileInfo(join_paths(__DIR__, '../Command/mire.svg'));
         $this->logger = $logger;
     }
 
@@ -35,7 +39,7 @@ class PictureBroadcaster implements MessageComponentInterface
          * Therefore, this wrapper decorates the \Ratchet\Client\WebSocket by inserting a property httpRequest
          * into the connection object.
          */
-        /** @var \Psr\Http\Message\RequestInterface $request */
+        /** @var RequestInterface $request */
         $request = $conn->httpRequest;
         $this->logger->info('New connection from ' . $this->getFirstUserAgent($request));
 
@@ -46,10 +50,12 @@ class PictureBroadcaster implements MessageComponentInterface
             $conn->send('data:'
                 . $mime . ';base64,'
                 . base64_encode(file_get_contents($this->currentFile->getPathname())));
+        } else {
+            $conn->send('that s it'); // @todo for the client to close the socket : that's sux
         }
     }
 
-    private function getFirstUserAgent(\Psr\Http\Message\RequestInterface $request): string
+    private function getFirstUserAgent(RequestInterface $request): string
     {
         $identifier = 'Unknown';
         if ($request->hasHeader('User-Agent')) {
@@ -60,7 +66,7 @@ class PictureBroadcaster implements MessageComponentInterface
         return $identifier;
     }
 
-    private function isRequestFromSymfony(\Psr\Http\Message\RequestInterface $request): bool
+    private function isRequestFromSymfony(RequestInterface $request): bool
     {
         $origin = $request->getHeader('X-Pusher');
 
@@ -71,7 +77,7 @@ class PictureBroadcaster implements MessageComponentInterface
     {
         $this->logger->debug('Server receiving message ' . $msg . ' from ' . $this->getFirstUserAgent($from->httpRequest));
         $message = json_decode($msg);
-        $fileinfo = new \SplFileInfo($message->file);
+        $fileinfo = new SplFileInfo($message->file);
         $this->currentFile = $fileinfo;
         $mime = mime_content_type($fileinfo->getPathname());
 
