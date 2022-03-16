@@ -94,6 +94,7 @@ class PictureBroadcaster implements MessageComponentInterface
 
     public function onClose(ConnectionInterface $conn)
     {
+        $this->logger->info($this->getFirstUserAgent($conn->httpRequest) . ' is disconnecting');
         $this->clients->detach($conn);
     }
 
