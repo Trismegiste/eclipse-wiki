@@ -19,11 +19,11 @@ class WebsocketPusher
     protected $wsPort;
     protected $logger;
 
-    public function __construct(NetTools $nettools, \Psr\Log\LoggerInterface $logger, int $websocketPort)
+    public function __construct(NetTools $nettools, \Psr\Log\LoggerInterface $websoxLogger, int $websocketPort)
     {
         $this->localIp = $nettools->getLocalIp();
         $this->wsPort = $websocketPort;
-        $this->logger = $logger;
+        $this->logger = $websoxLogger;
     }
 
     public function getUrl(): string
@@ -44,7 +44,7 @@ class WebsocketPusher
         if ($sp = WebsocketClient::open($this->localIp, $this->wsPort, ['X-Pusher: Symfony'])) {
             WebsocketClient::write($sp, $data);
             $this->logger->debug("Server responed with: " . WebsocketClient::read($sp, $errstr));
-        }
+        } // @todo better managment of error and returned message
     }
 
 }

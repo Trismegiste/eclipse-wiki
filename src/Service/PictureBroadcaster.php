@@ -87,7 +87,7 @@ class PictureBroadcaster implements MessageComponentInterface
         }
         unset($data); // to force GC asap
 
-        if ($this->isRequestFromSymfony($from->httpRequest)) {
+        if ($this->isRequestFromSymfony($from->httpRequest)) { // @todo all message are coming from symfony => short circuit at start of method ?
             $from->send("Broadcast of " . $fileinfo->getBasename() . " to " . $this->clients->count() . ' clients complete');
         }
     }
