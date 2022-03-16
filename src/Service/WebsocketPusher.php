@@ -41,22 +41,10 @@ class WebsocketPusher
 
     public function push(string $data): void
     {
-        $log = $this->logger;
-        \Ratchet\Client\connect($this->getUrl(), [], ['X-Pusher' => 'Symfony'])
-                ->then(
-                        function (\Ratchet\Client\WebSocket $conn) use ($data, $log) {
-                            // subscribing onMessage
-                            $conn->on('message', function ($msg) use ($conn, $log) {
-                                $log->debug("Symfony client receiving message: '$msg'");
-                                $conn->close();
-                            });
-                            // sending
-                            $conn->send($data);
-                        },
-                        function ($e) use ($log) {
-                            $log->error("Could not connect: " . $e->getMessage());
-                        }
-        );
+        if ($sp = WebsocketClient::open($this->localIp, $this->wsPort, ['X-Pusher: Symfony'])) {
+            WebsocketClient::write($sp, $data);
+            $this->logger->debug("Server responed with: " . WebsocketClient::read($sp, $errstr));
+        }
     }
 
 }

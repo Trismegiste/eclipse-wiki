@@ -48,8 +48,8 @@ class PictureBroadcaster implements MessageComponentInterface
             $mime = mime_content_type($this->currentFile->getPathname());
             $this->logger->debug('Pushing last picture');
             $conn->send('data:'
-                    . $mime . ';base64,'
-                    . base64_encode(file_get_contents($this->currentFile->getPathname())));
+                . $mime . ';base64,'
+                . base64_encode(file_get_contents($this->currentFile->getPathname())));
         }
     }
 
@@ -73,7 +73,7 @@ class PictureBroadcaster implements MessageComponentInterface
 
     public function onMessage(ConnectionInterface $from, $msg)
     {
-        $this->logger->debug('Server receiving message ' . $msg . ' from ' . $this->getFirstUserAgent($from->httpRequest));
+        $this->logger->debug('Websocket Server receiving message ' . $msg . ' from ' . $this->getFirstUserAgent($from->httpRequest));
         $message = json_decode($msg);
         $fileinfo = new SplFileInfo($message->file);
         $this->currentFile = $fileinfo;
@@ -81,14 +81,14 @@ class PictureBroadcaster implements MessageComponentInterface
 
         $data = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($fileinfo->getPathname()));
 
-        $this->logger->debug("Server broadcasting picture '$mime' to " . $this->clients->count() . ' web browser clients');
+        $this->logger->debug("Websocket Server broadcasting " . $fileinfo->getBasename() . " to " . $this->clients->count() . ' web browser clients');
         foreach ($this->clients as $client) {
             $client->send($data);
         }
         unset($data); // to force GC asap
 
         if ($this->isRequestFromSymfony($from->httpRequest)) {
-            $from->send("Broadcasting to " . $this->clients->count() . ' clients complete');
+            $from->send("Broadcast of " . $fileinfo->getBasename() . " to " . $this->clients->count() . ' clients complete');
         }
     }
 
