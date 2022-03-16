@@ -48,8 +48,8 @@ class PictureBroadcaster implements MessageComponentInterface
             $mime = mime_content_type($this->currentFile->getPathname());
             $this->logger->debug('Pushing last picture');
             $conn->send('data:'
-                . $mime . ';base64,'
-                . base64_encode(file_get_contents($this->currentFile->getPathname())));
+                    . $mime . ';base64,'
+                    . base64_encode(file_get_contents($this->currentFile->getPathname())));
         }
     }
 
@@ -86,8 +86,9 @@ class PictureBroadcaster implements MessageComponentInterface
             $client->send($data);
         }
         unset($data); // to force GC asap
+
         if ($this->isRequestFromSymfony($from->httpRequest)) {
-            $from->close();
+            $from->send("Broadcasting to " . $this->clients->count() . ' clients complete');
         }
     }
 

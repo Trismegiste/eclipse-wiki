@@ -43,13 +43,19 @@ class WebsocketPusher
     {
         $log = $this->logger;
         \Ratchet\Client\connect($this->getUrl(), [], ['X-Pusher' => 'Symfony'])
-            ->then(function (\Ratchet\Client\WebSocket $conn) use ($data, $log) {
-                // sending
-                $conn->send($data);
-                // cnx is auto closed by the server
-            }, function ($e) use ($log) {
-                $log->error("Could not connect: " . $e->getMessage());
-            }
+                ->then(
+                        function (\Ratchet\Client\WebSocket $conn) use ($data, $log) {
+                            // subscribing onMessage
+                            $conn->on('message', function ($msg) use ($conn, $log) {
+                                $log->debug("Symfony client receiving message: '$msg'");
+                                $conn->close();
+                            });
+                            // sending
+                            $conn->send($data);
+                        },
+                        function ($e) use ($log) {
+                            $log->error("Could not connect: " . $e->getMessage());
+                        }
         );
     }
 
