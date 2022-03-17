@@ -39,12 +39,29 @@ class WebsocketPusher
         return $app;
     }
 
-    public function push(string $data): void
+    public function push(string $data): string
     {
-        if ($sp = WebsocketClient::open($this->localIp, $this->wsPort, ['X-Pusher: Symfony'])) {
-            WebsocketClient::write($sp, $data);
-            $this->logger->debug("Server responed with: " . WebsocketClient::read($sp, $errstr));
-        } // @todo better managment of error and returned message
+        // open
+        $sp = WebsocketClient::open($this->localIp, $this->wsPort, ['X-Pusher: Symfony']);
+
+        if ($sp) {
+            // write
+            $written = WebsocketClient::write($sp, $data);
+            if (false === $written) {
+                throw new \RuntimeException('Unable to write to ' . $this->getUrl());
+            }
+            // read
+            $reading = WebsocketClient::read($sp, $errstr);
+            if (false === $reading) {
+                throw new \RuntimeException('Unable to read from ' . $this->getUrl() . ', cause : ' . $errstr);
+            }
+            // log
+            $this->logger->debug("Server responed with: $reading");
+
+            return $reading;
+        } else {
+            throw new \RuntimeException('Unable to connect to ' . $this->getUrl());
+        }
     }
 
 }

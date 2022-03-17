@@ -93,14 +93,14 @@ class Picture extends AbstractController
     public function push(string $title, Storage $storage, WebsocketPusher $client): JsonResponse
     {
         try {
-            $client->push(json_encode([
+            $ret = $client->push(json_encode([
                 'file' => $storage->getFileInfo($title)->getPathname(),
                 'action' => 'pictureBroadcast'
             ]));
 
-            return new JsonResponse(['message' => "$title sent"], Response::HTTP_OK);
+            return new JsonResponse(['level' => 'success', 'message' => $ret], Response::HTTP_OK);
         } catch (Exception $e) {
-            return new JsonResponse(['message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['level' => 'error', 'message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
