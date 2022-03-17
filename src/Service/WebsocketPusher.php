@@ -42,24 +42,19 @@ class WebsocketPusher
     public function push(string $data): string
     {
         // open
-        $sp = WebsocketClient::open($this->localIp, $this->wsPort, ['X-Pusher: Symfony']);
+        $sp = new \Paragi\PhpWebsocket\Client($this->localIp, $this->wsPort, ['X-Pusher: Symfony']);
 
         if ($sp) {
             // write
-            $written = WebsocketClient::write($sp, $data);
-            if (false === $written) {
-                throw new \RuntimeException('Unable to write to ' . $this->getUrl());
-            }
+            $sp->write($data);
             // read
-            $reading = WebsocketClient::read($sp, $errstr);
-            if (false === $reading) {
-                throw new \RuntimeException('Unable to read from ' . $this->getUrl() . ', cause : ' . $errstr);
-            }
+            $reading = $sp->read();
             // log
             $this->logger->debug("Server responed with: $reading");
 
             return $reading;
         } else {
+            // the client send an Error before I could throw this Exception
             throw new \RuntimeException('Unable to connect to ' . $this->getUrl());
         }
     }
