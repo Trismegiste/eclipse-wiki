@@ -73,7 +73,7 @@ class PictureTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $this->assertResponseIsSuccessful();
         $ret = json_decode($this->client->getResponse()->getContent());
         $this->assertStringContainsString('yolo.png', $ret->message);
-        $this->assertStringContainsString('sent', $ret->message);
+        $this->assertStringContainsString('complete', $ret->message);
     }
 
 }
