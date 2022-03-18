@@ -18,6 +18,8 @@
     {{ parent() }}
     <script src="{{ asset('js/howler.core.min.js') }}"></script>    
     <script>
+        var urlCreator = window.URL || window.webkitURL
+
         document.addEventListener('alpine:init', () => {
             Alpine.data('spa', () => ({
                     host: '{{ host }}',
@@ -29,7 +31,7 @@
                         this.clicSound = new Howl({
                             src: ['{{ asset('sound/clic.webm')}}', '{{ asset('sound/clic.ogg') }}']
                         })
-                        
+
                         this.socket = new WebSocket(this.host)
                         this.socket.onopen = function (msg) {
                             console.log('Connecting to ' + _this.host)
@@ -38,7 +40,9 @@
 
                         this.socket.onmessage = function (msg) {
                             console.log('New picture')
-                            _this.$refs.tv.src = msg.data
+                            let dataUrl = urlCreator.createObjectURL(msg.data)
+                            _this.$refs.tv.src = dataUrl
+                        //    urlCreator.revokeObjectURL(dataUrl)
                             _this.clicSound.play()
                         }
 

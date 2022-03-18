@@ -10,6 +10,9 @@ use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Log\LoggerInterface;
 use Ratchet\ConnectionInterface;
+use Ratchet\RFC6455\Messaging\Frame;
+use Ratchet\RFC6455\Messaging\Message;
+use Ratchet\RFC6455\Messaging\MessageInterface;
 use Ratchet\WebSocket\MessageComponentInterface;
 use SplFileInfo;
 use SplObjectStorage;
@@ -28,7 +31,7 @@ class PictureBroadcaster implements MessageComponentInterface
     public function __construct(LoggerInterface $logger)
     {
         $this->clients = new SplObjectStorage();
-        $this->currentFile = new SplFileInfo(join_paths(__DIR__, '../Command/mire.svg'));
+        $this->currentFile = new SplFileInfo(join_paths(__DIR__, 'mire.png'));
         $this->logger = $logger;
     }
 
@@ -45,11 +48,8 @@ class PictureBroadcaster implements MessageComponentInterface
 
         if (!$this->isRequestFromSymfony($request)) {
             $this->clients->attach($conn); // we only track connections from web brower clients
-            $mime = mime_content_type($this->currentFile->getPathname());
             $this->logger->debug('Pushing last picture');
-            $conn->send('data:'
-                . $mime . ';base64,'
-                . base64_encode(file_get_contents($this->currentFile->getPathname())));
+            $conn->send($this->createFrameForFile($this->currentFile));
         }
     }
 
@@ -71,15 +71,22 @@ class PictureBroadcaster implements MessageComponentInterface
         return (count($origin) > 0) && in_array('Symfony', $origin);
     }
 
+    protected function createFrameForFile(SplFileInfo $fileinfo): MessageInterface
+    {
+        $data = new Message();
+        $data->addFrame(new Frame(file_get_contents($fileinfo->getPathname()), true, Frame::OP_BINARY));
+
+        return $data;
+    }
+
     public function onMessage(ConnectionInterface $from, $msg)
     {
         $this->logger->debug('Websocket Server receiving message ' . $msg . ' from ' . $this->getFirstUserAgent($from->httpRequest));
         $message = json_decode($msg);
         $fileinfo = new SplFileInfo($message->file);
         $this->currentFile = $fileinfo;
-        $mime = mime_content_type($fileinfo->getPathname());
 
-        $data = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($fileinfo->getPathname()));
+        $data = $this->createFrameForFile($fileinfo);
 
         $this->logger->debug("Websocket Server broadcasting " . $fileinfo->getBasename() . " to " . $this->clients->count() . ' web browser clients');
         foreach ($this->clients as $client) {
