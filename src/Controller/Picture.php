@@ -100,7 +100,7 @@ class Picture extends AbstractController
 
             return new JsonResponse(['level' => 'success', 'message' => $ret], Response::HTTP_OK);
         } catch (Exception $e) {
-            return new JsonResponse(['level' => 'error', 'message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['level' => 'error', 'message' => $e->getMessage()], Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 
