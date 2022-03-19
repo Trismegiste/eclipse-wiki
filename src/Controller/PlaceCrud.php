@@ -107,11 +107,11 @@ class PlaceCrud extends GenericCrud
 
                 return new JsonResponse(['level' => 'success', 'message' => 'Profile for ' . $param['name'] . ' pushed'], Response::HTTP_OK);
             } catch (\Exception $e) {
-                return new JsonResponse(['level' => 'error', 'message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+                return new JsonResponse(['level' => 'error', 'message' => $e->getMessage()], Response::HTTP_SERVICE_UNAVAILABLE);
             }
         }
 
-        return new JsonResponse(['level' => 'error', 'message' => 'Invalid form'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        return new JsonResponse(['level' => 'error', 'message' => 'Invalid form'], Response::HTTP_FORBIDDEN);
     }
 
     private function convertSvgToPng(string $svg)
