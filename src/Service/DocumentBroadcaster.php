@@ -44,7 +44,7 @@ class DocumentBroadcaster
 
     protected function sanitizeFilename(string $filename): string
     {
-        return str_replace(' ', '-', iconv('UTF-8', 'ASCII//TRANSLIT', $filename));
+        return preg_replace('#([^A-Za-z0-9-_\.])#', '-', iconv('UTF-8', 'ASCII//TRANSLIT', $filename));
     }
 
     public function createResponseForFilename(string $filename): BinaryFileResponse
