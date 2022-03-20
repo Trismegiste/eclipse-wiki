@@ -11,7 +11,7 @@ use App\Entity\Vertex;
 use App\Form\PlaceType;
 use App\Form\ProfileOnTheFly;
 use App\Service\AvatarMaker;
-use App\Service\Storage;
+use App\Service\PlayerCastCache;
 use App\Service\WebsocketPusher;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -96,7 +96,7 @@ class PlaceCrud extends GenericCrud
             $npc = $this->repository->findByTitle($param['template']);
             $npc->setTitle($param['name']);
             $profile = $maker->generate($npc, $this->convertSvgToPng($param['svg']));
-            $path = \join_paths($this->getParameter('kernel.cache_dir'), $param['name'] . '.png'); // @todo warmup cache dir
+            $path = \join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, $param['name'] . '.png'); // @todo warmup cache dir
             imagepng($profile, $path);
 
             try {

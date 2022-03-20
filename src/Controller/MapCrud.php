@@ -14,6 +14,7 @@ use App\Form\ProceduralMap\StationMap;
 use App\Form\ProceduralMap\StreetMap;
 use App\Repository\MapRepository;
 use App\Repository\VertexRepository;
+use App\Service\PlayerCastCache;
 use App\Service\WebsocketPusher;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Exception\RuntimeException;
@@ -137,8 +138,8 @@ class MapCrud extends AbstractController
     {
         /** @var UploadedFile $svgContent */
         $svgContent = $request->files->get('svg')
-            ->move($this->getParameter('kernel.cache_dir'), 'tmp-map.svg'); // the moving is necessary because wkhtmltoimage fails to load a SVG file without extension
-        $target = join_paths($this->getParameter('kernel.cache_dir'), 'tmp-map.png'); // @todo warmup cache dir
+            ->move(join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir), 'tmp-map.svg'); // the moving is necessary because wkhtmltoimage fails to load a SVG file without extension
+        $target = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, 'tmp-map.png');
         $process = new Process([
             'wkhtmltoimage',
             '--quality', 50,
