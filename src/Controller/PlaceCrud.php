@@ -96,7 +96,7 @@ class PlaceCrud extends GenericCrud
             $npc = $this->repository->findByTitle($param['template']);
             $npc->setTitle($param['name']);
             $profile = $maker->generate($npc, $this->convertSvgToPng($param['svg']));
-            $path = \join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, $param['name'] . '.png'); // @todo warmup cache dir
+            $path = \join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, $param['name'] . '.png');
             imagepng($profile, $path);
 
             try {

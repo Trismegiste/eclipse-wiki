@@ -136,10 +136,11 @@ class MapCrud extends AbstractController
      */
     public function pushPlayerView(Request $request, WebsocketPusher $client): JsonResponse
     {
+        $playerDir = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir);
         /** @var UploadedFile $svgContent */
-        $svgContent = $request->files->get('svg')
-            ->move(join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir), 'tmp-map.svg'); // the moving is necessary because wkhtmltoimage fails to load a SVG file without extension
-        $target = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, 'tmp-map.png');
+        $svgContent = $request->files->get('svg')->move($playerDir, 'tmp-map.svg');
+        // the moving was necessary because wkhtmltoimage fails to load a SVG file without extension
+        $target = join_paths($playerDir, 'tmp-map.png');
         $process = new Process([
             'wkhtmltoimage',
             '--quality', 50,
