@@ -18,7 +18,6 @@ class VertexTypeTest extends KernelTestCase
     protected function setUp(): void
     {
         $factory = static::getContainer()->get('form.factory');
-
         $this->sut = $factory->create(VertexType::class);
     }
 
@@ -29,18 +28,19 @@ class VertexTypeTest extends KernelTestCase
         $this->assertCount(0, iterator_to_array($repo->search()));
     }
 
-    protected function getInputData(): array
+    public function getInputData(): array
     {
         return [
-            'title' => 'yolo',
-            'content' => 'some text'
+            [['title' => 'yolo', 'content' => 'some text']]
         ];
     }
 
-    public function testEmpty()
+    /** @dataProvider getInputData */
+    public function testEmpty(array $inputData)
     {
-        $this->sut->submit($this->getInputData());
+        $this->sut->submit($inputData);
         $this->assertTrue($this->sut->isSynchronized());
+        $this->assertCount(0, $this->sut->getErrors(), (string) $this->sut->getErrors());
         $this->assertTrue($this->sut->isValid());
 
         $model = $this->sut->getData();
@@ -51,9 +51,10 @@ class VertexTypeTest extends KernelTestCase
         $repo->save($this->sut->getData());
     }
 
-    public function testUniqueTitleFail()
+    /** @dataProvider getInputData */
+    public function testUniqueTitleFail(array $inputData)
     {
-        $this->sut->submit($this->getInputData());
+        $this->sut->submit($inputData);
         $this->assertTrue($this->sut->isSynchronized());
         $this->assertFalse($this->sut->isValid());
         $this->assertCount(1, $this->sut['title']->getErrors());

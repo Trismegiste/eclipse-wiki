@@ -19,6 +19,7 @@ framework:
 
 when@test:
     framework:
+        csrf_protection: false
         test: true
         session:
             storage_factory_id: session.storage.factory.mock_file

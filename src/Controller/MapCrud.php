@@ -131,7 +131,7 @@ class MapCrud extends AbstractController
 
     /**
      * AJAX Pushes the modified SVG to websocket server
-     * @Route("/place/broadcast", methods={"POST"})
+     * @Route("/map/broadcast", methods={"POST"})
      */
     public function pushPlayerView(Request $request, WebsocketPusher $client): JsonResponse
     {

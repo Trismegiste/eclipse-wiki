@@ -71,6 +71,7 @@ class NpcStatsTest extends KernelTestCase
 
         $npc = $this->sut->getData();
         $this->assertTrue($this->sut->isSynchronized());
+        $this->assertCount(0, $this->sut->getErrors(true), (string) $this->sut->getErrors());
         $this->assertEquals('Sample', $npc->getTitle());
     }
 

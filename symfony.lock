@@ -1,4 +1,7 @@
 {
+    "cboden/ratchet": {
+        "version": "v0.4.4"
+    },
     "composer/package-versions-deprecated": {
         "version": "1.11.99.4"
     },
@@ -23,29 +26,11 @@
     "doctrine/lexer": {
         "version": "1.2.2"
     },
-    "hoa/consistency": {
-        "version": "1.17.05.02"
+    "evenement/evenement": {
+        "version": "v3.0.1"
     },
-    "hoa/event": {
-        "version": "1.17.01.13"
-    },
-    "hoa/exception": {
-        "version": "1.17.01.16"
-    },
-    "hoa/http": {
-        "version": "1.17.01.13"
-    },
-    "hoa/protocol": {
-        "version": "1.17.01.14"
-    },
-    "hoa/socket": {
-        "version": "1.17.05.16"
-    },
-    "hoa/stream": {
-        "version": "1.17.02.21"
-    },
-    "hoa/websocket": {
-        "version": "3.17.01.09"
+    "guzzlehttp/psr7": {
+        "version": "2.1.0"
     },
     "knplabs/knp-snappy": {
         "version": "v1.3.1"
@@ -73,6 +58,9 @@
     },
     "nikic/php-parser": {
         "version": "v4.13.2"
+    },
+    "paragi/php-websocket-client": {
+        "version": "dev-master"
     },
     "phar-io/manifest": {
         "version": "2.0.3"
@@ -130,8 +118,41 @@
     "psr/event-dispatcher": {
         "version": "1.0.0"
     },
+    "psr/http-factory": {
+        "version": "1.0.1"
+    },
+    "psr/http-message": {
+        "version": "1.0.1"
+    },
     "psr/log": {
         "version": "1.1.4"
+    },
+    "ralouphie/getallheaders": {
+        "version": "3.0.3"
+    },
+    "ratchet/rfc6455": {
+        "version": "v0.3.1"
+    },
+    "react/cache": {
+        "version": "v1.1.1"
+    },
+    "react/dns": {
+        "version": "v1.9.0"
+    },
+    "react/event-loop": {
+        "version": "v1.3.0"
+    },
+    "react/promise": {
+        "version": "v2.9.0"
+    },
+    "react/promise-timer": {
+        "version": "v1.8.0"
+    },
+    "react/socket": {
+        "version": "v1.11.0"
+    },
+    "react/stream": {
+        "version": "v1.2.0"
     },
     "sebastian/cli-parser": {
         "version": "1.0.1"
@@ -344,6 +365,9 @@
     "symfony/options-resolver": {
         "version": "v5.4.3"
     },
+    "symfony/password-hasher": {
+        "version": "v5.4.3"
+    },
     "symfony/phpunit-bridge": {
         "version": "5.4",
         "recipe": {
@@ -407,6 +431,30 @@
     },
     "symfony/runtime": {
         "version": "v5.4.3"
+    },
+    "symfony/security-bundle": {
+        "version": "5.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "5.3",
+            "ref": "98f1f2b0d635908c2b40f3675da2d23b1a069d30"
+        },
+        "files": [
+            "config/packages/security.yaml"
+        ]
+    },
+    "symfony/security-core": {
+        "version": "v5.4.5"
+    },
+    "symfony/security-csrf": {
+        "version": "v5.4.3"
+    },
+    "symfony/security-guard": {
+        "version": "v5.4.3"
+    },
+    "symfony/security-http": {
+        "version": "v5.4.5"
     },
     "symfony/service-contracts": {
         "version": "v2.5.0"
