@@ -9,6 +9,7 @@ namespace App\Controller;
 use App\Form\ProfilePic;
 use App\Repository\VertexRepository;
 use App\Service\AvatarMaker;
+use App\Service\PlayerCastCache;
 use App\Service\Storage;
 use App\Service\WebsocketPusher;
 use Exception;
@@ -92,9 +93,32 @@ class Picture extends AbstractController
      */
     public function push(string $title, Storage $storage, WebsocketPusher $client): JsonResponse
     {
+        $picture = $storage->getFileInfo($title);
+
+        if ($picture->getSize() > 1e5) {
+            // this picture is big, need to reduce its size
+            $gd2 = imagecreatefromstring(file_get_contents($picture->getPathname()));
+            // checking dimension of picture
+            $maxSize = max([imagesx($gd2), imagesy($gd2)]);
+            if ($maxSize > 1000) {
+                $forPlayer = imagescale($gd2, imagesx($gd2) * 1000.0 / $maxSize, imagesy($gd2) * 1000.0 / $maxSize);
+                imagedestroy($gd2);
+            } else {
+                $forPlayer = $gd2;
+            }
+
+            $compressedPicture = join_paths(
+                $this->getParameter('kernel.cache_dir'),
+                PlayerCastCache::subDir,
+                $picture->getBasename('.' . $picture->getExtension()) . '.jpg');
+            imagejpeg($forPlayer, $compressedPicture, 60);
+
+            $picture = new \SplFileInfo($compressedPicture);
+        }
+
         try {
             $ret = $client->push(json_encode([
-                'file' => $storage->getFileInfo($title)->getPathname(),
+                'file' => $picture->getPathname(),
                 'action' => 'pictureBroadcast'
             ]));
 
