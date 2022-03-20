@@ -17,8 +17,6 @@ use function join_paths;
 class DocumentBroadcaster
 {
 
-    const subDir = 'player';
-
     protected $netTools;
     protected $knpPdf;
     protected $documentDir;
@@ -28,7 +26,7 @@ class DocumentBroadcaster
     {
         $this->netTools = $ntools;
         $this->knpPdf = $knpPdf;
-        $this->documentDir = join_paths($cacheDir, self::subDir);
+        $this->documentDir = join_paths($cacheDir, PlayerCastCache::subDir);
         $this->urlGenerator = $urlGen;
     }
 
