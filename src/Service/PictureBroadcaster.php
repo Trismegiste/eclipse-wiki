@@ -39,7 +39,7 @@ class PictureBroadcaster implements MessageComponentInterface
     {
         /* Some explanations here : 
          * Since we add a route on \Ratchet\App, this class is wrapped in a \Ratchet\WebSocket\WsServer
-         * Therefore, this wrapper decorates the \Ratchet\Client\WebSocket by inserting a property httpRequest
+         * Therefore, this wrapper decorates the \Ratchet\Client\WebSocket by injecting a public property httpRequest
          * into the connection object.
          */
         /** @var RequestInterface $request */
@@ -47,7 +47,7 @@ class PictureBroadcaster implements MessageComponentInterface
         $this->logger->info('New connection from ' . $this->getFirstUserAgent($request));
 
         if (!$this->isRequestFromSymfony($request)) {
-            $this->clients->attach($conn); // we only track connections from web brower clients
+            $this->clients->attach($conn); // we only track connections from web browser clients
             $this->logger->debug('Pushing last picture');
             $conn->send($this->createFrameForFile($this->currentFile));
         }
@@ -81,6 +81,11 @@ class PictureBroadcaster implements MessageComponentInterface
 
     public function onMessage(ConnectionInterface $from, $msg)
     {
+        // players don't send messages, only Symfony
+        if (!$this->isRequestFromSymfony($from->httpRequest)) {
+            throw new \RuntimeException('Other clients than Symfony cannot send messages');
+        }
+
         $this->logger->debug('Websocket Server receiving message ' . $msg . ' from ' . $this->getFirstUserAgent($from->httpRequest));
         $message = json_decode($msg);
         $fileinfo = new SplFileInfo($message->file);
@@ -94,9 +99,7 @@ class PictureBroadcaster implements MessageComponentInterface
         }
         unset($data); // to force GC asap
 
-        if ($this->isRequestFromSymfony($from->httpRequest)) { // @todo all message are coming from symfony => short circuit at start of method ?
-            $from->send("Broadcast of " . $fileinfo->getBasename() . " to " . $this->clients->count() . ' clients complete');
-        }
+        $from->send("Broadcast of " . $fileinfo->getBasename() . " to " . $this->clients->count() . ' clients complete');
     }
 
     public function onClose(ConnectionInterface $conn)
