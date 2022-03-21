@@ -40,9 +40,10 @@
 
                         this.socket.onmessage = function (msg) {
                             console.log('New picture')
-                            let dataUrl = urlCreator.createObjectURL(msg.data)
-                            _this.$refs.tv.src = dataUrl
-                        //    urlCreator.revokeObjectURL(dataUrl)
+                            _this.$refs.tv.src = urlCreator.createObjectURL(msg.data)
+                            _this.$refs.tv.onload = function () {
+                                urlCreator.revokeObjectURL(this.src)
+                            }
                             _this.clicSound.play()
                         }
 
