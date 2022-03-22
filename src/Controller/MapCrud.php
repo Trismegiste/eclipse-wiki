@@ -95,10 +95,10 @@ class MapCrud extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $map = $form->getData();
             $response = new StreamedResponse(function () use ($map) {
-                $map->printSvg();
-            },
-                Response::HTTP_CREATED,
-                ['Content-Type' => 'image/svg+xml']
+                        $map->printSvg();
+                    },
+                    Response::HTTP_CREATED,
+                    ['Content-Type' => 'image/svg+xml']
             );
 
             return $response;
@@ -150,16 +150,7 @@ class MapCrud extends AbstractController
         ]);
         $process->mustRun();
 
-        try {
-            $client->push(json_encode([
-                'file' => $target,
-                'action' => 'pictureBroadcast'
-            ]));
-
-            return new JsonResponse(['level' => 'success', 'message' => 'Update pushed'], Response::HTTP_OK);
-        } catch (\Exception $e) {
-            return new JsonResponse(['level' => 'error', 'message' => $e->getMessage()], Response::HTTP_SERVICE_UNAVAILABLE);
-        }
+        return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $target]);
     }
 
 }

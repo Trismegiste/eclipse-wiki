@@ -91,7 +91,7 @@ class Picture extends AbstractController
      * Pushes a picture (from the Storage) to player screen
      * @Route("/picture/push/{title}", methods={"POST"})
      */
-    public function push(string $title, Storage $storage, WebsocketPusher $client): JsonResponse
+    public function push(string $title, Storage $storage): JsonResponse
     {
         $picture = $storage->getFileInfo($title);
 
@@ -108,24 +108,15 @@ class Picture extends AbstractController
             }
 
             $compressedPicture = join_paths(
-                $this->getParameter('kernel.cache_dir'),
-                PlayerCastCache::subDir,
-                $picture->getBasename('.' . $picture->getExtension()) . '.jpg');
+                    $this->getParameter('kernel.cache_dir'),
+                    PlayerCastCache::subDir,
+                    $picture->getBasename('.' . $picture->getExtension()) . '.jpg');
             imagejpeg($forPlayer, $compressedPicture, 60);
 
             $picture = new \SplFileInfo($compressedPicture);
         }
 
-        try {
-            $ret = $client->push(json_encode([
-                'file' => $picture->getPathname(),
-                'action' => 'pictureBroadcast'
-            ]));
-
-            return new JsonResponse(['level' => 'success', 'message' => $ret], Response::HTTP_OK);
-        } catch (Exception $e) {
-            return new JsonResponse(['level' => 'error', 'message' => $e->getMessage()], Response::HTTP_SERVICE_UNAVAILABLE);
-        }
+        return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $picture->getPathname()]);
     }
 
 }

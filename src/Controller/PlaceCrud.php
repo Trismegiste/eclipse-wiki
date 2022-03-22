@@ -76,9 +76,9 @@ class PlaceCrud extends GenericCrud
         ]);
 
         return $this->render('place/npc_generate.html.twig', [
-                'place' => $vertex,
-                'listing' => $listing,
-                'form' => $form->createView()
+                    'place' => $vertex,
+                    'listing' => $listing,
+                    'form' => $form->createView()
         ]);
     }
 
@@ -99,16 +99,7 @@ class PlaceCrud extends GenericCrud
             $path = \join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, $param['name'] . '.png');
             imagepng($profile, $path);
 
-            try {
-                $client->push(json_encode([
-                    'file' => $path,
-                    'action' => 'pictureBroadcast'
-                ]));
-
-                return new JsonResponse(['level' => 'success', 'message' => 'Profile for ' . $param['name'] . ' pushed'], Response::HTTP_OK);
-            } catch (\Exception $e) {
-                return new JsonResponse(['level' => 'error', 'message' => $e->getMessage()], Response::HTTP_SERVICE_UNAVAILABLE);
-            }
+            return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $path]);
         }
 
         return new JsonResponse(['level' => 'error', 'message' => 'Invalid form'], Response::HTTP_FORBIDDEN);

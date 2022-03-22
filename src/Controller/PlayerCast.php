@@ -7,10 +7,15 @@
 namespace App\Controller;
 
 use App\Service\DocumentBroadcaster;
+use App\Service\PlayerCastCache;
 use App\Service\WebsocketPusher;
+use Paragi\PhpWebsocket\ConnectionException;
+use SplFileInfo;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use function join_paths;
 
 /**
  * Ctrl for WebSocket-controled Player Screen
@@ -41,6 +46,22 @@ class PlayerCast extends AbstractController
     public function getDocument(string $filename, DocumentBroadcaster $broad): Response
     {
         return $broad->createResponseForFilename($filename);
+    }
+
+    //  /!\ -- Big security breach : internally called ONLY -- /!\
+    // DO NOT EXPOSE THIS CONTROLLER PUBLICLY
+    public function internalPushFile(string $pathname): JsonResponse
+    {
+        try {
+            $ret = $this->pusher->push(json_encode([
+                'file' => $pathname,
+                'action' => 'pictureBroadcast'
+            ]));
+
+            return new JsonResponse(['level' => 'success', 'message' => $ret], Response::HTTP_OK);
+        } catch (ConnectionException $e) {
+            return new JsonResponse(['level' => 'error', 'message' => $e->getMessage()], Response::HTTP_SERVICE_UNAVAILABLE);
+        }
     }
 
 }
