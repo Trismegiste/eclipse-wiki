@@ -12,7 +12,6 @@ use App\Form\PlaceType;
 use App\Form\ProfileOnTheFly;
 use App\Service\AvatarMaker;
 use App\Service\PlayerCastCache;
-use App\Service\WebsocketPusher;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -86,7 +85,7 @@ class PlaceCrud extends GenericCrud
      * AJAX Create a social network profile for a NPC
      * @Route("/place/npc/{pk}", methods={"POST"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function pushProfile(string $pk, Request $request, AvatarMaker $maker, WebsocketPusher $client): JsonResponse
+    public function pushProfile(string $pk, Request $request, AvatarMaker $maker): JsonResponse
     {
         $form = $this->createForm(ProfileOnTheFly::class);
 

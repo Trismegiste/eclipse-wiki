@@ -15,7 +15,6 @@ use App\Form\ProceduralMap\StreetMap;
 use App\Repository\MapRepository;
 use App\Repository\VertexRepository;
 use App\Service\PlayerCastCache;
-use App\Service\WebsocketPusher;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Exception\RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -134,7 +133,7 @@ class MapCrud extends AbstractController
      * AJAX Pushes the modified SVG to websocket server
      * @Route("/map/broadcast", methods={"POST"})
      */
-    public function pushPlayerView(Request $request, WebsocketPusher $client): JsonResponse
+    public function pushPlayerView(Request $request): JsonResponse
     {
         $playerDir = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir);
         /** @var UploadedFile $svgContent */
