@@ -1,0 +1,3 @@
+strangelove:
+    mongodb:
+        dbname: '%env(resolve:DATABASE_NAME)%'

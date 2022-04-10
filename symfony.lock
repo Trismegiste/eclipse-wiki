@@ -543,8 +543,8 @@
     "trismegiste/smart-crop": {
         "version": "v1.0"
     },
-    "trismegiste/toolbox": {
-        "version": "v1.1.1"
+    "trismegiste/strangelove-bundle": {
+        "version": "dev-bundle"
     },
     "twig/extra-bundle": {
         "version": "v3.3.8"

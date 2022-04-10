@@ -37,7 +37,7 @@
         "trismegiste/rpg-map-generator": "dev-master",
         "trismegiste/rpg-name-generator": "^1.0",
         "trismegiste/smart-crop": "^1.0",
-        "trismegiste/toolbox": "^1.1",
+        "trismegiste/strangelove-bundle": "dev-bundle",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"
     },
@@ -106,6 +106,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/Trismegiste/PHP-websocket-client"
+        },
+        {
+            "type": "vcs",
+            "url": "/home/flo/Develop/toolbox"
         }
     ]
 }

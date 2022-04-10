@@ -7,7 +7,7 @@
 namespace App\Entity;
 
 use MongoDB\BSON\Persistable;
-use Trismegiste\Toolbox\MongoDb\PersistableImpl;
+use Trismegiste\Strangelove\MongoDb\PersistableImpl;
 
 /**
  * Faction for a NPC

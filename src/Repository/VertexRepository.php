@@ -11,7 +11,7 @@ use MongoDB\BSON\Binary;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\Regex;
 use MongoDB\Driver\Query;
-use Trismegiste\Toolbox\MongoDb\DefaultRepository;
+use Trismegiste\Strangelove\MongoDb\DefaultRepository;
 
 /**
  * Repository for Vertices

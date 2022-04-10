@@ -9,10 +9,10 @@ namespace App\Entity;
 /**
  * A page from MediaWiki
  */
-class MediaWikiPage implements \Trismegiste\Toolbox\MongoDb\Root
+class MediaWikiPage implements \Trismegiste\Strangelove\MongoDb\Root
 {
 
-    use \Trismegiste\Toolbox\MongoDb\RootImpl;
+    use \Trismegiste\Strangelove\MongoDb\RootImpl;
 
     protected $title;
     protected $category;

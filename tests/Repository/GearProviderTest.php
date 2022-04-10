@@ -10,7 +10,7 @@ use App\Entity\MediaWikiPage;
 use App\Repository\GearProvider;
 use App\Repository\MongoDbProvider;
 use App\Tests\Repository\MongoDbProviderTestCase;
-use Trismegiste\Toolbox\MongoDb\Repository;
+use Trismegiste\Strangelove\MongoDb\Repository;
 
 class GearProviderTest extends MongoDbProviderTestCase
 {

@@ -8,7 +8,7 @@ namespace App\Entity;
 
 use JsonSerializable;
 use MongoDB\BSON\Persistable;
-use Trismegiste\Toolbox\MongoDb\PersistableImpl;
+use Trismegiste\Strangelove\MongoDb\PersistableImpl;
 
 /**
  * A gear or stuff

@@ -11,7 +11,7 @@ use App\Entity\MediaWikiPage;
 use App\Repository\MongoDbProvider;
 use ArrayIterator;
 use PHPUnit\Framework\TestCase;
-use Trismegiste\Toolbox\MongoDb\Repository;
+use Trismegiste\Strangelove\MongoDb\Repository;
 
 /**
  * Test case for subclass of MongoDbProvider

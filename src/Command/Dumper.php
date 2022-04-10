@@ -14,7 +14,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Trismegiste\Toolbox\MongoDb\Repository;
+use Trismegiste\Strangelove\MongoDb\Repository;
 
 /**
  * Dump html pages from the wiki in MongoDb

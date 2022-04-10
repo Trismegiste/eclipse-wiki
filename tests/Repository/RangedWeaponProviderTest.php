@@ -7,7 +7,7 @@
 use App\Entity\MediaWikiPage;
 use App\Repository\RangedWeaponProvider;
 use PHPUnit\Framework\TestCase;
-use Trismegiste\Toolbox\MongoDb\Repository;
+use Trismegiste\Strangelove\MongoDb\Repository;
 
 /**
  * Description of RangedWeaponProviderTest

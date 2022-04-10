@@ -30,23 +30,14 @@ services:
             - '../src/Tests/'
 
     # MongoDB
-    MongoDB\Driver\Manager:
-        arguments:
-            - '%env(resolve:DATABASE_URL)%'
-            
-    Trismegiste\Toolbox\MongoDb\RepositoryFactory:
-        $dbName: '%env(resolve:DATABASE_NAME)%'
-      
     app.mwpage.repository:
-        class: Trismegiste\Toolbox\MongoDb\Repository
-        factory: ['@Trismegiste\Toolbox\MongoDb\RepositoryFactory', 'create']
+        class: Trismegiste\Strangelove\MongoDb\Repository
+        factory: ['@mongodb.factory', 'create']
         arguments: ['mwpage']
-    Trismegiste\Toolbox\MongoDb\Repository $pageRepo: '@app.mwpage.repository'
+    Trismegiste\Strangelove\MongoDb\Repository $pageRepo: '@app.mwpage.repository'
                      
     App\Repository\VertexRepository:
-        arguments:
-            $dbName: '%env(resolve:DATABASE_NAME)%'
-            $collectionName: 'vertex'
+        $collectionName: 'vertex'
             
     # WIKI
     App\Service\MediaWiki:

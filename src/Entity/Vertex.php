@@ -9,10 +9,10 @@ namespace App\Entity;
 /**
  * A generic document or node 
  */
-class Vertex implements \Trismegiste\Toolbox\MongoDb\Root
+class Vertex implements \Trismegiste\Strangelove\MongoDb\Root
 {
 
-    use \Trismegiste\Toolbox\MongoDb\RootImpl;
+    use \Trismegiste\Strangelove\MongoDb\RootImpl;
 
     protected $title;
     protected $content = null;

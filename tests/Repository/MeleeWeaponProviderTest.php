@@ -7,7 +7,7 @@
 use App\Entity\MediaWikiPage;
 use App\Repository\MeleeWeaponProvider;
 use PHPUnit\Framework\TestCase;
-use Trismegiste\Toolbox\MongoDb\Repository;
+use Trismegiste\Strangelove\MongoDb\Repository;
 
 /**
  * Unit test forr MeleeWeaponProvider

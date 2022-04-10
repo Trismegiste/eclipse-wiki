@@ -6,7 +6,7 @@
 
 namespace App\Entity;
 
-use Trismegiste\Toolbox\MongoDb\RootImpl;
+use Trismegiste\Strangelove\MongoDb\RootImpl;
 
 /**
  * A Character

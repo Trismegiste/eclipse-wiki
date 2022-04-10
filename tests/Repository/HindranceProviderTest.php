@@ -11,7 +11,7 @@ use App\Entity\Indexable;
 use App\Entity\MediaWikiPage;
 use App\Repository\HindranceProvider;
 use App\Repository\MongoDbProvider;
-use Trismegiste\Toolbox\MongoDb\Repository;
+use Trismegiste\Strangelove\MongoDb\Repository;
 
 /**
  * Description of HindranceProviderTest

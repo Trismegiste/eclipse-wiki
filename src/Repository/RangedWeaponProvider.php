@@ -9,7 +9,7 @@ namespace App\Repository;
 use App\Entity\Indexable;
 use App\Entity\MediaWikiPage;
 use App\Entity\RangedWeapon;
-use Trismegiste\Toolbox\MongoDb\Repository;
+use Trismegiste\Strangelove\MongoDb\Repository;
 
 /**
  * RangedWeaponProvider

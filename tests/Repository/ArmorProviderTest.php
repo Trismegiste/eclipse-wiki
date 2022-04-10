@@ -7,7 +7,7 @@
 use App\Entity\MediaWikiPage;
 use App\Repository\ArmorProvider;
 use PHPUnit\Framework\TestCase;
-use Trismegiste\Toolbox\MongoDb\Repository;
+use Trismegiste\Strangelove\MongoDb\Repository;
 
 /**
  * Unit test for ArmorProvider
