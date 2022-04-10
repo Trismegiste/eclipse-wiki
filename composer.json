@@ -37,7 +37,7 @@
         "trismegiste/rpg-map-generator": "dev-master",
         "trismegiste/rpg-name-generator": "^1.0",
         "trismegiste/smart-crop": "^1.0",
-        "trismegiste/strangelove-bundle": "dev-bundle",
+        "trismegiste/strangelove-bundle": "^2.0",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"
     },
@@ -109,7 +109,7 @@
         },
         {
             "type": "vcs",
-            "url": "/home/flo/Develop/toolbox"
+            "url": "https://github.com/Trismegiste/strangelove-bundle.git"
         }
     ]
 }

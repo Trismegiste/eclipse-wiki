@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7fb7df34f880c30ee7b3259545a0f21f",
+    "content-hash": "422e7e51cdcdbfa3db2b8e30c5b76c81",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -6543,11 +6543,17 @@
         },
         {
             "name": "trismegiste/strangelove-bundle",
-            "version": "dev-bundle",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
-                "url": "/home/flo/Develop/toolbox",
+                "url": "https://github.com/Trismegiste/strangelove-bundle.git",
                 "reference": "08f589d7f02a633c506d1677b7a9037f4d00c646"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Trismegiste/strangelove-bundle/zipball/08f589d7f02a633c506d1677b7a9037f4d00c646",
+                "reference": "08f589d7f02a633c506d1677b7a9037f4d00c646",
+                "shasum": ""
             },
             "require": {
                 "ext-mongodb": ">1.7",
@@ -6562,7 +6568,6 @@
                 "phpunit/phpunit": "^9.5",
                 "symfony/yaml": "^5.4"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -6589,6 +6594,10 @@
                 }
             ],
             "description": "How I Learned to Stop Worrying about ORM and Love MongoDb BSON",
+            "support": {
+                "source": "https://github.com/Trismegiste/strangelove-bundle/tree/2.0.0",
+                "issues": "https://github.com/Trismegiste/strangelove-bundle/issues"
+            },
             "time": "2022-04-10T09:25:49+00:00"
         },
         {
@@ -9466,8 +9475,7 @@
     "stability-flags": {
         "mike42/wikitext": 20,
         "paragi/php-websocket-client": 20,
-        "trismegiste/rpg-map-generator": 20,
-        "trismegiste/strangelove-bundle": 20
+        "trismegiste/rpg-map-generator": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
