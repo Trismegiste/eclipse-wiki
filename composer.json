@@ -34,7 +34,7 @@
         "symfony/twig-bundle": "5.4.*",
         "symfony/validator": "5.4.*",
         "symfony/yaml": "5.4.*",
-        "trismegiste/rpg-map-generator": "dev-master",
+        "trismegiste/rpg-map-generator": "^1.0",
         "trismegiste/rpg-name-generator": "^1.0",
         "trismegiste/smart-crop": "^1.0",
         "trismegiste/strangelove-bundle": "^2.0",
@@ -98,10 +98,6 @@
         {
             "type": "vcs",
             "url": "https://github.com/Trismegiste/wikitext/"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/Trismegiste/rpg-map-generator"
         },
         {
             "type": "vcs",
