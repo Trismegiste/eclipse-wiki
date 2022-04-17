@@ -47,9 +47,6 @@
             "config/packages/knp_snappy.yaml"
         ]
     },
-    "mike42/wikitext": {
-        "version": "dev-master"
-    },
     "monolog/monolog": {
         "version": "2.3.5"
     },
@@ -545,6 +542,9 @@
     },
     "trismegiste/strangelove-bundle": {
         "version": "dev-bundle"
+    },
+    "trismegiste/wikitext": {
+        "version": "1.0.0"
     },
     "twig/extra-bundle": {
         "version": "v3.3.8"

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "422e7e51cdcdbfa3db2b8e30c5b76c81",
+    "content-hash": "3d3c3c297aa63c1bd6d9a4d56cbf47de",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -591,46 +591,6 @@
             "time": "2020-11-16T07:45:16+00:00"
         },
         {
-            "name": "mike42/wikitext",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Trismegiste/wikitext.git",
-                "reference": "bcb7a74e4a6fffb78eec7b24a791868b2f6622de"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Trismegiste/wikitext/zipball/bcb7a74e4a6fffb78eec7b24a791868b2f6622de",
-                "reference": "bcb7a74e4a6fffb78eec7b24a791868b2f6622de",
-                "shasum": ""
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^9.5",
-                "squizlabs/php_codesniffer": "^3.1"
-            },
-            "default-branch": true,
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Mike42\\": "src/Mike42"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michael Billington",
-                    "email": "michael.billington@gmail.com"
-                }
-            ],
-            "description": "PHP wikitext parser",
-            "support": {
-                "source": "https://github.com/Trismegiste/wikitext/tree/master"
-            },
-            "time": "2021-12-11T01:47:27+00:00"
-        },
-        {
             "name": "monolog/monolog",
             "version": "2.5.0",
             "source": {
@@ -731,37 +691,38 @@
         },
         {
             "name": "paragi/php-websocket-client",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Trismegiste/PHP-websocket-client.git",
-                "reference": "0e9e4a77883e4953d59922e02c60f4801713edfd"
+                "url": "https://github.com/paragi/PHP-websocket-client.git",
+                "reference": "a40a6bf0525a1e76950d19b41201ccccb80bf9cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Trismegiste/PHP-websocket-client/zipball/0e9e4a77883e4953d59922e02c60f4801713edfd",
-                "reference": "0e9e4a77883e4953d59922e02c60f4801713edfd",
+                "url": "https://api.github.com/repos/paragi/PHP-websocket-client/zipball/a40a6bf0525a1e76950d19b41201ccccb80bf9cd",
+                "reference": "a40a6bf0525a1e76950d19b41201ccccb80bf9cd",
                 "shasum": ""
             },
             "require-dev": {
                 "cboden/ratchet": "dev-master",
                 "phpunit/phpunit": "9.5.x-dev"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "Paragi\\PhpWebsocket\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "description": "Websocket client",
             "support": {
-                "source": "https://github.com/Trismegiste/PHP-websocket-client/tree/master"
+                "issues": "https://github.com/paragi/PHP-websocket-client/issues",
+                "source": "https://github.com/paragi/PHP-websocket-client/tree/1.0.0"
             },
-            "time": "2022-03-21T11:55:13+00:00"
+            "time": "2022-03-22T21:49:11+00:00"
         },
         {
             "name": "psr/cache",
@@ -2888,16 +2849,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.18.5",
+            "version": "v1.18.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "10e438f53a972439675dc720706f0cd5c0ed94f1"
+                "reference": "130851b90c1ea615ac5be6fce827971f4f55afbf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/10e438f53a972439675dc720706f0cd5c0ed94f1",
-                "reference": "10e438f53a972439675dc720706f0cd5c0ed94f1",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/130851b90c1ea615ac5be6fce827971f4f55afbf",
+                "reference": "130851b90c1ea615ac5be6fce827971f4f55afbf",
                 "shasum": ""
             },
             "require": {
@@ -2933,7 +2894,7 @@
             "description": "Composer plugin for Symfony",
             "support": {
                 "issues": "https://github.com/symfony/flex/issues",
-                "source": "https://github.com/symfony/flex/tree/v1.18.5"
+                "source": "https://github.com/symfony/flex/tree/v1.18.6"
             },
             "funding": [
                 {
@@ -2949,7 +2910,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-02-16T17:26:46+00:00"
+            "time": "2022-04-15T08:20:34+00:00"
         },
         {
             "name": "symfony/form",
@@ -6422,33 +6383,28 @@
         },
         {
             "name": "trismegiste/rpg-map-generator",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Trismegiste/rpg-map-generator.git",
-                "reference": "88f5b8bbea5fed58fd53785d8b1ff21dd8a51587"
+                "reference": "0625b595900080bfd9912ed19bbe3590b27fe330"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Trismegiste/rpg-map-generator/zipball/88f5b8bbea5fed58fd53785d8b1ff21dd8a51587",
-                "reference": "88f5b8bbea5fed58fd53785d8b1ff21dd8a51587",
+                "url": "https://api.github.com/repos/Trismegiste/rpg-map-generator/zipball/0625b595900080bfd9912ed19bbe3590b27fe330",
+                "reference": "0625b595900080bfd9912ed19bbe3590b27fe330",
                 "shasum": ""
             },
             "require-dev": {
                 "phpunit/phpunit": "9.5"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "Trismegiste\\MapGenerator\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Tests\\Trismegiste\\MapGenerator\\": "tests/"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6459,10 +6415,10 @@
             ],
             "description": "Various procedural algorithms for generating battlemaps for roleplaying games",
             "support": {
-                "source": "https://github.com/Trismegiste/rpg-map-generator/tree/master",
-                "issues": "https://github.com/Trismegiste/rpg-map-generator/issues"
+                "issues": "https://github.com/Trismegiste/rpg-map-generator/issues",
+                "source": "https://github.com/Trismegiste/rpg-map-generator/tree/1.0.0"
             },
-            "time": "2022-03-12T06:22:05+00:00"
+            "time": "2022-04-15T09:52:14+00:00"
         },
         {
             "name": "trismegiste/rpg-name-generator",
@@ -6543,16 +6499,16 @@
         },
         {
             "name": "trismegiste/strangelove-bundle",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Trismegiste/strangelove-bundle.git",
-                "reference": "08f589d7f02a633c506d1677b7a9037f4d00c646"
+                "reference": "dd7ccc91703f5497eee6578dbff19467e5d0c222"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Trismegiste/strangelove-bundle/zipball/08f589d7f02a633c506d1677b7a9037f4d00c646",
-                "reference": "08f589d7f02a633c506d1677b7a9037f4d00c646",
+                "url": "https://api.github.com/repos/Trismegiste/strangelove-bundle/zipball/dd7ccc91703f5497eee6578dbff19467e5d0c222",
+                "reference": "dd7ccc91703f5497eee6578dbff19467e5d0c222",
                 "shasum": ""
             },
             "require": {
@@ -6566,23 +6522,19 @@
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.5",
+                "symfony/web-profiler-bundle": "^5.4",
                 "symfony/yaml": "^5.4"
             },
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "Trismegiste\\Strangelove\\": "src/"
-                },
                 "files": [
                     "src/util.php"
-                ]
-            },
-            "autoload-dev": {
+                ],
                 "psr-4": {
-                    "Tests\\Fixtures\\": "tests/fixtures/",
-                    "Tests\\Strangelove\\": "tests/"
+                    "Trismegiste\\Strangelove\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6595,10 +6547,56 @@
             ],
             "description": "How I Learned to Stop Worrying about ORM and Love MongoDb BSON",
             "support": {
-                "source": "https://github.com/Trismegiste/strangelove-bundle/tree/2.0.0",
-                "issues": "https://github.com/Trismegiste/strangelove-bundle/issues"
+                "issues": "https://github.com/Trismegiste/strangelove-bundle/issues",
+                "source": "https://github.com/Trismegiste/strangelove-bundle/tree/2.0.1"
             },
-            "time": "2022-04-10T09:25:49+00:00"
+            "time": "2022-04-11T08:06:13+00:00"
+        },
+        {
+            "name": "trismegiste/wikitext",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Trismegiste/wikitext.git",
+                "reference": "1a7b1e72d38f6baa9b3e26fe16b52793696cd810"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Trismegiste/wikitext/zipball/1a7b1e72d38f6baa9b3e26fe16b52793696cd810",
+                "reference": "1a7b1e72d38f6baa9b3e26fe16b52793696cd810",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5",
+                "squizlabs/php_codesniffer": "^3.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Mike42\\": "src/Mike42"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Billington",
+                    "email": "michael.billington@gmail.com",
+                    "role": "creator"
+                },
+                {
+                    "name": "Trismegiste",
+                    "homepage": "https://github.com/Trismegiste",
+                    "role": "rescuer"
+                }
+            ],
+            "description": "PHP wikitext parser",
+            "support": {
+                "source": "https://github.com/Trismegiste/wikitext/tree/1.0.0"
+            },
+            "time": "2022-04-17T18:32:35+00:00"
         },
         {
             "name": "twig/extra-bundle",
@@ -9472,11 +9470,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "mike42/wikitext": 20,
-        "paragi/php-websocket-client": 20,
-        "trismegiste/rpg-map-generator": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

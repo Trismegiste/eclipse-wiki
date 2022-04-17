@@ -12,7 +12,7 @@
         "cboden/ratchet": "0.4.4",
         "composer/package-versions-deprecated": "1.11.99.4",
         "knplabs/knp-snappy-bundle": "^1.8",
-        "mike42/wikitext": "dev-master",
+        "trismegiste/wikitext": "^1.0",
         "paragi/php-websocket-client": "^1.0",
         "sensio/framework-extra-bundle": "^6.1",
         "symfony/asset": "5.4.*",
@@ -93,11 +93,5 @@
             "allow-contrib": false,
             "require": "5.4.*"
         }
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/Trismegiste/wikitext/"
-        }
-    ]
+    }
 }
