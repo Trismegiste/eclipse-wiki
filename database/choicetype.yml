@@ -13,11 +13,13 @@ temperature:
     - Ultra-froide (-150° C)
     - Cryogénique (-200° C)
     - Surchauffée (+50° C)
+    - Brûlante (+400° C)
     
 pressure:
     - Terre (1 bar)
     - Mars (1/10 bar)
     - Vide (0 bar)
+    - Super-critique (90 bars)
     
 freeform_type:
     - Simulmorphe

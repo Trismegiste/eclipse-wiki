@@ -59,7 +59,7 @@ class PlaceCrud extends GenericCrud
         $repo = new RandomizerDecorator(new FileRepository());
         /** @var Place $vertex */
         $vertex = $this->repository->findByPk($pk);
-        $card = 16;
+        $card = 24;
 
         $listing = [];
         foreach (['female', 'male'] as $gender) {
@@ -69,15 +69,15 @@ class PlaceCrud extends GenericCrud
             }
         }
 
-        // form to post to generate profile on the fly
+        // the form to post for generating profile on the fly
         $form = $this->createForm(ProfileOnTheFly::class, [
             'template' => $vertex->npcTemplate
         ]);
 
-        return $this->render('place/npc_generate.html.twig', [
-                    'place' => $vertex,
-                    'listing' => $listing,
-                    'form' => $form->createView()
+        return $this->render('place/random_npc.html.twig', [
+                'place' => $vertex,
+                'listing' => $listing,
+                'form' => $form->createView()
         ]);
     }
 
@@ -138,6 +138,23 @@ class PlaceCrud extends GenericCrud
         $url = $this->generateUrl('get_picture', ['title' => $vertex->battleMap]);
 
         return $this->render('map/running.html.twig', ['title' => $vertex->getTitle(), 'img' => $url]);
+    }
+
+    /**
+     * Creates a wildcard NPC from a template and a new name
+     * @Route("/place/wildcard/{title}/{template}", methods={"GET"})
+     */
+    public function createWildcard(string $title, string $template): Response
+    {
+        $npc = $this->repository->findByTitle($template);
+        /** @var \App\Entity\Transhuman $wildcard */
+        $wildcard = clone $npc;
+        $wildcard->wildCard = true;
+        $wildcard->setTitle($title);
+
+        $this->repository->save($wildcard);
+
+        return $this->redirectToRoute('app_npcgenerator_edit', ['pk' => $wildcard->getPk()]);
     }
 
 }

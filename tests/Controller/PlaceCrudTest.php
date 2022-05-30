@@ -88,7 +88,7 @@ class PlaceCrudTest extends WebTestCase
         $crawler = $this->client->request('GET', $useradd);
         $this->assertPageTitleContains('Tatooine');
         $avatar = $crawler->filter('section.quick-npc figure');
-        $this->assertCount(32, $avatar);
+        $this->assertCount(48, $avatar);
         $firstName = $avatar->first()->attr('data-avatar');
         $this->assertMatchesRegularExpression('#[A-Z][a-z]+\s+[A-Z][a-z]+#', $firstName);
 

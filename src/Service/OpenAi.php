@@ -14,11 +14,13 @@ class OpenAi
 
     protected $secretKey;
     protected $engine;
+    protected $logger;
 
-    public function __construct(string $secret, string $engine = 'davinci')
+    public function __construct(string $secret, string $engine, \Psr\Log\LoggerInterface $log)
     {
         $this->secretKey = $secret;
         $this->engine = $engine;
+        $this->logger = $log;
     }
 
     public function request(string $prompt, int $max_tokens = 64): string
@@ -55,6 +57,7 @@ class OpenAi
         ]);
 
         $response = curl_exec($curl);
+        $this->logger->debug($response);
         $err = curl_error($curl);
 
         curl_close($curl);
