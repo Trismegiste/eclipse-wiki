@@ -537,9 +537,6 @@
     "trismegiste/rpg-name-generator": {
         "version": "v1.0"
     },
-    "trismegiste/smart-crop": {
-        "version": "v1.0"
-    },
     "trismegiste/strangelove-bundle": {
         "version": "dev-bundle"
     },

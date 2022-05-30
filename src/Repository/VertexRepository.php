@@ -29,12 +29,7 @@ class VertexRepository extends DefaultRepository
         $tmp = preg_split('//u', $title, null, PREG_SPLIT_NO_EMPTY);
         $firstLetter = array_shift($tmp);
 
-        $it = $this->search([
-            'title' => new Regex("^(?i:$firstLetter)" . preg_quote(implode('', $tmp)))
-        ]);
-        $it->rewind();
-
-        return $it->current();
+        return $this->searchOne(['title' => new Regex("^(?i:$firstLetter)" . preg_quote(implode('', $tmp)))]);
     }
 
     /**

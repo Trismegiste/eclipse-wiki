@@ -7,19 +7,23 @@
 namespace App\Controller;
 
 use App\Entity\Place;
+use App\Entity\Transhuman;
 use App\Entity\Vertex;
 use App\Form\PlaceType;
 use App\Form\ProfileOnTheFly;
 use App\Service\AvatarMaker;
 use App\Service\PlayerCastCache;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Process\InputStream;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
 use Trismegiste\NameGenerator\FileRepository;
 use Trismegiste\NameGenerator\RandomizerDecorator;
+use function join_paths;
 
 /**
  * CRUD for Place
@@ -75,9 +79,9 @@ class PlaceCrud extends GenericCrud
         ]);
 
         return $this->render('place/random_npc.html.twig', [
-                'place' => $vertex,
-                'listing' => $listing,
-                'form' => $form->createView()
+                    'place' => $vertex,
+                    'listing' => $listing,
+                    'form' => $form->createView()
         ]);
     }
 
@@ -95,7 +99,7 @@ class PlaceCrud extends GenericCrud
             $npc = $this->repository->findByTitle($param['template']);
             $npc->setTitle($param['name']);
             $profile = $maker->generate($npc, $this->convertSvgToPng($param['svg']));
-            $path = \join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, $param['name'] . '.png');
+            $path = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, $param['name'] . '.png');
             imagepng($profile, $path);
 
             return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $path]);
@@ -122,7 +126,7 @@ class PlaceCrud extends GenericCrud
         $process->wait();
 
         if (0 !== $process->getExitCode()) {
-            throw new \RuntimeException($process->getErrorOutput());
+            throw new RuntimeException($process->getErrorOutput());
         }
 
         return imagecreatefromstring($process->getOutput());
@@ -147,7 +151,10 @@ class PlaceCrud extends GenericCrud
     public function createWildcard(string $title, string $template): Response
     {
         $npc = $this->repository->findByTitle($template);
-        /** @var \App\Entity\Transhuman $wildcard */
+        if (is_null($npc) || (!$npc instanceof Transhuman)) {
+            throw new NotFoundHttpException("$template does not exist");
+        }
+        /** @var Transhuman $wildcard */
         $wildcard = clone $npc;
         $wildcard->wildCard = true;
         $wildcard->setTitle($title);

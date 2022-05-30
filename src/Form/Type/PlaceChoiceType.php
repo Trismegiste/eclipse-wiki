@@ -13,7 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Description of PlaceChoiceType
+ * A choice type with a list of Place
  */
 class PlaceChoiceType extends AbstractType
 {
