@@ -1,0 +1,13 @@
+{# MediaWiki image #}
+{% extends "base.html.twig" %}
+
+{% block header_title %}Tracker{% endblock %}
+
+{% block content %}
+    <section>
+        {{ form(form) }}
+    </section>
+    <section>
+        {{ dump(gallery) }}
+    </section>
+{% endblock %}

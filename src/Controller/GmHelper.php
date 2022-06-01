@@ -77,4 +77,33 @@ class GmHelper extends AbstractController
         return $this->render('player/qrcode.html.twig', ['url_cast' => $lan]);
     }
 
+    /**
+     * Image search
+     * @Route("/mediawiki/picture", methods={"GET"})
+     */
+    public function picture(\Symfony\Component\HttpFoundation\Request $request, \App\Service\MediaWiki $mw): Response
+    {
+        $form = $this->createFormBuilder()
+            ->add('query')
+            ->add('search', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+            ->setMethod('GET')
+            ->getForm();
+
+        $thumb = [];
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $listing = $mw->searchImage($form['query']->getData());
+            $content = $mw->renderGallery($listing);
+            $doc = new \DOMDocument("1.0", "utf-8");
+            $doc->loadXML($content);
+            $xpath = new \DOMXpath($doc);
+            $elements = $xpath->query("//img");
+            foreach ($elements as $img) {
+                $thumb[] = $img->attributes->getNamedItem('src')->value;
+            }
+        }
+
+        return $this->render('picture/search.html.twig', ['form' => $form->createView(), 'gallery' => $thumb]);
+    }
+
 }

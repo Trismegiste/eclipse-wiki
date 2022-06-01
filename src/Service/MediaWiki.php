@@ -131,4 +131,24 @@ class MediaWiki
         return property_exists($res, 'query') ? $res->query->search : [];
     }
 
+    public function renderGallery(array $listing): string
+    {
+        $wikitext = '';
+        foreach ($listing as $picture) {
+            $wikitext .= "[[{$picture->title}|vignette]]";
+        }
+
+        $response = $this->sendQuery([
+            'action' => 'parse',
+            'format' => 'json',
+            'title' => 'Gallery',
+            'text' => $wikitext,
+            'disablelimitreport' => 1,
+            'disableeditsection' => 1,
+            'disabletoc' => 1
+        ]);
+
+        return $response->parse->text->{'*'};
+    }
+
 }
