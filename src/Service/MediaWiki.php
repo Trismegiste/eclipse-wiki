@@ -124,7 +124,8 @@ class MediaWiki
             'format' => 'json',
             'list' => 'search',
             'srsearch' => $txt,
-            'srnamespace' => 6
+            'srnamespace' => 6,
+            'srlimit' => $limit
         ]);
 
         return property_exists($res, 'query') ? $res->query->search : [];
