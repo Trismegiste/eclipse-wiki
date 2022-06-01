@@ -116,4 +116,18 @@ class MediaWiki
         return $response->parse->text->{'*'};
     }
 
+    // https://www.mediawiki.org/wiki/API:Search
+    public function searchImage(string $txt, int $limit = 10): array
+    {
+        $res = $this->sendQuery([
+            'action' => 'query',
+            'format' => 'json',
+            'list' => 'search',
+            'srsearch' => $txt,
+            'srnamespace' => 6
+        ]);
+
+        return property_exists($res, 'query') ? $res->query->search : [];
+    }
+
 }
