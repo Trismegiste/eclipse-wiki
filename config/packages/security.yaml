@@ -23,10 +23,9 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: '^/', roles: PUBLIC_ACCESS, ip: 127.0.0.1 }        
-        - { path: '^/player', roles: IS_AUTHENTICATED_ANONYMOUSLY }        
-        - { path: '^/', roles: ROLE_GAME_MASTER }        
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: '^/', host: '^localhost$', roles: PUBLIC_ACCESS }
+        - { path: '^/player', roles: PUBLIC_ACCESS }
+        - { path: '^/', roles: ROLE_GAME_MASTER }
 
 when@test:
     security:
