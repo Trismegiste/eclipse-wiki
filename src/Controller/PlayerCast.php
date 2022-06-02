@@ -7,15 +7,16 @@
 namespace App\Controller;
 
 use App\Service\DocumentBroadcaster;
-use App\Service\PlayerCastCache;
+use App\Service\MediaWiki;
 use App\Service\WebsocketPusher;
+use DOMDocument;
 use Paragi\PhpWebsocket\ConnectionException;
-use SplFileInfo;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use function join_paths;
 
 /**
  * Ctrl for WebSocket-controled Player Screen
@@ -62,6 +63,35 @@ class PlayerCast extends AbstractController
         } catch (ConnectionException $e) {
             return new JsonResponse(['level' => 'error', 'message' => $e->getMessage()], Response::HTTP_SERVICE_UNAVAILABLE);
         }
+    }
+
+    /**
+     * Image search
+     * @Route("/mediawiki/picture", methods={"GET"})
+     */
+    public function picture(Request $request, MediaWiki $mw): Response
+    {
+        $form = $this->createFormBuilder()
+                ->add('query')
+                ->add('search', SubmitType::class)
+                ->setMethod('GET')
+                ->getForm();
+
+        $thumb = [];
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $listing = $mw->searchImage($form['query']->getData());
+            $content = $mw->renderGallery($listing);
+            $doc = new DOMDocument("1.0", "utf-8");
+            $doc->loadXML($content);
+            $xpath = new \DOMXpath($doc);
+            $elements = $xpath->query("//img");
+            foreach ($elements as $img) {
+                $thumb[] = $img->attributes->getNamedItem('src')->value;
+            }
+        }
+
+        return $this->render('picture/search.html.twig', ['form' => $form->createView(), 'gallery' => $thumb]);
     }
 
 }

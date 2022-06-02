@@ -63,12 +63,13 @@ services:
             - '@App\Twig\PdfLinkRender'
             
     App\Twig\PdfWikiParserExtension:
-        arguments:
-            $wikiParser: '@app.wikiparser.pdf'
+        $wikiParser: '@app.wikiparser.pdf'
 
     App\Service\DocumentBroadcaster:
-        arguments: 
-            $cacheDir: '%kernel.cache_dir%'
+        $cacheDir: '%kernel.cache_dir%'
+
+    App\Service\MwImageCache:
+        $cacheDir: '%kernel.cache_dir%'
             
     # Open AI
     App\Service\OpenAi:

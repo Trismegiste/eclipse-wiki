@@ -117,4 +117,14 @@ class Picture extends AbstractController
         return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $picture->getPathname()]);
     }
 
+    /**
+     * Show image from MediaWiki
+     * @Route("/picture/mediawikiget", methods={"GET"})
+     */
+    public function mediawikiGet(Request $request, \App\Service\MwImageCache $cache): Response
+    {
+        $url = $request->query->get('url');
+        return $cache->get(rawurldecode($url));
+    }
+
 }
