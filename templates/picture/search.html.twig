@@ -8,8 +8,10 @@
         {{ form(form) }}
     </section>
     <section>
-        {% for picture in gallery %} 
-            <img src="{{ path('app_picture_mediawikiget', {url: picture|url_encode}) }}"/>
+        {% for picture in gallery %}
+            <a href="{{ picture.original }}">
+                <img src="{{ path('app_picture_mediawikiget', {url: picture.thumbnail|url_encode}) }}"/>
+            </a>
         {% endfor %}
     </section>
 {% endblock %}
