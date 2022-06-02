@@ -119,7 +119,7 @@ class Picture extends AbstractController
 
     /**
      * Show image from MediaWiki
-     * @Route("/picture/mediawikiget", methods={"GET"})
+     * @Route("/picture/remote", methods={"GET"})
      */
     public function mediawikiGet(Request $request, \App\Service\MwImageCache $cache): Response
     {
