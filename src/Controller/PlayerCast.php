@@ -66,10 +66,10 @@ class PlayerCast extends AbstractController
     }
 
     /**
-     * Image search
-     * @Route("/mediawiki/picture", methods={"GET"})
+     * Image search against the remote MediaWiki
+     * @Route("/remote/search", methods={"GET"})
      */
-    public function picture(Request $request, MediaWiki $mw): Response
+    public function remoteSearch(Request $request, MediaWiki $mw): Response
     {
         $form = $this->createFormBuilder()
                 ->add('query')
@@ -81,13 +81,16 @@ class PlayerCast extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $listing = $mw->searchImage($form['query']->getData());
-            $content = $mw->renderGallery($listing);
+            $content = strip_tags($mw->renderGallery($listing), ['a', 'div', 'figure', 'img']);
             $doc = new DOMDocument("1.0", "utf-8");
             $doc->loadXML($content);
             $xpath = new \DOMXpath($doc);
             $elements = $xpath->query("//img");
             foreach ($elements as $img) {
-                $thumb[] = $img->attributes->getNamedItem('src')->value;
+                $src = $img->attributes->getNamedItem('src')->value;
+                if (0 === strpos($src, 'http')) {
+                    $thumb[] = $src;
+                }
             }
         }
 
