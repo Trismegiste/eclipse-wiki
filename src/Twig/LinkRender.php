@@ -33,6 +33,7 @@ class LinkRender extends HtmlRenderer
         $info['url'] = $this->routing->generate('app_picture_push', ['title' =>  $info['url']]);
         $info['thumbnail'] = true;
         $info['caption'] = false;
+        $info['class'] = 'pushable';
 
         return $info;
     }
