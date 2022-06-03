@@ -9,17 +9,12 @@ namespace App\Controller;
 use App\Service\MediaWiki;
 use App\Service\MwImageCache;
 use App\Service\PlayerCastCache;
-use DOMDocument;
-use DOMNode;
-use SplFileInfo;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use function join_paths;
 
 /**
  * Controller for accessing remote file on the MediaWiki
