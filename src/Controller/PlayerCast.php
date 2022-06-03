@@ -7,14 +7,10 @@
 namespace App\Controller;
 
 use App\Service\DocumentBroadcaster;
-use App\Service\MediaWiki;
 use App\Service\WebsocketPusher;
-use DOMDocument;
 use Paragi\PhpWebsocket\ConnectionException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 

@@ -8,30 +8,24 @@ namespace App\Controller;
 
 use App\Service\MediaWiki;
 use App\Service\MwImageCache;
+use App\Service\PlayerCastCache;
 use DOMDocument;
 use DOMNode;
+use SplFileInfo;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use function join_paths;
 
 /**
  * Controller for accessing remote file on the MediaWiki
  */
 class RemotePicture extends AbstractController
 {
-
-    /**
-     * Show image from MediaWiki
-     * @Route("/remote/get", methods={"GET"})
-     */
-    public function read(Request $request, MwImageCache $cache): \Symfony\Component\HttpFoundation\Response
-    {
-        $url = $request->query->get('url');
-        return $cache->get(rawurldecode($url));
-    }
 
     /**
      * Image search against the remote MediaWiki
@@ -70,12 +64,33 @@ class RemotePicture extends AbstractController
     }
 
     /**
-     * Pushes a picture (from the remote MediaWiki) to player screen
-     * @Route("/remote/push/{title}", methods={"POST"})
+     * Show image from MediaWiki
+     * @Route("/remote/get", methods={"GET"})
      */
-    public function push(string $title): JsonResponse
+    public function read(Request $request, MwImageCache $cache): Response
     {
-        
+        $url = $request->query->get('url');
+        return $cache->get(rawurldecode($url));
+    }
+
+    /**
+     * Pushes a picture (from the remote MediaWiki) to player screen
+     * @Route("/remote/push", methods={"POST"})
+     */
+    public function push(Request $request, HttpClientInterface $client): JsonResponse
+    {
+        $url = rawurldecode($request->query->get('url'));
+        $resp = $client->request('GET', $url);
+        $gd2 = imagecreatefromstring($resp->getContent());
+
+        $compressedPicture = join_paths(
+                $this->getParameter('kernel.cache_dir'),
+                PlayerCastCache::subDir,
+                sha1($url) . '.jpg');
+        imagejpeg($gd2, $compressedPicture, 60);
+        $picture = new SplFileInfo($compressedPicture);
+
+        return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $picture->getPathname()]);
     }
 
 }

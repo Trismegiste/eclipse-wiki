@@ -7,11 +7,54 @@
     <section>
         {{ form(form) }}
     </section>
-    <section>
+    <section class="search-result">
         {% for picture in gallery %}
-            <a href="{{ picture.original }}">
+            <a href="{{ path('app_remotepicture_push', {url: picture.original|url_encode}) }}">
                 <img src="{{ path('app_remotepicture_read', {url: picture.thumbnail|url_encode}) }}"/>
             </a>
         {% endfor %}
     </section>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }} 
+    <script>
+        let pictures = document.querySelectorAll('.search-result a')
+        pictures.forEach(function (picture) {
+            let url = picture.href
+            picture.addEventListener('click', function (event) {
+                // stop propagation
+                event.preventDefault()
+                // post image title for sending to external device
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title: 'fandom.jpg'
+                    })
+                }).then(function (response) {
+                    if (!response.ok) {
+                        return Promise.reject(response)
+                    }
+                    return response.json()
+                }).then(function (json) {
+                    pushFlash(picture, 'success', json.message)
+                }).catch(function (error) {
+                    if (typeof error.json === "function") {
+                        error.json().then(function (jsonError) {
+                            pushFlash(picture, 'error', jsonError.message)
+                        }).catch(function (genericError) {
+                            pushFlash(picture, 'error', genericError.statusText);
+                        })
+                    } else {
+                        pushFlash(picture, 'error', error)
+                    }
+                })
+            })
+        })
+    </script>
 {% endblock %}
