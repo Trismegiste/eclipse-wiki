@@ -49,13 +49,19 @@ class MwImageCache implements CacheWarmerInterface, CacheClearerInterface
 
     public function get(string $url): BinaryFileResponse
     {
-        $filename = join_paths($this->cacheDir, sha1($url) . ".webp");
+        return new BinaryFileResponse($this->download($url)->getPathname());
+    }
+
+    public function download(string $url): \SplFileInfo
+    {
+        $filename = join_paths($this->cacheDir, sha1($url));
+
         if (!file_exists($filename)) {
             $resp = $this->client->request('GET', $url);
             file_put_contents($filename, $resp->getContent());
         }
 
-        return new BinaryFileResponse($filename);
+        return new \SplFileInfo($filename);
     }
 
 }

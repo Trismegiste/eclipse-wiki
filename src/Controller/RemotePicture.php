@@ -27,6 +27,13 @@ use function join_paths;
 class RemotePicture extends AbstractController
 {
 
+    protected $remoteStorage;
+
+    public function __construct(MwImageCache $mw)
+    {
+        $this->remoteStorage = $mw;
+    }
+
     /**
      * Image search against the remote MediaWiki
      * @Route("/remote/search", methods={"GET"})
@@ -67,21 +74,20 @@ class RemotePicture extends AbstractController
      * Show image from MediaWiki
      * @Route("/remote/get", methods={"GET"})
      */
-    public function read(Request $request, MwImageCache $cache): Response
+    public function read(Request $request): Response
     {
-        $url = $request->query->get('url');
-        return $cache->get(rawurldecode($url));
+        $url = rawurldecode($request->query->get('url'));
+        return $this->remoteStorage->get($url);
     }
 
     /**
      * Pushes a picture (from the remote MediaWiki) to player screen
      * @Route("/remote/push", methods={"POST"})
      */
-    public function push(Request $request, HttpClientInterface $client): JsonResponse
+    public function push(Request $request): JsonResponse
     {
         $url = rawurldecode($request->query->get('url'));
-        $resp = $client->request('GET', $url);
-        $gd2 = imagecreatefromstring($resp->getContent());
+        $gd2 = imagecreatefromstring(file_get_contents($this->remoteStorage->download($url)));
 
         $compressedPicture = join_paths(
                 $this->getParameter('kernel.cache_dir'),
