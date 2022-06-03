@@ -7,12 +7,14 @@
     <section>
         {{ form(form) }}
     </section>
-    <section>
+    <section class="pure-g">
         {% for picture in gallery %}
-            <div class="pushable">
-                <a href="{{ path('app_remotepicture_push', {url: picture.original|url_encode}) }}">
-                    <img src="{{ path('app_remotepicture_read', {url: picture.thumbnail|url_encode}) }}"/>
-                </a>
+            <div class="pure-u-1-5">
+                <div class="pushable">
+                    <a href="{{ path('app_remotepicture_push', {url: picture.original|url_encode}) }}">
+                        <img src="{{ path('app_remotepicture_read', {url: picture.thumbnail|url_encode}) }}" class="pure-img"/>
+                    </a>
+                </div>
             </div>
         {% endfor %}
     </section>
@@ -22,4 +24,14 @@
 {% block javascripts %}
     {{ parent() }} 
     <script src="{{ asset('js/picture-pusher.js') }}"></script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .pushable img {
+            max-height: 200px;
+            margin: auto;
+        }
+    </style>
 {% endblock %}
