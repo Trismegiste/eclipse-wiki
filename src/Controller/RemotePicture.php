@@ -50,21 +50,7 @@ class RemotePicture extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $listing = $mw->searchImage($form['query']->getData());
-            $content = strip_tags($mw->renderGallery($listing), '<a><div><figure><img>');
-            $doc = new DOMDocument("1.0", "utf-8");
-            $doc->loadXML($content);
-            $xpath = new \DOMXpath($doc);
-            $elements = $xpath->query('//a[@class="image"]/img');
-            foreach ($elements as $img) {
-                /** @var DOMNode $img */
-                $thumbnail = $img->attributes->getNamedItem('src')->value;
-                if (0 === strpos($thumbnail, 'http')) {
-                    $extract[] = (object) [
-                                'thumbnail' => $thumbnail,
-                                'original' => $img->parentNode->attributes->getNamedItem('href')->value
-                    ];
-                }
-            }
+            $extract = $mw->extractUrlFromGallery($mw->renderGallery($listing));
         }
 
         return $this->render('picture/search.html.twig', ['form' => $form->createView(), 'gallery' => $extract]);

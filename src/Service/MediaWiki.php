@@ -2,7 +2,11 @@
 
 namespace App\Service;
 
+use DOMDocument;
+use DOMNode;
+use RuntimeException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use UnexpectedValueException;
 
 /**
  * MediaWiki API
@@ -62,7 +66,7 @@ class MediaWiki
         $response = $this->client->request('GET', $this->host, ['query' => $query]);
 
         if ($response->getStatusCode() !== 200) {
-            throw new \UnexpectedValueException('API returned ' . $response->getStatusCode() . ' status code');
+            throw new UnexpectedValueException('API returned ' . $response->getStatusCode() . ' status code');
         }
 
         return json_decode($response->getContent());
@@ -149,6 +153,29 @@ class MediaWiki
         ]);
 
         return $response->parse->text->{'*'};
+    }
+
+    public function extractUrlFromGallery(string $htmlContent): array
+    {
+        $extract = [];
+
+        $content = strip_tags($htmlContent, '<a><div><figure><img>');
+        $doc = new DOMDocument("1.0", "utf-8");
+        $doc->loadXML($content);
+        $xpath = new \DOMXpath($doc);
+        $elements = $xpath->query('//a[@class="image"]/img');
+        foreach ($elements as $img) {
+            /** @var DOMNode $img */
+            $thumbnail = $img->attributes->getNamedItem('src')->value;
+            if (0 === strpos($thumbnail, 'http')) {
+                $extract[] = (object) [
+                            'thumbnail' => $thumbnail,
+                            'original' => $img->parentNode->attributes->getNamedItem('href')->value
+                ];
+            }
+        }
+
+        return $extract;
     }
 
 }
