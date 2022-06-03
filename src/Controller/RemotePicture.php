@@ -84,17 +84,10 @@ class RemotePicture extends AbstractController
      * Pushes a picture (from the remote MediaWiki) to player screen
      * @Route("/remote/push", methods={"POST"})
      */
-    public function push(Request $request): JsonResponse
+    public function push(Request $request, PlayerCastCache $cache): JsonResponse
     {
         $url = rawurldecode($request->query->get('url'));
-        $gd2 = imagecreatefromstring(file_get_contents($this->remoteStorage->download($url)));
-
-        $compressedPicture = join_paths(
-                $this->getParameter('kernel.cache_dir'),
-                PlayerCastCache::subDir,
-                sha1($url) . '.jpg');
-        imagejpeg($gd2, $compressedPicture, 60);
-        $picture = new SplFileInfo($compressedPicture);
+        $picture = $cache->slimPictureForPush($this->remoteStorage->download($url));
 
         return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $picture->getPathname()]);
     }

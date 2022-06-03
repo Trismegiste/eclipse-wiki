@@ -46,10 +46,7 @@ class PlayerCastCache implements CacheWarmerInterface, CacheClearerInterface
 
     public function clear(string $cacheDir)
     {
-        $finder = new Finder();
-        $finder->in(join_paths($cacheDir, self::subDir))->name('*');
-
-        $this->fs->remove($finder);
+        $this->fs->remove(join_paths($cacheDir, self::subDir));
     }
 
     public function slimPictureForPush(SplFileInfo $picture): SplFileInfo
