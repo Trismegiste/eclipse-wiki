@@ -54,6 +54,9 @@ class MwImageCache implements CacheWarmerInterface, CacheClearerInterface
 
     public function download(string $url): \SplFileInfo
     {
+        if (0 !== strpos($url, 'http')) {
+            throw new InvalidArgumentException("$url is not a valid URL to a picture");
+        }
         $filename = join_paths($this->cacheDir, sha1($url));
 
         if (!file_exists($filename)) {
