@@ -6,7 +6,10 @@
 
 namespace App\Service;
 
+use InvalidArgumentException;
+use SplFileInfo;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
@@ -44,7 +47,10 @@ class MwImageCache implements CacheWarmerInterface, CacheClearerInterface
 
     public function clear(string $cacheDir)
     {
-        
+        $finder = new Finder();
+        $finder->in(join_paths($cacheDir, self::subDir))->name('*');
+
+        $this->fs->remove($finder);
     }
 
     public function get(string $url): BinaryFileResponse
@@ -52,7 +58,7 @@ class MwImageCache implements CacheWarmerInterface, CacheClearerInterface
         return new BinaryFileResponse($this->download($url)->getPathname());
     }
 
-    public function download(string $url): \SplFileInfo
+    public function download(string $url): SplFileInfo
     {
         if (0 !== strpos($url, 'http')) {
             throw new InvalidArgumentException("$url is not a valid URL to a picture");
@@ -64,7 +70,7 @@ class MwImageCache implements CacheWarmerInterface, CacheClearerInterface
             file_put_contents($filename, $resp->getContent());
         }
 
-        return new \SplFileInfo($filename);
+        return new SplFileInfo($filename);
     }
 
 }
