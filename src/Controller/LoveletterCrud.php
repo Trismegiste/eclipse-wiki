@@ -11,7 +11,6 @@ use App\Entity\Vertex;
 use App\Form\LoveletterPcChoice;
 use App\Form\LoveletterType;
 use App\Repository\VertexRepository;
-use App\Service\ObjectPushFactory;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\Request;
@@ -68,8 +67,8 @@ class LoveletterCrud extends GenericCrud
         $html = $this->renderView('loveletter/export.pdf.twig', ['vertex' => $vertex]);
 
         return new PdfResponse(
-            $this->knpPdf->getOutputFromHtml($html, self::pdfOptions),
-            $title
+                $this->knpPdf->getOutputFromHtml($html, self::pdfOptions),
+                iconv('UTF-8', 'ASCII//TRANSLIT', $title)
         );
     }
 
