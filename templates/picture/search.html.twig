@@ -24,6 +24,9 @@
 {% block javascripts %}
     {{ parent() }} 
     <script src="{{ asset('js/picture-pusher.js') }}"></script>
+    <script>
+        document.getElementById('form_query').focus()
+    </script>
 {% endblock %}
 
 {% block stylesheets %}
