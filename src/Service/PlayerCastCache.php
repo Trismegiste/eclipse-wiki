@@ -30,7 +30,7 @@ class PlayerCastCache implements CacheWarmerInterface, CacheClearerInterface
     {
         $this->fs = $fs;
         $this->cacheDir = join_paths($cacheDir, self::subDir);
-        $this->maxDimension = $maxDim;
+        $this->maxDimension = (float) $maxDim;
         $this->maxSize = $maxSize;
     }
 
@@ -59,9 +59,11 @@ class PlayerCastCache implements CacheWarmerInterface, CacheClearerInterface
         // this picture is big, need to reduce its size
         $gd2 = imagecreatefromstring(file_get_contents($picture->getPathname()));
         // checking dimension of picture
-        $maxSize = max([imagesx($gd2), imagesy($gd2)]);
+        $sx = imagesx($gd2);
+        $sy = imagesy($gd2);
+        $maxSize = max([$sx, $sy]);
         if ($maxSize > $this->maxDimension) {
-            $forPlayer = imagescale($gd2, imagesx($gd2) * (float) $this->maxDimension / $maxSize, imagesy($gd2) * (float) $this->maxDimension / $maxSize);
+            $forPlayer = imagescale($gd2, $sx * $this->maxDimension / $maxSize, $sy * $this->maxDimension / $maxSize);
             imagedestroy($gd2);
         } else {
             $forPlayer = $gd2;
