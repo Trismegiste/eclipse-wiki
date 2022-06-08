@@ -11,12 +11,27 @@
     {% block header_big_title %}{{ form.vars.data.title }}{% endblock %}
 {% endblock %}
 
+{% block _loveletter_roll3_widget %}
+    {{ form_widget(form) }}
+    <div class="helper">
+        <i class="icon-info-circled"></i>
+        La moyenne des 3 malus est à 0 pour une Loveletter classique ou à -2 si elle est liée à un Handicap. 
+        S'il s'agit d'un jet d'Économie, indiquez le nombre de Succès/Prouesses.
+    </div>
+{% endblock %}
+
 {% block _loveletter_resolution_widget %}
     {% for idx, child in form %}
         <textarea id="loveletter_resolution_{{ idx }}" 
                   name="loveletter[resolution][{{ idx }}]"
                   class="pure-input-1">{{ child.vars.data }}</textarea>
     {% endfor %}
+    <div class="helper">
+        <i class="icon-info-circled"></i>
+        Remplissez une liste qui doit comporter un choix positif,
+        un choix neutre (ou positif/négatif)
+        et au moins 2 choix négatifs.
+    </div>
 {% endblock %}
 
 {% block content %}
@@ -30,4 +45,15 @@
     <script>
         document.getElementById('loveletter_player').focus()
     </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        form .helper {
+            background-color: #eee;
+            margin: 0 0 1em;
+            padding: 0.5em;
+        }
+    </style>
 {% endblock %}
