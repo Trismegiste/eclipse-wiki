@@ -106,8 +106,8 @@ abstract class Character extends Vertex implements \JsonSerializable
     public function getPowerIndex(): int
     {
         return ($this->getAttributePoints() - 5) +
-                ($this->getSkillPoints() - 12) / 2 +
-                (count($this->edges) - 1);
+            ($this->getSkillPoints() - 12) / 2 +
+            (count($this->edges) - 1);
     }
 
     public function getGears(): array
@@ -211,4 +211,10 @@ abstract class Character extends Vertex implements \JsonSerializable
     }
 
     abstract public function getDescription(): string;
+
+    public function hasAvatarSection(): bool
+    {
+        return false;
+    }
+
 }

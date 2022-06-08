@@ -65,9 +65,10 @@ class Picture extends AbstractController
             $profilePic = $maker->generate($npc, imagecreatefromstring($avatarFile->getContent()));
             $filename = $npc->getTitle() . '-avatar.png';
             imagepng($profilePic, join_paths($this->storage->getRootDir(), $filename));
-            $append = "\n==Avatar==\n[[file:$filename]]\n";
-            $npc->setContent($npc->getContent() . $append);
-            $repo->save($npc);
+            if (!$npc->hasAvatarSection()) {
+                $npc->appendAvatarSection($filename);
+                $repo->save($npc);
+            }
             $this->addFlash('success', 'Profil réseaux sociaux généré');
 
             return new JsonResponse('', Response::HTTP_NO_CONTENT);
