@@ -33,15 +33,17 @@ class Hex extends AbstractController
     public function map(): Response
     {
         return new StreamedResponse(function () {
-                    echo '<svg viewBox="-10 -10 20 20" width="600" height="600">';
+            echo '<svg viewBox="0 0 20 20" width="600" height="600">';
 
-                    $cos60 = cos(M_PI / 3);
-                    $sin60 = sin(M_PI / 3);
-                    $minusCos60 = -$cos60;
-                    $minusSin60 = -$sin60;
-                    echo <<<YOLO
+            $cos60 = cos(M_PI / 3);
+            $sin60 = sin(M_PI / 3);
+            $minusCos60 = -$cos60;
+            $minusSin60 = -$sin60;
+            echo <<<YOLO
                         <defs>
-                            <g id="hexmap" style="stroke: black; stroke-width: 0.05" stroke-opacity="0.3">
+                            <g id="hexmap" style="stroke: black; stroke-width: 0.02"" 
+                                fill="#ddd" 
+                                transform="rotate(30) scale(0.66666)">
                                     <path d="M 1 0
                                         L $cos60 $sin60 
                                         L $minusCos60 $sin60 
@@ -53,15 +55,17 @@ class Hex extends AbstractController
                         </defs>
 YOLO;
 
-                    for ($x = -10; $x < 10; $x+=2) {
-                        for ($y = -10; $y < 10; $y+=2) {
-                            $cx = $x + $y * cos(M_PI / 3);
-                            $cy = -$y * sin(M_PI / 3);
-                            echo "<use x=\"$cx\" y=\"$cy\" href=\"#hexmap\"/>";
-                        }
-                    }
-                    echo '</svg>';
-                });
+            $tan60 = tan(M_PI / 3);
+            for ($x = 0; $x < 20; $x++) {
+                for ($y = 0; $y < 20; $y++) {
+                    $cx = ($x - floor($y / 2)) / $sin60 + $y / $tan60;
+                    echo "<use x=\"$cx\" y=\"$y\" href=\"#hexmap\">";
+                    echo "<title>$x $y</title>";
+                    echo "</use>";
+                }
+            }
+            echo '</svg>';
+        });
     }
 
 }
