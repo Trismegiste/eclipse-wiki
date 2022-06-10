@@ -39,12 +39,23 @@ class HexagonTopography implements \Trismegiste\MapGenerator\SvgPrintable
         }
     }
 
-    public function set(array $coord, $value): void
+    /**
+     * Sets a tile
+     * @param array $coord
+     * @param mixed $tile
+     * @return void
+     */
+    public function setTile(array $coord, $tile): void
     {
-        $this->tile[$coord[0]][$coord[1]] = $value;
+        $this->tile[$coord[0]][$coord[1]] = $tile;
     }
 
-    public function getNeighbour(array $coord): array
+    /**
+     * Gets the coordinates of neighbour tiles around a given tile coordinates
+     * @param array $coord
+     * @return array
+     */
+    public function getNeighbourCoordinates(array $coord): array
     {
         $x = $coord[0];
         $y = $coord[1];
@@ -58,6 +69,16 @@ class HexagonTopography implements \Trismegiste\MapGenerator\SvgPrintable
             [$offset, $y + 1],
             [$offset + 1, $y + 1]
         ];
+    }
+
+    /**
+     * Gets the tile at a given coordinates
+     * @param array $coord
+     * @return mixed
+     */
+    public function getTile(array $coord)
+    {
+        return $this->tile[$coord[0]][$coord[1]];
     }
 
 }
