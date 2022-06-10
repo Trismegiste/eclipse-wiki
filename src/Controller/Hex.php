@@ -33,7 +33,7 @@ class Hex extends AbstractController
     public function map(): Response
     {
         return new StreamedResponse(function () {
-                    echo '<svg viewBox="0 0 20 20" width="600" height="600">';
+                    echo '<svg viewBox="0 0 40 40" width="800" height="800">';
 
                     $cos60 = cos(M_PI / 3);
                     $sin60 = sin(M_PI / 3);
@@ -68,17 +68,17 @@ class Hex extends AbstractController
                         </defs>
 YOLO;
 
-                    $map = new \App\Entity\HexagonTopography(20);
-                    for ($x = 0; $x < 20; $x++) {
-                        for ($y = 0; $y < 20; $y++) {
-                            $map->set([$x, $y], 'hexmap');
+                    $map = new \App\Entity\HexagonTopography(40);
+                    for ($x = 0; $x < 40; $x++) {
+                        for ($y = 0; $y < 40; $y++) {
+                            $map->setTile([$x, $y], 'hexmap');
                         }
                     }
-                    foreach ($map->getNeighbour([5, 5]) as $coord) {
-                        $map->set($coord, 'redmap');
+                    foreach ($map->getNeighbourCoordinates([13, 13]) as $coord) {
+                        $map->setTile($coord, 'redmap');
                     }
-                    foreach ($map->getNeighbour([14, 14]) as $coord) {
-                        $map->set($coord, 'redmap');
+                    foreach ($map->getNeighbourCoordinates([26, 26]) as $coord) {
+                        $map->setTile($coord, 'redmap');
                     }
 
                     $map->printSvg();
