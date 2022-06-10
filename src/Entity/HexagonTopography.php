@@ -39,9 +39,25 @@ class HexagonTopography implements \Trismegiste\MapGenerator\SvgPrintable
         }
     }
 
-    public function set(int $x, int $y, $value): void
+    public function set(array $coord, $value): void
     {
-        $this->tile[$x][$y] = $value;
+        $this->tile[$coord[0]][$coord[1]] = $value;
+    }
+
+    public function getNeighbour(array $coord): array
+    {
+        $x = $coord[0];
+        $y = $coord[1];
+        $offset = $x - 1 + ($y % 2);
+
+        return [
+            [$x - 1, $y],
+            [$x + 1, $y],
+            [$offset, $y - 1],
+            [$offset + 1, $y - 1],
+            [$offset, $y + 1],
+            [$offset + 1, $y + 1]
+        ];
     }
 
 }

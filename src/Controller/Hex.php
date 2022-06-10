@@ -71,9 +71,16 @@ YOLO;
                     $map = new \App\Entity\HexagonTopography(20);
                     for ($x = 0; $x < 20; $x++) {
                         for ($y = 0; $y < 20; $y++) {
-                            $map->set($x, $y, (($x === 10) || ($y === 10)) ? 'redmap' : 'hexmap');
+                            $map->set([$x, $y], 'hexmap');
                         }
                     }
+                    foreach ($map->getNeighbour([5, 5]) as $coord) {
+                        $map->set($coord, 'redmap');
+                    }
+                    foreach ($map->getNeighbour([14, 14]) as $coord) {
+                        $map->set($coord, 'redmap');
+                    }
+
                     $map->printSvg();
 
                     echo '</svg>';
