@@ -71,7 +71,7 @@ YOLO;
                     $map = new \App\Entity\HexagonTopography(20);
                     for ($x = 0; $x < 20; $x++) {
                         for ($y = 0; $y < 20; $y++) {
-                            $map->set($x, $y, random_int(0, 100) === 0 ? 'redmap' : 'hexmap');
+                            $map->set($x, $y, (($x === 10) || ($y === 10)) ? 'redmap' : 'hexmap');
                         }
                     }
                     $map->printSvg();
