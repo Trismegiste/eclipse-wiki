@@ -6,21 +6,22 @@
 
 namespace App\Entity;
 
-use SplFixedArray;
+use Trismegiste\MapGenerator\SvgPrintable;
+use Trismegiste\Strangelove\Type\BsonFixedArray;
 
 /**
  * A Map tiled with hexagons
  */
-class HexagonTopography implements \Trismegiste\MapGenerator\SvgPrintable
+class HexagonTopography implements SvgPrintable
 {
 
     protected $tile;
 
     public function __construct(int $size)
     {
-        $this->tile = new SplFixedArray($size);
+        $this->tile = new BsonFixedArray($size);
         for ($k = 0; $k < $size; $k++) {
-            $this->tile[$k] = new SplFixedArray($size);
+            $this->tile[$k] = new BsonFixedArray($size);
         }
     }
 
@@ -59,15 +60,15 @@ class HexagonTopography implements \Trismegiste\MapGenerator\SvgPrintable
     {
         $x = $coord[0];
         $y = $coord[1];
-        $offset = $x - 1 + ($y % 2);
+        $offset = $x + ($y % 2);
 
         return [
             [$x - 1, $y],
             [$x + 1, $y],
+            [$offset - 1, $y - 1],
             [$offset, $y - 1],
-            [$offset + 1, $y - 1],
-            [$offset, $y + 1],
-            [$offset + 1, $y + 1]
+            [$offset - 1, $y + 1],
+            [$offset, $y + 1]
         ];
     }
 

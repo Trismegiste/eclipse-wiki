@@ -41,9 +41,9 @@ class Hex extends AbstractController
                     $minusSin60 = -$sin60;
                     echo <<<YOLO
                         <defs>
-                            <g id="hexmap" style="stroke: black; stroke-width: 0.02"" 
+                            <g id="hexmap" style="stroke: black; stroke-width: 0.02"
                                 fill="#ddd" 
-                                transform="rotate(30) scale(0.66666)">
+                                transform="rotate(30) scale(0.666666)">
                                 <path d="M 1 0
                                     L $cos60 $sin60 
                                     L $minusCos60 $sin60 
@@ -53,9 +53,9 @@ class Hex extends AbstractController
                                     L 1 0"/>
                             </g>
 
-                            <g id="redmap" style="stroke: black; stroke-width: 0.02"" 
+                            <g id="redmap" style="stroke: black; stroke-width: 0.02"
                                 fill="red" 
-                                transform="rotate(30) scale(0.66666)">
+                                transform="rotate(30) scale(0.666666)">
                                 <path d="M 1 0
                                     L $cos60 $sin60 
                                     L $minusCos60 $sin60 
