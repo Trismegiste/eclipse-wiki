@@ -7,3 +7,8 @@
 {% block content %}
     {{ form(form) }}
 {% endblock %}
+
+{% block _form_collection_entry_row %}
+    {{ include ('hex/tile/' ~ form.vars.data.filename) }}
+    {{ form(form.anchor) }}
+{% endblock %}

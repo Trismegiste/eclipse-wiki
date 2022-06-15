@@ -6,10 +6,12 @@
 
 namespace App\Form;
 
+use App\Entity\HexagonalTile;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Form for parameters on a tile
@@ -25,9 +27,9 @@ class HexagonalTileType extends AbstractType
         ]);
     }
     
-    public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('data_class', \App\Entity\HexagonalTile::class);
+        $resolver->setDefault('data_class', HexagonalTile::class);
     }
 
 }
