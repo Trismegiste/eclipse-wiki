@@ -115,4 +115,7 @@ services:
     App\Repository\MapRepository:
         arguments:
             $template: '%twig.default_path%/map/config'
+
+    App\Repository\TileProvider:
+        $sourceDir: '%twig.default_path%/hex/tile'
             
