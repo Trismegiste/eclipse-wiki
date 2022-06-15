@@ -37,6 +37,7 @@ class HexagonCrud extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $obj = $form->getData();
             $this->tileRepo->save($obj);
+            $this->addFlash('success', 'Collection sauvegardée');
 
             return $this->redirectToRoute('app_hexagoncrud_editset', ['pk' => $obj->getPk()]);
         }
@@ -52,15 +53,16 @@ class HexagonCrud extends AbstractController
         $arrang = $this->tileRepo->load($pk);
 
         $form = $this->createFormBuilder($arrang)
-                ->add('collection', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
-                    'entry_type' => \App\Form\HexagonalTileType::class,
-                ])
-                ->add('edit', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
-                ->getForm();
+            ->add('collection', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
+                'entry_type' => \App\Form\HexagonalTileType::class,
+            ])
+            ->add('edit', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+            ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->tileRepo->save($form->getData());
+            $this->addFlash('success', 'Adjacences sauvegardées');
         }
 
         return $this->render('hex/set_edit.html.twig', ['form' => $form->createView()]);
