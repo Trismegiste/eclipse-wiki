@@ -38,6 +38,9 @@ services:
                      
     App\Repository\VertexRepository:
         $collectionName: 'vertex'
+
+    App\Repository\TileArrangementRepository:
+        $collectionName: 'tile_arrangement'
             
     # WIKI
     App\Service\MediaWiki:
