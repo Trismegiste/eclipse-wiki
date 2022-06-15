@@ -18,9 +18,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Description of TileArrangementType
- *
- * @author trismegiste
+ * Choosing a set of tiles
  */
 class TileArrangementType extends AbstractType
 {
