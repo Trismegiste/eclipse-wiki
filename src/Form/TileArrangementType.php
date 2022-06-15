@@ -6,8 +6,10 @@
 
 namespace App\Form;
 
+use App\Entity\HexagonalTile;
 use App\Entity\TileArrangement;
 use App\Repository\TileProvider;
+use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -32,14 +34,22 @@ class TileArrangementType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $tile = $this->tileRepo->findAll();
+
+        array_walk($tile, function (SplFileInfo &$item) {
+            $obj = new HexagonalTile();
+            $obj->filename = $item->getRelativePathname();
+            $item = $obj;
+        });
+
         $builder
                 ->add('title', TextType::class)
                 ->add('collection', ChoiceType::class, [
-                    'choices' => $this->tileRepo->findAll(),
+                    'choices' => $tile,
                     'expanded' => true,
                     'multiple' => true,
                     'choice_label' => function ($choice, $key, $value) {
-                        return $choice->getRelativePathname();
+                        return $choice->filename;
                     }
                 ])
                 ->add('create', SubmitType::class);
