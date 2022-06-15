@@ -53,7 +53,7 @@ class HexagonCrud extends AbstractController
 
         $form = $this->createFormBuilder($arrang)
                 ->add('collection', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
-                    'entry_type' => \App\Form\HexagonalTileType::class
+                    'entry_type' => \App\Form\HexagonalTileType::class,
                 ])
                 ->add('edit', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
                 ->getForm();
