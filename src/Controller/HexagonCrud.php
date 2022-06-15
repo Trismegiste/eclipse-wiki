@@ -27,7 +27,7 @@ class HexagonCrud extends AbstractController
     }
 
     /**
-     * @Route("/hex/create/set")
+     * @Route("/tile/arragement/create")
      */
     public function createSet(Request $request): Response
     {

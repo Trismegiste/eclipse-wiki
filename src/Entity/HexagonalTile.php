@@ -1,0 +1,50 @@
+<?php
+
+/*
+ * eclipse-wiki
+ */
+
+namespace App\Entity;
+
+use MongoDB\BSON\Persistable;
+use Trismegiste\Strangelove\MongoDb\PersistableImpl;
+
+/**
+ * Description of HexagonalTile
+ *
+ * @author trismegiste
+ */
+class HexagonalTile implements Persistable
+{
+
+    use PersistableImpl;
+
+    const EAST = 0;
+    const NORTHEAST = 1;
+    const NORTHWEST = 2;
+    const WEST = 3;
+    const SOUTHWEST = 4;
+    const SOUTHEAST = 5;
+    const SIDES = 6;
+
+    public $filename;
+    protected $anchor;
+    protected $rotation;
+
+    public function __construct()
+    {
+        $this->anchor = array_fill(self::EAST, self::SIDES, null);
+        $this->rotation = array_fill(self::EAST, self::SIDES, false);
+    }
+
+    public function getAnchor(): array
+    {
+        return $this->anchor;
+    }
+
+    public function setAnchor(array $tab): void
+    {
+        $this->anchor = $tab;
+    }
+
+}
