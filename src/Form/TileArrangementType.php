@@ -25,6 +25,11 @@ class TileArrangementType extends AbstractType
 
     protected $tileRepo;
 
+    public function __construct(TileProvider $repo)
+    {
+        $this->tileRepo = $repo;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -38,11 +43,6 @@ class TileArrangementType extends AbstractType
                     }
                 ])
                 ->add('create', SubmitType::class);
-    }
-
-    public function __construct(TileProvider $repo)
-    {
-        $this->tileRepo = $repo;
     }
 
     public function configureOptions(OptionsResolver $resolver)

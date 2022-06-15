@@ -21,7 +21,7 @@ class TileProviderTest extends KernelTestCase
     public function testFindAll()
     {
         $iter = $this->sut->findAll();
-        var_dump($iter);
+        $this->assertGreaterThan(1, count($iter));
     }
 
 }
