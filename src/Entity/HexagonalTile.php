@@ -10,9 +10,7 @@ use MongoDB\BSON\Persistable;
 use Trismegiste\Strangelove\MongoDb\PersistableImpl;
 
 /**
- * Description of HexagonalTile
- *
- * @author trismegiste
+ * One hexagonal tile with its connections and generating rotations
  */
 class HexagonalTile implements Persistable
 {

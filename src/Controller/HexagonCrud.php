@@ -27,7 +27,7 @@ class HexagonCrud extends AbstractController
     }
 
     /**
-     * @Route("/tile/arragement/create")
+     * @Route("/tile/arrangement/create")
      */
     public function createSet(Request $request): Response
     {
@@ -35,10 +35,35 @@ class HexagonCrud extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->tileRepo->save($form->getData());
+            $obj = $form->getData();
+            $this->tileRepo->save($obj);
+
+            return $this->redirectToRoute('app_hexagoncrud_editset', ['pk' => $obj->getPk()]);
         }
 
         return $this->render('hex/set_create.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/tile/arrangement/edit/{pk}")
+     */
+    public function editSet(string $pk, Request $request): Response
+    {
+        $arrang = $this->tileRepo->load($pk);
+
+        $form = $this->createFormBuilder($arrang)
+                ->add('collection', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
+                    'entry_type' => \App\Form\HexagonalTileType::class
+                ])
+                ->add('edit', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+                ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->tileRepo->save($form->getData());
+        }
+
+        return $this->render('hex/set_edit.html.twig', ['form' => $form->createView()]);
     }
 
 }

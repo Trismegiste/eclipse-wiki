@@ -1,0 +1,9 @@
+{% extends "base.html.twig" %}
+{% form_theme form _self %}
+
+{% block title %}Edition d'une collection de tuiles{% endblock %}
+{% block header_title %}{{ block('title') }}{% endblock %}
+
+{% block content %}
+    {{ form(form) }}
+{% endblock %}
