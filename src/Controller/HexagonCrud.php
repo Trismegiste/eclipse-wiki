@@ -6,8 +6,13 @@
 
 namespace App\Controller;
 
+use App\Entity\TileArrangement;
 use App\Repository\TileProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -27,9 +32,16 @@ class HexagonCrud extends AbstractController
     /**
      * @Route("/hex/create/set")
      */
-    public function createSet(): Response
+    public function createSet(Request $request): Response
     {
-        return $this->render('hex/create_set.html.twig', ['listing' => $this->tileRepo->findAll()]);
+        $form = $this->createForm(\App\Form\TileArrangementType::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            //  var_dump($form->getData());
+        }
+
+        return $this->render('hex/set_create.html.twig', ['form' => $form->createView()]);
     }
 
 }
