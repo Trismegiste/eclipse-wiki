@@ -28,6 +28,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('pixabay/auto-complete.css') }}"/> 
     <style>
         .tile-anchor .hexagon {
             text-align: center;
@@ -45,3 +46,33 @@
         }
     </style>
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}  
+    <script src="{{ asset('pixabay/auto-complete.min.js') }}"></script>
+    <script>
+        var widget = document.querySelectorAll('.tile-anchor input')
+
+        widget.forEach(item => {
+            new autoComplete({
+                minChars: 1,
+                delay: 100,
+                selector: item,
+                source: function (term, response) {
+                    let filtered = []
+                    let query = new RegExp('^' + term, 'i')
+                    widget.forEach(val => {
+                        if ((item !== val) && (query.exec(val.value))) {
+                            filtered.push(val.value)
+                        }
+                    })
+
+                    filtered = [...new Set(filtered)]
+
+                    response(filtered)
+                }
+            })
+        })
+    </script>
+{% endblock %}
+
