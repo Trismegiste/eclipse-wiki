@@ -39,33 +39,58 @@ class HexagonCrud extends AbstractController
             $this->tileRepo->save($obj);
             $this->addFlash('success', 'Collection sauvegardée');
 
-            return $this->redirectToRoute('app_hexagoncrud_editset', ['pk' => $obj->getPk()]);
+            return $this->redirectToRoute('app_hexagoncrud_editanchor', ['pk' => $obj->getPk()]);
         }
 
         return $this->render('hex/set_create.html.twig', ['form' => $form->createView()]);
     }
 
     /**
-     * @Route("/tile/arrangement/edit/{pk}")
+     * @Route("/tile/arrangement/anchor/{pk}")
      */
-    public function editSet(string $pk, Request $request): Response
+    public function editAnchor(string $pk, Request $request): Response
     {
         $arrang = $this->tileRepo->load($pk);
 
         $form = $this->createFormBuilder($arrang)
-            ->add('collection', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
-                'entry_type' => \App\Form\HexagonalTileType::class,
-            ])
-            ->add('edit', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
-            ->getForm();
+                ->add('collection', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
+                    'entry_type' => \App\Form\TileAnchorType::class,
+                ])
+                ->add('edit', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->tileRepo->save($form->getData());
             $this->addFlash('success', 'Adjacences sauvegardées');
+
+            return $this->redirectToRoute('app_hexagoncrud_editrotation', ['pk' => $arrang->getPk()]);
         }
 
-        return $this->render('hex/set_edit.html.twig', ['form' => $form->createView()]);
+        return $this->render('hex/set_anchor.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/tile/arrangement/rotation/{pk}")
+     */
+    public function editRotation(string $pk, Request $request): Response
+    {
+        $arrang = $this->tileRepo->load($pk);
+
+        $form = $this->createFormBuilder($arrang)
+                ->add('collection', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
+                    'entry_type' => \App\Form\TileRotationType::class,
+                ])
+                ->add('edit', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+                ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->tileRepo->save($form->getData());
+            $this->addFlash('success', 'Rotations sauvegardées');
+        }
+
+        return $this->render('hex/set_rotation.html.twig', ['form' => $form->createView()]);
     }
 
 }

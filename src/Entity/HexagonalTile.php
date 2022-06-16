@@ -32,7 +32,7 @@ class HexagonalTile implements Persistable
     public function __construct()
     {
         $this->anchor = array_fill(self::EAST, self::SIDES, null);
-        $this->rotation = array_fill(self::EAST, self::SIDES, false);
+        $this->rotation = [true, false, false, false, false, false];  // default : rotation of 0° is available
     }
 
     public function getAnchor(): array
@@ -43,6 +43,16 @@ class HexagonalTile implements Persistable
     public function setAnchor(array $tab): void
     {
         $this->anchor = $tab;
+    }
+
+    public function getRotation(): array
+    {
+        return $this->rotation;
+    }
+
+    public function setRotation(array $tab): void
+    {
+        $this->rotation = $tab;
     }
 
 }

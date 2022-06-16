@@ -14,9 +14,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Form for parameters on a tile
+ * Form for editing anchors on a tile
  */
-class HexagonalTileType extends AbstractType
+class TileAnchorType extends AbstractType
 {
 
     public function buildForm(FormBuilderInterface $builder, array $options)
