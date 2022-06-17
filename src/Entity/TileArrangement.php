@@ -10,9 +10,7 @@ use Trismegiste\Strangelove\MongoDb\Root;
 use Trismegiste\Strangelove\MongoDb\RootImpl;
 
 /**
- * Description of TileSet
- *
- * @author trismegiste
+ * This is a group of HexagonalTile
  */
 class TileArrangement implements Root
 {
