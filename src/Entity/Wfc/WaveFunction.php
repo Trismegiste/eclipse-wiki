@@ -4,7 +4,7 @@
  * eclipse-wiki
  */
 
-namespace App\Entity;
+namespace App\Entity\Wfc;
 
 use Trismegiste\MapGenerator\SvgPrintable;
 use Trismegiste\Strangelove\Type\BsonFixedArray;
@@ -12,7 +12,7 @@ use Trismegiste\Strangelove\Type\BsonFixedArray;
 /**
  * A Map tiled with hexagons
  */
-class HexagonTopography implements SvgPrintable
+class WaveFunction implements SvgPrintable
 {
 
     protected $tile;
@@ -46,7 +46,7 @@ class HexagonTopography implements SvgPrintable
      * @param mixed $tile
      * @return void
      */
-    public function setTile(array $coord, $tile): void
+    public function setTile(array $coord, WaveCell $tile): void
     {
         $this->tile[$coord[0]][$coord[1]] = $tile;
     }
@@ -77,7 +77,7 @@ class HexagonTopography implements SvgPrintable
      * @param array $coord
      * @return mixed
      */
-    public function getTile(array $coord)
+    public function getTile(array $coord): WaveCell
     {
         return $this->tile[$coord[0]][$coord[1]];
     }
