@@ -1,0 +1,15 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Generate{% endblock %}
+{% block header_title %}{{ block('title') }}{% endblock %}
+
+{% block content %}
+    <ul>
+        {% for idx, item in tile %}
+            <li>
+                {{ item.filename }} {{ item.rotation }}
+                {{ dump(anchor[idx]) }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

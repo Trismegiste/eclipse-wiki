@@ -53,11 +53,11 @@ class HexagonCrud extends AbstractController
         $arrang = $this->tileRepo->load($pk);
 
         $form = $this->createFormBuilder($arrang)
-                ->add('collection', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
-                    'entry_type' => \App\Form\TileAnchorType::class,
-                ])
-                ->add('edit', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
-                ->getForm();
+            ->add('collection', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
+                'entry_type' => \App\Form\TileAnchorType::class,
+            ])
+            ->add('edit', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+            ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -78,19 +78,51 @@ class HexagonCrud extends AbstractController
         $arrang = $this->tileRepo->load($pk);
 
         $form = $this->createFormBuilder($arrang)
-                ->add('collection', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
-                    'entry_type' => \App\Form\TileRotationType::class,
-                ])
-                ->add('edit', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
-                ->getForm();
+            ->add('collection', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
+                'entry_type' => \App\Form\TileRotationType::class,
+            ])
+            ->add('edit', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+            ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->tileRepo->save($form->getData());
             $this->addFlash('success', 'Rotations sauvegardées');
+
+            return $this->redirectToRoute('app_hexagoncrud_generate', ['pk' => $arrang->getPk()]);
         }
 
         return $this->render('hex/set_rotation.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/tile/arrangement/generate/{pk}")
+     */
+    public function generate(string $pk): Response
+    {
+        /** @var \App\Entity\TileArrangement $arrang */
+        $arrang = $this->tileRepo->load($pk);
+        $tileDic = [];
+        $anchor = [];
+        foreach ($arrang->getCollection() as $tile) {
+            foreach ($tile->getRotation() as $idx => $isPresent) {
+                if ($isPresent) {
+                    $eigen = new \App\Entity\Wfc\EigenTile();
+                    $eigen->filename = $tile->filename;
+                    $eigen->rotation = 60 * $idx;
+
+                    $tileDic[] = $eigen;
+                    $tmp = $tile->getAnchor();
+                    for ($k = 0; $k < $idx; $k++) {
+                        $lastItem = array_pop($tmp);
+                        array_unshift($tmp, $lastItem);
+                    }
+                    $anchor[] = $tmp;
+                }
+            }
+        }
+
+        return $this->render('hex/generate.html.twig', ['tile' => $tileDic, 'anchor' => $anchor]);
     }
 
 }
