@@ -13,6 +13,7 @@ class EigenTile
 {
 
     public $filename;  // the filename of the tile
-    public $rotation;  // the rotation of the file
+    public $rotation;  // the rotation of the file (in degrees)
+    public $neighborMask = [];  // the 6 neighbors masks
 
 }

@@ -53,11 +53,11 @@ class HexagonCrud extends AbstractController
         $arrang = $this->tileRepo->load($pk);
 
         $form = $this->createFormBuilder($arrang)
-            ->add('collection', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
-                'entry_type' => \App\Form\TileAnchorType::class,
-            ])
-            ->add('edit', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
-            ->getForm();
+                ->add('collection', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
+                    'entry_type' => \App\Form\TileAnchorType::class,
+                ])
+                ->add('edit', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -78,11 +78,11 @@ class HexagonCrud extends AbstractController
         $arrang = $this->tileRepo->load($pk);
 
         $form = $this->createFormBuilder($arrang)
-            ->add('collection', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
-                'entry_type' => \App\Form\TileRotationType::class,
-            ])
-            ->add('edit', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
-            ->getForm();
+                ->add('collection', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
+                    'entry_type' => \App\Form\TileRotationType::class,
+                ])
+                ->add('edit', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -119,6 +119,18 @@ class HexagonCrud extends AbstractController
                     }
                     $anchor[] = $tmp;
                 }
+            }
+        }
+
+        foreach ($tileDic as $centerIdx => $centerTile) {
+            for ($direction = 0; $direction < 6; $direction++) {
+                $mask = 0;
+                foreach ($tileDic as $neighborIdx => $neighborTile) {
+                    if ($anchor[$centerIdx][$direction] === $anchor[$neighborIdx][($direction + 3) % 6]) {
+                        $mask = $mask | (1 << $neighborIdx);
+                    }
+                }
+                $centerTile->neighborMask[$direction] = $mask;
             }
         }
 
