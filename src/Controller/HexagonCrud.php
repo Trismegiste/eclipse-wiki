@@ -102,6 +102,8 @@ class HexagonCrud extends AbstractController
     {
         /** @var \App\Entity\TileArrangement $arrang */
         $arrang = $this->tileRepo->load($pk);
+
+        // compil anchors
         $tileDic = [];
         $anchor = [];
         foreach ($arrang->getCollection() as $tile) {
@@ -122,6 +124,7 @@ class HexagonCrud extends AbstractController
             }
         }
 
+        // compute neighbors masks
         foreach ($tileDic as $centerIdx => $centerTile) {
             for ($direction = 0; $direction < 6; $direction++) {
                 $mask = 0;
@@ -134,7 +137,21 @@ class HexagonCrud extends AbstractController
             }
         }
 
-        return $this->render('hex/generate.html.twig', ['tile' => $tileDic, 'anchor' => $anchor]);
+        // fill wave function
+        $edgeSize = 20;
+        $wf = new \App\Entity\Wfc\WaveFunction($edgeSize);
+        for ($x = 0; $x < $edgeSize; $x++) {
+            for ($y = 0; $y < $edgeSize; $y++) {
+                $cell = new \App\Entity\Wfc\WaveCell();
+                $cell->tileList = new \SplObjectStorage();
+                foreach ($tileDic as $idx => $tile) {
+                    $cell->tileList[$tile] = true;
+                }
+                $wf->setTile([$x, $y], $cell);
+            }
+        }
+
+        return $this->render('hex/generate.html.twig', ['tile' => $tileDic, 'anchor' => $anchor, 'map' => $wf]);
     }
 
 }

@@ -11,6 +11,5 @@ namespace App\Entity\Wfc;
  */
 class WaveCell
 {
-    public $tileList; // an array of EigenTile
-    public $dirty; // already computed
+    public $tileList; // array of probability for each EigenTile
 }
