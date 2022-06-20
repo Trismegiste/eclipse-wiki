@@ -43,7 +43,7 @@ class WaveFunction implements SvgPrintable
     /**
      * Sets a tile
      * @param array $coord
-     * @param mixed $tile
+     * @param WaveCell $tile
      * @return void
      */
     public function setTile(array $coord, WaveCell $tile): void
@@ -75,7 +75,7 @@ class WaveFunction implements SvgPrintable
     /**
      * Gets the tile at a given coordinates
      * @param array $coord
-     * @return mixed
+     * @return WaveCell
      */
     public function getTile(array $coord): WaveCell
     {
