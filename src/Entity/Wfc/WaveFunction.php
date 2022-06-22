@@ -6,6 +6,7 @@
 
 namespace App\Entity\Wfc;
 
+use App\Entity\HexagonalTile;
 use Trismegiste\MapGenerator\SvgPrintable;
 use Trismegiste\Strangelove\Type\BsonFixedArray;
 
@@ -63,12 +64,12 @@ class WaveFunction implements SvgPrintable
         $offset = $x + ($y % 2);
 
         return [
-            [$x - 1, $y],
-            [$x + 1, $y],
-            [$offset - 1, $y - 1],
-            [$offset, $y - 1],
-            [$offset - 1, $y + 1],
-            [$offset, $y + 1]
+            HexagonalTile::WEST => [$x - 1, $y],
+            HexagonalTile::EAST => [$x + 1, $y],
+            HexagonalTile::NORTHWEST => [$offset - 1, $y - 1],
+            HexagonalTile::NORTHEAST => [$offset, $y - 1],
+            HexagonalTile::SOUTHWEST => [$offset - 1, $y + 1],
+            HexagonalTile::SOUTHEAST => [$offset, $y + 1]
         ];
     }
 
@@ -80,6 +81,23 @@ class WaveFunction implements SvgPrintable
     public function getTile(array $coord): WaveCell
     {
         return $this->tile[$coord[0]][$coord[1]];
+    }
+
+    public function collapse(array $coord, int $mask): void
+    {
+        /** @var WaveCell $centerTile */
+        $centerTile = $this->tile[$coord[0]][$coord[1]];
+        if ($centerTile->updated) {
+            return;
+        }
+        $centerTile->tileMask = $mask;
+        $centerTile->updated = true;
+
+        // propagate
+        $neighbours = $this->getNeighbourCoordinates($coord);
+        foreach ($neighbours as $direction => $adja) {
+            $this->collapse($adja, ??????????);
+        }
     }
 
 }

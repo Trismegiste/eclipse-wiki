@@ -11,5 +11,8 @@ namespace App\Entity\Wfc;
  */
 class WaveCell
 {
-    public $tileList; // array of probability for each EigenTile
+
+    public $tileMask; // mask (probability) for each EigenTile
+    public $updated;  // don't come back to this hexagon, it has been already collapsed
+
 }
