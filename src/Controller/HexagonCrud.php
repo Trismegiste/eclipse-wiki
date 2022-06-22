@@ -143,13 +143,13 @@ class HexagonCrud extends AbstractController
         for ($x = 0; $x < $edgeSize; $x++) {
             for ($y = 0; $y < $edgeSize; $y++) {
                 $cell = new \App\Entity\Wfc\WaveCell();
-                $cell->tileList = new \SplObjectStorage();
-                foreach ($tileDic as $idx => $tile) {
-                    $cell->tileList[$tile] = true;
-                }
+                $cell->tileMask = (1 << count($tileDic)) - 1;
                 $wf->setTile([$x, $y], $cell);
             }
         }
+
+        // launch
+        $wf->collapse([$edgeSize / 2, $edgeSize / 2], 0b00001);
 
         return $this->render('hex/generate.html.twig', ['tile' => $tileDic, 'anchor' => $anchor, 'map' => $wf]);
     }
