@@ -3,8 +3,12 @@
 {% macro print_trait(trait, rof = 1, bonus = 0) %}
     <button x-on:click="$dispatch('roll', { dice: {{ trait.dice }}, modifier: {{ trait.modifier + bonus }}, rof: {{ rof }} })" class="pure-button">
         d{{ trait.dice }}
-        {% if (trait.modifier + bonus) > 0 %}
-            + {{ trait.modifier + bonus }}
+        {% set delta = trait.modifier + bonus %}
+        {% if delta > 0 %}
+            + {{ delta }}
+        {% endif %}
+        {% if delta < 0 %}
+            - {{ -delta }}
         {% endif %}
     </button>
 {% endmacro %}
@@ -33,6 +37,7 @@
                 <i x-bind:class="'icon-d' + dice"></i>
                 <i class="icon-d6" x-bind:class="{ 'extra-dice': !wildcard }"></i>
                 <span x-show="modifier > 0" x-text="'+' + modifier"></span>
+                <span x-show="modifier < 0" x-text="modifier"></span>
             </div>
             <div x-show="(dice !== null) && (result === null)" class="roll-result">
                 <i class="icon-spin3 animate-spin"></i>
