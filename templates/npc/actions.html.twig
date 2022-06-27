@@ -2,7 +2,7 @@
 <a href="{{ path('app_npcgenerator_edit', {pk: npc.pk}) }}" title="Modifier"><i class="icon-d6"></i></a>
 <a href="{{ path('app_vertexcrud_edit', {pk: npc.pk}) }}" title="Informations"><i class="icon-edit"></i></a>
     {% if npc.category == 'transhuman' %}
-    <a href="{{ path('app_picture_profile', {pk: npc.pk}) }}" title="Créer l'avatar"><i class="icon-profile"></i></a>
+    <a href="{{ path('app_profilepicture_create', {pk: npc.pk}) }}" title="Créer l'avatar"><i class="icon-profile"></i></a>
     {% endif %}
 <a href="{{ path('app_npcgenerator_gear', {pk: npc.pk}) }}" title="Matériel"><i class="icon-wrench"></i></a>
 <a href="{{ path('app_npcgenerator_battle', {pk: npc.pk}) }}" title="Combat"><i class="icon-gun"></i></a>
