@@ -16,6 +16,7 @@ class Transhuman extends Character
 
     protected $background;
     protected $faction;
+    public $surnameLang;
 
     public function __construct(string $title, Background $bg, Faction $fac)
     {

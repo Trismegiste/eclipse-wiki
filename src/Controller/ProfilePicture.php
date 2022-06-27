@@ -83,7 +83,7 @@ class ProfilePicture extends AbstractController
         $listing = [];
         foreach (['female', 'male'] as $gender) {
             for ($k = 0; $k < $card; $k++) {
-                $lang = 'random';//random_int(0, 100) < 75 ? $vertex->surnameLang : 'random';
+                $lang = random_int(0, 100) < 75 ? $vertex->surnameLang : 'random';
                 $listing[$gender][] = $repo->getRandomGivenNameFor($gender, 'random') . ' ' . $repo->getRandomSurnameFor($lang);
             }
         }

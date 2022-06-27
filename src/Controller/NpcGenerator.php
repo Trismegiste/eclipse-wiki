@@ -167,6 +167,7 @@ class NpcGenerator extends AbstractController
 
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $npc->getPk()]);
         }
+
         return $this->render('npc/gear.html.twig', ['form' => $form->createView()]);
     }
 
@@ -254,6 +255,26 @@ class NpcGenerator extends AbstractController
         }
 
         return $this->render('form.html.twig', ['title' => 'PNJ libre', 'form' => $form->createView()]);
+    }
+
+    /**
+     * Edit information of NPC
+     * @Route("/npc/info/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
+     */
+    public function info(string $pk, Request $request): Response
+    {
+        $npc = $this->repository->findByPk($pk);
+        $form = $this->createForm(\App\Form\NpcInfo::class, $npc, ['edit' => true]);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $npc = $form->getData();
+            $this->repository->save($npc);
+            $this->addFlash('success', 'Les informations de ' . $npc->getTitle() . ' ont été enregistrées');
+
+            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $npc->getPk()]);
+        }
+        return $this->render('npc/edit_info.html.twig', ['form' => $form->createView()]);
     }
 
 }
