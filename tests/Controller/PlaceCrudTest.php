@@ -30,12 +30,15 @@ class PlaceCrudTest extends WebTestCase
         $repo->delete(iterator_to_array($repo->search()));
         $this->assertCount(0, iterator_to_array($repo->search()));
 
-        $npc = new Transhuman('Template', new Background('back'), new Faction('fact'));
+        $npc = new Transhuman('Wizard', new Background('back'), new Faction('fact'));
         $npc->setMorph(new Morph('morph'));
         $repo->save($npc);
+        
+        return $npc->getPk();
     }
 
-    public function testCreate()
+    /** @depends testClean */
+    public function testCreate(\MongoDB\BSON\ObjectIdInterface $pkNpc)
     {
         $crawler = $this->client->request('GET', '/place/create');
         $this->assertResponseIsSuccessful();
@@ -43,7 +46,7 @@ class PlaceCrudTest extends WebTestCase
         $form->setValues(['place' => [
                 'title' => 'Tatooine',
                 'content' => 'Some link to [[Luke]]',
-                'npcTemplate' => 'Template'
+                'npcTemplate' => (string) $pkNpc
         ]]);
         $this->client->submit($form);
         $this->assertResponseRedirects();
@@ -91,7 +94,7 @@ class PlaceCrudTest extends WebTestCase
     public function testShowNpcGeneration(string $useradd)
     {
         $crawler = $this->client->request('GET', $useradd);
-        $this->assertPageTitleContains('Tatooine');
+        $this->assertPageTitleContains('Wizard');
         $avatar = $crawler->filter('section.quick-npc figure');
         $this->assertCount(48, $avatar);
         $firstName = $avatar->first()->attr('data-avatar');

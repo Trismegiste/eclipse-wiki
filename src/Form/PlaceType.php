@@ -46,7 +46,7 @@ class PlaceType extends AbstractType
         $npcList = [];
         foreach ($this->repository->findByClass(Transhuman::class) as $npc) {
             if (!$npc->wildCard) {
-                $npcList[$npc->getTitle()] = $npc->getPk();
+                $npcList[$npc->getTitle()] = (string) $npc->getPk();
             }
         }
 
