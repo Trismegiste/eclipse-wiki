@@ -4,6 +4,9 @@
     {% if npc.category == 'transhuman' %}
     <a href="{{ path('app_profilepicture_create', {pk: npc.pk}) }}" title="Créer l'avatar"><i class="icon-profile"></i></a>
     {% endif %}
+    {% if npc.category == 'transhuman' %}
+    <a href="{{ path('app_profilepicture_generateonthefly', {pk: npc.pk}) }}" title="Instancier un avatar"><i class="icon-profile"></i></a>
+    {% endif %}
 <a href="{{ path('app_npcgenerator_gear', {pk: npc.pk}) }}" title="Matériel"><i class="icon-wrench"></i></a>
 <a href="{{ path('app_npcgenerator_battle', {pk: npc.pk}) }}" title="Combat"><i class="icon-gun"></i></a>
     {% if npc.category != 'freeform' %}

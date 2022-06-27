@@ -1,13 +1,13 @@
 {% extends "base.html.twig" %}
 
-{% block title %}PNJ pour {{ place.title }}{% endblock %}
+{% block title %}Instancier un {{ vertex.title }}{% endblock %}
 
 {% block header_title %}
     {# the header menu with title #}
     <nav style="float: right">
-        {{ include('place/actions.html.twig', {vertex:place}) }}
+        {{ include('npc/actions.html.twig', {npc:vertex}) }}
     </nav>   
-    {% block header_big_title %}PNJ pour {{ place.title }}{% endblock %}
+    {% block header_big_title %}{{ block('title') }}{% endblock %}
 {% endblock %}
 
 {% block javascripts %}
@@ -46,7 +46,7 @@
             {% for name in gender %}
                 <div class="pure-u-1-8">
                     <figure data-avatar="{{ name }}"></figure>
-                    <a href="{{ path('app_placecrud_createwildcard', {title: name, template: place.npcTemplate}) }}"><i class="icon-wildcard"></i>{{ name }}</a>
+                    <a href="{{ path('app_placecrud_createwildcard', {title: name, template: vertex.title}) }}"><i class="icon-wildcard"></i>{{ name }}</a>
                 </div>
             {% endfor %}
         </section>
