@@ -14,9 +14,7 @@ use Trismegiste\Strangelove\MongoDb\RootImpl;
 abstract class Character extends Vertex implements \JsonSerializable
 {
 
-    use RootImpl {
-        bsonSerialize as defaultDump;
-    }
+    use RootImpl;
     use EdgeContainer;
 
     public $wildCard = false;
@@ -41,14 +39,14 @@ abstract class Character extends Vertex implements \JsonSerializable
         return $this->morph;
     }
 
-    public function bsonSerialize()
+    protected function beforeSave(): void
     {
+        parent::beforeSave();
+
         usort($this->skills, function (Skill $a, Skill $b) {
             return iconv('UTF-8', 'ASCII//TRANSLIT', $a->getName()) > iconv('UTF-8', 'ASCII//TRANSLIT', $b->getName());
         });
         $this->skills = array_values($this->skills);
-
-        return $this->defaultDump();
     }
 
     public function addSkill(Skill $sk): void
@@ -106,8 +104,8 @@ abstract class Character extends Vertex implements \JsonSerializable
     public function getPowerIndex(): int
     {
         return ($this->getAttributePoints() - 5) +
-            ($this->getSkillPoints() - 12) / 2 +
-            (count($this->edges) - 1);
+                ($this->getSkillPoints() - 12) / 2 +
+                (count($this->edges) - 1);
     }
 
     public function getGears(): array
