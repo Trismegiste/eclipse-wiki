@@ -68,7 +68,7 @@
     {{ parent() }} 
     <script>
         Mousetrap.bind('p', function () {
-            location.assign('{{ path('app_picture_profile', {pk: npc.pk}) }}')
+            location.assign('{{ path('app_profilepicture_create', {pk: npc.pk}) }}')
             return false
         });
     </script>

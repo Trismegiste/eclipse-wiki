@@ -11,8 +11,8 @@ use App\Entity\Faction;
 use App\Entity\Morph;
 use App\Entity\Transhuman;
 use App\Repository\VertexRepository;
+use MongoDB\BSON\ObjectIdInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PlaceCrudTest extends WebTestCase
 {
@@ -30,12 +30,17 @@ class PlaceCrudTest extends WebTestCase
         $repo->delete(iterator_to_array($repo->search()));
         $this->assertCount(0, iterator_to_array($repo->search()));
 
-        $npc = new Transhuman('Template', new Background('back'), new Faction('fact'));
+        // fixtures
+        $fac = static::getContainer()->get(\App\Repository\CharacterFactory::class);
+        $npc = $fac->create('Wizard', new Background('back'), new Faction('fact'));
         $npc->setMorph(new Morph('morph'));
         $repo->save($npc);
+
+        return $npc->getPk();
     }
 
-    public function testCreate()
+    /** @depends testClean */
+    public function testCreate(ObjectIdInterface $pkNpc)
     {
         $crawler = $this->client->request('GET', '/place/create');
         $this->assertResponseIsSuccessful();
@@ -43,7 +48,7 @@ class PlaceCrudTest extends WebTestCase
         $form->setValues(['place' => [
                 'title' => 'Tatooine',
                 'content' => 'Some link to [[Luke]]',
-                'npcTemplate' => 'Template'
+                'npcTemplate' => (string) $pkNpc
         ]]);
         $this->client->submit($form);
         $this->assertResponseRedirects();
@@ -88,33 +93,11 @@ class PlaceCrudTest extends WebTestCase
     }
 
     /** @depends testEdit */
-    public function testShowNpcGeneration(string $useradd)
+    public function testShowDefaultNpc(string $useradd)
     {
         $crawler = $this->client->request('GET', $useradd);
-        $this->assertPageTitleContains('Tatooine');
-        $avatar = $crawler->filter('section.quick-npc figure');
-        $this->assertCount(48, $avatar);
-        $firstName = $avatar->first()->attr('data-avatar');
-        $this->assertMatchesRegularExpression('#[A-Z][a-z]+\s+[A-Z][a-z]+#', $firstName);
-
-        return $firstName;
-    }
-
-    public function testCreateNotFoundTemplate()
-    {
-        $this->client->request('GET', '/place/wildcard/John/Unknown');
-        $this->assertResponseStatusCodeSame(404);
-    }
-
-    public function testCreateWildcard()
-    {
-        $template = new Transhuman('Warrior', new Background('dummy'), new Faction('dummy'));
-        $repo = static::getContainer()->get(VertexRepository::class);
-        $repo->save($template);
-
-        $this->client->request('GET', '/place/wildcard/John/Warrior');
-        $this->assertResponseRedirects();
-        $this->assertStringStartsWith('/npc/edit/', $this->client->getResponse()->headers->get('Location'));
+        $this->assertResponseIsSuccessful();
+        $this->assertPageTitleContains('Wizard');
     }
 
 }
