@@ -11,8 +11,8 @@ use App\Entity\Faction;
 use App\Entity\Morph;
 use App\Entity\Transhuman;
 use App\Repository\VertexRepository;
+use MongoDB\BSON\ObjectIdInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PlaceCrudTest extends WebTestCase
 {
@@ -30,15 +30,17 @@ class PlaceCrudTest extends WebTestCase
         $repo->delete(iterator_to_array($repo->search()));
         $this->assertCount(0, iterator_to_array($repo->search()));
 
-        $npc = new Transhuman('Wizard', new Background('back'), new Faction('fact'));
+        // fixtures
+        $fac = static::getContainer()->get(\App\Repository\CharacterFactory::class);
+        $npc = $fac->create('Wizard', new Background('back'), new Faction('fact'));
         $npc->setMorph(new Morph('morph'));
         $repo->save($npc);
-        
+
         return $npc->getPk();
     }
 
     /** @depends testClean */
-    public function testCreate(\MongoDB\BSON\ObjectIdInterface $pkNpc)
+    public function testCreate(ObjectIdInterface $pkNpc)
     {
         $crawler = $this->client->request('GET', '/place/create');
         $this->assertResponseIsSuccessful();
@@ -94,13 +96,8 @@ class PlaceCrudTest extends WebTestCase
     public function testShowNpcGeneration(string $useradd)
     {
         $crawler = $this->client->request('GET', $useradd);
+        $this->assertResponseIsSuccessful();
         $this->assertPageTitleContains('Wizard');
-        $avatar = $crawler->filter('section.quick-npc figure');
-        $this->assertCount(48, $avatar);
-        $firstName = $avatar->first()->attr('data-avatar');
-        $this->assertMatchesRegularExpression('#[A-Z][a-z]+\s+[A-Z][a-z]+#', $firstName);
-
-        return $firstName;
     }
 
     public function testCreateNotFoundTemplate()

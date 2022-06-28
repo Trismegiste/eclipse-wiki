@@ -26,23 +26,14 @@ class PlaceType extends AbstractType
     use FormTypeUtils;
 
     protected $repository;
-    protected $generator;
 
     public function __construct(VertexRepository $repository)
     {
         $this->repository = $repository;
-        $this->generator = new FileRepository();
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $tmpList = $this->generator->getSurnameLanguage();
-        sort($tmpList);
-        $language['-- Aléatoire --'] = 'random';
-        foreach ($tmpList as $lang) {
-            $language[ucfirst($lang)] = $lang;
-        }
-
         $npcList = [];
         foreach ($this->repository->findByClass(Transhuman::class) as $npc) {
             if (!$npc->wildCard) {
@@ -65,9 +56,6 @@ class PlaceType extends AbstractType
                         'class' => 'pure-input-1-2',
                         'placeholder' => 'ID unique de Youtube ou url de la vidéo'
                     ]
-                ])
-                ->add('surnameLang', ChoiceType::class, [
-                    'choices' => $language
                 ])
                 ->add('npcTemplate', ChoiceType::class, [
                     'required' => false,

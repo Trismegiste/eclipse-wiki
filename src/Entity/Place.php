@@ -16,8 +16,7 @@ class Place extends Vertex
     public $pressure;
     public $gravity;
     public $youtubeUrl = null;
-    public $surnameLang = null;
-    public $npcTemplate = null;
+    public $npcTemplate = null; // need something more complex, a list and Place children will reuse this list
     public $battleMap = null;
 
 }
