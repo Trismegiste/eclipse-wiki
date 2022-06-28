@@ -75,9 +75,14 @@ class VertexRepository extends DefaultRepository
 
     public function searchPreviousOf(string $pk): ?Vertex
     {
+        $current = $this->manager->executeQuery($this->getNamespace(), new Query(
+                    ['_id' => new ObjectId($pk)],
+                    ['limit' => 1, 'projection' => ['lastModified' => true]]))
+            ->toArray();
+
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                        ['_id' => ['$gt' => new ObjectId($pk)]],
-                        ['limit' => 1, 'sort' => ['_id' => 1]]));
+                ['lastModified' => ['$gt' => $current[0]->lastModified]],
+                ['limit' => 1, 'sort' => ['lastModified' => 1]]));
 
         $item = $cursor->toArray();
 
@@ -86,9 +91,14 @@ class VertexRepository extends DefaultRepository
 
     public function searchNextOf(string $pk): ?Vertex
     {
+        $current = $this->manager->executeQuery($this->getNamespace(), new Query(
+                    ['_id' => new ObjectId($pk)],
+                    ['limit' => 1, 'projection' => ['lastModified' => true]]))
+            ->toArray();
+
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                        ['_id' => ['$lt' => new ObjectId($pk)]],
-                        ['limit' => 1, 'sort' => ['_id' => -1]]));
+                ['lastModified' => ['$lt' => $current[0]->lastModified]],
+                ['limit' => 1, 'sort' => ['lastModified' => -1]]));
 
         $item = $cursor->toArray();
 
@@ -152,8 +162,8 @@ class VertexRepository extends DefaultRepository
 
         // returning query
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                        ['__pclass' => ['$in' => $fqcn]],
-                        ['sort' => ['title' => 1]]
+                ['__pclass' => ['$in' => $fqcn]],
+                ['sort' => ['title' => 1]]
         ));
 
         return new \IteratorIterator($cursor);
