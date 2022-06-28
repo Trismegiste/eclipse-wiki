@@ -93,28 +93,11 @@ class PlaceCrudTest extends WebTestCase
     }
 
     /** @depends testEdit */
-    public function testShowNpcGeneration(string $useradd)
+    public function testShowDefaultNpc(string $useradd)
     {
         $crawler = $this->client->request('GET', $useradd);
         $this->assertResponseIsSuccessful();
         $this->assertPageTitleContains('Wizard');
-    }
-
-    public function testCreateNotFoundTemplate()
-    {
-        $this->client->request('GET', '/place/wildcard/John/Unknown');
-        $this->assertResponseStatusCodeSame(404);
-    }
-
-    public function testCreateWildcard()
-    {
-        $template = new Transhuman('Warrior', new Background('dummy'), new Faction('dummy'));
-        $repo = static::getContainer()->get(VertexRepository::class);
-        $repo->save($template);
-
-        $this->client->request('GET', '/place/wildcard/John/Warrior');
-        $this->assertResponseRedirects();
-        $this->assertStringStartsWith('/npc/edit/', $this->client->getResponse()->headers->get('Location'));
     }
 
 }

@@ -46,7 +46,7 @@
             {% for name in gender %}
                 <div class="pure-u-1-8">
                     <figure data-avatar="{{ name }}"></figure>
-                    <a href="{{ path('app_placecrud_createwildcard', {title: name, template: vertex.title}) }}"><i class="icon-wildcard"></i>{{ name }}</a>
+                    <a href="{{ path('app_npcgenerator_createwildcard', {title: name, template: vertex.pk}) }}"><i class="icon-wildcard"></i>{{ name }}</a>
                 </div>
             {% endfor %}
         </section>

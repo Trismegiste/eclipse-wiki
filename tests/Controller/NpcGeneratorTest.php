@@ -2,6 +2,10 @@
 
 namespace App\Tests\Controller;
 
+use App\Entity\Background;
+use App\Entity\Faction;
+use App\Repository\CharacterFactory;
+use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class NpcGeneratorTest extends WebTestCase
@@ -16,7 +20,7 @@ class NpcGeneratorTest extends WebTestCase
 
     public function testClean()
     {
-        $repo = static::getContainer()->get(\App\Repository\VertexRepository::class);
+        $repo = static::getContainer()->get(VertexRepository::class);
         $repo->delete(iterator_to_array($repo->search()));
         $this->assertCount(0, iterator_to_array($repo->search()));
     }
@@ -193,6 +197,24 @@ class NpcGeneratorTest extends WebTestCase
         $this->assertResponseRedirects();
         $this->client->followRedirect();
         $this->assertResponseIsSuccessful();
+    }
+
+    public function testCreateNotFoundTemplate()
+    {
+        $this->client->request('GET', '/npc/wildcard/John/Unknown');
+        $this->assertResponseStatusCodeSame(404);
+    }
+
+    public function testCreateWildcard()
+    {
+        $fac = static::getContainer()->get(CharacterFactory::class);
+        $template = $fac->create('Warrior', new Background('dummy'), new Faction('dummy'));
+        $repo = static::getContainer()->get(VertexRepository::class);
+        $repo->save($template);
+
+        $this->client->request('GET', '/npc/wildcard/John/' . $template->getPk());
+        $this->assertResponseRedirects();
+        $this->assertStringStartsWith('/npc/edit/', $this->client->getResponse()->headers->get('Location'));
     }
 
 }

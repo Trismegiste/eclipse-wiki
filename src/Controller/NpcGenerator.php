@@ -6,16 +6,20 @@
 
 namespace App\Controller;
 
+use App\Entity\Transhuman;
 use App\Form\AliCreate;
+use App\Form\FreeformCreate;
 use App\Form\NpcAttacks;
 use App\Form\NpcCreate;
 use App\Form\NpcGears;
+use App\Form\NpcInfo;
 use App\Form\NpcStats;
 use App\Form\Type\ProviderChoiceType;
 use App\Repository\BackgroundProvider;
 use App\Repository\FactionProvider;
 use App\Repository\MorphProvider;
 use App\Repository\VertexRepository;
+use App\Twig\SaWoExtension;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -23,7 +27,11 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use const MB_CASE_TITLE;
+use function join_paths;
+use function mb_convert_case;
 
 /**
  * CRUD for NPC
@@ -75,7 +83,7 @@ class NpcGenerator extends AbstractController
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $npc->getPk()]);
         }
 
-        return $this->render(\App\Twig\SaWoExtension::editStatTemplate[get_class($npc)], ['profile' => $this->getProfileList(), 'form' => $form->createView()]);
+        return $this->render(SaWoExtension::editStatTemplate[get_class($npc)], ['profile' => $this->getProfileList(), 'form' => $form->createView()]);
     }
 
     private function getProfileList()
@@ -245,7 +253,7 @@ class NpcGenerator extends AbstractController
      */
     public function freeform(Request $request): Response
     {
-        $form = $this->createForm(\App\Form\FreeformCreate::class);
+        $form = $this->createForm(FreeformCreate::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $npc = $form->getData();
@@ -264,7 +272,7 @@ class NpcGenerator extends AbstractController
     public function info(string $pk, Request $request): Response
     {
         $npc = $this->repository->findByPk($pk);
-        $form = $this->createForm(\App\Form\NpcInfo::class, $npc, ['edit' => true]);
+        $form = $this->createForm(NpcInfo::class, $npc, ['edit' => true]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -275,6 +283,26 @@ class NpcGenerator extends AbstractController
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $npc->getPk()]);
         }
         return $this->render('npc/edit_info.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * Creates a wildcard NPC from a template and a new name
+     * @Route("/npc/wildcard/{title}/{template}", methods={"GET"}, requirements={"template"="[\da-f]{24}"})
+     */
+    public function createWildcard(string $title, string $template): Response
+    {
+        $npc = $this->repository->findByPk($template);
+        if (is_null($npc) || (!$npc instanceof Transhuman)) {
+            throw new NotFoundHttpException("$template does not exist");
+        }
+        /** @var Transhuman $wildcard */
+        $wildcard = clone $npc;
+        $wildcard->wildCard = true;
+        $wildcard->setTitle($title);
+
+        $this->repository->save($wildcard);
+
+        return $this->redirectToRoute('app_npcgenerator_edit', ['pk' => $wildcard->getPk()]);
     }
 
 }

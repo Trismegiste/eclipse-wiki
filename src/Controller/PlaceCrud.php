@@ -7,12 +7,10 @@
 namespace App\Controller;
 
 use App\Entity\Place;
-use App\Entity\Transhuman;
 use App\Entity\Vertex;
 use App\Form\PlaceType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -54,26 +52,6 @@ class PlaceCrud extends GenericCrud
         $url = $this->generateUrl('get_picture', ['title' => $vertex->battleMap]);
 
         return $this->render('map/running.html.twig', ['title' => $vertex->getTitle(), 'img' => $url]);
-    }
-
-    /**
-     * Creates a wildcard NPC from a template and a new name
-     * @Route("/place/wildcard/{title}/{template}", methods={"GET"})
-     */
-    public function createWildcard(string $title, string $template): Response
-    {
-        $npc = $this->repository->findByTitle($template);
-        if (is_null($npc) || (!$npc instanceof Transhuman)) {
-            throw new NotFoundHttpException("$template does not exist");
-        }
-        /** @var Transhuman $wildcard */
-        $wildcard = clone $npc;
-        $wildcard->wildCard = true;
-        $wildcard->setTitle($title);
-
-        $this->repository->save($wildcard);
-
-        return $this->redirectToRoute('app_npcgenerator_edit', ['pk' => $wildcard->getPk()]);
     }
 
 }
