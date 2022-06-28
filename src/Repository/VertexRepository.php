@@ -130,7 +130,7 @@ class VertexRepository extends DefaultRepository
             ]];
         }
 
-        $it = $this->search($filter, [], '_id');
+        $it = $this->search($filter, [], 'lastModified');
 
         return $it;
     }

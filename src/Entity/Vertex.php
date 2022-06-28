@@ -16,6 +16,12 @@ class Vertex implements \Trismegiste\Strangelove\MongoDb\Root
 
     protected $title;
     protected $content = null;
+    protected $lastModified;
+
+    protected function beforeSave(): void
+    {
+        $this->lastModified = new \MongoDB\BSON\UTCDateTime();
+    }
 
     public function __construct(string $str)
     {
