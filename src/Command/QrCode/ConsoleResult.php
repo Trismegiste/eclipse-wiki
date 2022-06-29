@@ -39,12 +39,13 @@ class ConsoleResult extends AbstractResult
     public function getString(): string
     {
         $side = $this->matrix->getBlockCount();
+        $margin = $this->twoblocks[0] . $this->twoblocks[0];
 
         ob_start();
         echo str_repeat($this->twoblocks[0], $side + 4) . PHP_EOL;
 
         for ($rowIndex = 0; $rowIndex < $side; $rowIndex += 2) {
-            echo $this->twoblocks[0] . $this->twoblocks[0];
+            echo $margin;
             for ($columnIndex = 0; $columnIndex < $side; $columnIndex++) {
                 $combined = $this->matrix->getBlockValue($rowIndex, $columnIndex);
                 if (($rowIndex + 1) < $side) {
@@ -52,7 +53,7 @@ class ConsoleResult extends AbstractResult
                 }
                 echo $this->twoblocks[$combined];
             }
-            echo $this->twoblocks[0] . $this->twoblocks[0] . PHP_EOL;
+            echo $margin . PHP_EOL;
         }
 
         echo str_repeat($this->twoblocks[0], $side + 4) . PHP_EOL;
