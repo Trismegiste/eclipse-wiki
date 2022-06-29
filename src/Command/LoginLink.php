@@ -8,7 +8,7 @@ namespace App\Command;
 
 use App\Command\QrCode\ConsoleWriter;
 use App\Service\NetTools;
-use Endroid\QrCode\Builder\Builder;
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -52,7 +52,7 @@ class LoginLink extends Command
 
         $output->writeln($loginLink);
 
-        $result = Builder::create()
+        $result = \Endroid\QrCode\Builder\Builder::create()
                 ->writer(new ConsoleWriter($output))
                 ->data($loginLink)
                 ->build();
