@@ -73,15 +73,24 @@ class VertexRepository extends DefaultRepository
         return $linked;
     }
 
-    public function searchPreviousOf(string $pk): ?Vertex
+    protected function getLastModified(string $pk): \MongoDB\BSON\UTCDateTime
     {
         $current = $this->manager->executeQuery($this->getNamespace(), new Query(
                                 ['_id' => new ObjectId($pk)],
                                 ['limit' => 1, 'projection' => ['lastModified' => true]]))
                 ->toArray();
 
+        if (0 == count($current)) {
+            throw new \RuntimeException("The document with _id='$pk' was not found.");
+        }
+
+        return $current[0]->lastModified;
+    }
+
+    public function searchPreviousOf(string $pk): ?Vertex
+    {
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                        ['lastModified' => ['$gt' => $current[0]->lastModified]],
+                        ['lastModified' => ['$gt' => $this->getLastModified($pk)]],
                         ['limit' => 1, 'sort' => ['lastModified' => 1]]));
 
         $item = $cursor->toArray();
@@ -91,13 +100,8 @@ class VertexRepository extends DefaultRepository
 
     public function searchNextOf(string $pk): ?Vertex
     {
-        $current = $this->manager->executeQuery($this->getNamespace(), new Query(
-                                ['_id' => new ObjectId($pk)],
-                                ['limit' => 1, 'projection' => ['lastModified' => true]]))
-                ->toArray();
-
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                        ['lastModified' => ['$lt' => $current[0]->lastModified]],
+                        ['lastModified' => ['$lt' => $this->getLastModified($pk)]],
                         ['limit' => 1, 'sort' => ['lastModified' => -1]]));
 
         $item = $cursor->toArray();
