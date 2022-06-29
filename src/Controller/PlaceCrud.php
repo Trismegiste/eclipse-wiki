@@ -54,4 +54,25 @@ class PlaceCrud extends GenericCrud
         return $this->render('map/running.html.twig', ['title' => $vertex->getTitle(), 'img' => $url]);
     }
 
+    /**
+     * Redirection to default NPC or Profile on the fly
+     * @Route("/place/npc/{title}", methods={"GET"})
+     */
+    public function npcShow(string $title): Response
+    {
+        $npc = $this->repository->findByTitle($title);
+
+        if (is_null($npc) || (!$npc instanceof \App\Entity\Transhuman)) {
+            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException("$title is not a Transhuman");
+        }
+
+        if (!empty($npc->surnameLang)) {
+            return $this->redirectToRoute('app_profilepicture_generateonthefly', ['pk' => $npc->getPk()]);
+        } else {
+            $this->addFlash('error', "Cannot generate a profile from '$title' since its surname language is not defined");
+
+            return $this->redirectToRoute('app_npcgenerator_info', ['pk' => $npc->getPk()]);
+        }
+    }
+
 }

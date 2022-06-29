@@ -48,7 +48,7 @@ class PlaceCrudTest extends WebTestCase
         $form->setValues(['place' => [
                 'title' => 'Tatooine',
                 'content' => 'Some link to [[Luke]]',
-                'npcTemplate' => (string) $pkNpc
+                'npcTemplate' => 'Wizard'
         ]]);
         $this->client->submit($form);
         $this->assertResponseRedirects();
@@ -96,7 +96,8 @@ class PlaceCrudTest extends WebTestCase
     public function testShowDefaultNpc(string $useradd)
     {
         $crawler = $this->client->request('GET', $useradd);
-        $this->assertResponseIsSuccessful();
+        $this->assertResponseRedirects();
+        $this->client->followRedirect();
         $this->assertPageTitleContains('Wizard');
     }
 

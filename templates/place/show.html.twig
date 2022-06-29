@@ -24,7 +24,7 @@
             {{ parent() }}
             {% if vertex.npcTemplate is not empty %}
                 <h2>PNJ</h2>
-                <a href="{{ path('app_vertexcrud_show', {pk: vertex.npcTemplate}) }}">Lien vers le PNJ par défaut</a>
+                La majorité des PNJ sont <a href="{{ path('app_placecrud_npcshow', {title: vertex.npcTemplate}) }}">{{ vertex.npcTemplate }}</a>
             {% endif %}
         </div>
         <aside class="pure-u-1-4">

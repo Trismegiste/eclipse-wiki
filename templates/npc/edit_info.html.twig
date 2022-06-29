@@ -1,13 +1,15 @@
 {% extends "form.html.twig" %}
 
+{% block title %}{{ form.vars.data.title }}{% endblock %}
+
+{% block header_title %}
+    {{ include('npc/menu.html.twig', {npc: form.vars.data}) }}
+{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
     {{ include('fragment/init_autocomplete.html.twig', {element_id:'npc_info_content'}) }}
     <script>
         document.getElementById('npc_info_content').focus()
     </script>
-{% endblock %}
-
-{% block header_title %}
-    {{ include('npc/menu.html.twig', {npc: form.vars.data}) }}
 {% endblock %}
