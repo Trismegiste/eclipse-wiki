@@ -47,7 +47,7 @@ class Export extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title("Export to $filename");
 
-        $iter = $this->repo->search();
+        $iter = $this->repo->sortedExport();
         $export = \MongoDB\BSON\toJSON(\MongoDB\BSON\fromPHP(iterator_to_array($iter)));
 
         $zip = new ZipArchive();

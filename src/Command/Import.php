@@ -23,6 +23,8 @@ use function join_paths;
 class Import extends Command
 {
 
+    const delayForTimestamp = 1000;
+
     protected static $defaultName = 'db:import';
     protected $repo;
     protected $store;
@@ -69,6 +71,7 @@ class Import extends Command
         foreach ($dump as $vertex) {
             $io->writeln('Importing ' . $vertex->getCategory() . ' "' . $vertex->getTitle() . '"');
             $this->repo->save(clone $vertex);
+            usleep(self::delayForTimestamp);
         }
         $this->store->delete(Export::vertexFilename);
 

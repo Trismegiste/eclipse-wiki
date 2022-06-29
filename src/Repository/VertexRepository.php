@@ -76,13 +76,13 @@ class VertexRepository extends DefaultRepository
     public function searchPreviousOf(string $pk): ?Vertex
     {
         $current = $this->manager->executeQuery($this->getNamespace(), new Query(
-                    ['_id' => new ObjectId($pk)],
-                    ['limit' => 1, 'projection' => ['lastModified' => true]]))
-            ->toArray();
+                                ['_id' => new ObjectId($pk)],
+                                ['limit' => 1, 'projection' => ['lastModified' => true]]))
+                ->toArray();
 
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                ['lastModified' => ['$gt' => $current[0]->lastModified]],
-                ['limit' => 1, 'sort' => ['lastModified' => 1]]));
+                        ['lastModified' => ['$gt' => $current[0]->lastModified]],
+                        ['limit' => 1, 'sort' => ['lastModified' => 1]]));
 
         $item = $cursor->toArray();
 
@@ -92,13 +92,13 @@ class VertexRepository extends DefaultRepository
     public function searchNextOf(string $pk): ?Vertex
     {
         $current = $this->manager->executeQuery($this->getNamespace(), new Query(
-                    ['_id' => new ObjectId($pk)],
-                    ['limit' => 1, 'projection' => ['lastModified' => true]]))
-            ->toArray();
+                                ['_id' => new ObjectId($pk)],
+                                ['limit' => 1, 'projection' => ['lastModified' => true]]))
+                ->toArray();
 
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                ['lastModified' => ['$lt' => $current[0]->lastModified]],
-                ['limit' => 1, 'sort' => ['lastModified' => -1]]));
+                        ['lastModified' => ['$lt' => $current[0]->lastModified]],
+                        ['limit' => 1, 'sort' => ['lastModified' => -1]]));
 
         $item = $cursor->toArray();
 
@@ -156,14 +156,27 @@ class VertexRepository extends DefaultRepository
         }
 
         // convert to MongoDb
-        array_walk($fqcn, function (&$val) {
+        array_walk($fqcn, function (string &$val) {
+            if (!class_exists($val)) {
+                throw new \DomainException("FQCN $val does not exist");
+            }
             $val = new Binary($val, Binary::TYPE_USER_DEFINED);
         });
 
         // returning query
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                ['__pclass' => ['$in' => $fqcn]],
-                ['sort' => ['title' => 1]]
+                        ['__pclass' => ['$in' => $fqcn]],
+                        ['sort' => ['title' => 1]]
+        ));
+
+        return new \IteratorIterator($cursor);
+    }
+
+    public function sortedExport(): \IteratorIterator
+    {
+        $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
+                        [],
+                        ['sort' => ['lastModified' => 1]]
         ));
 
         return new \IteratorIterator($cursor);
