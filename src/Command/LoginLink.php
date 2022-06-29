@@ -33,7 +33,7 @@ class LoginLink extends Command
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $user = $this->provider->loadUserByIdentifier('gamemaster');
-        $request = Request::create('/');
+        $request = Request::create('http://localhost:8001/');
 
         $loginLinkDetails = $this->handler->createLoginLink($user, $request);
         $loginLink = $loginLinkDetails->getUrl();

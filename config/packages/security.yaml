@@ -18,7 +18,7 @@ security:
             provider: player_users
             login_link:
                 check_route: login_check
-                signature_properties: ['id']
+                signature_properties: ['username']
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
