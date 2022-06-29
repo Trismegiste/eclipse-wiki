@@ -8,7 +8,7 @@ namespace App\Command;
 
 use App\Command\QrCode\ConsoleWriter;
 use App\Service\NetTools;
-
+use Endroid\QrCode\Builder\Builder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -39,7 +39,7 @@ class LoginLink extends Command
     public function configure()
     {
         $this->setDescription('Generates login link to connect to the web server')
-                ->addArgument('port', InputArgument::REQUIRED, 'The port on which the web server is running');
+            ->addArgument('port', InputArgument::OPTIONAL, 'The port on which the web server is running', 8000);
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int
@@ -52,12 +52,12 @@ class LoginLink extends Command
 
         $output->writeln($loginLink);
 
-        $result = \Endroid\QrCode\Builder\Builder::create()
-                ->writer(new ConsoleWriter($output))
-                ->data($loginLink)
-                ->build();
+        $result = Builder::create()
+            ->writer(new ConsoleWriter())
+            ->data($loginLink)
+            ->build();
 
-        $result->dump();
+        $output->writeln($result->getString());
 
         return self::SUCCESS;
     }
