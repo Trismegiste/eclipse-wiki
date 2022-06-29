@@ -15,7 +15,7 @@ use Endroid\QrCode\Writer\Result\AbstractResult;
 class ConsoleResult extends AbstractResult
 {
 
-    const twoblocks = [
+    const TWOBLOCKS = [
         0 => "\xe2\x96\x88",
         1 => "\xe2\x96\x84",
         2 => "\xe2\x96\x80",
@@ -23,10 +23,12 @@ class ConsoleResult extends AbstractResult
     ];
 
     protected $matrix;
+    protected $twoblocks;
 
-    public function __construct(MatrixInterface $matrix)
+    public function __construct(MatrixInterface $matrix, bool $inverted)
     {
         $this->matrix = $matrix;
+        $this->twoblocks = $inverted ? array_reverse(self::TWOBLOCKS) : self::TWOBLOCKS;
     }
 
     public function getMimeType(): string
@@ -39,21 +41,21 @@ class ConsoleResult extends AbstractResult
         $side = $this->matrix->getBlockCount();
 
         ob_start();
-        echo str_repeat(self::twoblocks[0], $side + 4) . PHP_EOL;
+        echo str_repeat($this->twoblocks[0], $side + 4) . PHP_EOL;
 
         for ($rowIndex = 0; $rowIndex < $side; $rowIndex += 2) {
-            echo self::twoblocks[0] . self::twoblocks[0];
-            for ($columnIndex = 0; $columnIndex < $side; ++$columnIndex) {
+            echo $this->twoblocks[0] . $this->twoblocks[0];
+            for ($columnIndex = 0; $columnIndex < $side; $columnIndex++) {
                 $combined = $this->matrix->getBlockValue($rowIndex, $columnIndex);
                 if (($rowIndex + 1) < $side) {
                     $combined |= $this->matrix->getBlockValue($rowIndex + 1, $columnIndex) << 1;
                 }
-                echo self::twoblocks[$combined];
+                echo $this->twoblocks[$combined];
             }
-            echo self::twoblocks[0] . self::twoblocks[0] . PHP_EOL;
+            echo $this->twoblocks[0] . $this->twoblocks[0] . PHP_EOL;
         }
 
-        echo str_repeat(self::twoblocks[0], $side + 4) . PHP_EOL;
+        echo str_repeat($this->twoblocks[0], $side + 4) . PHP_EOL;
 
         return ob_get_clean();
     }

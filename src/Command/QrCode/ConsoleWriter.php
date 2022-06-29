@@ -19,12 +19,19 @@ use Endroid\QrCode\Writer\WriterInterface;
 class ConsoleWriter implements WriterInterface
 {
 
+    protected $inverted;
+
+    public function __construct(bool $inverted = false)
+    {
+        $this->inverted = $inverted;
+    }
+
     public function write(QrCodeInterface $qrCode, LogoInterface $logo = null, LabelInterface $label = null, $options = []): ResultInterface
     {
         $matrixFactory = new MatrixFactory();
         $matrix = $matrixFactory->create($qrCode);
 
-        return new ConsoleResult($matrix);
+        return new ConsoleResult($matrix, $this->inverted);
     }
 
 }
