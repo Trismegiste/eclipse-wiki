@@ -6,7 +6,9 @@
 
 namespace App\Command;
 
+use App\Service\NetTools;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,18 +24,26 @@ class LoginLink extends Command
     protected static $defaultName = 'app:link';
     protected $handler;
     protected $provider;
+    protected $tools;
 
-    public function __construct(LoginLinkHandlerInterface $loginLinkHandler, UserProviderInterface $repo)
+    public function __construct(LoginLinkHandlerInterface $loginLinkHandler, UserProviderInterface $repo, NetTools $tools)
     {
         parent::__construct();
         $this->handler = $loginLinkHandler;
         $this->provider = $repo;
+        $this->tools = $tools;
+    }
+
+    public function configure()
+    {
+        $this->setDescription('Generates login link to connect to the web server')
+                ->addArgument('port', InputArgument::REQUIRED, 'The port on which the web server is running');
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $user = $this->provider->loadUserByIdentifier('gamemaster');
-        $request = Request::create('http://localhost:8001/');
+        $request = Request::create('http://' . $this->tools->getLocalIp() . ':' . $input->getArgument('port'));
 
         $loginLinkDetails = $this->handler->createLoginLink($user, $request);
         $loginLink = $loginLinkDetails->getUrl();
