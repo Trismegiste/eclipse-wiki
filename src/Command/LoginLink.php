@@ -42,10 +42,9 @@ class LoginLink extends Command
     public function configure()
     {
         $this->setDescription('Generates login link to connect to the web server')
-                ->addArgument('port', InputArgument::OPTIONAL, 'The port on which the web server is running', 8000)
-                ->addOption('firefox', 'f', InputOption::VALUE_NONE, 'Launch Firefox')
-                ->addOption('url', 'u', InputOption::VALUE_NONE, 'Print URL')
-                ->addOption('qrcode', 'c', InputOption::VALUE_NONE, 'Print QR-Code')
+            ->addArgument('port', InputArgument::OPTIONAL, 'The port on which the web server is running', 8000)
+            ->addOption('firefox', 'f', InputOption::VALUE_NONE, 'Launch Firefox')
+            ->addOption('qrcode', 'c', InputOption::VALUE_NONE, 'Print QR-Code')
         ;
     }
 
@@ -60,22 +59,21 @@ class LoginLink extends Command
         $loginLinkDetails = $this->handler->createLoginLink($user, $request);
         $loginLink = $loginLinkDetails->getUrl();
 
+        // Print link
+        $io->writeln(['Login link :', '', $loginLink, '']);
+
         // firefox
         if ($input->getOption('firefox')) {
             $browser = new Process(['firefox', $loginLink]);
             $browser->mustRun();
         }
 
-        // Print link
-        if ($input->getOption('url')) {
-            $io->writeln(['Login link :', '', $loginLink, '']);
-        }
-
+        // print qr code
         if ($input->getOption('qrcode')) {
             $result = Builder::create()
-                    ->writer(new ConsoleWriter())
-                    ->data($loginLink)
-                    ->build();
+                ->writer(new ConsoleWriter())
+                ->data($loginLink)
+                ->build();
 
             $output->writeln($result->getString());
         }
