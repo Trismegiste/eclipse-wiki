@@ -1,0 +1,12 @@
+{% extends "landing.html.twig" %}
+
+{% block header_title %}Erreur 401{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            pushFlash(document, 'error', 'This page need authentication')
+        })
+    </script>
+{% endblock %}

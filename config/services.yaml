@@ -116,3 +116,7 @@ services:
         arguments:
             $template: '%twig.default_path%/map/config'
             
+            
+    App\Command\LoginLink:
+        arguments:
+            $loginLinkHandler: '@security.authenticator.login_link_handler.main'
