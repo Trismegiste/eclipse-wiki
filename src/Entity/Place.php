@@ -12,6 +12,7 @@ namespace App\Entity;
 class Place extends Vertex
 {
 
+    public $world;
     public $temperature;
     public $pressure;
     public $gravity;

@@ -24,3 +24,7 @@ pressure:
 freeform_type:
     - Simulmorphe
     - Monstre    
+
+world:
+    - Réel
+    - Simulespace
