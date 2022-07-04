@@ -18,7 +18,7 @@ security:
             provider: player_users
             login_link:
                 check_route: login_check
-                signature_properties: ['username']
+                signature_properties: ['userIdentifier']
 
 when@prod:
     security:
