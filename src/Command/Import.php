@@ -45,7 +45,8 @@ class Import extends Command
     {
         $filename = $input->getArgument('source');
         $io = new SymfonyStyle($input, $output);
-        $io->title("Import from $filename");
+        $env = $this->getApplication()->getKernel()->getEnvironment();
+        $io->title("Import '$filename' file to '$env' environment");
 
         $answer = $io->confirm("You're going to delete all existing vertices. Do you confirm ?", false);
         if (!$answer) {

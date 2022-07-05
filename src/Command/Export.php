@@ -45,7 +45,9 @@ class Export extends Command
     {
         $filename = $input->getArgument('target');
         $io = new SymfonyStyle($input, $output);
-        $io->title("Export to $filename");
+        
+        $env = $this->getApplication()->getKernel()->getEnvironment();
+        $io->title("Export '$env' environment to '$filename' file");
 
         $iter = $this->repo->sortedExport();
         $export = \MongoDB\BSON\toJSON(\MongoDB\BSON\fromPHP(iterator_to_array($iter)));
