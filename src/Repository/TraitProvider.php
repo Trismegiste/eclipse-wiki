@@ -38,6 +38,10 @@ class TraitProvider
             return $this->wiki->searchPageFromCategory(self::skillCategory, 50);
         });
 
+        usort($skills, function($a, $b) {
+            return iconv('UTF-8', 'ASCII//TRANSLIT', $a->title) > iconv('UTF-8', 'ASCII//TRANSLIT', $b->title);
+        });
+
         $listing = [];
         foreach ($skills as $item) {
             $listing[$item->title] = $item->title;
@@ -49,21 +53,21 @@ class TraitProvider
     public function findAttributes(): array
     {
         return $this->cache->get('attribute_list', function (ItemInterface $item) {
-                    $item->expiresAfter(DateInterval::createFromDateString('1 day'));
+                $item->expiresAfter(DateInterval::createFromDateString('1 day'));
 
-                    $content = $this->wiki->getPageByName(self::attributesPage);
-                    $doc = new \DOMDocument("1.0", "utf-8");
-                    $doc->loadXML($content);
-                    $xpath = new \DOMXpath($doc);
-                    $elements = $xpath->query("//tr/td[1]");
+                $content = $this->wiki->getPageByName(self::attributesPage);
+                $doc = new \DOMDocument("1.0", "utf-8");
+                $doc->loadXML($content);
+                $xpath = new \DOMXpath($doc);
+                $elements = $xpath->query("//tr/td[1]");
 
-                    for ($k = 0; $k < 5; $k++) {
-                        $name = trim($elements->item($k)->textContent);
-                        $listing[$name] = $name;
-                    }
+                for ($k = 0; $k < 5; $k++) {
+                    $name = trim($elements->item($k)->textContent);
+                    $listing[$name] = $name;
+                }
 
-                    return $listing;
-                });
+                return $listing;
+            });
     }
 
     public function findSocialNetworks(): array

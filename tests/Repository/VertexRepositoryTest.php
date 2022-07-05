@@ -4,6 +4,7 @@
  * Vesta
  */
 
+use App\Command\Import;
 use App\Entity\Vertex;
 use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -36,6 +37,7 @@ class VertexRepositoryTest extends KernelTestCase
         $doc = new Vertex('doc 2');
         $this->sut->save($doc);
         $pk = $doc->getPk();
+        usleep(Import::delayForTimestamp); // delay to get two different typestamps
         $doc = new Vertex('doc 3');
         $this->sut->save($doc);
 
