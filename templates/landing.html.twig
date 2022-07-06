@@ -1,41 +1,34 @@
 {% extends "base.html.twig" %}
 
-{% block header_title %}Aide{% endblock %}
+{% block header_title %}Eclipse Savage{% endblock %}
+
+{% macro dashboard_item(route, icon, label) %}
+    <div class="pure-u-1-5">
+        <a href="{{ path(route) }}">
+            <i class="icon-{{ icon }}"></i>
+            <h2>{{ label }}</h2>
+        </a>
+    </div>
+{% endmacro %}
+
 
 {% block content %}
-    <h2>Raccourcis sur la page de listing des vertex</h2>
-    <ul>
-        <li><strong>Escape</strong> : Reset du filtre de recherche</li>
-        <li><strong>Entrée</strong> : Sélection du premier choix dans la liste</li>
-    </ul>
-    <h2>Raccourcis clavier dans une page 'Voir'</h2>
-    <ul>
-        <li><strong>Flèche droite</strong> : Vertex précédent (plus ancien)</li>
-        <li><strong>Flèche gauche</strong> : Vertex suivant (plus récent)</li>
-        <li><strong>Flèche haute</strong> : Liste des vertex</li>
-        <li><strong>E</strong> : Édition du contenu WikiText du vertex</li>
-        <li><strong>S</strong> : Édition des caractéristiques d'un PNJ</li>
-        <li><strong>W</strong> : Édition des paramètres de combat d'un PNJ</li>
-        <li><strong>P</strong> : Génération du profil réseau d'un Transhumain</li>
-    </ul>
-    <h2>Écran des joueurs</h2>
-    <ul>
-        <li><a href="{{ path('app_gmhelper_qrcode') }}">QR Code de connexion</a></li>
-        <li><a href="{{ path('app_playercast_view') }}">Écran partagé</a></li>
-    </ul>
-    <h2>Page du tracker d'initiative</h2>
-    <ul>
-        <li><strong>Clic sur la case mort</strong> : PNJ grisé</li>
-        <li><strong>2e clic sur la case mort</strong> : PNJ effacé</li>
-    </ul>
-    <h2>Images MediaWiki</h2>
-    <ul>
-        <li><a href="{{ path('app_remotepicture_search') }}">Recherche images</a></li>
-    </ul>
-    <h2>Génération de cartes</h2>
-    <ul>
-        <li><a href="{{ path('app_mapcrud_list') }}">Liste des modèles</a></li>
-    </ul>
+    <div class="pure-g dashboard">
+        {{ _self.dashboard_item('app_npcgenerator_create', 'user-plus', 'Créer Transhumain') }}
+        {{ _self.dashboard_item('app_vertexcrud_create', 'video', 'Créer Scénario') }}
+        {{ _self.dashboard_item('app_placecrud_create', 'place', 'Créer Décor') }}
+        {{ _self.dashboard_item('app_remotepicture_search', 'search', 'Recherche images') }}
+        {{ _self.dashboard_item('app_gmhelper_namegenerate', 'namebook', 'Générateur de noms') }}
+        {{ _self.dashboard_item('app_mapcrud_list', 'battlemap', 'Créer une carte') }}
+        {{ _self.dashboard_item('app_gmhelper_tracker', 'stopwatch', 'Tracker Initiative') }}
+        {{ _self.dashboard_item('app_handoutcrud_create', 'handout', 'Créer Aide de jeu') }}
+        {{ _self.dashboard_item('app_lovelettercrud_create', 'loveletter', 'Créer Love letter') }}
+        {{ _self.dashboard_item('app_gmhelper_qrcode', 'qrcode', 'QR Code de connexion') }}
+        {{ _self.dashboard_item('app_playercast_view', 'screen', 'Écran partagé') }}
+        {{ _self.dashboard_item('app_npcgenerator_ali', 'ali', 'Créer IAL') }}
+        {{ _self.dashboard_item('app_npcgenerator_freeform', 'monster', 'Création libre') }}
+        {{ _self.dashboard_item('app_gmhelper_help', 'help-circled', 'Aide') }}
+    </div>
     <h2>En panne d'idée ?</h2>
     <ul>
         <li><a href="{{ path('app_idea_inspiration') }}">Avec OpenAI</a></li>
@@ -63,4 +56,22 @@
             <a href="{{ path('app_dump_rangedweapon') }}">Tableau des Armes à Distance</a>
         </li>
     </ul>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .dashboard > div {
+            text-align: center;
+        }
+        .dashboard a {
+            text-decoration: none;
+            color: #333;
+        }
+        .dashboard i {
+            display: block;
+            font-size: 800%;
+            color: #ccc;
+        }
+    </style>
 {% endblock %}

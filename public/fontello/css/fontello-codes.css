@@ -26,6 +26,8 @@
 .icon-handout:before { content: '\e816'; } /* '' */
 .icon-monster:before { content: '\e817'; } /* '' */
 .icon-qrcode:before { content: '\e818'; } /* '' */
+.icon-search:before { content: '\e819'; } /* '' */
+.icon-help-circled:before { content: '\e81a'; } /* '' */
 .icon-dead:before { content: '\e820'; } /* '' */
 .icon-token:before { content: '\e821'; } /* '' */
 .icon-stopwatch:before { content: '\e822'; } /* '' */
@@ -38,6 +40,7 @@
 .icon-simulspace:before { content: '\e833'; } /* '' */
 .icon-duplicate:before { content: '\f0c5'; } /* '' */
 .icon-menu:before { content: '\f0c9'; } /* '' */
+.icon-screen:before { content: '\f108'; } /* '' */
 .icon-angle-circled-up:before { content: '\f139'; } /* '' */
 .icon-angle-circled-down:before { content: '\f13a'; } /* '' */
 .icon-database:before { content: '\f1c0'; } /* '' */

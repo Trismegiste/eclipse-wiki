@@ -77,4 +77,13 @@ class GmHelper extends AbstractController
         return $this->render('player/qrcode.html.twig', ['url_cast' => $lan]);
     }
 
+    /**
+     * Help page
+     * @Route("/help", methods={"GET"})
+     */
+    public function help(): Response
+    {
+        return $this->render('help.html.twig');
+    }
+
 }
