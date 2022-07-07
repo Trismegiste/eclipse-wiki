@@ -13,33 +13,35 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
+        {% set navigation = [
+            {key: 'f1', route: 'app_vertexcrud_list', icon: 'list', label: 'Liste Vertex'},
+            {key: 'f2', route: 'app_npcgenerator_create', icon: 'user-plus', label: 'Créer Transhumain'},
+            {key: 'f3', route: 'app_vertexcrud_create', icon: 'video', label: 'Créer Scénario'},
+            {key: 'f4', route: 'app_placecrud_create', icon: 'place', label: 'Créer Décor'},
+            {key: 'f5', route: 'app_remotepicture_search', icon: 'search', label: 'Recherche images'},
+            {key: 'f6', route: 'app_gmhelper_namegenerate', icon: 'namebook', label: 'Générateur de noms'},
+            {key: 'f7', route: 'app_gmhelper_tracker', icon: 'stopwatch', label: 'Tracker Initiative'}
+        ] %}
         {% block body %}
             <h1 class="big-title">{% block header_title %}{% endblock %}</h1>
             {{ include('fragment/flashes.html.twig') }}
             <div class="pure-g">
                 <aside class="pure-u-1-6">
                     {% block sidebar %}
-                        {% macro menu_item(route, icon, label) %}
-                            <li class="pure-menu-item">
-                                <a href="{{ path(route) }}" class="pure-menu-link">
-                                    <i class="icon-{{ icon }}"></i>
-                                    {{ label }}
-                                </a>
-                            </li>
-                        {% endmacro %}
                         <nav class="pure-menu">
                             <a href="/" class="pure-menu-heading">
                                 <i class="icon-menu"></i>
                                 Eclipse Savage
                             </a>
                             <ul class="pure-menu-list">
-                                {{ _self.menu_item('app_vertexcrud_list', 'list', 'Liste Vertex') }}
-                                {{ _self.menu_item('app_npcgenerator_create', 'user-plus', 'Créer Transhumain') }}
-                                {{ _self.menu_item('app_vertexcrud_create', 'video', 'Créer Scénario') }}
-                                {{ _self.menu_item('app_placecrud_create', 'place', 'Créer Décor') }}
-                                {{ _self.menu_item('app_remotepicture_search', 'search', 'Recherche images') }}
-                                {{ _self.menu_item('app_gmhelper_namegenerate', 'namebook', 'Générateur de noms') }}
-                                {{ _self.menu_item('app_gmhelper_tracker', 'stopwatch', 'Tracker Initiative') }}
+                                {% for item in navigation %}
+                                    <li class="pure-menu-item">
+                                        <a href="{{ path(item.route) }}" class="pure-menu-link">
+                                            <i class="icon-{{ item.icon }}"></i>
+                                            {{ item.label }} ({{ item.key }})
+                                        </a>
+                                    </li>
+                                {% endfor %}
                             </ul>
                         </nav>
                         <section class="info">
@@ -59,6 +61,14 @@
         <script src="{{ asset('yuku/textcomplete.min.js') }}"></script>
         <script src="{{ asset('ccampbell/mousetrap.min.js') }}"></script>
         {% block javascripts %}
+            <script>
+                {% for item in navigation %}
+                    Mousetrap.bind('{{ item.key }}', function () {
+                        location.assign('{{ path(item.route) }}')
+                        return false
+                    })
+                {% endfor %}
+            </script>
         {% endblock %}
     </body>
 </html>
