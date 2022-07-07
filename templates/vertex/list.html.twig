@@ -11,6 +11,7 @@
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
     <script>
         async function filter(input) {
             let response = await fetch('{{ path('app_vertexcrud_filter') }}?query=' + input)
@@ -31,7 +32,7 @@
                         })
                     },
                     goToFirst(e) {
-                        e.preventDefault();
+                        e.preventDefault()
                         let elem = document.querySelector('.entity-listing a')
                         if (elem) {
                             location.href = elem.href
@@ -43,6 +44,7 @@
 {% endblock %}
 
 {% block stylesheets %}
+    {{ parent() }}
     <style>
         .pure-form {
             margin-bottom: 1em;
