@@ -18,11 +18,14 @@ class WaveFunction implements SvgPrintable
     protected $gridSize;
     protected $grid;
     protected $base;
+    protected $lastCollapse; // last coordinates (array) of the last collapsed cell
 
     public function __construct(int $size)
     {
         $this->gridSize = $size;
         $this->grid = array_fill(0, $size, array_fill(0, $size, null));
+        // used for sorting cell with the same entropy
+        $this->lastCollapse = [(int) $size / 2, (int) $size / 2];
     }
 
     public function printSvg(): void
@@ -95,6 +98,47 @@ class WaveFunction implements SvgPrintable
         });
 
         $this->base = $dic;
+    }
+
+    public function findLowerEntropyCoordinates(): array
+    {
+        // build an array of cells ordered by entropy (except already collapsed)
+        $entropyCounter = [];
+        $lowerEntropy = count($this->base);
+        foreach ($this->grid as $x => $column) {
+            foreach ($column as $y => $cell) {
+                /** @var \App\Entity\Wfc\WaveCell $cell */
+                $s = $cell->getEntropy();
+                if ($s > 1) {
+                    $entropyCounter[$s][] = [$x, $y];
+                    // in the process we store the lower entropy (after 1)
+                    if ($s < $lowerEntropy) {
+                        $lowerEntropy = $s;
+                    }
+                }
+            }
+        }
+
+        // here are the cells with lower entropy for collapsing
+        $candidatesForCollapse = $entropyCounter[$lowerEntropy];
+
+        // if there are many, we choose the closest to the last collapsed cell
+        if (count($candidatesForCollapse) > 1) {
+            $last = $this->lastCollapse;
+            usort($candidatesForCollapse, function (array $a, array $b) use ($last) {
+                $da = WaveFunction::getManhattanLength($a, $last);
+                $db = WaveFunction::getManhattanLength($b, $last);
+
+                return $da - $db;
+            });
+        }
+
+        return $candidatesForCollapse[0];
+    }
+
+    static public function getManhattanLength(array $a, array $b): int
+    {
+        return abs($a[0] - $b[0]) + abs($a[1] - $b[1]);
     }
 
 }

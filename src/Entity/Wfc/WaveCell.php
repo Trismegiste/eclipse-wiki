@@ -13,6 +13,10 @@ class WaveCell
 {
 
     public $tileMask; // mask (probability) for each EigenTile
-    public $updated;  // don't come back to this hexagon, it has been already collapsed
+
+    public function getEntropy(): int
+    {
+        return substr_count(decbin($this->tileMask), '1');
+    }
 
 }
