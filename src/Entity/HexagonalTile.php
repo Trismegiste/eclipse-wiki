@@ -25,14 +25,28 @@ class HexagonalTile implements Persistable
     const SOUTHEAST = 5;
     const SIDES = 6;
 
+    /**
+     * absolute pathname of the SVG
+     * @var string
+     */
     public $filename;
+
+    /**
+     * array of 6 strings naming the "type" of connections (free and arbitrary)
+     * @var array
+     */
     protected $anchor;
+
+    /**
+     * array of 6 booleans if one of the 6 rotations (from 0° to 300°) is enabled
+     * @var array
+     */
     protected $rotation;
 
     public function __construct()
     {
         $this->anchor = array_fill(self::EAST, self::SIDES, null);
-        $this->rotation = [true, false, false, false, false, false];  // default : rotation of 0° is available
+        $this->rotation = [true, false, false, false, false, false];  // default : rotation of 0° is always available
     }
 
     public function getAnchor(): array
