@@ -46,7 +46,20 @@ class Hexa extends Command
         $arrang = $this->repository->load($pkTileSet);
 
         $wf = $fac->buildWaveFunction($size, $arrang);
-        var_dump($wf);
+        $wf->getCell([3, 0])->tileMask = 6;
+        $wf->getCell([3, 4])->tileMask = 7;
+        $wf->getCell([6, 6])->tileMask = 7;
+
+        for ($y = 0; $y < $size; $y++) {
+            for ($x = 0; $x < $size; $x++) {
+                $cell = $wf->getCell([$x, $y]);
+                // $output->write(sprintf("%08b ", $cell->tileMask));
+                $output->write(sprintf("%d ", $cell->getEntropy()));
+            }
+            $output->writeln('');
+        }
+
+        var_dump($wf->findLowerEntropyCoordinates());
 
         return self::SUCCESS;
     }
