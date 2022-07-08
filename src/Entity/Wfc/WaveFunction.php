@@ -8,7 +8,6 @@ namespace App\Entity\Wfc;
 
 use App\Entity\HexagonalTile;
 use Trismegiste\MapGenerator\SvgPrintable;
-use Trismegiste\Strangelove\Type\BsonFixedArray;
 
 /**
  * A Map tiled with hexagons
@@ -16,14 +15,14 @@ use Trismegiste\Strangelove\Type\BsonFixedArray;
 class WaveFunction implements SvgPrintable
 {
 
-    protected $tile;
+    protected $gridSize;
+    protected $grid;
+    protected $base;
 
     public function __construct(int $size)
     {
-        $this->tile = new BsonFixedArray($size);
-        for ($k = 0; $k < $size; $k++) {
-            $this->tile[$k] = new BsonFixedArray($size);
-        }
+        $this->gridSize = $size;
+        $this->grid = array_fill(0, $size, array_fill(0, $size, null));
     }
 
     public function printSvg(): void
@@ -31,7 +30,7 @@ class WaveFunction implements SvgPrintable
         $sin60 = sin(M_PI / 3);
         $tan60 = tan(M_PI / 3);
 
-        foreach ($this->tile as $x => $column) {
+        foreach ($this->grid as $x => $column) {
             foreach ($column as $y => $cell) {
                 $cx = ($x - floor($y / 2)) / $sin60 + $y / $tan60;
                 echo "<use x=\"$cx\" y=\"$y\" href=\"#$cell\">";
@@ -42,18 +41,17 @@ class WaveFunction implements SvgPrintable
     }
 
     /**
-     * Sets a tile
+     * Sets a cell of the grid
      * @param array $coord
-     * @param WaveCell $tile
-     * @return void
+     * @param WaveCell $cell
      */
-    public function setTile(array $coord, WaveCell $tile): void
+    public function setCell(array $coord, WaveCell $cell): void
     {
-        $this->tile[$coord[0]][$coord[1]] = $tile;
+        $this->grid[$coord[0]][$coord[1]] = $cell;
     }
 
     /**
-     * Gets the coordinates of neighbour tiles around a given tile coordinates
+     * Gets the coordinates of neighbour cells around a given cell coordinates
      * @param array $coord
      * @return array
      */
@@ -74,30 +72,29 @@ class WaveFunction implements SvgPrintable
     }
 
     /**
-     * Gets the tile at a given coordinates
+     * Gets the cell at a given coordinates
      * @param array $coord
      * @return WaveCell
      */
-    public function getTile(array $coord): WaveCell
+    public function getCell(array $coord): WaveCell
     {
-        return $this->tile[$coord[0]][$coord[1]];
+        return $this->grid[$coord[0]][$coord[1]];
     }
 
-    public function collapse(array $coord, int $mask): void
+    /**
+     * Sets the dictionary of EigenTile
+     * @param array $dic Array of EigenTile
+     */
+    public function setEigenBase(array $dic): void
     {
-        /** @var WaveCell $centerTile */
-        $centerTile = $this->tile[$coord[0]][$coord[1]];
-        if ($centerTile->updated) {
-            return;
-        }
-        $centerTile->tileMask = $mask;
-        $centerTile->updated = true;
+        // check
+        array_walk($dic, function ($val) {
+            if (!$val instanceof \App\Entity\Wfc\EigenTile) {
+                throw new \UnexpectedValueException("This is not an EigenTile");
+            }
+        });
 
-        // propagate
-        $neighbours = $this->getNeighbourCoordinates($coord);
-        foreach ($neighbours as $direction => $adja) {
-            $this->collapse($adja, ??????????);
-        }
+        $this->base = $dic;
     }
 
 }

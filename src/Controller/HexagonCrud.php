@@ -98,60 +98,13 @@ class HexagonCrud extends AbstractController
     /**
      * @Route("/tile/arrangement/generate/{pk}")
      */
-    public function generate(string $pk): Response
+    public function generate(string $pk, \App\Entity\Wfc\Factory $fac): Response
     {
         /** @var \App\Entity\TileArrangement $arrang */
         $arrang = $this->tileRepo->load($pk);
+        $wf = $fac->buildWaveFunction(20, $arrang);
 
-        // compil anchors
-        $tileDic = [];
-        $anchor = [];
-        foreach ($arrang->getCollection() as $tile) {
-            foreach ($tile->getRotation() as $idx => $isPresent) {
-                if ($isPresent) {
-                    $eigen = new \App\Entity\Wfc\EigenTile();
-                    $eigen->filename = $tile->filename;
-                    $eigen->rotation = 60 * $idx;
-
-                    $tileDic[] = $eigen;
-                    $tmp = $tile->getAnchor();
-                    for ($k = 0; $k < $idx; $k++) {
-                        $lastItem = array_pop($tmp);
-                        array_unshift($tmp, $lastItem);
-                    }
-                    $anchor[] = $tmp;
-                }
-            }
-        }
-
-        // compute neighbors masks
-        foreach ($tileDic as $centerIdx => $centerTile) {
-            for ($direction = 0; $direction < 6; $direction++) {
-                $mask = 0;
-                foreach ($tileDic as $neighborIdx => $neighborTile) {
-                    if ($anchor[$centerIdx][$direction] === $anchor[$neighborIdx][($direction + 3) % 6]) {
-                        $mask = $mask | (1 << $neighborIdx);
-                    }
-                }
-                $centerTile->neighborMask[$direction] = $mask;
-            }
-        }
-
-        // fill wave function
-        $edgeSize = 20;
-        $wf = new \App\Entity\Wfc\WaveFunction($edgeSize);
-        for ($x = 0; $x < $edgeSize; $x++) {
-            for ($y = 0; $y < $edgeSize; $y++) {
-                $cell = new \App\Entity\Wfc\WaveCell();
-                $cell->tileMask = (1 << count($tileDic)) - 1;
-                $wf->setTile([$x, $y], $cell);
-            }
-        }
-
-        // launch
-        $wf->collapse([$edgeSize / 2, $edgeSize / 2], 0b00001);
-
-        return $this->render('hex/generate.html.twig', ['tile' => $tileDic, 'anchor' => $anchor, 'map' => $wf]);
+        return $this->render('hex/generate.html.twig', ['map' => $wf]);
     }
 
 }
