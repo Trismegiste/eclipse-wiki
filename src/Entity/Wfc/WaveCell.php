@@ -13,6 +13,8 @@ class WaveCell
 {
 
     public $tileMask; // mask (probability) for each EigenTile
+    
+    // @todo Change to an array of [null or EigenTile] at a fixed position (from the base)
 
     public function getEntropy(): int
     {
