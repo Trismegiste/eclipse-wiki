@@ -14,6 +14,6 @@ class EigenTile
 
     public $filename;  // the filename of the tile
     public $rotation;  // the rotation of the file (in degrees)
-    public $neighborMask = [];  // the 6 neighbors masks from HexagonalTile::EAST to HexagonalTile::SOUTHEAST
+    public $neighbourList = [];  // the 6 neighbour lists of EigenTile from HexagonalTile::EAST to HexagonalTile::SOUTHEAST
 
 }
