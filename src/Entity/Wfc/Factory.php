@@ -51,7 +51,7 @@ class Factory
                     if ($anchor[$centerIdx][$direction] === $anchor[$neighborIdx][($direction + 3) % 6]) {
                         // for example : if the anchor name at EAST of the center tile is equal to the anchor name at WEST of the neighbor tile
                         // we update the list i.e. this neighbor tile could be at EAST of the center tile
-                        $centerTile->neighbourList[$direction][]=$neighborTile;
+                        $centerTile->neighbourList[$direction][] = $neighborTile;
                     }
                 }
             }
@@ -67,8 +67,7 @@ class Factory
 
         for ($x = 0; $x < $size; $x++) {
             for ($y = 0; $y < $size; $y++) {
-                $cell = new \App\Entity\Wfc\WaveCell();
-                $cell->tileSuperposition = $base;  // all EigenTile are possible
+                $cell = new \App\Entity\Wfc\WaveCell($base);
                 $wf->setCell([$x, $y], $cell);
             }
         }

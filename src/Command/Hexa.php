@@ -47,22 +47,35 @@ class Hexa extends Command
 
         $base = $fac->buildEigenTileBase($arrang);
         $wf = $fac->buildWaveFunction($size, $base);
-        $wf->getCell([3, 0])->tileSuperposition = [$base[0], $base[2], $base[1], $base[7]];
-        $wf->getCell([3, 4])->tileSuperposition = [$base[0], $base[2], $base[5]];
-        $wf->getCell([6, 6])->tileSuperposition = [$base[0], $base[2], $base[5]];
 
+        $this->printWave($wf, $output);
+
+        $coord = $wf->findLowerEntropyCoordinates();
+        $start = $wf->getCell($coord);
+
+        $start->collapse();
+        $wf->propagate($coord);
+
+        $coord = $wf->findLowerEntropyCoordinates();
+        $wf->getCell($coord)->collapse();
+        $wf->propagate($coord);
+
+        $output->writeln('');
+        $this->printWave($wf, $output);
+
+        return self::SUCCESS;
+    }
+
+    protected function printWave(\App\Entity\Wfc\WaveFunction $wf, OutputInterface $output): void
+    {
+        $size = $wf->getSize();
         for ($y = 0; $y < $size; $y++) {
             for ($x = 0; $x < $size; $x++) {
                 $cell = $wf->getCell([$x, $y]);
-                // $output->write(sprintf("%08b ", $cell->tileMask));
                 $output->write(sprintf("%d ", $cell->getEntropy()));
             }
             $output->writeln('');
         }
-
-        var_dump($wf->findLowerEntropyCoordinates());
-
-        return self::SUCCESS;
     }
 
 }

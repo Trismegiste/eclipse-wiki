@@ -28,6 +28,11 @@ class WaveFunction implements SvgPrintable
         $this->lastCollapse = [(int) $size / 2, (int) $size / 2];
     }
 
+    public function getSize(): int
+    {
+        return $this->gridSize;
+    }
+
     public function printSvg(): void
     {
         $sin60 = sin(M_PI / 3);
@@ -100,6 +105,10 @@ class WaveFunction implements SvgPrintable
         $this->base = $dic;
     }
 
+    /**
+     * Finds the coordinates of the cell with minimal entropy (except collapsed) and closest to the last collapsed cell
+     * @return array a two-element array for [x,y]
+     */
     public function findLowerEntropyCoordinates(): array
     {
         // build an array of cells ordered by entropy (except already collapsed)
@@ -139,6 +148,26 @@ class WaveFunction implements SvgPrintable
     static public function getManhattanLength(array $a, array $b): int
     {
         return abs($a[0] - $b[0]) + abs($a[1] - $b[1]);
+    }
+
+    public function propagate(array $center): void
+    {
+        $current = $this->getCell($center);
+        $neigh = $this->getNeighbourCoordinates($center);
+        $newCell = [];
+        foreach ($neigh as $direction => $coord) {
+            echo "at " . $coord[0] . ' ' . $coord[1] . "\n";
+            // $direction of neighbours coordinates are the same order of neighbour in EigenTile
+            $possibilities = $current->getNeighbourEigenTile($direction);
+            echo "possibilities " . count($possibilities) . "\n";
+            $newState = $this->getCell($coord)->getNewState($possibilities);
+            echo "newstate " . count($newState) . "\n";
+            $newCell[$direction] = new WaveCell($newState);
+        }
+        // update grid
+        foreach ($newCell as $direction => $cell) {
+            $this->setCell($neigh[$direction], $cell);
+        }
     }
 
 }
