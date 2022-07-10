@@ -76,9 +76,9 @@ class VertexRepository extends DefaultRepository
     protected function getLastModified(string $pk): \MongoDB\BSON\UTCDateTime
     {
         $current = $this->manager->executeQuery($this->getNamespace(), new Query(
-                                ['_id' => new ObjectId($pk)],
-                                ['limit' => 1, 'projection' => ['lastModified' => true]]))
-                ->toArray();
+                    ['_id' => new ObjectId($pk)],
+                    ['limit' => 1, 'projection' => ['lastModified' => true]]))
+            ->toArray();
 
         if (0 == count($current)) {
             throw new \RuntimeException("The document with _id='$pk' was not found.");
@@ -90,8 +90,8 @@ class VertexRepository extends DefaultRepository
     public function searchPreviousOf(string $pk): ?Vertex
     {
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                        ['lastModified' => ['$gt' => $this->getLastModified($pk)]],
-                        ['limit' => 1, 'sort' => ['lastModified' => 1]]));
+                ['lastModified' => ['$gt' => $this->getLastModified($pk)]],
+                ['limit' => 1, 'sort' => ['lastModified' => 1]]));
 
         $item = $cursor->toArray();
 
@@ -101,8 +101,8 @@ class VertexRepository extends DefaultRepository
     public function searchNextOf(string $pk): ?Vertex
     {
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                        ['lastModified' => ['$lt' => $this->getLastModified($pk)]],
-                        ['limit' => 1, 'sort' => ['lastModified' => -1]]));
+                ['lastModified' => ['$lt' => $this->getLastModified($pk)]],
+                ['limit' => 1, 'sort' => ['lastModified' => -1]]));
 
         $item = $cursor->toArray();
 
@@ -149,7 +149,7 @@ class VertexRepository extends DefaultRepository
         return $it;
     }
 
-    public function findByClass($fqcn): \IteratorIterator
+    public function findByClass($fqcn, array $filter = []): \IteratorIterator
     {
         // managing parameters
         if (is_string($fqcn)) {
@@ -168,9 +168,10 @@ class VertexRepository extends DefaultRepository
         });
 
         // returning query
+        $filter['__pclass'] = ['$in' => $fqcn];
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                        ['__pclass' => ['$in' => $fqcn]],
-                        ['sort' => ['title' => 1]]
+                $filter,
+                ['sort' => ['title' => 1]]
         ));
 
         return new \IteratorIterator($cursor);
@@ -179,8 +180,8 @@ class VertexRepository extends DefaultRepository
     public function sortedExport(): \IteratorIterator
     {
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                        [],
-                        ['sort' => ['lastModified' => 1]]
+                [],
+                ['sort' => ['lastModified' => 1]]
         ));
 
         return new \IteratorIterator($cursor);

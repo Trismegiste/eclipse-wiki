@@ -84,7 +84,7 @@ class PlaceType extends AbstractType
     protected function getNpcList(): array
     {
         $npcList = [];
-        foreach ($this->repository->findByClass(Transhuman::class) as $npc) {
+        foreach ($this->repository->findByClass(Transhuman::class, ['surnameLang' => ['$ne' => null]]) as $npc) {
             if (!$npc->wildCard) {
                 $npcList[$npc->getTitle()] = $npc->getTitle();
             }
