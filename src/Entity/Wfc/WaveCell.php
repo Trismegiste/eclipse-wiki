@@ -12,13 +12,11 @@ namespace App\Entity\Wfc;
 class WaveCell
 {
 
-    public $tileMask; // mask (probability) for each EigenTile
-    
-    // @todo Change to an array of [null or EigenTile] at a fixed position (from the base)
+    public $tileSuperposition; // list of possible EigenTile
 
     public function getEntropy(): int
     {
-        return substr_count(decbin($this->tileMask), '1');
+        return count($this->tileSuperposition);
     }
 
 }
