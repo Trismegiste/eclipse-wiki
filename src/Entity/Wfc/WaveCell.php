@@ -48,7 +48,7 @@ class WaveCell
         return array_values($neighbour);
     }
 
-    public function getNewState(array $eigenTile): array
+    public function interactWith(array $eigenTile): void
     {
         $intersect = [];
         foreach ($eigenTile as $newConstraint) {
@@ -57,7 +57,7 @@ class WaveCell
             }
         }
 
-        return $intersect;
+        $this->tileSuperposition = $intersect;
     }
 
     public function getFirst(): EigenTile

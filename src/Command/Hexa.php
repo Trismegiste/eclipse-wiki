@@ -32,9 +32,9 @@ class Hexa extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Test Hexa')
-            ->addArgument('tileset', InputArgument::REQUIRED)
-            ->addArgument('size', InputArgument::REQUIRED);
+                ->setDescription('Test Hexa')
+                ->addArgument('tileset', InputArgument::REQUIRED)
+                ->addArgument('size', InputArgument::REQUIRED);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -50,18 +50,19 @@ class Hexa extends Command
 
         $this->printWave($wf, $output);
 
-        $coord = $wf->findLowerEntropyCoordinates();
-        $start = $wf->getCell($coord);
-
-        $start->collapse();
-        $wf->propagate($coord);
-
-        $coord = $wf->findLowerEntropyCoordinates();
-        $wf->getCell($coord)->collapse();
-        $wf->propagate($coord);
+        for ($iter = 0; $iter < 4; $iter++) {
+            $wf->iterate();
+            $output->writeln('');
+            $this->printWave($wf, $output);
+        }
 
         $output->writeln('');
-        $this->printWave($wf, $output);
+        for ($y = 0; $y < $size; $y++) {
+            for ($x = 0; $x < $size; $x++) {
+                $output->write(sprintf("%d ", count($wf->getNeighbourCoordinates([$x, $y]))));
+            }
+            $output->writeln('');
+        }
 
         return self::SUCCESS;
     }
