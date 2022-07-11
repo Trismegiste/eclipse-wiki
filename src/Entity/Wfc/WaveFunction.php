@@ -69,14 +69,33 @@ class WaveFunction implements SvgPrintable
         $y = $coord[1];
         $offset = $x + ($y % 2);
 
-        return [
-            HexagonalTile::WEST => [$x - 1, $y],
-            HexagonalTile::EAST => [$x + 1, $y],
-            HexagonalTile::NORTHWEST => [$offset - 1, $y - 1],
-            HexagonalTile::NORTHEAST => [$offset, $y - 1],
-            HexagonalTile::SOUTHWEST => [$offset - 1, $y + 1],
-            HexagonalTile::SOUTHEAST => [$offset, $y + 1]
-        ];
+        $neighbour = [];
+
+        if ($x > 0) {
+            $neighbour[HexagonalTile::WEST] = [$x - 1, $y];
+        }
+
+        if ($x < $this->gridSize - 1) {
+            $neighbour[HexagonalTile::EAST] = [$x + 1, $y];
+        }
+
+        if (($offset > 1) && ($y > 1)) {
+            $neighbour[HexagonalTile::NORTHWEST] = [$offset - 1, $y - 1];
+        }
+
+        if (($offset < $this->gridSize) && ($y > 1)) {
+            $neighbour[HexagonalTile::NORTHEAST] = [$offset, $y - 1];
+        }
+
+        if (($offset > 0) && ($y < $this->gridSize - 1)) {
+            $neighbour[HexagonalTile::SOUTHWEST] = [$offset - 1, $y + 1];
+        }
+
+        if (($offset < $this->gridSize) && ($y < $this->gridSize - 1)) {
+            $neighbour[HexagonalTile::SOUTHEAST] = [$offset, $y + 1];
+        }
+
+        return $neighbour;
     }
 
     /**
@@ -128,6 +147,10 @@ class WaveFunction implements SvgPrintable
             }
         }
 
+        if (0 == count($entropyCounter)) {
+            return [];
+        }
+
         // here are the cells with lower entropy for collapsing
         $candidatesForCollapse = $entropyCounter[$lowerEntropy];
 
@@ -150,23 +173,41 @@ class WaveFunction implements SvgPrintable
         return abs($a[0] - $b[0]) + abs($a[1] - $b[1]);
     }
 
-    public function propagate(array $center): void
+    public function relaxCoupling(): void
     {
-        $current = $this->getCell($center);
-        $neigh = $this->getNeighbourCoordinates($center);
-        $newCell = [];
-        foreach ($neigh as $direction => $coord) {
-            echo "at " . $coord[0] . ' ' . $coord[1] . "\n";
-            // $direction of neighbours coordinates are the same order of neighbour in EigenTile
-            $possibilities = $current->getNeighbourEigenTile($direction);
-            echo "possibilities " . count($possibilities) . "\n";
-            $newState = $this->getCell($coord)->getNewState($possibilities);
-            echo "newstate " . count($newState) . "\n";
-            $newCell[$direction] = new WaveCell($newState);
+        $dimBase = count($this->base);
+        $updated = array_fill(0, $this->gridSize, array_fill(0, $this->gridSize, null));
+
+        for ($x = 0; $x < $this->gridSize; $x++) {
+            for ($y = 0; $y < $this->gridSize; $y++) {
+                $current = $this->grid[$x][$y];
+                if ($current->getEntropy() === 1) {
+                    $updated[$x][$y] = clone $current;
+                    continue;
+                }
+                $newCell = $updated[$x][$y] = clone $current;
+                $neigh = $this->getNeighbourCoordinates([$x, $y]);
+                foreach ($neigh as $direction => $coord) {
+                    $couplingWithCurrent = $this->grid[$coord[0]][$coord[1]]->getNeighbourEigenTile(($direction + 3) % 6);
+                    if (count($couplingWithCurrent) === $dimBase) {
+                        continue;
+                    }
+                    $newCell->interactWith($couplingWithCurrent);
+                }
+            }
         }
-        // update grid
-        foreach ($newCell as $direction => $cell) {
-            $this->setCell($neigh[$direction], $cell);
+
+        $this->grid = $updated;
+    }
+
+    public function iterate(): void
+    {
+        $coord = $this->findLowerEntropyCoordinates();
+
+        if ([] !== $coord) {
+            $this->grid[$coord[0]][$coord[1]]->collapse();
+            $this->lastCollapse = $coord;
+            $this->relaxCoupling();
         }
     }
 
