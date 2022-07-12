@@ -7,9 +7,7 @@
 namespace App\Entity\Wfc;
 
 /**
- * Description of Factory
- *
- * @author trismegiste
+ * Factory for WFC objects
  */
 class Factory
 {
@@ -44,13 +42,13 @@ class Factory
             }
         }
 
-        // compute neighbors masks with the anchor array of arrays
+        // compute the 6 neighbours lists with the anchor array of arrays
         foreach ($tileBase as $centerIdx => $centerTile) {
             for ($direction = 0; $direction < 6; $direction++) {
                 foreach ($tileBase as $neighborIdx => $neighborTile) {
                     if ($anchor[$centerIdx][$direction] === $anchor[$neighborIdx][($direction + 3) % 6]) {
                         // for example : if the anchor name at EAST of the center tile is equal to the anchor name at WEST of the neighbor tile
-                        // we update the list i.e. this neighbor tile could be at EAST of the center tile
+                        // we update the list i.e. this neighbour tile could be at EAST of the center tile
                         $centerTile->neighbourList[$direction][] = $neighborTile;
                     }
                 }

@@ -158,6 +158,7 @@ class WaveFunction implements SvgPrintable
         if (count($candidatesForCollapse) > 1) {
             $last = $this->lastCollapse;
             usort($candidatesForCollapse, function (array $a, array $b) use ($last) {
+                // @todo no need to sort all items : only find the closest with one loop
                 $da = WaveFunction::getManhattanLength($a, $last);
                 $db = WaveFunction::getManhattanLength($b, $last);
 
