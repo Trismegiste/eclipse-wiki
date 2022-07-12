@@ -79,11 +79,11 @@ class WaveFunction implements SvgPrintable
             $neighbour[HexagonalTile::EAST] = [$x + 1, $y];
         }
 
-        if (($offset > 1) && ($y > 1)) {
+        if (($offset > 0) && ($y > 0)) {
             $neighbour[HexagonalTile::NORTHWEST] = [$offset - 1, $y - 1];
         }
 
-        if (($offset < $this->gridSize) && ($y > 1)) {
+        if (($offset < $this->gridSize) && ($y > 0)) {
             $neighbour[HexagonalTile::NORTHEAST] = [$offset, $y - 1];
         }
 

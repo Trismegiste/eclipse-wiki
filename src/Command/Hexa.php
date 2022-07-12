@@ -34,12 +34,14 @@ class Hexa extends Command
         $this
                 ->setDescription('Test Hexa')
                 ->addArgument('tileset', InputArgument::REQUIRED)
-                ->addArgument('size', InputArgument::REQUIRED);
+                ->addArgument('size', InputArgument::REQUIRED)
+                ->addArgument('iter', InputArgument::REQUIRED);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $size = $input->getArgument('size');
+        $maxIter = $input->getArgument('iter');
         $pkTileSet = $input->getArgument('tileset');
 
         $fac = new \App\Entity\Wfc\Factory();
@@ -50,19 +52,19 @@ class Hexa extends Command
 
         $this->printWave($wf, $output);
 
-        for ($iter = 0; $iter < 4; $iter++) {
+        for ($iter = 0; $iter < $maxIter; $iter++) {
             $wf->iterate();
             $output->writeln('');
             $this->printWave($wf, $output);
         }
 
-        $output->writeln('');
-        for ($y = 0; $y < $size; $y++) {
-            for ($x = 0; $x < $size; $x++) {
-                $output->write(sprintf("%d ", count($wf->getNeighbourCoordinates([$x, $y]))));
-            }
-            $output->writeln('');
-        }
+//        $output->writeln('');
+//        for ($y = 0; $y < $size; $y++) {
+//            for ($x = 0; $x < $size; $x++) {
+//                $output->write(sprintf("%d ", count($wf->getNeighbourCoordinates([$x, $y]))));
+//            }
+//            $output->writeln('');
+//        }
 
         return self::SUCCESS;
     }
