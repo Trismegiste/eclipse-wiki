@@ -50,6 +50,10 @@ class WaveCell
 
     public function interactWith(array $eigenTile): void
     {
+        if (!count($eigenTile)) { // to prevent error to propagate
+            return;
+        }
+
         $intersect = [];
         foreach ($eigenTile as $newConstraint) {
             if (in_array($newConstraint, $this->tileSuperposition)) {
