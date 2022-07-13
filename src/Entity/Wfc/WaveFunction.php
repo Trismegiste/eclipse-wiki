@@ -7,12 +7,11 @@
 namespace App\Entity\Wfc;
 
 use App\Entity\HexagonalTile;
-use Trismegiste\MapGenerator\SvgPrintable;
 
 /**
  * A Map tiled with hexagons
  */
-class WaveFunction implements SvgPrintable
+class WaveFunction
 {
 
     protected $gridSize;
@@ -31,21 +30,6 @@ class WaveFunction implements SvgPrintable
     public function getSize(): int
     {
         return $this->gridSize;
-    }
-
-    public function printSvg(): void
-    {
-        $sin60 = sin(M_PI / 3);
-        $tan60 = tan(M_PI / 3);
-
-        foreach ($this->grid as $x => $column) {
-            foreach ($column as $y => $cell) {
-                $cx = ($x - floor($y / 2)) / $sin60 + $y / $tan60;
-                echo "<use x=\"$cx\" y=\"$y\" href=\"#$cell\">";
-                echo "<title>$x $y</title>";
-                echo "</use>\n";
-            }
-        }
     }
 
     public function dump(BattlemapSvg $doc): void
