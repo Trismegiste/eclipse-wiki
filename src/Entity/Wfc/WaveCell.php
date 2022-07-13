@@ -26,13 +26,14 @@ class WaveCell
 
     public function collapse(): void
     {
+        $keys = array_keys($this->tileSuperposition);
         $n = random_int(0, count($this->tileSuperposition) - 1);
-        $this->tileSuperposition = [$this->tileSuperposition[$n]];
+        $this->setEigenState($this->tileSuperposition[$keys[$n]]);
     }
 
     public function setEigenState(EigenTile $tile): void
     {
-        $this->tileSuperposition = [$tile];
+        $this->tileSuperposition = [$tile->getUniqueId() => $tile];
     }
 
     public function getNeighbourEigenTile(int $direction): array
@@ -40,12 +41,12 @@ class WaveCell
         $neighbour = [];
         foreach ($this->tileSuperposition as $tile) {
             /** @var \App\Entity\Wfc\EigenTile $tile */
-            foreach ($tile->neighbourList[$direction] as $constraint) {
-                $neighbour[spl_object_id($constraint)] = $constraint;
+            foreach ($tile->neighbourList[$direction] as $idx => $constraint) {
+                $neighbour[$idx] = $constraint;
             }
         }
 
-        return array_values($neighbour);
+        return $neighbour;
     }
 
     public function interactWith(array $eigenTile): void
@@ -54,19 +55,14 @@ class WaveCell
             return;
         }
 
-        $intersect = [];
-        foreach ($eigenTile as $newConstraint) {
-            if (in_array($newConstraint, $this->tileSuperposition)) {
-                $intersect[] = $newConstraint;
-            }
-        }
-
-        $this->tileSuperposition = $intersect;
+        $this->tileSuperposition = array_intersect_key($this->tileSuperposition, $eigenTile);
     }
 
     public function getFirst(): EigenTile
     {
-        return $this->tileSuperposition[0];
+        $idx = array_key_first($this->tileSuperposition);
+
+        return $this->tileSuperposition[$idx];
     }
 
 }

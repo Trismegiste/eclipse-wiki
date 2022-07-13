@@ -35,14 +35,15 @@ class Factory
             foreach ($tile->getRotation() as $idx => $isPresent) {
                 // creating a tile for each possible rotation
                 if ($isPresent) {
-                    $tileBase[] = new EigenTile($svgFile->getKey(), 60 * $idx);
+                    $eigen = new EigenTile($svgFile->getKey(), 60 * $idx);
+                    $tileBase[$eigen->getUniqueId()] = $eigen;
                     // we copy the tile anchors array and shift it (and loop) according the count of 60° rotations we apply to the tile
                     $tmp = $tile->getAnchor();
                     for ($k = 0; $k < $idx; $k++) {
                         $lastItem = array_pop($tmp);
                         array_unshift($tmp, $lastItem);
                     }
-                    $anchor[] = $tmp;
+                    $anchor[$eigen->getUniqueId()] = $tmp;
                 }
             }
         }
@@ -54,7 +55,7 @@ class Factory
                     if ($anchor[$centerIdx][$direction] === $anchor[$neighborIdx][($direction + 3) % 6]) {
                         // for example : if the anchor name at EAST of the center tile is equal to the anchor name at WEST of the neighbor tile
                         // we update the list i.e. this neighbour tile could be at EAST of the center tile
-                        $centerTile->neighbourList[$direction][] = $neighborTile;
+                        $centerTile->neighbourList[$direction][$neighborTile->getUniqueId()] = $neighborTile;
                     }
                 }
             }
@@ -103,6 +104,7 @@ class Factory
             /** @var \App\Entity\Wfc\EigenTile $eigentile */
             $item = $battlemap->createElementNS(TileSvg::svgNS, 'g');
             $item->setAttribute('id', $eigentile->getUniqueId());
+            // minus because rotate is not CCW
             $item->setAttribute('transform', "rotate(-" . $eigentile->getRotation() . ")");
             $usetile = $battlemap->createElementNS(TileSvg::svgNS, 'use');
             $usetile->setAttribute('href', '#' . $eigentile->getTemplate());
