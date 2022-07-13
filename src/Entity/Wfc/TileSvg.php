@@ -33,4 +33,9 @@ class TileSvg extends \DOMDocument
         return $xpath->query('/svg:svg/svg:g[@id="' . $this->key . '"]')->item(0);
     }
 
+    public function getKey(): string
+    {
+        return $this->key;
+    }
+
 }

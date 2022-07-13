@@ -12,6 +12,13 @@ namespace App\Entity\Wfc;
 class Factory
 {
 
+    protected $tileFolder;
+
+    public function __construct()
+    {
+        $this->tileFolder = __DIR__ . '/../../../templates/hex/tile/';
+    }
+
     /**
      * Creates a base of EigenTile
      * @param \App\Entity\TileArrangement $arrang
@@ -23,11 +30,13 @@ class Factory
         $tileBase = [];
         $anchor = [];
         foreach ($arrang->getCollection() as $tile) {
+            $svgFile = new TileSvg();
+            $svgFile->load($this->tileFolder . $tile->filename);
             foreach ($tile->getRotation() as $idx => $isPresent) {
                 // creating a tile for each possible rotation
                 if ($isPresent) {
                     $eigen = new EigenTile();
-                    $eigen->filename = $tile->filename;
+                    $eigen->filename = $svgFile->getKey();
                     $eigen->rotation = 60 * $idx;
 
                     $tileBase[] = $eigen;
@@ -87,7 +96,7 @@ class Factory
         // hexagon tile from file
         foreach ($arrang->getCollection() as $tile) {
             $svg = new TileSvg();
-            $svg->load(__DIR__ . '/../../../templates/hex/tile/' . $tile->filename);
+            $svg->load($this->tileFolder . $tile->filename);
             $item = $svg->getTile();
             $imported = $battlemap->importNode($item, true);
             $defs->appendChild($imported);
