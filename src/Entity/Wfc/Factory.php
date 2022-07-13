@@ -103,7 +103,7 @@ class Factory
             /** @var \App\Entity\Wfc\EigenTile $eigentile */
             $item = $battlemap->createElementNS(TileSvg::svgNS, 'g');
             $item->setAttribute('id', $eigentile->getUniqueId());
-            $item->setAttribute('transform', "rotate(" . $eigentile->getRotation() . ")");
+            $item->setAttribute('transform', "rotate(-" . $eigentile->getRotation() . ")");
             $usetile = $battlemap->createElementNS(TileSvg::svgNS, 'use');
             $usetile->setAttribute('href', '#' . $eigentile->getTemplate());
             $item->appendChild($usetile);
