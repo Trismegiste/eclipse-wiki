@@ -35,11 +35,7 @@ class Factory
             foreach ($tile->getRotation() as $idx => $isPresent) {
                 // creating a tile for each possible rotation
                 if ($isPresent) {
-                    $eigen = new EigenTile();
-                    $eigen->filename = $svgFile->getKey();
-                    $eigen->rotation = 60 * $idx;
-
-                    $tileBase[] = $eigen;
+                    $tileBase[] = new EigenTile($svgFile->getKey(), 60 * $idx);
                     // we copy the tile anchors array and shift it (and loop) according the count of 60° rotations we apply to the tile
                     $tmp = $tile->getAnchor();
                     for ($k = 0; $k < $idx; $k++) {
@@ -106,10 +102,10 @@ class Factory
         foreach ($base as $eigentile) {
             /** @var \App\Entity\Wfc\EigenTile $eigentile */
             $item = $battlemap->createElementNS(TileSvg::svgNS, 'g');
-            $item->setAttribute('id', $eigentile->filename . '-' . $eigentile->rotation);
-            $item->setAttribute('transform', "rotate(" . $eigentile->rotation . ")");
+            $item->setAttribute('id', $eigentile->getUniqueId());
+            $item->setAttribute('transform', "rotate(" . $eigentile->getRotation() . ")");
             $usetile = $battlemap->createElementNS(TileSvg::svgNS, 'use');
-            $usetile->setAttribute('href', '#' . $eigentile->filename);
+            $usetile->setAttribute('href', '#' . $eigentile->getTemplate());
             $item->appendChild($usetile);
             $defs->appendChild($item);
         }

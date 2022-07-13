@@ -63,7 +63,7 @@ class WaveFunction implements SvgPrintable
                     $item = $doc->createElementNS(TileSvg::svgNS, 'use');
                     $item->setAttribute('x', $cx);
                     $item->setAttribute('y', $y);
-                    $item->setAttribute('href', '#' . $eigentile->filename . '-' . $eigentile->rotation);
+                    $item->setAttribute('href', '#' . $eigentile->getUniqueId());
                     $container->appendChild($item);
                 }
             }
