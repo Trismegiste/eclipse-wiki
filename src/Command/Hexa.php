@@ -34,17 +34,14 @@ class Hexa extends Command
         $this
                 ->setDescription('Test Hexa')
                 ->addArgument('tileset', InputArgument::REQUIRED)
-                ->addArgument('size', InputArgument::REQUIRED)
-                ->addArgument('iter', InputArgument::REQUIRED);
+                ->addArgument('size', InputArgument::REQUIRED);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $size = $input->getArgument('size');
-        $maxIter = $input->getArgument('iter');
         $pkTileSet = $input->getArgument('tileset');
-        $cursor = new \Symfony\Component\Console\Cursor($output);
-        
+
         $fac = new \App\Entity\Wfc\Factory();
         $arrang = $this->repository->load($pkTileSet);
 
@@ -52,30 +49,23 @@ class Hexa extends Command
         $wf = $fac->buildWaveFunction($size, $base);
 
         while ($wf->iterate()) {
-            $cursor->clearScreen();
             $this->printWave($wf, $output);
         }
-
-//        $output->writeln('');
-//        for ($y = 0; $y < $size; $y++) {
-//            for ($x = 0; $x < $size; $x++) {
-//                $output->write(sprintf("%d ", count($wf->getNeighbourCoordinates([$x, $y]))));
-//            }
-//            $output->writeln('');
-//        }
 
         return self::SUCCESS;
     }
 
     protected function printWave(\App\Entity\Wfc\WaveFunction $wf, OutputInterface $output): void
     {
+        $cursor = new \Symfony\Component\Console\Cursor($output);
         $size = $wf->getSize();
         for ($y = 0; $y < $size; $y++) {
+            $cursor->moveToPosition(1, $y + 1);
             for ($x = 0; $x < $size; $x++) {
                 $cell = $wf->getCell([$x, $y]);
-                $output->write(sprintf("%d ", $cell->getEntropy()));
+                $output->write($cell->getEntropy());
+                $cursor->moveRight();
             }
-            $output->writeln('');
         }
     }
 
