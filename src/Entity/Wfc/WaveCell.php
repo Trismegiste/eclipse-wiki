@@ -41,9 +41,7 @@ class WaveCell
         $neighbour = [];
         foreach ($this->tileSuperposition as $tile) {
             /** @var \App\Entity\Wfc\EigenTile $tile */
-            foreach ($tile->neighbourList[$direction] as $idx => $constraint) {
-                $neighbour[$idx] = $constraint;
-            }
+            $neighbour = array_merge($neighbour, $tile->neighbourList[$direction]);
         }
 
         return $neighbour;
