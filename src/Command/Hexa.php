@@ -43,18 +43,16 @@ class Hexa extends Command
         $size = $input->getArgument('size');
         $maxIter = $input->getArgument('iter');
         $pkTileSet = $input->getArgument('tileset');
-
+        $cursor = new \Symfony\Component\Console\Cursor($output);
+        
         $fac = new \App\Entity\Wfc\Factory();
         $arrang = $this->repository->load($pkTileSet);
 
         $base = $fac->buildEigenTileBase($arrang);
         $wf = $fac->buildWaveFunction($size, $base);
 
-        $this->printWave($wf, $output);
-
-        for ($iter = 0; $iter < $maxIter; $iter++) {
-            $wf->iterate();
-            $output->writeln('');
+        while ($wf->iterate()) {
+            $cursor->clearScreen();
             $this->printWave($wf, $output);
         }
 

@@ -201,15 +201,23 @@ class WaveFunction implements SvgPrintable
         $this->grid = $updated;
     }
 
-    public function iterate(): void
+    public function iterate(): bool
     {
         $coord = $this->findLowerEntropyCoordinates();
+        $hasMore = ([] !== $coord);
 
-        if ([] !== $coord) {
+        if ($hasMore) {
             $this->grid[$coord[0]][$coord[1]]->collapse();
             $this->lastCollapse = $coord;
             $this->relaxCoupling();
+            $this->relaxCoupling();
+            $this->relaxCoupling();
+            $this->relaxCoupling();
+            $this->relaxCoupling();
+            // @todo If there is a zero, we cancel the iteration and try another collapse OR we can choose another cell just above the lower entropy
         }
+
+        return $hasMore;
     }
 
 }
