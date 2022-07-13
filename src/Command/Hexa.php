@@ -48,9 +48,14 @@ class Hexa extends Command
         $base = $fac->buildEigenTileBase($arrang);
         $wf = $fac->buildWaveFunction($size, $base);
 
+        $battlemap = $fac->buildBattlemap($size, $arrang, $base);
+
         while ($wf->iterate()) {
-            $this->printWave($wf, $output);
+            //      $this->printWave($wf, $output);
         }
+
+        $wf->dump($battlemap);
+        echo $battlemap->saveXML();
 
         return self::SUCCESS;
     }
