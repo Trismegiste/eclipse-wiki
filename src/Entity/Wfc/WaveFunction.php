@@ -48,6 +48,28 @@ class WaveFunction implements SvgPrintable
         }
     }
 
+    public function dump(BattlemapSvg $doc): void
+    {
+        $sin60 = sin(M_PI / 3);
+        $tan60 = tan(M_PI / 3);
+
+        $container = $doc->getGround();
+        foreach ($this->grid as $x => $column) {
+            foreach ($column as $y => $cell) {
+                /** @var \App\Entity\Wfc\WaveCell $cell */
+                if ($cell->getEntropy() === 1) {
+                    $eigentile = $cell->getFirst();
+                    $cx = ($x - floor($y / 2)) / $sin60 + $y / $tan60;
+                    $item = $doc->createElementNS(TileSvg::svgNS, 'use');
+                    $item->setAttribute('x', $cx);
+                    $item->setAttribute('y', $y);
+                    $item->setAttribute('href', '#' . $eigentile->filename . '-' . $eigentile->rotation);
+                    $container->appendChild($item);
+                }
+            }
+        }
+    }
+
     /**
      * Sets a cell of the grid
      * @param array $coord
@@ -209,7 +231,6 @@ class WaveFunction implements SvgPrintable
         if ($hasMore) {
             $this->grid[$coord[0]][$coord[1]]->collapse();
             $this->lastCollapse = $coord;
-            $this->relaxCoupling();
             $this->relaxCoupling();
             $this->relaxCoupling();
             $this->relaxCoupling();

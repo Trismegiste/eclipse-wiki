@@ -73,4 +73,44 @@ class Factory
         return $wf;
     }
 
+    public function buildBattlemap(int $size, \App\Entity\TileArrangement $arrang, array $base): \DOMDocument
+    {
+
+        $battlemap = new BattlemapSvg();
+        $root = $battlemap->createElementNS(TileSvg::svgNS, 'svg');
+        $root->setAttribute('viewBox', "0 0 $size $size");
+        $battlemap->appendChild($root);
+
+        $defs = $battlemap->createElementNS(TileSvg::svgNS, 'defs');
+        $root->appendChild($defs);
+
+        // hexagon tile from file
+        foreach ($arrang->getCollection() as $tile) {
+            $svg = new TileSvg();
+            $svg->load(__DIR__ . '/../../../templates/hex/tile/' . $tile->filename);
+            $item = $svg->getTile();
+            $imported = $battlemap->importNode($item, true);
+            $defs->appendChild($imported);
+        }
+
+        // generation of eigentile
+        foreach ($base as $eigentile) {
+            /** @var \App\Entity\Wfc\EigenTile $eigentile */
+            $item = $battlemap->createElementNS(TileSvg::svgNS, 'g');
+            $item->setAttribute('id', $eigentile->filename . '-' . $eigentile->rotation);
+            $item->setAttribute('transform', "rotate(" . $eigentile->rotation . ")");
+            $usetile = $battlemap->createElementNS(TileSvg::svgNS, 'use');
+            $usetile->setAttribute('href', '#' . $eigentile->filename);
+            $item->appendChild($usetile);
+            $defs->appendChild($item);
+        }
+
+        // map
+        $item = $battlemap->createElementNS(TileSvg::svgNS, 'g');
+        $item->setAttribute('id', 'ground');
+        $root->appendChild($item);
+
+        return $battlemap;
+    }
+
 }
