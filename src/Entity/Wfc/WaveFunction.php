@@ -144,10 +144,13 @@ class WaveFunction
                 /** @var \App\Entity\Wfc\WaveCell $cell */
                 $s = $cell->getEntropy();
                 if ($s > 1) {
-                    $entropyCounter[$s][] = [$x, $y];
-                    // in the process we store the lower entropy (after 1)
+                    // we store the lower entropy (after 1)
                     if ($s < $lowerEntropy) {
                         $lowerEntropy = $s;
+                        // restart the filter of lower entropy
+                        $entropyCounter = [[$x, $y]];
+                    } else if ($s === $lowerEntropy) {
+                        $entropyCounter[] = [$x, $y];
                     }
                 }
             }
@@ -157,22 +160,22 @@ class WaveFunction
             return [];
         }
 
-        // here are the cells with lower entropy for collapsing
-        $candidatesForCollapse = $entropyCounter[$lowerEntropy];
-
         // if there are many, we choose the closest to the last collapsed cell
-        if (count($candidatesForCollapse) > 1) {
-            $last = $this->lastCollapse;
-            usort($candidatesForCollapse, function (array $a, array $b) use ($last) {
-                // @todo no need to sort all items : only find the closest with one loop
-                $da = WaveFunction::getManhattanLength($a, $last);
-                $db = WaveFunction::getManhattanLength($b, $last);
-
-                return $da - $db;
-            });
+        if (count($entropyCounter) > 1) {
+            $closestCoord = [$this->gridSize, $this->gridSize];
+            $closestDistance = 2 * $this->gridSize;
+            foreach ($entropyCounter as $coord) {
+                $distance = WaveFunction::getManhattanLength($coord, $this->lastCollapse);
+                if ($distance < $closestDistance) {
+                    $closestDistance = $distance;
+                    $closestCoord = $coord;
+                }
+            }
+        } else {
+            $closestCoord = array_pop($entropyCounter);
         }
 
-        return $candidatesForCollapse[0];
+        return $closestCoord;
     }
 
     static public function getManhattanLength(array $a, array $b): int
