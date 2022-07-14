@@ -32,9 +32,9 @@ class Hexa extends Command
     protected function configure(): void
     {
         $this
-                ->setDescription('Test Hexa')
-                ->addArgument('tileset', InputArgument::REQUIRED)
-                ->addArgument('size', InputArgument::REQUIRED);
+            ->setDescription('Test Hexa')
+            ->addArgument('tileset', InputArgument::REQUIRED)
+            ->addArgument('size', InputArgument::REQUIRED);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -50,12 +50,14 @@ class Hexa extends Command
 
         $battlemap = $fac->buildBattlemap($size, $arrang, $base);
 
+        $stopwatch = microtime(true);
         while ($wf->iterate()) {
             //      $this->printWave($wf, $output);
         }
 
         $wf->dump($battlemap);
-        echo $battlemap->saveXML();
+        $battlemap->save('yolo.svg');
+        $output->writeln("duration = " . (microtime(true) - $stopwatch));
 
         return self::SUCCESS;
     }
