@@ -212,9 +212,9 @@ class NpcGeneratorTest extends WebTestCase
         $repo = static::getContainer()->get(VertexRepository::class);
         $repo->save($template);
 
-        $this->client->request('GET', '/npc/wildcard/John/' . $template->getPk());
+        $this->client->request('GET', '/npc/extra/John/' . $template->getPk());
         $this->assertResponseRedirects();
-        $this->assertStringStartsWith('/npc/edit/', $this->client->getResponse()->headers->get('Location'));
+        $this->assertStringStartsWith('/profile/create', $this->client->getResponse()->headers->get('Location'));
     }
 
 }

@@ -287,22 +287,18 @@ class NpcGenerator extends AbstractController
 
     /**
      * Creates a wildcard NPC from a template and a new name
-     * @Route("/npc/wildcard/{title}/{template}", methods={"GET"}, requirements={"template"="[\da-f]{24}"})
+     * @Route("/npc/extra/{title}/{template}", methods={"GET"}, requirements={"template"="[\da-f]{24}"})
      */
-    public function createWildcard(string $title, string $template): Response
+    public function createExtra(string $title, string $template, \App\Repository\CharacterFactory $fac): Response
     {
         $npc = $this->repository->findByPk($template);
         if (is_null($npc) || (!$npc instanceof Transhuman)) {
             throw new NotFoundHttpException("$template does not exist");
         }
-        /** @var Transhuman $wildcard */
-        $wildcard = clone $npc;
-        $wildcard->wildCard = true;
-        $wildcard->setTitle($title);
+        $extra = $fac->createExtraFromTemplate($npc, $title);
+        $this->repository->save($extra);
 
-        $this->repository->save($wildcard);
-
-        return $this->redirectToRoute('app_npcgenerator_edit', ['pk' => $wildcard->getPk()]);
+        return $this->redirectToRoute('app_profilepicture_create', ['pk' => $extra->getPk()]);
     }
 
 }

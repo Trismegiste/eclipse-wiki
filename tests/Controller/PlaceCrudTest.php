@@ -34,6 +34,7 @@ class PlaceCrudTest extends WebTestCase
         $fac = static::getContainer()->get(\App\Repository\CharacterFactory::class);
         $npc = $fac->create('Wizard', new Background('back'), new Faction('fact'));
         $npc->setMorph(new Morph('morph'));
+        $npc->surnameLang = 'german';
         $repo->save($npc);
 
         return $npc->getPk();
