@@ -63,13 +63,3 @@
         </div>
     </div>
 {% endblock %}
-
-{% block javascripts %}
-    {{ parent() }} 
-    <script>
-        Mousetrap.bind('p', function () {
-            location.assign('{{ path('app_profilepicture_create', {pk: npc.pk}) }}')
-            return false
-        });
-    </script>
-{% endblock %}
