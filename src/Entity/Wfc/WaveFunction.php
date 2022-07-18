@@ -156,26 +156,27 @@ class WaveFunction
             }
         }
 
-        if (0 == count($entropyCounter)) {
-            return [];
-        }
+        $candidate = count($entropyCounter);
 
-        // if there are many, we choose the closest to the last collapsed cell
-        if (count($entropyCounter) > 1) {
-            $closestCoord = [$this->gridSize, $this->gridSize];
-            $closestDistance = 2 * $this->gridSize;
-            foreach ($entropyCounter as $coord) {
-                $distance = WaveFunction::getManhattanLength($coord, $this->lastCollapse);
-                if ($distance < $closestDistance) {
-                    $closestDistance = $distance;
-                    $closestCoord = $coord;
+        switch ($candidate) {
+            case 0 :
+                return [];
+
+            case 1 :
+                return array_pop($entropyCounter);
+
+            default :
+                $closestCoord = [$this->gridSize, $this->gridSize];
+                $closestDistance = 2 * $this->gridSize;
+                foreach ($entropyCounter as $coord) {
+                    $distance = WaveFunction::getManhattanLength($coord, $this->lastCollapse);
+                    if ($distance < $closestDistance) {
+                        $closestDistance = $distance;
+                        $closestCoord = $coord;
+                    }
                 }
-            }
-        } else {
-            $closestCoord = array_pop($entropyCounter);
+                return $closestCoord;
         }
-
-        return $closestCoord;
     }
 
     static public function getManhattanLength(array $a, array $b): int
