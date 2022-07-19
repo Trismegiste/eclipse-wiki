@@ -2,7 +2,7 @@
     <div class="pure-u-1-12 thumb">
         <i class="icon-{{ item.world == 'Simulespace' ? 'simulspace' : 'place' }}"></i>
     </div>
-    <div class="pure-u-17-24">
+    <div class="pure-u-2-3">
         <a href="{{ path('app_vertexcrud_show', {pk: item.pk}) }}" class="block-link">
             <h2>{{ item.title }}</h2>
             <span>Lieu : </span>
@@ -11,7 +11,7 @@
             {{ item.temperature }}
         </a>
     </div>
-    <div class="pure-u-5-24">
+    <div class="pure-u-1-4">
         <nav class="listing-action">
             {{ include('place/actions.html.twig', {vertex:item}) }}
         </nav>

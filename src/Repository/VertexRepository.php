@@ -144,9 +144,14 @@ class VertexRepository extends DefaultRepository
             ]];
         }
 
-        $it = $this->search($filter, [], 'lastModified');
+        $cursor = $this->manager->executeQuery($this->getNamespace(), new Query($filter, [
+                'sort' => [
+                    'archived' => 1,
+                    'lastModified' => -1
+                ]
+        ]));
 
-        return $it;
+        return new \IteratorIterator($cursor);
     }
 
     public function findByClass($fqcn, array $filter = []): \IteratorIterator

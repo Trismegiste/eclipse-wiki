@@ -54,12 +54,17 @@ form .collection nav a {
     margin-left: 0.8em;
 }
 
+.entity-listing > .pure-g:hover {
+    background-color: #ffeded;
+}
+
 .entity-listing i {
     font-size: 150%;
 }
 
 .entity-listing nav.listing-action {
     text-align: right;
+    margin-top: 1em;
 }
 
 .entity-listing nav.listing-action a {
