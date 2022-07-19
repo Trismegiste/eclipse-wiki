@@ -17,6 +17,7 @@ class Vertex implements \Trismegiste\Strangelove\MongoDb\Root
     protected $title;
     protected $content = null;
     protected $lastModified;
+    protected $archived = false;
 
     protected function beforeSave(): void
     {
@@ -71,4 +72,13 @@ class Vertex implements \Trismegiste\Strangelove\MongoDb\Root
         $this->_id = null;
     }
 
+    public function setArchived(bool $val): void
+    {
+        $this->archived = $val;
+    }
+
+    public function getArchived(): bool
+    {
+        return $this->archived;
+    }
 }

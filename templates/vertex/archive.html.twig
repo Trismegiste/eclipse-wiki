@@ -1,0 +1,16 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ form.vars.data.title }}{% endblock %}
+
+{% block header_title %}
+    {# the header menu with title #}
+    <nav style="float: right">
+        {{ include('vertex/actions.html.twig', {vertex:form.vars.data}) }}
+    </nav>   
+    {% block header_big_title %}{{ form.vars.data.title }}{% endblock %}
+{% endblock %}
+
+{% block content %}
+    <h2>Êtes-vous sûr de vouloir archiver le {{ form.vars.data.category }} <strong>{{ form.vars.data.title }}</strong> ?</h2>
+    {{ form(form) }}
+{% endblock %}

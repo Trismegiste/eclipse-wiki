@@ -9,6 +9,7 @@ namespace App\Controller;
 use App\Entity\Vertex;
 use App\Form\VertexType;
 use App\Twig\SaWoExtension;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -84,9 +85,9 @@ class VertexCrud extends GenericCrud
     {
         $vertex = $this->repository->findByPk($pk);
         $form = $this->createFormBuilder($vertex)
-                ->add('delete', SubmitType::class, ['attr' => ['class' => 'button-delete']])
-                ->setMethod('DELETE')
-                ->getForm();
+            ->add('delete', SubmitType::class, ['attr' => ['class' => 'button-delete']])
+            ->setMethod('DELETE')
+            ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -153,10 +154,10 @@ class VertexCrud extends GenericCrud
         $backlinks = $this->repository->searchByBacklinks($vertex->getTitle());
 
         $form = $this->createFormBuilder($vertex)
-                ->add('title', TextType::class, ['label' => 'Nouveau nom'])
-                ->add('rename', SubmitType::class)
-                ->setMethod('PUT')
-                ->getForm();
+            ->add('title', TextType::class, ['label' => 'Nouveau nom'])
+            ->add('rename', SubmitType::class)
+            ->setMethod('PUT')
+            ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -186,4 +187,27 @@ class VertexCrud extends GenericCrud
         return new Vertex($title);
     }
 
+    /**
+     * Archiving a vertex
+     * @Route("/vertex/archive/{pk}", methods={"GET","PATCH"}, requirements={"pk"="[\da-f]{24}"})
+     */
+    public function archive(string $pk, Request $request): Response
+    {
+        $vertex = $this->repository->findByPk($pk);
+        $form = $this->createFormBuilder($vertex)
+            ->add('archived', CheckboxType::class)
+            ->add('archive', SubmitType::class)
+            ->setMethod('PATCH')
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->repository->save($vertex);
+            $this->addFlash('success', $vertex->getTitle() . ' a été archivé');
+
+            return $this->redirectToRoute('app_vertexcrud_list');
+        }
+
+        return $this->render('vertex/archive.html.twig', ['form' => $form->createView()]);
+    }
 }

@@ -194,3 +194,7 @@ a[href=""] {
     background-color: lightpink;
     color: red;
 }
+
+i.archived {
+    color: #ddd;
+}
