@@ -49,4 +49,10 @@ class VertexTest extends PHPUnit\Framework\TestCase
         $this->assertEquals('image.jpg', $this->sut->extractFirstPicture());
     }
 
+    public function testArchived()
+    {
+        $this->assertFalse($this->sut->getArchived());
+        $this->sut->setArchived(true);
+        $this->assertTrue($this->sut->getArchived());
+    }
 }
