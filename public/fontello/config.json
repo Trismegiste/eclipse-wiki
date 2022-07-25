@@ -521,6 +521,12 @@
       "search": [
         "movie-roll"
       ]
+    },
+    {
+      "uid": "ca2d64f8a3ea7cbf6af45898b2dcf35e",
+      "css": "male",
+      "code": 61827,
+      "src": "fontawesome"
     }
   ]
 }

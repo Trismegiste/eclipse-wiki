@@ -96,7 +96,11 @@ class SaWoExtension extends AbstractExtension
             case Freeform::class:
                 return 'icon-monster';
             case Transhuman::class:
-                return $v->wildCard ? 'icon-wildcard' : 'icon-extra';
+                if ($v->wildCard) {
+                    return 'icon-wildcard';
+                } else {
+                    return is_null($v->surnameLang) ? 'icon-male' : 'icon-extra';
+                }
             default :
                 throw new OutOfBoundsException("No icon for " . get_class($v));
         }
