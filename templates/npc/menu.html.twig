@@ -2,4 +2,4 @@
 <div style="float: right">
     {{ include('npc/actions.html.twig') }}
 </div>
-PNJ : {{ npc.title }} {% if npc.wildCard %}<i class="icon-wildcard"></i>{% endif %}
+PNJ : {{ npc.title }} <i class="{{ char_icon(npc) }}"></i>
