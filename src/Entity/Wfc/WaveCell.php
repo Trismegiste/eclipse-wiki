@@ -13,6 +13,7 @@ class WaveCell
 {
 
     protected $tileSuperposition = []; // list of possible EigenTile
+    public $updated = false;
 
     public function __construct(array $eigenTileBase)
     {

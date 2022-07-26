@@ -229,4 +229,57 @@ class WaveFunction
         return $hasMore;
     }
 
+    public function propagate(array $center): void
+    {
+        $current = $this->getCell($center);
+        $neighbourCoord = $this->getNeighbourCoordinates($center);
+
+        // filter the cells to be updated
+        $interactingCell = [];
+        foreach ($neighbourCoord as $direction => $coord) {
+            $neighbourCell = $this->getCell($coord);
+            if ($neighbourCell->updated) {
+                continue;
+            }
+            $interactingCell[$direction] = $neighbourCell;
+        }
+
+        // interact with all (filtered) directions
+        foreach ($interactingCell as $direction => $neighbourCell) {
+            $constraints = $current->getNeighbourEigenTile($direction);
+            $neighbourCell->interactWith($constraints);
+            $neighbourCell->updated = true;
+        }
+
+        // and propagate in all (filtered) directions
+        foreach ($interactingCell as $direction => $neighbourCell) {
+            $this->propagate($neighbourCoord[$direction]);
+        }
+    }
+
+    public function resetUpdated(): void
+    {
+        for ($x = 0; $x < $this->gridSize; $x++) {
+            for ($y = 0; $y < $this->gridSize; $y++) {
+                $this->grid[$x][$y]->updated = false;
+            }
+        }
+    }
+
+    public function newIterate(): bool
+    {
+        $coord = $this->findLowerEntropyCoordinates();
+        $hasMore = ([] !== $coord);
+
+        if ($hasMore) {
+            $cell = $this->grid[$coord[0]][$coord[1]];
+            $cell->collapse();
+            $this->lastCollapse = $coord;
+            $this->propagate($coord);
+        }
+        $this->resetUpdated();
+
+        return $hasMore;
+    }
+
 }

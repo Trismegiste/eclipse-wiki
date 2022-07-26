@@ -51,7 +51,7 @@ class Hexa extends Command
         $battlemap = $fac->buildBattlemap($size, $arrang, $base);
 
         $stopwatch = microtime(true);
-        while ($wf->iterate()) {
+        while ($wf->newIterate()) {
             //      $this->printWave($wf, $output);
         }
 
