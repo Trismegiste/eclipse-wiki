@@ -12,7 +12,7 @@ namespace App\Entity\Wfc;
 class WaveCell
 {
 
-    protected $tileSuperposition = []; // list of possible EigenTile
+    protected $tileSuperposition = []; // list of possible EigenTile indexed by its getUniqueId()
     public $updated = false;
 
     public function __construct(array $eigenTileBase)
@@ -35,6 +35,11 @@ class WaveCell
     public function setEigenState(EigenTile $tile): void
     {
         $this->tileSuperposition = [$tile->getUniqueId() => $tile];
+    }
+
+    public function excludeTile(EigenTile $tile): void
+    {
+        unset($this->tileSuperposition[$tile->getUniqueId()]);
     }
 
     public function getNeighbourEigenTile(int $direction): array
@@ -62,6 +67,19 @@ class WaveCell
         $idx = array_key_first($this->tileSuperposition);
 
         return $this->tileSuperposition[$idx];
+    }
+
+    public function getInteractionWith(array $eigenTile): array
+    {
+        return array_intersect_key($this->tileSuperposition, $eigenTile);
+    }
+
+    public function pickOneTile(): EigenTile
+    {
+        $keys = array_keys($this->tileSuperposition);
+        $n = random_int(0, count($this->tileSuperposition) - 1);
+
+        return $this->tileSuperposition[$keys[$n]];
     }
 
 }

@@ -231,6 +231,7 @@ class WaveFunction
 
     public function propagate(array $center): void
     {
+        // echo '   propagate ' . $center[0] . '-' . $center[1] . "\n";
         $current = $this->getCell($center);
         $neighbourCoord = $this->getNeighbourCoordinates($center);
 
@@ -248,6 +249,7 @@ class WaveFunction
         foreach ($interactingCell as $direction => $neighbourCell) {
             $constraints = $current->getNeighbourEigenTile($direction);
             $neighbourCell->interactWith($constraints);
+            // echo '   interact ' . $neighbourCoord[$direction][0] . '-' . $neighbourCoord[$direction][1] . "\n";
             $neighbourCell->updated = true;
         }
 
@@ -274,6 +276,7 @@ class WaveFunction
         if ($hasMore) {
             $cell = $this->grid[$coord[0]][$coord[1]];
             $cell->collapse();
+            // echo "\nCOLLAPSE " . $coord[0] . '-' . $coord[1] . "\n";
             $this->lastCollapse = $coord;
             $this->propagate($coord);
         }
