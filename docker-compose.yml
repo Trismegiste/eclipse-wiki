@@ -5,6 +5,7 @@ services:
         image: symfony:dev
         ports:
             - "8000:8000"
+            - "9000:9000"
         volumes:
             - .:/www
         depends_on:
@@ -22,11 +23,3 @@ services:
         depends_on:
             - "symfony"
         command: "bin/console p:d"
-
-    connection:
-        image: symfony:dev
-        volumes:
-            - .:/www
-        depends_on:
-            - "symfony"
-        command: "bin/console a:l"

@@ -37,7 +37,9 @@ RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | b
 RUN apt -y install symfony-cli
 
 EXPOSE 8000
+EXPOSE 9000
+EXPOSE 53/udp
 
 WORKDIR /www
 
-CMD echo "symfony serve" | bash
+CMD echo "bin/launch.sh" | bash
