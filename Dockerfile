@@ -23,7 +23,7 @@ RUN apt-get install -y wkhtmltopdf
 # OPCache
 RUN docker-php-ext-install opcache
 
-# OPCache
+# Socket
 RUN docker-php-ext-install sockets
 
 # Composer
@@ -38,7 +38,6 @@ RUN apt -y install symfony-cli
 
 EXPOSE 8000
 EXPOSE 9000
-EXPOSE 53/udp
 
 WORKDIR /www
 

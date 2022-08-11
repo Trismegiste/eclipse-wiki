@@ -15,11 +15,3 @@ services:
         image: "bitnami/mongodb:4.4"
         volumes:
             - ./var/mongodb:/bitnami/mongodb
-
-    websocket:
-        image: symfony:dev
-        volumes:
-            - .:/www
-        depends_on:
-            - "symfony"
-        command: "bin/console p:d"
