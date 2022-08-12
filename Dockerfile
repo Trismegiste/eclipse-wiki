@@ -4,8 +4,8 @@ FROM php:8.1-cli
 RUN pecl install mongodb && docker-php-ext-enable mongodb
 
 # Ext GD
-RUN apt-get update && apt-get install -y libpng-dev libwebp-dev libjpeg-dev
-RUN docker-php-ext-configure gd --with-jpeg --with-webp
+RUN apt-get update && apt-get install -y libpng-dev libwebp-dev libjpeg-dev libfreetype6-dev
+RUN docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype
 RUN docker-php-ext-install gd
 
 # Ext XSL
