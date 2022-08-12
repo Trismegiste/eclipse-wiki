@@ -1,3 +1,4 @@
 strangelove:
     mongodb:
+        url: '%env(resolve:DATABASE_URL)%'
         dbname: '%env(resolve:DATABASE_NAME)%'
