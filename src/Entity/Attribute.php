@@ -17,7 +17,7 @@ class Attribute extends SaWoTrait implements Persistable, \JsonSerializable
 
     use PersistableImpl;
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return [
             'name' => $this->name,

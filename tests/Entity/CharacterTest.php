@@ -171,7 +171,7 @@ abstract class CharacterTest extends TestCase
         $sk->dice = 12;
         $this->sut->addSkill($sk);
 
-        $this->assertEquals(-5, $this->sut->getPowerIndex());
+        $this->assertEquals(-6, $this->sut->getPowerIndex());
     }
 
     public function testSortingSkills()

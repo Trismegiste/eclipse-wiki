@@ -46,7 +46,7 @@ class Edge extends Modifier implements Persistable, JsonSerializable
         return $this->requis;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->bsonSerialize();
     }

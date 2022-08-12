@@ -42,6 +42,10 @@ class Transhuman extends Character
 
     public function hasAvatarSection(): bool
     {
+        if (is_null($this->content)) {
+            return false;
+        }
+
         return false !== strpos($this->content, self::avatarSection);
     }
 
@@ -50,5 +54,4 @@ class Transhuman extends Character
         $append = "\n" . self::avatarSection . "\n[[file:$filename]]\n";
         $this->content .= $append;
     }
-
 }

@@ -39,7 +39,7 @@ class TraitProvider
         });
 
         usort($skills, function($a, $b) {
-            return iconv('UTF-8', 'ASCII//TRANSLIT', $a->title) > iconv('UTF-8', 'ASCII//TRANSLIT', $b->title);
+            return strcmp(iconv('UTF-8', 'ASCII//TRANSLIT', $a->title), iconv('UTF-8', 'ASCII//TRANSLIT', $b->title));
         });
 
         $listing = [];

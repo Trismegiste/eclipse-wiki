@@ -27,7 +27,7 @@ class Skill extends SaWoTrait implements Persistable, \JsonSerializable
         $this->core = $core;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return [
             'name' => $this->name,

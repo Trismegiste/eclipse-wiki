@@ -32,7 +32,7 @@ class AvatarMakerTest extends TestCase
     {
         $npc = $this->createNpc();
         $res = $this->sut->generate($npc, imagecreatetruecolor(500, 500));
-        $this->assertIsResource($res);
+        $this->assertInstanceOf(\GdImage::class, $res);
         $this->assertEquals(503, imagesx($res));
         $this->assertEquals(894, imagesy($res));
     }

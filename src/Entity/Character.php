@@ -44,7 +44,7 @@ abstract class Character extends Vertex implements \JsonSerializable
         parent::beforeSave();
 
         usort($this->skills, function (Skill $a, Skill $b) {
-            return iconv('UTF-8', 'ASCII//TRANSLIT', $a->getName()) > iconv('UTF-8', 'ASCII//TRANSLIT', $b->getName());
+            return strcmp(iconv('UTF-8', 'ASCII//TRANSLIT', $a->getName()), iconv('UTF-8', 'ASCII//TRANSLIT', $b->getName()));
         });
         $this->skills = array_values($this->skills);
     }
@@ -74,7 +74,7 @@ abstract class Character extends Vertex implements \JsonSerializable
         return $this->skills;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->bsonSerialize();
     }
@@ -103,9 +103,9 @@ abstract class Character extends Vertex implements \JsonSerializable
 
     public function getPowerIndex(): int
     {
-        return ($this->getAttributePoints() - 5) +
+        return (int) floor(($this->getAttributePoints() - 5) +
                 ($this->getSkillPoints() - 12) / 2 +
-                (count($this->edges) - 1);
+                (count($this->edges) - 1));
     }
 
     public function getGears(): array

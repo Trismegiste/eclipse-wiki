@@ -33,7 +33,7 @@ class Hindrance extends Modifier implements Persistable, JsonSerializable
         $this->choices = $choices;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->bsonSerialize();
     }

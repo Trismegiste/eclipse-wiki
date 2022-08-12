@@ -28,7 +28,7 @@ class IteratorDecorator implements \Iterator
      * Returns the current element of the iterator decorated by the callable
      * @return mixed
      */
-    public function current()
+    public function current(): mixed
     {
         /** @var \Symfony\Component\Finder\SplFileInfo $info */
         $info = $this->iter->current();
@@ -37,7 +37,7 @@ class IteratorDecorator implements \Iterator
     }
 
     // next methods are just redirections
-    public function key()
+    public function key(): mixed
     {
         return $this->iter->key();
     }

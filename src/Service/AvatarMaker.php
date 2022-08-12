@@ -7,6 +7,7 @@
 namespace App\Service;
 
 use App\Entity\Transhuman;
+use GdImage;
 
 /**
  * Creating avatar for Transhuman
@@ -29,15 +30,12 @@ class AvatarMaker
     /**
      * Create the profile pic
      * @param Transhuman $npc
-     * @param resource $source the GD resource of an avatar picture
+     * @param GdImage $source the GD resource of an avatar picture
      * @return resource the GD2 image resource
      * @throws \RuntimeException
      */
-    public function generate(Transhuman $npc, $source)
+    public function generate(Transhuman $npc, \GdImage $source)
     {
-        if (!is_resource($source)) {
-            throw new \InvalidArgumentException('$image is not resource');
-        }
         $target = imagecreatetruecolor($this->width, $this->height);
         $bg = imagecolorallocate($target, 0xf0, 0xf0, 0xf0);
         imagefill($target, 0, 0, $bg);
@@ -48,12 +46,12 @@ class AvatarMaker
 
         // title
         $txt = sprintf('Follow %s', $npc->getTitle());
-        list($left,, $right,,, ) = imageftbbox($size, 0, $this->font, $txt);
+        list($left,, $right,,, ) = \imageftbbox($size, 0, $this->font, $txt);
         $calcSize = $size / ($right - $left) * $this->width * 0.9;
         if ($calcSize > 100) {
             $calcSize = 100;
         }
-        list($left,, $right,,, ) = imageftbbox($calcSize, 0, $this->font, $txt);
+        list($left,, $right,,, ) = \imageftbbox($calcSize, 0, $this->font, $txt);
         imagefttext($target, $calcSize, 0, $this->width / 2 - ($right - $left) / 2, $this->height * 0.7, $fg, $this->font, $txt);
 
         // economy

@@ -26,7 +26,7 @@ class VertexRepository extends DefaultRepository
      */
     public function findByTitle(string $title): ?Vertex
     {
-        $tmp = preg_split('//u', $title, null, PREG_SPLIT_NO_EMPTY);
+        $tmp = preg_split('//u', $title, -1, PREG_SPLIT_NO_EMPTY);
         $firstLetter = array_shift($tmp);
 
         return $this->searchOne(['title' => new Regex("^(?i:$firstLetter)" . preg_quote(implode('', $tmp)))]);
@@ -58,7 +58,7 @@ class VertexRepository extends DefaultRepository
 
     public function searchByBacklinks(string $title): array
     {
-        $tmp = preg_split('//u', $title, null, PREG_SPLIT_NO_EMPTY);
+        $tmp = preg_split('//u', $title, -1, PREG_SPLIT_NO_EMPTY);
         $firstLetter = array_shift($tmp);
 
         $it = $this->search([
@@ -113,7 +113,7 @@ class VertexRepository extends DefaultRepository
     {
         $vertex = $this->findByTitle($oldTitle);
         // build the regex with insensitive case on the first letter
-        $tmp = preg_split('//u', $vertex->getTitle(), null, PREG_SPLIT_NO_EMPTY);
+        $tmp = preg_split('//u', $vertex->getTitle(), -1, PREG_SPLIT_NO_EMPTY);
         $firstLetter = array_shift($tmp);
         $regex = "\[\[(?i:$firstLetter)" . preg_quote(implode('', $tmp)) . "(\]\]|\|)";
 

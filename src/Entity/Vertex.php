@@ -60,6 +60,10 @@ class Vertex implements \Trismegiste\Strangelove\MongoDb\Root
 
     public function extractFirstPicture(): ?string
     {
+        if (is_null($this->getContent())) {
+            return null;
+        }
+
         if (preg_match('#\[\[file:([^\]]+)\]\]#', $this->getContent(), $match)) {
             return $match[1];
         }
