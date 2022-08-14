@@ -15,5 +15,8 @@ services:
     mongo:
         image: "bitnami/mongodb:4.4"
         volumes:
-            - ./var/mongodb:/bitnami/mongodb
+            - eclipse-mongo:/bitnami/mongodb
         network_mode: host
+
+volumes:
+    eclipse-mongo:
