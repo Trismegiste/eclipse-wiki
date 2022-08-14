@@ -64,4 +64,12 @@ class Picture extends AbstractController
         return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $picture->getPathname()]);
     }
 
+    /**
+     * Upload a new picture
+     * @Route("/picture/upload", methods={"GET","POST"})
+     */
+    public function upload(): Response
+    {
+        return $this->render('picture/upload_form.html.twig');
+    }
 }
