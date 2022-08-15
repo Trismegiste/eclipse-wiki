@@ -112,13 +112,11 @@ class Storage
      */
     public function storePicture(UploadedFile $picture, string $filename, int $maxDimension = 1920, int $compressionLevel = 90): void
     {
-        file_put_contents('yolo.txt', $picture->getContent());
-
         $source = imagecreatefromstring($picture->getContent());
         $dim = [imagesx($source), imagesy($source)];
         if (max($dim) > $maxDimension) {
-            $width = (int) round((float) imagesx($source) / max($dim));
-            $height = (int) round((float) imagesy($source) / max($dim));
+            $width = (int) round((float) $maxDimension * imagesx($source) / max($dim));
+            $height = (int) round((float) $maxDimension * imagesy($source) / max($dim));
             $target = imagescale($source, $width, $height);
         } else {
             $target = $source;
