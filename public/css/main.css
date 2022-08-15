@@ -96,6 +96,10 @@ h2 {
     margin: 1em;
 }
 
+.parsed-wikitext p, .parsed-wikitext li {
+    line-height: 150%;
+}
+
 .diceroller {
     font-size: 200%;
     text-align: center;

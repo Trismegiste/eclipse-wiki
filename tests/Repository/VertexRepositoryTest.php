@@ -12,12 +12,18 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class VertexRepositoryTest extends KernelTestCase
 {
 
-    protected $sut;
+    protected VertexRepository $sut;
 
     protected function setUp(): void
     {
         static::createKernel();
         $this->sut = static::getContainer()->get(VertexRepository::class);
+    }
+
+    public function testReset()
+    {
+        $this->sut->delete(iterator_to_array($this->sut->search()));
+        $this->assertCount(0,$this->sut->search());
     }
 
     public function testBacklinks()
@@ -82,5 +88,4 @@ class VertexRepositoryTest extends KernelTestCase
         $it = $this->sut->filterBy('wxzwxzwxz');
         $this->assertEquals([], iterator_to_array($it));
     }
-
 }

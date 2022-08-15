@@ -32,7 +32,6 @@ class WikiParserExtension extends AbstractExtension
 
     public function printWikiText(?string $wikitext): string
     {
-        return empty($wikitext) ? '' : $this->parser->parse($wikitext);
+        return empty($wikitext) ? '' : '<div class="parsed-wikitext">' . $this->parser->parse($wikitext) . '</div>';
     }
-
 }
