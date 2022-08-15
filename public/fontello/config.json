@@ -527,6 +527,12 @@
       "css": "male",
       "code": 61827,
       "src": "fontawesome"
+    },
+    {
+      "uid": "381da2c2f7fd51f8de877c044d7f439d",
+      "css": "picture",
+      "code": 59419,
+      "src": "fontawesome"
     }
   ]
 }
