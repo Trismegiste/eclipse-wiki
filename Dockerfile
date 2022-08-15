@@ -46,6 +46,8 @@ ENV LC_ALL en_US.UTF-8
 
 RUN apt-get install -y imagemagick
 
+COPY ./docker/php.ini /usr/local/etc/php
+
 EXPOSE 8000
 EXPOSE 9000
 

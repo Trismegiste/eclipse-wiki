@@ -21,7 +21,7 @@ class PictureUpload extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('filename')
-                ->add('picture', FileType::class, ['constraints' => [new \Symfony\Component\Validator\Constraints\File()]])
+                ->add('picture', FileType::class, ['constraints' => [new Image()]])
                 ->add('upload', SubmitType::class);
     }
 
