@@ -68,8 +68,17 @@ class Picture extends AbstractController
      * Upload a new picture
      * @Route("/picture/upload", methods={"GET","POST"})
      */
-    public function upload(): Response
+    public function upload(Request $request): Response
     {
-        return $this->render('picture/upload_form.html.twig');
+        $form = $this->createForm(\App\Form\PictureUpload::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->addFlash('success', 'Upload');
+            $this->redirectToRoute('app_picture_upload');
+        }
+
+        return $this->render('picture/upload.html.twig', ['form' => $form->createView()]);
     }
+
 }

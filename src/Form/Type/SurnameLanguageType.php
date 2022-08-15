@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * Eclipse Wiki
+ */
+
 namespace App\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
@@ -7,6 +11,9 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Trismegiste\NameGenerator\FileRepository;
 
+/**
+ * Type for surname language
+ */
 class SurnameLanguageType extends AbstractType
 {
     protected $generator;
