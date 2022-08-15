@@ -7,8 +7,11 @@
 namespace App\Service;
 
 use Iterator;
+use RuntimeException;
+use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use function join_paths;
 
@@ -69,8 +72,8 @@ class Storage
     {
         $scan = new Finder();
         $scan->in($this->root)
-            ->files()
-            ->name($glob);
+                ->files()
+                ->name($glob);
 
         return $scan->getIterator();
     }
@@ -78,25 +81,55 @@ class Storage
     /**
      * Deletes one file on the storage
      * @param string $filename
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function delete(string $filename): void
     {
         $path = join_paths($this->root, $filename);
 
         if (!file_exists($path)) {
-            throw new \RuntimeException("Cannot find " . $filename);
+            throw new RuntimeException("Cannot find " . $filename);
         }
 
         $ret = unlink($path);
         if (!$ret) {
-            throw new \RuntimeException("Unable to delete " . $filename);
+            throw new RuntimeException("Unable to delete " . $filename);
         }
     }
 
-    public function getFileInfo(string $filename): \SplFileInfo
+    public function getFileInfo(string $filename): SplFileInfo
     {
-        return new \SplFileInfo(join_paths($this->root, $filename));
+        return new SplFileInfo(join_paths($this->root, $filename));
+    }
+
+    /**
+     * Store a uploaded picture into Storage as a JPEG
+     * @param UploadedFile $picture
+     * @param string $filename
+     * @param int $maxDimension
+     * @param int $compressionLevel
+     * @throws RuntimeException
+     */
+    public function storePicture(UploadedFile $picture, string $filename, int $maxDimension = 1920, int $compressionLevel = 90): void
+    {
+        $source = imagecreatefromstring($picture->getContent());
+        $dim = [imagesx($source), imagesy($source)];
+        if (max($dim) > $maxDimension) {
+            $width = (int) round((float) imagesx($source) / max($dim));
+            $height = (int) round((float) imagesy($source) / max($dim));
+            $target = imagescale($source, $width, $height);
+        } else {
+            $target = $source;
+        }
+
+        $targetName = join_paths($this->getRootDir(), $filename . '.jpg');
+        $ret = imagejpeg($target, $targetName, $compressionLevel);
+        imagedestroy($source);
+        imagedestroy($target);
+
+        if (!$ret) {
+            throw new RuntimeException("Unable to save $filename.jpg");
+        }
     }
 
 }
