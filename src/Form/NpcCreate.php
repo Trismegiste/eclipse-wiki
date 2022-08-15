@@ -7,6 +7,7 @@
 namespace App\Form;
 
 use App\Entity\Transhuman;
+use App\Form\Type\SurnameLanguageType;
 use App\Repository\BackgroundProvider;
 use App\Repository\CharacterFactory;
 use App\Repository\FactionProvider;
@@ -47,6 +48,7 @@ class NpcCreate extends AbstractType
             ->add('background', Type\ProviderChoiceType::class, ['provider' => $this->background, 'placeholder' => '--- Choisissez un Historique ---'])
             ->add('faction', Type\ProviderChoiceType::class, ['provider' => $this->faction, 'placeholder' => '--- Choisissez une Faction ---'])
             ->add('morph', Type\ProviderChoiceType::class, ['provider' => $this->morph, 'placeholder' => '--- Choisissez un Morphe ---'])
+            ->add('surnameLang', SurnameLanguageType::class)
             ->add('content', TextareaType::class, ['required' => false])
             ->add('generate', SubmitType::class);
     }
@@ -71,5 +73,4 @@ class NpcCreate extends AbstractType
     {
         return 'npc';
     }
-
 }

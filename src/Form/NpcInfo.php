@@ -7,13 +7,12 @@
 namespace App\Form;
 
 use App\Entity\Transhuman;
+use App\Form\Type\SurnameLanguageType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Trismegiste\NameGenerator\FileRepository;
 
 /**
  * Information about a Transhuman
@@ -23,28 +22,9 @@ class NpcInfo extends AbstractType
 
     use FormTypeUtils;
 
-    protected $generator;
-
-    public function __construct()
-    {
-        $this->generator = new FileRepository();
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $tmpList = $this->generator->getSurnameLanguage();
-        sort($tmpList);
-        $language['-- Aléatoire --'] = 'random';
-        foreach ($tmpList as $lang) {
-            $language[ucfirst($lang)] = $lang;
-        }
-
-
-        $builder->add('surnameLang', ChoiceType::class, [
-            'choices' => $language,
-            'placeholder' => '-------------',
-            'required' => false
-        ]);
+        $builder->add('surnameLang', SurnameLanguageType::class);
     }
 
     public function getParent()
@@ -61,5 +41,4 @@ class NpcInfo extends AbstractType
     {
         $resolver->setDefault('data_class', Transhuman::class);
     }
-
 }

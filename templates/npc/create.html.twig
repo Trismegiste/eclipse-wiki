@@ -45,7 +45,10 @@
         </div>
         <div class="pure-u-1-1">
             {{ form_widget(form['content'],  {attr: {'class':'pure-input-1', 'placeholder': 'Information au format WikiText'}}) }}
-        </div>            
+        </div>  
+        <fieldset class="pure-u-1-1">
+            {{ form_row(form['surnameLang']) }}
+        </fieldset>  
     </div>
     {{ form_end(form) }}
 {% endblock %}
