@@ -21,7 +21,10 @@ class PictureUpload extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('filename')
-                ->add('picture', FileType::class, ['constraints' => [new Image()]])
+                ->add('picture', FileType::class, [
+                    'constraints' => [new Image()],
+                    'help' => 'COPY_PASTE_IMG'
+                ])
                 ->add('upload', SubmitType::class);
     }
 

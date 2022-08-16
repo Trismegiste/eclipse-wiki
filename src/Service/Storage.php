@@ -115,8 +115,9 @@ class Storage
         $source = imagecreatefromstring($picture->getContent());
         $dim = [imagesx($source), imagesy($source)];
         if (max($dim) > $maxDimension) {
-            $width = (int) round((float) $maxDimension * imagesx($source) / max($dim));
-            $height = (int) round((float) $maxDimension * imagesy($source) / max($dim));
+            $ratio = (float) $maxDimension / max($dim);
+            $width = (int) round($ratio * imagesx($source));
+            $height = (int) round($ratio * imagesy($source));
             $target = imagescale($source, $width, $height);
         } else {
             $target = $source;
@@ -130,6 +131,12 @@ class Storage
         if (!$ret) {
             throw new RuntimeException("Unable to save $filename.jpg");
         }
+
+        $check = imagecreatefromjpeg($targetName);
+        if (false === $check) {
+            throw new RuntimeException("$targetName is not readable or corrupted");
+        }
+        imagedestroy($check);
     }
 
 }
