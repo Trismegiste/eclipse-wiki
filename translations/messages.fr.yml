@@ -76,6 +76,6 @@ spaceship: Vaisseau
 World: Monde
 Archived: À archiver
 Archive: Archiver
-COPY_PASTE_IMG: (Vous pouvez copier-coller une image avec Ctrl-V)
+COPY_PASTE_IMG: (Ctrl-V pour coller une image du clipboard)
 Filename: Nom du fichier
 Picture: Sélectionnez une image

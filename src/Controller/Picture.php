@@ -77,14 +77,20 @@ class Picture extends AbstractController
             $data = $form->getData();
             try {
                 $storage->storePicture($data['picture'], $data['filename']);
-                $this->addFlash('success', 'Upload');
-                $this->redirectToRoute('app_picture_upload');
+                $this->addFlash('success', "Upload {$data['filename']} OK");
+
+                return $this->redirectToRoute('app_picture_upload');
             } catch (\RuntimeException $e) {
                 $this->addFlash('error', $e->getMessage());
             }
         }
 
-        return $this->render('picture/upload.html.twig', ['form' => $form->createView()]);
+        $listing = $storage->searchLastPicture();
+
+        return $this->render('picture/upload.html.twig', [
+                    'form' => $form->createView(),
+                    'last' => $listing
+        ]);
     }
 
 }

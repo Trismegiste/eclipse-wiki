@@ -6,9 +6,18 @@
 {% endblock %}
 
 {% block content %}
-    <section>
-        {{ form(form) }}
-    </section>
+    <div class="pure-g">
+        <section class="pure-u-4-5">
+            {{ form(form) }}
+        </section>
+        <section class="pure-u-1-5">
+            {% for picture in last|slice(0, 5) %}
+                <article>
+                    <img src="{{ path('get_picture', {title: picture.filename}) }}" class="pure-img"/>
+                </article>
+            {% endfor %}
+        </section>
+    </div>
 {% endblock %}
 
 {% block javascripts %}

@@ -139,4 +139,14 @@ class Storage
         imagedestroy($check);
     }
 
+    public function searchLastPicture(int $limit = 5): \Iterator
+    {
+        $iter = new Finder();
+
+        return $iter->in($this->getRootDir())
+                        ->sortByModifiedTime()
+                        ->reverseSorting()
+                        ->getIterator();
+    }
+
 }
