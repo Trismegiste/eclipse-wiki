@@ -112,6 +112,11 @@ class Storage
      */
     public function storePicture(UploadedFile $picture, string $filename, int $maxDimension = 1920, int $compressionLevel = 90): void
     {
+        $targetName = join_paths($this->getRootDir(), $filename . '.jpg');
+        if (file_exists($targetName)) {
+            throw new RuntimeException("Picture $filename.jpg is already existing");
+        }
+
         $source = imagecreatefromstring($picture->getContent());
         $dim = [imagesx($source), imagesy($source)];
         if (max($dim) > $maxDimension) {
@@ -123,7 +128,6 @@ class Storage
             $target = $source;
         }
 
-        $targetName = join_paths($this->getRootDir(), $filename . '.jpg');
         $ret = imagejpeg($target, $targetName, $compressionLevel);
         imagedestroy($source);
         imagedestroy($target);

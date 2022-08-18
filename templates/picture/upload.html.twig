@@ -1,9 +1,8 @@
 {# Upload new image #}
 {% extends "base.html.twig" %}
 
-{% block header_title %}
-    Upload picture
-{% endblock %}
+{% block title %}Upload picture{% endblock %}
+{% block header_title %}{{ block('title') }}{% endblock %}
 
 {% block content %}
     <div class="pure-g">
@@ -13,7 +12,7 @@
         <section class="pure-u-1-5">
             {% for picture in last|slice(0, 5) %}
                 <article>
-                    <img src="{{ path('get_picture', {title: picture.filename}) }}" class="pure-img"/>
+                    <img src="{{ path('get_picture', {title: picture.filename}) }}" class="pure-img" title="{{ picture.filename }}"/>
                 </article>
             {% endfor %}
         </section>
