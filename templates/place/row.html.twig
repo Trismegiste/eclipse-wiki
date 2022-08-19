@@ -5,10 +5,16 @@
     <div class="pure-u-2-3">
         <a href="{{ path('app_vertexcrud_show', {pk: item.pk}) }}" class="block-link">
             <h2>{{ item.title }}</h2>
-            <span>Lieu : </span>
-            {{ item.gravity }},
-            {{ item.pressure }},
-            {{ item.temperature }}
+            <span>Lieu :
+                {{ item.gravity }},
+                {{ item.pressure }},
+                {{ item.temperature }}.
+            </span>
+            {% if item.npcTemplate is not empty %}
+                <span>Peuplé par
+                    <strong>{{ item.npcTemplate }}</strong>
+                </span>
+            {% endif %}
         </a>
     </div>
     <div class="pure-u-1-4">
