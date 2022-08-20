@@ -4,15 +4,5 @@
 {% block header_title %}{{ block('title') }}{% endblock %}
 
 {% block content %}
-    <ul>
-        {% for idx, item in tile %}
-            <li>
-                {{ idx }}
-                {{ item.filename }} {{ item.rotation }}
-                {{ dump(item.neighborMask) }}
-                {{ dump(anchor[idx]) }}
-            </li>
-        {% endfor %}
-    </ul>
-        {{ dump(map) }}
+    {{ map.saveXML()|raw }}
 {% endblock %}

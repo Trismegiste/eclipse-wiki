@@ -27,7 +27,7 @@ class HexagonCrud extends AbstractController
     }
 
     /**
-     * @Route("/tile/arrangement/create")
+     * @Route("/tileset/create")
      */
     public function createSet(Request $request): Response
     {
@@ -46,7 +46,7 @@ class HexagonCrud extends AbstractController
     }
 
     /**
-     * @Route("/tile/arrangement/anchor/{pk}")
+     * @Route("/tileset/anchor/{pk}")
      */
     public function editAnchor(string $pk, Request $request): Response
     {
@@ -71,7 +71,7 @@ class HexagonCrud extends AbstractController
     }
 
     /**
-     * @Route("/tile/arrangement/rotation/{pk}")
+     * @Route("/tileset/rotation/{pk}")
      */
     public function editRotation(string $pk, Request $request): Response
     {
@@ -89,22 +89,47 @@ class HexagonCrud extends AbstractController
             $this->tileRepo->save($form->getData());
             $this->addFlash('success', 'Rotations sauvegardées');
 
-            return $this->redirectToRoute('app_hexagoncrud_generate', ['pk' => $arrang->getPk()]);
+            return $this->redirectToRoute('app_hexagoncrud_show', ['pk' => $arrang->getPk()]);
         }
 
         return $this->render('hex/set_rotation.html.twig', ['form' => $form->createView()]);
     }
 
     /**
-     * @Route("/tile/arrangement/generate/{pk}")
+     * @Route("/tileset/show/{pk}")
      */
-    public function generate(string $pk, \App\Entity\Wfc\Factory $fac): Response
+    public function show(string $pk): Response
     {
+        $fac = new \App\Entity\Wfc\Factory();
         /** @var \App\Entity\TileArrangement $arrang */
         $arrang = $this->tileRepo->load($pk);
-        $wf = $fac->buildWaveFunction(20, $arrang);
 
-        return $this->render('hex/generate.html.twig', ['map' => $wf]);
+        $base = $fac->buildEigenTileBase($arrang);
+
+        return $this->render('hex/showbase.html.twig', ['tileset' => $arrang, 'eigenbase' => $base]);
+    }
+
+    /**
+     * @Route("/tileset/generate/{pk}")
+     */
+    public function generate(string $pk): Response
+    {
+        $size = 50;
+        $fac = new \App\Entity\Wfc\Factory();
+        $arrang = $this->tileRepo->load($pk);
+
+        $base = $fac->buildEigenTileBase($arrang);
+        $wf = $fac->buildWaveFunction($size, $base);
+
+        $battlemap = $fac->buildBattlemap($size, $arrang, $base);
+
+        while ($wf->newIterate()) {
+            //      $this->printWave($wf, $output);
+        }
+
+        $wf->dump($battlemap);
+
+        return $this->render('hex/generate.html.twig', ['map' => $battlemap]);
     }
 
 }
