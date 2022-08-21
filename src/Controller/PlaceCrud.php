@@ -75,4 +75,32 @@ class PlaceCrud extends GenericCrud
         }
     }
 
+    /**
+     * Creates a Place child from the current Place
+     * @Route("/place/child/{pk}", methods={"GET","POST"}, requirements={"pk"="[\da-f]{24}"})
+     */
+    public function child(string $pk, Request $request): Response
+    {
+        $place = $this->repository->findByPk($pk);
+        if (is_null($place) || (!$place instanceof \App\Entity\Place)) {
+            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException("Vertex $pk is not a Place");
+        }
+
+        $title = $place->getTitle();
+        $child = clone $place;
+        $child->setTitle("Lieu enfant dans $title");
+        $child->setContent("Localisé sur [[$title]]");
+        $form = $this->createForm(PlaceType::class, $child);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $vertex = $form->getData();
+            $this->repository->save($vertex);
+
+            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
+        }
+
+        return $this->render('place/create.html.twig', ['form' => $form->createView()]);
+    }
+
 }

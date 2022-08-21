@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 abstract class GenericCrud extends AbstractController
 {
 
-    protected $repository;
+    protected VertexRepository $repository;
 
     public function __construct(VertexRepository $repo)
     {
