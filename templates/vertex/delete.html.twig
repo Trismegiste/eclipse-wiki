@@ -12,5 +12,13 @@
 
 {% block content %}
     <h2>Êtes-vous sûr de vouloir supprimer le {{ form.vars.data.category }} <strong>{{ form.vars.data.title }}</strong> ?</h2>
+    <span>Ce vertex est mentionné dans les documents suivants :</span>
+    <ul>
+        {% for title in backlinks %}
+            <li>
+                <a href="{{ path('app_wiki', {title:title}) }}"><i class="icon-link"></i> {{ title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
     {{ form(form) }}
 {% endblock %}

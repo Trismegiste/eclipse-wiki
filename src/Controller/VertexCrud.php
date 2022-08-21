@@ -84,10 +84,11 @@ class VertexCrud extends GenericCrud
     public function delete(string $pk, Request $request): Response
     {
         $vertex = $this->repository->findByPk($pk);
+        $backlinks = $this->repository->searchByBacklinks($vertex->getTitle());
         $form = $this->createFormBuilder($vertex)
-            ->add('delete', SubmitType::class, ['attr' => ['class' => 'button-delete']])
-            ->setMethod('DELETE')
-            ->getForm();
+                ->add('delete', SubmitType::class, ['attr' => ['class' => 'button-delete']])
+                ->setMethod('DELETE')
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -97,7 +98,7 @@ class VertexCrud extends GenericCrud
             return $this->redirectToRoute('app_vertexcrud_list');
         }
 
-        return $this->render('vertex/delete.html.twig', ['form' => $form->createView()]);
+        return $this->render('vertex/delete.html.twig', ['form' => $form->createView(), 'backlinks' => $backlinks]);
     }
 
     /**
@@ -154,10 +155,10 @@ class VertexCrud extends GenericCrud
         $backlinks = $this->repository->searchByBacklinks($vertex->getTitle());
 
         $form = $this->createFormBuilder($vertex)
-            ->add('title', TextType::class, ['label' => 'Nouveau nom'])
-            ->add('rename', SubmitType::class)
-            ->setMethod('PUT')
-            ->getForm();
+                ->add('title', TextType::class, ['label' => 'Nouveau nom'])
+                ->add('rename', SubmitType::class)
+                ->setMethod('PUT')
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -195,10 +196,10 @@ class VertexCrud extends GenericCrud
     {
         $vertex = $this->repository->findByPk($pk);
         $form = $this->createFormBuilder($vertex)
-            ->add('archived', CheckboxType::class)
-            ->add('archive', SubmitType::class)
-            ->setMethod('PATCH')
-            ->getForm();
+                ->add('archived', CheckboxType::class)
+                ->add('archive', SubmitType::class)
+                ->setMethod('PATCH')
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -210,4 +211,5 @@ class VertexCrud extends GenericCrud
 
         return $this->render('vertex/archive.html.twig', ['form' => $form->createView()]);
     }
+
 }
