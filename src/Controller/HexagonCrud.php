@@ -114,7 +114,7 @@ class HexagonCrud extends AbstractController
      */
     public function generate(string $pk): Response
     {
-        $size = 50;
+        $size = 30;
         $fac = new \App\Entity\Wfc\Factory();
         $arrang = $this->tileRepo->load($pk);
 
