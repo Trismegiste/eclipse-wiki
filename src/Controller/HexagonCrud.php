@@ -114,7 +114,7 @@ class HexagonCrud extends AbstractController
      */
     public function generate(string $pk): Response
     {
-        $size = 30;
+        $size = 40;
         $fac = new \App\Entity\Wfc\Factory();
         $arrang = $this->tileRepo->load($pk);
 
@@ -126,6 +126,7 @@ class HexagonCrud extends AbstractController
         while ($wf->newIterate()) {
             //      $this->printWave($wf, $output);
         }
+        $wf->retryConflict();
 
         $wf->dump($battlemap);
 

@@ -220,10 +220,6 @@ class WaveFunction
             $this->grid[$coord[0]][$coord[1]]->collapse();
             $this->lastCollapse = $coord;
             $this->relaxCoupling();
-            $this->relaxCoupling();
-            $this->relaxCoupling();
-            $this->relaxCoupling();
-            // @todo If there is a zero, we cancel the iteration and try another collapse OR we can choose another cell just above the lower entropy
         }
 
         return $hasMore;
@@ -283,6 +279,23 @@ class WaveFunction
         $this->resetUpdated();
 
         return $hasMore;
+    }
+
+    public function retryConflict(): void
+    {
+        foreach ($this->grid as $x => $column) {
+            foreach ($column as $y => $cell) {
+                /** @var \App\Entity\Wfc\WaveCell $cell */
+                $s = $cell->getEntropy();
+                if ($s === 0) {
+                    $this->grid[$x][$y] = new WaveCell($this->base);
+                }
+            }
+        }
+
+        while ($this->iterate()) {
+            
+        }
     }
 
 }
