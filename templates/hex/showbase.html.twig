@@ -9,7 +9,7 @@
             <tr>
                 <th>{{ uid }}</th>
                 <td>{{ include ('hex/tile/' ~ tile.template~'.svg') }}</td>
-                <td>{{ tile.rotation }}°</td>
+                <td>{{ tile.rotation }}°<br/>{{ tile.probability }}</td>
                 <td>
                     {% for direction in 0..5 %}
                         <div class="pure-g">

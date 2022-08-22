@@ -145,8 +145,8 @@ class HexagonCrud extends AbstractController
      */
     public function generate(string $pk): Response
     {
-        srand(66);
-        $size = 30;
+       // srand(12);
+        $size = 40;
 
         $fac = new Factory();
         $arrang = $this->tileRepo->load($pk);

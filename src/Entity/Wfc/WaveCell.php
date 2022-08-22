@@ -28,8 +28,18 @@ class WaveCell
     public function collapse(): void
     {
         $keys = array_keys($this->tileSuperposition);
-        $n = rand(0, count($this->tileSuperposition) - 1);
-        $this->setEigenState($this->tileSuperposition[$keys[$n]]);
+        $upperBound = count($this->tileSuperposition) - 1;
+
+        $chosenKey = null;
+        while (is_null($chosenKey)) {
+            $n = rand(0, $upperBound);
+            $picked = $this->tileSuperposition[$keys[$n]];
+            if ((rand() / (float) getrandmax()) < $picked->getProbability()) {
+                $chosenKey = $keys[$n];
+            }
+        }
+
+        $this->setEigenState($this->tileSuperposition[$chosenKey]);
     }
 
     public function setEigenState(EigenTile $tile): void
@@ -72,14 +82,6 @@ class WaveCell
     public function getInteractionWith(array $eigenTile): array
     {
         return array_intersect_key($this->tileSuperposition, $eigenTile);
-    }
-
-    public function pickOneTile(): EigenTile
-    {
-        $keys = array_keys($this->tileSuperposition);
-        $n = rand(0, count($this->tileSuperposition) - 1);
-
-        return $this->tileSuperposition[$keys[$n]];
     }
 
 }

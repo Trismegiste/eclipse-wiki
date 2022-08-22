@@ -26,16 +26,27 @@ class Factory
      */
     public function buildEigenTileBase(\App\Entity\TileArrangement $arrang): array
     {
-        // Generates all EigenTile from the HexagonalTile collection
         $tileBase = [];
         $anchor = [];
+
+        // total of weights × rotation
+        $weightSum = 0;
+        foreach ($arrang->getCollection() as $tile) {
+            foreach ($tile->getRotation() as $isPresent) {
+                if ($isPresent) {
+                    $weightSum += $tile->weight;
+                }
+            }
+        }
+
+        // Generates all EigenTile from the HexagonalTile collection
         foreach ($arrang->getCollection() as $tile) {
             $svgFile = new TileSvg();
             $svgFile->load($this->tileFolder . $tile->filename);
             foreach ($tile->getRotation() as $idx => $isPresent) {
                 // creating a tile for each possible rotation
                 if ($isPresent) {
-                    $eigen = new EigenTile($svgFile->getKey(), 60 * $idx);
+                    $eigen = new EigenTile($svgFile->getKey(), 60 * $idx, $tile->weight / (float) $weightSum);
                     $tileBase[$eigen->getUniqueId()] = $eigen;
                     // we copy the tile anchors array and shift it (and loop) according the count of 60° rotations we apply to the tile
                     $tmp = $tile->getAnchor();
