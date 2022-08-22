@@ -1,0 +1,31 @@
+{% extends "base.html.twig" %}
+{% form_theme form _self %}
+
+{% block title %}Edition du poids des tuiles{% endblock %}
+{% block header_title %}{{ block('title') }}{% endblock %}
+
+{% block content %}
+    {{ form(form) }}
+{% endblock %}
+
+{% block _form_collection_row %}
+    {{ form_widget(form) }}
+{% endblock %}
+
+{% block _form_collection_entry_label %}
+    <label for="{{ form.vars.id }}">{{ include('hex/tile/' ~ form.vars.data.filename) }}</label>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        label svg {
+            max-width: 120px;
+            max-height: 120px;
+        }
+
+        div[id^="form_collection_"] {
+            margin-top: 50px;
+        }
+    </style>
+{% endblock %}

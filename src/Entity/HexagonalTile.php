@@ -43,6 +43,11 @@ class HexagonalTile implements Persistable
      */
     protected $rotation;
 
+    /**
+     * Weight
+     */
+    public int $weight = 1;
+
     public function __construct()
     {
         $this->anchor = array_fill(self::EAST, self::SIDES, null);

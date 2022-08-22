@@ -4,29 +4,33 @@
  * eclipse-wiki
  */
 
-namespace App\Form;
+namespace App\Form\Tile;
 
 use App\Entity\HexagonalTile;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Form for editing anchors on a tile
+ * Enable the 6 rotations on a tile
  */
-class TileAnchorType extends AbstractType
+class RotationType extends AbstractType
 {
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('anchor', CollectionType::class, [
-                    'entry_type' => TextType::class
-        ]);
+                ->add('rotation', CollectionType::class, [
+                    'entry_type' => CheckboxType::class,
+                    'entry_options' => [
+                        'required' => false
+                    ]
+                ])
+        ;
     }
-    
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefault('data_class', HexagonalTile::class);

@@ -6,9 +6,15 @@
 
 namespace App\Controller;
 
-use App\Form\TileArrangementType;
+use App\Entity\TileArrangement;
+use App\Entity\Wfc\Factory;
+use App\Form\Tile\AnchorType;
+use App\Form\Tile\ArrangementType;
+use App\Form\Tile\RotationType;
 use App\Repository\TileArrangementRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,7 +37,7 @@ class HexagonCrud extends AbstractController
      */
     public function createSet(Request $request): Response
     {
-        $form = $this->createForm(TileArrangementType::class);
+        $form = $this->createForm(ArrangementType::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -39,10 +45,35 @@ class HexagonCrud extends AbstractController
             $this->tileRepo->save($obj);
             $this->addFlash('success', 'Collection sauvegardée');
 
-            return $this->redirectToRoute('app_hexagoncrud_editanchor', ['pk' => $obj->getPk()]);
+            return $this->redirectToRoute('app_hexagoncrud_editweight', ['pk' => $obj->getPk()]);
         }
 
         return $this->render('hex/set_create.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/tileset/weight/{pk}")
+     */
+    public function editWeight(string $pk, Request $request): Response
+    {
+        $arrang = $this->tileRepo->load($pk);
+
+        $form = $this->createFormBuilder($arrang)
+                ->add('collection', CollectionType::class, [
+                    'entry_type' => \App\Form\Tile\WeightType::class,
+                ])
+                ->add('edit', SubmitType::class)
+                ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->tileRepo->save($form->getData());
+            $this->addFlash('success', 'Poids sauvegardés');
+
+            return $this->redirectToRoute('app_hexagoncrud_editanchor', ['pk' => $arrang->getPk()]);
+        }
+
+        return $this->render('hex/set_weight.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -53,10 +84,10 @@ class HexagonCrud extends AbstractController
         $arrang = $this->tileRepo->load($pk);
 
         $form = $this->createFormBuilder($arrang)
-                ->add('collection', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
-                    'entry_type' => \App\Form\TileAnchorType::class,
+                ->add('collection', CollectionType::class, [
+                    'entry_type' => AnchorType::class,
                 ])
-                ->add('edit', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+                ->add('edit', SubmitType::class)
                 ->getForm();
 
         $form->handleRequest($request);
@@ -78,10 +109,10 @@ class HexagonCrud extends AbstractController
         $arrang = $this->tileRepo->load($pk);
 
         $form = $this->createFormBuilder($arrang)
-                ->add('collection', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
-                    'entry_type' => \App\Form\TileRotationType::class,
+                ->add('collection', CollectionType::class, [
+                    'entry_type' => RotationType::class,
                 ])
-                ->add('edit', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+                ->add('edit', SubmitType::class)
                 ->getForm();
 
         $form->handleRequest($request);
@@ -100,8 +131,8 @@ class HexagonCrud extends AbstractController
      */
     public function show(string $pk): Response
     {
-        $fac = new \App\Entity\Wfc\Factory();
-        /** @var \App\Entity\TileArrangement $arrang */
+        $fac = new Factory();
+        /** @var TileArrangement $arrang */
         $arrang = $this->tileRepo->load($pk);
 
         $base = $fac->buildEigenTileBase($arrang);
@@ -114,8 +145,10 @@ class HexagonCrud extends AbstractController
      */
     public function generate(string $pk): Response
     {
-        $size = 40;
-        $fac = new \App\Entity\Wfc\Factory();
+        srand(66);
+        $size = 30;
+
+        $fac = new Factory();
         $arrang = $this->tileRepo->load($pk);
 
         $base = $fac->buildEigenTileBase($arrang);

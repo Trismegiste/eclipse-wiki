@@ -28,7 +28,7 @@ class WaveCell
     public function collapse(): void
     {
         $keys = array_keys($this->tileSuperposition);
-        $n = random_int(0, count($this->tileSuperposition) - 1);
+        $n = rand(0, count($this->tileSuperposition) - 1);
         $this->setEigenState($this->tileSuperposition[$keys[$n]]);
     }
 
@@ -77,7 +77,7 @@ class WaveCell
     public function pickOneTile(): EigenTile
     {
         $keys = array_keys($this->tileSuperposition);
-        $n = random_int(0, count($this->tileSuperposition) - 1);
+        $n = rand(0, count($this->tileSuperposition) - 1);
 
         return $this->tileSuperposition[$keys[$n]];
     }

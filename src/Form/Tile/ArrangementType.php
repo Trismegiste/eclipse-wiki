@@ -4,7 +4,7 @@
  * eclipse-wiki
  */
 
-namespace App\Form;
+namespace App\Form\Tile;
 
 use App\Entity\HexagonalTile;
 use App\Entity\TileArrangement;
@@ -20,7 +20,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Choosing a set of tiles
  */
-class TileArrangementType extends AbstractType
+class ArrangementType extends AbstractType
 {
 
     protected $tileRepo;
