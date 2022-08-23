@@ -298,4 +298,25 @@ class WaveFunction
         }
     }
 
+    public function retryHarderConflict(): void
+    {
+        foreach ($this->grid as $x => $column) {
+            foreach ($column as $y => $cell) {
+                /** @var \App\Entity\Wfc\WaveCell $cell */
+                $s = $cell->getEntropy();
+                if ($s === 0) {
+                    $this->grid[$x][$y] = new WaveCell($this->base);
+                    $resetted = $this->getNeighbourCoordinates([$x, $y]);
+                    foreach ($resetted as $coord) {
+                        $this->grid[$coord[0]][$coord[1]] = new WaveCell($this->base);
+                    }
+                }
+            }
+        }
+
+        while ($this->iterate()) {
+            
+        }
+    }
+
 }

@@ -160,6 +160,7 @@ class HexagonCrud extends AbstractController
             //      $this->printWave($wf, $output);
         }
         $wf->retryConflict();
+     //   $wf->retryHarderConflict();
 
         $wf->dump($battlemap);
 
