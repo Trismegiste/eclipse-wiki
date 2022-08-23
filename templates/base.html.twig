@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% block metadata_header %}{% endblock %}
         <title>{% block title %}Eclipse Savage{% endblock %}</title>
         <link rel="stylesheet" href="{{ asset('purecss/pure-min.css') }}"/>
         <link rel="stylesheet" href="{{ asset('css/form.css') }}"/>

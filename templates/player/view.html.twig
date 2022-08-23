@@ -1,5 +1,11 @@
-{# show battlemap #}
+{# player screen #}
 {% extends "base.html.twig" %}
+
+{% block metadata_header %}
+    {{ parent() }}
+    {# Smartphone could drop connections because of energy saving, 3 minutes seems a common duration to refresh this page #}
+    <meta http-equiv="refresh" content="180">
+{% endblock %}
 
 {% block title %}PlayerCast{% endblock %}
 
