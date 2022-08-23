@@ -145,7 +145,7 @@ class HexagonCrud extends AbstractController
      */
     public function generate(string $pk): Response
     {
-       // srand(12);
+        // srand(12);
         $size = 40;
 
         $fac = new Factory();
@@ -153,6 +153,10 @@ class HexagonCrud extends AbstractController
 
         $base = $fac->buildEigenTileBase($arrang);
         $wf = $fac->buildWaveFunction($size, $base);
+        for ($k = 0; $k < 80; $k++) {
+            $cell = $wf->getCell([random_int(0, $size-1), random_int(0, $size - 1)]);
+            $cell->setEigenState($base['floor-0']);
+        }
 
         $battlemap = $fac->buildBattlemap($size, $arrang, $base);
 
@@ -160,7 +164,7 @@ class HexagonCrud extends AbstractController
             //      $this->printWave($wf, $output);
         }
         $wf->retryConflict();
-     //   $wf->retryHarderConflict();
+        //   $wf->retryHarderConflict();
 
         $wf->dump($battlemap);
 

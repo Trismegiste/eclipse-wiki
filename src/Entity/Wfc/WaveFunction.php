@@ -298,6 +298,7 @@ class WaveFunction
         }
     }
 
+    // this is MADNESS. Go to Voronoi https://christianjmills.com/Notes-on-Procedural-Map-Generation-Techniques/#voronoi-diagrams
     public function retryHarderConflict(): void
     {
         foreach ($this->grid as $x => $column) {
