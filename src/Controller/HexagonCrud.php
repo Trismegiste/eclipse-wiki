@@ -7,11 +7,16 @@
 namespace App\Controller;
 
 use App\Entity\TileArrangement;
+use App\Entity\Wfc\BattlemapSvg;
 use App\Entity\Wfc\Factory;
+use App\Entity\Wfc\TileSvg;
 use App\Form\Tile\AnchorType;
 use App\Form\Tile\ArrangementType;
 use App\Form\Tile\RotationType;
+use App\Form\Tile\WeightType;
 use App\Repository\TileArrangementRepository;
+use App\Voronoi\HexaCell;
+use App\Voronoi\HexaMap;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -60,7 +65,7 @@ class HexagonCrud extends AbstractController
 
         $form = $this->createFormBuilder($arrang)
                 ->add('collection', CollectionType::class, [
-                    'entry_type' => \App\Form\Tile\WeightType::class,
+                    'entry_type' => WeightType::class,
                 ])
                 ->add('edit', SubmitType::class)
                 ->getForm();
@@ -153,11 +158,6 @@ class HexagonCrud extends AbstractController
 
         $base = $fac->buildEigenTileBase($arrang);
         $wf = $fac->buildWaveFunction($size, $base);
-        for ($k = 0; $k < 80; $k++) {
-            $cell = $wf->getCell([random_int(0, $size-1), random_int(0, $size - 1)]);
-            $cell->setEigenState($base['floor-0']);
-        }
-
         $battlemap = $fac->buildBattlemap($size, $arrang, $base);
 
         while ($wf->newIterate()) {
@@ -168,6 +168,47 @@ class HexagonCrud extends AbstractController
 
         $wf->dump($battlemap);
 
+        return $this->render('hex/generate.html.twig', ['map' => $battlemap]);
+    }
+
+    /**
+     * @Route("/tileset/voronoi")
+     */
+    public function voronoi(): Response
+    {
+        $size = 50;
+        $map = new HexaMap($size);
+
+        $battlemap = new BattlemapSvg();
+        $root = $battlemap->createElementNS(TileSvg::svgNS, 'svg');
+        $root->setAttribute('viewBox', "0 0 $size $size");
+        $battlemap->appendChild($root);
+
+        $defs = $battlemap->createElementNS(TileSvg::svgNS, 'defs');
+        $root->appendChild($defs);
+
+        $svg = new TileSvg();
+        $svg->load($this->getParameter('kernel.project_dir') . '/templates/hex/tile/empty.svg');
+        $item = $svg->getTile();
+        $imported = $battlemap->importNode($item, true);
+        $defs->appendChild($imported);
+
+        for ($k = 0; $k < 100; $k++) {
+            $cell = new HexaCell();
+            $cell->uid = $k;
+            $map->setCell([rand(0, $size - 1), rand(0, $size - 1)], $cell);
+        }
+
+        $map->iterate();
+        $map->iterate();
+        $map->iterate();
+
+        // map
+        $item = $battlemap->createElementNS(TileSvg::svgNS, 'g');
+        $item->setAttribute('id', 'ground');
+        $root->appendChild($item);
+
+        $map->dump($battlemap);
         return $this->render('hex/generate.html.twig', ['map' => $battlemap]);
     }
 
