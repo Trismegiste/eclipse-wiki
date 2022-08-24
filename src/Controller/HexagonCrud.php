@@ -26,9 +26,9 @@ class HexagonCrud extends AbstractController
     public function voronoi(): Response
     {
         // @todo => form
-        $size = 69;
-        $avgTilePerRoom = 18;
-        
+        $size = 40;
+        $avgTilePerRoom = 12;
+
         $map = new HexaMap($size);
 
         $battlemap = new BattlemapSvg($size);
@@ -50,6 +50,15 @@ class HexagonCrud extends AbstractController
             $cell->growable = false;
             $map->setCell([$x, $size / 2], $cell);
             $map->setCell([$x, $size / 2 + 1], clone $cell);
+        }
+
+        for ($x = 0; $x < $size; $x += $size / 7) {
+            $cell = new HexaCell();
+            $cell->uid = 6666666;
+            $cell->growable = false;
+            for ($y = 0; $y < $size; $y++) {
+                $map->setCell([$x, $y], clone $cell);
+            }
         }
 
         while ($map->iterateNeighbourhood()) {
