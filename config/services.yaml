@@ -39,9 +39,6 @@ services:
     App\Repository\VertexRepository:
         $collectionName: 'vertex'
 
-    App\Repository\TileArrangementRepository:
-        $collectionName: 'tile_arrangement'
-            
     # WIKI
     App\Service\MediaWiki:
         arguments:
@@ -122,7 +119,3 @@ services:
     App\Command\LoginLink:
         arguments:
             $loginLinkHandler: '@security.authenticator.login_link_handler.main'
-
-    App\Repository\TileProvider:
-        $sourceDir: '%twig.default_path%/hex/tile'
-            

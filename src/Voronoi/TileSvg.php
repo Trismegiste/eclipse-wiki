@@ -7,9 +7,8 @@
 namespace App\Voronoi;
 
 /**
- * Description of TileSvg
- *
- * @author trismegiste
+ * A tile extracted from a SVG
+ * The tile must be contained in a group (<g> tag) with an id equals to the filename (without extension)
  */
 class TileSvg extends \DOMDocument
 {
