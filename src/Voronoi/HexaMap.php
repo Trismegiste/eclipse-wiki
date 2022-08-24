@@ -16,13 +16,21 @@ use App\Entity\Wfc\TileSvg;
 class HexaMap
 {
 
-    protected $gridSize;
-    protected $grid;
+    protected int $gridSize;
+    protected array $grid;
+    protected array $randomAccess;
 
     public function __construct(int $size)
     {
         $this->gridSize = $size;
         $this->grid = array_fill(0, $size, array_fill(0, $size, null));
+
+        $this->randomAccess = [];
+        for ($x = 0; $x < $this->gridSize; $x++) {
+            for ($y = 0; $y < $this->gridSize; $y++) {
+                $this->randomAccess[] = [$x, $y];
+            }
+        }
     }
 
     public function getSize(): int
@@ -47,6 +55,14 @@ class HexaMap
                 $item->setAttribute('x', $cx);
                 $item->setAttribute('y', $y);
                 $item->setAttribute('href', '#' . $cell->template);
+                $hue = ($cell->uid % 20) * 18;
+                $sat = ($cell->uid % 2) ? '100%' : '70%';
+                $item->setAttribute('fill', "hsl($hue,$sat,50%)");
+
+                $title = $doc->createElementNS(TileSvg::svgNS, 'title');
+                $title->textContent = 'cell-' . $cell->uid;
+                $item->appendChild($title);
+
                 $container->appendChild($item);
             }
         }
@@ -112,21 +128,49 @@ class HexaMap
         return $this->grid[$coord[0]][$coord[1]];
     }
 
-    public function iterate(): void
+    public function iteratePropagation(): bool
     {
+        $counter = 0;
+        shuffle($this->randomAccess);
+
+        foreach ($this->randomAccess as $idx => $center) {
+            /** @var HexaCell $cell */
+            $cell = $this->grid[$center[0]][$center[1]];
+            if (!is_null($cell)) {
+                $neighbor = $this->getNeighbourCoordinates($center);
+                foreach ($neighbor as $coord) {
+                    if (is_null($this->grid[$coord[0]][$coord[1]])) {
+                        $this->setCell($coord, clone $cell);
+                        $counter++;
+                    }
+                }
+                unset($this->randomAccess[$idx]); // nothing to propagate further
+            }
+        }
+
+        return $counter > 0;
+    }
+
+    public function iterateNeighborhood(): bool
+    {
+        $update = array_fill(0, $this->gridSize, array_fill(0, $this->gridSize, null));
+
         foreach ($this->grid as $x => $column) {
             foreach ($column as $y => $cell) {
-                /** @var HexaCell $cell */
-                if (!is_null($cell)) {
+                if (is_null($cell)) {
                     $neighbor = $this->getNeighbourCoordinates([$x, $y]);
-                    foreach ($neighbor as $coord) {
-                        if (is_null($this->grid[$coord[0]][$coord[1]])) {
-                            $this->setCell($coord, clone $cell);
-                        }
+                    foreach ($neighbor as $direction => $coord) {
+                        // check neighbour
+                        // if zero => skip
+                        // if one => clone
+                        // if two => random choice and add door if access[$room1][$room2] is false
+                        // for each direction : add wall
                     }
                 }
             }
         }
+
+        $this->grid = $update;
     }
 
 }

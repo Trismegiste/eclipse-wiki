@@ -193,15 +193,15 @@ class HexagonCrud extends AbstractController
         $imported = $battlemap->importNode($item, true);
         $defs->appendChild($imported);
 
-        for ($k = 0; $k < 100; $k++) {
+        for ($k = 0; $k < 300; $k++) {
             $cell = new HexaCell();
             $cell->uid = $k;
             $map->setCell([rand(0, $size - 1), rand(0, $size - 1)], $cell);
         }
 
-        $map->iterate();
-        $map->iterate();
-        $map->iterate();
+        while ($map->iteratePropagation()) {
+            // nothing            
+        }
 
         // map
         $item = $battlemap->createElementNS(TileSvg::svgNS, 'g');
