@@ -59,9 +59,9 @@ class HexaMap
 
                 $doc->getGround()->appendChild($item);
 
-                // Wall layer
-                foreach ($cell->wall as $direction => $hasWall) {
-                    if ($hasWall) {
+                // Wall layer - Since wall are set on each two cells, no need to duplicate the rendering
+                for ($direction = HexaCell::EAST; $direction < HexaCell::WEST; $direction++) {
+                    if ($cell->wall[$direction]) {
                         $item = $doc->createElementNS(TileSvg::svgNS, 'use');
                         $item->setAttribute('href', '#eastwall');
                         $angle = -60 * $direction;
