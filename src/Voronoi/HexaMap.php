@@ -18,19 +18,11 @@ class HexaMap
 
     protected int $gridSize;
     protected array $grid;
-    protected array $randomAccess;
 
     public function __construct(int $size)
     {
         $this->gridSize = $size;
         $this->grid = array_fill(0, $size, array_fill(0, $size, null));
-
-        $this->randomAccess = [];
-        for ($x = 0; $x < $this->gridSize; $x++) {
-            for ($y = 0; $y < $this->gridSize; $y++) {
-                $this->randomAccess[] = [$x, $y];
-            }
-        }
     }
 
     public function getSize(): int
@@ -60,7 +52,7 @@ class HexaMap
                 $item->setAttribute('fill', "hsl($hue,$sat,50%)");
 
                 $title = $doc->createElementNS(TileSvg::svgNS, 'title');
-                $title->textContent = 'cell-' . $cell->uid;
+                $title->textContent = 'room-' . $cell->uid;
                 $item->appendChild($title);
 
                 $container->appendChild($item);
@@ -76,46 +68,6 @@ class HexaMap
     public function setCell(array $coord, HexaCell $cell): void
     {
         $this->grid[$coord[0]][$coord[1]] = $cell;
-    }
-
-    /**
-     * Gets the coordinates of neighbour cells around a given cell coordinates
-     * @param array $coord
-     * @return array
-     */
-    public function getNeighbourCoordinates(array $coord): array
-    {
-        $x = $coord[0];
-        $y = $coord[1];
-        $offset = $x + ($y % 2);
-
-        $neighbour = [];
-
-        if ($x > 0) {
-            $neighbour[HexaCell::WEST] = [$x - 1, $y];
-        }
-
-        if ($x < $this->gridSize - 1) {
-            $neighbour[HexaCell::EAST] = [$x + 1, $y];
-        }
-
-        if (($offset > 0) && ($y > 0)) {
-            $neighbour[HexaCell::NORTHWEST] = [$offset - 1, $y - 1];
-        }
-
-        if (($offset < $this->gridSize) && ($y > 0)) {
-            $neighbour[HexaCell::NORTHEAST] = [$offset, $y - 1];
-        }
-
-        if (($offset > 0) && ($y < $this->gridSize - 1)) {
-            $neighbour[HexaCell::SOUTHWEST] = [$offset - 1, $y + 1];
-        }
-
-        if (($offset < $this->gridSize) && ($y < $this->gridSize - 1)) {
-            $neighbour[HexaCell::SOUTHEAST] = [$offset, $y + 1];
-        }
-
-        return $neighbour;
     }
 
     /**
@@ -167,30 +119,7 @@ class HexaMap
         return $this->grid[$coord[0]][$coord[1]];
     }
 
-    public function iteratePropagation(): bool
-    {
-        $counter = 0;
-        shuffle($this->randomAccess);
-
-        foreach ($this->randomAccess as $idx => $center) {
-            /** @var HexaCell $cell */
-            $cell = $this->grid[$center[0]][$center[1]];
-            if (!is_null($cell)) {
-                $neighbor = $this->getNeighbourCoordinates($center);
-                foreach ($neighbor as $coord) {
-                    if (is_null($this->grid[$coord[0]][$coord[1]])) {
-                        $this->setCell($coord, clone $cell);
-                        $counter++;
-                    }
-                }
-                unset($this->randomAccess[$idx]); // nothing to propagate further
-            }
-        }
-
-        return $counter > 0;
-    }
-
-    public function iterateNeighborhood(): bool
+    public function iterateNeighbourhood(): bool
     {
         $update = array_fill(0, $this->gridSize, array_fill(0, $this->gridSize, null));
 
@@ -204,7 +133,7 @@ class HexaMap
                     $choices = [];
                     foreach ($neighbor as $direction => $cell) {
                         /** @var HexaCell $cell */
-                        if (!is_null($cell)) {
+                        if (!is_null($cell) && $cell->growable) {
                             $choices[] = $cell;
                         }
                     }
@@ -225,7 +154,7 @@ class HexaMap
                                 // if two => random choice and add door if access[$room1][$room2] is false
                                 // for each direction : add wall
                                 if (!is_null($cell) && ($cell->uid !== $picked->uid)) {
-                                    $cell->door[$direction] = true;
+                                    $cell->wall[$direction] = true;
                                 }
                             }
                     }

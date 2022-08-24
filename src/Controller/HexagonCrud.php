@@ -176,7 +176,7 @@ class HexagonCrud extends AbstractController
      */
     public function voronoi(): Response
     {
-        $size = 50;
+        $size = 30;
         $map = new HexaMap($size);
 
         $battlemap = new BattlemapSvg();
@@ -193,13 +193,13 @@ class HexagonCrud extends AbstractController
         $imported = $battlemap->importNode($item, true);
         $defs->appendChild($imported);
 
-        for ($k = 0; $k < 500; $k++) {
+        for ($k = 0; $k < 300; $k++) {
             $cell = new HexaCell();
             $cell->uid = $k;
             $map->setCell([rand(0, $size - 1), rand(0, $size - 1)], $cell);
         }
 
-        while ($map->iterateNeighborhood()) {
+        while ($map->iterateNeighbourhood()) {
             // nothing
         }
 
