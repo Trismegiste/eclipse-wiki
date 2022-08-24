@@ -6,7 +6,7 @@
 
 namespace App\Voronoi;
 
-use App\Entity\HexagonalTile;
+use App\Voronoi\HexaCell;
 use App\Entity\Wfc\BattlemapSvg;
 use App\Entity\Wfc\TileSvg;
 
@@ -92,27 +92,66 @@ class HexaMap
         $neighbour = [];
 
         if ($x > 0) {
-            $neighbour[HexagonalTile::WEST] = [$x - 1, $y];
+            $neighbour[HexaCell::WEST] = [$x - 1, $y];
         }
 
         if ($x < $this->gridSize - 1) {
-            $neighbour[HexagonalTile::EAST] = [$x + 1, $y];
+            $neighbour[HexaCell::EAST] = [$x + 1, $y];
         }
 
         if (($offset > 0) && ($y > 0)) {
-            $neighbour[HexagonalTile::NORTHWEST] = [$offset - 1, $y - 1];
+            $neighbour[HexaCell::NORTHWEST] = [$offset - 1, $y - 1];
         }
 
         if (($offset < $this->gridSize) && ($y > 0)) {
-            $neighbour[HexagonalTile::NORTHEAST] = [$offset, $y - 1];
+            $neighbour[HexaCell::NORTHEAST] = [$offset, $y - 1];
         }
 
         if (($offset > 0) && ($y < $this->gridSize - 1)) {
-            $neighbour[HexagonalTile::SOUTHWEST] = [$offset - 1, $y + 1];
+            $neighbour[HexaCell::SOUTHWEST] = [$offset - 1, $y + 1];
         }
 
         if (($offset < $this->gridSize) && ($y < $this->gridSize - 1)) {
-            $neighbour[HexagonalTile::SOUTHEAST] = [$offset, $y + 1];
+            $neighbour[HexaCell::SOUTHEAST] = [$offset, $y + 1];
+        }
+
+        return $neighbour;
+    }
+
+    /**
+     * Gets the neighbour cells around a given cell coordinates
+     * @param int $x
+     * @param int $y
+     * @return array
+     */
+    public function getNeighbourCell(int $x, int $y): array
+    {
+        $offset = $x + ($y % 2);
+
+        $neighbour = [];
+
+        if ($x > 0) {
+            $neighbour[HexaCell::WEST] = $this->grid[$x - 1][$y];
+        }
+
+        if ($x < $this->gridSize - 1) {
+            $neighbour[HexaCell::EAST] = $this->grid[$x + 1][$y];
+        }
+
+        if (($offset > 0) && ($y > 0)) {
+            $neighbour[HexaCell::NORTHWEST] = $this->grid[$offset - 1][$y - 1];
+        }
+
+        if (($offset < $this->gridSize) && ($y > 0)) {
+            $neighbour[HexaCell::NORTHEAST] = $this->grid[$offset][$y - 1];
+        }
+
+        if (($offset > 0) && ($y < $this->gridSize - 1)) {
+            $neighbour[HexaCell::SOUTHWEST] = $this->grid[$offset - 1][$y + 1];
+        }
+
+        if (($offset < $this->gridSize) && ($y < $this->gridSize - 1)) {
+            $neighbour[HexaCell::SOUTHEAST] = $this->grid[$offset][$y + 1];
         }
 
         return $neighbour;
@@ -155,22 +194,51 @@ class HexaMap
     {
         $update = array_fill(0, $this->gridSize, array_fill(0, $this->gridSize, null));
 
+        $hasNull = false;
         foreach ($this->grid as $x => $column) {
-            foreach ($column as $y => $cell) {
-                if (is_null($cell)) {
-                    $neighbor = $this->getNeighbourCoordinates([$x, $y]);
-                    foreach ($neighbor as $direction => $coord) {
-                        // check neighbour
-                        // if zero => skip
-                        // if one => clone
-                        // if two => random choice and add door if access[$room1][$room2] is false
-                        // for each direction : add wall
+            foreach ($column as $y => $center) {
+                /** @var HexaCell $center */
+                if (is_null($center)) {
+                    $hasNull = true;
+                    $neighbor = $this->getNeighbourCell($x, $y);
+                    $choices = [];
+                    foreach ($neighbor as $direction => $cell) {
+                        /** @var HexaCell $cell */
+                        if (!is_null($cell)) {
+                            $choices[] = $cell;
+                        }
                     }
+
+                    $nbChoices = count($choices);
+                    switch ($nbChoices) {
+                        case 0:
+                            break;
+
+                        case 1:
+                            $update[$x][$y] = clone $choices[0];
+                            break;
+
+                        default:
+                            $picked = $choices[rand(0, $nbChoices - 1)];
+                            $update[$x][$y] = clone $picked;
+                            foreach ($neighbor as $direction => $cell) {
+                                // if two => random choice and add door if access[$room1][$room2] is false
+                                // for each direction : add wall
+                                if (!is_null($cell) && ($cell->uid !== $picked->uid)) {
+                                    $cell->door[$direction] = true;
+                                }
+                            }
+                    }
+                } else {
+                    $update[$x][$y] = clone $center;
                 }
             }
         }
 
+        unset($this->grid);
         $this->grid = $update;
+
+        return $hasNull;
     }
 
 }
