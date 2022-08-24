@@ -179,9 +179,11 @@ class HexagonCrud extends AbstractController
         $map = new HexaMap($size);
 
         $battlemap = new \App\Voronoi\BattlemapSvg($size);
-        $svg = new TileSvg();
-        $svg->load($this->getParameter('kernel.project_dir') . '/templates/hex/tile/empty.svg');
-        $battlemap->appendTile($svg);
+        foreach (['default', 'eastwall'] as $filename) {
+            $svg = new TileSvg();
+            $svg->load($this->getParameter('kernel.project_dir') . "/templates/hex/tile/$filename.svg");
+            $battlemap->appendTile($svg);
+        }
 
         for ($k = 0; $k < 300; $k++) {
             $cell = new HexaCell();

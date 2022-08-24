@@ -18,6 +18,7 @@ class BattlemapSvg extends DOMDocument
 
     protected DOMElement $defs;
     protected DOMElement $ground;
+    protected DOMElement $wall;
 
     public function __construct(int $size)
     {
@@ -32,10 +33,15 @@ class BattlemapSvg extends DOMDocument
         $this->defs = $this->createElementNS(TileSvg::svgNS, 'defs');
         $root->appendChild($this->defs);
 
-        // ground
+        // ground layer
         $this->ground = $this->createElementNS(TileSvg::svgNS, 'g');
         $this->ground->setAttribute('id', 'ground');
         $root->appendChild($this->ground);
+
+        // wall layer
+        $this->wall = $this->createElementNS(TileSvg::svgNS, 'g');
+        $this->wall->setAttribute('id', 'wall');
+        $root->appendChild($this->wall);
     }
 
     public function getGround(): DOMElement
@@ -48,6 +54,11 @@ class BattlemapSvg extends DOMDocument
         $item = $svg->getTile();
         $imported = $this->importNode($item, true);
         $this->defs->appendChild($imported);
+    }
+
+    public function getWall(): DOMElement
+    {
+        return $this->wall;
     }
 
 }

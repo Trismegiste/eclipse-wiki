@@ -35,7 +35,6 @@ class HexaMap
         $sin60 = sin(M_PI / 3);
         $tan60 = tan(M_PI / 3);
 
-        $container = $doc->getGround();
         foreach ($this->grid as $x => $column) {
             foreach ($column as $y => $cell) {
                 if (is_null($cell)) {
@@ -43,25 +42,33 @@ class HexaMap
                 }
                 /** @var HexaCell $cell */
                 $cx = ($x - floor($y / 2)) / $sin60 + $y / $tan60;
+
+                // Ground layer
                 $item = $doc->createElementNS(TileSvg::svgNS, 'use');
-                // $item->setAttribute('x', $cx);
-                // $item->setAttribute('y', $y);
+                $item->setAttribute('x', $cx);
+                $item->setAttribute('y', $y);
                 $item->setAttribute('href', '#' . $cell->template);
                 // color
                 $hue = ($cell->uid % 20) * 18;
                 $sat = ($cell->uid % 2) ? '100%' : '70%';
                 $item->setAttribute('fill', "hsl($hue,$sat,50%)");
 
-                $item->setAttribute('transform', "translate($cx $y) rotate(-0)");
-
                 $title = $doc->createElementNS(TileSvg::svgNS, 'title');
-                $wall = implode(' ', array_map(function (bool $v) {
-                            return $v ? '1' : '0';
-                        }, $cell->wall));
-                $title->textContent = 'room-' . $cell->uid . '   ' . $wall;
+                $title->textContent = 'room-' . $cell->uid;
                 $item->appendChild($title);
 
-                $container->appendChild($item);
+                $doc->getGround()->appendChild($item);
+
+                // Wall layer
+                foreach ($cell->wall as $direction => $hasWall) {
+                    if ($hasWall) {
+                        $item = $doc->createElementNS(TileSvg::svgNS, 'use');
+                        $item->setAttribute('href', '#eastwall');
+                        $angle = -60 * $direction;
+                        $item->setAttribute('transform', "translate($cx $y) rotate($angle)");
+                        $doc->getWall()->appendChild($item);
+                    }
+                }
             }
         }
     }

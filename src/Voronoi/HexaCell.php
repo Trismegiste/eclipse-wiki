@@ -19,7 +19,7 @@ class HexaCell
     const SOUTHWEST = 4;
     const SOUTHEAST = 5;
 
-    public string $template = 'empty';  // for use tag (color, pattern, textures...)
+    public string $template = 'default';  // for use tag (color, pattern, textures...)
     public int $uid;  // to differentiate rooms
     public array $wall = [false, false, false, false, false, false]; // CCW, from EAST (0°) to SOUTHEAST (300°)
     public array $door = [false, false, false, false, false, false]; // CCW, from EAST (0°) to SOUTHEAST (300°)
