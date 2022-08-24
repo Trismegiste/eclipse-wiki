@@ -29,7 +29,7 @@ class HexagonCrud extends AbstractController
         $map = new HexaMap($size);
 
         $battlemap = new BattlemapSvg($size);
-        foreach (['default', 'eastwall'] as $filename) {
+        foreach (['default', 'eastwall', 'eastdoor'] as $filename) {
             $svg = new TileSvg();
             $svg->load($this->getParameter('kernel.project_dir') . "/templates/hex/tile/$filename.svg");
             $battlemap->appendTile($svg);

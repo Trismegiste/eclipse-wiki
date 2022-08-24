@@ -69,6 +69,17 @@ class HexaMap
                         $doc->getWall()->appendChild($item);
                     }
                 }
+
+                // Door layer
+                for ($direction = HexaCell::EAST; $direction <= HexaCell::SOUTHEAST; $direction++) {
+                    if ($cell->door[$direction]) {
+                        $item = $doc->createElementNS(TileSvg::svgNS, 'use');
+                        $item->setAttribute('href', '#eastdoor');
+                        $angle = -60 * $direction;
+                        $item->setAttribute('transform', "translate($cx $y) rotate($angle)");
+                        $doc->getDoor()->appendChild($item);
+                    }
+                }
             }
         }
     }
@@ -191,6 +202,8 @@ class HexaMap
 
     public function wallProcessing(): void
     {
+        $roomConnection = [];
+
         foreach ($this->grid as $x => $column) {
             foreach ($column as $y => $center) {
                 /** @var HexaCell $center */
@@ -199,6 +212,8 @@ class HexaMap
                     /** @var HexaCell $cell */
                     if ($center->uid !== $cell->uid) {
                         $center->wall[$direction] = true;
+                        if (rand(0, 1))
+                            $center->door[$direction] = true;
                     }
                 }
             }
