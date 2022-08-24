@@ -41,6 +41,14 @@ class HexagonCrud extends AbstractController
             $map->setCell([rand(0, $size - 1), rand(0, $size - 1)], $cell);
         }
 
+        for ($x = 0; $x < $size; $x++) {
+            $cell = new HexaCell();
+            $cell->uid = 6666666;
+            $cell->growable = false;
+            $map->setCell([$x, $size / 2], $cell);
+            $map->setCell([$x, $size / 2 + 1], clone $cell);
+        }
+
         while ($map->iterateNeighbourhood()) {
             // nothing
         }

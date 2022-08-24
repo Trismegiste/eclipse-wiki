@@ -212,7 +212,7 @@ class HexaMap
                     /** @var HexaCell $cell */
                     if ($center->uid !== $cell->uid) {
                         $center->wall[$direction] = true;
-                        if (rand(0, 1))
+                        if (!rand(0, 4))
                             $center->door[$direction] = true;
                     }
                 }
