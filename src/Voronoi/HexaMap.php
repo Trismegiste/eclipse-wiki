@@ -132,6 +132,10 @@ class HexaMap
         return $this->grid[$coord[0]][$coord[1]];
     }
 
+    /**
+     * Growing Voronoi
+     * @return bool if there is still empty tile ?
+     */
     public function iterateNeighbourhood(): bool
     {
         $update = array_fill(0, $this->gridSize, array_fill(0, $this->gridSize, null));
@@ -142,14 +146,10 @@ class HexaMap
                 /** @var HexaCell $center */
                 if (is_null($center)) {
                     $hasNull = true;
-                    $neighbor = $this->getNeighbourCell($x, $y);
-                    $choices = [];
-                    foreach ($neighbor as $direction => $cell) {
-                        /** @var HexaCell $cell */
-                        if (!is_null($cell) && $cell->growable) {
-                            $choices[] = $cell;
-                        }
-                    }
+
+                    $choices = array_filter($this->getNeighbourCell($x, $y), function (?HexaCell $cell) {
+                        return !is_null($cell) && $cell->growable;
+                    });
 
                     $nbChoices = count($choices);
                     switch ($nbChoices) {
@@ -157,10 +157,11 @@ class HexaMap
                             break;
 
                         case 1:
-                            $update[$x][$y] = clone $choices[0];
+                            $update[$x][$y] = clone array_pop($choices);
                             break;
 
                         default:
+                            $choices = array_values($choices);
                             $picked = $choices[rand(0, $nbChoices - 1)];
                             $update[$x][$y] = clone $picked;
                     }
@@ -170,7 +171,6 @@ class HexaMap
             }
         }
 
-        unset($this->grid);
         $this->grid = $update;
 
         return $hasNull;
