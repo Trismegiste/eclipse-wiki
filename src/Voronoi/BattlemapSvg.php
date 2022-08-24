@@ -6,24 +6,49 @@
 
 namespace App\Voronoi;
 
+use App\Entity\Wfc\TileSvg;
+use DOMDocument;
+use DOMElement;
+use DOMXPath;
+
 /**
  * A vector battlemap
  */
-class BattlemapSvg extends \DOMDocument
+class BattlemapSvg extends DOMDocument
 {
 
-    public function __construct(string $version = "1.0", string $encoding = "")
+    protected DOMElement $defs;
+    protected DOMElement $ground;
+
+    public function __construct(int $size)
     {
-        parent::__construct($version, $encoding);
-        
+        parent::__construct();
+
+        // root
+        $root = $this->createElementNS(TileSvg::svgNS, 'svg');
+        $root->setAttribute('viewBox', "0 0 $size $size");
+        $this->appendChild($root);
+
+        // svg defs
+        $this->defs = $this->createElementNS(TileSvg::svgNS, 'defs');
+        $root->appendChild($this->defs);
+
+        // ground
+        $this->ground = $this->createElementNS(TileSvg::svgNS, 'g');
+        $this->ground->setAttribute('id', 'ground');
+        $root->appendChild($this->ground);
     }
 
-    public function getGround(): \DOMElement
+    public function getGround(): DOMElement
     {
-        $xpath = new \DOMXPath($this);
-        $xpath->registerNamespace('svg', TileSvg::svgNS);
+        return $this->ground;
+    }
 
-        return $xpath->query('/svg:svg/svg:g[@id="ground"]')->item(0);
+    public function appendTile(TileSvg $svg): void
+    {
+        $item = $svg->getTile();
+        $imported = $this->importNode($item, true);
+        $this->defs->appendChild($imported);
     }
 
 }

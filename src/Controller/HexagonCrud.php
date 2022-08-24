@@ -7,7 +7,6 @@
 namespace App\Controller;
 
 use App\Entity\TileArrangement;
-use App\Entity\Wfc\BattlemapSvg;
 use App\Entity\Wfc\Factory;
 use App\Entity\Wfc\TileSvg;
 use App\Form\Tile\AnchorType;
@@ -176,22 +175,13 @@ class HexagonCrud extends AbstractController
      */
     public function voronoi(): Response
     {
-        $size = 30;
+        $size = 50;
         $map = new HexaMap($size);
 
-        $battlemap = new BattlemapSvg();
-        $root = $battlemap->createElementNS(TileSvg::svgNS, 'svg');
-        $root->setAttribute('viewBox', "0 0 $size $size");
-        $battlemap->appendChild($root);
-
-        $defs = $battlemap->createElementNS(TileSvg::svgNS, 'defs');
-        $root->appendChild($defs);
-
+        $battlemap = new \App\Voronoi\BattlemapSvg($size);
         $svg = new TileSvg();
         $svg->load($this->getParameter('kernel.project_dir') . '/templates/hex/tile/empty.svg');
-        $item = $svg->getTile();
-        $imported = $battlemap->importNode($item, true);
-        $defs->appendChild($imported);
+        $battlemap->appendTile($svg);
 
         for ($k = 0; $k < 300; $k++) {
             $cell = new HexaCell();
@@ -202,11 +192,6 @@ class HexagonCrud extends AbstractController
         while ($map->iterateNeighbourhood()) {
             // nothing
         }
-
-        // map
-        $item = $battlemap->createElementNS(TileSvg::svgNS, 'g');
-        $item->setAttribute('id', 'ground');
-        $root->appendChild($item);
 
         $map->dump($battlemap);
         return $this->render('hex/generate.html.twig', ['map' => $battlemap]);

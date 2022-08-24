@@ -7,7 +7,7 @@
 namespace App\Voronoi;
 
 use App\Voronoi\HexaCell;
-use App\Entity\Wfc\BattlemapSvg;
+use App\Voronoi\BattlemapSvg;
 use App\Entity\Wfc\TileSvg;
 
 /**
