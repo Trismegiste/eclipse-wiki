@@ -9,7 +9,6 @@ namespace App\Voronoi;
 use App\Entity\Wfc\TileSvg;
 use DOMDocument;
 use DOMElement;
-use DOMXPath;
 
 /**
  * A vector battlemap

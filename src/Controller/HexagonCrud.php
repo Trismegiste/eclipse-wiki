@@ -192,6 +192,7 @@ class HexagonCrud extends AbstractController
         while ($map->iterateNeighbourhood()) {
             // nothing
         }
+        $map->wallProcessing();
 
         $map->dump($battlemap);
         return $this->render('hex/generate.html.twig', ['map' => $battlemap]);

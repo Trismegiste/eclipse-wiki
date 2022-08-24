@@ -44,15 +44,21 @@ class HexaMap
                 /** @var HexaCell $cell */
                 $cx = ($x - floor($y / 2)) / $sin60 + $y / $tan60;
                 $item = $doc->createElementNS(TileSvg::svgNS, 'use');
-                $item->setAttribute('x', $cx);
-                $item->setAttribute('y', $y);
+                // $item->setAttribute('x', $cx);
+                // $item->setAttribute('y', $y);
                 $item->setAttribute('href', '#' . $cell->template);
+                // color
                 $hue = ($cell->uid % 20) * 18;
                 $sat = ($cell->uid % 2) ? '100%' : '70%';
                 $item->setAttribute('fill', "hsl($hue,$sat,50%)");
 
+                $item->setAttribute('transform', "translate($cx $y) rotate(-0)");
+
                 $title = $doc->createElementNS(TileSvg::svgNS, 'title');
-                $title->textContent = 'room-' . $cell->uid;
+                $wall = implode(' ', array_map(function (bool $v) {
+                            return $v ? '1' : '0';
+                        }, $cell->wall));
+                $title->textContent = 'room-' . $cell->uid . '   ' . $wall;
                 $item->appendChild($title);
 
                 $container->appendChild($item);
@@ -150,16 +156,9 @@ class HexaMap
                         default:
                             $picked = $choices[rand(0, $nbChoices - 1)];
                             $update[$x][$y] = clone $picked;
-                            foreach ($neighbor as $direction => $cell) {
-                                // if two => random choice and add door if access[$room1][$room2] is false
-                                // for each direction : add wall
-                                if (!is_null($cell) && ($cell->uid !== $picked->uid)) {
-                                    $cell->wall[$direction] = true;
-                                }
-                            }
                     }
                 } else {
-                    $update[$x][$y] = clone $center;
+                    $update[$x][$y] = $center;
                 }
             }
         }
@@ -168,6 +167,35 @@ class HexaMap
         $this->grid = $update;
 
         return $hasNull;
+    }
+
+    protected function getCoordPerRoom(): array
+    {
+        $roomGroup = [];
+        foreach ($this->grid as $x => $column) {
+            foreach ($column as $y => $cell) {
+                /** @var HexaCell $cell */
+                $roomGroup[$cell->uid][] = [$x, $y];
+            }
+        }
+
+        return $roomGroup;
+    }
+
+    public function wallProcessing(): void
+    {
+        foreach ($this->grid as $x => $column) {
+            foreach ($column as $y => $center) {
+                /** @var HexaCell $center */
+                $neighbor = $this->getNeighbourCell($x, $y);
+                foreach ($neighbor as $direction => $cell) {
+                    /** @var HexaCell $cell */
+                    if ($center->uid !== $cell->uid) {
+                        $center->wall[$direction] = true;
+                    }
+                }
+            }
+        }
     }
 
 }
