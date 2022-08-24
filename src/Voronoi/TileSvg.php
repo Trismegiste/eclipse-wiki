@@ -4,7 +4,7 @@
  * eclipse-wiki
  */
 
-namespace App\Entity\Wfc;
+namespace App\Voronoi;
 
 /**
  * Description of TileSvg

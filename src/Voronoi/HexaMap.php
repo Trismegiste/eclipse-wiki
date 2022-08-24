@@ -8,7 +8,7 @@ namespace App\Voronoi;
 
 use App\Voronoi\HexaCell;
 use App\Voronoi\BattlemapSvg;
-use App\Entity\Wfc\TileSvg;
+use App\Voronoi\TileSvg;
 
 /**
  * A Map tiled with hexagons

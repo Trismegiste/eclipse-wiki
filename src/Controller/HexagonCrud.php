@@ -8,7 +8,7 @@ namespace App\Controller;
 
 use App\Entity\TileArrangement;
 use App\Entity\Wfc\Factory;
-use App\Entity\Wfc\TileSvg;
+use App\Voronoi\TileSvg;
 use App\Form\Tile\AnchorType;
 use App\Form\Tile\ArrangementType;
 use App\Form\Tile\RotationType;

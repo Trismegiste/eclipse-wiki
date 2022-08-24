@@ -6,7 +6,7 @@
 
 namespace App\Voronoi;
 
-use App\Entity\Wfc\TileSvg;
+use App\Voronoi\TileSvg;
 use DOMDocument;
 use DOMElement;
 
