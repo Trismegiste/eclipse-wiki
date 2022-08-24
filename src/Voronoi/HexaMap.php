@@ -211,9 +211,16 @@ class HexaMap
                 foreach ($neighbor as $direction => $cell) {
                     /** @var HexaCell $cell */
                     if ($center->uid !== $cell->uid) {
+                        // wall
                         $center->wall[$direction] = true;
-                        if (!rand(0, 4))
+                        // door
+                        $minKey = min($center->uid, $cell->uid);
+                        $maxKey = max($center->uid, $cell->uid);
+                        if (!(array_key_exists($minKey, $roomConnection) &&
+                                array_key_exists($maxKey, $roomConnection[$minKey]))) {
                             $center->door[$direction] = true;
+                            $roomConnection[$minKey][$maxKey] = true;
+                        }
                     }
                 }
             }
