@@ -26,8 +26,10 @@ class BattlemapSvg extends DOMDocument
         parent::__construct();
 
         // root
+        $width = $size * (2 / sqrt(3)) + 1;  // because of the included rectangle in a hexagon
+        $height = $size + 1;
         $root = $this->createElementNS(TileSvg::svgNS, 'svg');
-        $root->setAttribute('viewBox', "0 0 $size $size");
+        $root->setAttribute('viewBox', "-1 -1 $width $height");
         $this->appendChild($root);
 
         // svg defs

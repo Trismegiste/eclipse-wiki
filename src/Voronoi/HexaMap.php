@@ -6,9 +6,8 @@
 
 namespace App\Voronoi;
 
-use App\Voronoi\HexaCell;
 use App\Voronoi\BattlemapSvg;
-use App\Voronoi\TileSvg;
+use App\Voronoi\HexaCell;
 
 /**
  * A Map tiled with hexagons
@@ -190,7 +189,7 @@ class HexaMap
         }
     }
 
-    public function erodeWith(HexaCell $hallway, int $threshold = 13): void
+    public function erodeWith(HexaCell $hallway, int $minRoomSize = 13, int $maxNeighbour = 6): void
     {
         $update = array_fill(0, $this->gridSize, array_fill(0, $this->gridSize, null));
 
@@ -203,7 +202,7 @@ class HexaMap
                 /** @var HexaCell $center */
                 $update[$x][$y] = $center;
 
-                if ($sizePerRoom[$center->uid] > $threshold) {
+                if ($center->growable && ($sizePerRoom[$center->uid] > $minRoomSize)) {
                     $neighbor = $this->getNeighbourCell($x, $y);
                     $counter = 0;
                     foreach ($neighbor as $cell) {
@@ -211,7 +210,7 @@ class HexaMap
                             $counter++;
                         }
                     }
-                    if ($counter < 6) {
+                    if ($counter < $maxNeighbour) {
                         $update[$x][$y] = clone $hallway;
                     }
                 }
