@@ -177,17 +177,48 @@ class HexaMap
                         // wall
                         $center->wall[$direction] = true;
                         // door
-                        $minKey = min($center->uid, $cell->uid);
-                        $maxKey = max($center->uid, $cell->uid);
-                        if (!(array_key_exists($minKey, $roomConnection) &&
-                                array_key_exists($maxKey, $roomConnection[$minKey]))) {
+                        $keys = [$center->uid, $cell->uid];
+                        sort($keys);
+                        if (!(array_key_exists($keys[0], $roomConnection) &&
+                                array_key_exists($keys[1], $roomConnection[$keys[0]]))) {
                             $center->door[$direction] = true;
-                            $roomConnection[$minKey][$maxKey] = true;
+                            $roomConnection[$keys[0]][$keys[1]] = true;
                         }
                     }
                 }
             }
         }
+    }
+
+    public function erode(int $threshold = 13): void
+    {
+        $hallway = new HexaCell();
+        $hallway->uid = -555;
+        $update = array_fill(0, $this->gridSize, array_fill(0, $this->gridSize, null));
+
+        $sizePerRoom = array_map(function (array $coord) {
+            return count($coord);
+        }, $this->getCoordPerRoom());
+
+        foreach ($this->grid as $x => $column) {
+            foreach ($column as $y => $center) {
+                /** @var HexaCell $center */
+                $update[$x][$y] = $center;
+                if ($sizePerRoom[$center->uid] > $threshold) {
+                    $neighbor = $this->getNeighbourCell($x, $y);
+                    $counter = 0;
+                    foreach ($neighbor as $cell) {
+                        if ($center->uid === $cell->uid) {
+                            $counter++;
+                        }
+                    }
+                    if ($counter < 6) {
+                        $update[$x][$y] = clone $hallway;
+                    }
+                }
+            }
+        }
+        $this->grid = $update;
     }
 
 }
