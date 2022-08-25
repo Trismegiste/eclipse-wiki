@@ -26,6 +26,13 @@ class HexaCell
     public bool $growable = true; // for voronoi algo
     public bool $npc = false;  // is there a npc
 
+    /**
+     * Modifies the battlemap SVG to append this cell. The coordinates of the cell is calculated and given by the battlemap
+     * @param BattlemapSvg $doc
+     * @param float $cx abscissa
+     * @param float $y ordinate
+     * @return void
+     */
     public function dumpAt(BattlemapSvg $doc, float $cx, float $y): void
     {
         // Ground layer

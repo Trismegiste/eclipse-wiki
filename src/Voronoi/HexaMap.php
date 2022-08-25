@@ -162,6 +162,10 @@ class HexaMap
         return $roomGroup;
     }
 
+    /**
+     * Add walls and doors on cells
+     * @return void
+     */
     public function wallProcessing(): void
     {
         $roomConnection = [];
@@ -189,6 +193,14 @@ class HexaMap
         }
     }
 
+    /**
+     * Erodes rooms by eliminating outside cells that does not have at least a given number of neighbours
+     * This erosion is enabled only for a given size of room
+     * @param HexaCell $hallway The cell to clone to replace eroded cells
+     * @param int $minRoomSize The minimum size of a room (in cell) to apply erosion
+     * @param int $maxNeighbour The count of minimal neighbours to keep a cell. 6 means 6 neighbouring cells of the same room are mandatory to keep this cell
+     * @return void
+     */
     public function erodeWith(HexaCell $hallway, int $minRoomSize = 13, int $maxNeighbour = 6): void
     {
         $update = array_fill(0, $this->gridSize, array_fill(0, $this->gridSize, null));

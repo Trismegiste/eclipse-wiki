@@ -52,11 +52,20 @@ class BattlemapSvg extends DOMDocument
         $root->appendChild($this->door);
     }
 
+    /**
+     * Gets the ground layer (a.k.a a svg <g> tag)
+     * @return DOMElement
+     */
     public function getGround(): DOMElement
     {
         return $this->ground;
     }
 
+    /**
+     * Appends a tile in the definitions of this SVG
+     * @param TileSvg $svg
+     * @return void
+     */
     public function appendTile(TileSvg $svg): void
     {
         $item = $svg->getTile();
@@ -64,11 +73,19 @@ class BattlemapSvg extends DOMDocument
         $this->defs->appendChild($imported);
     }
 
+    /**
+     * Gets the walls layer
+     * @return DOMElement
+     */
     public function getWall(): DOMElement
     {
         return $this->wall;
     }
 
+    /**
+     * Gets the doors layer
+     * @return DOMElement
+     */
     public function getDoor(): DOMElement
     {
         return $this->door;
