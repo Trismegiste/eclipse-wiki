@@ -26,15 +26,17 @@ class HexagonCrud extends AbstractController
     public function voronoi(): Response
     {
         // @todo => form
-        $size = 51;
-        $avgTilePerRoom = 15;
+        $size = 70;
+        $avgTilePerRoom = 20;
+        $minRoomSize = 13;
+        $maxNeighbour = 5;
 
         $map = new HexaMap($size);
 
         $battlemap = new BattlemapSvg($size);
         foreach (['default', 'eastwall', 'eastdoor'] as $filename) {
             $svg = new TileSvg();
-            $svg->load($this->getParameter('kernel.project_dir') . "/templates/hex/tile/$filename.svg");
+            $svg->load($this->getParameter('twig.default_path') . "/hex/tile/$filename.svg");
             $battlemap->appendTile($svg);
         }
 
@@ -43,7 +45,6 @@ class HexagonCrud extends AbstractController
             $cell->uid = $k;
             $map->setCell([rand(0, $size - 1), rand(0, $size - 1)], $cell);
         }
-
 
         if (false) {
             $street = new HexaCell();
@@ -74,7 +75,7 @@ class HexagonCrud extends AbstractController
 
         $hallway = new HexaCell();
         $hallway->uid = 222222;
-        $map->erodeWith($hallway);
+        $map->erodeWith($hallway, $minRoomSize, $maxNeighbour);
 
         $map->wallProcessing();
 
