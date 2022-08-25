@@ -190,10 +190,8 @@ class HexaMap
         }
     }
 
-    public function erode(int $threshold = 13): void
+    public function erodeWith(HexaCell $hallway, int $threshold = 13): void
     {
-        $hallway = new HexaCell();
-        $hallway->uid = -555;
         $update = array_fill(0, $this->gridSize, array_fill(0, $this->gridSize, null));
 
         $sizePerRoom = array_map(function (array $coord) {
@@ -204,6 +202,7 @@ class HexaMap
             foreach ($column as $y => $center) {
                 /** @var HexaCell $center */
                 $update[$x][$y] = $center;
+
                 if ($sizePerRoom[$center->uid] > $threshold) {
                     $neighbor = $this->getNeighbourCell($x, $y);
                     $counter = 0;

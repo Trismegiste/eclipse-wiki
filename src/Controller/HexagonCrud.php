@@ -66,7 +66,11 @@ class HexagonCrud extends AbstractController
         while ($map->iterateNeighbourhood()) {
             // nothing
         }
-        $map->erode();
+
+        $hallway = new HexaCell();
+        $hallway->uid = -555;
+        $map->erodeWith($hallway);
+
         $map->wallProcessing();
 
         $map->dump($battlemap);
