@@ -20,7 +20,7 @@ class MapConfig extends Vertex
     public bool $erosion;
     public int $erodingMinRoomSize;
     public int $erodingMaxNeighbour;
-    public string $container;
+    public ?string $container;
     public int $horizontalLines;
     public bool $doubleHorizontal;
     public int $verticalLines;
