@@ -26,6 +26,7 @@ class HexagonCrud extends AbstractController
     public function voronoi(): Response
     {
         // @todo => form
+        $randomSeed = 666;
         $size = 70;
         $avgTilePerRoom = 20;
         $minRoomSize = 13;
@@ -40,11 +41,11 @@ class HexagonCrud extends AbstractController
             $battlemap->appendTile($svg);
         }
 
-        for ($k = 0; $k < $size * $size / $avgTilePerRoom; $k++) {
-            $cell = new HexaCell();
-            $cell->uid = $k;
-            $map->setCell([rand(0, $size - 1), rand(0, $size - 1)], $cell);
-        }
+        $draw = new \App\Voronoi\MapDrawer($map);
+
+        $cell = new HexaCell();
+        $cell->uid = 100;
+        $draw->plantRandomSeed($cell, $avgTilePerRoom);
 
         if (false) {
             $street = new HexaCell();
@@ -63,9 +64,13 @@ class HexagonCrud extends AbstractController
             }
         }
 
-        $draw = new \App\Voronoi\MapDrawer($map);
+        $hallway = new HexaCell();
+        $hallway->uid = 10;
+        $hallway->growable=false;
+        $draw->drawHorizontalLine($hallway, 3);
+
         $filling = new HexaCell();
-        $filling->uid = 111111;
+        $filling->uid = 0;
         $filling->growable = false;
         $draw->drawCircleContainer($filling);
 
@@ -73,8 +78,6 @@ class HexagonCrud extends AbstractController
             // nothing
         }
 
-        $hallway = new HexaCell();
-        $hallway->uid = 222222;
         $map->erodeWith($hallway, $minRoomSize, $maxNeighbour);
 
         $map->wallProcessing();

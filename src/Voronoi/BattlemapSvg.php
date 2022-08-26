@@ -16,6 +16,8 @@ use DOMElement;
 class BattlemapSvg extends DOMDocument
 {
 
+    const defaultSizeForWeb = 1200;
+
     protected DOMElement $defs;
     protected DOMElement $ground;
     protected DOMElement $wall;
@@ -24,12 +26,15 @@ class BattlemapSvg extends DOMDocument
     public function __construct(int $size)
     {
         parent::__construct();
+        $cos30 = sqrt(3) / 2.0;
 
         // root
-        $width = $size * (2 / sqrt(3)) + 1;  // because of the included rectangle in a hexagon
+        $width = $size / $cos30 + 1;  // because of the included rectangle in a hexagon
         $height = $size + 1;
         $root = $this->createElementNS(TileSvg::svgNS, 'svg');
         $root->setAttribute('viewBox', "-1 -1 $width $height");
+        $root->setAttribute('height', (int) floor(self::defaultSizeForWeb * $cos30));
+        $root->setAttribute('width', self::defaultSizeForWeb);
         $this->appendChild($root);
 
         // svg defs
