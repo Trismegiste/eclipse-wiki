@@ -24,7 +24,7 @@ class MapBuilder
         $map = new HexaMap($config->side);
 
         $battlemap = new BattlemapSvg($config->side);
-        foreach (['default', 'eastwall', 'eastdoor'] as $filename) {
+        foreach (['default', 'eastwall', 'eastdoor', 'room', 'void'] as $filename) {
             $svg = new TileSvg();
             $svg->load("{$this->tilePath}/$filename.svg");
             $battlemap->appendTile($svg);
@@ -33,13 +33,9 @@ class MapBuilder
         srand($config->seed);
         $draw = new MapDrawer($map);
 
-        $cell = new HexaCell();
-        $cell->uid = 100;
-        $draw->plantRandomSeed($cell, $config->avgTilePerRoom);
+        $draw->plantRandomSeed(new HexaCell(100, 'room'), $config->avgTilePerRoom);
 
-        $hallway = new HexaCell();
-        $hallway->uid = 10;
-        $hallway->growable = false;
+        $hallway = new HexaCell(10, 'default', false);
 
         if ($config->horizontalLines > 0) {
             $draw->drawHorizontalLine($hallway, $config->horizontalLines, $config->doubleHorizontal);
@@ -49,9 +45,7 @@ class MapBuilder
         }
 
         if (!empty($config->container)) {
-            $filling = new HexaCell();
-            $filling->uid = 0;
-            $filling->growable = false;
+            $filling = new HexaCell(0, 'void', false);
             $draw->drawCircleContainer($filling);
         }
 

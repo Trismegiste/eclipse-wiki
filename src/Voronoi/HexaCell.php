@@ -19,12 +19,19 @@ class HexaCell
     const SOUTHWEST = 4;
     const SOUTHEAST = 5;
 
-    public string $template = 'default';  // for use tag (color, pattern, textures...)
+    public string $template;  // for use tag (color, pattern, textures...)
     public int $uid;  // to differentiate rooms
+    public bool $growable; // for voronoi algo
     public array $wall = [false, false, false, false, false, false]; // CCW, from EAST (0°) to SOUTHEAST (300°)
     public array $door = [false, false, false, false, false, false]; // CCW, from EAST (0°) to SOUTHEAST (300°)
-    public bool $growable = true; // for voronoi algo
     public bool $npc = false;  // is there a npc
+
+    public function __construct(int $uid, string $template = 'default', bool $growable = true)
+    {
+        $this->uid = $uid;
+        $this->template = $template;
+        $this->growable = $growable;
+    }
 
     /**
      * Modifies the battlemap SVG to append this cell. The coordinates of the cell is calculated and given by the battlemap
@@ -40,10 +47,6 @@ class HexaCell
         $item->setAttribute('x', $cx);
         $item->setAttribute('y', $y);
         $item->setAttribute('href', '#' . $this->template);
-        // color
-        $hue = ($this->uid % 20) * 18;
-        $sat = ($this->uid % 2) ? '100%' : '70%';
-        $item->setAttribute('fill', "hsl($hue,$sat,50%)");
 
         $title = $doc->createElementNS(TileSvg::svgNS, 'title');
         $title->textContent = 'room-' . $this->uid;
