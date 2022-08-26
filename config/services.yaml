@@ -122,4 +122,4 @@ services:
 
     # Map
     App\Voronoi\MapBuilder:
-        - '%twig.default_path%/hex/tile'
+        - '%twig.default_path%/voronoi/tile'
