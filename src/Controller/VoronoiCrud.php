@@ -12,6 +12,7 @@ use App\Voronoi\MapConfig;
 use App\Voronoi\MapConfigType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -26,10 +27,11 @@ class VoronoiCrud extends GenericCrud
     public function generate(string $pk, MapBuilder $builder): Response
     {
         $config = $this->repository->load($pk);
-
         $map = $builder->create($config);
 
-        return new Response($map->saveXML(), Response::HTTP_CREATED, ['content-type' => 'image/svg+xml']);
+        return new StreamedResponse(function () use ($map) {
+                    echo $map->saveXML();
+                }, Response::HTTP_OK, ['content-type' => 'image/svg+xml']);
     }
 
     /**

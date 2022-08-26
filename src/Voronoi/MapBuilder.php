@@ -30,6 +30,7 @@ class MapBuilder
             $battlemap->appendTile($svg);
         }
 
+        srand($config->seed);
         $draw = new MapDrawer($map);
 
         $cell = new HexaCell();
@@ -40,7 +41,7 @@ class MapBuilder
         $hallway->uid = 10;
         $hallway->growable = false;
         $draw->drawHorizontalLine($hallway, 1, true);
-        $draw->drawVerticalLine($hallway, 2, true);
+        $draw->drawVerticalLine($hallway, 1, true);
 
         $filling = new HexaCell();
         $filling->uid = 0;
