@@ -6,14 +6,24 @@
 
 namespace App\Voronoi;
 
-use Trismegiste\Strangelove\MongoDb\Root;
-use Trismegiste\Strangelove\MongoDb\RootImpl;
+use App\Entity\Vertex;
 
 /**
  * Config entity for HexaMap
  */
-class MapConfig implements Root
+class MapConfig extends Vertex
 {
 
-    use RootImpl;
+    public int $seed;
+    public int $side;
+    public int $avgTilePerRoom;
+    public bool $erosion;
+    public int $erodingMinRoomSize;
+    public int $erodingMaxNeighbour;
+    public string $container;
+    public int $horizontalLines;
+    public bool $doubleHorizontal;
+    public int $verticalLines;
+    public bool $doubleVertical;
+
 }

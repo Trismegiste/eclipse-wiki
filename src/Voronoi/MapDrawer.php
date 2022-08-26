@@ -46,13 +46,30 @@ class MapDrawer
         }
     }
 
-    public function drawHorizontalLine(HexaCell $hallway, int $howMany = 1, int $thickness = 1): void
+    public function drawHorizontalLine(HexaCell $hallway, int $howMany = 1, bool $double = false): void
     {
         $size = $this->map->getSize();
 
         for ($y = $size / ($howMany + 1); $y < $size; $y += $size / ($howMany + 1)) {
             for ($x = 0; $x < $size; $x++) {
                 $this->map->setCell([$x, (int) floor($y)], clone $hallway);
+                if ($double) {
+                    $this->map->setCell([$x, (int) floor($y) + 1], clone $hallway);
+                }
+            }
+        }
+    }
+
+    public function drawVerticalLine(HexaCell $hallway, int $howMany = 1, bool $double = false): void
+    {
+        $size = $this->map->getSize();
+
+        for ($x = $size / ($howMany + 1); $x < $size; $x += $size / ($howMany + 1)) {
+            for ($y = 0; $y < $size; $y++) {
+                $this->map->setCell([(int) floor($x), $y], clone $hallway);
+                if ($double) {
+                    $this->map->setCell([(int) floor($x) + 1, $y], clone $hallway);
+                }
             }
         }
     }

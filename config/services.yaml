@@ -119,3 +119,7 @@ services:
     App\Command\LoginLink:
         arguments:
             $loginLinkHandler: '@security.authenticator.login_link_handler.main'
+
+    # Map
+    App\Voronoi\MapBuilder:
+        - '%twig.default_path%/hex/tile'

@@ -1,0 +1,58 @@
+<?php
+
+/*
+ * eclipse-wiki
+ */
+
+namespace App\Controller;
+
+use App\Entity\Vertex;
+use App\Voronoi\MapBuilder;
+use App\Voronoi\MapConfig;
+use App\Voronoi\MapConfigType;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+/**
+ * CRUD controler for Hexagonal map
+ */
+class VoronoiCrud extends GenericCrud
+{
+
+    /**
+     * @Route("/voronoi/generate/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
+     */
+    public function generate(string $pk, MapBuilder $builder): Response
+    {
+        $config = $this->repository->load($pk);
+
+        $map = $builder->create($config);
+
+        return new Response($map->saveXML(), Response::HTTP_CREATED, ['content-type' => 'image/svg+xml']);
+    }
+
+    /**
+     * Creates a battlemap config
+     * @Route("/voronoi/create", methods={"GET","POST"})
+     */
+    public function create(Request $request): Response
+    {
+        return $this->handleCreate(MapConfigType::class, 'voronoi/create.html.twig', $request);
+    }
+
+    /**
+     * Edits a battlemap config
+     * @Route("/voronoi/edit/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
+     */
+    public function edit(string $pk, Request $request): Response
+    {
+        return $this->handleEdit(MapConfigType::class, 'voronoi/edit.html.twig', $pk, $request);
+    }
+
+    protected function createEntity(string $title): Vertex
+    {
+        return new MapConfig($title);
+    }
+
+}

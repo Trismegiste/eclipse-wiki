@@ -1,0 +1,14 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ vertex.title }}{% endblock %}
+
+{% block header_title %}
+    <nav style="float: right">
+        {{ include('voronoi/actions.html.twig') }}
+    </nav>   
+    {{ vertex.title }}
+{% endblock %}
+
+{% block content %}
+    <img src="{{ path('app_voronoicrud_generate', {pk: vertex.pk}) }}" class="pure-img"/>
+{% endblock %}

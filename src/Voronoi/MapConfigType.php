@@ -6,10 +6,17 @@
 
 namespace App\Voronoi;
 
+use App\Form\FormTypeUtils;
+use App\Form\Type\RandomIntegerType;
+use App\Form\VertexType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * All parameters for generating a Voronoi map
@@ -17,13 +24,60 @@ use Symfony\Component\Form\FormBuilderInterface;
 class MapConfigType extends AbstractType
 {
 
+    use FormTypeUtils;
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('side', NumberType::class)
-                ->add('avgTilePerRoom', NumberType::class)
-                ->add('minRoomSize', NumberType::class)
-                ->add('maxNeighbour', NumberType::class)
-                ->add('generate', SubmitType::class);
+        $builder
+                ->add('seed', RandomIntegerType::class)
+                ->add('side', IntegerType::class)
+                ->add('avgTilePerRoom', IntegerType::class)
+                ->add('erosionForHallway', CheckboxType::class, ['required' => false, 'property_path' => 'erosion'])
+                ->add('erodingMinRoomSize', IntegerType::class)
+                ->add('erodingMaxNeighbour', ChoiceType::class, [
+                    'expanded' => true,
+                    'choices' => [
+                        6 => 6,
+                        5 => 5,
+                        4 => 4,
+                        3 => 3
+                    ]
+                ])
+                ->add('container', ChoiceType::class, [
+                    'required' => false,
+                    'placeholder' => '-- Néant --',
+                    'choices' => [
+                        'Dôme' => 'circle',
+                        'Vaisseau' => 'ship',
+                    ]
+                ])
+                ->add('horizontalLines', IntegerType::class)
+                ->add('doubleHorizontal', CheckboxType::class, ['required' => false])
+                ->add('verticalLines', IntegerType::class)
+                ->add('doubleVertical', CheckboxType::class, ['required' => false])
+        ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => MapConfig::class,
+            'empty_data' => function (FormInterface $form) {
+                return new MapConfig($form->get('title')->getData());
+            }
+        ]);
+    }
+
+    public function getParent()
+    {
+        return VertexType::class;
+    }
+
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        $this->changeAttribute($view, 'content', 'rows', 1);
+        $this->moveChildAtEnd($view, 'content');
+        $this->moveChildAtEnd($view, 'create');
     }
 
 }
