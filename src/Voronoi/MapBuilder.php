@@ -40,22 +40,30 @@ class MapBuilder
         $hallway = new HexaCell();
         $hallway->uid = 10;
         $hallway->growable = false;
-        $draw->drawHorizontalLine($hallway, 1, true);
-        $draw->drawVerticalLine($hallway, 1, true);
 
-        $filling = new HexaCell();
-        $filling->uid = 0;
-        $filling->growable = false;
-        $draw->drawCircleContainer($filling);
+        if ($config->horizontalLines > 0) {
+            $draw->drawHorizontalLine($hallway, $config->horizontalLines, $config->doubleHorizontal);
+        }
+        if ($config->verticalLines > 0) {
+            $draw->drawVerticalLine($hallway, $config->verticalLines, $config->doubleVertical);
+        }
+
+        if (!empty($config->container)) {
+            $filling = new HexaCell();
+            $filling->uid = 0;
+            $filling->growable = false;
+            $draw->drawCircleContainer($filling);
+        }
 
         while ($map->iterateNeighbourhood()) {
             // nothing
         }
 
-        $map->erodeWith($hallway, $config->erodingMinRoomSize, $config->erodingMaxNeighbour);
+        if ($config->erosion) {
+            $map->erodeWith($hallway, $config->erodingMinRoomSize, $config->erodingMaxNeighbour);
+        }
 
         $map->wallProcessing();
-
         $map->dump($battlemap);
 
         return $battlemap;
