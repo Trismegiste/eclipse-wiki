@@ -12,6 +12,10 @@ namespace App\Voronoi;
 class MapBuilder
 {
 
+    const VOID_UID = 0;
+    const HALLWAY_UID = 10;
+    const ROOM_UID = 100;
+
     protected $tilePath;
 
     public function __construct(string $tilePath)
@@ -33,9 +37,9 @@ class MapBuilder
         srand($config->seed);
         $draw = new MapDrawer($map);
 
-        $draw->plantRandomSeed(new HexaCell(100, 'room'), $config->avgTilePerRoom);
+        $draw->plantRandomSeed(new HexaCell(self::ROOM_UID, 'room'), $config->avgTilePerRoom);
 
-        $hallway = new HexaCell(10, 'default', false);
+        $hallway = new HexaCell(self::HALLWAY_UID, 'default', false);
 
         if ($config->horizontalLines > 0) {
             $draw->drawHorizontalLine($hallway, $config->horizontalLines, $config->doubleHorizontal);
@@ -45,7 +49,7 @@ class MapBuilder
         }
 
         if (!empty($config->container)) {
-            $filling = new HexaCell(0, 'void', false);
+            $filling = new HexaCell(self::VOID_UID, 'void', false);
             $draw->drawCircleContainer($filling);
         }
 

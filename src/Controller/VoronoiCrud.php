@@ -44,12 +44,23 @@ class VoronoiCrud extends GenericCrud
     }
 
     /**
-     * Edits a battlemap config
+     * Edits a battlemap config with direct view (loop)
      * @Route("/voronoi/edit/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
     public function edit(string $pk, Request $request): Response
     {
-        return $this->handleEdit(MapConfigType::class, 'voronoi/edit.html.twig', $pk, $request);
+        $vertex = $this->repository->findByPk($pk);
+        $form = $this->createForm(MapConfigType::class, $vertex, ['edit' => true]);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $vertex = $form->getData();
+            $this->repository->save($vertex);
+
+            return $this->redirectToRoute('app_voronoicrud_edit', ['pk' => $vertex->getPk()]);
+        }
+
+        return $this->render('voronoi/edit.html.twig', ['form' => $form->createView()]);
     }
 
     protected function createEntity(string $title): Vertex

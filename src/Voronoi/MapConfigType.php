@@ -47,6 +47,7 @@ class MapConfigType extends AbstractType
                     'required' => false,
                     'placeholder' => '-- Néant --',
                     'choices' => [
+                        'Bordure' => 'border',
                         'Dôme' => 'circle',
                         'Vaisseau' => 'ship',
                     ]
@@ -76,6 +77,7 @@ class MapConfigType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         $this->changeAttribute($view, 'content', 'rows', 1);
+        $this->changeLabel($view, 'content', 'Informations');
         $this->moveChildAtEnd($view, 'content');
         $this->moveChildAtEnd($view, 'create');
     }

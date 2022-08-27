@@ -23,7 +23,7 @@ class BattlemapSvg extends DOMDocument
     protected DOMElement $wall;
     protected DOMElement $door;
 
-    public function __construct(int $size)
+    public function __construct(int $size, bool $withSvgSize = false)
     {
         parent::__construct();
         $cos30 = sqrt(3) / 2.0;
@@ -33,8 +33,11 @@ class BattlemapSvg extends DOMDocument
         $height = $size + 1;
         $root = $this->createElementNS(TileSvg::svgNS, 'svg');
         $root->setAttribute('viewBox', "-1 -1 $width $height");
-        $root->setAttribute('height', (int) floor(self::defaultSizeForWeb * $cos30));
-        $root->setAttribute('width', self::defaultSizeForWeb);
+        // if the SVG needs width and height (in pixels)
+        if ($withSvgSize) {
+            $root->setAttribute('height', (int) floor(self::defaultSizeForWeb * $cos30));
+            $root->setAttribute('width', self::defaultSizeForWeb);
+        }
         $this->appendChild($root);
 
         // svg defs

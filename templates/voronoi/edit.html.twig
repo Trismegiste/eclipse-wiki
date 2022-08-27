@@ -11,5 +11,12 @@
 {% endblock %}
 
 {% block content %}
-    {{ form(form) }}
+    <div class="pure-g">
+        <div class="pure-u-1-2">
+            {{ form(form) }}
+        </div>
+        <div class="pure-u-1-2">
+            <img src="{{ path('app_voronoicrud_generate', {pk: form.vars.data.pk}) }}" class="pure-img"/>
+        </div>
+    </div>
 {% endblock %}
