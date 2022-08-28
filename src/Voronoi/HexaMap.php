@@ -49,7 +49,21 @@ class HexaMap
         // rendering per room
         foreach ($this->getCoordPerRoom() as $uid => $roomCoord) {
             // fog of war
-            
+            $roomFog = $doc->createElementNS(TileSvg::svgNS, 'g');
+            $roomFog->setAttribute('id', "fog-of-war-$uid");
+            $roomFog->setAttribute('class', 'fog-of-war');
+            foreach ($roomCoord as $cell) {
+                $x = $cell[0];
+                $y = $cell[1];
+                $cx = ($x - floor($y / 2)) / $sin60 + $y / $tan60;
+                $fog = $doc->createElementNS(TileSvg::svgNS, 'use');
+                $fog->setAttribute('x', $cx);
+                $fog->setAttribute('y', $y);
+                $fog->setAttribute('href', '#fogofwar');
+                $roomFog->appendChild($fog);
+            }
+            $doc->getFogOfWar()->appendChild($roomFog);
+
             // legend
             $firstCell = array_pop($roomCoord);
             $x = $firstCell[0];

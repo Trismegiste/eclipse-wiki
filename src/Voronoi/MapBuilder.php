@@ -27,8 +27,8 @@ class MapBuilder
     {
         $map = new HexaMap($config->side);
 
-        $battlemap = new BattlemapSvg($config->side);
-        foreach (['default', 'eastwall', 'eastdoor', 'room', 'void'] as $filename) {
+        $battlemap = new BattlemapSvg($config->side, true);
+        foreach (['default', 'eastwall', 'eastdoor', 'room', 'void', 'fogofwar'] as $filename) {
             $svg = new TileSvg();
             $svg->load("{$this->tilePath}/$filename.svg");
             $battlemap->appendTile($svg);

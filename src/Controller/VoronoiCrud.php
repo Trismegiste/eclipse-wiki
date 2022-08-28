@@ -62,4 +62,16 @@ class VoronoiCrud extends GenericCrud
         return new MapConfig($title);
     }
 
+    /**
+     * Show map to run it on the fly
+     * @Route("/voronoi/running/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
+     */
+    public function running(string $pk, Request $request): Response
+    {
+        $config = $this->repository->load($pk);
+        $url = $this->generateUrl('app_voronoicrud_generate', ['pk' => $pk]);
+
+        return $this->render('map/running.html.twig', ['title' => 'on the fly ' . $config->getTitle(), 'img' => $url]);
+    }
+
 }
