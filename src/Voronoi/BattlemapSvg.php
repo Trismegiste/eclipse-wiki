@@ -16,7 +16,7 @@ use DOMElement;
 class BattlemapSvg extends DOMDocument
 {
 
-    const defaultSizeForWeb = 1200;
+    const defaultSizeForWeb = 900;
 
     protected DOMElement $defs;
     protected DOMElement $ground;

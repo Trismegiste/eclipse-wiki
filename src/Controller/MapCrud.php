@@ -143,7 +143,7 @@ class MapCrud extends AbstractController
         $process = new Process([
             'wkhtmltoimage',
             '--quality', 50,
-            '--crop-w', 800,
+            '--crop-w', \App\Voronoi\BattlemapSvg::defaultSizeForWeb,
             $svgContent->getPathname(),
             $target
         ]);
