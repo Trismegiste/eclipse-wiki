@@ -22,12 +22,12 @@ class VoronoiCrud extends GenericCrud
 {
 
     /**
-     * @Route("/voronoi/generate/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
+     * @Route("/voronoi/generate/{pk}/{fog}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function generate(string $pk, MapBuilder $builder): Response
+    public function generate(string $pk, MapBuilder $builder, bool $fog = true): Response
     {
         $config = $this->repository->load($pk);
-        $map = $builder->create($config);
+        $map = $builder->create($config, $fog);
 
         return new StreamedResponse(function () use ($map) {
                     echo $map->saveXML();
