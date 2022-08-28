@@ -35,6 +35,24 @@ class MapDrawer
         }
     }
 
+    public function drawTorusContainer(HexaCell $filling, float $innerRadius = 0.5): void
+    {
+        $size = $this->map->getSize();
+        $radius = $size / 2.0 - 1;
+        $smallRadius = $innerRadius * $size / 2.0;
+        $cx = $size / 2.0 - 1;
+        $cy = $size / 2.0 - 1;
+
+        for ($x = 0; $x < $size; $x++) {
+            for ($y = 0; $y < $size; $y++) {
+                $distance = sqrt(($x - $cx) ** 2 + ($y - $cy) ** 2);
+                if (($distance >= $radius) || ($distance < $smallRadius)) {
+                    $this->map->setCell([$x, $y], clone $filling);
+                }
+            }
+        }
+    }
+
     public function plantRandomSeed(HexaCell $floorTemplate, int $avgTilePerRoom)
     {
         $size = $this->map->getSize();
@@ -92,6 +110,23 @@ class MapDrawer
         $this->drawHorizontalLine($filling, $size - 1, 0, $size);
         $this->drawVerticalLine($filling, 0, 0, $size);
         $this->drawVerticalLine($filling, $size - 1, 0, $size);
+    }
+
+    public function circle(HexaCell $filling, $radiusRatio = 0.75): void
+    {
+        $size = $this->map->getSize();
+
+        $radius = $radiusRatio * $size / 2.0;
+        $cx = $size / 2.0 - 1;
+        $cy = $size / 2.0 - 1;
+
+        for ($x = 0; $x < $size; $x++) {
+            for ($y = 0; $y < $size; $y++) {
+                if (abs(sqrt(($x - $cx) ** 2 + ($y - $cy) ** 2) - $radius) < 1.0) {
+                    $this->map->setCell([$x, $y], clone $filling);
+                }
+            }
+        }
     }
 
 }

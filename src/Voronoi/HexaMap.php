@@ -34,6 +34,7 @@ class HexaMap
         $sin60 = sin(M_PI / 3);
         $tan60 = tan(M_PI / 3);
 
+        // rendering per cell
         foreach ($this->grid as $x => $column) {
             foreach ($column as $y => $cell) {
                 if (is_null($cell)) {
@@ -45,8 +46,11 @@ class HexaMap
             }
         }
 
-        // legends
+        // rendering per room
         foreach ($this->getCoordPerRoom() as $uid => $roomCoord) {
+            // fog of war
+            
+            // legend
             $firstCell = array_pop($roomCoord);
             $x = $firstCell[0];
             $y = $firstCell[1];

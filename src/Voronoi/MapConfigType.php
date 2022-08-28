@@ -46,8 +46,9 @@ class MapConfigType extends AbstractType
                 ->add('container', ChoiceType::class, [
                     'choices' => [
                         new Shape\NullShape(),
+                        new Shape\Border(),
                         new Shape\Dome(),
-                        new Shape\Border()
+                        new Shape\Torus(),
                     ],
                     'choice_label' => function (Shape\Strategy $strat): string {
                         return $strat->getName();
