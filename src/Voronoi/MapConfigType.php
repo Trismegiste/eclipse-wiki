@@ -44,19 +44,25 @@ class MapConfigType extends AbstractType
                     ]
                 ])
                 ->add('container', ChoiceType::class, [
-                    'required' => false,
-                    'placeholder' => '-- Néant --',
                     'choices' => [
-                        'Bordure' => 'border',
-                        'Dôme' => 'circle',
-                        'Vaisseau' => 'ship',
-                    ]
+                        new Shape\NullShape(),
+                        new Shape\Dome(),
+                        new Shape\Border()
+                    ],
+                    'choice_label' => function (Shape\Strategy $strat): string {
+                        return $strat->getName();
+                    },
+                    'choice_value' => function (?Shape\Strategy $strat): string {
+                        return !is_null($strat) ? get_class($strat) : '';
+                    }
                 ])
-                ->add('horizontalLines', IntegerType::class)
+                ->add('horizontalLines', IntegerType::class, ['required' => false, 'empty_data' => 0])
                 ->add('doubleHorizontal', CheckboxType::class, ['required' => false])
-                ->add('verticalLines', IntegerType::class)
+                ->add('verticalLines', IntegerType::class, ['required' => false, 'empty_data' => 0])
                 ->add('doubleVertical', CheckboxType::class, ['required' => false])
         ;
+
+        $builder->get('content')->setRequired(false);
     }
 
     public function configureOptions(OptionsResolver $resolver)

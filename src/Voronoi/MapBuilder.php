@@ -42,16 +42,13 @@ class MapBuilder
         $hallway = new HexaCell(self::HALLWAY_UID, 'default', false);
 
         if ($config->horizontalLines > 0) {
-            $draw->drawHorizontalLine($hallway, $config->horizontalLines, $config->doubleHorizontal);
+            $draw->horizontalCross($hallway, $config->horizontalLines, $config->doubleHorizontal);
         }
         if ($config->verticalLines > 0) {
-            $draw->drawVerticalLine($hallway, $config->verticalLines, $config->doubleVertical);
+            $draw->verticalCross($hallway, $config->verticalLines, $config->doubleVertical);
         }
 
-        if (!empty($config->container)) {
-            $filling = new HexaCell(self::VOID_UID, 'void', false);
-            $draw->drawCircleContainer($filling);
-        }
+        $config->container->draw($draw);
 
         while ($map->iterateNeighbourhood()) {
             // nothing

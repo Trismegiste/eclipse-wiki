@@ -17,13 +17,13 @@ class MapConfig extends Vertex
     public int $seed;
     public int $side;
     public int $avgTilePerRoom;
-    public bool $erosion;
+    public bool $erosion = false;
     public int $erodingMinRoomSize;
     public int $erodingMaxNeighbour;
-    public ?string $container;
-    public int $horizontalLines;
-    public bool $doubleHorizontal;
-    public int $verticalLines;
-    public bool $doubleVertical;
+    public Shape\Strategy $container;
+    public int $horizontalLines = 0;
+    public bool $doubleHorizontal = false;
+    public int $verticalLines = 0;
+    public bool $doubleVertical = false;
 
 }

@@ -79,3 +79,15 @@ Archive: Archiver
 COPY_PASTE_IMG: (Ctrl-V pour coller une image du clipboard)
 Filename: Nom du fichier
 Picture: Sélectionnez une image
+Avg tile per room: Taille moyenne par pièce
+Erosion for hallway: Éroder les pièces
+Eroding min room size: Taille min pour éroder
+Eroding max neighbour: Nombre de voisins pour ne pas éroder une case
+Container: Forme générale
+Horizontal lines: Nbre lignes horizontales
+Double horizontal: Lignes horizontales doublées
+Vertical lines: Nbre lignes verticales
+Double vertical: Lignes verticales doublées
+STRAT_DOME: Dôme
+STRAT_NULL: -- Rien --
+STRAT_BORDER: Bordure
