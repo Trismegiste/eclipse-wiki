@@ -61,7 +61,7 @@ class HexaMap
                 $fog->setAttribute('y', $y);
                 $roomFog->appendChild($fog);
             }
-            $doc->getFogOfWar()->appendChild($roomFog);
+            $doc->addFog($roomFog);
 
             // legend
             $firstCell = array_pop($roomCoord);

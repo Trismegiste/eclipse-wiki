@@ -23,9 +23,9 @@ class BattlemapSvg extends DOMDocument
     protected DOMElement $wall;
     protected DOMElement $door;
     protected DOMElement $legend;
-    protected DOMElement $fogOfWar;
+    protected ?DOMElement $fogOfWar = null;
 
-    public function __construct(int $size, bool $withSvgSize = false)
+    public function __construct(int $size, bool $withSvgSize = false, bool $withFogOfWar = false)
     {
         parent::__construct();
         $cos30 = sqrt(3) / 2.0;
@@ -67,9 +67,11 @@ class BattlemapSvg extends DOMDocument
         $root->appendChild($this->legend);
 
         // Fog of war layer
-        $this->fogOfWar = $this->createElementNS(TileSvg::svgNS, 'g');
-        $this->fogOfWar->setAttribute('id', 'fogofwar');
-        $root->appendChild($this->fogOfWar);
+        if ($withFogOfWar) {
+            $this->fogOfWar = $this->createElementNS(TileSvg::svgNS, 'g');
+            $this->fogOfWar->setAttribute('id', 'gm-fogofwar');
+            $root->appendChild($this->fogOfWar);
+        }
     }
 
     /**
@@ -121,12 +123,14 @@ class BattlemapSvg extends DOMDocument
     }
 
     /**
-     * Gets the fog of war layer
+     * Add fog of war element
      * @return DOMElement
      */
-    public function getFogOfWar(): DOMElement
+    public function addFog(DOMElement $fog): void
     {
-        return $this->fogOfWar;
+        if (!is_null($this->fogOfWar)) {
+            $this->fogOfWar->appendChild($fog);
+        }
     }
 
     public function createUse(string $href): DOMElement

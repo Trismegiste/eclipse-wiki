@@ -23,11 +23,11 @@ class MapBuilder
         $this->tilePath = $tilePath;
     }
 
-    public function create(MapConfig $config): BattlemapSvg
+    public function create(MapConfig $config, bool $withFogOfWar = true): BattlemapSvg
     {
         $map = new HexaMap($config->side);
 
-        $battlemap = new BattlemapSvg($config->side, true);
+        $battlemap = new BattlemapSvg($config->side, true, $withFogOfWar);
         foreach (['default', 'eastwall', 'eastdoor', 'room', 'void', 'fogofwar'] as $filename) {
             $svg = new TileSvg();
             $svg->load("{$this->tilePath}/$filename.svg");
