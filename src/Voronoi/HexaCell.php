@@ -77,4 +77,16 @@ class HexaCell
         }
     }
 
+    public function printAt(BattlemapSvg $doc, string $txt, float $x, float $y): void
+    {
+        $item = $doc->createElementNS(TileSvg::svgNS, 'text');
+        $item->setAttribute('x', $x);
+        $item->setAttribute('y', $y + 0.15);
+        $item->setAttribute('font-size', 0.3);
+        $item->textContent = $txt;
+        $item->setAttribute('text-anchor', 'middle');
+
+        $doc->getLegend()->appendChild($item);
+    }
+
 }

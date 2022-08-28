@@ -44,6 +44,27 @@ class HexaMap
                 $cell->dumpAt($doc, $cx, $y);
             }
         }
+
+        // legends
+        foreach ($this->getCoordPerRoom() as $uid => $roomCoord) {
+            $firstCell = array_pop($roomCoord);
+            $x = $firstCell[0];
+            $y = $firstCell[1];
+            $cell = $firstCell[2];
+            $cx = ($x - floor($y / 2)) / $sin60 + $y / $tan60;
+            $cell->printAt($doc, $this->num2alpha($uid), $cx, $y);
+        }
+    }
+
+    protected function num2alpha($n)
+    {
+        $r = '';
+        for ($i = 1; $n >= 0 && $i < 10; $i++) {
+            $r = chr(0x41 + ($n % pow(26, $i) / pow(26, $i - 1))) . $r;
+            $n -= pow(26, $i);
+        }
+
+        return $r;
     }
 
     /**
@@ -155,7 +176,7 @@ class HexaMap
         foreach ($this->grid as $x => $column) {
             foreach ($column as $y => $cell) {
                 /** @var HexaCell $cell */
-                $roomGroup[$cell->uid][] = [$x, $y];
+                $roomGroup[$cell->uid][] = [$x, $y, $cell];
             }
         }
 

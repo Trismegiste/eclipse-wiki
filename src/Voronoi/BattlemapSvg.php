@@ -22,6 +22,7 @@ class BattlemapSvg extends DOMDocument
     protected DOMElement $ground;
     protected DOMElement $wall;
     protected DOMElement $door;
+    protected DOMElement $legend;
 
     public function __construct(int $size, bool $withSvgSize = false)
     {
@@ -58,6 +59,11 @@ class BattlemapSvg extends DOMDocument
         $this->door = $this->createElementNS(TileSvg::svgNS, 'g');
         $this->door->setAttribute('id', 'door');
         $root->appendChild($this->door);
+
+        // legend layer
+        $this->legend = $this->createElementNS(TileSvg::svgNS, 'g');
+        $this->legend->setAttribute('id', 'legend');
+        $root->appendChild($this->legend);
     }
 
     /**
@@ -97,6 +103,15 @@ class BattlemapSvg extends DOMDocument
     public function getDoor(): DOMElement
     {
         return $this->door;
+    }
+
+    /**
+     * Gets the legend layer
+     * @return DOMElement
+     */
+    public function getLegend(): DOMElement
+    {
+        return $this->legend;
     }
 
 }
