@@ -129,4 +129,12 @@ class BattlemapSvg extends DOMDocument
         return $this->fogOfWar;
     }
 
+    public function createUse(string $href): DOMElement
+    {
+        $item = $this->createElementNS(TileSvg::svgNS, 'use');
+        $item->setAttributeNS(TileSvg::xlinkNS, 'xlink:href', '#' . $href);
+
+        return $item;
+    }
+
 }

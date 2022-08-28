@@ -56,10 +56,9 @@ class HexaMap
                 $x = $cell[0];
                 $y = $cell[1];
                 $cx = ($x - floor($y / 2)) / $sin60 + $y / $tan60;
-                $fog = $doc->createElementNS(TileSvg::svgNS, 'use');
+                $fog = $doc->createUse('fogofwar');
                 $fog->setAttribute('x', $cx);
                 $fog->setAttribute('y', $y);
-                $fog->setAttribute('href', '#fogofwar');
                 $roomFog->appendChild($fog);
             }
             $doc->getFogOfWar()->appendChild($roomFog);

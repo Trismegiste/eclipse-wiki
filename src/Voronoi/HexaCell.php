@@ -43,10 +43,9 @@ class HexaCell
     public function dumpAt(BattlemapSvg $doc, float $cx, float $y): void
     {
         // Ground layer
-        $item = $doc->createElementNS(TileSvg::svgNS, 'use');
+        $item = $doc->createUse($this->template);
         $item->setAttribute('x', $cx);
         $item->setAttribute('y', $y);
-        $item->setAttribute('href', '#' . $this->template);
 
         $title = $doc->createElementNS(TileSvg::svgNS, 'title');
         $title->textContent = 'room-' . $this->uid;
@@ -57,8 +56,7 @@ class HexaCell
         // Wall layer - Since wall are set on each two cells, no need to duplicate the rendering
         for ($direction = HexaCell::EAST; $direction < HexaCell::WEST; $direction++) {
             if ($this->wall[$direction]) {
-                $item = $doc->createElementNS(TileSvg::svgNS, 'use');
-                $item->setAttribute('href', '#eastwall');
+                $item = $doc->createUse('eastwall');
                 $angle = -60 * $direction;
                 $item->setAttribute('transform', "translate($cx $y) rotate($angle)");
                 $doc->getWall()->appendChild($item);
@@ -68,8 +66,7 @@ class HexaCell
         // Door layer
         for ($direction = HexaCell::EAST; $direction <= HexaCell::SOUTHEAST; $direction++) {
             if ($this->door[$direction]) {
-                $item = $doc->createElementNS(TileSvg::svgNS, 'use');
-                $item->setAttribute('href', '#eastdoor');
+                $item = $doc->createUse('eastdoor');
                 $angle = -60 * $direction;
                 $item->setAttribute('transform', "translate($cx $y) rotate($angle)");
                 $doc->getDoor()->appendChild($item);
