@@ -38,6 +38,11 @@ services:
                      
     App\Repository\VertexRepository:
         $collectionName: 'vertex'
+
+    # CLI
+    App\Command\CheckDatabase:
+        $dbName: '%mongodb.dbname%'
+        $man: '@mongodb'            
             
     # WIKI
     App\Service\MediaWiki:
