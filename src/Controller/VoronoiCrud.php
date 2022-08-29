@@ -78,7 +78,7 @@ class VoronoiCrud extends GenericCrud
      * Attach the generated map to a Place entity
      * @Route("/voronoi/attachplace/{pk}", methods={"GET","PATCH"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function attachPlace(string $pk, Request $request, MapBuilder $builder, \App\Service\Storage $storage): Response
+    public function attachPlace(string $pk, Request $request, MapBuilder $builder, \App\Service\Storage $storage, \Symfony\Contracts\Translation\TranslatorInterface $translator): Response
     {
         /** @var \App\Voronoi\MapConfig $config */
         $config = $this->repository->load($pk);
@@ -98,7 +98,12 @@ class VoronoiCrud extends GenericCrud
             $newPlace = empty($place);
 
             if ($newPlace) {
-                $place = new \App\Entity\Place('Map-' . $config->getTitle() . '-' . $config->seed);
+                $place = new \App\Entity\Place(sprintf('Map-%s %s-%d×%d %d',
+                                $config->getTitle(),
+                                $translator->trans($config->container->getName()),
+                                $config->side,
+                                $config->side,
+                                $config->seed));
                 $this->repository->save($place);
             }
 
