@@ -155,7 +155,7 @@ class VertexCrud extends GenericCrud
         $backlinks = $this->repository->searchByBacklinks($vertex->getTitle());
 
         $form = $this->createFormBuilder($vertex)
-                ->add('title', TextType::class, ['label' => 'Nouveau nom'])
+                ->add('title', TextType::class, ['label' => 'Nouveau nom', 'constraints' => [new \App\Validator\UniqueVertexTitle()]])
                 ->add('rename', SubmitType::class)
                 ->setMethod('PUT')
                 ->getForm();
