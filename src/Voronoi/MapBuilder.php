@@ -23,16 +23,9 @@ class MapBuilder
         $this->tilePath = $tilePath;
     }
 
-    public function create(MapConfig $config, bool $withFogOfWar = true): BattlemapSvg
+    public function create(MapConfig $config): HexaMap
     {
         $map = new HexaMap($config->side);
-
-        $battlemap = new BattlemapSvg($config->side, true, $withFogOfWar);
-        foreach (['default', 'eastwall', 'eastdoor', 'room', 'void', 'fogofwar'] as $filename) {
-            $svg = new TileSvg();
-            $svg->load("{$this->tilePath}/$filename.svg");
-            $battlemap->appendTile($svg);
-        }
 
         srand($config->seed);
         $draw = new MapDrawer($map);
@@ -59,9 +52,53 @@ class MapBuilder
         }
 
         $map->wallProcessing();
-        $map->dump($battlemap);
 
-        return $battlemap;
+        return $map;
+    }
+
+    public function dumpSvg(HexaMap $map, bool $withFogOfWar = true): void
+    {
+        $side = $map->getSize();
+        $cos30 = sqrt(3) / 2.0;
+        $width = $side / $cos30 + 1;  // because of the included rectangle in a hexagon
+        $height = $side + 1;
+
+        echo '<?xml version="1.0" encoding="utf-8"?>' . PHP_EOL;
+        echo '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"' . PHP_EOL;
+        echo "width=\"1920\" height=\"1080\"" . PHP_EOL;
+        echo "viewBox=\"-1 -1 $width $height\">\n";
+
+        echo "<defs>\n";
+        foreach (['default', 'eastwall', 'eastdoor', 'room', 'void', 'fogofwar'] as $filename) {
+            $svg = new TileSvg();
+            $svg->load("{$this->tilePath}/$filename.svg");
+            echo $svg->getTile()->C14N();
+        }
+        echo "</defs>\n";
+
+        echo '<g id="ground">' . PHP_EOL;
+        $map->dumpGround();
+        echo '</g>' . PHP_EOL;
+
+        echo '<g id="wall">' . PHP_EOL;
+        $map->dumpWall();
+        echo '</g>' . PHP_EOL;
+
+        echo '<g id="door">' . PHP_EOL;
+        $map->dumpDoor();
+        echo '</g>' . PHP_EOL;
+
+        echo '<g id="legend">' . PHP_EOL;
+        $map->dumpLegend();
+        echo '</g>' . PHP_EOL;
+
+        echo '<g id="gm-fogofwar">' . PHP_EOL;
+        if ($withFogOfWar) {
+            $map->dumpFogOfWar();
+        }
+        echo '</g>' . PHP_EOL;
+
+        echo '</svg>';
     }
 
 }

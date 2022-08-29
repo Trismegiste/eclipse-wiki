@@ -29,8 +29,8 @@ class VoronoiCrud extends GenericCrud
         $config = $this->repository->load($pk);
         $map = $builder->create($config, $fog);
 
-        return new StreamedResponse(function () use ($map) {
-                    echo $map->saveXML();
+        return new StreamedResponse(function () use ($builder, $map, $fog) {
+                    $builder->dumpSvg($map, $fog);
                 }, Response::HTTP_OK, ['content-type' => 'image/svg+xml']);
     }
 

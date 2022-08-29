@@ -74,16 +74,40 @@ class HexaCell
         }
     }
 
-    public function printAt(BattlemapSvg $doc, string $txt, float $x, float $y): void
+    public function dumpGround(float $cx, float $y): void
     {
-        $item = $doc->createElementNS(TileSvg::svgNS, 'text');
-        $item->setAttribute('x', $x);
-        $item->setAttribute('y', $y + 0.15);
-        $item->setAttribute('font-size', 0.3);
-        $item->textContent = $txt;
-        $item->setAttribute('text-anchor', 'middle');
+        echo "<use xlink:href=\"#{$this->template}\" x=\"$cx\" y=\"$y\">";
+        echo "<title>room-{$this->uid}</title>";
+        echo "</use>\n";
+    }
 
-        $doc->getLegend()->appendChild($item);
+    public function dumpWall(float $cx, float $y): void
+    {
+        // Since walls are set on each of the two adjacent cells, we render half of all walls
+        for ($direction = HexaCell::EAST; $direction < HexaCell::WEST; $direction++) {
+            if ($this->wall[$direction]) {
+                $angle = -60 * $direction;
+                echo "<use xlink:href=\"#eastwall\" transform=\"translate($cx $y) rotate($angle)\"/>\n";
+            }
+        }
+    }
+
+    public function dumpDoor(float $cx, float $y): void
+    {
+        for ($direction = HexaCell::EAST; $direction <= HexaCell::SOUTHEAST; $direction++) {
+            if ($this->door[$direction]) {
+                $angle = -60 * $direction;
+                echo "<use xlink:href=\"#eastdoor\" transform=\"translate($cx $y) rotate($angle)\"/>\n";
+            }
+        }
+    }
+
+    public function dumpLegend(string $txt, float $x, float $y): void
+    {
+        $y += 0.15;
+        echo "<text font-size=\"0.3\" x=\"$x\" y=\"$y\" text-anchor=\"middle\">";
+        echo $txt;
+        echo "</text>\n";
     }
 
 }

@@ -73,6 +73,92 @@ class HexaMap
         }
     }
 
+    public function dumpGround(): void
+    {
+        $sin60 = sin(M_PI / 3);
+        $tan60 = tan(M_PI / 3);
+
+        // rendering per cell
+        foreach ($this->grid as $x => $column) {
+            foreach ($column as $y => $cell) {
+                if (is_null($cell)) {
+                    continue;
+                }
+                /** @var HexaCell $cell */
+                $cx = ($x - floor($y / 2)) / $sin60 + $y / $tan60;
+                $cell->dumpGround($cx, $y);
+            }
+        }
+    }
+
+    public function dumpWall(): void
+    {
+        $sin60 = sin(M_PI / 3);
+        $tan60 = tan(M_PI / 3);
+
+        // rendering per cell
+        foreach ($this->grid as $x => $column) {
+            foreach ($column as $y => $cell) {
+                if (is_null($cell)) {
+                    continue;
+                }
+                /** @var HexaCell $cell */
+                $cx = ($x - floor($y / 2)) / $sin60 + $y / $tan60;
+                $cell->dumpWall($cx, $y);
+            }
+        }
+    }
+
+    public function dumpDoor(): void
+    {
+        $sin60 = sin(M_PI / 3);
+        $tan60 = tan(M_PI / 3);
+
+        // rendering per cell
+        foreach ($this->grid as $x => $column) {
+            foreach ($column as $y => $cell) {
+                if (is_null($cell)) {
+                    continue;
+                }
+                /** @var HexaCell $cell */
+                $cx = ($x - floor($y / 2)) / $sin60 + $y / $tan60;
+                $cell->dumpDoor($cx, $y);
+            }
+        }
+    }
+
+    public function dumpLegend(): void
+    {
+        $sin60 = sin(M_PI / 3);
+        $tan60 = tan(M_PI / 3);
+        foreach ($this->getCoordPerRoom() as $uid => $roomCoord) {
+            // legend
+            $firstCell = array_pop($roomCoord);
+            $x = $firstCell[0];
+            $y = $firstCell[1];
+            $cell = $firstCell[2];
+            $cx = ($x - floor($y / 2)) / $sin60 + $y / $tan60;
+            $cell->dumpLegend($this->num2alpha($uid), $cx, $y);
+        }
+    }
+
+    public function dumpFogOfWar(): void
+    {
+        $sin60 = sin(M_PI / 3);
+        $tan60 = tan(M_PI / 3);
+        foreach ($this->getCoordPerRoom() as $uid => $roomCoord) {
+            // fog of war
+            echo "<g id=\"fog-of-war-$uid\" class=\"fog-of-war\">";
+            foreach ($roomCoord as $cell) {
+                $x = $cell[0];
+                $y = $cell[1];
+                $cx = ($x - floor($y / 2)) / $sin60 + $y / $tan60;
+                echo "<use xlink:href=\"#fogofwar\" x=\"$cx\" y=\"$y\"/>";
+            }
+            echo '</g>';
+        }
+    }
+
     protected function num2alpha($n)
     {
         $r = '';
