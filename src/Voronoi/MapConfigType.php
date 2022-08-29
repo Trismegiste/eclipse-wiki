@@ -50,9 +50,7 @@ class MapConfigType extends AbstractType
                         new Shape\Dome(),
                         new Shape\Torus(),
                     ],
-                    'choice_label' => function (Shape\Strategy $strat): string {
-                        return $strat->getName();
-                    },
+                    'choice_label' => 'name',
                     'choice_value' => function (?Shape\Strategy $strat): string {
                         return !is_null($strat) ? get_class($strat) : '';
                     }

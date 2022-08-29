@@ -1,6 +1,7 @@
 {# default actions #}
 <a href="{{ path('app_vertexcrud_show', {pk: vertex.pk}) }}" title="Voir"><i class="icon-eye"></i></a>
 <a href="{{ path('app_voronoicrud_edit', {pk: vertex.pk}) }}" title="Modifier"><i class="icon-edit"></i></a>
+<a href="{{ path('app_voronoicrud_attachplace', {pk: vertex.pk}) }}" title="Associer à un Décor"><i class="icon-place"></i></a>
 <a href="{{ path('app_voronoicrud_running', {pk: vertex.pk}) }}" title="Lancer la battlemap" target="_blank"><i class="icon-battlemap"></i></a>
 <a href="{{ path('app_vertexcrud_rename', {pk: vertex.pk}) }}" title="Renommer"><i class="icon-rename"></i></a>
 <a href="{{ path('app_vertexcrud_delete', {pk: vertex.pk}) }}" title="Effacer"><i class="icon-trash-empty"></i></a>

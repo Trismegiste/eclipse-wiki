@@ -89,6 +89,6 @@ Double horizontal: Lignes horizontales doublées
 Vertical lines: Nbre lignes verticales
 Double vertical: Lignes verticales doublées
 STRAT_DOME: Dôme
-STRAT_NULL: -- Rien --
+STRAT_NULL: Libre
 STRAT_BORDER: Bordure
 STRAT_TORUS: Tore

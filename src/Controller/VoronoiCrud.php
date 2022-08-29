@@ -74,4 +74,46 @@ class VoronoiCrud extends GenericCrud
         return $this->render('map/running.html.twig', ['title' => 'on the fly ' . $config->getTitle(), 'img' => $url]);
     }
 
+    /**
+     * Attach the generated map to a Place entity
+     * @Route("/voronoi/attachplace/{pk}", methods={"GET","PATCH"}, requirements={"pk"="[\da-f]{24}"})
+     */
+    public function attachPlace(string $pk, Request $request, MapBuilder $builder, \App\Service\Storage $storage): Response
+    {
+        /** @var \App\Voronoi\MapConfig $config */
+        $config = $this->repository->load($pk);
+
+        $form = $this->createFormBuilder()
+                ->add('place', \App\Form\Type\PlaceChoiceType::class, [
+                    'placeholder' => '-- Create New --',
+                    'required' => false
+                ])
+                ->add('Attacher', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+                ->setMethod('PATCH')
+                ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $place = $form['place']->getData();
+            $newPlace = empty($place);
+
+            if ($newPlace) {
+                $place = new \App\Entity\Place('Map-' . $config->getTitle() . '-' . $config->seed);
+                $this->repository->save($place);
+            }
+
+            $filename = 'map-' . $place->getPk() . '.svg';
+            $map = $builder->create($config);
+            $map->save(\join_paths($storage->getRootDir(), $filename));
+            $place->battleMap = $filename;
+            $this->repository->save($place);
+
+            $this->addFlash('success', 'Plan sauvegardé dans ' . $place->getTitle());
+
+            return $this->redirectToRoute($newPlace ? 'app_vertexcrud_rename' : 'app_vertexcrud_show', ['pk' => $place->getPk()]);
+        }
+
+        return $this->render('voronoi/attachplace.html.twig', ['vertex' => $config, 'form' => $form->createView()]);
+    }
+
 }
