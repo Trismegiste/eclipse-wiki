@@ -18,8 +18,8 @@ class MapConfig extends Vertex
     public int $side;
     public int $avgTilePerRoom;
     public bool $erosion = false;
-    public int $erodingMinRoomSize;
-    public int $erodingMaxNeighbour;
+    public ?int $erodingMinRoomSize;
+    public ?int $erodingMaxNeighbour;
     public Shape\Strategy $container;
     public int $horizontalLines = 0;
     public bool $doubleHorizontal = false;

@@ -92,3 +92,5 @@ STRAT_DOME: Dôme
 STRAT_NULL: Libre
 STRAT_BORDER: Bordure
 STRAT_TORUS: Tore
+None: Aucun
+Side: Arête

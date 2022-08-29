@@ -9,6 +9,11 @@ namespace App\Voronoi;
 use App\Form\FormTypeUtils;
 use App\Form\Type\RandomIntegerType;
 use App\Form\VertexType;
+use App\Voronoi\Shape\Border;
+use App\Voronoi\Shape\Dome;
+use App\Voronoi\Shape\NullShape;
+use App\Voronoi\Shape\Strategy;
+use App\Voronoi\Shape\Torus;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -17,6 +22,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * All parameters for generating a Voronoi map
@@ -33,8 +40,9 @@ class MapConfigType extends AbstractType
                 ->add('side', IntegerType::class)
                 ->add('avgTilePerRoom', IntegerType::class)
                 ->add('erosionForHallway', CheckboxType::class, ['required' => false, 'property_path' => 'erosion'])
-                ->add('erodingMinRoomSize', IntegerType::class)
+                ->add('erodingMinRoomSize', IntegerType::class, ['required' => false])
                 ->add('erodingMaxNeighbour', ChoiceType::class, [
+                    'required' => false,
                     'expanded' => true,
                     'choices' => [
                         6 => 6,
@@ -45,13 +53,13 @@ class MapConfigType extends AbstractType
                 ])
                 ->add('container', ChoiceType::class, [
                     'choices' => [
-                        new Shape\NullShape(),
-                        new Shape\Border(),
-                        new Shape\Dome(),
-                        new Shape\Torus(),
+                        new NullShape(),
+                        new Border(),
+                        new Dome(),
+                        new Torus(),
                     ],
                     'choice_label' => 'name',
-                    'choice_value' => function (?Shape\Strategy $strat): string {
+                    'choice_value' => function (?Strategy $strat): string {
                         return !is_null($strat) ? get_class($strat) : '';
                     }
                 ])
@@ -70,7 +78,22 @@ class MapConfigType extends AbstractType
             'data_class' => MapConfig::class,
             'empty_data' => function (FormInterface $form) {
                 return new MapConfig($form->get('title')->getData());
-            }
+            },
+            'constraints' => [new Callback(function (MapConfig $cfg, ExecutionContextInterface $ctx) {
+                            if ($cfg->erosion) {
+                                if (empty($cfg->erodingMinRoomSize)) {
+                                    $ctx->buildViolation('A minimum of room size for erosion must be set since erosion is enabled')
+                                            ->atPath('erodingMinRoomSize')
+                                            ->addViolation();
+                                }
+
+                                if (empty($cfg->erodingMaxNeighbour)) {
+                                    $ctx->buildViolation('A maximum of neighbouring cells for erosion must be set since erosion is enabled')
+                                            ->atPath('erodingMaxNeighbour')
+                                            ->addViolation();
+                                }
+                            }
+                        })]
         ]);
     }
 
