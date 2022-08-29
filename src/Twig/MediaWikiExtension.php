@@ -21,7 +21,7 @@ class MediaWikiExtension extends AbstractExtension
         $this->wikiSource = $src;
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('dump_page', [$this, 'dumpPage'], ['is_safe' => ['html']]),

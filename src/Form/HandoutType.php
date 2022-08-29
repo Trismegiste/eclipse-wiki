@@ -23,7 +23,7 @@ class HandoutType extends AbstractType
 
     use FormTypeUtils;
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return VertexType::class;
     }

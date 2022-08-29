@@ -16,7 +16,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 class DamageRollType extends AbstractType implements DataTransformerInterface
 {
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return TextType::class;
     }
@@ -26,7 +26,7 @@ class DamageRollType extends AbstractType implements DataTransformerInterface
         $builder->addModelTransformer($this);
     }
 
-    public function transform($value)
+    public function transform($value): mixed
     {
         if (is_null($value)) {
             return '';

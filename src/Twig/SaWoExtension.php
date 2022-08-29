@@ -53,7 +53,7 @@ class SaWoExtension extends AbstractExtension
         MapConfig::class => 'voronoi/show.html.twig'
     ];
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('level_hindrance', [$this, 'printLevelHindrance']),

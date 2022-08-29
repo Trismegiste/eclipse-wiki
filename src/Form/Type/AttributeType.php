@@ -24,7 +24,7 @@ class AttributeType extends AbstractType
         $this->repository = $repo;
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return SaWoTraitType::class;
     }
