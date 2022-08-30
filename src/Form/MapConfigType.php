@@ -7,14 +7,14 @@
 namespace App\Form;
 
 use App\Entity\MapConfig;
+use App\Entity\Shape\Border;
+use App\Entity\Shape\Dome;
+use App\Entity\Shape\NullShape;
+use App\Entity\Shape\Strategy;
+use App\Entity\Shape\Torus;
 use App\Form\FormTypeUtils;
 use App\Form\Type\RandomIntegerType;
 use App\Form\VertexType;
-use App\Voronoi\Shape\Border;
-use App\Voronoi\Shape\Dome;
-use App\Voronoi\Shape\NullShape;
-use App\Voronoi\Shape\Strategy;
-use App\Voronoi\Shape\Torus;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;

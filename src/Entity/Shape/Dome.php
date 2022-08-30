@@ -4,29 +4,27 @@
  * Eclipse Wiki
  */
 
-namespace App\Voronoi\Shape;
+namespace App\Entity\Shape;
 
 use App\Voronoi\HexaCell;
 use App\Voronoi\MapBuilder;
 use App\Voronoi\MapDrawer;
 
 /**
- * Draw a torus
+ * Drawing a Dome strategy
  */
-class Torus extends Strategy
+class Dome extends Strategy
 {
 
     public function draw(MapDrawer $draw): void
     {
         $filling = new HexaCell(MapBuilder::VOID_UID, 'void', false);
-        $draw->drawTorusContainer($filling);
-        $hallway = new HexaCell(MapBuilder::HALLWAY_UID, 'default', false);
-        $draw->circle($hallway);
+        $draw->drawCircleContainer($filling);
     }
 
     public function getName(): string
     {
-        return 'STRAT_TORUS';
+        return 'STRAT_DOME';
     }
 
 }

@@ -4,7 +4,7 @@
  * Eclipse Wiki
  */
 
-namespace App\Voronoi\Shape;
+namespace App\Entity\Shape;
 
 use App\Voronoi\HexaCell;
 use App\Voronoi\MapBuilder;

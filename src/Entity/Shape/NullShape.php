@@ -4,7 +4,9 @@
  * Eclipse Wiki
  */
 
-namespace App\Voronoi\Shape;
+namespace App\Entity\Shape;
+
+use App\Voronoi\MapDrawer;
 
 /**
  * Null object
@@ -12,7 +14,7 @@ namespace App\Voronoi\Shape;
 class NullShape extends Strategy
 {
 
-    public function draw(\App\Voronoi\MapDrawer $draw): void
+    public function draw(MapDrawer $draw): void
     {
         
     }

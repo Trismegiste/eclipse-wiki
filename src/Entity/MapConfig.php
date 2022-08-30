@@ -6,7 +6,7 @@
 
 namespace App\Entity;
 
-use App\Voronoi\Shape;
+use App\Entity\Shape;
 
 /**
  * Config entity for HexaMap
