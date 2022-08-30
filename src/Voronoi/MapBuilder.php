@@ -6,6 +6,9 @@
 
 namespace App\Voronoi;
 
+use App\Entity\MapConfig;
+use RuntimeException;
+
 /**
  * Service for creating a HexaMap
  */
@@ -53,7 +56,7 @@ class MapBuilder
 
         // if there are still empty cells, stops generation and throw exception
         if ($current > 0) {
-            throw new \RuntimeException("Cannot fill $current cells with Voronoi iterations");
+            throw new RuntimeException("Cannot fill $current cells with Voronoi iterations");
         }
 
         if ($config->erosion) {

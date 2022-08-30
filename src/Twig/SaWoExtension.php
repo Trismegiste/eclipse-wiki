@@ -16,7 +16,7 @@ use App\Entity\Place;
 use App\Entity\Transhuman;
 use App\Entity\Vertex;
 use App\Repository\HindranceProvider;
-use App\Voronoi\MapConfig;
+use App\Entity\MapConfig;
 use OutOfBoundsException;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;

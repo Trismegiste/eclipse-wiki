@@ -9,7 +9,7 @@ namespace App\Form;
 use App\Form\Type\PlaceChoiceType;
 use App\Voronoi\HexaMap;
 use App\Voronoi\MapBuilder;
-use App\Voronoi\MapConfig;
+use App\Entity\MapConfig;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;

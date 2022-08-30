@@ -4,9 +4,9 @@
  * eclipse-wiki
  */
 
-namespace App\Voronoi;
+namespace App\Entity;
 
-use App\Entity\Vertex;
+use App\Voronoi\Shape;
 
 /**
  * Config entity for HexaMap

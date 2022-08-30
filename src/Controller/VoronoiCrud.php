@@ -6,13 +6,13 @@
 
 namespace App\Controller;
 
+use App\Entity\MapConfig;
 use App\Entity\Place;
 use App\Entity\Vertex;
 use App\Form\GenerateMapForPlace;
+use App\Form\MapConfigType;
 use App\Service\Storage;
 use App\Voronoi\MapBuilder;
-use App\Voronoi\MapConfig;
-use App\Voronoi\MapConfigType;
 use Exception;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;

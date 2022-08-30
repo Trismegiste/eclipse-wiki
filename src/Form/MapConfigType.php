@@ -4,8 +4,9 @@
  * eclipse-wiki
  */
 
-namespace App\Voronoi;
+namespace App\Form;
 
+use App\Entity\MapConfig;
 use App\Form\FormTypeUtils;
 use App\Form\Type\RandomIntegerType;
 use App\Form\VertexType;
