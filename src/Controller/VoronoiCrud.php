@@ -109,7 +109,7 @@ class VoronoiCrud extends GenericCrud
 
             $filename = 'map-' . $place->getPk() . '.svg';
             $map = $builder->create($config);
-            $map->save(\join_paths($storage->getRootDir(), $filename));
+            $builder->save($map, \join_paths($storage->getRootDir(), $filename));
             $place->battleMap = $filename;
             $this->repository->save($place);
 

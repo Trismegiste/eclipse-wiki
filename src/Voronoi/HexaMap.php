@@ -6,7 +6,6 @@
 
 namespace App\Voronoi;
 
-use App\Voronoi\BattlemapSvg;
 use App\Voronoi\HexaCell;
 
 /**
@@ -27,50 +26,6 @@ class HexaMap
     public function getSize(): int
     {
         return $this->gridSize;
-    }
-
-    public function dump(BattlemapSvg $doc): void
-    {
-        $sin60 = sin(M_PI / 3);
-        $tan60 = tan(M_PI / 3);
-
-        // rendering per cell
-        foreach ($this->grid as $x => $column) {
-            foreach ($column as $y => $cell) {
-                if (is_null($cell)) {
-                    continue;
-                }
-                /** @var HexaCell $cell */
-                $cx = ($x - floor($y / 2)) / $sin60 + $y / $tan60;
-                $cell->dumpAt($doc, $cx, $y);
-            }
-        }
-
-        // rendering per room
-        foreach ($this->getCoordPerRoom() as $uid => $roomCoord) {
-            // fog of war
-            $roomFog = $doc->createElementNS(TileSvg::svgNS, 'g');
-            $roomFog->setAttribute('id', "fog-of-war-$uid");
-            $roomFog->setAttribute('class', 'fog-of-war');
-            foreach ($roomCoord as $cell) {
-                $x = $cell[0];
-                $y = $cell[1];
-                $cx = ($x - floor($y / 2)) / $sin60 + $y / $tan60;
-                $fog = $doc->createUse('fogofwar');
-                $fog->setAttribute('x', $cx);
-                $fog->setAttribute('y', $y);
-                $roomFog->appendChild($fog);
-            }
-            $doc->addFog($roomFog);
-
-            // legend
-            $firstCell = array_pop($roomCoord);
-            $x = $firstCell[0];
-            $y = $firstCell[1];
-            $cell = $firstCell[2];
-            $cx = ($x - floor($y / 2)) / $sin60 + $y / $tan60;
-            $cell->printAt($doc, $this->num2alpha($uid), $cx, $y);
-        }
     }
 
     public function getAbscissa(int $x, int $y): float

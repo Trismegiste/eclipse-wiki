@@ -104,4 +104,20 @@ class MapBuilder
         echo '</svg>';
     }
 
+    /**
+     * Writes a map SVG content to a file
+     * @param HexaMap $map
+     * @param string $pathname
+     */
+    public function save(HexaMap $map, string $pathname): void
+    {
+        $target = fopen($pathname, 'w');
+        ob_start(function (string $buffer) use ($target) {
+            fwrite($target, $buffer);
+        }, 10000);
+        $this->dumpSvg($map);
+        ob_end_flush();
+        fclose($target);
+    }
+
 }
