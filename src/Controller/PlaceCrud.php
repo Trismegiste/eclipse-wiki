@@ -90,6 +90,7 @@ class PlaceCrud extends GenericCrud
         $child = clone $place;
         $child->setTitle("Lieu enfant dans $title");
         $child->setContent("Localisé sur [[$title]]");
+        $child->battleMap = null;
         $form = $this->createForm(PlaceType::class, $child);
 
         $form->handleRequest($request);
