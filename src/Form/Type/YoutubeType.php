@@ -23,12 +23,12 @@ class YoutubeType extends AbstractType implements DataTransformerInterface
         $builder->addViewTransformer($this);
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return TextType::class;
     }
 
-    public function reverseTransform($value)
+    public function reverseTransform($value): mixed
     {
         if (empty($value)) {
             return null;
@@ -45,7 +45,7 @@ class YoutubeType extends AbstractType implements DataTransformerInterface
         }
     }
 
-    public function transform($value)
+    public function transform($value): mixed
     {
         return $value;
     }

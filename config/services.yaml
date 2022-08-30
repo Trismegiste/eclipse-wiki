@@ -43,7 +43,7 @@ services:
     App\Command\CheckDatabase:
         $dbName: '%mongodb.dbname%'
         $man: '@mongodb'            
-            
+
     # WIKI
     App\Service\MediaWiki:
         arguments:
@@ -120,8 +120,11 @@ services:
     App\Repository\MapRepository:
         arguments:
             $template: '%twig.default_path%/map/config'
-            
-            
+
     App\Command\LoginLink:
         arguments:
             $loginLinkHandler: '@security.authenticator.login_link_handler.main'
+
+    # Map
+    App\Voronoi\MapBuilder:
+        - '%twig.default_path%/voronoi/tile'

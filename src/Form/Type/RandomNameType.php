@@ -25,7 +25,7 @@ class RandomNameType extends AbstractType
         $this->category = Yaml::parseFile($yaml);
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return TextType::class;
     }

@@ -16,6 +16,7 @@ use App\Entity\Place;
 use App\Entity\Transhuman;
 use App\Entity\Vertex;
 use App\Repository\HindranceProvider;
+use App\Entity\MapConfig;
 use OutOfBoundsException;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -38,7 +39,8 @@ class SaWoExtension extends AbstractExtension
         Vertex::class => 'vertex/row.html.twig',
         Place::class => 'place/row.html.twig',
         Loveletter::class => 'loveletter/row.html.twig',
-        Handout::class => 'handout/row.html.twig'
+        Handout::class => 'handout/row.html.twig',
+        MapConfig::class => 'voronoi/row.html.twig'
     ];
     const showTemplate = [
         Ali::class => 'npc/ali/show.html.twig',
@@ -47,10 +49,11 @@ class SaWoExtension extends AbstractExtension
         Vertex::class => 'vertex/show.html.twig',
         Place::class => 'place/show.html.twig',
         Loveletter::class => 'loveletter/show.html.twig',
-        Handout::class => 'handout/show.html.twig'
+        Handout::class => 'handout/show.html.twig',
+        MapConfig::class => 'voronoi/show.html.twig'
     ];
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('level_hindrance', [$this, 'printLevelHindrance']),

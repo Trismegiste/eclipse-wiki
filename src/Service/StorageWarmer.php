@@ -24,9 +24,11 @@ class StorageWarmer implements CacheWarmerInterface
         $this->root = $store->getRootDir();
     }
 
-    public function warmUp(string $cacheDir)
+    public function warmUp(string $cacheDir): array
     {
         $this->fs->mkdir($this->root);
+        
+        return [];
     }
 
     public function isOptional(): bool

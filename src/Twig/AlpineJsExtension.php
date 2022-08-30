@@ -15,7 +15,7 @@ use Twig\TwigFunction;
 class AlpineJsExtension extends AbstractExtension
 {
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('alpinejs_flashes', [$this, 'flattenFlashBag'])

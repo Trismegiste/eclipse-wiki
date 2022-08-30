@@ -34,9 +34,11 @@ class PlayerCastCache implements CacheWarmerInterface, CacheClearerInterface
         $this->maxSize = $maxSize;
     }
 
-    public function warmUp(string $cacheDir)
+    public function warmUp(string $cacheDir): array
     {
         $this->fs->mkdir(join_paths($cacheDir, self::subDir));
+        
+        return [];
     }
 
     public function isOptional(): bool

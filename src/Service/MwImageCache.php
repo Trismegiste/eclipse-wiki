@@ -35,9 +35,11 @@ class MwImageCache implements CacheWarmerInterface, CacheClearerInterface
         $this->cacheDir = join_paths($cacheDir, self::subDir);
     }
 
-    public function warmUp(string $cacheDir)
+    public function warmUp(string $cacheDir): array
     {
         $this->fs->mkdir(join_paths($cacheDir, self::subDir));
+        
+        return [];
     }
 
     public function isOptional(): bool

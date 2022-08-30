@@ -115,7 +115,7 @@ abstract class MapRecipe extends AbstractType implements DataMapperInterface
         $viewData->appendLayer($fog);
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'mapgen';
     }

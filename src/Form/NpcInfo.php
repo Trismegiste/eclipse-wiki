@@ -27,7 +27,7 @@ class NpcInfo extends AbstractType
         $builder->add('surnameLang', SurnameLanguageType::class);
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return VertexType::class;
     }
