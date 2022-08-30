@@ -24,6 +24,8 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Positive;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
@@ -37,9 +39,9 @@ class MapConfigType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('seed', RandomIntegerType::class)
-                ->add('side', IntegerType::class)
-                ->add('avgTilePerRoom', IntegerType::class)
+                ->add('seed', RandomIntegerType::class, ['constraints' => [new NotBlank(), new Positive()]])
+                ->add('side', IntegerType::class, ['constraints' => [new NotBlank(), new Positive()]])
+                ->add('avgTilePerRoom', IntegerType::class, ['constraints' => [new NotBlank(), new Positive()]])
                 ->add('erosionForHallway', CheckboxType::class, ['required' => false, 'property_path' => 'erosion'])
                 ->add('erodingMinRoomSize', IntegerType::class, ['required' => false])
                 ->add('erodingMaxNeighbour', ChoiceType::class, [
