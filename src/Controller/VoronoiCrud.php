@@ -6,14 +6,20 @@
 
 namespace App\Controller;
 
+use App\Entity\Place;
 use App\Entity\Vertex;
+use App\Form\GenerateMapForPlace;
+use App\Service\Storage;
 use App\Voronoi\MapBuilder;
 use App\Voronoi\MapConfig;
 use App\Voronoi\MapConfigType;
+use Exception;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use function join_paths;
 
 /**
  * CRUD controler for Hexagonal map
@@ -34,8 +40,8 @@ class VoronoiCrud extends GenericCrud
             return new StreamedResponse(function () use ($builder, $map, $fog) {
                         $builder->dumpSvg($map, $fog);
                     }, Response::HTTP_OK, ['content-type' => 'image/svg+xml']);
-        } catch (\Exception $e) {
-            return new \Symfony\Component\HttpFoundation\BinaryFileResponse($this->getParameter('twig.default_path') . '/voronoi/fail.svg');
+        } catch (Exception $e) {
+            return new BinaryFileResponse($this->getParameter('twig.default_path') . '/voronoi/fail.svg');
         }
     }
 
@@ -83,38 +89,26 @@ class VoronoiCrud extends GenericCrud
      * Attach the generated map to a Place entity
      * @Route("/voronoi/attachplace/{pk}", methods={"GET","PATCH"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function attachPlace(string $pk, Request $request, MapBuilder $builder, \App\Service\Storage $storage, \Symfony\Contracts\Translation\TranslatorInterface $translator): Response
+    public function attachPlace(string $pk, Request $request, MapBuilder $builder, Storage $storage): Response
     {
-        /** @var \App\Voronoi\MapConfig $config */
+        /** @var MapConfig $config */
         $config = $this->repository->load($pk);
 
-        $form = $this->createFormBuilder()
-                ->add('place', \App\Form\Type\PlaceChoiceType::class, [
-                    'placeholder' => '-- Create New --',
-                    'required' => false
-                ])
-                ->add('Attacher', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
-                ->setMethod('PATCH')
-                ->getForm();
+        $form = $this->createForm(GenerateMapForPlace::class, null, ['map_config' => $config]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            // getting place
             $place = $form['place']->getData();
             $newPlace = empty($place);
-
             if ($newPlace) {
-                $place = new \App\Entity\Place(sprintf('Map-%s %s-%d×%d %d',
-                                $config->getTitle(),
-                                $translator->trans($config->container->getName()),
-                                $config->side,
-                                $config->side,
-                                $config->seed));
+                $place = new Place($form['default_newname']->getData());
                 $this->repository->save($place);
             }
 
+            // attach generated map to the place
             $filename = 'map-' . $place->getPk() . '.svg';
-            $map = $builder->create($config);
-            $builder->save($map, \join_paths($storage->getRootDir(), $filename));
+            $builder->save($form->getData(), join_paths($storage->getRootDir(), $filename));
             $place->battleMap = $filename;
             $this->repository->save($place);
 
