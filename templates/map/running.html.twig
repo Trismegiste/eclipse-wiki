@@ -36,7 +36,7 @@
             // Pan & zoom the SVG
             let svgElem = document.querySelector('#map svg')
             battlemap = SVG(svgElem)
-            battlemap.panZoom({zoomMin: 5, zoomMax: 50, zoomFactor: 0.2})
+            battlemap.panZoom({zoomMin: 5, zoomMax: 100, zoomFactor: 0.2})
 
             // make all NPC draggable
             document.querySelectorAll('svg #token-layer circle').forEach(function (item) {

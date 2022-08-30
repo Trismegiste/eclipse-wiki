@@ -41,7 +41,7 @@ class VoronoiCrud extends GenericCrud
                         $builder->dumpSvg($map, $fog);
                     }, Response::HTTP_OK, ['content-type' => 'image/svg+xml']);
         } catch (Exception $e) {
-            return new BinaryFileResponse($this->getParameter('twig.default_path') . '/voronoi/fail.svg');
+            return new BinaryFileResponse($this->getParameter('twig.default_path') . '/voronoi/fail.svg', 200, [], false, null, false, false);
         }
     }
 
