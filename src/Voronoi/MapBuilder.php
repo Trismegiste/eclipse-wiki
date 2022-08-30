@@ -15,6 +15,7 @@ class MapBuilder
     const VOID_UID = 0;
     const HALLWAY_UID = 10;
     const ROOM_UID = 100;
+    const defaultSizeForWeb = 1000;
 
     protected $tilePath;
 
@@ -62,10 +63,12 @@ class MapBuilder
         $cos30 = sqrt(3) / 2.0;
         $width = $side / $cos30 + 1;  // because of the included rectangle in a hexagon
         $height = $side + 1;
+        $pixelWidth = self::defaultSizeForWeb;
+        $pixelHeight = (int) floor(self::defaultSizeForWeb * $cos30);
 
         echo '<?xml version="1.0" encoding="utf-8"?>' . PHP_EOL;
         echo '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"' . PHP_EOL;
-        echo "width=\"1920\" height=\"1080\"" . PHP_EOL;
+        echo "width=\"$pixelWidth\" height=\"$pixelHeight\"" . PHP_EOL;
         echo "viewBox=\"-1 -1 $width $height\">\n";
 
         echo "<defs>\n";

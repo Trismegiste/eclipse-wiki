@@ -104,8 +104,9 @@ class HexaCell
 
     public function dumpLegend(string $txt, float $x, float $y): void
     {
-        $y += 0.15;
-        echo "<text font-size=\"0.3\" x=\"$x\" y=\"$y\" text-anchor=\"middle\">";
+        $fontSize = 0.3;
+        $y += $fontSize / 2;
+        echo "<text font-size=\"$fontSize\" x=\"$x\" y=\"$y\" text-anchor=\"middle\">";
         echo $txt;
         echo "</text>\n";
     }

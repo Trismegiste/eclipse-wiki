@@ -73,97 +73,73 @@ class HexaMap
         }
     }
 
+    public function getAbscissa(int $x, int $y): float
+    {
+        return ($x - floor($y / 2)) / sin(M_PI / 3) + $y / tan(M_PI / 3);
+    }
+
     public function dumpGround(): void
     {
-        $sin60 = sin(M_PI / 3);
-        $tan60 = tan(M_PI / 3);
-
-        // rendering per cell
         foreach ($this->grid as $x => $column) {
             foreach ($column as $y => $cell) {
-                if (is_null($cell)) {
-                    continue;
+                if (!is_null($cell)) {
+                    /** @var HexaCell $cell */
+                    $cell->dumpGround($this->getAbscissa($x, $y), $y);
                 }
-                /** @var HexaCell $cell */
-                $cx = ($x - floor($y / 2)) / $sin60 + $y / $tan60;
-                $cell->dumpGround($cx, $y);
             }
         }
     }
 
     public function dumpWall(): void
     {
-        $sin60 = sin(M_PI / 3);
-        $tan60 = tan(M_PI / 3);
-
-        // rendering per cell
         foreach ($this->grid as $x => $column) {
             foreach ($column as $y => $cell) {
-                if (is_null($cell)) {
-                    continue;
+                if (!is_null($cell)) {
+                    /** @var HexaCell $cell */
+                    $cell->dumpWall($this->getAbscissa($x, $y), $y);
                 }
-                /** @var HexaCell $cell */
-                $cx = ($x - floor($y / 2)) / $sin60 + $y / $tan60;
-                $cell->dumpWall($cx, $y);
             }
         }
     }
 
     public function dumpDoor(): void
     {
-        $sin60 = sin(M_PI / 3);
-        $tan60 = tan(M_PI / 3);
-
-        // rendering per cell
         foreach ($this->grid as $x => $column) {
             foreach ($column as $y => $cell) {
-                if (is_null($cell)) {
-                    continue;
+                if (!is_null($cell)) {
+                    /** @var HexaCell $cell */
+                    $cell->dumpDoor($this->getAbscissa($x, $y), $y);
                 }
-                /** @var HexaCell $cell */
-                $cx = ($x - floor($y / 2)) / $sin60 + $y / $tan60;
-                $cell->dumpDoor($cx, $y);
             }
         }
     }
 
     public function dumpLegend(): void
     {
-        $sin60 = sin(M_PI / 3);
-        $tan60 = tan(M_PI / 3);
         foreach ($this->getCoordPerRoom() as $uid => $roomCoord) {
-            // legend
-            $firstCell = array_pop($roomCoord);
-            $x = $firstCell[0];
-            $y = $firstCell[1];
-            $cell = $firstCell[2];
-            $cx = ($x - floor($y / 2)) / $sin60 + $y / $tan60;
-            $cell->dumpLegend($this->num2alpha($uid), $cx, $y);
+            list($x, $y, $cell) = array_pop($roomCoord);
+            $cell->dumpLegend($this->num2alpha($uid), $this->getAbscissa($x, $y), $y);
         }
     }
 
     public function dumpFogOfWar(): void
     {
-        $sin60 = sin(M_PI / 3);
-        $tan60 = tan(M_PI / 3);
         foreach ($this->getCoordPerRoom() as $uid => $roomCoord) {
-            // fog of war
             echo "<g id=\"fog-of-war-$uid\" class=\"fog-of-war\">";
             foreach ($roomCoord as $cell) {
-                $x = $cell[0];
-                $y = $cell[1];
-                $cx = ($x - floor($y / 2)) / $sin60 + $y / $tan60;
+                list($x, $y) = $cell;
+                $cx = $this->getAbscissa($x, $y);
                 echo "<use xlink:href=\"#fogofwar\" x=\"$cx\" y=\"$y\"/>";
             }
             echo '</g>';
         }
     }
 
-    protected function num2alpha($n)
+    protected function num2alpha(int $n)
     {
         $r = '';
         for ($i = 1; $n >= 0 && $i < 10; $i++) {
-            $r = chr(0x41 + ($n % pow(26, $i) / pow(26, $i - 1))) . $r;
+            $r = chr(0x41 + (int) floor($n % pow(26, $i) / pow(26, $i - 1))) . $r;
             $n -= pow(26, $i);
         }
 
