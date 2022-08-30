@@ -44,8 +44,16 @@ class MapBuilder
 
         $config->container->draw($draw);
 
-        while ($map->iterateNeighbourhood()) {
-            // nothing
+        $current = $map->iterateNeighbourhood();
+        // we iterates as long as the count of empty cells is shrinking on each iteration
+        do {
+            $lastEmpty = $current;
+            $current = $map->iterateNeighbourhood();
+        } while ($current < $lastEmpty);
+
+        // if there are still empty cells, stops generation and throw exception
+        if ($current > 0) {
+            throw new \RuntimeException("Cannot fill $current cells with Voronoi iterations");
         }
 
         if ($config->erosion) {

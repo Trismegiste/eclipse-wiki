@@ -27,11 +27,16 @@ class VoronoiCrud extends GenericCrud
     public function generate(string $pk, MapBuilder $builder, bool $fog = true): Response
     {
         $config = $this->repository->load($pk);
-        $map = $builder->create($config, $fog);
 
-        return new StreamedResponse(function () use ($builder, $map, $fog) {
-                    $builder->dumpSvg($map, $fog);
-                }, Response::HTTP_OK, ['content-type' => 'image/svg+xml']);
+        try {
+            $map = $builder->create($config, $fog);
+
+            return new StreamedResponse(function () use ($builder, $map, $fog) {
+                        $builder->dumpSvg($map, $fog);
+                    }, Response::HTTP_OK, ['content-type' => 'image/svg+xml']);
+        } catch (\Exception $e) {
+            return new \Symfony\Component\HttpFoundation\BinaryFileResponse(__DIR__ . '/../Voronoi/error.svg');
+        }
     }
 
     /**

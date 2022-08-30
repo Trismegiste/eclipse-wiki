@@ -162,18 +162,17 @@ class HexaMap
 
     /**
      * Growing Voronoi
-     * @return bool if there is still empty tile ?
+     * @return int the count of remaining empty cells
      */
-    public function iterateNeighbourhood(): bool
+    public function iterateNeighbourhood(): int
     {
         $update = array_fill(0, $this->gridSize, array_fill(0, $this->gridSize, null));
 
-        $hasNull = false;
+        $nullCounter = 0;
         foreach ($this->grid as $x => $column) {
             foreach ($column as $y => $center) {
                 /** @var HexaCell $center */
                 if (is_null($center)) {
-                    $hasNull = true;
 
                     $choices = array_filter($this->getNeighbourCell($x, $y), function (?HexaCell $cell) {
                         return !is_null($cell) && $cell->growable;
@@ -182,6 +181,7 @@ class HexaMap
                     $nbChoices = count($choices);
                     switch ($nbChoices) {
                         case 0:
+                            $nullCounter++;
                             break;
 
                         case 1:
@@ -201,7 +201,7 @@ class HexaMap
 
         $this->grid = $update;
 
-        return $hasNull;
+        return $nullCounter;
     }
 
     protected function getCoordPerRoom(): array
