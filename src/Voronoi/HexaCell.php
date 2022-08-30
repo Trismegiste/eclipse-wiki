@@ -24,7 +24,7 @@ class HexaCell implements BattlemapItem
     public bool $growable; // for voronoi algo
     public array $wall = [false, false, false, false, false, false]; // CCW, from EAST (0°) to SOUTHEAST (300°)
     public array $door = [false, false, false, false, false, false]; // CCW, from EAST (0°) to SOUTHEAST (300°)
-    public bool $npc = false;  // is there a npc
+    public bool $npc = false;  // a npc could be on this cell or not
 
     public function __construct(int $uid, string $template = 'default', bool $growable = true)
     {
@@ -35,9 +35,7 @@ class HexaCell implements BattlemapItem
 
     public function dumpGround(float $cx, float $y): void
     {
-        echo "<use xlink:href=\"#{$this->template}\" x=\"$cx\" y=\"$y\">";
-        echo "<title>room-{$this->uid}</title>";
-        echo "</use>\n";
+        echo "<use xlink:href=\"#{$this->template}\" x=\"$cx\" y=\"$y\"/>";
     }
 
     public function dumpWall(float $cx, float $y): void

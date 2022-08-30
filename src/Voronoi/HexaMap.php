@@ -80,7 +80,9 @@ class HexaMap
     public function dumpFogOfWar(): void
     {
         foreach ($this->getCoordPerRoom() as $uid => $roomCoord) {
-            echo "<g id=\"fog-of-war-$uid\" class=\"fog-of-war\">";
+            echo "<g class=\"fog-of-war\">";
+            $title = $this->num2alpha($uid);
+            echo "<title>{$roomCoord[0][2]->template} $title</title>";
             foreach ($roomCoord as $cell) {
                 list($x, $y) = $cell;
                 $cx = $this->getAbscissa($x, $y);
