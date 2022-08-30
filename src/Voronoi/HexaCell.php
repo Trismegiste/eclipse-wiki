@@ -9,7 +9,7 @@ namespace App\Voronoi;
 /**
  * A hexagonal cell
  */
-class HexaCell
+class HexaCell implements BattlemapItem
 {
 
     const EAST = 0;
