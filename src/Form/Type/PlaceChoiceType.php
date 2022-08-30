@@ -29,8 +29,17 @@ class PlaceChoiceType extends AbstractType
     {
         $resolver->setDefaults([
             'choices' => $this->repo->findByClass(Place::class),
-            'choice_label' => 'title',
+            'choice_label' => function (?Place $obj) {
+                return $obj->getTitle();
+            },
             'choice_value' => 'pk',
+            'group_by' => function ($obj, $key, $value) {
+                if (!empty($obj->battleMap)) {
+                    return 'WITH_BATTLEMAP';
+                }
+
+                return 'WITHOUT_BATTLEMAP';
+            }
         ]);
     }
 
