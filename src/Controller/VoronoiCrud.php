@@ -11,6 +11,7 @@ use App\Entity\Place;
 use App\Entity\Vertex;
 use App\Form\GenerateMapForPlace;
 use App\Form\MapConfigType;
+use App\Repository\VertexRepository;
 use App\Service\Storage;
 use App\Voronoi\MapBuilder;
 use Exception;
@@ -27,18 +28,26 @@ use function join_paths;
 class VoronoiCrud extends GenericCrud
 {
 
+    protected MapBuilder $builder;
+
+    public function __construct(VertexRepository $repo, MapBuilder $builder)
+    {
+        parent::__construct($repo);
+        $this->builder = $builder;
+    }
+
     /**
      * @Route("/voronoi/generate/{pk}/{fog}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function generate(string $pk, MapBuilder $builder, bool $fog = true): Response
+    public function generate(string $pk, bool $fog = true): Response
     {
         $config = $this->repository->load($pk);
 
         try {
-            $map = $builder->create($config, $fog);
+            $map = $this->builder->create($config, $fog);
 
-            return new StreamedResponse(function () use ($builder, $map, $fog) {
-                        $builder->dumpSvg($map, $fog);
+            return new StreamedResponse(function () use ($map, $fog) {
+                        $this->builder->dumpSvg($map, $fog);
                     }, Response::HTTP_OK, ['content-type' => 'image/svg+xml']);
         } catch (Exception $e) {
             return new BinaryFileResponse($this->getParameter('twig.default_path') . '/voronoi/fail.svg', 200, [], false, null, false, false);
@@ -89,7 +98,7 @@ class VoronoiCrud extends GenericCrud
      * Attach the generated map to a Place entity
      * @Route("/voronoi/attachplace/{pk}", methods={"GET","PATCH"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function attachPlace(string $pk, Request $request, MapBuilder $builder, Storage $storage): Response
+    public function attachPlace(string $pk, Request $request, Storage $storage): Response
     {
         /** @var MapConfig $config */
         $config = $this->repository->load($pk);
@@ -108,7 +117,7 @@ class VoronoiCrud extends GenericCrud
 
             // attach generated map to the place
             $filename = 'map-' . $place->getPk() . '.svg';
-            $builder->save($form->getData(), join_paths($storage->getRootDir(), $filename));
+            $this->builder->save($form->getData(), join_paths($storage->getRootDir(), $filename));
             $place->battleMap = $filename;
             $this->repository->save($place);
 
