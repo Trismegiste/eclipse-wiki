@@ -11,7 +11,7 @@ class PictureTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 
     use PictureFixture;
 
-    protected $client;
+    protected \Symfony\Bundle\FrameworkBundle\KernelBrowser $client;
 
     protected function setUp(): void
     {
@@ -45,6 +45,25 @@ class PictureTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $ret = json_decode($this->client->getResponse()->getContent());
         $this->assertStringContainsString('yolo.png', $ret->message);
         $this->assertStringContainsString('complete', $ret->message);
+    }
+
+    public function testUpload()
+    {
+        $crawler = $this->client->request('GET', '/picture/upload');
+        $this->assertResponseIsSuccessful();
+        $form = $crawler->selectButton('picture_upload_upload')->form();
+        $form->setValues(['picture_upload' => [
+                'filename' => 'uploaded' . rand()
+        ]]);
+
+        $filename = 'tmp.png';
+        $image = $this->createTestChart(2000); // to force resizing
+        imagepng($image, $filename);
+
+        $form['picture_upload[picture]']->upload($filename);
+        $this->client->submit($form);
+        $this->assertResponseRedirects();
+        unlink($filename);
     }
 
 }

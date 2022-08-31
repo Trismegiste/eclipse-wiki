@@ -38,7 +38,7 @@ class HexaMapTest extends TestCase
         }
     }
 
-    public function testGrowingIteration()
+    public function testOneGrowingIteration()
     {
         $this->sut->iterateNeighbourhood();
         $neigh = $this->sut->getNeighbourCell(10, 10);
@@ -53,13 +53,16 @@ class HexaMapTest extends TestCase
     {
         while ($this->sut->iterateNeighbourhood() > 0);
 
+        $counter = 0;
         for ($x = 0; $x < $this->sut->getSize(); $x++) {
             for ($y = 0; $y < $this->sut->getSize(); $y++) {
                 $cell = $this->sut->getCell([$x, $y]);
-                $this->assertInstanceOf(HexaCell::class, $cell, "$x $y");
-                $this->assertEquals(666, $cell->uid, "$x $y");
+                if (($cell instanceof HexaCell) && (666 === $cell->uid)) {
+                    $counter++;
+                }
             }
         }
+        $this->assertEquals(400, $counter);
     }
 
     public function testAbscissa()
