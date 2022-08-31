@@ -78,8 +78,9 @@ class AvatarMaker
 
             // icon
             $socnet = imagecreatefrompng(join_paths($this->socNetFolder, $key . '.png'));
-            $resized = imagescale($socnet, (int) ( $this->width / 4), -1, IMG_GAUSSIAN);
-            imagecopy($target, $resized, (int) $imgPos, (int) ($this->height * 0.78), 0, 0, (int) ($this->width / 4), (int) ($this->width / 4));
+            $srcWidth = imagesx($socnet);
+            $srcHeight = imagesy($socnet);
+            imagecopyresampled($target, $socnet, (int) $imgPos, (int) ($this->height * 0.78), 0, 0, (int) ($this->width / 4), (int) ($this->width / 4), $srcWidth, $srcHeight);
             $imgPos += $this->width / 3;
         }
 
