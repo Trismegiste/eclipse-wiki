@@ -4,18 +4,21 @@
  * eclipse-wiki
  */
 
+use App\Entity\Place;
+use App\Repository\VertexRepository;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class VoronoiCrudTest extends WebTestCase
 {
 
-    protected Symfony\Bundle\FrameworkBundle\KernelBrowser $client;
-    protected \App\Repository\VertexRepository $repository;
+    protected KernelBrowser $client;
+    protected VertexRepository $repository;
 
     protected function setUp(): void
     {
         $this->client = static::createClient();
-        $this->repository = static::getContainer()->get(\App\Repository\VertexRepository::class);
+        $this->repository = static::getContainer()->get(VertexRepository::class);
     }
 
     public function testClean()
@@ -92,6 +95,30 @@ class VoronoiCrudTest extends WebTestCase
     {
         $this->client->request('GET', "/voronoi/running/$pk");
         $this->assertResponseIsSuccessful();
+    }
+
+    /** @depends testGenerateSvg */
+    public function testAttachPlace(string $pk)
+    {
+        $crawler = $this->client->request('GET', "/voronoi/attachplace/$pk");
+        $this->assertResponseIsSuccessful();
+        $form = $crawler->selectButton('generate_map_for_place_attach')->form();
+        $this->client->submit($form);
+        $this->assertResponseRedirects();
+        $target = $this->client->getResponse()->headers->get('location');
+        $this->assertStringStartsWith('/vertex/rename/', $target);
+        $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
+        $pk = $this->client->getRequest()->attributes->get('pk');
+
+        return $pk;
+    }
+
+    /** @depends testAttachPlace */
+    public function testNewPlace(string $pk)
+    {
+        $place = $this->repository->load($pk);
+        $this->assertInstanceOf(Place::class, $place);
     }
 
 }

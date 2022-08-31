@@ -52,7 +52,7 @@ class AvatarMaker
             $calcSize = 100;
         }
         list($left,, $right,,, ) = \imageftbbox($calcSize, 0, $this->font, $txt);
-        imagefttext($target, $calcSize, 0, $this->width / 2 - ($right - $left) / 2, $this->height * 0.7, $fg, $this->font, $txt);
+        imagefttext($target, (int) $calcSize, 0, (int) ($this->width / 2 - ($right - $left) / 2), (int) ($this->height * 0.7), $fg, $this->font, $txt);
 
         // economy
         $economy = array_filter($npc->economy, function ($val, $key) {
@@ -73,13 +73,13 @@ class AvatarMaker
             // text
             $txt = $this->printFollowers(10 ** ($val - random_int(10, 90) / 100.0));
             list($left,, $right,,, ) = imageftbbox($size, 0, $this->font, $txt);
-            imagefttext($target, $size, 0, $txtPos - ($right - $left) / 2, $this->height * 0.97, $fg, $this->font, $txt);
+            imagefttext($target, $size, 0, (int) ($txtPos - ($right - $left) / 2), (int) ($this->height * 0.97), $fg, $this->font, $txt);
             $txtPos += $this->width / 3;
 
             // icon
-            $socnet = imagecreatefromstring(file_get_contents(join_paths($this->socNetFolder, $key . '.png')));
-            $resized = imagescale($socnet, $this->width / 4, -1, IMG_GAUSSIAN);
-            imagecopy($target, $resized, $imgPos, $this->height * 0.78, 0, 0, $this->width / 4, $this->width / 4);
+            $socnet = imagecreatefrompng(join_paths($this->socNetFolder, $key . '.png'));
+            $resized = imagescale($socnet, (int) ( $this->width / 4), -1, IMG_GAUSSIAN);
+            imagecopy($target, $resized, (int) $imgPos, (int) ($this->height * 0.78), 0, 0, (int) ($this->width / 4), (int) ($this->width / 4));
             $imgPos += $this->width / 3;
         }
 
@@ -88,7 +88,7 @@ class AvatarMaker
 
     const coeff = ['', 'k', 'M', 'G', 'T', 'P'];
 
-    private function printFollowers(int $num): string
+    private function printFollowers(float $num): string
     {
         $multiplier = (int) floor(log10($num) / 3);
 
