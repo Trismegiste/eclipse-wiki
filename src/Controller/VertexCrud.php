@@ -162,8 +162,9 @@ class VertexCrud extends GenericCrud
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->repository->renameTitle($oldTitle, $form->getData()->getTitle());
-            $this->addFlash('success', "'$oldTitle' a été renommé");
+            $newTitle = $form->getData()->getTitle();
+            $this->repository->renameTitle($oldTitle, $newTitle);
+            $this->addFlash('success', "'$oldTitle' a été renommé en '$newTitle'");
 
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
         }
