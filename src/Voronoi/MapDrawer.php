@@ -129,4 +129,31 @@ class MapDrawer
         }
     }
 
+    public function getCanvasSize(): int
+    {
+        return $this->map->getSize();
+    }
+
+    public function fillOutsidePolygon(HexaCell $filling, array $polygon): void
+    {
+        $size = $this->map->getSize();
+        // algo Point In Polygon (PIP) https://en.wikipedia.org/wiki/Point_in_polygon
+        for ($x = 0; $x < $size; $x++) {
+            for ($y = 0; $y < $size; $y++) {
+                // for each point of the canvas
+                // https://stackoverflow.com/a/16391873
+                $inside = false;
+                for ($i = 0, $j = count($polygon) - 1; $i < count($polygon); $j = $i++) {
+                    if (( $polygon[$i][1] > $y) != ( $polygon[$j][1] > $y ) &&
+                            $x < ( $polygon[$j][0] - $polygon[$i][0] ) * ( $y - $polygon[$i][1] ) / ( $polygon[$j][1] - $polygon[$i][1] ) + $polygon[$i][0]) {
+                        $inside = !$inside;
+                    }
+                }
+                if (!$inside) {
+                    $this->map->setCell([$x, $y], clone $filling);
+                }
+            }
+        }
+    }
+
 }

@@ -60,6 +60,7 @@ class MapConfigType extends AbstractType
                         new Border(),
                         new Dome(),
                         new Torus(),
+                        new \App\Entity\Shape\Starship(),
                     ],
                     'choice_label' => 'name',
                     'choice_value' => function (?Strategy $strat): string {
