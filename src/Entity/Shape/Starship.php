@@ -21,9 +21,10 @@ class Starship extends Strategy
     {
         $size = $draw->getCanvasSize();
         $polygon = [
-            [1, (int) $size / 2],
-            [$size - 2, (int) $size / 4],
-            [$size - 2, (int) 3 * $size / 4],
+            [1, (int) 3 * $size / 7],
+            [1, (int) 4 * $size / 7],
+            [$size - 2, (int) 4 * $size / 5],
+            [$size - 2, (int) $size / 5],
         ];
 
         $draw->fillOutsidePolygon(new HexaCell(MapBuilder::VOID_UID, 'void', false), $polygon);
