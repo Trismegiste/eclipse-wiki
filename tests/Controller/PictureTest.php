@@ -6,21 +6,28 @@
 
 namespace App\Tests\Controller;
 
-class PictureTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
+use App\Service\Storage;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use function join_paths;
+
+class PictureTest extends WebTestCase
 {
 
     use PictureFixture;
 
-    protected \Symfony\Bundle\FrameworkBundle\KernelBrowser $client;
+    protected KernelBrowser $client;
+    protected Storage $storage;
 
     protected function setUp(): void
     {
         $this->client = static::createClient();
+        $this->storage = static::getContainer()->get(Storage::class);
     }
 
     public function testPictureResponse()
     {
-        $filename = \join_paths(static::getContainer()->get(\App\Service\Storage::class)->getRootDir(), 'yolo.png');
+        $filename = join_paths(static::getContainer()->get(Storage::class)->getRootDir(), 'yolo.png');
         $image = $this->createTestChart(1024);
         imagepng($image, $filename);
 
@@ -53,8 +60,13 @@ class PictureTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $this->assertResponseIsSuccessful();
         $form = $crawler->selectButton('picture_upload_upload')->form();
         $form->setValues(['picture_upload' => [
-                'filename' => 'uploaded' . rand()
+                'filename' => 'uploaded'
         ]]);
+        try {
+            $this->storage->delete('uploaded.jpg');
+        } catch (\Exception $e) {
+            
+        }
 
         $filename = 'tmp.png';
         $image = $this->createTestChart(2000); // to force resizing
