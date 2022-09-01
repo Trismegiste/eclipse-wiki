@@ -1,0 +1,2 @@
+bin/console --env=test --no-warmup ca:cl
+phpdbg -qrr bin/phpunit
