@@ -7,6 +7,7 @@
 namespace App\Voronoi;
 
 use App\Entity\MapConfig;
+use App\Repository\TileProvider;
 use RuntimeException;
 
 /**
@@ -20,9 +21,9 @@ class MapBuilder
     const CLUSTER_UID = 100;
     const defaultSizeForWeb = 1000;
 
-    protected \App\Repository\TileProvider $provider;
+    protected TileProvider $provider;
 
-    public function __construct(\App\Repository\TileProvider $provider)
+    public function __construct(TileProvider $provider)
     {
         $this->provider = $provider;
     }
@@ -34,7 +35,7 @@ class MapBuilder
         srand($config->seed);
         $draw = new MapDrawer($map);
 
-        $draw->plantRandomSeed(new HexaCell(self::CLUSTER_UID, 'cluster'), $config->avgTilePerRoom); // @todo think generic : it's 'cluster' instead of 'room', the color scheme will replace 'cluster' with a room tile
+        $draw->plantRandomSeed(new HexaCell(self::CLUSTER_UID, 'cluster'), $config->avgTilePerRoom);
 
         $hallway = new HexaCell(self::SPACING_UID, 'default', false);
 
@@ -84,7 +85,7 @@ class MapBuilder
         echo "viewBox=\"-1 -1 $width $height\">\n";
 
         echo "<defs>\n";
-        foreach ($this->provider->getTileSet('habitat') as $svg) {
+        foreach ($this->provider->getTileSet('habitat') as $svg) {  // @todo remove hardcoded, this value is coming from MapConfig
             echo $svg->getTile()->C14N();
         }
         echo "</defs>\n";
