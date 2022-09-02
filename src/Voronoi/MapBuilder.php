@@ -84,7 +84,7 @@ class MapBuilder
         echo "viewBox=\"-1 -1 $width $height\">\n";
 
         echo "<defs>\n";
-        foreach ($this->provider->getTileSet('notused') as $svg) {
+        foreach ($this->provider->getTileSet('habitat') as $svg) {
             echo $svg->getTile()->C14N();
         }
         echo "</defs>\n";

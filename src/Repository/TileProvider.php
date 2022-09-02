@@ -25,7 +25,7 @@ class TileProvider
     public function getTileSet(string $title): TileSetIterator
     {
         $finder = new Finder();
-        $finder->in($this->tilePath)
+        $finder->in($this->tilePath . "/$title")
                 ->files()
                 ->name('*.svg');
 

@@ -16,7 +16,7 @@ class TileProviderTest extends \PHPUnit\Framework\TestCase
 
     public function testGetTileSet()
     {
-        $it = $this->sut->getTileSet('dummy');
+        $it = $this->sut->getTileSet('tile');
         $this->assertInstanceOf(Iterator::class, $it);
         foreach ($it as $key => $tile) {
             $this->assertStringEndsWith('default.svg', $key);

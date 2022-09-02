@@ -19,20 +19,20 @@ class TileSvgTest extends TestCase
 
     public function testLoad()
     {
-        $ret = $this->sut->load(__DIR__ . '/default.svg');
+        $ret = $this->sut->load(__DIR__ . '/tile/default.svg');
         $this->assertTrue($ret);
     }
 
     public function testKey()
     {
-        $this->sut->load(__DIR__ . '/default.svg');
+        $this->sut->load(__DIR__ . '/tile/default.svg');
         $tile = $this->sut->getTile();
         $this->assertEquals('default', $this->sut->getKey());
     }
 
     public function testGetTile()
     {
-        $this->sut->load(__DIR__ . '/default.svg');
+        $this->sut->load(__DIR__ . '/tile/default.svg');
         $tile = $this->sut->getTile();
         $this->assertInstanceOf(DOMElement::class, $tile);
     }
