@@ -34,7 +34,7 @@ class MapBuilder
         srand($config->seed);
         $draw = new MapDrawer($map);
 
-        $draw->plantRandomSeed(new HexaCell(self::ROOM_UID, 'room'), $config->avgTilePerRoom);
+        $draw->plantRandomSeed(new HexaCell(self::ROOM_UID, 'cluster'), $config->avgTilePerRoom); // @todo think generic : it's 'cluster' instead of 'room', the color scheme will replace 'cluster' with a room tile
 
         $hallway = new HexaCell(self::HALLWAY_UID, 'default', false);
 
@@ -64,6 +64,7 @@ class MapBuilder
         }
 
         $map->wallProcessing();
+        $map->texturing(['room' => 200, 'yolo' => 1]);
 
         return $map;
     }
@@ -83,7 +84,7 @@ class MapBuilder
         echo "viewBox=\"-1 -1 $width $height\">\n";
 
         echo "<defs>\n";
-        foreach (['default', 'eastwall', 'eastdoor', 'room', 'void', 'fogofwar'] as $filename) {
+        foreach (['default', 'eastwall', 'yolo', 'eastdoor', 'room', 'void', 'fogofwar'] as $filename) {
             $svg = new TileSvg();
             $svg->load("{$this->tilePath}/$filename.svg");
             echo $svg->getTile()->C14N();

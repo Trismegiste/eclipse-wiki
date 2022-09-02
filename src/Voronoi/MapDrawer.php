@@ -64,34 +64,6 @@ class MapDrawer
         }
     }
 
-    public function plantWeightedSeed(\SplObjectStorage $tileSet, int $avgTilePerRoom): void
-    {
-        $size = $this->map->getSize();
-        $roomCount = $size * $size / $avgTilePerRoom;
-        // since we're gonna round up the rooms count for each tile, in average, there will be half the tiles count rooms in excess.
-        // Ok this not very accurate but remember, we're talking about a set of random-generated rooms.
-        // Why rounding up ? Because I want each tile to be at least once even if the percentage is very low
-        // this means there is a gap between a something non-zero weight and a zero weight
-        // This is by design.
-        $roomCount -= count($tileSet) / 2;
-
-        $sum = 0;
-        foreach ($tileSet as $tile) {
-            $sum += $tileSet[$tile];
-        }
-
-        $deltaUid = 0;
-        foreach ($tileSet as $tile) {
-            $tileCount = (int) ceil($tileSet[$tile] * $roomCount / $sum);
-            for ($k = 0; $k < $tileCount; $k++) {
-                $cell = clone $tile;
-                $cell->uid += $deltaUid;
-                $this->map->setCell([rand(0, $size - 1), rand(0, $size - 1)], $cell);
-                $deltaUid++;
-            }
-        }
-    }
-
     public function horizontalCross(HexaCell $hallway, int $howMany = 1, bool $double = false): void
     {
         $size = $this->map->getSize();
