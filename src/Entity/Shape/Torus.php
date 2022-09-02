@@ -20,7 +20,7 @@ class Torus extends Strategy
     {
         $filling = new HexaCell(MapBuilder::VOID_UID, 'void', false);
         $draw->drawTorusContainer($filling);
-        $hallway = new HexaCell(MapBuilder::HALLWAY_UID, 'default', false);
+        $hallway = new HexaCell(MapBuilder::SPACING_UID, 'default', false);
         $draw->circle($hallway);
     }
 

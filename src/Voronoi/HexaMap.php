@@ -293,7 +293,7 @@ class HexaMap
     {
         $roomGroup = $this->getCoordPerRoom();
         unset($roomGroup[MapBuilder::VOID_UID]);
-        unset($roomGroup[MapBuilder::HALLWAY_UID]);
+        unset($roomGroup[MapBuilder::SPACING_UID]);
 
         $roomUid = array_keys($roomGroup);
         $roomCount = count($roomGroup);

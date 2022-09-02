@@ -16,8 +16,8 @@ class MapBuilder
 {
 
     const VOID_UID = 0;
-    const HALLWAY_UID = 10;
-    const ROOM_UID = 100;
+    const SPACING_UID = 10;
+    const CLUSTER_UID = 100;
     const defaultSizeForWeb = 1000;
 
     protected $tilePath;
@@ -34,9 +34,9 @@ class MapBuilder
         srand($config->seed);
         $draw = new MapDrawer($map);
 
-        $draw->plantRandomSeed(new HexaCell(self::ROOM_UID, 'cluster'), $config->avgTilePerRoom); // @todo think generic : it's 'cluster' instead of 'room', the color scheme will replace 'cluster' with a room tile
+        $draw->plantRandomSeed(new HexaCell(self::CLUSTER_UID, 'cluster'), $config->avgTilePerRoom); // @todo think generic : it's 'cluster' instead of 'room', the color scheme will replace 'cluster' with a room tile
 
-        $hallway = new HexaCell(self::HALLWAY_UID, 'default', false);
+        $hallway = new HexaCell(self::SPACING_UID, 'default', false);
 
         if ($config->horizontalLines > 0) {
             $draw->horizontalCross($hallway, $config->horizontalLines, $config->doubleHorizontal);
