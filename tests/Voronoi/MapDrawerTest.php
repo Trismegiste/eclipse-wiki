@@ -67,4 +67,9 @@ class MapDrawerTest extends TestCase
         $this->sut->drawTorusContainer($this->createStub(HexaCell::class));
     }
 
+    public function testSize()
+    {
+        $this->assertEquals(20, $this->sut->getCanvasSize());
+    }
+
 }
