@@ -126,5 +126,5 @@ services:
             $loginLinkHandler: '@security.authenticator.login_link_handler.main'
 
     # Map
-    App\Voronoi\MapBuilder:
+    App\Repository\TileProvider:
         - '%twig.default_path%/voronoi/tile'

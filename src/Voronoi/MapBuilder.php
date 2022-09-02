@@ -20,11 +20,11 @@ class MapBuilder
     const CLUSTER_UID = 100;
     const defaultSizeForWeb = 1000;
 
-    protected $tilePath;
+    protected \App\Repository\TileProvider $provider;
 
-    public function __construct(string $tilePath)
+    public function __construct(\App\Repository\TileProvider $provider)
     {
-        $this->tilePath = $tilePath;
+        $this->provider = $provider;
     }
 
     public function create(MapConfig $config): HexaMap
@@ -84,9 +84,7 @@ class MapBuilder
         echo "viewBox=\"-1 -1 $width $height\">\n";
 
         echo "<defs>\n";
-        foreach (['default', 'eastwall', 'yolo', 'eastdoor', 'room', 'void', 'fogofwar'] as $filename) {
-            $svg = new TileSvg();
-            $svg->load("{$this->tilePath}/$filename.svg");
+        foreach ($this->provider->getTileSet('notused') as $svg) {
             echo $svg->getTile()->C14N();
         }
         echo "</defs>\n";
