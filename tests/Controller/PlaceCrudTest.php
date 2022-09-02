@@ -102,4 +102,14 @@ class PlaceCrudTest extends WebTestCase
         $this->assertPageTitleContains('Wizard');
     }
 
+    /** @depends testList */
+    public function testChildPlace(string $show)
+    {
+        $this->client->request('GET', $show);
+        $pk = $this->client->getRequest()->get('pk');
+        $crawler = $this->client->request('GET', "/place/child/$pk");
+        $this->assertCount(1, $crawler->selectButton('place_create'));
+        $this->assertFormValue('form[name="place"]', 'place[title]', 'Lieu enfant dans Tatooine');
+    }
+
 }
