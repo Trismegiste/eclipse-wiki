@@ -292,8 +292,8 @@ class HexaMap
     public function texturing(array $tileSet): void
     {
         $roomGroup = $this->getCoordPerRoom();
-        unset($roomGroup[MapBuilder::VOID_UID]);
-        unset($roomGroup[MapBuilder::SPACING_UID]);
+        unset($roomGroup[HexaCell::VOID_UID]);
+        unset($roomGroup[HexaCell::SPACING_UID]);
 
         $roomUid = array_keys($roomGroup);
         $roomCount = count($roomGroup);

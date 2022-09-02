@@ -7,7 +7,6 @@
 namespace App\Entity\Shape;
 
 use App\Voronoi\HexaCell;
-use App\Voronoi\MapBuilder;
 use App\Voronoi\MapDrawer;
 
 /**
@@ -18,7 +17,7 @@ class Dome extends Strategy
 
     public function draw(MapDrawer $draw): void
     {
-        $filling = new HexaCell(MapBuilder::VOID_UID, 'void', false);
+        $filling = new HexaCell(HexaCell::VOID_UID, 'void', false);
         $draw->drawCircleContainer($filling);
     }
 

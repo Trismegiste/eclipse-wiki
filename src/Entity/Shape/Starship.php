@@ -7,7 +7,6 @@
 namespace App\Entity\Shape;
 
 use App\Voronoi\HexaCell;
-use App\Voronoi\MapBuilder;
 use App\Voronoi\MapDrawer;
 
 /**
@@ -29,7 +28,7 @@ class Starship extends Strategy
             [(int) $size / 2, $size / 5],
         ];
 
-        $draw->fillOutsidePolygon(new HexaCell(MapBuilder::VOID_UID, 'void', false), $polygon);
+        $draw->fillOutsidePolygon(new HexaCell(HexaCell::VOID_UID, 'void', false), $polygon);
     }
 
     public function getName(): string

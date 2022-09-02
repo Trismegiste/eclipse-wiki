@@ -12,12 +12,17 @@ namespace App\Voronoi;
 class HexaCell implements BattlemapItem
 {
 
+    // direction
     const EAST = 0;
     const NORTHEAST = 1;
     const NORTHWEST = 2;
     const WEST = 3;
     const SOUTHWEST = 4;
     const SOUTHEAST = 5;
+    // default UID by type
+    const VOID_UID = 0;
+    const SPACING_UID = 10;
+    const CLUSTER_UID = 100;
 
     public string $template;  // for use tag (color, pattern, textures...)
     public int $uid;  // to differentiate rooms

@@ -16,9 +16,6 @@ use RuntimeException;
 class MapBuilder
 {
 
-    const VOID_UID = 0;
-    const SPACING_UID = 10;
-    const CLUSTER_UID = 100;
     const defaultSizeForWeb = 1000;
 
     protected TileProvider $provider;
@@ -35,9 +32,9 @@ class MapBuilder
         srand($config->seed);
         $draw = new MapDrawer($map);
 
-        $draw->plantRandomSeed(new HexaCell(self::CLUSTER_UID, 'cluster'), $config->avgTilePerRoom);
+        $draw->plantRandomSeed(new HexaCell(HexaCell::CLUSTER_UID, 'cluster'), $config->avgTilePerRoom);
 
-        $hallway = new HexaCell(self::SPACING_UID, 'default', false);
+        $hallway = new HexaCell(HexaCell::SPACING_UID, 'default', false);
 
         if ($config->horizontalLines > 0) {
             $draw->horizontalCross($hallway, $config->horizontalLines, $config->doubleHorizontal);

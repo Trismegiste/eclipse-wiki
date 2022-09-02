@@ -7,7 +7,6 @@
 namespace App\Entity\Shape;
 
 use App\Voronoi\HexaCell;
-use App\Voronoi\MapBuilder;
 use App\Voronoi\MapDrawer;
 
 /**
@@ -18,9 +17,9 @@ class Torus extends Strategy
 
     public function draw(MapDrawer $draw): void
     {
-        $filling = new HexaCell(MapBuilder::VOID_UID, 'void', false);
+        $filling = new HexaCell(HexaCell::VOID_UID, 'void', false);
         $draw->drawTorusContainer($filling);
-        $hallway = new HexaCell(MapBuilder::SPACING_UID, 'default', false);
+        $hallway = new HexaCell(HexaCell::SPACING_UID, 'default', false);
         $draw->circle($hallway);
     }
 
