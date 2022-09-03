@@ -1,5 +1,11 @@
 {% extends "voronoi/show.html.twig" %}
 
 {% block content %}
-    {{ dump(stats) }}
+    <ul>
+        {% for key, value in stats %}
+            <li>
+                {{ key }} = {{ value }}
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}
