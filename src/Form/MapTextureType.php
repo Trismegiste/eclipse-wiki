@@ -39,7 +39,8 @@ class MapTextureType extends AbstractType implements DataMapperInterface
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         foreach ($this->provider->getClusterSet($options['tileset']) as $tile) {
-            $builder->add($tile->getKey(), IntegerType::class, ['required' => false]);
+            preg_match("#^cluster-([a-z]+)$#", $tile->getKey(), $match);
+            $builder->add($tile->getKey(), IntegerType::class, ['required' => false, 'label' => ucfirst($match[1])]);
         }
         $builder->add('texture', SubmitType::class);
         $builder->setMethod('PUT');
@@ -55,7 +56,7 @@ class MapTextureType extends AbstractType implements DataMapperInterface
 
         // invalid data type
         if (!is_array($viewData->tileWeight)) {
-            throw new UnexpectedTypeException($viewData, 'array');
+            throw new UnexpectedTypeException($viewData->tileWeight, 'array');
         }
 
         /** @var FormInterface $field */
