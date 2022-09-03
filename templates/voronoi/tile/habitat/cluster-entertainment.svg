@@ -9,10 +9,10 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <g
-     id="room-C"
+     id="cluster-entertainment"
      transform="rotate(30) scale(0.666666)">
     <path
-       style="fill:#9ae0d9;fill-opacity:1;stroke:#5d5d5d;stroke-width:0.02;stroke-opacity:1"
+       style="fill:#e09ad3;fill-opacity:1;stroke:#5d5d5d;stroke-width:0.02;stroke-opacity:1"
        d="M 1,0 0.5,0.8660254 h -1 L -1,0 -0.5,-0.8660254 h 1 z"
        id="path1672" />
     <path

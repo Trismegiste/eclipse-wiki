@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="200"
+   height="200"
+   viewBox="-1 -1 2 2"
+   id="svg1675"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <g
+     id="cluster-energy"
+     transform="rotate(30) scale(0.666666)">
+    <path
+       style="fill:#e0a29a;fill-opacity:1;stroke:#5d5d5d;stroke-width:0.02;stroke-opacity:1"
+       d="M 1,0 0.5,0.8660254 h -1 L -1,0 -0.5,-0.8660254 h 1 z"
+       id="path1672" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#e9e9e9;stroke-width:0.06020793;stroke-opacity:1;stroke-dasharray:none"
+       d="M 0.74292903,0 0.37146452,0.64339542 H -0.37146452 L -0.74292904,0 -0.37146452,-0.64339541 h 0.74292904 z"
+       id="path893" />
+  </g>
+</svg>

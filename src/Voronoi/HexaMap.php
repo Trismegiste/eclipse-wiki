@@ -290,34 +290,38 @@ class HexaMap
 
     public function texturing(array $tileWeight, array $tileMinCount): void
     {
-        $sum = array_reduce($tileWeight, function ($carry, $item) {
-            return $carry + $item;
-        }, 0);
-        array_walk($tileWeight, function (&$item, $key, $divisor) {
-            $item /= $divisor;
-        }, $sum);
-
         $roomGroup = $this->getCoordPerRoom();
         unset($roomGroup[HexaCell::VOID_UID]);
         unset($roomGroup[HexaCell::SPACING_UID]);
-
         $tileCount = [];
-        foreach ($roomGroup as $uid => $coordList) {
-            do {
-                $picked = array_rand($tileWeight);
-                if (rand() / getrandmax() > $tileWeight[$picked]) {
-                    $picked = null;
-                }
-            } while (is_null($picked));
 
-            foreach ($coordList as $cellCoord) {
-                list($x, $y, $cell) = $cellCoord;  // get the cell
-                $cell->template = $picked;   // set the template name for this cell of this room
-                $tileCount[$picked] = key_exists($picked, $tileCount) ? $tileCount[$picked] + 1 : 1;
+        // probability texturing with weights
+        if (count($tileWeight) > 0) {
+            // translate weights into probabilities for each tile
+            $sum = array_reduce($tileWeight, function ($carry, $item) {
+                return $carry + $item;
+            }, 0);
+            array_walk($tileWeight, function (&$item, $key, $divisor) {
+                $item /= $divisor;
+            }, $sum);
+
+            foreach ($roomGroup as $uid => $coordList) {
+                do {
+                    $picked = array_rand($tileWeight);
+                    if (rand() / getrandmax() > $tileWeight[$picked]) {
+                        $picked = null;
+                    }
+                } while (is_null($picked));
+
+                foreach ($coordList as $cellCoord) {
+                    list($x, $y, $cell) = $cellCoord;  // get the cell
+                    $cell->template = $picked;   // set the template name for this cell of this room
+                    $tileCount[$picked] = key_exists($picked, $tileCount) ? $tileCount[$picked] + 1 : 1;
+                }
             }
         }
 
-        // Minimal count for each tile
+        // Texturing with the minimal count for each tile
         foreach ($tileMinCount as $tile => $minCount) {
             if (!key_exists($tile, $tileCount)) {
                 $tileCount[$tile] = 0;

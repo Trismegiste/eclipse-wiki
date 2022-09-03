@@ -129,4 +129,21 @@ class VoronoiCrud extends GenericCrud
         return $this->render('voronoi/attachplace.html.twig', ['vertex' => $config, 'form' => $form->createView()]);
     }
 
+    /**
+     * Edits tiles texturing of a map with direct view (loop)
+     * @Route("/voronoi/texture/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
+     */
+    public function texture(string $pk, Request $request): Response
+    {
+        $config = $this->repository->load($pk);
+        $form = $this->createForm(\App\Form\MapTextureType::class, $config, ['tileset' => 'habitat']);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            return $this->redirectToRoute('app_voronoicrud_texture', ['pk' => $pk]);
+        }
+
+        return $this->render('voronoi/edit.html.twig', ['form' => $form->createView()]);
+    }
+
 }

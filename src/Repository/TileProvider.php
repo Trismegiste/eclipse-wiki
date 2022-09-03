@@ -32,4 +32,14 @@ class TileProvider
         return new TileSetIterator($finder->getIterator());
     }
 
+    public function getClusterSet(string $title): TileSetIterator
+    {
+        $finder = new Finder();
+        $finder->in($this->tilePath . "/$title")
+                ->files()
+                ->name('cluster-*.svg');
+
+        return new TileSetIterator($finder->getIterator());
+    }
+
 }
