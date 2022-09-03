@@ -62,7 +62,7 @@ class MapBuilder
         }
 
         $map->wallProcessing();
-        $map->texturing(['room' => 200, 'yolo' => 1]);
+        $map->texturing($config->tileWeight, $config->tileMinCount);
 
         return $map;
     }

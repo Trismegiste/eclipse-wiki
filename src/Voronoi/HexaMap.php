@@ -191,9 +191,8 @@ class HexaMap
                             break;
 
                         default:
-                            $choices = array_values($choices);
-                            $picked = $choices[rand(0, $nbChoices - 1)];
-                            $update[$x][$y] = clone $picked;
+                            $picked = array_rand($choices);
+                            $update[$x][$y] = clone $choices[$picked];
                     }
                 } else {
                     $update[$x][$y] = $center;
@@ -289,35 +288,48 @@ class HexaMap
         $this->grid = $update;
     }
 
-    public function texturing(array $tileSet): void
+    public function texturing(array $tileWeight, array $tileMinCount): void
     {
+        $sum = array_reduce($tileWeight, function ($carry, $item) {
+            return $carry + $item;
+        }, 0);
+        array_walk($tileWeight, function (&$item, $key, $divisor) {
+            $item /= $divisor;
+        }, $sum);
+
         $roomGroup = $this->getCoordPerRoom();
         unset($roomGroup[HexaCell::VOID_UID]);
         unset($roomGroup[HexaCell::SPACING_UID]);
 
-        $roomUid = array_keys($roomGroup);
-        $roomCount = count($roomGroup);
-        // since we're gonna round up the rooms count for each tile, in average, there will be half the tiles count rooms in excess.
-        // Why rounding up ? Because I want each tile to be at least once even if the percentage is very low
-        // this means there is a gap between a something non-zero weight and a zero weight
-        // Therefore, we substract the rooms in excess
-        $fixedCount = $roomCount - count($tileSet) / 2;
+        $tileCount = [];
+        foreach ($roomGroup as $uid => $coordList) {
+            do {
+                $picked = array_rand($tileWeight);
+                if (rand() / getrandmax() > $tileWeight[$picked]) {
+                    $picked = null;
+                }
+            } while (is_null($picked));
 
-        $sum = 0;
-        foreach ($tileSet as $tile => $weight) {
-            $sum += $weight;
+            foreach ($coordList as $cellCoord) {
+                list($x, $y, $cell) = $cellCoord;  // get the cell
+                $cell->template = $picked;   // set the template name for this cell of this room
+                $tileCount[$picked] = key_exists($picked, $tileCount) ? $tileCount[$picked] + 1 : 1;
+            }
         }
 
-        foreach ($tileSet as $tile => $weight) { // for each tile in the tile set
-            $tileCount = (int) ceil($weight * $fixedCount / $sum); // we evaluate the fixed rooms count for this tile according to the weight of this tile
-            for ($k = 0; $k < $tileCount; $k++) {   // we set $tileCount rooms to this current tile
-                $idx = rand(0, count($roomUid) - 1);  // pick a room among the UID list
-                $roomCell = $roomGroup[$roomUid[$idx]];  // get the list of cell for this picked room
-                foreach ($roomCell as $cellCoord) {
+        // Minimal count for each tile
+        foreach ($tileMinCount as $tile => $minCount) {
+            if (!key_exists($tile, $tileCount)) {
+                $tileCount[$tile] = 0;
+            }
+            while ($tileCount[$tile] < $minCount) {
+                $uid = array_rand($roomGroup);
+                foreach ($roomGroup[$uid] as $cellCoord) {
                     list($x, $y, $cell) = $cellCoord;  // get the cell
                     $cell->template = $tile;   // set the template name for this cell of this room
                 }
-                array_splice($roomUid, $idx, 1);  // delete the UID of this room (no gap)
+                unset($roomGroup[$uid]);
+                $tileCount[$tile]++;
             }
         }
     }
