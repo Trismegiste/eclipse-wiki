@@ -148,4 +148,15 @@ class VoronoiCrud extends GenericCrud
         return $this->render('voronoi/edit.html.twig', ['form' => $form->createView()]);
     }
 
+    /**
+     * @Route("/voronoi/statistics/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
+     */
+    public function statistics(string $pk): Response
+    {
+        $config = $this->repository->load($pk);
+        $map = $this->builder->create($config, false);
+
+        return $this->render('voronoi/statistics.html.twig', ['vertex' => $config, 'stats' => $map->getStatistics()]);
+    }
+
 }

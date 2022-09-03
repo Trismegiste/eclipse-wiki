@@ -338,4 +338,20 @@ class HexaMap
         }
     }
 
+    public function getStatistics(): array
+    {
+        $roomGroup = $this->getCoordPerRoom();
+        $stats = [];
+        foreach ($roomGroup as $room) {
+            $cellCount = count($room);
+            list(,, $cell) = array_pop($room);
+            if (!key_exists($cell->template, $stats)) {
+                $stats[$cell->template] = 0;
+            }
+            $stats[$cell->template] += $cellCount;
+        }
+
+        return $stats;
+    }
+
 }
