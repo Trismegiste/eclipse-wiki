@@ -140,6 +140,8 @@ class VoronoiCrud extends GenericCrud
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->repository->save($form->getData());
+
             return $this->redirectToRoute('app_voronoicrud_texture', ['pk' => $pk]);
         }
 
