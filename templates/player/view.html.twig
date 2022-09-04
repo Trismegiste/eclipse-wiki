@@ -10,12 +10,12 @@
 {% block title %}PlayerCast{% endblock %}
 
 {% block body %}
-    <div class="pure-g" x-data="spa">
-        <div class="pure-u-1 waiting" x-show="!onAir">
+    <div x-data="spa">
+        <div class="waiting" x-show="!onAir">
             <i class="icon-spin3 animate-spin"></i>
         </div>        
-        <div class="pure-u-1 screencast" x-show="onAir">
-            <img src="#" class="pure-img" x-ref="tv"/>
+        <div class="screencast" x-show="onAir">
+            <img src="#" x-ref="tv"/>
         </div>
     </div>
 {% endblock %}
@@ -37,6 +37,10 @@
                         this.clicSound = new Howl({
                             src: ['{{ asset('sound/clic.webm')}}', '{{ asset('sound/clic.ogg') }}']
                         })
+                        let container = document.querySelector('img')
+                        container.height = document.documentElement.clientHeight
+                        container.width = document.documentElement.clientWidth
+                        console.log(document.documentElement.clientWidth, document.documentElement.clientHeight)
 
                         this.socket = new WebSocket(this.host)
                         this.socket.onopen = function (msg) {
@@ -70,6 +74,18 @@
             font-size: 15em;
             color: #bbb;
             text-align: center;
+        }
+
+        .screencast {
+            overflow: hidden;
+            display: flex;
+            background-color: #bbb;
+        }
+
+        img {
+            max-width: inherit;
+            max-height: inherit;
+            object-fit: contain;
         }
     </style>
 {% endblock %}
