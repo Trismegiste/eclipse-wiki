@@ -9,6 +9,7 @@ namespace App\Command;
 use App\Entity\MediaWikiPage;
 use App\Service\MediaWiki;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -36,9 +37,9 @@ class Dumper extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Dump pages to MongoDb')
-            ->addArgument('category', InputArgument::REQUIRED)
-            ->addOption('limit', null, InputOption::VALUE_REQUIRED, 'How many', 50);
+                ->setDescription('Dump pages to MongoDb')
+                ->addArgument('category', InputArgument::REQUIRED)
+                ->addOption('limit', null, InputOption::VALUE_REQUIRED, 'How many', 50);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -48,6 +49,9 @@ class Dumper extends Command
         $io->title("Dumping $category");
 
         $page = $this->mediaWiki->searchPageFromCategory($category, $input->getOption('limit'));
+        if (count($page) == 0) {
+            throw new RuntimeException("The category $category is empty, nothing to import");
+        }
         $io->success("Found " . \count($page) . ' pages');
 
         // delete old :
