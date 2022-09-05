@@ -103,9 +103,9 @@ class Picture extends AbstractController
      * Returns a pixelized thumbnail for the vector battlemap linked to the Place given by its pk
      * @Route("/battlemap/thumbnail/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function battlemapThumbnail(string $pk): Response
+    public function battlemapThumbnail(string $pk, \App\Repository\VertexRepository $repository): Response
     {
-        $place = $this->repository->findByPk($pk);
+        $place = $repository->findByPk($pk);
 
         $battlemapSvg = $this->storage->getFileInfo($place->battleMap);
         // folder for caching :

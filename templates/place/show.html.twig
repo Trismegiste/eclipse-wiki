@@ -34,7 +34,7 @@
             <div class="pure-g">
                 <div class="pure-u-1">
                     <a href="{{ path('app_placecrud_battlemap', {pk: vertex.pk}) }}" target="_blank">
-                        <div id="battlemap"></div>
+                        <img src="{{ path('app_picture_battlemapthumbnail', {pk: vertex.pk}) }}" class="pure-img"/>
                     </a>
                 </div>
                 <div class="pure-u-1 conditions">
@@ -63,27 +63,4 @@
             opacity: 0;
         }
     </style>
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    {% if vertex.battleMap is not empty %}
-        <script>
-            fetch('{{ path('get_picture', {title: vertex.battleMap}) }}', {
-                redirect: 'manual'
-            }).then(function (response) {
-                if (!response.ok) {
-                    return Promise.reject(response.statusText);
-                }
-                return response.text()
-            }).then(function (svg) {
-                let battlemap = document.getElementById('battlemap')
-                battlemap.innerHTML = svg
-                document.querySelector('#battlemap svg').attributes.removeNamedItem('height')
-                document.querySelector('#battlemap svg').attributes.removeNamedItem('width')
-            }).catch((error) => {
-                console.error(error);
-            })
-        </script>
-    {% endif %}
 {% endblock %}
