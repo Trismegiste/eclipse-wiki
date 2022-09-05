@@ -152,7 +152,10 @@ YOLO
         ]);
         $convert->mustRun();
 
-        return new BinaryFileResponse("$targetName.jpg");
+        $response = new BinaryFileResponse("$targetName.jpg");
+        $response->setLastModified(new \DateTime('@' . $battlemapSvg->getMTime()));
+
+        return $response;
     }
 
 }

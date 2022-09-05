@@ -343,12 +343,14 @@ class HexaMap
         $roomGroup = $this->getCoordPerRoom();
         $stats = [];
         foreach ($roomGroup as $room) {
-            $cellCount = count($room);
+            $size = count($room);
             list(,, $cell) = array_pop($room);
             if (!key_exists($cell->template, $stats)) {
-                $stats[$cell->template] = 0;
+                $stats[$cell->template] = ['rooms' => 0, 'hexagons' => 0];
             }
-            $stats[$cell->template] += $cellCount;
+            // summing
+            $stats[$cell->template]['rooms']++;
+            $stats[$cell->template]['hexagons'] += $size;
         }
 
         return $stats;

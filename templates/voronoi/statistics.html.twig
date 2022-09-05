@@ -2,11 +2,21 @@
 
 {% block content %}
     <table class="pure-table pure-table-striped">
-        {% for key, value in stats %}
+        <thead>
             <tr>
-                <th>{{ key }}</th>
-                <td>{{ value }}</td>
+                <th>Tuile</th>
+                <th>Pièces</th>
+                <th>Hexagones</th>
             </tr>
-        {% endfor %}
+        </thead>
+        <tbody>
+            {% for key, value in stats %}
+                <tr>
+                    <th>{{ key }}</th>
+                    <td>{{ value.rooms }}</td>
+                    <td>{{ value.hexagons }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
     </table>
 {% endblock %}
