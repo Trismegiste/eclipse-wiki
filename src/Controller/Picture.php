@@ -103,7 +103,7 @@ class Picture extends AbstractController
      * Returns a pixelized thumbnail for the vector battlemap linked to the Place given by its pk
      * @Route("/battlemap/thumbnail/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function battlemapThumbnail(string $pk, \App\Repository\VertexRepository $repository): Response
+    public function battlemapThumbnail(string $pk, \App\Repository\VertexRepository $repository, Request $request): Response
     {
         $place = $repository->findByPk($pk);
 
@@ -111,6 +111,15 @@ class Picture extends AbstractController
         // folder for caching :
         $cacheDir = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir);
         $targetName = join_paths($cacheDir, $battlemapSvg->getBasename('.svg'));
+
+        // managing HTTP Cache
+        if (file_exists("$targetName.jpg")) {
+            $response = new BinaryFileResponse("$targetName.jpg");
+            $response->setLastModified(new \DateTime('@' . $battlemapSvg->getMTime()));
+            if ($response->isNotModified($request)) {
+                return $response;
+            }
+        }
 
         $output = fopen("$targetName.html", 'w');
         $source = fopen($battlemapSvg->getPathname(), 'r');
