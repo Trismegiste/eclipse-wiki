@@ -1,11 +1,12 @@
 {% extends "voronoi/show.html.twig" %}
 
 {% block content %}
-    <ul>
+    <table class="pure-table pure-table-striped">
         {% for key, value in stats %}
-            <li>
-                {{ key }} = {{ value }}
-            </li>
+            <tr>
+                <th>{{ key }}</th>
+                <td>{{ value }}</td>
+            </tr>
         {% endfor %}
-    </ul>
+    </table>
 {% endblock %}
