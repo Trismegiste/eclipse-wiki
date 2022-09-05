@@ -117,10 +117,7 @@ services:
             $projectDir: '%kernel.project_dir%'
             $env: '%kernel.environment%'
             
-    App\Repository\MapRepository:
-        arguments:
-            $template: '%twig.default_path%/map/config'
-
+    # Secu
     App\Command\LoginLink:
         arguments:
             $loginLinkHandler: '@security.authenticator.login_link_handler.main'
