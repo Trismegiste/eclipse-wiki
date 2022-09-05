@@ -6,13 +6,19 @@
 
 namespace App\Controller;
 
+use App\Form\PictureUpload;
 use App\Service\PlayerCastCache;
 use App\Service\Storage;
+use App\Voronoi\MapBuilder;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
+use function join_paths;
 
 /**
  * Controller for pictures
@@ -20,7 +26,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class Picture extends AbstractController
 {
 
-    protected $storage;
+    protected Storage $storage;
 
     public function __construct(Storage $store)
     {
@@ -57,9 +63,9 @@ class Picture extends AbstractController
      * Pushes a picture (from the Storage) to player screen
      * @Route("/picture/push/{title}", methods={"POST"})
      */
-    public function push(string $title, Storage $storage, PlayerCastCache $cache): JsonResponse
+    public function push(string $title, PlayerCastCache $cache): JsonResponse
     {
-        $picture = $cache->slimPictureForPush($storage->getFileInfo($title));
+        $picture = $cache->slimPictureForPush($this->storage->getFileInfo($title));
 
         return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $picture->getPathname()]);
     }
@@ -68,29 +74,85 @@ class Picture extends AbstractController
      * Upload a new picture
      * @Route("/picture/upload", methods={"GET","POST"})
      */
-    public function upload(Request $request, Storage $storage): Response
+    public function upload(Request $request): Response
     {
-        $form = $this->createForm(\App\Form\PictureUpload::class);
+        $form = $this->createForm(PictureUpload::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             try {
-                $storage->storePicture($data['picture'], $data['filename']);
+                $this->storage->storePicture($data['picture'], $data['filename']);
                 $this->addFlash('success', "Upload {$data['filename']} OK");
 
                 return $this->redirectToRoute('app_picture_upload');
-            } catch (\RuntimeException $e) {
+            } catch (RuntimeException $e) {
                 $this->addFlash('error', $e->getMessage());
             }
         }
 
-        $listing = $storage->searchLastPicture();
+        $listing = $this->storage->searchLastPicture();
 
         return $this->render('picture/upload.html.twig', [
                     'form' => $form->createView(),
                     'last' => $listing
         ]);
+    }
+
+    /**
+     * Returns a pixelized thumbnail for the vector battlemap linked to the Place given by its pk
+     * @Route("/battlemap/thumbnail/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
+     */
+    public function battlemapThumbnail(string $pk): Response
+    {
+        $place = $this->repository->findByPk($pk);
+
+        $battlemapSvg = $this->storage->getFileInfo($place->battleMap);
+        // folder for caching :
+        $cacheDir = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir);
+        $targetName = join_paths($cacheDir, $battlemapSvg->getBasename('.svg'));
+
+        $output = fopen("$targetName.html", 'w');
+        $source = fopen($battlemapSvg->getPathname(), 'r');
+        $widthForMap = MapBuilder::defaultSizeForWeb;
+        fwrite(
+                $output,
+                <<<YOLO
+<html>
+<head>
+    <style>
+        #gm-fogofwar {
+            display: none;
+        }
+    </style>
+</head>
+<body style="width:$widthForMap">
+YOLO
+        );
+        while ($buf = fread($source, 10000)) {
+            fwrite($output, $buf);
+        }
+        fwrite($output, '</body></html>');
+        fclose($output);
+        fclose($source);
+
+        $matrixing = new Process([
+            'wkhtmltoimage',
+            "$targetName.html",
+            "$targetName.png"
+        ]);
+        $matrixing->mustRun();
+
+        $convert = new Process([
+            'convert',
+            "$targetName.png",
+            '-resize', 300,
+            '-quality', 60,
+            "$targetName.jpg"
+        ]);
+        $convert->mustRun();
+
+        return new BinaryFileResponse("$targetName.jpg");
     }
 
 }
