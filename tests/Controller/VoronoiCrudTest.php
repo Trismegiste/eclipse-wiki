@@ -140,6 +140,9 @@ class VoronoiCrudTest extends WebTestCase
     {
         $place = $this->repository->load($pk);
         $this->assertInstanceOf(Place::class, $place);
+        $this->assertNotNull($place->battleMap);
+
+        return $pk;
     }
 
     /** @depends testRunningOnTheFly */
@@ -158,6 +161,23 @@ class VoronoiCrudTest extends WebTestCase
         $response = json_decode($response);
         $this->assertEquals('success', $response->level);
         $this->assertStringContainsString('Broadcast', $response->message);
+    }
+
+    /** @depends testNewPlace */
+    public function testBattlemapThumbnail(string $pk)
+    {
+        $this->client->request('GET', "/battlemap/thumbnail/$pk");
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals('image/jpeg', $this->client->getResponse()->headers->get('Content-Type'));
+
+        return $pk;
+    }
+
+    /** @depends testBattlemapThumbnail */
+    public function testRunningBattlemap(string $pk)
+    {
+        $this->client->request('GET', "/place/battlemap/$pk");
+        $this->assertResponseIsSuccessful();
     }
 
 }
