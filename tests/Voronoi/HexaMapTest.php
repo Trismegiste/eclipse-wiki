@@ -137,4 +137,24 @@ class HexaMapTest extends TestCase
         $this->assertStringContainsString('text-anchor', $fragment);
     }
 
+    public function testStatistics()
+    {
+        $this->sut->setCell([5, 5], new HexaCell(111));
+        while ($this->sut->iterateNeighbourhood() > 0);
+
+        $stat = $this->sut->getStatistics();
+        $this->assertEquals(2, $stat['default']['rooms']);
+    }
+
+    public function testTexturingWithWeights()
+    {
+        $this->sut->setCell([5, 5], new HexaCell(111));
+        while ($this->sut->iterateNeighbourhood() > 0);
+
+        $this->sut->texturing(['tile' => 1], []);
+        $stat = $this->sut->getStatistics();
+        $this->assertArrayHasKey('tile', $stat);
+        $this->assertEquals(2, $stat['tile']['rooms']);
+    }
+
 }
