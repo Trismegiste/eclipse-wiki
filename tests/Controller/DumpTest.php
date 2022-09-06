@@ -43,4 +43,13 @@ class DumpTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    public function testDumpRanged(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/dump/rw');
+        $this->assertSelectorExists('table');
+
+        $this->assertResponseIsSuccessful();
+    }
+
 }

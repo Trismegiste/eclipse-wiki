@@ -11,14 +11,19 @@ use App\Entity\Place;
 use App\Entity\Vertex;
 use App\Form\GenerateMapForPlace;
 use App\Form\MapConfigType;
+use App\Form\MapTextureType;
 use App\Repository\VertexRepository;
+use App\Service\PlayerCastCache;
 use App\Service\Storage;
 use App\Voronoi\MapBuilder;
-use Exception;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
 use function join_paths;
 
@@ -49,7 +54,7 @@ class VoronoiCrud extends GenericCrud
             return new StreamedResponse(function () use ($map, $fog) {
                         $this->builder->dumpSvg($map, $fog);
                     }, Response::HTTP_OK, ['content-type' => 'image/svg+xml']);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             return new BinaryFileResponse($this->getParameter('twig.default_path') . '/voronoi/fail.svg', 200, [], false, null, false, false);
         }
     }
@@ -136,7 +141,7 @@ class VoronoiCrud extends GenericCrud
     public function texture(string $pk, Request $request): Response
     {
         $config = $this->repository->load($pk);
-        $form = $this->createForm(\App\Form\MapTextureType::class, $config, ['tileset' => 'habitat']);
+        $form = $this->createForm(MapTextureType::class, $config, ['tileset' => 'habitat']);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -157,6 +162,29 @@ class VoronoiCrud extends GenericCrud
         $map = $this->builder->create($config, false);
 
         return $this->render('voronoi/statistics.html.twig', ['vertex' => $config, 'stats' => $map->getStatistics()]);
+    }
+
+    /**
+     * AJAX Pushes the modified SVG to websocket server
+     * @Route("/voronoi/broadcast", methods={"POST"})
+     */
+    public function pushPlayerView(Request $request): JsonResponse
+    {
+        $playerDir = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir);
+        /** @var UploadedFile $svgContent */
+        $svgContent = $request->files->get('svg')->move($playerDir, 'tmp-map.svg');
+        // the moving was necessary because wkhtmltoimage fails to load a SVG file without extension
+        $target = join_paths($playerDir, 'tmp-map.png');
+        $process = new Process([
+            'wkhtmltoimage',
+            '--quality', 50,
+            '--crop-w', MapBuilder::defaultSizeForWeb,
+            $svgContent->getPathname(),
+            $target
+        ]);
+        $process->mustRun();
+
+        return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $target]);
     }
 
 }

@@ -61,7 +61,7 @@
             const formData = new FormData()
             formData.append('svg', new Blob([battlemap.svg()], {type: 'image/svg+xml'}))
 
-            fetch('{{ path('app_mapcrud_pushplayerview') }}', {
+            fetch('{{ path('app_voronoicrud_pushplayerview') }}', {
                 method: 'post',
                 body: formData,
                 redirect: 'manual'

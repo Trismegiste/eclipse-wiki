@@ -8,6 +8,7 @@ use App\Entity\Place;
 use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class VoronoiCrudTest extends WebTestCase
 {
@@ -66,6 +67,8 @@ class VoronoiCrudTest extends WebTestCase
         $this->client->submit($form);
         $this->assertResponseRedirects();
         $this->client->followRedirect();
+
+        return $pk;
     }
 
     /** @depends testCreate */
@@ -76,6 +79,22 @@ class VoronoiCrudTest extends WebTestCase
         $this->assertSelectorExists('article img');
 
         return $pk;
+    }
+
+    /** @depends testEdit */
+    public function testStatistics(string $pk)
+    {
+        $this->client->request('GET', "/voronoi/statistics/$pk");
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('table');
+    }
+
+    /** @depends testEdit */
+    public function testTextures(string $pk)
+    {
+        $this->client->request('GET', "/voronoi/texture/$pk");
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('form');
     }
 
     /** @depends testShow */
@@ -95,6 +114,8 @@ class VoronoiCrudTest extends WebTestCase
     {
         $this->client->request('GET', "/voronoi/running/$pk");
         $this->assertResponseIsSuccessful();
+
+        return $pk;
     }
 
     /** @depends testGenerateSvg */
@@ -119,6 +140,24 @@ class VoronoiCrudTest extends WebTestCase
     {
         $place = $this->repository->load($pk);
         $this->assertInstanceOf(Place::class, $place);
+    }
+
+    /** @depends testRunningOnTheFly */
+    public function testPushPlayerView(string $pk)
+    {
+        ob_start();
+        $this->client->request('GET', "/voronoi/generate/$pk");
+        $map = ob_get_clean();
+        $target = 'tmp.svg';
+        file_put_contents($target, $map);
+
+        $this->client->request('POST', "/voronoi/broadcast", [], ['svg' => new UploadedFile($target, $target)]);
+        $this->assertResponseIsSuccessful();
+        $response = $this->client->getResponse()->getContent();
+        $this->assertJson($response);
+        $response = json_decode($response);
+        $this->assertEquals('success', $response->level);
+        $this->assertStringContainsString('Broadcast', $response->message);
     }
 
 }
