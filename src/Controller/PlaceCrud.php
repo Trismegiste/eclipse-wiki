@@ -46,12 +46,12 @@ class PlaceCrud extends GenericCrud
      * Page for the battlemap
      * @Route("/place/battlemap/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function battlemap(string $pk): Response
+    public function battlemap(string $pk, \App\Service\Storage $storage): Response
     {
         $vertex = $this->repository->findByPk($pk);
-        $url = $this->generateUrl('get_picture', ['title' => $vertex->battleMap]);
+        $svg = file_get_contents($storage->getFileInfo($vertex->battleMap)->getPathname());
 
-        return $this->render('map/running.html.twig', ['title' => $vertex->getTitle(), 'img' => $url]);
+        return $this->render('map/running.html.twig', ['title' => $vertex->getTitle(), 'svg' => $svg]);
     }
 
     /**

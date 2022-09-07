@@ -4,7 +4,14 @@
 {% block title %}Running {{ title }}{% endblock %}
 
 {% block body %}
-    <div id="map"></div>
+    <div x-data="spa" class="pure-g">
+        <div class="pure-u-3-4">
+            <div id="map">{{ svg|raw }}</div>
+        </div>
+        <div class="pure-u-1-4">
+            <input type="checkbox" x-model="fogEnabled" x-on:change="toggleFog"/>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
@@ -12,64 +19,83 @@
     <script src="{{ asset('svgdotjs/svg.panzoom.min.js') }}"></script>
     <script src="{{ asset('svgdotjs/svg.draggable.min.js') }}"></script>
     <script>
-        var battlemap
-        var colorCycle = 0
-        const palette = ['Red', 'DarkOrange', 'Yellow', 'Magenta', 'DarkViolet', 'Lime', 'MediumSeaGreen', 'Aqua', 'DeepSkyBlue', 'RosyBrown']
 
-        fetch('{{ img|raw }}', {
-            redirect: 'manual'
-        }).then(function (response) {
-            if (!response.ok) {
-                return Promise.reject(response.statusText);
-            }
-            return response.text()
-        }).then(function (svg) {
-            document.getElementById('map').innerHTML = svg
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('spa', () => ({
+                    battlemap: null,
+                    fogEnabled: true,
 
-            // remove fog of war for one room on a double click event
-            document.querySelectorAll('#map g.fog-of-war').forEach(function (item) {
-                item.addEventListener('dblclick', function (e) {
-                    e.target.parentNode.remove() // since the <g> is only a group, <rect> inside the <g> are catching the event
-                })
-            })
+                    init() {
+                        let svgElem = document.querySelector('#map svg')
+                        this.battlemap = SVG(svgElem)
+                        this.battlemap.panZoom({zoomMin: 5, zoomMax: 100, zoomFactor: 0.2})
 
-            // Pan & zoom the SVG
-            let svgElem = document.querySelector('#map svg')
-            battlemap = SVG(svgElem)
-            battlemap.panZoom({zoomMin: 5, zoomMax: 100, zoomFactor: 0.2})
+                        // remove fog of war for one room on a double click event
+                        document.querySelectorAll('#map g.fog-of-war').forEach(function (item) {
+                            item.addEventListener('dblclick', function (e) {
+                                item.remove() // since the <g> is only a group, <rect> inside the <g> are catching the event
+                            })
+                        })
 
-            // make all NPC draggable
-            document.querySelectorAll('svg #token-layer circle').forEach(function (item) {
-                SVG(item).draggable()
-            })
+                        // keys
+                        var model = this
+                        Mousetrap.bind('p', function () {
+                            const formData = new FormData()
+                            formData.append('svg', new Blob([model.battlemap.svg()], {type: 'image/svg+xml'}))
 
-        }).catch((error) => {
-            console.error(error);
+                            fetch('{{ path('app_voronoicrud_pushplayerview') }}', {
+                                method: 'post',
+                                body: formData,
+                                redirect: 'manual'
+                            }).then(function (response) {
+                                return response.json()
+                            }).then(function (json) {
+                                console.log(json.message)
+                            })
+                        })
+                    },
+
+                    toggleFog() {
+                        let fogLayer = document.querySelector('#map #gm-fogofwar')
+                        fogLayer.style = 'opacity:' + (this.fogEnabled ? '1' : '0.3');
+                    }
+                }))
         })
 
-        Mousetrap.bind('t', function () {
-            let bbox = battlemap.viewbox()
-            battlemap.circle(0.6)
-                    .fill(palette[colorCycle % palette.length])
-                    .move(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2)
-                    .draggable()
-            colorCycle++
-            return false
-        })
 
-        Mousetrap.bind('p', function () {
-            const formData = new FormData()
-            formData.append('svg', new Blob([battlemap.svg()], {type: 'image/svg+xml'}))
+        {#
+            var battlemap
+            var colorCycle = 0
+            const palette = ['Red', 'DarkOrange', 'Yellow', 'Magenta', 'DarkViolet', 'Lime', 'MediumSeaGreen', 'Aqua', 'DeepSkyBlue', 'RosyBrown']
 
-            fetch('{{ path('app_voronoicrud_pushplayerview') }}', {
-                method: 'post',
-                body: formData,
+            fetch('{{ img|raw }}', {
                 redirect: 'manual'
             }).then(function (response) {
-                return response.json()
-            }).then(function (json) {
-                console.log(json.message)
+                if (!response.ok) {
+                    return Promise.reject(response.statusText);
+                }
+                return response.text()
+            }).then(function (svg) {
+
+                // make all NPC draggable
+                document.querySelectorAll('svg #token-layer circle').forEach(function (item) {
+                    SVG(item).draggable()
+                })
+
+            }).catch((error) => {
+                console.error(error);
             })
-        })
+
+            Mousetrap.bind('t', function () {
+                let bbox = battlemap.viewbox()
+                battlemap.circle(0.6)
+                        .fill(palette[colorCycle % palette.length])
+                        .move(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2)
+                        .draggable()
+                colorCycle++
+                return false
+            })
+
+            #}
     </script>
 {% endblock %}
