@@ -10,6 +10,7 @@
         </div>
         <div class="pure-u-1-4">
             <input type="checkbox" x-model="fogEnabled" x-on:change="toggleFog"/>
+            <input type="text" x-model="legendFilter" x-on:blur="searchLegend"/>
         </div>
     </div>
 {% endblock %}
@@ -24,6 +25,7 @@
             Alpine.data('spa', () => ({
                     battlemap: null,
                     fogEnabled: true,
+                    legendFilter: null,
 
                     init() {
                         let svgElem = document.querySelector('#map svg')
@@ -33,7 +35,7 @@
                         // remove fog of war for one room on a double click event
                         document.querySelectorAll('#map g.fog-of-war').forEach(function (item) {
                             item.addEventListener('dblclick', function (e) {
-                                item.remove() // since the <g> is only a group, <rect> inside the <g> are catching the event
+                                item.remove()
                             })
                         })
 
@@ -57,7 +59,23 @@
 
                     toggleFog() {
                         let fogLayer = document.querySelector('#map #gm-fogofwar')
-                        fogLayer.style = 'opacity:' + (this.fogEnabled ? '1' : '0.3');
+                        fogLayer.setAttribute('class', this.fogEnabled ? '' : 'disabled-fog')
+                    },
+
+                    searchLegend() {
+                        let xpath = '//svg:svg/svg:g[@id="legend"]/svg:text[contains(text(),"' + this.legendFilter + '")]'
+                        let legend = document.evaluate(xpath, document, function (prefix) {
+                            const ns = {
+                                'xhtml': 'http://www.w3.org/1999/xhtml',
+                                'svg': 'http://www.w3.org/2000/svg'
+                            }
+                            return ns[prefix] || null
+                        }, XPathResult.ANY_UNORDERED_NODE_TYPE)
+                                .singleNodeValue
+
+                        if (legend) {
+                            console.log(legend.getAttribute('x'), legend.getAttribute('y'))
+                        }
                     }
                 }))
         })
@@ -98,4 +116,13 @@
 
             #}
     </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .disabled-fog {
+            opacity: 0.33;
+        }
+    </style>
 {% endblock %}
