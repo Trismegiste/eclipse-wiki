@@ -9,10 +9,27 @@
             <div id="map">{{ svg|raw }}</div>
         </div>
         <div class="pure-u-1-4">
-            <input type="checkbox" x-model="fogEnabled" x-on:change="toggleFog"/>
-            <input type="text" x-model="legendFilter" x-on:blur="searchLegend"/>
+            <form class="pure-form">
+                <fieldset>
+                    <div class="pure-g ">
+                        <div class="pure-u-1-2">
+                            <label>{% trans %}FOG_OF_WAR{% endtrans %}</label>
+                        </div>
+                        <div class="pure-u-1-2">
+                            <input type="checkbox" x-model="fogEnabled" x-on:change="toggleFog"/>
+                        </div>
+                        <div class="pure-u-1-2">
+                            <label>{% trans %}SEARCH_LEGEND{% endtrans %}</label>
+                        </div>
+                        <div class="pure-u-1-2">
+                            <input type="text" x-model="legendFilter" x-on:blur="searchLegend" class="pure-input-1-2"/>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
         </div>
     </div>
+</div>
 {% endblock %}
 
 {% block javascripts %}
@@ -128,6 +145,13 @@
     <style>
         .disabled-fog {
             opacity: 0.33;
+        }
+        form .pure-u-1-2 > label {
+            margin: .5em 0 .2em;
+            text-align: right;
+            padding-right: 1em;
+            padding-left: 0.1em;
+            display: block;
         }
     </style>
 {% endblock %}

@@ -98,3 +98,5 @@ WITH_BATTLEMAP: Avec battlemap
 WITHOUT_BATTLEMAP: Sans battlemap
 Attach: Attacher
 STRAT_STARSHIP: Vaisseau
+FOG_OF_WAR: Brouillard de guerre
+SEARCH_LEGEND: Rechercher légende
