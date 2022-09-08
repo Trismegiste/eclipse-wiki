@@ -49,7 +49,7 @@ class VoronoiCrud extends GenericCrud
         $config = $this->repository->load($pk);
 
         try {
-            $map = $this->builder->create($config, $fog);
+            $map = $this->builder->create($config);
 
             return new StreamedResponse(function () use ($map, $fog) {
                         $this->builder->dumpSvg($map, $fog);
@@ -91,12 +91,15 @@ class VoronoiCrud extends GenericCrud
      * Show map to run it on the fly
      * @Route("/voronoi/running/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function running(string $pk, Request $request): Response
+    public function running(string $pk): Response
     {
         $config = $this->repository->load($pk);
-        $url = $this->generateUrl('app_voronoicrud_generate', ['pk' => $pk]);
+        $map = $this->builder->create($config);
+        ob_start();
+        $this->builder->dumpSvg($map);
+        $svg = ob_get_clean();
 
-        return $this->render('map/running.html.twig', ['title' => 'on the fly ' . $config->getTitle(), 'img' => $url]);
+        return $this->render('map/running.html.twig', ['title' => 'On the fly ' . $config->getTitle(), 'svg' => $svg]);
     }
 
     /**
