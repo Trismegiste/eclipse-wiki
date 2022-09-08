@@ -74,7 +74,12 @@
                                 .singleNodeValue
 
                         if (legend) {
-                            console.log(legend.getAttribute('x'), legend.getAttribute('y'))
+                            let cx = legend.getAttribute('x')
+                            let cy = legend.getAttribute('y')
+                            this.battlemap
+                                    .zoom(1) // uses center of viewport by default
+                                    .animate()
+                                    .zoom(75, {x: cx, y: cy})
                         }
                     }
                 }))
