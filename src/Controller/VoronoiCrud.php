@@ -115,7 +115,7 @@ class VoronoiCrud extends GenericCrud
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            // getting place
+            // getting the chosen Place (or creating a new Place)
             $place = $form['place']->getData();
             $newPlace = empty($place);
             if ($newPlace) {
