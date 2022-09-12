@@ -122,13 +122,13 @@ class VoronoiCrud extends AbstractController
      */
     public function running(string $pk): Response
     {
-        $config = $this->repository->load($pk);
-        $map = $this->builder->create($config);
+        $place = $this->repository->load($pk);
+        $map = $this->builder->create($place->voronoiParam);
         ob_start();
         $this->builder->dumpSvg($map);
         $svg = ob_get_clean();
 
-        return $this->render('map/running.html.twig', ['title' => 'On the fly ' . $config->getTitle(), 'svg' => $svg]);
+        return $this->render('map/running.html.twig', ['title' => 'On the fly ' . $place->getTitle(), 'svg' => $svg]);
     }
 
     /**
@@ -136,10 +136,11 @@ class VoronoiCrud extends AbstractController
      */
     public function statistics(string $pk): Response
     {
-        $config = $this->repository->load($pk);
+        $place = $this->repository->load($pk);
+        $config = $place->voronoiParam;
         $map = $this->builder->create($config, false);
 
-        return $this->render('voronoi/statistics.html.twig', ['vertex' => $config, 'stats' => $map->getStatistics()]);
+        return $this->render('voronoi/statistics.html.twig', ['vertex' => $place, 'stats' => $map->getStatistics()]);
     }
 
     /**
