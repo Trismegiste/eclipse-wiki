@@ -42,6 +42,8 @@
 .icon-movie-roll:before { content: '\e834'; } /* '' */
 .icon-newchild:before { content: '\e836'; } /* '' */
 .icon-rgbcolor:before { content: '\e837'; } /* '' */
+.icon-hexamap:before { content: '\e83b'; } /* '' */
+.icon-runmap:before { content: '\e83c'; } /* '' */
 .icon-duplicate:before { content: '\f0c5'; } /* '' */
 .icon-menu:before { content: '\f0c9'; } /* '' */
 .icon-screen:before { content: '\f108'; } /* '' */
