@@ -6,7 +6,7 @@
 {% block header_title %}
     {# the header menu with title #}
     <nav style="float: right">
-        {{ include('voronoi/actions.html.twig', {vertex:form.vars.data}) }}
+        {{ include('place/actions.html.twig', {vertex:form.vars.data}) }}
     </nav>   
     {% block header_big_title %}{{ form.vars.data.title }}{% endblock %}
 {% endblock %}
@@ -21,7 +21,7 @@
             {{ form(form) }}
         </div>
         <div class="pure-u-1-2">
-            <img src="{{ path('app_placecrud_voronoigenerate', {pk: form.vars.data.pk, fog: 0}) }}" class="pure-img"/>
+            <img src="{{ path('app_voronoicrud_generate', {pk: form.vars.data.pk, fog: 0}) }}" class="pure-img"/>
         </div>
     </div>
 {% endblock %}

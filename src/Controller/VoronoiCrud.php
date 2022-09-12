@@ -6,17 +6,14 @@
 
 namespace App\Controller;
 
-use App\Entity\MapConfig;
-use App\Entity\Place;
-use App\Entity\Vertex;
-use App\Form\GenerateMapForPlace;
 use App\Form\MapConfigType;
 use App\Form\MapTextureType;
 use App\Repository\VertexRepository;
 use App\Service\PlayerCastCache;
-use App\Service\Storage;
 use App\Voronoi\MapBuilder;
 use RuntimeException;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -30,15 +27,51 @@ use function join_paths;
 /**
  * CRUD controler for Hexagonal map
  */
-class VoronoiCrud extends GenericCrud
+class VoronoiCrud extends AbstractController
 {
 
     protected MapBuilder $builder;
+    protected VertexRepository $repository;
 
     public function __construct(VertexRepository $repo, MapBuilder $builder)
     {
-        parent::__construct($repo);
         $this->builder = $builder;
+        $this->repository = $repo;
+    }
+
+    /**
+     * Show the generated Voronoi map
+     * @Route("/voronoi/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
+     */
+    public function show(string $pk): Response
+    {
+        $place = $this->repository->findByPk($pk);
+
+        return $this->render('voronoi/show.html.twig', ['vertex' => $place]);
+    }
+
+    /**
+     * Creates or Edits a voronoi Map in the current Place
+     * @Route("/voronoi/edit/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
+     */
+    public function edit(string $pk, Request $request): Response
+    {
+        $place = $this->repository->findByPk($pk);
+        $form = $this->createFormBuilder($place)
+                ->add('voronoiParam', MapConfigType::class)
+                ->add('generate', SubmitType::class)
+                ->setMethod('PUT')
+                ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $vertex = $form->getData();
+            $this->repository->save($vertex);
+
+            return $this->redirectToRoute('app_voronoicrud_edit', ['pk' => $place->getPk()]);
+        }
+
+        return $this->render('voronoi/edit.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -46,7 +79,8 @@ class VoronoiCrud extends GenericCrud
      */
     public function generate(string $pk, bool $fog = true): Response
     {
-        $config = $this->repository->load($pk);
+        $place = $this->repository->load($pk);
+        $config = $place->voronoiParam;
 
         try {
             $map = $this->builder->create($config);
@@ -60,31 +94,26 @@ class VoronoiCrud extends GenericCrud
     }
 
     /**
-     * Creates a battlemap config
-     * @Route("/voronoi/create", methods={"GET","POST"})
+     * Edits tiles texturing of a map with direct view (loop)
+     * @Route("/voronoi/texture/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function create(Request $request): Response
+    public function texture(string $pk, Request $request): Response
     {
-        return $this->handleCreate(MapConfigType::class, 'voronoi/create.html.twig', $request);
-    }
+        $place = $this->repository->load($pk);
+        $form = $this->createFormBuilder($place)
+                ->add('voronoiParam', MapTextureType::class, ['tileset' => 'habitat'])
+                ->add('texture', SubmitType::class)
+                ->setMethod('PUT')
+                ->getForm();
 
-    /**
-     * Edits a battlemap config with direct view (loop)
-     * @Route("/voronoi/edit/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
-     */
-    public function edit(string $pk, Request $request): Response
-    {
-        $resp = $this->handleEdit(MapConfigType::class, 'voronoi/edit.html.twig', $pk, $request);
-        if ($resp->isRedirection()) {
-            return $this->redirectToRoute('app_voronoicrud_edit', ['pk' => $pk]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->repository->save($form->getData());
+
+            return $this->redirectToRoute('app_voronoicrud_texture', ['pk' => $pk]);
         }
 
-        return $resp;
-    }
-
-    protected function createEntity(string $title): Vertex
-    {
-        return new MapConfig($title);
+        return $this->render('voronoi/edit.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -100,60 +129,6 @@ class VoronoiCrud extends GenericCrud
         $svg = ob_get_clean();
 
         return $this->render('map/running.html.twig', ['title' => 'On the fly ' . $config->getTitle(), 'svg' => $svg]);
-    }
-
-    /**
-     * Attach the generated map to a Place entity
-     * @Route("/voronoi/attachplace/{pk}", methods={"GET","PATCH"}, requirements={"pk"="[\da-f]{24}"})
-     */
-    public function attachPlace(string $pk, Request $request, Storage $storage): Response
-    {
-        /** @var MapConfig $config */
-        $config = $this->repository->load($pk);
-
-        $form = $this->createForm(GenerateMapForPlace::class, null, ['map_config' => $config]);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            // getting the chosen Place (or creating a new Place)
-            $place = $form['place']->getData();
-            $newPlace = empty($place);
-            if ($newPlace) {
-                $place = new Place($form['default_newname']->getData());
-                $this->repository->save($place);
-            }
-
-            // attach generated map to the place
-            $filename = 'map-' . $place->getPk() . '.svg';
-            $this->builder->save($form->getData(), join_paths($storage->getRootDir(), $filename));
-            $place->battleMap = $filename;
-            $this->repository->save($place);
-
-            $this->addFlash('success', 'Plan sauvegardé dans ' . $place->getTitle());
-
-            return $this->redirectToRoute($newPlace ? 'app_vertexcrud_rename' : 'app_vertexcrud_show', ['pk' => $place->getPk()]);
-        }
-
-        return $this->render('voronoi/attachplace.html.twig', ['vertex' => $config, 'form' => $form->createView()]);
-    }
-
-    /**
-     * Edits tiles texturing of a map with direct view (loop)
-     * @Route("/voronoi/texture/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
-     */
-    public function texture(string $pk, Request $request): Response
-    {
-        $config = $this->repository->load($pk);
-        $form = $this->createForm(MapTextureType::class, $config, ['tileset' => 'habitat']);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->repository->save($form->getData());
-
-            return $this->redirectToRoute('app_voronoicrud_texture', ['pk' => $pk]);
-        }
-
-        return $this->render('voronoi/edit.html.twig', ['form' => $form->createView()]);
     }
 
     /**

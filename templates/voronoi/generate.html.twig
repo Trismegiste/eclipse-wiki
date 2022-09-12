@@ -1,8 +1,0 @@
-{% extends "base.html.twig" %}
-
-{% block title %}Generate{% endblock %}
-{% block header_title %}{{ block('title') }}{% endblock %}
-
-{% block content %}
-    {{ map.saveXML()|raw }}
-{% endblock %}
