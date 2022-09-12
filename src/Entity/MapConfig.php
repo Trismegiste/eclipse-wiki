@@ -7,12 +7,16 @@
 namespace App\Entity;
 
 use App\Entity\Shape;
+use MongoDB\BSON\Persistable;
+use Trismegiste\Strangelove\MongoDb\PersistableImpl;
 
 /**
- * Config entity for HexaMap
+ * Config for HexaMap
  */
-class MapConfig extends Vertex
+class MapConfig implements Persistable
 {
+
+    use PersistableImpl;
 
     public int $seed;
     public int $side;

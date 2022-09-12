@@ -19,5 +19,6 @@ class Place extends Vertex
     public $youtubeUrl = null;
     public $npcTemplate = null; // need something more complex, a list and Place children will reuse this list
     public $battleMap = null;
+    public ?MapConfig $voronoiParam = null;
 
 }

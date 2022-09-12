@@ -42,8 +42,6 @@ class MapTextureType extends AbstractType implements DataMapperInterface
             preg_match("#^cluster-([a-z]+)$#", $tile->getKey(), $match);
             $builder->add($tile->getKey(), IntegerType::class, ['required' => false, 'label' => ucfirst($match[1])]);
         }
-        $builder->add('texture', SubmitType::class);
-        $builder->setMethod('PUT');
         $builder->setDataMapper($this);
     }
 

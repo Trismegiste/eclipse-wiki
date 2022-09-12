@@ -10,18 +10,16 @@ use App\Entity\MapConfig;
 use App\Entity\Shape\Border;
 use App\Entity\Shape\Dome;
 use App\Entity\Shape\NullShape;
+use App\Entity\Shape\Starship;
 use App\Entity\Shape\Strategy;
 use App\Entity\Shape\Torus;
 use App\Form\FormTypeUtils;
 use App\Form\Type\RandomIntegerType;
-use App\Form\VertexType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -60,7 +58,7 @@ class MapConfigType extends AbstractType
                         new Border(),
                         new Dome(),
                         new Torus(),
-                        new \App\Entity\Shape\Starship(),
+                        new Starship(),
                     ],
                     'choice_label' => 'name',
                     'choice_value' => function (?Strategy $strat): string {
@@ -72,17 +70,12 @@ class MapConfigType extends AbstractType
                 ->add('verticalLines', IntegerType::class, ['required' => false, 'empty_data' => 0])
                 ->add('doubleVertical', CheckboxType::class, ['required' => false])
         ;
-
-        $builder->get('content')->setRequired(false);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => MapConfig::class,
-            'empty_data' => function (FormInterface $form) {
-                return new MapConfig($form->get('title')->getData());
-            },
             'constraints' => [new Callback(function (MapConfig $cfg, ExecutionContextInterface $ctx) {
                             if ($cfg->erosion) {
                                 if (empty($cfg->erodingMinRoomSize)) {
@@ -99,19 +92,6 @@ class MapConfigType extends AbstractType
                             }
                         })]
         ]);
-    }
-
-    public function getParent(): ?string
-    {
-        return VertexType::class;
-    }
-
-    public function finishView(FormView $view, FormInterface $form, array $options)
-    {
-        $this->changeAttribute($view, 'content', 'rows', 1);
-        $this->changeLabel($view, 'content', 'Informations');
-        $this->moveChildAtEnd($view, 'content');
-        $this->moveChildAtEnd($view, 'create');
     }
 
 }
