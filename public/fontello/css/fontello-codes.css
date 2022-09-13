@@ -29,6 +29,7 @@
 .icon-search:before { content: '\e819'; } /* '' */
 .icon-help-circled:before { content: '\e81a'; } /* '' */
 .icon-picture:before { content: '\e81b'; } /* '' */
+.icon-download:before { content: '\e81c'; } /* '' */
 .icon-dead:before { content: '\e820'; } /* '' */
 .icon-token:before { content: '\e821'; } /* '' */
 .icon-stopwatch:before { content: '\e822'; } /* '' */
@@ -36,7 +37,6 @@
 .icon-extra:before { content: '\e829'; } /* '' */
 .icon-namebook:before { content: '\e82a'; } /* '' */
 .icon-select-list:before { content: '\e82c'; } /* '' */
-.icon-battlemap:before { content: '\e82e'; } /* '' */
 .icon-spin3:before { content: '\e832'; } /* '' */
 .icon-simulspace:before { content: '\e833'; } /* '' */
 .icon-movie-roll:before { content: '\e834'; } /* '' */

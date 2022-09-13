@@ -47,9 +47,9 @@ class PlaceCrud extends GenericCrud
 
     /**
      * Page for the battlemap
-     * @Route("/place/battlemap/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
+     * @Route("/place/runmap/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function battlemap(string $pk, Storage $storage): Response
+    public function runMap(string $pk, Storage $storage): Response
     {
         $vertex = $this->repository->findByPk($pk);
         $svg = file_get_contents($storage->getFileInfo($vertex->battleMap)->getPathname());

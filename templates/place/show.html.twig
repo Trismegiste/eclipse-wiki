@@ -30,17 +30,18 @@
         <aside class="pure-u-1-4">
             <div class="conditions"><i class="icon-gravity"></i>{{ vertex.gravity }}</div>
             <div class="conditions"><i class="icon-pressure"></i>{{ vertex.pressure }}</div>
-            <div class="conditions"><i class="icon-temperature"></i>{{ vertex.temperature }}</div>
-            <div class="pure-g">
-                <div class="pure-u-1">
-                    <a href="{{ path('app_placecrud_battlemap', {pk: vertex.pk}) }}" target="_blank">
-                        <img src="{{ path('app_picture_battlemapthumbnail', {pk: vertex.pk}) }}" class="pure-img"/>
-                    </a>
-                </div>
-                <div class="pure-u-1 conditions">
-                    <a href="{{ path('app_voronoicrud_edit', {pk: vertex.pk}) }}" class="pure-button">Générer une map</a>
-                </div>
+            <div class="conditions">
+                <i class="icon-temperature"></i>{{ vertex.temperature }}
             </div>
+            {% if vertex.battleMap is not empty %}
+                <div class="pure-g">
+                    <div class="pure-u-1">
+                        <a href="{{ path('app_placecrud_runmap', {pk: vertex.pk}) }}" target="_blank">
+                            <img src="{{ path('app_picture_battlemapthumbnail', {pk: vertex.pk}) }}" class="pure-img"/>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
         </aside>
     </div>
 {% endblock %}

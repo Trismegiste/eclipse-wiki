@@ -41,9 +41,9 @@ class VoronoiCrud extends AbstractController
 
     /**
      * Show the generated Voronoi map
-     * @Route("/voronoi/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
+     * @Route("/voronoi/storage/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function show(string $pk): Response
+    public function storage(string $pk): Response
     {
         $place = $this->repository->findByPk($pk);
 

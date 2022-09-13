@@ -21,9 +21,7 @@
             {{ form(form) }}
         </div>
         <div class="pure-u-1-2">
-            <a href="{{ path('app_voronoicrud_show', {pk: form.vars.data.pk}) }}">
-                <img src="{{ path('app_voronoicrud_generate', {pk: form.vars.data.pk, fog: 0}) }}" class="pure-img"/>
-            </a>
+            <img src="{{ path('app_voronoicrud_generate', {pk: form.vars.data.pk, fog: 0}) }}" class="pure-img"/>
         </div>
     </div>
 {% endblock %}
