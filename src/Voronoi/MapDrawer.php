@@ -12,9 +12,9 @@ namespace App\Voronoi;
 class MapDrawer
 {
 
-    protected HexaMap $map;
+    protected SquareGrid $map;
 
-    public function __construct(HexaMap $map)
+    public function __construct(SquareGrid $map)
     {
         $this->map = $map;
     }

@@ -11,7 +11,7 @@ use App\Voronoi\HexaCell;
 /**
  * A Map tiled with hexagons
  */
-class HexaMap
+class HexaMap implements SquareGrid
 {
 
     protected int $gridSize;
