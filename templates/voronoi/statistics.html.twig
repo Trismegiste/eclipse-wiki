@@ -1,4 +1,13 @@
-{% extends "voronoi/show.html.twig" %}
+{% extends "base.html.twig" %}
+
+{% block title %}{{ vertex.title }}{% endblock %}
+
+{% block header_title %}
+    <nav style="float: right">
+        {{ include('place/actions.html.twig') }}
+    </nav>   
+    {{ block('title') }}
+{% endblock %}
 
 {% block content %}
     <table class="pure-table pure-table-striped">

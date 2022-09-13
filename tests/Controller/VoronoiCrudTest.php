@@ -76,9 +76,12 @@ class VoronoiCrudTest extends WebTestCase
     /** @depends testCreate */
     public function testStorage(string $pk)
     {
-        $this->client->request('GET', "/voronoi/storage/$pk");
+        $crawler = $this->client->request('GET', "/voronoi/storage/$pk");
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('article img');
+        $form = $crawler->selectButton('generate_map_for_place_store_battlemap')->form();
+        $this->client->submit($form);
+        $this->assertResponseRedirects();
 
         return $pk;
     }
@@ -138,7 +141,7 @@ class VoronoiCrudTest extends WebTestCase
         $this->assertStringContainsString('Broadcast', $response->message);
     }
 
-    /** @depends testEdit */
+    /** @depends testStorage */
     public function testBattlemapThumbnail(string $pk)
     {
         $this->client->request('GET', "/battlemap/thumbnail/$pk");
