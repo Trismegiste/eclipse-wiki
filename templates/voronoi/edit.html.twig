@@ -21,7 +21,9 @@
             {{ form(form) }}
         </div>
         <div class="pure-u-1-2">
-            <img src="{{ path('app_voronoicrud_generate', {pk: form.vars.data.pk, fog: 0}) }}" class="pure-img"/>
+            {% if form.vars.data.voronoiParam is not empty %}
+                <img src="{{ path('app_voronoicrud_generate', {pk: form.vars.data.pk, fog: 0}) }}" class="pure-img"/>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

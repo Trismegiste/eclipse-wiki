@@ -6,6 +6,7 @@
 
 namespace App\Controller;
 
+use App\Form\GenerateMapForPlace;
 use App\Form\MapConfigType;
 use App\Form\MapTextureType;
 use App\Repository\VertexRepository;
@@ -41,13 +42,23 @@ class VoronoiCrud extends AbstractController
 
     /**
      * Show the generated Voronoi map
-     * @Route("/voronoi/storage/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
+     * @Route("/voronoi/storage/{pk}", methods={"GET","PATCH"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function storage(string $pk): Response
+    public function storage(string $pk, Request $request): Response
     {
         $place = $this->repository->findByPk($pk);
+        $form = $this->createForm(GenerateMapForPlace::class, $place);
 
-        return $this->render('voronoi/show.html.twig', ['vertex' => $place]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $vertex = $form->getData();
+            $this->repository->save($vertex);
+            $this->addFlash('success', 'Battlemap générée et stockée');
+
+            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
+        }
+
+        return $this->render('voronoi/storage.html.twig', ['form' => $form->createView()]);
     }
 
     /**
