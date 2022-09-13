@@ -32,7 +32,7 @@ class MapConfigTypeTest extends KernelTestCase
     public function getIncompleteData(): array
     {
         return [
-            [['title' => 'yolo']]
+            [['side' => 25]]
         ];
     }
 
@@ -40,7 +40,6 @@ class MapConfigTypeTest extends KernelTestCase
     {
         return [[
         [
-            'title' => 'yolo',
             'side' => 25,
             'seed' => 123,
             'horizontalLines' => 0,
@@ -56,7 +55,7 @@ class MapConfigTypeTest extends KernelTestCase
         $this->sut->submit($inputData);
         $this->assertTrue($this->sut->isSynchronized());
         $checkError = $this->sut->getErrors(true, true);
-        $this->assertCount(5, $checkError, (string) $checkError);
+        $this->assertCount(4, $checkError, (string) $checkError);
     }
 
     /** @dataProvider getMinimalData */
@@ -70,7 +69,7 @@ class MapConfigTypeTest extends KernelTestCase
 
         $model = $this->sut->getData();
         $this->assertInstanceOf(MapConfig::class, $model);
-        $this->assertEquals('yolo', $model->getTitle());
+        $this->assertEquals(25, $model->side);
     }
 
 }

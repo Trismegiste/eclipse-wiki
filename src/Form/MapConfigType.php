@@ -13,7 +13,6 @@ use App\Entity\Shape\NullShape;
 use App\Entity\Shape\Starship;
 use App\Entity\Shape\Strategy;
 use App\Entity\Shape\Torus;
-use App\Form\FormTypeUtils;
 use App\Form\Type\RandomIntegerType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -31,8 +30,6 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  */
 class MapConfigType extends AbstractType
 {
-
-    use FormTypeUtils;
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

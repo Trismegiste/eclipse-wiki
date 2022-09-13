@@ -30,12 +30,14 @@ class VoronoiCrudTest extends WebTestCase
 
     public function testCreate()
     {
-        $crawler = $this->client->request('GET', '/voronoi/create');
+        $place = new Place('Empty');
+        $this->repository->save($place);
+
+        $crawler = $this->client->request('GET', '/voronoi/edit/' . $place->getPk());
         $this->assertResponseIsSuccessful();
 
-        $form = $crawler->selectButton('map_config_create')->form();
-        $form->setValues(['map_config' => [
-                'title' => 'Test',
+        $form = $crawler->selectButton('form_generate')->form();
+        $form->setValues(['form[voronoiParam]' => [
                 'side' => 20,
                 'seed' => 666,
                 'avgTilePerRoom' => 12,
@@ -56,9 +58,9 @@ class VoronoiCrudTest extends WebTestCase
         $crawler = $this->client->request('GET', "/voronoi/edit/$pk");
         $this->assertResponseIsSuccessful();
 
-        $form = $crawler->selectButton('map_config_create')->form();
-        $form->setValues(['map_config' => [
-                'side' => 20,
+        $form = $crawler->selectButton('form_generate')->form();
+        $form->setValues(['form[voronoiParam]' => [
+                'side' => 25,
                 'seed' => 666,
                 'avgTilePerRoom' => 12,
                 'horizontalLines' => 0,
@@ -72,9 +74,9 @@ class VoronoiCrudTest extends WebTestCase
     }
 
     /** @depends testCreate */
-    public function testShow(string $pk)
+    public function testStorage(string $pk)
     {
-        $this->client->request('GET', "/vertex/show/$pk");
+        $this->client->request('GET', "/voronoi/storage/$pk");
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('article img');
 
@@ -97,7 +99,7 @@ class VoronoiCrudTest extends WebTestCase
         $this->assertSelectorExists('form');
     }
 
-    /** @depends testShow */
+    /** @depends testEdit */
     public function testGenerateSvg(string $pk)
     {
         ob_start();
@@ -112,35 +114,8 @@ class VoronoiCrudTest extends WebTestCase
     /** @depends testGenerateSvg */
     public function testRunningOnTheFly(string $pk)
     {
-        $this->client->request('GET', "/voronoi/running/$pk");
+        $this->client->request('GET', "/voronoi/runmap/$pk");
         $this->assertResponseIsSuccessful();
-
-        return $pk;
-    }
-
-    /** @depends testGenerateSvg */
-    public function testAttachPlace(string $pk)
-    {
-        $crawler = $this->client->request('GET', "/voronoi/attachplace/$pk");
-        $this->assertResponseIsSuccessful();
-        $form = $crawler->selectButton('generate_map_for_place_attach')->form();
-        $this->client->submit($form);
-        $this->assertResponseRedirects();
-        $target = $this->client->getResponse()->headers->get('location');
-        $this->assertStringStartsWith('/vertex/rename/', $target);
-        $this->client->followRedirect();
-        $this->assertResponseIsSuccessful();
-        $pk = $this->client->getRequest()->attributes->get('pk');
-
-        return $pk;
-    }
-
-    /** @depends testAttachPlace */
-    public function testNewPlace(string $pk)
-    {
-        $place = $this->repository->load($pk);
-        $this->assertInstanceOf(Place::class, $place);
-        $this->assertNotNull($place->battleMap);
 
         return $pk;
     }
@@ -163,7 +138,7 @@ class VoronoiCrudTest extends WebTestCase
         $this->assertStringContainsString('Broadcast', $response->message);
     }
 
-    /** @depends testNewPlace */
+    /** @depends testEdit */
     public function testBattlemapThumbnail(string $pk)
     {
         $this->client->request('GET', "/battlemap/thumbnail/$pk");
@@ -176,7 +151,7 @@ class VoronoiCrudTest extends WebTestCase
     /** @depends testBattlemapThumbnail */
     public function testRunningBattlemap(string $pk)
     {
-        $this->client->request('GET', "/place/battlemap/$pk");
+        $this->client->request('GET', "/place/runmap/$pk");
         $this->assertResponseIsSuccessful();
     }
 
