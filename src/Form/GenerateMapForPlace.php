@@ -6,22 +6,24 @@
 
 namespace App\Form;
 
-use App\Entity\MapConfig;
 use App\Entity\Place;
 use App\Service\Storage;
 use App\Voronoi\MapBuilder;
+use LogicException;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\DataMapperInterface;
+use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Traversable;
+use function join_paths;
 
 /**
  * Generate a new map for a Place
  * (also generates a default name for a new Place)
  */
-class GenerateMapForPlace extends AbstractType implements \Symfony\Component\Form\DataMapperInterface
+class GenerateMapForPlace extends AbstractType implements DataMapperInterface
 {
 
     protected MapBuilder $builder;
@@ -45,19 +47,19 @@ class GenerateMapForPlace extends AbstractType implements \Symfony\Component\For
                 ->setMethod('PATCH');
     }
 
-    public function mapDataToForms($viewData, \Traversable $forms)
+    public function mapDataToForms($viewData, Traversable $forms)
     {
         // nothing to edit
     }
 
-    public function mapFormsToData(\Traversable $forms, &$place)
+    public function mapFormsToData(Traversable $forms, &$place)
     {
         if (is_null($place)) {
-            throw new \LogicException('Place cannot be NULL');
+            throw new LogicException('Place cannot be NULL');
         }
 
         if (!$place instanceof Place) {
-            throw new \Symfony\Component\Form\Exception\UnexpectedTypeException($viewData, Place::class);
+            throw new UnexpectedTypeException($viewData, Place::class);
         }
 
         $map = $this->builder->create($place->voronoiParam);

@@ -129,9 +129,9 @@ class VoronoiCrud extends AbstractController
 
     /**
      * Show map to run it on the fly
-     * @Route("/voronoi/running/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
+     * @Route("/voronoi/runmap/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function running(string $pk): Response
+    public function runMap(string $pk): Response
     {
         $place = $this->repository->load($pk);
         $map = $this->builder->create($place->voronoiParam);
