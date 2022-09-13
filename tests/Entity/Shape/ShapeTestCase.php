@@ -7,8 +7,8 @@
 namespace App\Tests\Entity\Shape;
 
 use App\Entity\Shape\Strategy;
-use App\Voronoi\HexaMap;
 use App\Voronoi\MapDrawer;
+use App\Voronoi\SquareGrid;
 use PHPUnit\Framework\TestCase;
 
 abstract class ShapeTestCase extends TestCase
@@ -23,7 +23,7 @@ abstract class ShapeTestCase extends TestCase
     protected function setUp(): void
     {
         $this->sut = $this->createShape();
-        $this->map = $this->createMock(HexaMap::class);
+        $this->map = $this->createMock(SquareGrid::class);
         $this->drawer = new MapDrawer($this->map);
     }
 
