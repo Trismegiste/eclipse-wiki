@@ -9,6 +9,7 @@ namespace App\Form;
 use App\Entity\MapConfig;
 use App\Entity\Shape\Border;
 use App\Entity\Shape\Dome;
+use App\Entity\Shape\Hexadome;
 use App\Entity\Shape\NullShape;
 use App\Entity\Shape\Starship;
 use App\Entity\Shape\Strategy;
@@ -56,6 +57,7 @@ class MapConfigType extends AbstractType
                         new Dome(),
                         new Torus(),
                         new Starship(),
+                        new Hexadome()
                     ],
                     'choice_label' => 'name',
                     'choice_value' => function (?Strategy $strat): string {
