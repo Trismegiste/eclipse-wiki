@@ -54,7 +54,7 @@ class PlaceCrud extends GenericCrud
         $vertex = $this->repository->findByPk($pk);
         $svg = file_get_contents($storage->getFileInfo($vertex->battleMap)->getPathname());
 
-        return $this->render('map/running.html.twig', ['title' => $vertex->getTitle(), 'svg' => $svg]);
+        return $this->render('place/runmap.html.twig', ['title' => $vertex->getTitle(), 'svg' => $svg]);
     }
 
     /**
