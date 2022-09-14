@@ -4,23 +4,22 @@
  * eclipse-wiki
  */
 
-use App\Entity\Shape\Border;
+use App\Entity\Shape\Dome;
 use App\Entity\Shape\Strategy;
 use App\Tests\Entity\Shape\ShapeTestCase;
 
-class BorderTest extends ShapeTestCase
+class DomeTest extends ShapeTestCase
 {
 
     protected function createShape(): Strategy
     {
-        return new Border();
+        return new Dome();
     }
 
-    public function testBorder()
+    public function testDomeCircle()
     {
-        $this->map->expects($this->exactly(80))
+        $this->map->expects($this->exactly(151))  // ~ 20² - 3.14 × 9²
                 ->method('setCell');
-
         $this->draw();
     }
 

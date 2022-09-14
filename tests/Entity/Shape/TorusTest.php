@@ -4,23 +4,22 @@
  * eclipse-wiki
  */
 
-use App\Entity\Shape\Border;
 use App\Entity\Shape\Strategy;
+use App\Entity\Shape\Torus;
 use App\Tests\Entity\Shape\ShapeTestCase;
 
-class BorderTest extends ShapeTestCase
+class TorusTest extends ShapeTestCase
 {
 
     protected function createShape(): Strategy
     {
-        return new Border();
+        return new Torus();
     }
 
-    public function testBorder()
+    public function testDomeCircle()
     {
-        $this->map->expects($this->exactly(80))
+        $this->map->expects($this->exactly(308))
                 ->method('setCell');
-
         $this->draw();
     }
 
