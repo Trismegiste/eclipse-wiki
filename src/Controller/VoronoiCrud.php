@@ -139,7 +139,7 @@ class VoronoiCrud extends AbstractController
         $this->builder->dumpSvg($map);
         $svg = ob_get_clean();
 
-        return $this->render('place/runmap.html.twig', ['title' => 'On the fly ' . $place->getTitle(), 'svg' => $svg]);
+        return $this->render('place/runmap.html.twig', ['title' => 'Testing ' . $place->getTitle(), 'svg' => $svg]);
     }
 
     /**

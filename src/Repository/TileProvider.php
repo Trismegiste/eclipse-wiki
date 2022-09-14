@@ -7,6 +7,7 @@
 namespace App\Repository;
 
 use App\Voronoi\TileSetIterator;
+use App\Voronoi\TileSvg;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -40,6 +41,14 @@ class TileProvider
                 ->name('cluster-*.svg');
 
         return new TileSetIterator($finder->getIterator());
+    }
+
+    public function findByKey(string $tileSet, string $tileKey): TileSvg
+    {
+        $tile = new TileSvg();
+        $tile->load($this->tilePath . "/$tileSet/$tileKey.svg");
+
+        return $tile;
     }
 
 }
