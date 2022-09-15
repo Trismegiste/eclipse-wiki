@@ -112,7 +112,7 @@ class VoronoiCrud extends AbstractController
     {
         $place = $this->repository->load($pk);
         $form = $this->createFormBuilder($place)
-                ->add('voronoiParam', MapTextureType::class, ['tileset' => 'habitat'])
+                ->add('voronoiParam', MapTextureType::class, ['tileset' => 'habitat'])  // @todo hardcoded constant
                 ->add('texture', SubmitType::class)
                 ->setMethod('PUT')
                 ->getForm();
