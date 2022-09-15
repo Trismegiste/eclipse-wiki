@@ -8,6 +8,7 @@
     {% if vertex.voronoiParam is not empty %}
     <a href="{{ path('app_voronoicrud_texture', {pk: vertex.pk}) }}" title="Texturer la battlemap"><i class="icon-rgbcolor"></i></a>
     <a href="{{ path('app_voronoicrud_statistics', {pk: vertex.pk}) }}" title="Statistiques de la battlemap"><i class="icon-info-circled"></i></a>
+    <a href="{{ path('app_voronoicrud_populate', {pk: vertex.pk}) }}" title="Population"><i class="icon-extra"></i></a>
     <a href="{{ path('app_voronoicrud_storage', {pk: vertex.pk}) }}" title="Stocker la battlemap"><i class="icon-download"></i></a>
     {% endif %}
     {% if vertex.battleMap is not empty %}
