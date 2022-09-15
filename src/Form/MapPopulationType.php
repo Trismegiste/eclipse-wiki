@@ -79,7 +79,7 @@ class MapPopulationType extends AbstractType implements DataMapperInterface
         /** @var FormInterface $field */
         foreach ($forms as $key => $field) {
             $val = $field->getData();
-            if (!empty($val) && ($val->tilePerNpc > 0) && !empty($val->npcTitle)) {
+            if (!empty($val)) {
                 $viewData->tilePopulation[$key] = $val;
             }
         }
