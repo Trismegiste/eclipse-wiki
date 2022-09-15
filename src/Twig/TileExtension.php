@@ -27,13 +27,13 @@ class TileExtension extends AbstractExtension
         ];
     }
 
-    public function renderTileSvg(string $tileSet, string $tileKey): string
+    public function renderTileSvg(string $tileSet, string $tileKey, int $size = 48): string
     {
         $tile = $this->provider->findByKey($tileSet, $tileKey);
         ob_start();
         echo '<?xml version="1.0" encoding="utf-8"?>' . PHP_EOL;
         echo '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"' . PHP_EOL;
-        echo "width=\"200\" height=\"200\"" . PHP_EOL;
+        echo "width=\"$size\" height=\"$size\"" . PHP_EOL;
         echo "viewBox=\"-0.67 -0.67 1.34 1.34\">\n";
         echo $tile->getTile()->C14N();
         echo "</svg>\n";

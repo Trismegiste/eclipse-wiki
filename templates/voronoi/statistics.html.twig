@@ -23,21 +23,11 @@
             {% for key, value in stats %}
                 <tr>
                     <th>{{ key }}</th>
-                    <th>{{ render_tile('habitat', key) }}</th>
+                    <th>{{ render_tile('habitat', key, 32) }}</th>
                     <td>{{ value.rooms }}</td>
                     <td>{{ value.hexagons }}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
-
-{% block stylesheets %}
-    {{ parent() }}
-    <style>
-        table svg {
-            width: 48px;
-            height: 48px;
-        }
-    </style>
 {% endblock %}
