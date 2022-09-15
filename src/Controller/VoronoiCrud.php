@@ -177,4 +177,27 @@ class VoronoiCrud extends AbstractController
         return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $target]);
     }
 
+    /**
+     * Edits tiles populations of a map
+     * @Route("/voronoi/populate/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
+     */
+    public function populate(string $pk, Request $request): Response
+    {
+        $place = $this->repository->load($pk);
+        $form = $this->createFormBuilder($place)
+                ->add('voronoiParam', \App\Form\MapPopulationType::class)
+                ->add('populate', SubmitType::class)
+                ->setMethod('PUT')
+                ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->repository->save($form->getData());
+
+            return $this->redirectToRoute('app_voronoicrud_populate', ['pk' => $pk]);
+        }
+
+        return $this->render('voronoi/edit.html.twig', ['form' => $form->createView()]);
+    }
+
 }
