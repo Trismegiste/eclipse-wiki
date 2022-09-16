@@ -106,13 +106,13 @@ class VoronoiCrudTest extends WebTestCase
 
         $form = $crawler->selectButton('form_texture')->form();
         $form->setValues(['form[voronoiParam]' => [
-            'cluster-sleep' => 5
+                'cluster-sleep' => 5
         ]]);
         $this->client->submit($form);
         $this->assertResponseRedirects();
         $this->client->followRedirect();
 
-	return $pk;
+        return $pk;
     }
 
     /** @depends testEdit */
@@ -181,14 +181,14 @@ class VoronoiCrudTest extends WebTestCase
         $npc->surnameLang = 'french';
         $this->repository->save($npc);
 
-        $crawler=$this->client->request('GET', "/voronoi/populate/$pk");
+        $crawler = $this->client->request('GET', "/voronoi/populate/$pk");
         $this->assertResponseIsSuccessful();
         $form = $crawler->selectButton('form_populate')->form();
         $form->setValues(['form[voronoiParam]' => [
-            'cluster-sleep' => [
-                'npcTitle' => 'Wizard',
-                'tilePerNpc' => 6
-             ]
+                'cluster-sleep' => [
+                    'npcTitle' => 'Wizard',
+                    'tilePerNpc' => 6
+                ]
         ]]);
         $this->client->submit($form);
         $this->assertResponseRedirects();
