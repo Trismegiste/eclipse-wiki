@@ -9,6 +9,9 @@ use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Entity\Background;
+use App\Entity\Faction;
+use App\Entity\Morph;
 
 class VoronoiCrudTest extends WebTestCase
 {
@@ -97,9 +100,19 @@ class VoronoiCrudTest extends WebTestCase
     /** @depends testEdit */
     public function testTextures(string $pk)
     {
-        $this->client->request('GET', "/voronoi/texture/$pk");
+        $crawler = $this->client->request('GET', "/voronoi/texture/$pk");
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('form');
+
+        $form = $crawler->selectButton('form_texture')->form();
+        $form->setValues(['form[voronoiParam]' => [
+            'cluster-sleep' => 5
+        ]]);
+        $this->client->submit($form);
+        $this->assertResponseRedirects();
+        $this->client->followRedirect();
+
+	return $pk;
     }
 
     /** @depends testEdit */
@@ -156,6 +169,30 @@ class VoronoiCrudTest extends WebTestCase
     {
         $this->client->request('GET', "/place/runmap/$pk");
         $this->assertResponseIsSuccessful();
+    }
+
+    /** @depends testTextures */
+    public function testPopulate(string $pk)
+    {
+        // fixtures
+        $fac = static::getContainer()->get(\App\Repository\CharacterFactory::class);
+        $npc = $fac->create('Wizard', new Background('back'), new Faction('fact'));
+        $npc->setMorph(new Morph('morph'));
+        $npc->surnameLang = 'french';
+        $this->repository->save($npc);
+
+        $crawler=$this->client->request('GET', "/voronoi/populate/$pk");
+        $this->assertResponseIsSuccessful();
+        $form = $crawler->selectButton('form_populate')->form();
+        $form->setValues(['form[voronoiParam]' => [
+            'cluster-sleep' => [
+                'npcTitle' => 'Wizard',
+                'tilePerNpc' => 6
+             ]
+        ]]);
+        $this->client->submit($form);
+        $this->assertResponseRedirects();
+        $this->client->followRedirect();
     }
 
 }
