@@ -197,7 +197,7 @@ class VoronoiCrud extends AbstractController
             return $this->redirectToRoute('app_voronoicrud_populate', ['pk' => $pk]);
         }
 
-        return $this->render('voronoi/edit.html.twig', ['form' => $form->createView()]);
+        return $this->render('voronoi/populate.html.twig', ['form' => $form->createView()]);
     }
 
 }

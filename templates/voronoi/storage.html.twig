@@ -1,13 +1,4 @@
-{% extends "base.html.twig" %}
-
-{% block title %}{{ form.vars.data.title }}{% endblock %}
-
-{% block header_title %}
-    <nav style="float: right">
-        {{ include('place/actions.html.twig', {vertex:form.vars.data}) }}
-    </nav>   
-    {{ form.vars.data.title }}
-{% endblock %}
+{% extends "voronoi/baseform.html.twig" %}
 
 {% block content %}
     <div class="pure-g">

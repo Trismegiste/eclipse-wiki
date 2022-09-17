@@ -1,0 +1,40 @@
+{% extends "voronoi/baseform.html.twig" %}
+{% form_theme form _self %}
+
+{% block _form_voronoiParam_row %}
+    {% for key, child in form %}
+        <div class="pure-g tile-form">
+            <div class="pure-u-1-12">
+                {{ render_tile('habitat', key, 64) }}
+            </div>
+            <div class="pure-u-11-12">
+                {{ form_widget(child) }}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+    <div class="pure-g">
+        <div class="pure-u-1-2">
+            {{ form(form) }}
+        </div>
+        <div class="pure-u-1-2">
+            {% if form.vars.data.voronoiParam is not empty %}
+                <img src="{{ path('app_voronoicrud_generate', {pk: form.vars.data.pk, fog: 0}) }}" class="pure-img"/>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .tile-form {
+            margin-bottom: 2em;
+        }
+        .tile-form svg {
+            margin-top: 0.6em;
+        }
+    </style>
+{% endblock %}
