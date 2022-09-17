@@ -4,11 +4,15 @@
 {% block _form_voronoiParam_row %}
     {% for key, child in form %}
         <div class="pure-g tile-form">
-            <div class="pure-u-1-12">
-                {{ render_tile('habitat', key, 64) }}
+            <div class="pure-u-1-8">
+                {{ render_tile('habitat', key, 40) }}
             </div>
-            <div class="pure-u-11-12">
-                {{ form_widget(child) }}
+            <div class="pure-u-7-8">
+                {{ form_errors(child) }}
+                1 {{ form_widget(child.npcTitle) }}
+                par
+                {{ form_widget(child.tilePerNpc, {attr:{class:'pure-input-1-4'}}) }}
+                cases
             </div>
         </div>
     {% endfor %}
@@ -25,16 +29,4 @@
             {% endif %}
         </div>
     </div>
-{% endblock %}
-
-{% block stylesheets %}
-    {{ parent() }}
-    <style>
-        .tile-form {
-            margin-bottom: 2em;
-        }
-        .tile-form svg {
-            margin-top: 0.6em;
-        }
-    </style>
 {% endblock %}
