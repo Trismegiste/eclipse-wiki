@@ -9,18 +9,17 @@ namespace App\Form;
 use App\Entity\MapConfig;
 use App\Repository\TileProvider;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\DataMapperInterface;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Traversable;
 
 /**
  * Form for texturing a map
  */
-class MapTextureType extends AbstractType implements DataMapperInterface
+class MapTextureType extends AbstractType
 {
 
     protected TileProvider $provider;
@@ -38,44 +37,24 @@ class MapTextureType extends AbstractType implements DataMapperInterface
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->add('tileWeight', CollectionType::class, [
+            'entry_type' => IntegerType::class,
+            'entry_options' => ['required' => false],
+            'allow_add' => true,
+            'allow_delete' => true,
+            'delete_empty' => true
+        ]);
+    }
+
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        $data = $form['tileWeight']->getData();
         foreach ($this->provider->getClusterSet($options['tileset']) as $tile) {
-            preg_match("#^cluster-([a-z]+)$#", $tile->getKey(), $match);
-            $builder->add($tile->getKey(), IntegerType::class, ['required' => false, 'label' => ucfirst($match[1])]);
-        }
-        $builder->setDataMapper($this);
-    }
-
-    public function mapDataToForms($viewData, Traversable $forms)
-    {
-        // there is no data yet, so nothing to prepopulate
-        if (null === $viewData) {
-            return;
-        }
-
-        // invalid data type
-        if (!is_array($viewData->tileWeight)) {
-            throw new UnexpectedTypeException($viewData->tileWeight, 'array');
-        }
-
-        /** @var FormInterface $field */
-        foreach ($forms as $key => $field) {
-            if (key_exists($key, $viewData->tileWeight)) {
-                $field->setData($viewData->tileWeight[$key]);
+            if (!key_exists($tile->getKey(), $data)) {
+                $data[$tile->getKey()] = null;
             }
         }
-    }
-
-    public function mapFormsToData(Traversable $forms, &$viewData)
-    {
-        /** @var MapConfig $viewData */
-        $viewData->tileWeight = [];
-        /** @var FormInterface $field */
-        foreach ($forms as $key => $field) {
-            $val = $field->getData();
-            if (!empty($val)) {
-                $viewData->tileWeight[$key] = $val;
-            }
-        }
+        $form['tileWeight']->setData($data);
     }
 
 }
