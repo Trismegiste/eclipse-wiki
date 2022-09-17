@@ -19,10 +19,11 @@ class Hexadome extends Strategy
     {
         $size = $draw->getCanvasSize();
         $center = $size / 2;
-        $radius = $size / 2 - 1;
+        $xradius = $size / 2 - 1;
+        $yradius = $xradius * (2 / sqrt(3));
         $polygon = [];
-        for($k = 0; $k < 6; $k++) {
-            $polygon[] = [intval($center + $radius * cos(2 * M_PI * $k / 6)), intval($center - $radius * sin(2 * M_PI * $k / 6))];
+        for ($k = 0; $k < 6; $k++) {
+            $polygon[] = [(int) round($center + $xradius * cos(2 * M_PI * $k / 6)), (int) round($center - $yradius * sin(2 * M_PI * $k / 6))];
         }
 
         $draw->fillOutsidePolygon(new HexaCell(HexaCell::VOID_UID, 'void', false), $polygon);
