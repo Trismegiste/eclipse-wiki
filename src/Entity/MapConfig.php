@@ -33,14 +33,4 @@ class MapConfig implements Persistable
     public array $tileMinCount = [];
     public array $tilePopulation = [];   // info on how to populate any tile (clusters and other tiles)
 
-    public function beforeSave(): void
-    {
-        // clean null entries in tilePopulation
-        foreach ($this->tilePopulation as $key => $cfg) {
-            if (is_null($cfg)) {
-                unset($this->tilePopulation[$key]);
-            }
-        }
-    }
-
 }

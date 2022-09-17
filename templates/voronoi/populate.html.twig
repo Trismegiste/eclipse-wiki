@@ -2,19 +2,21 @@
 {% form_theme form _self %}
 
 {% block _form_voronoiParam_row %}
-    {% for key, child in form %}
-        <div class="pure-g tile-form">
-            <div class="pure-u-1-8">
-                {{ render_tile('habitat', key, 42) }}
-            </div>
-            <div class="pure-u-7-8">
-                1 {{ form_widget(child.npcTitle) }}
-                par
-                {{ form_widget(child.tilePerNpc, {attr:{class:'pure-input-1-4'}}) }}
-                cases
-            </div>
+    {{ form_widget(form.tilePopulation) }}
+{% endblock %}
+
+{% block _form_voronoiParam_tilePopulation_entry_row %}
+    <div class="pure-g tile-form">
+        <div class="pure-u-1-8">
+            {{ render_tile('habitat', name, 42) }}
         </div>
-    {% endfor %}
+        <div class="pure-u-7-8">
+            1 {{ form_widget(form.npcTitle) }}
+            par
+            {{ form_widget(form.tilePerNpc, {attr:{class:'pure-input-1-4'}}) }}
+            cases
+        </div>
+    </div>
 {% endblock %}
 
 {% block content %}
