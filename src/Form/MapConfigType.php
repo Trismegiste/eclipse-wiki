@@ -35,7 +35,6 @@ class MapConfigType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('seed', RandomIntegerType::class, ['constraints' => [new NotBlank(), new Positive()]])
                 ->add('side', IntegerType::class, ['constraints' => [new NotBlank(), new Positive()]])
                 ->add('avgTilePerRoom', IntegerType::class, ['constraints' => [new NotBlank(), new Positive()]])
                 ->add('erosionForHallway', CheckboxType::class, ['required' => false, 'property_path' => 'erosion'])
@@ -68,6 +67,7 @@ class MapConfigType extends AbstractType
                 ->add('doubleHorizontal', CheckboxType::class, ['required' => false])
                 ->add('verticalLines', IntegerType::class, ['required' => false, 'empty_data' => 0])
                 ->add('doubleVertical', CheckboxType::class, ['required' => false])
+                ->add('seed', RandomIntegerType::class, ['constraints' => [new NotBlank(), new Positive()]])
         ;
     }
 
