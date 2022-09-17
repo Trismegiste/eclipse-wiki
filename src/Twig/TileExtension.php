@@ -24,6 +24,7 @@ class TileExtension extends AbstractExtension
     {
         return [
             new TwigFunction('render_tile', [$this, 'renderTileSvg'], ['is_safe' => ['html']]),
+            new TwigFunction('humanize_tilename', [$this, 'humanizeTileName']),
         ];
     }
 
@@ -39,6 +40,15 @@ class TileExtension extends AbstractExtension
         echo "</svg>\n";
 
         return ob_get_clean();
+    }
+
+    public function humanizeTileName(string $tilename): string
+    {
+        if (preg_match('#^cluster-([a-z]+)#', $tilename, $match)) {
+            return ucfirst($match[1]);
+        }
+
+        return 'undefined';
     }
 
 }
