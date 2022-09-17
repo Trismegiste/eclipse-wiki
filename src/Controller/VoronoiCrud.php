@@ -124,7 +124,7 @@ class VoronoiCrud extends AbstractController
             return $this->redirectToRoute('app_voronoicrud_texture', ['pk' => $pk]);
         }
 
-        return $this->render('voronoi/edit.html.twig', ['form' => $form->createView()]);
+        return $this->render('voronoi/texture.html.twig', ['form' => $form->createView()]);
     }
 
     /**

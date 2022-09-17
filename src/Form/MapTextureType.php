@@ -38,23 +38,41 @@ class MapTextureType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('tileWeight', CollectionType::class, [
-            'entry_type' => IntegerType::class,
-            'entry_options' => ['required' => false],
-            'allow_add' => true,
-            'allow_delete' => true,
-            'delete_empty' => true
-        ]);
+                    'entry_type' => IntegerType::class,
+                    'entry_options' => ['required' => false],
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true,
+                    'prototype_name' => 'default'
+                ])
+                ->add('minClusterPerTile', CollectionType::class, [
+                    'entry_type' => IntegerType::class,
+                    'entry_options' => ['required' => false],
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true,
+                    'prototype_name' => 'default'
+                ])
+        ;
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $data = $form['tileWeight']->getData();
-        foreach ($this->provider->getClusterSet($options['tileset']) as $tile) {
+        $tileSet = $this->provider->getClusterSet($options['tileset']);
+
+        $this->initializeCollection($form['tileWeight'], $tileSet);
+        $this->initializeCollection($form['minClusterPerTile'], $tileSet);
+    }
+
+    private function initializeCollection(FormInterface $form, iterable $tileSet): void
+    {
+        $data = $form->getData();
+        foreach ($tileSet as $tile) {
             if (!key_exists($tile->getKey(), $data)) {
                 $data[$tile->getKey()] = null;
             }
         }
-        $form['tileWeight']->setData($data);
+        $form->setData($data);
     }
 
 }

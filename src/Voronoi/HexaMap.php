@@ -293,7 +293,7 @@ class HexaMap implements SquareGrid
         $roomGroup = $this->getCoordPerRoom();
         unset($roomGroup[HexaCell::VOID_UID]);
         unset($roomGroup[HexaCell::SPACING_UID]);
-        $tileCount = [];
+        $tileCount = []; // the count of rooms for each tile
 
         // probability texturing with weights
         if (count($tileWeight) > 0) {
@@ -316,8 +316,8 @@ class HexaMap implements SquareGrid
                 foreach ($coordList as $cellCoord) {
                     list($x, $y, $cell) = $cellCoord;  // get the cell
                     $cell->template = $picked;   // set the template name for this cell of this room
-                    $tileCount[$picked] = key_exists($picked, $tileCount) ? $tileCount[$picked] + 1 : 1;
                 }
+                $tileCount[$picked] = key_exists($picked, $tileCount) ? $tileCount[$picked] + 1 : 1;
             }
         }
 

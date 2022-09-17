@@ -29,8 +29,8 @@ class MapConfig implements Persistable
     public bool $doubleHorizontal = false;
     public int $verticalLines = 0;
     public bool $doubleVertical = false;
-    public array $tileWeight = [];       // weights for different cluster tiles
-    public array $tileMinCount = [];
+    public array $tileWeight = [];       // weights for each cluster-tile
+    public array $minClusterPerTile = []; // minimal count of clusters for each cluster-tile
     public array $tilePopulation = [];   // info on how to populate any tile (clusters and other tiles)
 
 }

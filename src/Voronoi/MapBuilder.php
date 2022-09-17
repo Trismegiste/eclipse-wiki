@@ -62,7 +62,7 @@ class MapBuilder
         }
 
         $map->wallProcessing();
-        $map->texturing($config->tileWeight, $config->tileMinCount);
+        $map->texturing($config->tileWeight, $config->minClusterPerTile);
 
         return $map;
     }

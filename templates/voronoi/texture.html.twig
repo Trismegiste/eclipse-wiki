@@ -1,0 +1,27 @@
+{% extends "voronoi/baseform.html.twig" %}
+{% form_theme form _self %}
+
+{% block _form_voronoiParam_row %}
+    {{ form_widget(form) }}
+{% endblock %}
+
+{% block _form_voronoiParam_tileWeight_entry_label %}
+    {{ render_tile('habitat', name, 42) }}
+{% endblock %}
+
+{% block _form_voronoiParam_minClusterPerTile_entry_label %}
+    {{ render_tile('habitat', name, 42) }}
+{% endblock %}
+
+{% block content %}
+    <div class="pure-g">
+        <div class="pure-u-1-2">
+            {{ form(form) }}
+        </div>
+        <div class="pure-u-1-2">
+            {% if form.vars.data.voronoiParam is not empty %}
+                <img src="{{ path('app_voronoicrud_generate', {pk: form.vars.data.pk, fog: 0}) }}" class="pure-img"/>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
