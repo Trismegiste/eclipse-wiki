@@ -27,7 +27,11 @@ class TileNpcConfigType extends AbstractType implements DataMapperInterface
                     'placeholder' => '-----------',
                     'required' => false
                 ])
-                ->add('tilePerNpc', IntegerType::class, ['constraints' => [new Positive()], 'required' => false]);
+                ->add('tilePerNpc', IntegerType::class, [
+                    'constraints' => [new Positive()],
+                    'required' => false,
+                    'error_bubbling' => true
+        ]);
         $builder->setDataMapper($this);
     }
 

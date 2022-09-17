@@ -5,10 +5,9 @@
     {% for key, child in form %}
         <div class="pure-g tile-form">
             <div class="pure-u-1-8">
-                {{ render_tile('habitat', key, 40) }}
+                {{ render_tile('habitat', key, 42) }}
             </div>
             <div class="pure-u-7-8">
-                {{ form_errors(child) }}
                 1 {{ form_widget(child.npcTitle) }}
                 par
                 {{ form_widget(child.tilePerNpc, {attr:{class:'pure-input-1-4'}}) }}
