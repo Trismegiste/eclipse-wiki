@@ -147,4 +147,27 @@ class ProfilePicture extends AbstractController
         return imagecreatefromstring($process->getOutput());
     }
 
+    /**
+     * Creates a battlemap token for a NPC
+     * @Route("/npc/token/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
+     */
+    public function token(string $pk, Request $request): Response
+    {
+        $npc = $this->repository->findByPk($pk);
+        if (!$npc instanceof \App\Entity\Character) {
+            throw $this->createNotFoundException($npc->getTitle() . ' is not a Character');
+        }
+
+        $form = $this->createForm(ProfilePic::class, $npc);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->addFlash('success', 'Token généré');
+
+            return new JsonResponse('', Response::HTTP_NO_CONTENT);
+        }
+
+        return $this->render('picture/token.html.twig', ['form' => $form->createView()]);
+    }
+
 }

@@ -90,8 +90,8 @@ class NpcGenerator extends AbstractController
     {
         $profile = new Finder();
         $profile->files()
-            ->in(join_paths($this->getParameter('twig.default_path'), 'npc/profile'))
-            ->name('*.json');
+                ->in(join_paths($this->getParameter('twig.default_path'), 'npc/profile'))
+                ->name('*.json');
 
         return $profile;
     }
@@ -143,10 +143,10 @@ class NpcGenerator extends AbstractController
         $newNpc->setTitle($npc->getTitle() . ' (copie)');
 
         $form = $this->createFormBuilder($newNpc)
-            ->add('title', TextType::class)
-            ->add('wildCard', CheckboxType::class, ['required' => false])
-            ->add('copy', SubmitType::class)
-            ->getForm();
+                ->add('title', TextType::class)
+                ->add('wildCard', CheckboxType::class, ['required' => false])
+                ->add('copy', SubmitType::class)
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -227,13 +227,13 @@ class NpcGenerator extends AbstractController
     {
         $npc = $this->repository->findByPk($pk);
         $form = $this->createFormBuilder($npc)
-            ->add('morph', ProviderChoiceType::class, [
-                'provider' => $morph,
-                'placeholder' => '--- Choisissez un Morphe ---'
-            ])
-            ->add('sleeve', SubmitType::class)
-            ->setMethod('PATCH')
-            ->getForm();
+                ->add('morph', ProviderChoiceType::class, [
+                    'provider' => $morph,
+                    'placeholder' => '--- Choisissez un Morphe ---'
+                ])
+                ->add('sleeve', SubmitType::class)
+                ->setMethod('PATCH')
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

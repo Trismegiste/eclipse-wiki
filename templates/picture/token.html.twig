@@ -1,0 +1,97 @@
+{# generate token picture #}
+{% extends "base.html.twig" %}
+{% form_theme form _self %}
+
+{% block header_title %}
+    {{ include('npc/menu.html.twig', {npc: form.vars.data}) }}
+{% endblock %}
+
+{% block _profile_pic_avatar_row %}
+    {{ block('form_row') }}
+    <div id="cropper"></div>
+{% endblock %}
+
+{% block content %}
+    <div class="pure-u-1-5"></div>
+    <div class="pure-u-3-5" x-data>
+        {{ form(form) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('foliotek/croppie.min.js') }}"></script>
+    <script>
+        var uploadCrop = new Croppie(document.getElementById('cropper'), {
+            viewport: {
+                width: 500,
+                height: 500,
+                type: 'circle'
+            },
+            boundary: {width: 500, height: 500},
+            enableExif: true
+        })
+
+        function readFile(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    uploadCrop.bind({url: e.target.result})
+                            .then(function () {
+                                console.log('Bind complete')
+                            })
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                console.log("Sorry - you're browser doesn't support the FileReader API");
+            }
+        }
+
+        // sending form in ajax
+        document.getElementById('profile_pic_generate').addEventListener('click', function (e) {
+            e.preventDefault()
+            let uploadForm = document.querySelector('article form')
+            let data = new FormData(uploadForm)
+
+            uploadCrop.result('base64').then(function (dataUrl) {
+                data.set('profile_pic[avatar]', dataURLtoFile(dataUrl, 'avatar.png'))
+                fetch(uploadForm.action, {
+                    method: 'post',
+                    body: data,
+                    redirect: 'manual'
+                }).then(function (response) {
+                    location.href = '{{ path('app_vertexcrud_show', {pk: form.vars.data.pk}) }}'
+                }).catch((error) => {
+                    console.error(error);
+                })
+            })
+        }) // fin du form
+
+        // convert a DataURL to File for sending to symfony Form (with CSRF and all)
+        function dataURLtoFile(dataurl, filename) {
+            var arr = dataurl.split(','),
+                    mime = arr[0].match(/:(.*?);/)[1],
+                    bstr = atob(arr[1]),
+                    n = bstr.length,
+                    u8arr = new Uint8Array(n);
+
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+
+            return new File([u8arr], filename, {type: mime});
+        }
+
+        {% if form.vars.data.extractFirstPicture is not empty %}
+            uploadCrop.bind({url: '{{ path('get_picture', {title: form.vars.data.extractFirstPicture}) }}'});
+        {% endif %}
+    </script>
+
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('foliotek/croppie.css') }}" />
+{% endblock %}

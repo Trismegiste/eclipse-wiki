@@ -86,6 +86,13 @@ class MapBuilder
         foreach ($this->provider->getTileSet('habitat') as $svg) {  // @todo remove hardcoded, this value is coming from MapConfig
             echo $svg->getTile()->C14N();
         }
+        echo '<g id="token" transform="scale(0.008) translate(-50, -50)">';
+        echo '<image width="100" height="100" xlink:href="data:image/png;base64,';
+        echo base64_encode(file_get_contents('/www/var/storage/dev/token.png'));
+        echo '"/>';
+        echo '<circle cx="50" cy="50" r="50" style="fill:none;stroke:red;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />';
+        echo "</g>\n";
+
         echo "</defs>\n";
 
         echo '<g id="ground">' . PHP_EOL;
@@ -104,7 +111,7 @@ class MapBuilder
         $map->dumpLegend();
         echo '</g>' . PHP_EOL;
 
-        echo '<g id="npc-layer">' . PHP_EOL;
+        echo '<g id="layer-npc">' . PHP_EOL;
         $map->dumpNpc();
         echo '</g>' . PHP_EOL;
 
