@@ -63,6 +63,7 @@ class MapBuilder
 
         $map->wallProcessing();
         $map->texturing($config->tileWeight, $config->minClusterPerTile);
+        $map->populating($config->tilePopulation);
 
         return $map;
     }
@@ -101,6 +102,10 @@ class MapBuilder
 
         echo '<g id="legend">' . PHP_EOL;
         $map->dumpLegend();
+        echo '</g>' . PHP_EOL;
+
+        echo '<g id="npc-layer">' . PHP_EOL;
+        $map->dumpNpc();
         echo '</g>' . PHP_EOL;
 
         echo '<g id="gm-fogofwar">' . PHP_EOL;

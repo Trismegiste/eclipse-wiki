@@ -28,8 +28,12 @@
                     <th>{{ render_tile('habitat', key, 32) }}</th>
                     <td>{{ value.rooms }}</td>
                     <td>{{ value.hexagons }}</td>
-                    <td>{{ '' }}</td>
-                    <td>{{ 0 }}</td>
+                    <td>{{ value.npcTitle }}</td>
+                    <td>
+                        {% if value.npcTitle is not empty %}
+                            {{ value.npcCount  }} ({{ (100 * value.npcCount / value.hexagons)|round }}%)
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

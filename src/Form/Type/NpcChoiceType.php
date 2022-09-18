@@ -38,9 +38,7 @@ class NpcChoiceType extends AbstractType
     {
         $npcList = [];
         foreach ($this->repository->search(['wildCard' => false]) as $npc) {
-            if (!$npc->wildCard) {
-                $npcList[$npc->getTitle()] = $npc->getTitle();
-            }
+            $npcList[$npc->getTitle()] = $npc->getTitle();
         }
 
         return $npcList;

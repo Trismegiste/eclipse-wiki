@@ -92,6 +92,16 @@ class HexaMap implements SquareGrid
         }
     }
 
+    public function dumpNpc(): void
+    {
+        foreach ($this->grid as $x => $column) {
+            foreach ($column as $y => $cell) {
+                /** @var HexaCell $cell */
+                $cell->dumpNpc($this->getAbscissa($x, $y), $y);
+            }
+        }
+    }
+
     protected function num2alpha(int $n)
     {
         $r = '';
@@ -294,7 +304,6 @@ class HexaMap implements SquareGrid
         unset($roomGroup[HexaCell::VOID_UID]);
         unset($roomGroup[HexaCell::SPACING_UID]);
         $tileCount = []; // the count of rooms for each tile
-
         // probability texturing with weights
         if (count($tileWeight) > 0) {
             // translate weights into probabilities for each tile
@@ -346,14 +355,44 @@ class HexaMap implements SquareGrid
             $size = count($room);
             list(,, $cell) = array_pop($room);
             if (!key_exists($cell->template, $stats)) {
-                $stats[$cell->template] = ['rooms' => 0, 'hexagons' => 0];
+                $stats[$cell->template] = [
+                    'rooms' => 0,
+                    'hexagons' => 0,
+                    'npcTitle' => null,
+                    'npcCount' => 0
+                ];
             }
             // summing
             $stats[$cell->template]['rooms']++;
             $stats[$cell->template]['hexagons'] += $size;
         }
 
+        foreach ($this->grid as $column) {
+            foreach ($column as $cell) {
+                if (!is_null($cell->npcTitle)) {
+                    $stats[$cell->template]['npcCount']++;
+                    $stats[$cell->template]['npcTitle'] = $cell->npcTitle;
+                }
+            }
+        }
+
         return $stats;
+    }
+
+    public function populating(array $npcPerTile): void
+    {
+        foreach ($this->grid as $x => $column) {
+            foreach ($column as $y => $cell) {
+                /** @var HexaCell $cell */
+                if (key_exists($cell->template, $npcPerTile)) {
+                    $cfg = $npcPerTile[$cell->template];
+                    /** @var \App\Entity\TileNpcConfig $cfg */
+                    if (rand() / getrandmax() <= 1.0 / $cfg->tilePerNpc) {
+                        $cell->npcTitle = $cfg->npcTitle;
+                    }
+                }
+            }
+        }
     }
 
 }
