@@ -6,7 +6,6 @@
 
 namespace App\Form\Type;
 
-use App\Entity\Transhuman;
 use App\Repository\VertexRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -38,7 +37,7 @@ class NpcChoiceType extends AbstractType
     protected function getNpcList(): array
     {
         $npcList = [];
-        foreach ($this->repository->findByClass(Transhuman::class, ['surnameLang' => ['$ne' => null]]) as $npc) {
+        foreach ($this->repository->search(['wildCard' => false]) as $npc) {
             if (!$npc->wildCard) {
                 $npcList[$npc->getTitle()] = $npc->getTitle();
             }

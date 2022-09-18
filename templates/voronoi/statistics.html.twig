@@ -13,10 +13,12 @@
     <table class="pure-table pure-table-striped">
         <thead>
             <tr>
-                <th>Tuile</th>
                 <th></th>
+                <th>Tuile</th>
                 <th>Pièces</th>
                 <th>Hexagones</th>
+                <th>PNJ</th>
+                <th>Nombre</th>
             </tr>
         </thead>
         <tbody>
@@ -26,6 +28,8 @@
                     <th>{{ render_tile('habitat', key, 32) }}</th>
                     <td>{{ value.rooms }}</td>
                     <td>{{ value.hexagons }}</td>
+                    <td>{{ '' }}</td>
+                    <td>{{ 0 }}</td>
                 </tr>
             {% endfor %}
         </tbody>

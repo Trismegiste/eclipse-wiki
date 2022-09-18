@@ -101,3 +101,5 @@ Attach: Attacher
 STRAT_STARSHIP: Vaisseau
 FOG_OF_WAR: Brouillard de guerre
 SEARCH_LEGEND: Rechercher légende
+Tile weight: Proportion de pièces par tuile
+Min cluster per tile: Nombre minimal de pièces par tuile
