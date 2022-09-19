@@ -21,6 +21,8 @@ use function join_paths;
 class Storage
 {
 
+    const tokenSize = 100;
+
     protected $root;
 
     public function __construct(string $projectDir, string $env)
@@ -157,13 +159,24 @@ class Storage
      * Store a uploaded token into Storage as a PNG
      * @param UploadedFile $picture
      * @param string $filename
-     * @param int $maxDimension
-     * @param int $compressionLevel
      * @throws RuntimeException
      */
     public function storeToken(UploadedFile $picture, string $filename): void
     {
-        $picture->move($this->root, $filename);
+        $source = imagecreatefrompng($picture->getPathname());
+        if (imagesx($source) !== imagesy($source)) {
+            throw new RuntimeException('PNG image for token is not square');
+        }
+
+        $targetName = join_paths($this->getRootDir(), $filename);
+        $target = imagescale($source, self::tokenSize, self::tokenSize);
+        $ret = imagepng($target, $targetName);
+        imagedestroy($source);
+        imagedestroy($target);
+
+        if (!$ret) {
+            throw new RuntimeException("Unable to save token $filename");
+        }
     }
 
 }
