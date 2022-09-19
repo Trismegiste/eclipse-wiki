@@ -158,7 +158,11 @@ class ProfilePicture extends AbstractController
             throw $this->createNotFoundException($npc->getTitle() . ' is not a Character');
         }
 
-        $form = $this->createForm(ProfilePic::class, $npc);
+        $form = $this->createFormBuilder($npc)
+                ->add('token', \App\Form\Type\CropperType::class)
+                ->add('token_create', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+                ->setMethod('PUT')
+                ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

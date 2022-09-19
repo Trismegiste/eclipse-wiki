@@ -1,0 +1,37 @@
+{# Custom rendering for CropperType #}
+{% block cropper_row %}
+    {{ block('form_row') }}
+    <div id="cropper-{{ form.vars.id }}"></div>
+    <script>
+        var uploadCrop
+        
+        window.addEventListener('load', (event) => {
+            uploadCrop = new Croppie(document.getElementById('cropper-{{ form.vars.id }}'), {
+                viewport: {
+                    width: 500,
+                    height: 500,
+                    type: 'circle'
+                },
+                boundary: {width: 500, height: 500},
+                enableExif: true
+            })
+        })
+
+        function readFile(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    uploadCrop.bind({url: e.target.result})
+                            .then(function () {
+                                console.log('Bind complete')
+                            })
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                console.log("Sorry - you're browser doesn't support the FileReader API");
+            }
+        }
+    </script>
+{% endblock %}
