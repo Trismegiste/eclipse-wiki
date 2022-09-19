@@ -153,4 +153,17 @@ class Storage
                         ->getIterator();
     }
 
+    /**
+     * Store a uploaded token into Storage as a PNG
+     * @param UploadedFile $picture
+     * @param string $filename
+     * @param int $maxDimension
+     * @param int $compressionLevel
+     * @throws RuntimeException
+     */
+    public function storeToken(UploadedFile $picture, string $filename): void
+    {
+        $picture->move($this->root, $filename);
+    }
+
 }

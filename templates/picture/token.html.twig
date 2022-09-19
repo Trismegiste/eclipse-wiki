@@ -30,7 +30,7 @@
             let data = new FormData(uploadForm)
 
             uploadCrop.result('base64').then(function (dataUrl) {
-                data.set('form[token]', dataURLtoFile(dataUrl, 'avatar.png'))
+                data.set('form[token]', dataURLtoFile(dataUrl, 'token.png'))
                 fetch(uploadForm.action, {
                     method: 'post',
                     body: data,
