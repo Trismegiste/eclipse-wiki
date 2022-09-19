@@ -163,6 +163,10 @@ class Storage
      */
     public function storeToken(UploadedFile $picture, string $filename): void
     {
+        if ($picture->getMimeType() !== 'image/png') {
+            throw new \InvalidArgumentException('Not a PNG format');
+        }
+
         $source = imagecreatefrompng($picture->getPathname());
         if (imagesx($source) !== imagesy($source)) {
             throw new RuntimeException('PNG image for token is not square');
