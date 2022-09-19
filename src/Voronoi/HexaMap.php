@@ -16,6 +16,7 @@ class HexaMap implements SquareGrid
 
     protected int $gridSize;
     protected array $grid;
+    protected array $npcToken;
 
     public function __construct(int $size)
     {
@@ -381,6 +382,11 @@ class HexaMap implements SquareGrid
 
     public function populating(array $npcPerTile): void
     {
+        // keep npc title for generating SVG
+        foreach($npcPerTile as $cfg) {
+             $this->npcToken[crc32($cfg->npcTitle)] = $cfg->npcTitle;
+        }
+
         foreach ($this->grid as $x => $column) {
             foreach ($column as $y => $cell) {
                 /** @var HexaCell $cell */
@@ -393,6 +399,11 @@ class HexaMap implements SquareGrid
                 }
             }
         }
+    }
+
+    public function getNpcToken(): array
+    {
+        return $this->npcToken;
     }
 
 }

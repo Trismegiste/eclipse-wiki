@@ -76,7 +76,9 @@ class HexaCell implements BattlemapItem
     public function dumpNpc(float $x, float $y): void
     {
         if (!is_null($this->npcTitle)) {
-            echo "<use xlink:href=\"#token\" x=\"$x\" y=\"$y\" data-npc-title=\"{$this->npcTitle}\"/>\n";
+            echo '<use xlink:href="#token-';
+            echo crc32($this->npcTitle);
+            echo "\" x=\"$x\" y=\"$y\" data-npc-title=\"{$this->npcTitle}\"/>\n";
         }
     }
 
