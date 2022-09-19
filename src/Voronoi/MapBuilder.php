@@ -28,6 +28,12 @@ class MapBuilder
         $this->storage = $storage;
     }
 
+    /**
+     * Builds the battlemap with all parameters from MapConfig
+     * @param MapConfig $config
+     * @return HexaMap
+     * @throws RuntimeException
+     */
     public function create(MapConfig $config): HexaMap
     {
         $map = new HexaMap($config->side);
@@ -71,6 +77,11 @@ class MapBuilder
         return $map;
     }
 
+    /**
+     * Dumps the SVG of a battlemap
+     * @param HexaMap $map
+     * @param bool $withFogOfWar With fog or not
+     */
     public function dumpSvg(HexaMap $map, bool $withFogOfWar = true): void
     {
         $side = $map->getSize();
@@ -91,12 +102,15 @@ class MapBuilder
         }
 
         foreach ($map->getNpcToken() as $key => $title) {
-            echo '<g id="token-' . $key . '" transform="scale(0.008) translate(-50, -50)">';
-            echo '<image width="100" height="100" xlink:href="data:image/png;base64,';
-            echo base64_encode(file_get_contents($this->storage->getFileInfo("$title-token.png")->getPathname()));
-            echo '"/>';
-            echo '<circle cx="50" cy="50" r="50" style="fill:none;stroke:red;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />';
-            echo "</g>\n";
+            $tokenPic = $this->storage->getFileInfo("$title-token.png");
+            if ($tokenPic->isReadable()) {
+                echo '<g id="token-' . $key . '" transform="scale(0.008) translate(-50, -50)">';
+                echo '<image width="100" height="100" xlink:href="data:image/png;base64,';
+                echo base64_encode(file_get_contents($tokenPic->getPathname()));
+                echo '"/>';
+                echo '<circle cx="50" cy="50" r="50" style="fill:none;stroke:red;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />';
+                echo "</g>\n";
+            }
         }
 
         echo "</defs>\n";

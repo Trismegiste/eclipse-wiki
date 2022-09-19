@@ -19,6 +19,10 @@ class MapDrawer
         $this->map = $map;
     }
 
+    /**
+     * Encloses the map in a disk
+     * @param HexaCell $filling The template for outside cell
+     */
     public function drawCircleContainer(HexaCell $filling): void
     {
         $size = $this->map->getSize();
@@ -35,6 +39,11 @@ class MapDrawer
         }
     }
 
+    /**
+     * Limits the map to a torus
+     * @param HexaCell $filling
+     * @param float $innerRadius
+     */
     public function drawTorusContainer(HexaCell $filling, float $innerRadius = 0.5): void
     {
         $size = $this->map->getSize();
@@ -53,6 +62,11 @@ class MapDrawer
         }
     }
 
+    /**
+     * Sets the seeds for the Voronoi cellular automaton
+     * @param HexaCell $floorTemplate
+     * @param int $avgTilePerRoom The average size of a cluster after growth of the cellular automaton
+     */
     public function plantRandomSeed(HexaCell $floorTemplate, int $avgTilePerRoom)
     {
         $size = $this->map->getSize();
@@ -102,6 +116,10 @@ class MapDrawer
         }
     }
 
+    /**
+     * Encloses the map with a border
+     * @param HexaCell $filling the template cell for the border
+     */
     public function drawFrame(HexaCell $filling): void
     {
         $size = $this->map->getSize();
@@ -112,6 +130,11 @@ class MapDrawer
         $this->drawVerticalLine($filling, $size - 1, 0, $size);
     }
 
+    /**
+     * Draws a circle large enough to walk into
+     * @param HexaCell $filling
+     * @param type $radiusRatio
+     */
     public function circle(HexaCell $filling, $radiusRatio = 0.75): void
     {
         $size = $this->map->getSize();
@@ -134,6 +157,11 @@ class MapDrawer
         return $this->map->getSize();
     }
 
+    /**
+     * Encloses a region with a template cell. The region is any closed polygon
+     * @param HexaCell $filling
+     * @param array $polygon A list of coordinates of points
+     */
     public function fillOutsidePolygon(HexaCell $filling, array $polygon): void
     {
         $size = $this->map->getSize();

@@ -178,7 +178,7 @@ class VoronoiCrudTest extends WebTestCase
         $fac = static::getContainer()->get(\App\Repository\CharacterFactory::class);
         $npc = $fac->create('Wizard', new Background('back'), new Faction('fact'));
         $npc->setMorph(new Morph('morph'));
-        $npc->surnameLang = 'french';
+        $npc->tokenPic = 'Wizard-token.png';
         $this->repository->save($npc);
 
         $crawler = $this->client->request('GET', "/voronoi/populate/$pk");

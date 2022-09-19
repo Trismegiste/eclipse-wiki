@@ -299,6 +299,11 @@ class HexaMap implements SquareGrid
         $this->grid = $update;
     }
 
+    /**
+     * Differentiates clusters by giving them a different tile/color
+     * @param array $tileWeight The weights (in clusters) for each tile
+     * @param array $tileMinCount The mminimal count of clusters for each tile
+     */
     public function texturing(array $tileWeight, array $tileMinCount): void
     {
         $roomGroup = $this->getCoordPerRoom();
@@ -348,6 +353,10 @@ class HexaMap implements SquareGrid
         }
     }
 
+    /**
+     * Gets some statistics about this map
+     * @return array
+     */
     public function getStatistics(): array
     {
         $roomGroup = $this->getCoordPerRoom();
@@ -380,11 +389,17 @@ class HexaMap implements SquareGrid
         return $stats;
     }
 
+    /**
+     * Puts NPC on cells
+     * @param array $npcPerTile for each tile, the count of cells for one NPC
+     * @return void
+     */
     public function populating(array $npcPerTile): void
     {
-        // keep npc title for generating SVG
-        foreach($npcPerTile as $cfg) {
-             $this->npcToken[crc32($cfg->npcTitle)] = $cfg->npcTitle;
+        // keep npc title for generating SVG, we need abstract ID for <defs> tag
+        $this->npcToken = [];
+        foreach ($npcPerTile as $cfg) {
+            $this->npcToken[crc32($cfg->npcTitle)] = $cfg->npcTitle;
         }
 
         foreach ($this->grid as $x => $column) {
@@ -401,6 +416,10 @@ class HexaMap implements SquareGrid
         }
     }
 
+    /**
+     * Gets assoc array between token ID and NPC
+     * @return array
+     */
     public function getNpcToken(): array
     {
         return $this->npcToken;
