@@ -23,11 +23,7 @@ class ProfilePic extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('avatar', FileType::class, [
-                'mapped' => false,
-                'attr' => ['x-on:change' => 'readFile($el)']
-            ])
-            ->add('content', HiddenType::class)
+            ->add('avatar', Type\CropperType::class)
             ->add('generate', SubmitType::class)
         ;
     }
