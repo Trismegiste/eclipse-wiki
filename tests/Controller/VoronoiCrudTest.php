@@ -105,7 +105,7 @@ class VoronoiCrudTest extends WebTestCase
         $this->assertSelectorExists('form');
 
         $form = $crawler->selectButton('form_texture')->form();
-        $form->setValues(['form[voronoiParam]' => [
+        $form->setValues(['form[voronoiParam][tileWeight]' => [
                 'cluster-sleep' => 5
         ]]);
         $this->client->submit($form);
@@ -184,7 +184,7 @@ class VoronoiCrudTest extends WebTestCase
         $crawler = $this->client->request('GET', "/voronoi/populate/$pk");
         $this->assertResponseIsSuccessful();
         $form = $crawler->selectButton('form_populate')->form();
-        $form->setValues(['form[voronoiParam]' => [
+        $form->setValues(['form[voronoiParam][tilePopulation]' => [
                 'cluster-sleep' => [
                     'npcTitle' => 'Wizard',
                     'tilePerNpc' => 6
