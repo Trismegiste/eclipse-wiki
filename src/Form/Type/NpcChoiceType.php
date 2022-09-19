@@ -37,7 +37,7 @@ class NpcChoiceType extends AbstractType
     protected function getNpcList(): array
     {
         $npcList = [];
-        foreach ($this->repository->search(['wildCard' => false]) as $npc) {
+        foreach ($this->repository->search(['tokenPic' => ['$ne' => null]]) as $npc) {
             $npcList[$npc->getTitle()] = $npc->getTitle();
         }
 

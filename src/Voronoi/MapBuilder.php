@@ -8,6 +8,7 @@ namespace App\Voronoi;
 
 use App\Entity\MapConfig;
 use App\Repository\TileProvider;
+use App\Service\Storage;
 use RuntimeException;
 
 /**
@@ -19,10 +20,12 @@ class MapBuilder
     const defaultSizeForWeb = 1000;
 
     protected TileProvider $provider;
+    protected Storage $storage;
 
-    public function __construct(TileProvider $provider)
+    public function __construct(TileProvider $provider, Storage $storage)
     {
         $this->provider = $provider;
+        $this->storage = $storage;
     }
 
     public function create(MapConfig $config): HexaMap
@@ -87,10 +90,10 @@ class MapBuilder
             echo $svg->getTile()->C14N();
         }
 
-        foreach($map->getNpcToken() as $key => $title) {
+        foreach ($map->getNpcToken() as $key => $title) {
             echo '<g id="token-' . $key . '" transform="scale(0.008) translate(-50, -50)">';
             echo '<image width="100" height="100" xlink:href="data:image/png;base64,';
-            echo base64_encode(file_get_contents("/www/var/storage/dev/$title-token.png")); // @todo need to inject Storage service
+            echo base64_encode(file_get_contents($this->storage->getFileInfo("$title-token.png")->getPathname()));
             echo '"/>';
             echo '<circle cx="50" cy="50" r="50" style="fill:none;stroke:red;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />';
             echo "</g>\n";

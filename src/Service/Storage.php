@@ -174,6 +174,7 @@ class Storage
 
         $targetName = join_paths($this->getRootDir(), $filename);
         $target = imagescale($source, self::tokenSize, self::tokenSize);
+        imagesavealpha($target, true);
         $ret = imagepng($target, $targetName);
         imagedestroy($source);
         imagedestroy($target);
