@@ -16,7 +16,7 @@ class HexaMap implements SquareGrid
 
     protected int $gridSize;
     protected array $grid;
-    protected array $npcToken;
+    protected array $npcToken = [];
 
     public function __construct(int $size)
     {
