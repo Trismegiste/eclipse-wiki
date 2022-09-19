@@ -28,7 +28,14 @@
                     <th>{{ render_tile('habitat', key, 32) }}</th>
                     <td>{{ value.rooms }}</td>
                     <td>{{ value.hexagons }}</td>
-                    <td>{{ value.npcTitle }}</td>
+                    <td>
+                        {% if value.npcTitle is not empty %}
+                            <a href="{{ path('app_placecrud_npcshow', {title: value.npcTitle}) }}">
+                                <i class="icon-user-plus"></i>
+                                {{ value.npcTitle }}
+                            </a>
+                        {% endif %}
+                    </td>
                     <td>
                         {% if value.npcTitle is not empty %}
                             {{ value.npcCount  }} ({{ (100 * value.npcCount / value.hexagons)|round }}%)

@@ -22,9 +22,15 @@
     <div class="pure-g">
         <div class="pure-u-3-4">
             {{ parent() }}
-            {% if vertex.npcTemplate is not empty %}
+            {% if vertex.voronoiParam is not empty and vertex.voronoiParam.tilePopulation is not empty %}
                 <h2>PNJ</h2>
-                La majorité des PNJ sont <a href="{{ path('app_placecrud_npcshow', {title: vertex.npcTemplate}) }}">{{ vertex.npcTemplate }}</a>
+                Ce lieu est peuplé par 
+                {% for cfg in vertex.voronoiParam.tilePopulation %}
+                    <a href="{{ path('app_placecrud_npcshow', {title: cfg.npcTitle}) }}">
+                        <i class="icon-user-plus"></i>
+                        {{ cfg.npcTitle }}
+                    </a>
+                {% endfor %}
             {% endif %}
         </div>
         <aside class="pure-u-1-4">

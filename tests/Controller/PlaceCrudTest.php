@@ -9,7 +9,7 @@ namespace App\Tests\Controller;
 use App\Entity\Background;
 use App\Entity\Faction;
 use App\Entity\Morph;
-use App\Entity\Transhuman;
+use App\Repository\CharacterFactory;
 use App\Repository\VertexRepository;
 use MongoDB\BSON\ObjectIdInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -31,7 +31,7 @@ class PlaceCrudTest extends WebTestCase
         $this->assertCount(0, iterator_to_array($repo->search()));
 
         // fixtures
-        $fac = static::getContainer()->get(\App\Repository\CharacterFactory::class);
+        $fac = static::getContainer()->get(CharacterFactory::class);
         $npc = $fac->create('Wizard', new Background('back'), new Faction('fact'));
         $npc->setMorph(new Morph('morph'));
         $npc->surnameLang = 'german';
@@ -48,8 +48,7 @@ class PlaceCrudTest extends WebTestCase
         $form = $crawler->selectButton('place_create')->form();
         $form->setValues(['place' => [
                 'title' => 'Tatooine',
-                'content' => 'Some link to [[Luke]]',
-                'npcTemplate' => 'Wizard'
+                'content' => 'Some link to [[Luke]]'
         ]]);
         $this->client->submit($form);
         $this->assertResponseRedirects();
@@ -88,18 +87,6 @@ class PlaceCrudTest extends WebTestCase
         $crawler = $this->client->request('GET', $edit);
         $this->assertPageTitleContains('Tatooine');
         $this->assertCount(1, $crawler->selectButton('place_create'));
-        $url = $crawler->filterXPath('//nav/a/i[@class="icon-user-plus"]/parent::a')->attr('href');
-
-        return $url;
-    }
-
-    /** @depends testEdit */
-    public function testShowDefaultNpc(string $useradd)
-    {
-        $crawler = $this->client->request('GET', $useradd);
-        $this->assertResponseRedirects();
-        $this->client->followRedirect();
-        $this->assertPageTitleContains('Wizard');
     }
 
     /** @depends testList */
