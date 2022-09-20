@@ -102,7 +102,7 @@ class MapBuilder
         }
 
         foreach ($map->getNpcToken() as $key => $title) {
-            $tokenPic = $this->storage->getFileInfo("$title-token.png");
+            $tokenPic = $this->storage->getFileInfo("$title-token.png");   // @todo bug if vertex is renamed after generating token
             if ($tokenPic->isReadable()) {
                 echo '<g id="token-' . $key . '" transform="scale(0.008) translate(-50, -50)">';
                 echo '<image width="100" height="100" xlink:href="data:image/png;base64,';

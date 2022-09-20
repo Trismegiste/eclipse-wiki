@@ -45,10 +45,9 @@
                         })
 
                         // Broadcast current view with a key
-                        var model = this
-                        Mousetrap.bind('p', function () {
+                        Mousetrap.bind('p', () => {
                             const formData = new FormData()
-                            formData.append('svg', new Blob([model.battlemap.svg()], {type: 'image/svg+xml'}))
+                            formData.append('svg', new Blob([this.battlemap.svg()], {type: 'image/svg+xml'}))
 
                             fetch('{{ path('app_voronoicrud_pushplayerview') }}', {
                                 method: 'post',
@@ -88,7 +87,13 @@
                     },
 
                     characterAdd() {
-
+                        let npcTitle = this.newCharacter
+                        this.newCharacter = null
+                        let bbox = this.battlemap.viewbox()
+                        this.battlemap.circle(0.8)
+                                .fill('Lime')
+                                .move(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2)
+                                .draggable()
                     },
 
                     playerBroadcast(e) {
