@@ -68,7 +68,7 @@
                     },
 
                     searchLegend() {
-                        let xpath = '//svg:svg/svg:g[@id="legend"]/svg:text[contains(text(),"' + this.legendFilter.trim().toUpperCase() + '")]'
+                        let xpath = '//svg:svg/svg:g[@id="legend"]/svg:text[normalize-space()="' + this.legendFilter.trim().toUpperCase() + '"]'
                         let legend = document.evaluate(xpath, document, function (prefix) {
                             const ns = {
                                 'xhtml': 'http://www.w3.org/1999/xhtml',
