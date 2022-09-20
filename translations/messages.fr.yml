@@ -99,7 +99,10 @@ WITH_BATTLEMAP: Avec battlemap
 WITHOUT_BATTLEMAP: Sans battlemap
 Attach: Attacher
 STRAT_STARSHIP: Vaisseau
-FOG_OF_WAR: Brouillard de guerre
-SEARCH_LEGEND: Rechercher légende
+Fog of war: Brouillard de guerre
+Search legend: Rechercher légende
+-- CHOOSE_NPC --: -- Choisissez --
+Character add: Ajouter un perso
+Broadcast: Diffuser
 Tile weight: Proportion de pièces par tuile
 Min cluster per tile: Nombre minimal de pièces par tuile

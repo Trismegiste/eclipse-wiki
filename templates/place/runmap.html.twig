@@ -9,24 +9,7 @@
             <div id="map">{{ svg|raw }}</div>
         </div>
         <div class="pure-u-1-4">
-            <div class="pure-form">
-                <fieldset>
-                    <div class="pure-g">
-                        <div class="pure-u-1-2">
-                            <label for="check-fog">{% trans %}FOG_OF_WAR{% endtrans %}</label>
-                        </div>
-                        <div class="pure-u-1-2">
-                            <input type="checkbox" x-model="fogEnabled" x-on:change="toggleFog" id="check-fog"/>
-                        </div>
-                        <div class="pure-u-1-2">
-                            <label>{% trans %}SEARCH_LEGEND{% endtrans %}</label>
-                        </div>
-                        <div class="pure-u-1-2">
-                            <input type="text" x-model="legendFilter" x-on:blur="searchLegend" class="pure-input-1-2"/>
-                        </div>
-                    </div>
-                </fieldset>
-            </div>
+            {{ form(tools) }}
         </div>
     </div>
 {% endblock %}
@@ -42,6 +25,7 @@
                     battlemap: null,
                     fogEnabled: true,
                     legendFilter: null,
+                    newCharacter: null,
 
                     init() {
                         let svgElem = document.querySelector('#map svg')
@@ -53,6 +37,11 @@
                             item.addEventListener('dblclick', function (e) {
                                 item.remove()
                             })
+                        })
+
+                        // make all NPC draggable
+                        document.querySelectorAll('svg #layer-npc use').forEach(function (item) {
+                            SVG(item).draggable()
                         })
 
                         // Broadcast current view with a key
@@ -96,6 +85,14 @@
                                     .animate()
                                     .zoom(75, {x: cx, y: cy})
                         }
+                    },
+
+                    characterAdd() {
+
+                    },
+
+                    playerBroadcast(e) {
+                        e.preventDefault()
                     }
                 }))
         })

@@ -53,8 +53,9 @@ class PlaceCrud extends GenericCrud
     {
         $vertex = $this->repository->findByPk($pk);
         $svg = file_get_contents($storage->getFileInfo($vertex->battleMap)->getPathname());
+        $tools = $this->createForm(\App\Form\RunningMapTools::class);
 
-        return $this->render('place/runmap.html.twig', ['title' => 'Running ' . $vertex->getTitle(), 'svg' => $svg]);
+        return $this->render('place/runmap.html.twig', ['title' => 'Running ' . $vertex->getTitle(), 'tools' => $tools->createView(), 'svg' => $svg]);
     }
 
     /**
