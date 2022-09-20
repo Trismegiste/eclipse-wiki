@@ -6,11 +6,19 @@
 
 namespace App\Repository;
 
+use App\Entity\Ali;
+use App\Entity\Freeform;
+use App\Entity\Transhuman;
 use App\Entity\Vertex;
+use DomainException;
+use InvalidArgumentException;
+use IteratorIterator;
 use MongoDB\BSON\Binary;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\Regex;
+use MongoDB\BSON\UTCDateTime;
 use MongoDB\Driver\Query;
+use RuntimeException;
 use Trismegiste\Strangelove\MongoDb\DefaultRepository;
 
 /**
@@ -34,9 +42,9 @@ class VertexRepository extends DefaultRepository
 
     /**
      * Gets an iterator against all vertices collection
-     * @return \IteratorIterator
+     * @return IteratorIterator
      */
-    public function findAll(): \IteratorIterator
+    public function findAll(): IteratorIterator
     {
         return $this->search([], [], '_id');
     }
@@ -73,15 +81,15 @@ class VertexRepository extends DefaultRepository
         return $linked;
     }
 
-    protected function getLastModified(string $pk): \MongoDB\BSON\UTCDateTime
+    protected function getLastModified(string $pk): UTCDateTime
     {
         $current = $this->manager->executeQuery($this->getNamespace(), new Query(
-                    ['_id' => new ObjectId($pk)],
-                    ['limit' => 1, 'projection' => ['lastModified' => true]]))
-            ->toArray();
+                                ['_id' => new ObjectId($pk)],
+                                ['limit' => 1, 'projection' => ['lastModified' => true]]))
+                ->toArray();
 
         if (0 == count($current)) {
-            throw new \RuntimeException("The document with _id='$pk' was not found.");
+            throw new RuntimeException("The document with _id='$pk' was not found.");
         }
 
         return $current[0]->lastModified;
@@ -90,8 +98,8 @@ class VertexRepository extends DefaultRepository
     public function searchPreviousOf(string $pk): ?Vertex
     {
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                ['lastModified' => ['$gt' => $this->getLastModified($pk)]],
-                ['limit' => 1, 'sort' => ['lastModified' => 1]]));
+                        ['lastModified' => ['$gt' => $this->getLastModified($pk)]],
+                        ['limit' => 1, 'sort' => ['lastModified' => 1]]));
 
         $item = $cursor->toArray();
 
@@ -101,8 +109,8 @@ class VertexRepository extends DefaultRepository
     public function searchNextOf(string $pk): ?Vertex
     {
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                ['lastModified' => ['$lt' => $this->getLastModified($pk)]],
-                ['limit' => 1, 'sort' => ['lastModified' => -1]]));
+                        ['lastModified' => ['$lt' => $this->getLastModified($pk)]],
+                        ['limit' => 1, 'sort' => ['lastModified' => -1]]));
 
         $item = $cursor->toArray();
 
@@ -134,7 +142,12 @@ class VertexRepository extends DefaultRepository
         return count($updated);
     }
 
-    public function filterBy(string $keyword): \IteratorIterator
+    /**
+     * Generic search for most-used listing of vertices
+     * @param string $keyword
+     * @return IteratorIterator
+     */
+    public function filterBy(string $keyword): IteratorIterator
     {
         $filter = [];
         if (!empty($keyword)) {
@@ -145,29 +158,33 @@ class VertexRepository extends DefaultRepository
         }
 
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query($filter, [
-                'sort' => [
-                    'archived' => 1,
-                    'lastModified' => -1
-                ]
+                    'sort' => [
+                        'archived' => 1,
+                        'lastModified' => -1
+                    ]
         ]));
 
-        return new \IteratorIterator($cursor);
+        return new IteratorIterator($cursor);
     }
 
-    public function findByClass($fqcn, array $filter = []): \IteratorIterator
+    /**
+     * Searches documents by FQCN
+     * @param string|array $fqcn
+     * @param array $filter
+     * @return IteratorIterator
+     * @throws InvalidArgumentException
+     */
+    public function findByClass(string|array $fqcn, array $filter = []): IteratorIterator
     {
         // managing parameters
         if (is_string($fqcn)) {
             $fqcn = [$fqcn];
         }
-        if (!is_array($fqcn)) {
-            throw new \InvalidArgumentException('Not an array');
-        }
 
         // convert to MongoDb
         array_walk($fqcn, function (string &$val) {
             if (!class_exists($val)) {
-                throw new \DomainException("FQCN $val does not exist");
+                throw new DomainException("FQCN $val does not exist");
             }
             $val = new Binary($val, Binary::TYPE_USER_DEFINED);
         });
@@ -175,21 +192,41 @@ class VertexRepository extends DefaultRepository
         // returning query
         $filter['__pclass'] = ['$in' => $fqcn];
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                $filter,
-                ['sort' => ['title' => 1]]
+                        $filter,
+                        ['sort' => ['title' => 1]]
         ));
 
-        return new \IteratorIterator($cursor);
+        return new IteratorIterator($cursor);
     }
 
-    public function sortedExport(): \IteratorIterator
+    /**
+     * Query for Database Export
+     * @return IteratorIterator
+     */
+    public function sortedExport(): IteratorIterator
     {
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query(
-                [],
-                ['sort' => ['lastModified' => 1]]
+                        [],
+                        ['sort' => ['lastModified' => 1]]
         ));
 
-        return new \IteratorIterator($cursor);
+        return new IteratorIterator($cursor);
+    }
+
+    /**
+     * Searches all NPC with a token picture
+     * @return IteratorIterator
+     */
+    public function searchNpcWithToken(): IteratorIterator
+    {
+        return $this->findByClass(
+                        [
+                            Ali::class,
+                            Transhuman::class,
+                            Freeform::class
+                        ],
+                        ['tokenPic' => ['$ne' => null]]
+        );
     }
 
 }

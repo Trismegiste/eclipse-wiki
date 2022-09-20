@@ -23,7 +23,7 @@ class VertexRepositoryTest extends KernelTestCase
     public function testReset()
     {
         $this->sut->delete(iterator_to_array($this->sut->search()));
-        $this->assertCount(0,$this->sut->search());
+        $this->assertCount(0, $this->sut->search());
     }
 
     public function testBacklinks()
@@ -88,4 +88,20 @@ class VertexRepositoryTest extends KernelTestCase
         $it = $this->sut->filterBy('wxzwxzwxz');
         $this->assertEquals([], iterator_to_array($it));
     }
+
+    public function testSearchNpcByTokenEmpty()
+    {
+        $this->assertCount(0, $this->sut->searchNpcWithToken());
+
+        $npc = new App\Entity\Freeform('monster');
+        $npc->tokenPic = 'monster.png';
+        $this->sut->save($npc);
+    }
+
+    /** @depends testSearchNpcByTokenEmpty */
+    public function testSearchNpcByTokenOne()
+    {
+        $this->assertCount(1, $this->sut->searchNpcWithToken());
+    }
+
 }
