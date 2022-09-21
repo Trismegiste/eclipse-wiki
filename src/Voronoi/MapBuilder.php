@@ -104,12 +104,7 @@ class MapBuilder
         foreach ($map->getNpcToken() as $npcToken) {
             $tokenPic = $this->storage->getFileInfo($npcToken->picture);
             if ($tokenPic->isReadable()) {
-                echo '<g id="' . $tokenPic->getBasename('.png') . '" transform="scale(0.008) translate(-50, -50)">';
-                echo '<image width="100" height="100" xlink:href="data:image/png;base64,';
-                echo base64_encode(file_get_contents($tokenPic->getPathname()));
-                echo '"/>';
-                echo '<circle cx="50" cy="50" r="50" style="fill:none;stroke:red;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />';
-                echo "</g>\n";
+                $this->dumpTokenFor($tokenPic);
             }
         }
 
@@ -158,6 +153,20 @@ class MapBuilder
         $this->dumpSvg($map);
         ob_end_flush();
         fclose($target);
+    }
+
+    public function dumpTokenFor(\SplFileInfo $tokenPic, bool $withId = true): void
+    {
+        echo '<g ';
+        if ($withId) {
+            echo 'id="' . $tokenPic->getBasename('.png') . '" ';
+        }
+        echo 'transform="scale(0.008) translate(-50, -50)">';
+        echo '<image width="100" height="100" xlink:href="data:image/png;base64,';
+        echo base64_encode(file_get_contents($tokenPic->getPathname()));
+        echo '"/>';
+        echo '<circle cx="50" cy="50" r="50" style="fill:none;stroke:red;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />';
+        echo "</g>\n";
     }
 
 }

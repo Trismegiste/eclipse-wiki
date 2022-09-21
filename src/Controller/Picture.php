@@ -7,15 +7,18 @@
 namespace App\Controller;
 
 use App\Form\PictureUpload;
+use App\Repository\VertexRepository;
 use App\Service\PlayerCastCache;
 use App\Service\Storage;
 use App\Voronoi\MapBuilder;
+use DateTime;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
 use function join_paths;
@@ -103,7 +106,7 @@ class Picture extends AbstractController
      * Returns a pixelized thumbnail for the vector battlemap linked to the Place given by its pk
      * @Route("/battlemap/thumbnail/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function battlemapThumbnail(string $pk, \App\Repository\VertexRepository $repository, Request $request): Response
+    public function battlemapThumbnail(string $pk, VertexRepository $repository, Request $request): Response
     {
         $place = $repository->findByPk($pk);
 
@@ -115,7 +118,7 @@ class Picture extends AbstractController
         // managing HTTP Cache
         if (file_exists("$targetName.jpg")) {
             $response = new BinaryFileResponse("$targetName.jpg");
-            $response->setLastModified(new \DateTime('@' . $battlemapSvg->getMTime()));
+            $response->setLastModified(new DateTime('@' . $battlemapSvg->getMTime()));
             if ($response->isNotModified($request)) {
                 return $response;
             }
@@ -162,9 +165,23 @@ YOLO
         $convert->mustRun();
 
         $response = new BinaryFileResponse("$targetName.jpg");
-        $response->setLastModified(new \DateTime('@' . $battlemapSvg->getMTime()));
+        $response->setLastModified(new DateTime('@' . $battlemapSvg->getMTime()));
 
         return $response;
+    }
+
+    /**
+     * Show token from storage
+     * @Route("/token/get/{title}", methods={"GET"})
+     */
+    public function readToken(string $title, VertexRepository $repo, MapBuilder $builder): Response
+    {
+        $npc = $repo->findByTitle($title);
+        $pic = $this->storage->getFileInfo($npc->tokenPic);
+
+        return new StreamedResponse(function () use ($builder, $pic) {
+                    $builder->dumpTokenFor($pic, false);
+                }, 200, ['content-type' => 'image/svg+xml']);
     }
 
 }

@@ -5,10 +5,10 @@
 
 {% block body %}
     <div x-data="spa" class="pure-g">
-        <div class="pure-u-3-4">
+        <div class="pure-u-3-5">
             <div id="map">{{ svg|raw }}</div>
         </div>
-        <div class="pure-u-1-4">
+        <div class="pure-u-2-5">
             {{ form(tools) }}
         </div>
     </div>
@@ -87,13 +87,17 @@
                     },
 
                     characterAdd() {
-                        let npcTitle = this.newCharacter
+                        fetch('/token/get/' + this.newCharacter).then((response) => {
+                            return response.text()
+                        }).then((content) => {
+                            let bbox = this.battlemap.viewbox()
+                            let token = this.battlemap.group()
+                            token.svg(content)
+                                    .move(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2)
+                                    .draggable()
+                        })
+
                         this.newCharacter = null
-                        let bbox = this.battlemap.viewbox()
-                        this.battlemap.circle(0.8)
-                                .fill('Lime')
-                                .move(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2)
-                                .draggable()
                     },
 
                     playerBroadcast(e) {
@@ -101,22 +105,6 @@
                     }
                 }))
         })
-
-        {#
-            var colorCycle = 0
-            const palette = ['Red', 'DarkOrange', 'Yellow', 'Magenta', 'DarkViolet', 'Lime', 'MediumSeaGreen', 'Aqua', 'DeepSkyBlue', 'RosyBrown']
-
-            Mousetrap.bind('t', function () {
-                let bbox = battlemap.viewbox()
-                battlemap.circle(0.6)
-                        .fill(palette[colorCycle % palette.length])
-                        .move(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2)
-                        .draggable()
-                colorCycle++
-                return false
-            })
-
-        #}
     </script>
 {% endblock %}
 
