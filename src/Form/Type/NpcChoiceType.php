@@ -38,7 +38,7 @@ class NpcChoiceType extends AbstractType
     {
         $npcList = [];
         foreach ($this->repository->searchNpcWithToken() as $npc) {
-            $npcList[$npc->getTitle()] = $npc->getTitle();
+            $npcList[$npc->getTitle()] = new MapToken($npc->tokenPic, $npc->getTitle());
         }
 
         return $npcList;

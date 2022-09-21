@@ -9,6 +9,6 @@ class TileNpcConfig implements Persistable
 {
     use PersistableImpl;
 
-    public string $npcTitle;
+    public MapToken $npc;
     public int $tilePerNpc;
 }
