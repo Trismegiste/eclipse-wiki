@@ -26,10 +26,11 @@
                 <h2>PNJ</h2>
                 Ce lieu est peuplé par 
                 {% for cfg in vertex.voronoiParam.tilePopulation %}
-                    <a href="{{ path('app_placecrud_npcshow', {title: cfg.npcTitle}) }}">
+                    <a href="{{ path('app_placecrud_npcshow', {title: cfg.npc.label}) }}">
                         <i class="icon-user-plus"></i>
-                        {{ cfg.npcTitle }}
+                        {{ cfg.npc.label }}
                     </a>
+                    {% if not loop.last %},{% endif %}
                 {% endfor %}
             {% endif %}
         </div>
