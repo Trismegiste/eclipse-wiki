@@ -101,10 +101,10 @@ class MapBuilder
             echo $svg->getTile()->C14N();
         }
 
-        foreach ($map->getNpcToken() as $key => $title) {
-            $tokenPic = $this->storage->getFileInfo("$title-token.png");   // @todo bug if vertex is renamed after generating token
+        foreach ($map->getNpcToken() as $npcToken) {
+            $tokenPic = $this->storage->getFileInfo($npcToken->picture);
             if ($tokenPic->isReadable()) {
-                echo '<g id="token-' . $key . '" transform="scale(0.008) translate(-50, -50)">';
+                echo '<g id="' . $tokenPic->getBasename('.png') . '" transform="scale(0.008) translate(-50, -50)">';
                 echo '<image width="100" height="100" xlink:href="data:image/png;base64,';
                 echo base64_encode(file_get_contents($tokenPic->getPathname()));
                 echo '"/>';

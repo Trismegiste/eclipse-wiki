@@ -379,9 +379,9 @@ class HexaMap implements SquareGrid
 
         foreach ($this->grid as $column) {
             foreach ($column as $cell) {
-                if (!is_null($cell->npcTitle)) {
+                if (!is_null($cell->npc)) {
                     $stats[$cell->template]['npcCount']++;
-                    $stats[$cell->template]['npcTitle'] = $cell->npcTitle;
+                    $stats[$cell->template]['npcTitle'] = $cell->npc->label;
                 }
             }
         }
@@ -396,10 +396,10 @@ class HexaMap implements SquareGrid
      */
     public function populating(array $npcPerTile): void
     {
-        // keep npc title for generating SVG, we need abstract ID for <defs> tag
+        // keep npc for generating SVG, we need abstract ID for <defs> tag
         $this->npcToken = [];
         foreach ($npcPerTile as $cfg) {
-            $this->npcToken[crc32($cfg->npcTitle)] = $cfg->npcTitle;
+            $this->npcToken[] = $cfg->npc;
         }
 
         foreach ($this->grid as $x => $column) {
@@ -409,7 +409,7 @@ class HexaMap implements SquareGrid
                     $cfg = $npcPerTile[$cell->template];
                     /** @var \App\Entity\TileNpcConfig $cfg */
                     if (rand() / getrandmax() <= 1.0 / $cfg->tilePerNpc) {
-                        $cell->npcTitle = $cfg->npcTitle;
+                        $cell->npc = $cfg->npc;
                     }
                 }
             }

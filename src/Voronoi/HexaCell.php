@@ -29,7 +29,7 @@ class HexaCell implements BattlemapItem
     public bool $growable; // for voronoi algo
     public array $wall = [false, false, false, false, false, false]; // CCW, from EAST (0°) to SOUTHEAST (300°)
     public array $door = [false, false, false, false, false, false]; // CCW, from EAST (0°) to SOUTHEAST (300°)
-    public ?string $npcTitle = null;
+    public ?\App\Entity\MapToken $npc = null;
 
     public function __construct(int $uid, string $template = 'default', bool $growable = true)
     {
@@ -75,10 +75,10 @@ class HexaCell implements BattlemapItem
 
     public function dumpNpc(float $x, float $y): void
     {
-        if (!is_null($this->npcTitle)) {
-            echo '<use xlink:href="#token-';
-            echo crc32($this->npcTitle);
-            echo "\" x=\"$x\" y=\"$y\" data-npc-title=\"{$this->npcTitle}\"/>\n";
+        if (!is_null($this->npc)) {
+            echo '<use xlink:href="#';
+            echo basename($this->npc->picture, '.png');
+            echo "\" x=\"$x\" y=\"$y\" data-npc-title=\"{$this->npc->label}\"/>\n";
         }
     }
 

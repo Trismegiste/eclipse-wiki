@@ -166,7 +166,7 @@ class ProfilePicture extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $filename = $npc->getTitle() . '-token.png';
+            $filename = 'token-' . $npc->getPk() . '.png';
             $this->storage->storeToken($form['token']->getData(), $filename);
             $npc->tokenPic = $filename;
             $this->repository->save($npc);

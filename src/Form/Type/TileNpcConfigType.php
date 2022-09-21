@@ -23,7 +23,7 @@ class TileNpcConfigType extends AbstractType implements DataMapperInterface
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('npcTitle', NpcChoiceType::class, [
+        $builder->add('npc', NpcChoiceType::class, [
                     'placeholder' => '-----------',
                     'required' => false
                 ])
@@ -47,16 +47,16 @@ class TileNpcConfigType extends AbstractType implements DataMapperInterface
         }
 
         $forms = iterator_to_array($forms);
-        $forms['npcTitle']->setData($viewData->npcTitle);
+        $forms['npc']->setData($viewData->npc);
         $forms['tilePerNpc']->setData($viewData->tilePerNpc);
     }
 
     public function mapFormsToData(Traversable $forms, &$viewData)
     {
         $forms = iterator_to_array($forms);
-        if (!empty($forms['tilePerNpc']->getData()) && !empty($forms['npcTitle']->getData())) {
+        if (!empty($forms['tilePerNpc']->getData()) && !empty($forms['npc']->getData())) {
             $viewData->tilePerNpc = $forms['tilePerNpc']->getData();
-            $viewData->npcTitle = $forms['npcTitle']->getData();
+            $viewData->npc = $forms['npc']->getData();
         } else {
             $viewData = null;
         }

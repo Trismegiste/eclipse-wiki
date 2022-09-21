@@ -31,14 +31,17 @@ class NpcChoiceType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(['choices' => $this->getNpcList()]);
+        $resolver->setDefaults([
+            'choices' => $this->getNpcList(),
+            'choice_value' => 'label'
+        ]);
     }
 
     protected function getNpcList(): array
     {
         $npcList = [];
         foreach ($this->repository->searchNpcWithToken() as $npc) {
-            $npcList[$npc->getTitle()] = new MapToken($npc->tokenPic, $npc->getTitle());
+            $npcList[$npc->getTitle()] = new \App\Entity\MapToken($npc->tokenPic, $npc->getTitle());
         }
 
         return $npcList;

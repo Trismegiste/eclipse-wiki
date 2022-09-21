@@ -186,7 +186,7 @@ class VoronoiCrudTest extends WebTestCase
         $form = $crawler->selectButton('form_populate')->form();
         $form->setValues(['form[voronoiParam][tilePopulation]' => [
                 'cluster-sleep' => [
-                    'npcTitle' => 'Wizard',
+                    'npc' => 'Wizard',
                     'tilePerNpc' => 6
                 ]
         ]]);
