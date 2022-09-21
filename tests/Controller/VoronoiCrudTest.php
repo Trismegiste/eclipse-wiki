@@ -193,6 +193,18 @@ class VoronoiCrudTest extends WebTestCase
         $this->client->submit($form);
         $this->assertResponseRedirects();
         $this->client->followRedirect();
+
+        return $pk;
+    }
+
+    /** @depends testPopulate */
+    public function testGenerateSvgWithNpc(string $pk)
+    {
+        ob_start();
+        $this->client->request('GET', "/voronoi/generate/$pk");
+        ob_end_clean();
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals('image/svg+xml', $this->client->getResponse()->headers->get('content-type'));
     }
 
 }
