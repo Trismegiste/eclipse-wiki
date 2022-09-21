@@ -33,7 +33,8 @@ class NpcChoiceType extends AbstractType
     {
         $resolver->setDefaults([
             'choices' => $this->getNpcList(),
-            'choice_value' => 'label'
+            'choice_value' => 'label',
+            'choice_label' => 'label'
         ]);
     }
 
@@ -41,7 +42,7 @@ class NpcChoiceType extends AbstractType
     {
         $npcList = [];
         foreach ($this->repository->searchNpcWithToken() as $npc) {
-            $npcList[$npc->getTitle()] = new \App\Entity\MapToken($npc->tokenPic, $npc->getTitle());
+            $npcList[] = new \App\Entity\MapToken($npc->tokenPic, $npc->getTitle());
         }
 
         return $npcList;
