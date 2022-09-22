@@ -17,10 +17,10 @@ class Background implements Indexable, Persistable
 
     use PersistableImpl;
 
-    public $title;
-    public $ability = [];
-    public $disability = [];
-    public $motivation = [];
+    public ?string $title = null;
+    public array $ability = [];
+    public array $disability = [];
+    public array $motivation = [];
 
     public function __construct(string $param)
     {

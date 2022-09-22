@@ -12,12 +12,12 @@ namespace App\Entity;
 abstract class Modifier implements Indexable
 {
 
-    protected $name;
-    protected $ego;
-    protected $biomorph;
-    protected $synthmorph;
+    protected string $name;
+    protected bool $ego;
+    protected bool $biomorph;
+    protected bool $synthmorph;
 
-    public function __construct(string $str, $ego = false, $biomorph = false, $synthmorph = false)
+    public function __construct(string $str, bool $ego = false, bool $biomorph = false, bool $synthmorph = false)
     {
         $this->name = $str;
         $this->ego = $ego;

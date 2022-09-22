@@ -12,7 +12,7 @@ use Trismegiste\Strangelove\MongoDb\PersistableImpl;
 use UnexpectedValueException;
 
 /**
- * Hindrance 
+ * Hindrance
  */
 class Hindrance extends Modifier implements Persistable, JsonSerializable
 {
@@ -23,11 +23,11 @@ class Hindrance extends Modifier implements Persistable, JsonSerializable
     const MAJOR = 2;
     const MINOR_MAJOR = 3;
 
-    protected $choices;
-    protected $level;
-    public $origin = null; // creation, gift, xperience, morph, morph slot...
+    protected int $choices;
+    protected int $level;
+    public ?string $origin = null; // creation, gift, xperience, morph, morph slot...
 
-    public function __construct(string $str, $ego = false, $biomorph = false, $synthmorph = false, $choices = self::MINOR_MAJOR)
+    public function __construct(string $str, bool $ego = false, bool $biomorph = false, bool $synthmorph = false, int $choices = self::MINOR_MAJOR)
     {
         parent::__construct($str, $ego, $biomorph, $synthmorph);
         $this->choices = $choices;

@@ -40,7 +40,7 @@ class HexaCell implements BattlemapItem
 
     public function dumpGround(float $cx, float $y): void
     {
-        echo "<use xlink:href=\"#{$this->template}\" x=\"$cx\" y=\"$y\"/>";
+        echo "<use xlink:href=\"#{$this->template}\" x=\"$cx\" y=\"$y\"/>\n";
     }
 
     public function dumpWall(float $cx, float $y): void

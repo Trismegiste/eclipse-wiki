@@ -14,9 +14,9 @@ class MediaWikiPage implements \Trismegiste\Strangelove\MongoDb\Root
 
     use \Trismegiste\Strangelove\MongoDb\RootImpl;
 
-    protected $title;
-    protected $category;
-    public $content;
+    protected string $title;
+    protected string $category;
+    public string $content;
 
     public function __construct(string $title, string $category)
     {

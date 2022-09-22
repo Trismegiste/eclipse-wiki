@@ -12,12 +12,12 @@ namespace App\Entity;
 class Loveletter extends Vertex
 {
 
-    public $player;
-    public $drama;
+    public string $player;
+    public string $drama;
     public $roll1;
     public $roll2;
     public $roll3;
-    public $resolution = [];
-    public $pcChoice = [];
+    public array $resolution = [];
+    public array $pcChoice = [];
 
 }

@@ -12,6 +12,6 @@ namespace App\Entity;
 class MeleeWeapon extends Weapon
 {
 
-    public $minStr = 4;
+    public int $minStr = 4;
 
 }

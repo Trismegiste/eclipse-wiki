@@ -12,15 +12,15 @@ namespace App\Entity;
 trait EdgeContainer
 {
 
-    protected $edges = [];
-    protected $hindrances = [];
+    protected array $edges = [];
+    protected array $hindrances = [];
 
     public function getEdges(): array
     {
         return $this->edges;
     }
 
-    public function setEdges(array $listing)
+    public function setEdges(array $listing): void
     {
         $this->edges = $listing;
     }
@@ -30,7 +30,7 @@ trait EdgeContainer
         return $this->hindrances;
     }
 
-    public function setHindrances(array $listing)
+    public function setHindrances(array $listing): void
     {
         $this->hindrances = $listing;
     }

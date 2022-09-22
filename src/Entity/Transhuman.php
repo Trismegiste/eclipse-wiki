@@ -14,9 +14,9 @@ class Transhuman extends Character
 
     const avatarSection = '==Avatar==';
 
-    protected $background;
-    protected $faction;
-    public $surnameLang;
+    protected Background $background;
+    protected Faction $faction;
+    public ?string $surnameLang = null;
 
     public function __construct(string $title, Background $bg, Faction $fac)
     {

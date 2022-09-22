@@ -180,7 +180,7 @@ YOLO
         $pic = $this->storage->getFileInfo($npc->tokenPic);
 
         return new StreamedResponse(function () use ($builder, $pic) {
-                    $builder->dumpTokenFor($pic, false);
+                    $builder->dumpTokenFor($pic);
                 }, 200, ['content-type' => 'image/svg+xml']);
     }
 

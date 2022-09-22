@@ -12,9 +12,9 @@ namespace App\Entity;
 abstract class SaWoTrait implements Indexable
 {
 
-    protected $name;
+    protected string $name;
     public $dice;
-    public $modifier = 0; // after d12
+    public int $modifier = 0; // after d12
 
     public function __construct(string $str)
     {

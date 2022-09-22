@@ -17,10 +17,10 @@ class Armor implements Persistable, Indexable
 
     use PersistableImpl;
 
-    public $name;
-    public $protect;
-    public $special;
-    public $zone;
+    public string $name;
+    public int $protect;
+    public string $special;
+    public string $zone;
 
     public function __construct(string $name = '', int $protect = 0, string $spe = '', string $z = '')
     {

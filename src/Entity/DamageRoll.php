@@ -17,8 +17,8 @@ class DamageRoll implements Persistable, \JsonSerializable
 
     use PersistableImpl;
 
-    protected $diceCount = [4 => 0, 6 => 0, 8 => 0, 10 => 0, 12 => 0];
-    protected $bonus = 0;
+    protected array $diceCount = [4 => 0, 6 => 0, 8 => 0, 10 => 0, 12 => 0];
+    protected int $bonus = 0;
 
     public static function createFromString(string $roll)
     {
@@ -43,7 +43,7 @@ class DamageRoll implements Persistable, \JsonSerializable
         $this->diceCount[$side] += $cnt;
     }
 
-    public function incBonus(int $param)
+    public function incBonus(int $param): void
     {
         $this->bonus += $param;
     }
