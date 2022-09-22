@@ -24,7 +24,8 @@ class CropperType extends AbstractType
     {
         $resolver->setDefaults([
             'mapped' => false,
-            'attr' => ['x-on:change' => 'readFile($el)']
+            'attr' => ['x-on:change' => 'readFile($el)'],
+            'help' => '(ou Ctrl-V)'
         ]);
     }
 

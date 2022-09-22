@@ -4,7 +4,7 @@
     <div id="cropper-{{ form.vars.id }}"></div>
     <script>
         var uploadCrop
-        
+
         window.addEventListener('load', (event) => {
             uploadCrop = new Croppie(document.getElementById('cropper-{{ form.vars.id }}'), {
                 viewport: {
@@ -33,5 +33,12 @@
                 console.log("Sorry - you're browser doesn't support the FileReader API");
             }
         }
+
+
+        window.addEventListener('paste', e => {
+            if (e.clipboardData.files.length > 0) {
+                uploadCrop.bind(URL.createObjectURL(e.clipboardData.files[0]))
+            }
+        })
     </script>
 {% endblock %}
