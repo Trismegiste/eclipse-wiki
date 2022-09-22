@@ -18,8 +18,8 @@ class Faction implements Indexable, Persistable
     use PersistableImpl;
 
     public $title;
-    public $characteristic = [];
-    public $motivation = [];
+    public array $characteristic = [];
+    public array $motivation = [];
 
     public function __construct(string $param)
     {

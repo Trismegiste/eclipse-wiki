@@ -16,8 +16,8 @@ class Place extends Vertex
     public $temperature;
     public $pressure;
     public $gravity;
-    public $youtubeUrl = null;
-    public $battleMap = null;
+    public ?string $youtubeUrl = null;
+    public ?string $battleMap = null;
     public ?MapConfig $voronoiParam = null;
 
 }

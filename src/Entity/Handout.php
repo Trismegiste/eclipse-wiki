@@ -12,7 +12,7 @@ namespace App\Entity;
 class Handout extends Vertex
 {
 
-    public $gmInfo;
-    public $target; // a field for PC (not very defined at current time)
+    public string $gmInfo;
+    public string $target; // a field for PC (not very defined at current time)
 
 }

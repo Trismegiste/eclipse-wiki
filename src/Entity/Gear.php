@@ -18,7 +18,7 @@ class Gear implements Indexable, Persistable, JsonSerializable
 
     use PersistableImpl;
 
-    protected $name;
+    protected string $name;
     public $price;
 
     public function getUId(): string

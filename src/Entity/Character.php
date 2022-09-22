@@ -17,20 +17,20 @@ abstract class Character extends Vertex implements \JsonSerializable
     use RootImpl;
     use EdgeContainer;
 
-    public $wildCard = false;
-    public $attributes = [];
-    protected $morph;
-    protected $skills = [];
-    protected $gears = [];
-    protected $attacks = [];
-    protected $armors = [];
-    public $rangedMalus = 0;
-    public $toughnessBonus = 0;
-    public $parryBonus = 0;
-    public $economy = [];
+    public bool $wildCard = false;
+    public array $attributes = [];
+    protected ?Morph $morph = null;
+    protected array $skills = [];
+    protected array $gears = [];
+    protected array $attacks = [];
+    protected array $armors = [];
+    public int $rangedMalus = 0;
+    public int $toughnessBonus = 0;
+    public int $parryBonus = 0;
+    public array $economy = [];
     public ?string $tokenPic = null;
 
-    public function setMorph(Morph $mrp)
+    public function setMorph(Morph $mrp): void
     {
         $this->morph = $mrp;
     }

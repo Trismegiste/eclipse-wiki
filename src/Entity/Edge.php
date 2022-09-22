@@ -18,12 +18,12 @@ class Edge extends Modifier implements Persistable, JsonSerializable
 
     use PersistableImpl;
 
-    protected $rank;
-    protected $category;
+    protected string $rank;
+    protected string $category;
     protected $requis;
     public $origin = null; // creation, gift, xperience, morph, morph slot...
 
-    public function __construct(string $str, string $rank, string $category, $ego = false, $biomorph = false, $synthmorph = false, $requis = '')
+    public function __construct(string $str, string $rank, string $category, bool $ego = false, bool $biomorph = false, bool $synthmorph = false, $requis = '')
     {
         parent::__construct($str, $ego, $biomorph, $synthmorph);
         $this->rank = $rank;

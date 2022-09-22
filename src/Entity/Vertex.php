@@ -14,10 +14,10 @@ class Vertex implements \Trismegiste\Strangelove\MongoDb\Root
 
     use \Trismegiste\Strangelove\MongoDb\RootImpl;
 
-    protected $title;
-    protected $content = null;
+    protected string $title;
+    protected ?string $content = null;
     protected $lastModified;
-    protected $archived = false;
+    protected bool $archived = false;
 
     protected function beforeSave(): void
     {

@@ -18,9 +18,9 @@ class Morph implements Indexable, Persistable
     use PersistableImpl,
         EdgeContainer;
 
-    public $title;
-    public $ability = [];
-    public $disability = [];
+    public string $title;
+    public array $ability = [];
+    public array $disability = [];
     public $type;
     public $price;
 
