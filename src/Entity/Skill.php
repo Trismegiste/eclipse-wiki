@@ -17,8 +17,8 @@ class Skill extends SaWoTrait implements Persistable, \JsonSerializable
 
     use PersistableImpl;
 
-    protected $linkedAttr;
-    protected $core;
+    protected string $linkedAttr;
+    protected bool $core;
 
     public function __construct(string $str, string $linkAttr, bool $core = false)
     {

@@ -12,9 +12,9 @@ namespace App\Entity;
 class Weapon implements \JsonSerializable, Indexable
 {
 
-    public $name;
-    public $damage;
-    public $ap;
+    public string $name;
+    public string $damage;
+    public int $ap;
 
     public function __construct(string $n, string $d, int $a)
     {
