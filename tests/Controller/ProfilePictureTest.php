@@ -63,7 +63,7 @@ class ProfilePictureTest extends WebTestCase
         $crawler = $this->client->request('GET', '/profile/onthefly/' . $pk);
         $this->assertSelectorExists('#profile_on_the_fly_generate');
         $this->client->submitForm('profile_on_the_fly_generate', [
-                'profile_on_the_fly' => [
+            'profile_on_the_fly' => [
                 'svg' => '<svg width="256" height="256" viewBox="0 0 256 256"/>',
                 'name' => 'Yolo',
                 'template' => $pk
@@ -72,6 +72,24 @@ class ProfilePictureTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $result = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals('success', $result->level);
+    }
+
+    /** @depends testCreateProfile */
+    public function testCreateToken(string $pk)
+    {
+        $crawler = $this->client->request('GET', '/npc/token/' . $pk);
+        $this->assertResponseIsSuccessful();
+
+        $form = $crawler->selectButton('form_token_create')->form();
+
+        $filename = 'tmp.png';
+        $image = $this->createTestChart(256);
+        imagepng($image, $filename);
+
+        $form['form[token]']->upload($filename);
+        $this->client->submit($form);
+        $this->assertResponseIsSuccessful();
+        unlink($filename);
     }
 
 }
