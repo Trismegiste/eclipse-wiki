@@ -104,7 +104,9 @@ class MapBuilder
         foreach ($map->getNpcToken() as $npcToken) {
             $tokenPic = $this->storage->getFileInfo($npcToken->picture);
             if ($tokenPic->isReadable()) {
+                echo '<g id="' . $tokenPic->getBasename('.png') . '">';
                 $this->dumpTokenFor($tokenPic);
+                echo '</g>';
             }
         }
 
@@ -155,13 +157,9 @@ class MapBuilder
         fclose($target);
     }
 
-    public function dumpTokenFor(\SplFileInfo $tokenPic, bool $withId = true): void
+    public function dumpTokenFor(\SplFileInfo $tokenPic): void
     {
-        echo '<g ';
-        if ($withId) {
-            echo 'id="' . $tokenPic->getBasename('.png') . '" ';
-        }
-        echo 'transform="scale(0.008) translate(-50, -50)">';
+        echo '<g transform="scale(0.008) translate(-50, -50)">';
         echo '<image width="100" height="100" xlink:href="data:image/png;base64,';
         echo base64_encode(file_get_contents($tokenPic->getPathname()));
         echo '"/>';
