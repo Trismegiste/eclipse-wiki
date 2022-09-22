@@ -66,4 +66,21 @@ class MapBuilderTest extends KernelTestCase
         unlink($pathname);
     }
 
+    public function testDumpingSingleToken() {
+         $tokenPng = imagecreatetruecolor(100, 100);
+         $pathname = __DIR__ . '/token.png';
+         @unlink($pathname);
+         imagepng($tokenPng, $pathname);
+         $info = new \SplFileInfo($pathname);
+
+         ob_start(); 
+         $this->sut->dumpTokenFor($info);
+         $dumped = ob_get_clean();
+         $this->assertStringContainsString('circle', $dumped);
+         $this->assertStringContainsString('image', $dumped);
+         $this->assertStringContainsString('xlink:href="data:image/png;base64,', $dumped);
+         @unlink($pathname);
+    }
+
 }
+ 
