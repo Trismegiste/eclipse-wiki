@@ -10,7 +10,7 @@
         </div>
         <div class="pure-u-2-5">
             {{ form(tools) }}
-	    <hr/>
+            <hr/>
             <div id="npc-box"></div>
         </div>
     </div>
@@ -34,16 +34,24 @@
                         this.battlemap = SVG(svgElem)
                         this.battlemap.panZoom({zoomMin: 5, zoomMax: 100, zoomFactor: 0.2})
 
-                        // remove fog of war for one room on a double click event
+                        // remove fog of war for one room on a ctrl+click event
                         document.querySelectorAll('#map g.fog-of-war').forEach(function (item) {
-                            item.addEventListener('dblclick', function (e) {
-                                item.remove()
+                            item.addEventListener('click', function (e) {
+                                if (e.ctrlKey) {
+                                    item.remove()
+                                }
                             })
                         })
 
-                        // make all NPC draggable
+                        // make all NPC draggable and removable on ctrl+click
                         document.querySelectorAll('svg #layer-npc use').forEach(function (item) {
-                            SVG(item).draggable()
+                            SVG(item)
+                                    .draggable()
+                                    .click(e => {
+                                        if (e.ctrlKey) {
+                                            item.remove()
+                                        }
+                                    })
                         })
 
                         // Broadcast current view with a key
@@ -86,6 +94,12 @@
                             token.svg(content)
                                     .move(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2)
                                     .draggable()
+                            // remove on ctrl+click
+                            token.click(e => {
+                                if (e.ctrlKey) {
+                                    token.remove()
+                                }
+                            })
                         })
 
                         this.newCharacter = null
