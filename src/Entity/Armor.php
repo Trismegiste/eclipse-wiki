@@ -17,8 +17,8 @@ class Armor implements Persistable, Indexable
 
     use PersistableImpl;
 
-    public ?string $name;
-    public ?int $protect;
+    public string $name;
+    public int $protect;
     public ?string $special;
     public ?string $zone;
 
