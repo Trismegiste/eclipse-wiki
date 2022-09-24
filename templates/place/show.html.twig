@@ -24,14 +24,17 @@
             {{ parent() }}
             {% if vertex.voronoiParam is not empty and vertex.voronoiParam.tilePopulation is not empty %}
                 <h2>PNJ</h2>
-                Ce lieu est peuplé par 
-                {% for cfg in vertex.voronoiParam.tilePopulation %}
-                    <a href="{{ path('app_placecrud_npcshow', {title: cfg.npc.label}) }}">
-                        <i class="icon-user-plus"></i>
-                        {{ cfg.npc.label }}
-                    </a>
-                    {% if not loop.last %},{% endif %}
-                {% endfor %}
+                Ce lieu est peuplé par :
+                <ul>
+                    {% for cfg in vertex.voronoiParam.tilePopulation %}
+                        <li>
+                            <a href="{{ path('app_placecrud_npcshow', {title: cfg.npc.label}) }}">
+                                <i class="icon-user-plus"></i>
+                                {{ cfg.npc.label }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
             {% endif %}
         </div>
         <aside class="pure-u-1-4">
