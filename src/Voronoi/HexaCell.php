@@ -76,6 +76,9 @@ class HexaCell implements BattlemapItem
     public function dumpNpc(float $x, float $y): void
     {
         if (!is_null($this->npc)) {
+            // rattrapage de bug pour svg.draggable.js :
+            $x -= 0.4;
+            $y -= 0.4;
             echo '<use xlink:href="#';
             echo basename($this->npc->picture, '.png');
             echo "\" x=\"$x\" y=\"$y\" data-npc-title=\"{$this->npc->label}\"/>\n";

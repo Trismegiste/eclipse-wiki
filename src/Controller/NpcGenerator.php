@@ -302,4 +302,12 @@ class NpcGenerator extends AbstractController
         return $this->redirectToRoute('app_profilepicture_create', ['pk' => $extra->getPk()]);
     }
 
+    /** @Route("/npc/ajaxget", methods={"GET"}) */
+    public function getCharacter(Request $request): \Symfony\Component\HttpFoundation\JsonResponse
+    {
+        $npc = $this->repository->findByTitle($request->get('title'));
+
+        return $this->json(['character' => $npc]);
+    }
+
 }

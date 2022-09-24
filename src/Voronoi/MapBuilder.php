@@ -159,7 +159,7 @@ class MapBuilder
 
     public function dumpTokenFor(\SplFileInfo $tokenPic): void
     {
-        echo '<g transform="scale(0.008) translate(-50, -50)">';
+        echo '<g transform="scale(0.008)">';   // translate(-50, -50) is missing because of bug in svg.draggable
         echo '<image width="100" height="100" xlink:href="data:image/png;base64,';
         echo base64_encode(file_get_contents($tokenPic->getPathname()));
         echo '"/>';
