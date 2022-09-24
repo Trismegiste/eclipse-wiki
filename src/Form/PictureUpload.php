@@ -6,6 +6,7 @@
 
 namespace App\Form;
 
+use App\Repository\VertexRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -19,6 +20,13 @@ use Symfony\Component\Validator\Constraints\Image;
 class PictureUpload extends AbstractType
 {
 
+    protected VertexRepository $repository;
+
+    public function __construct(VertexRepository $repo)
+    {
+        $this->repository = $repo;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('filename', TextType::class, [
@@ -28,7 +36,15 @@ class PictureUpload extends AbstractType
                     'constraints' => [new Image()],
                     'help' => 'COPY_PASTE_IMG'
                 ])
+                ->add('append_vertex', Type\AutocompleteType::class, ['required' => false, 'choices' => $this->getVertexTitle()])
                 ->add('upload', SubmitType::class);
+    }
+
+    protected function getVertexTitle(): iterable
+    {
+        foreach ($this->repository->findAll() as $vertex) {
+            yield $vertex->getTitle();
+        }
     }
 
 }

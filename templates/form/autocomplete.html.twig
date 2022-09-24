@@ -1,0 +1,23 @@
+{# Custom rendering for AutocompleteType #}
+{% block autocomplete_widget %}
+    {{ form_widget(form) }}
+    <script>
+        window.addEventListener('load', () => {
+            new autoComplete({
+                selector: '#{{ form.vars.id }}',
+                minChars: 2,
+                source: function (term, suggest) {
+                    term = term.toLowerCase()
+                    var choices ={{ form.vars.choices|json_encode()|raw }}
+                    var suggestions = []
+                    for (i = 0; i < choices.length; i++) {
+                        if (~choices[i].toLowerCase().indexOf(term)) {
+                            suggestions.push(choices[i])
+                        }
+                    }
+                    suggest(suggestions)
+                }
+            })
+        })
+    </script>
+{% endblock %}

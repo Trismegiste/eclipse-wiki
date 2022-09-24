@@ -6,6 +6,7 @@ twig:
         - 'form/trait_type.html.twig'
         - 'form/random_type.html.twig'
         - 'form/cropper_type.html.twig'
+        - 'form/autocomplete.html.twig'
 
 when@test:
     twig:

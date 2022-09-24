@@ -77,7 +77,7 @@ class Picture extends AbstractController
      * Upload a new picture
      * @Route("/picture/upload", methods={"GET","POST"})
      */
-    public function upload(Request $request): Response
+    public function upload(Request $request, VertexRepository $repository): Response
     {
         $form = $this->createForm(PictureUpload::class);
 
@@ -87,6 +87,12 @@ class Picture extends AbstractController
             try {
                 $this->storage->storePicture($data['picture'], $data['filename']);
                 $this->addFlash('success', "Upload {$data['filename']} OK");
+                if (!empty($data['append_vertex'])) {
+                    $vertex = $repository->findByTitle($data['append_vertex']);
+                    $vertex->setContent($vertex->getContent() . "\n\n[[file:{$data['filename']}.jpg]]\n");
+                    $repository->save($vertex);
+                    $this->addFlash('success', "Picture {$data['filename']} append to '{$data['append_vertex']}'");
+                }
 
                 return $this->redirectToRoute('app_picture_upload');
             } catch (RuntimeException $e) {

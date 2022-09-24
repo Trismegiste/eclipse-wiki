@@ -52,6 +52,11 @@
                                             item.remove()
                                         }
                                     })
+                                    .click(e => {
+                                        if (e.shiftKey) {
+                                            console.log(item.dataset.npcTitle)
+                                        }
+                                    })
                         })
 
                         // Broadcast current view with a key
