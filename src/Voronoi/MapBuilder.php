@@ -21,11 +21,13 @@ class MapBuilder
 
     protected TileProvider $provider;
     protected Storage $storage;
+    protected MapDrawer $drawer;
 
-    public function __construct(TileProvider $provider, Storage $storage)
+    public function __construct(TileProvider $provider, Storage $storage, MapDrawer $draw)
     {
         $this->provider = $provider;
         $this->storage = $storage;
+        $this->drawer = $draw;
     }
 
     /**
@@ -39,20 +41,20 @@ class MapBuilder
         $map = new HexaMap($config->side);
 
         srand($config->seed);
-        $draw = new MapDrawer($map);
+        $this->drawer->setMap($map);
 
-        $draw->plantRandomSeed(new HexaCell(HexaCell::CLUSTER_UID, 'cluster'), $config->avgTilePerRoom);
+        $this->drawer->plantRandomSeed(new HexaCell(HexaCell::CLUSTER_UID, 'cluster'), $config->avgTilePerRoom);
 
         $hallway = new HexaCell(HexaCell::SPACING_UID, 'default', false);
 
         if ($config->horizontalLines > 0) {
-            $draw->horizontalCross($hallway, $config->horizontalLines, $config->doubleHorizontal);
+            $this->drawer->horizontalCross($hallway, $config->horizontalLines, $config->doubleHorizontal);
         }
         if ($config->verticalLines > 0) {
-            $draw->verticalCross($hallway, $config->verticalLines, $config->doubleVertical);
+            $this->drawer->verticalCross($hallway, $config->verticalLines, $config->doubleVertical);
         }
 
-        $config->container->draw($draw);
+        $config->container->draw($this->drawer);
 
         $current = $map->iterateNeighbourhood();
         // we iterates as long as the count of empty cells is shrinking on each iteration

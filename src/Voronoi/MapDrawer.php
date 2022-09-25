@@ -14,7 +14,7 @@ class MapDrawer
 
     protected SquareGrid $map;
 
-    public function __construct(SquareGrid $map)
+    public function setMap(SquareGrid $map)
     {
         $this->map = $map;
     }
