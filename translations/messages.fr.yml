@@ -98,7 +98,7 @@ Side: Arête
 WITH_BATTLEMAP: Avec battlemap
 WITHOUT_BATTLEMAP: Sans battlemap
 Attach: Attacher
-STRAT_STARSHIP: Vaisseau
+STRAT_STARSHIP_BARGE: Barge spatiale
 Fog of war: Brouillard de guerre
 Search legend: Rechercher légende
 -- CHOOSE_NPC --: -- Choisissez --

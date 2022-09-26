@@ -33,7 +33,7 @@ class Starship extends Strategy
 
     public function getName(): string
     {
-        return 'STRAT_STARSHIP';
+        return 'STRAT_STARSHIP_BARGE';
     }
 
 }
