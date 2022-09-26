@@ -7,14 +7,9 @@
 namespace App\Form;
 
 use App\Entity\MapConfig;
-use App\Entity\Shape\Border;
-use App\Entity\Shape\Dome;
-use App\Entity\Shape\Hexadome;
-use App\Entity\Shape\NullShape;
-use App\Entity\Shape\Starship;
 use App\Entity\Shape\Strategy;
-use App\Entity\Shape\Torus;
 use App\Form\Type\RandomIntegerType;
+use App\Service\ShapeProvider;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -31,6 +26,13 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  */
 class MapConfigType extends AbstractType
 {
+
+    protected ShapeProvider $provider;
+
+    public function __construct(ShapeProvider $shapeProvider)
+    {
+        $this->provider = $shapeProvider;
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -50,15 +52,7 @@ class MapConfigType extends AbstractType
                     ]
                 ])
                 ->add('container', ChoiceType::class, [
-                    'choices' => [
-                        new NullShape(),
-                        new Border(),
-                        new Dome(),
-                        new Torus(),
-                        new Starship(),
-                        new Hexadome(),
-                        new \App\Entity\Shape\SvgStrategy('vaisseau', file_get_contents(__DIR__ . '/vaisseau.svg'))
-                    ],
+                    'choices' => $this->provider->findAll(),
                     'choice_label' => 'name',
                     'choice_value' => function (?Strategy $strat): string {
                         return !is_null($strat) ? get_class($strat) : '';

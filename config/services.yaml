@@ -125,3 +125,6 @@ services:
     # Map
     App\Repository\TileProvider:
         - '%twig.default_path%/voronoi/tile'
+        
+    App\Service\ShapeProvider:
+        - '%kernel.project_dir%/database/shape'

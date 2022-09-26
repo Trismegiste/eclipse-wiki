@@ -78,6 +78,13 @@ class MapDrawer
         }
     }
 
+    /**
+     * Crosses the map with a horizontal line
+     * @param HexaCell $hallway
+     * @param int $howMany
+     * @param bool $double
+     * @return void
+     */
     public function horizontalCross(HexaCell $hallway, int $howMany = 1, bool $double = false): void
     {
         $size = $this->map->getSize();
@@ -90,6 +97,13 @@ class MapDrawer
         }
     }
 
+    /**
+     * Crosses the map with a vertical line
+     * @param HexaCell $hallway
+     * @param int $howMany
+     * @param bool $double
+     * @return void
+     */
     public function verticalCross(HexaCell $hallway, int $howMany = 1, bool $double = false): void
     {
         $size = $this->map->getSize();
@@ -184,8 +198,16 @@ class MapDrawer
         }
     }
 
+    /**
+     * Fills the map with a given cell according to a B&W bitmap
+     * @param HexaCell $filling
+     * @param \GdImage $raster
+     * @return void
+     * @throws \RuntimeException
+     */
     public function fillWithPicture(HexaCell $filling, \GdImage $raster): void
     {
+        $threshold = 127;
         $size = $this->map->getSize();
         if ((imagesx($raster) !== $size) || (imagesy($raster) !== $size)) {
             throw new \RuntimeException('Width and Height mismatch with grid size');
@@ -194,8 +216,8 @@ class MapDrawer
         for ($y = 0; $y < $size; $y++) {
             for ($x = 0; $x < $size; $x++) {
                 $rgb = imagecolorat($raster, $x, $y);
-                $r = ($rgb >> 16) & 0xFF;
-                if ($r > 127) {
+                $red = ($rgb >> 16) & 0xFF;  // since the picture is in black and white
+                if ($red > $threshold) {
                     $this->map->setCell([$x, $y], clone $filling);
                 }
             }
