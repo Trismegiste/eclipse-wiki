@@ -54,9 +54,7 @@ class MapConfigType extends AbstractType
                 ->add('container', ChoiceType::class, [
                     'choices' => $this->provider->findAll(),
                     'choice_label' => 'name',
-                    'choice_value' => function (?Strategy $strat): string {
-                        return !is_null($strat) ? get_class($strat) : '';
-                    }
+                    'choice_value' => 'name'
                 ])
                 ->add('horizontalLines', IntegerType::class, ['required' => false, 'empty_data' => 0])
                 ->add('doubleHorizontal', CheckboxType::class, ['required' => false])

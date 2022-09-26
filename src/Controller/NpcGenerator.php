@@ -16,6 +16,7 @@ use App\Form\NpcInfo;
 use App\Form\NpcStats;
 use App\Form\Type\ProviderChoiceType;
 use App\Repository\BackgroundProvider;
+use App\Repository\CharacterFactory;
 use App\Repository\FactionProvider;
 use App\Repository\MorphProvider;
 use App\Repository\VertexRepository;
@@ -25,6 +26,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -289,7 +291,7 @@ class NpcGenerator extends AbstractController
      * Creates an Extra NPC from a template and a new name
      * @Route("/npc/extra/{title}/{template}", methods={"GET"}, requirements={"template"="[\da-f]{24}"})
      */
-    public function createExtra(string $title, string $template, \App\Repository\CharacterFactory $fac): Response
+    public function createExtra(string $title, string $template, CharacterFactory $fac): Response
     {
         $npc = $this->repository->findByPk($template);
         if (is_null($npc) || (!$npc instanceof Transhuman)) {
@@ -302,8 +304,11 @@ class NpcGenerator extends AbstractController
         return $this->redirectToRoute('app_profilepicture_create', ['pk' => $extra->getPk()]);
     }
 
-    /** @Route("/npc/ajaxget", methods={"GET"}) */
-    public function getCharacter(Request $request): \Symfony\Component\HttpFoundation\JsonResponse
+    /**
+     * Ajax get character in json
+     * @Route("/npc/ajaxget", methods={"GET"})
+     */
+    public function getCharacter(Request $request): JsonResponse
     {
         $npc = $this->repository->findByTitle($request->get('title'));
 
