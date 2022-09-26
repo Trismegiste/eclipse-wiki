@@ -22,7 +22,8 @@ class MapDrawerTest extends TestCase
                 ->method('getSize')
                 ->willReturn(20);
 
-        $this->sut = new MapDrawer($this->map);
+        $this->sut = new MapDrawer();
+        $this->sut->setMap($this->map);
     }
 
     public function testHCross()

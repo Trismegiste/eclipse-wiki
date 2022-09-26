@@ -24,7 +24,8 @@ abstract class ShapeTestCase extends TestCase
     {
         $this->sut = $this->createShape();
         $this->map = $this->createMock(SquareGrid::class);
-        $this->drawer = new MapDrawer($this->map);
+        $this->drawer = new MapDrawer();
+        $this->drawer->setMap($this->map);
 
         $this->map->expects($this->any())
                 ->method('getSize')
