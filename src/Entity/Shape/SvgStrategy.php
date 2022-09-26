@@ -59,8 +59,11 @@ YOLO;
         $matrixing->mustRun();
 
         $raster = imagecreatefrompng($pngTarget);
+        unlink($htmlTarget);
 
         $draw->fillWithPicture($filling, $raster);
+        imagedestroy($raster);
+        unlink($pngTarget);
     }
 
     public function getName(): string
