@@ -56,7 +56,8 @@ class MapConfigType extends AbstractType
                         new Dome(),
                         new Torus(),
                         new Starship(),
-                        new Hexadome()
+                        new Hexadome(),
+                        new \App\Entity\Shape\SvgStrategy('vaisseau', file_get_contents(__DIR__ . '/vaisseau.svg'))
                     ],
                     'choice_label' => 'name',
                     'choice_value' => function (?Strategy $strat): string {

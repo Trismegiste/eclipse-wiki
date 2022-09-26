@@ -184,4 +184,22 @@ class MapDrawer
         }
     }
 
+    public function fillWithPicture(HexaCell $filling, \GdImage $raster): void
+    {
+        $size = $this->map->getSize();
+        if ((imagesx($raster) !== $size) || (imagesy($raster) !== $size)) {
+            throw new \RuntimeException('Width and Height mismatch with grid size');
+        }
+
+        for ($y = 0; $y < $size; $y++) {
+            for ($x = 0; $x < $size; $x++) {
+                $rgb = imagecolorat($raster, $x, $y);
+                $r = ($rgb >> 16) & 0xFF;
+                if ($r > 127) {
+                    $this->map->setCell([$x, $y], clone $filling);
+                }
+            }
+        }
+    }
+
 }
