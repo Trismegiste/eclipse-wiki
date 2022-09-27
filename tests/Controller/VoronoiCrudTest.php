@@ -179,6 +179,7 @@ class VoronoiCrudTest extends WebTestCase
         $npc = $fac->create('Wizard', new Background('back'), new Faction('fact'));
         $npc->setMorph(new Morph('morph'));
         $npc->tokenPic = 'Wizard-token.png';
+        $npc->surnameLang = 'english';
         $this->repository->save($npc);
 
         $crawler = $this->client->request('GET', "/voronoi/populate/$pk");
@@ -205,6 +206,27 @@ class VoronoiCrudTest extends WebTestCase
         ob_end_clean();
         $this->assertResponseIsSuccessful();
         $this->assertEquals('image/svg+xml', $this->client->getResponse()->headers->get('content-type'));
+
+        return $pk;
+    }
+
+    /** @depends testGenerateSvgWithNpc */
+    public function testStatsWithNpc(string $pk)
+    {
+        $this->client->request('GET', "/voronoi/statistics/$pk");
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('table', 'Wizard');
+        $this->assertSelectorTextContains('a[href^="/place/npc/Wizard"]', 'Wizard');
+    }
+
+    /** @depends testStatsWithNpc */
+    public function testShowNpc()
+    {
+        $this->client->request('GET', "/place/npc/Wizard");
+        $this->assertResponseRedirects();
+        $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
+	$this->assertEquals('app_profilepicture_generateonthefly', $this->client->getRequest()->get('_route'));
     }
 
 }
