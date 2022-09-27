@@ -190,4 +190,13 @@ YOLO
                 }, 200, ['content-type' => 'image/svg+xml']);
     }
 
+    /**
+     * Show pictogram from folder
+     * @Route("/picto/get/{title}", methods={"GET"})
+     */
+    public function readPictogram(string $title): BinaryFileResponse
+    {
+        return new BinaryFileResponse("/www/database/pictogram/$title.svg");
+    }
+
 }

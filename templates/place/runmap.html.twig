@@ -32,6 +32,7 @@
                     fogEnabled: true,
                     legendFilter: null,
                     newCharacter: null,
+                    newPictogram: null,
                     selectedCharacter: null,
 
                     init() {
@@ -119,6 +120,27 @@
                         })
 
                         this.newCharacter = null
+                    },
+
+                    pictogramAdd() {
+                        fetch('/picto/get/' + this.newPictogram).then(response => {
+                            return response.blob()
+                        }).then(content => {
+                            let bbox = this.battlemap.viewbox()
+                            let token = SVG().svg(content)
+                            token.findOne('g').addTo(this.battlemap)
+                                    .move(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2)
+                                    .draggable()
+                            // remove on ctrl+click
+                            token.click(e => {
+                                if (e.ctrlKey) {
+                                    token.remove()
+                                }
+                            })
+                            console.log(token)
+                        })
+
+                        this.newPictogram = null
                     },
 
                     playerBroadcast(e) {

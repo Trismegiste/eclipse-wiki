@@ -41,6 +41,13 @@ class RunningMapTools extends AbstractType
                         'x-on:change' => "characterAdd"
                     ]
                 ])
+                ->add('pictogram_add', Type\PictogramType::class, [
+                    'placeholder'=>'-- CHOOSE_PICTOGRAM --',
+                    'attr' => [
+                        'x-model' => "newPictogram",
+                        'x-on:change' => "pictogramAdd"
+                    ]
+                ])
                 ->add('broadcast', ButtonType::class, [
                     'attr' => [
                         'x-on:click' => "playerBroadcast"
