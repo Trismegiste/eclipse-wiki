@@ -194,9 +194,15 @@ YOLO
      * Show pictogram from folder
      * @Route("/picto/get/{title}", methods={"GET"})
      */
-    public function readPictogram(string $title): BinaryFileResponse
+    public function readPictogram(string $title): Response
     {
-        return new BinaryFileResponse("/www/database/pictogram/$title.svg");
+        $doc = new \DOMDocument();
+        $doc->load("/www/database/pictogram/$title.svg");
+        $xpath = new \DOMXPath($doc);
+        $xpath->registerNamespace('svg', \App\Voronoi\TileSvg::svgNS);
+        $extract = $xpath->query('/svg:svg/svg:g')->item(0);
+
+        return new Response($extract->C14N());
     }
 
 }

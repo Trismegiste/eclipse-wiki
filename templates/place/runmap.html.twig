@@ -124,11 +124,12 @@
 
                     pictogramAdd() {
                         fetch('/picto/get/' + this.newPictogram).then(response => {
-                            return response.blob()
+                            return response.text()
                         }).then(content => {
                             let bbox = this.battlemap.viewbox()
-                            let token = SVG().svg(content)
-                            token.findOne('g').addTo(this.battlemap)
+                            let token = this.battlemap.group()
+                            token.svg(content)
+                                    .size(0.8,0.8)
                                     .move(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2)
                                     .draggable()
                             // remove on ctrl+click
@@ -137,7 +138,7 @@
                                     token.remove()
                                 }
                             })
-                            console.log(token)
+                            console.log(token.children())
                         })
 
                         this.newPictogram = null
