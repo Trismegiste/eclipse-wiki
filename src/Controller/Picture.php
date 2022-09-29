@@ -197,12 +197,12 @@ YOLO
     public function readPictogram(string $title): Response
     {
         $doc = new \DOMDocument();
-        $doc->load("/www/database/pictogram/$title.svg");
+        $doc->load($this->getParameter('kernel.project_dir') . "/database/pictogram/$title.svg");
         $xpath = new \DOMXPath($doc);
         $xpath->registerNamespace('svg', \App\Voronoi\TileSvg::svgNS);
         $extract = $xpath->query('/svg:svg/svg:g')->item(0);
 
-        return new Response($extract->C14N());
+        return new Response($extract->C14N(), 200, ['content-type' => 'image/svg+xml']);
     }
 
 }
