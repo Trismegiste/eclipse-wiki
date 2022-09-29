@@ -78,4 +78,9 @@ class PictureTest extends WebTestCase
         unlink($filename);
     }
 
+    public function testPictogram()
+    {
+        $this->client->request('GET', '/picto/get/processor');
+        $this->assertStringStartsWith('<g', $this->client->getResponse()->getContent());
+    }
 }
