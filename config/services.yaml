@@ -128,3 +128,6 @@ services:
         
     App\Service\ShapeProvider:
         - '%kernel.project_dir%/database/shape'
+
+    App\Service\PictoProvider:
+        - '%kernel.project_dir%/database/pictogram'

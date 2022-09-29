@@ -6,6 +6,7 @@
 
 namespace App\Form\Type;
 
+use App\Service\PictoProvider;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -18,11 +19,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class PictogramType extends AbstractType
 {
 
+    protected PictoProvider $repository;
+
+    public function __construct(PictoProvider $provider)
+    {
+        $this->repository = $provider;
+    }
+
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('choices', [
-            'processor' => 'processor'
-        ]);
+        $resolver->setDefault('choices', $this->repository->findAll());
     }
 
     public function getParent()

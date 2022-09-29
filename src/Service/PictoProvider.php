@@ -6,11 +6,16 @@
 
 namespace App\Service;
 
+use DOMDocument;
+use DOMXPath;
+use Symfony\Component\Finder\Finder;
+
 /**
  * Provider of Pictogram (SVG fragment for battlemap)
  */
 class PictoProvider
 {
+
     protected $pictoFolder;
 
     public function __construct(string $basepath)
@@ -20,12 +25,12 @@ class PictoProvider
 
     public function findAll(): array
     {
-	$finder = new Finder();
+        $finder = new Finder();
         $finder->in($this->pictoFolder)->files()->name('*.svg');
 
         $listing = [];
-	foreach ($finder as $picto) {
-	    $key = $picto->getBasename('.svg')
+        foreach ($finder as $picto) {
+            $key = $picto->getBasename('.svg');
             $listing[ucfirst($key)] = $key;
         }
 
@@ -34,10 +39,10 @@ class PictoProvider
 
     public function getSvg(string $key): string
     {
-        $doc = new \DOMDocument();
+        $doc = new DOMDocument();
         $doc->load($this->pictoFolder . "/$key.svg");
-        $xpath = new \DOMXPath($doc);
-        $xpath->registerNamespace('svg', \App\Voronoi\TileSvg::svgNS);
+        $xpath = new DOMXPath($doc);
+        $xpath->registerNamespace('svg', 'http://www.w3.org/2000/svg');
         $extract = $xpath->query('/svg:svg/svg:g')->item(0);
 
         return $extract->C14N();
