@@ -38,7 +38,7 @@ class RunningMapTools extends AbstractType
                     'placeholder'=>'-- CHOOSE_NPC --',
                     'attr' => [
                         'x-model' => "newCharacter",
-                        'x-on:change' => "characterAdd"
+                        'x-on:change' => 'characterAdd($el.value)'
                     ]
                 ])
                 ->add('pictogram_add', Type\PictogramType::class, [

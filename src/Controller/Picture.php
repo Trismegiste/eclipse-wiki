@@ -191,18 +191,12 @@ YOLO
     }
 
     /**
-     * Show pictogram from folder
+     * Show pictogram from folder. Returns a SVG fragment
      * @Route("/picto/get/{title}", methods={"GET"})
      */
-    public function readPictogram(string $title): Response
+    public function readPictogram(string $title, \App\Service\PictoProvider $provider): Response
     {
-        $doc = new \DOMDocument();
-        $doc->load($this->getParameter('kernel.project_dir') . "/database/pictogram/$title.svg");
-        $xpath = new \DOMXPath($doc);
-        $xpath->registerNamespace('svg', \App\Voronoi\TileSvg::svgNS);
-        $extract = $xpath->query('/svg:svg/svg:g')->item(0);
-
-        return new Response($extract->C14N(), 200, ['content-type' => 'image/svg+xml']);
+        return new Response($provider->getSvg($title), 200, ['content-type' => 'image/svg+xml']);
     }
 
 }

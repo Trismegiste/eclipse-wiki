@@ -11,11 +11,8 @@
         <div class="pure-u-2-5">
             {{ form(tools) }}
             <hr/>
-            <template x-if="selectedCharacter">
-                <div id="npc-box">
-                    <h2 x-text="selectedCharacter.title"></h2>
-                </div>
-            </template>
+            <div x-html="characterCard">
+            </div>
         </div>
     </div>
 {% endblock %}
@@ -33,7 +30,7 @@
                     legendFilter: null,
                     newCharacter: null,
                     newPictogram: null,
-                    selectedCharacter: null,
+                    characterCard: null,
 
                     init() {
                         let svgElem = document.querySelector('#map svg')
@@ -60,13 +57,7 @@
                                     })
                                     .click(e => {
                                         if (e.shiftKey) {
-                                            fetch('{{ path('app_npcgenerator_getcharacter') }}' + '?title=' + item.dataset.npcTitle)
-                                                    .then(response => {
-                                                        return response.json()
-                                                    })
-                                                    .then(stat => {
-                                                        this.selectedCharacter = stat.character
-                                                    })
+                                            this.updateCharacterInfo(item.dataset.npcTitle)
                                         }
                                     })
                         })
@@ -80,6 +71,16 @@
                     toggleFog() {
                         let fogLayer = document.querySelector('#map #gm-fogofwar')
                         fogLayer.setAttribute('class', this.fogEnabled ? '' : 'disabled-fog')
+                    },
+
+                    updateCharacterInfo(title) {
+                        fetch('{{ path('app_npcgenerator_minicard') }}' + '?title=' + title)
+                                .then(response => {
+                                    return response.text()
+                                })
+                                .then(content => {
+                                    this.characterCard = content
+                                })
                     },
 
                     searchLegend() {
@@ -102,21 +103,28 @@
                         }
                     },
 
-                    characterAdd() {
-                        fetch('/token/get/' + this.newCharacter).then((response) => {
+                    characterAdd(npcTitle) {
+                        fetch('/token/get/' + npcTitle).then(response => {
                             return response.text()
                         }).then((content) => {
                             let bbox = this.battlemap.viewbox()
                             let token = this.battlemap.group()
                             token.svg(content)
+                            token.data('npc-title', npcTitle, true)
                                     .move(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2)
                                     .draggable()
-                            // remove on ctrl+click
-                            token.click(e => {
-                                if (e.ctrlKey) {
-                                    token.remove()
-                                }
-                            })
+                            // remove on ctrl+click & info on shift+click
+                            token
+                                    .click(e => {
+                                        if (e.ctrlKey) {
+                                            token.remove()
+                                        }
+                                    })
+                                    .click(e => {
+                                        if (e.shiftKey) {
+                                            this.updateCharacterInfo(npcTitle)
+                                        }
+                                    })
                         })
 
                         this.newCharacter = null

@@ -306,13 +306,13 @@ class NpcGenerator extends AbstractController
 
     /**
      * Ajax get character in json
-     * @Route("/npc/ajaxget", methods={"GET"})
+     * @Route("/npc/minicard", methods={"GET"})
      */
-    public function getCharacter(Request $request): JsonResponse
+    public function minicard(Request $request): Response
     {
         $npc = $this->repository->findByTitle($request->get('title'));
 
-        return $this->json(['character' => $npc]);
+        return $this->render('npc/minicard.html.twig', ['npc' => $npc]);
     }
 
 }
