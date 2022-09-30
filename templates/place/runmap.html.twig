@@ -129,8 +129,14 @@
                             let bbox = this.battlemap.viewbox()
                             let token = this.battlemap.group()
                             token.svg(content)
-                                    .size(0.8,0.8)
-                                    .move(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2)
+
+                            if (token.bbox().width > token.bbox().height) {
+                                token.size(0.8)
+                            } else {
+                                token.size(null, 0.8)
+                            }
+
+                            token.move(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2)
                                     .draggable()
                             // remove on ctrl+click
                             token.click(e => {
