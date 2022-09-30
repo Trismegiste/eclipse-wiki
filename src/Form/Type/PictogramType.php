@@ -28,7 +28,10 @@ class PictogramType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('choices', $this->repository->findAll());
+        $resolver->setDefaults([
+            'choices' => $this->repository->findAll(),
+            'translation_domain' => 'pictogram'
+        ]);
     }
 
     public function getParent()

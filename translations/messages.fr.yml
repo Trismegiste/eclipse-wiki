@@ -102,8 +102,9 @@ STRAT_STARSHIP_BARGE: Barge spatiale
 Fog of war: Brouillard de guerre
 Search legend: Rechercher légende
 -- CHOOSE_NPC --: -- Choisissez --
-Character add: Ajouter un perso
+Character add: Ajouter personnage
 Broadcast: Diffuser
 Tile weight: Proportion de pièces par tuile
 Min cluster per tile: Nombre minimal de pièces par tuile
 STRAT_SVG_CARGO: Vaisseau cargo
+
