@@ -8,6 +8,7 @@ namespace App\Controller;
 
 use App\Form\PictureUpload;
 use App\Repository\VertexRepository;
+use App\Service\PictoProvider;
 use App\Service\PlayerCastCache;
 use App\Service\Storage;
 use App\Voronoi\MapBuilder;
@@ -178,10 +179,11 @@ YOLO
 
     /**
      * Show token from storage
-     * @Route("/token/get/{title}", methods={"GET"})
+     * @Route("/token/get", methods={"GET"})
      */
-    public function readToken(string $title, VertexRepository $repo, MapBuilder $builder): Response
+    public function readToken(Request $request, VertexRepository $repo, MapBuilder $builder): Response
     {
+        $title = $request->query->get('title');
         $npc = $repo->findByTitle($title);
         $pic = $this->storage->getFileInfo($npc->tokenPic);
 
@@ -192,10 +194,11 @@ YOLO
 
     /**
      * Show pictogram from folder. Returns a SVG fragment
-     * @Route("/picto/get/{title}", methods={"GET"})
+     * @Route("/picto/get", methods={"GET"})
      */
-    public function readPictogram(string $title, \App\Service\PictoProvider $provider): Response
+    public function readPictogram(Request $request, PictoProvider $provider): Response
     {
+        $title = $request->query->get('title');
         return new Response($provider->getSvg($title), 200, ['content-type' => 'image/svg+xml']);
     }
 
