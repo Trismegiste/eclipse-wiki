@@ -38,6 +38,13 @@ class VertexTest extends PHPUnit\Framework\TestCase
         $this->assertEquals('vertex', $this->sut->getCategory());
     }
 
+    public function testExtractPicture()
+    {
+        $this->sut->setContent('aaaa [[link-avatar.jpg]] [[file:image.jpg]] [[file:avatar.jpg]] end');
+        $this->assertCount(2, $this->sut->extractPicture());
+        $this->assertEquals(['image.jpg', 'avatar.jpg'], $this->sut->extractPicture());
+    }
+
     public function testExtractFirstPictureEmpty()
     {
         $this->assertNull($this->sut->extractFirstPicture());
@@ -55,4 +62,5 @@ class VertexTest extends PHPUnit\Framework\TestCase
         $this->sut->setArchived(true);
         $this->assertTrue($this->sut->getArchived());
     }
+
 }

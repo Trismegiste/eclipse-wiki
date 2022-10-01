@@ -60,15 +60,21 @@ class Vertex implements \Trismegiste\Strangelove\MongoDb\Root
 
     public function extractFirstPicture(): ?string
     {
-        if (is_null($this->getContent())) {
-            return null;
+        $picture = $this->extractPicture();
+
+        return count($picture) ? $picture[0] : null;
+    }
+
+    public function extractPicture(): array
+    {
+        if (is_null($this->content)) {
+            return [];
         }
 
-        if (preg_match('#\[\[file:([^\]]+)\]\]#', $this->getContent(), $match)) {
-            return $match[1];
-        }
+        $matches = [];
+        preg_match_all('#\[\[file:([^\]]+)\]\]#', $this->getContent(), $matches, PREG_SET_ORDER, 0);
 
-        return null;
+        return array_column($matches, 1);
     }
 
     public function __clone()
@@ -85,4 +91,5 @@ class Vertex implements \Trismegiste\Strangelove\MongoDb\Root
     {
         return $this->archived;
     }
+
 }

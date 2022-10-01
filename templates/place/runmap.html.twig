@@ -11,8 +11,10 @@
         <div class="pure-u-2-5">
             {{ form(tools) }}
             <hr/>
-            <div x-html="characterCard">
+            <div x-ref="characterCard">
             </div>
+            <hr/>
+            {{ include('fragment/flashes.html.twig') }}
         </div>
     </div>
 {% endblock %}
@@ -21,6 +23,7 @@
     <script src="{{ asset('svgdotjs/svg.min.js') }}"></script>
     <script src="{{ asset('svgdotjs/svg.panzoom.min.js') }}"></script>
     <script src="{{ asset('svgdotjs/svg.draggable.min.js') }}"></script>
+    <script src="{{ asset('js/picture-pusher.js') }}"></script>
     <script>
 
         document.addEventListener('alpine:init', () => {
@@ -30,7 +33,6 @@
                     legendFilter: null,
                     newCharacter: null,
                     newPictogram: null,
-                    characterCard: null,
 
                     init() {
                         let svgElem = document.querySelector('#map svg')
@@ -63,8 +65,8 @@
                         })
 
                         // Broadcast current view with a key
-                        Mousetrap.bind('p', () => {
-                            this.pushSvgToBroadcast()
+                        Mousetrap.bind('p', (e) => {
+                            this.pushSvgToBroadcast(e)
                         })
                     },
 
@@ -79,7 +81,8 @@
                                     return response.text()
                                 })
                                 .then(content => {
-                                    this.characterCard = content
+                                    this.$refs.characterCard.innerHTML = content
+                                    Pushable_subscribe(document.querySelectorAll('.pushable a'))
                                 })
                     },
 
@@ -159,10 +162,10 @@
 
                     playerBroadcast(e) {
                         e.preventDefault()
-                        this.pushSvgToBroadcast()
+                        this.pushSvgToBroadcast(e)
                     },
 
-                    pushSvgToBroadcast() {
+                    pushSvgToBroadcast(e) {
                         const formData = new FormData()
                         formData.append('svg', new Blob([this.battlemap.svg()], {type: 'image/svg+xml'}))
 
@@ -173,7 +176,7 @@
                         }).then(function (response) {
                             return response.json()
                         }).then(function (json) {
-                            console.log(json.message)
+                            pushFlash(e.target, 'success', json.message)
                         })
                     }
                 }))

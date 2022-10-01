@@ -16,3 +16,14 @@
         </a>
     </p>
 {% endif %}
+<div class="pure-g">
+    {% for pic in npc.extractPicture %}
+        <div class="pure-u-1-6">
+            <div class="pushable">
+                <a href="{{ path('app_picture_push', {title: pic}) }}">
+                    <img src="{{ path('get_picture', {title: pic}) }}" class="pure-img"/>
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
