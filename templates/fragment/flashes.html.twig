@@ -1,6 +1,6 @@
 <section class="notif" 
          x-data="{{ alpinejs_flashes(app.flashes)|json_encode()|e('html_attr') }}"
-         x-on:flash.window="flashes.push($event.detail)">
+         x-on:flash.window="flashes.unshift($event.detail)">
     <template x-for="flash in flashes">
         <div x-bind:class="'flash-' + flash.level"
              x-on:click="$el.hidden=true"
