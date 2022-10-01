@@ -40,6 +40,7 @@ class VertexRepositoryTest extends KernelTestCase
 
     public function testPrevious()
     {
+        usleep(Import::delayForTimestamp); // delay to get two different typestamps
         $doc = new Vertex('doc 2');
         $this->sut->save($doc);
         $pk = $doc->getPk();
