@@ -27,6 +27,7 @@ when@prod:
         access_control:
             - { path: '^/login_check', roles: PUBLIC_ACCESS }
             - { path: '^/player', roles: PUBLIC_ACCESS }
+            - { path: '^/tracker/show', roles: PUBLIC_ACCESS }
             - { path: '^/', roles: ROLE_GAMEMASTER }
 
 when@test:
@@ -41,4 +42,3 @@ when@test:
                 cost: 4 # Lowest possible value for bcrypt
                 time_cost: 3 # Lowest possible value for argon
                 memory_cost: 10 # Lowest possible value for argon
-           
