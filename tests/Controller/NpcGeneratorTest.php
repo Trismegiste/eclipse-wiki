@@ -108,9 +108,22 @@ class NpcGeneratorTest extends WebTestCase
         $crawler = $this->client->request('GET', $url);
         $url = $crawler->filterXPath('//a/i[@class="icon-edit"]/parent::a')->attr('href');
         $crawler = $this->client->request('GET', $url);
-        $this->assertNotNull($crawler->selectButton('npc_info_edit'));
+        $this->assertSelectorExists('#npc_info_create');
+        $pk = $this->client->getRequest()->attributes->get('pk');
 
-        return $this->client->getRequest()->attributes->get('pk');
+        $form = $crawler->selectButton('npc_info_create')->form();
+        $this->client->submit($form, [
+            'npc_info' => [
+                'content' => 'some text',
+                'surnameLang' => 'french'
+            ]
+        ]);
+
+        $this->assertResponseRedirects();
+        $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
+
+        return $pk;
     }
 
     /** @depends testInfo */
@@ -215,6 +228,24 @@ class NpcGeneratorTest extends WebTestCase
         $this->client->request('GET', '/npc/extra/John/' . $template->getPk());
         $this->assertResponseRedirects();
         $this->assertStringStartsWith('/profile/create', $this->client->getResponse()->headers->get('Location'));
+    }
+
+    public function getCharacterFqcn()
+    {
+        return [
+            [\App\Entity\Transhuman::class],
+            [\App\Entity\Ali::class],
+            [\App\Entity\Freeform::class]
+        ];
+    }
+
+    /** @dataProvider getCharacterFqcn */
+    public function testMinicardForCharacter($fqcn)
+    {
+        $iter = static::getContainer()->get(VertexRepository::class)->findByClass([$fqcn]);
+        $iter->rewind();
+        $this->client->request('GET', "/npc/minicard?title=" . $iter->current()->getTitle());
+        $this->assertResponseIsSuccessful();
     }
 
 }
