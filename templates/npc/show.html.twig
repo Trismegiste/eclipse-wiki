@@ -73,9 +73,6 @@
     <div class="character-show" x-data="{}">
         <div class="pure-g">
             <div class="pure-u-1-4">
-                {% if npc.tokenPic is not empty %}
-                    <img src="{{ path('get_picture', {title: npc.tokenPic}) }}" class="pure-img"/>
-                {% endif %}
                 {% block attributes_dice %}
                     <h2>Attributs</h2>
                     <table class="pure-table">
@@ -106,6 +103,9 @@
                 {% endblock %}
             </div>
             <div class="pure-u-1-4">
+                {% if npc.tokenPic is not empty %}
+                    <img src="{{ path('get_picture', {title: npc.tokenPic}) }}" class="pure-img"/>
+                {% endif %}
                 <h2>Carac. 2<sup>ndaires</sup></h2>
                 <table class="pure-table">
                     <tr>
