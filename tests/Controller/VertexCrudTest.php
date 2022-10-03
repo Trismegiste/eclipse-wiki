@@ -160,13 +160,6 @@ class VertexCrudTest extends WebTestCase
         $client->followRedirect();
     }
 
-    public function testTracker()
-    {
-        $client = static::createClient();
-        $client->request('GET', '/tracker');
-        $this->assertResponseIsSuccessful();
-    }
-
     public function testArchive()
     {
         $client = static::createClient();
