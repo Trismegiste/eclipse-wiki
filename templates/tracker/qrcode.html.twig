@@ -41,7 +41,7 @@
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('behavior', () => ({
-                    staticUrl: '{{ path('app_tracker_show') }}?',
+                    staticUrl: '{{ url_tracker }}?',
                     encounter: [],
                     qrCode: null,
                     init() {

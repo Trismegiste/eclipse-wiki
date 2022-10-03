@@ -58,11 +58,14 @@ class GmHelper extends AbstractController
      * Generates a QR Code for external initiative tracker
      * @Route("/tracker/qrcode", methods={"GET"})
      */
-    public function tracker(VertexRepository $repo): Response
+    public function tracker(VertexRepository $repo, NetTools $ntools): Response
     {
         $listing = $repo->findByClass([Ali::class, Freeform::class, Transhuman::class]);
 
-        return $this->render('tracker/qrcode.html.twig', ['listing' => $listing]);
+        $url = $this->generateUrl('app_tracker_show', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $lan = preg_replace('#//localhost#', '//' . $ntools->getLocalIp(), $url); // @todo hardcoded config
+
+        return $this->render('tracker/qrcode.html.twig', ['listing' => $listing, 'url_tracker' => $lan]);
     }
 
     /**

@@ -1,119 +1,118 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Initiative tracker</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link  rel="stylesheet" href="./purecss/pure-min.css"/> 
-        <link  rel="stylesheet" href="./fontello/css/fontello.css"/> 
-        <style>
-            .npc-list {
-                margin: 0.6em 0 0 0.6em;
-            }
-            .stat {
-                text-align: center;
-                padding: 0.3em 0;
-            }
-            .parry {
-                background-color: lightblue;
-            }
-            .toughness {
-                background-color: orange;
-            }
-            .ranged {
-                background-color: lightgreen;
-            }
-            .armor {
-                background-color: lightgray;
-            }
-            h2 {
-                font-size: 120%;
-                font-weight: lighter;
-                margin: 0;
-            }
-            input[type=radio] {
-                margin-top: 0.4em;
-                margin-left: 1em;
-                vertical-align: bottom;
-            }
-            input[type=checkbox] {
-                margin-top: 0.3em;
-                vertical-align: bottom;
-            }
-            .pure-g {
-                margin-bottom: 1.5em;
-            }
-            .dead {
-                opacity: 0.3;
-            }
-        </style>        
-    </head>
-    <body>
-        <div x-data="model" class="npc-list">
-            <template x-for="(npc, idx) in encounter">
-                <div class="pure-g" x-bind:class="(npc.wound==4) ? 'dead': ''">
-                    <div class="pure-u-3-4">
-                        <h2><span x-text="npc.name"></span><i class="icon-wildcard" x-show="npc.wc"></i></h2>
-                    </div>    
-                    <div class="pure-u-1-8 stat parry" x-text="npc.parry">
-                    </div>
-                    <div class="pure-u-1-8 stat ranged" x-text="npc.rangedMalus">
-                    </div>     
+{% extends "base.html.twig" %}
 
-                    <div class="pure-u-3-4">
-                        <label x-bind:for="'shaken'+idx">Secoué</label>
-                        <input type="checkbox" x-bind:id="'shaken'+idx"/>
-                    </div>    
-                    <div class="pure-u-1-8 stat toughness" x-text="npc.toughness">
-                    </div>
-                    <div class="pure-u-1-8 stat armor" x-text="npc.armor">
-                    </div>       
-
-                    <div class="pure-u-1">
-                        Blessures
-                        <input type="radio" x-bind:name="'wound_level'+idx" x-bind:id="'wound_level_0_'+idx" x-model="npc.wound" value="0"/>
-                        <label x-bind:for="'wound_level_0_'+idx">0</label>
-                        <input type="radio" x-bind:name="'wound_level'+idx" x-bind:id="'wound_level_1_'+idx" x-show="npc.wc" x-model="npc.wound" value="1"/>
-                        <label x-bind:for="'wound_level_1_'+idx" x-show="npc.wc">1</label>
-                        <input type="radio" x-bind:name="'wound_level'+idx" x-bind:id="'wound_level_2_'+idx" x-show="npc.wc" x-model="npc.wound" value="2"/>
-                        <label x-bind:for="'wound_level_2_'+idx" x-show="npc.wc">2</label>
-                        <input type="radio" x-bind:name="'wound_level'+idx" x-bind:id="'wound_level_3_'+idx" x-show="npc.wc" x-model="npc.wound" value="3"/>
-                        <label x-bind:for="'wound_level_3_'+idx" x-show="npc.wc">3</label>
-                        <input type="radio" x-bind:name="'wound_level'+idx" x-bind:id="'wound_level_d_'+idx" 
-                               x-model="npc.wound" value="4"
-                               x-on:click="killIt(idx)"/>
-                        <label x-bind:for="'wound_level_d_'+idx"><i class="icon-dead"></i></label>
-                    </div>
+{% block body %}
+    <div x-data="model" class="npc-list">
+        <template x-for="(npc, idx) in encounter">
+            <div class="pure-g" x-bind:class="(npc.wound==4) ? 'dead': ''">
+                <div class="pure-u-3-4">
+                    <h2><span x-text="npc.name"></span><i class="icon-wildcard" x-show="npc.wc"></i></h2>
+                </div>    
+                <div class="pure-u-1-8 stat parry" x-text="npc.parry">
                 </div>
-            </template>
-        </div>
-        <script defer src="./alpine/cdn.min.js"></script>        
-        <script>
-            document.addEventListener('alpine:init', () => {
-                Alpine.data('model', () => ({
-                        encounter: [],
-                        init() {
-                            let param = new URLSearchParams(location.search)
-                            let names = param.getAll('name')
-                            for (let idx = 0; idx < names.length; idx++) {
-                                let npc = {name: names[idx]}
-                                npc.wc = param.getAll('w')[idx] == 'true'
-                                npc.parry = param.getAll('p')[idx]
-                                npc.rangedMalus = param.getAll('r')[idx]
-                                npc.toughness = param.getAll('t')[idx]
-                                npc.armor = param.getAll('a')[idx]
-                                npc.wound = 0
-                                this.encounter.push(npc)
-                            }
-                        },
-                        killIt(idx) {
-                            let npc = this.encounter[idx]
-                            if (npc.wound == 4) {
-                                this.encounter.splice(idx, 1)
-                            }
+                <div class="pure-u-1-8 stat ranged" x-text="npc.rangedMalus">
+                </div>     
+
+                <div class="pure-u-3-4">
+                    <label x-bind:for="'shaken'+idx">Secoué</label>
+                    <input type="checkbox" x-bind:id="'shaken'+idx"/>
+                </div>    
+                <div class="pure-u-1-8 stat toughness" x-text="npc.toughness">
+                </div>
+                <div class="pure-u-1-8 stat armor" x-text="npc.armor">
+                </div>       
+
+                <div class="pure-u-1">
+                    Blessures
+                    <input type="radio" x-bind:name="'wound_level'+idx" x-bind:id="'wound_level_0_'+idx" x-model="npc.wound" value="0"/>
+                    <label x-bind:for="'wound_level_0_'+idx">0</label>
+                    <input type="radio" x-bind:name="'wound_level'+idx" x-bind:id="'wound_level_1_'+idx" x-show="npc.wc" x-model="npc.wound" value="1"/>
+                    <label x-bind:for="'wound_level_1_'+idx" x-show="npc.wc">1</label>
+                    <input type="radio" x-bind:name="'wound_level'+idx" x-bind:id="'wound_level_2_'+idx" x-show="npc.wc" x-model="npc.wound" value="2"/>
+                    <label x-bind:for="'wound_level_2_'+idx" x-show="npc.wc">2</label>
+                    <input type="radio" x-bind:name="'wound_level'+idx" x-bind:id="'wound_level_3_'+idx" x-show="npc.wc" x-model="npc.wound" value="3"/>
+                    <label x-bind:for="'wound_level_3_'+idx" x-show="npc.wc">3</label>
+                    <input type="radio" x-bind:name="'wound_level'+idx" x-bind:id="'wound_level_d_'+idx" 
+                           x-model="npc.wound" value="4"
+                           x-on:click="killIt(idx)"/>
+                    <label x-bind:for="'wound_level_d_'+idx"><i class="icon-dead"></i></label>
+                </div>
+            </div>
+        </template>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('model', () => ({
+                    encounter: [],
+                    init() {
+                        let param = new URLSearchParams(location.search)
+                        let names = param.getAll('name')
+                        for (let idx = 0; idx < names.length; idx++) {
+                            let npc = {name: names[idx]}
+                            npc.wc = param.getAll('w')[idx] == 'true'
+                            npc.parry = param.getAll('p')[idx]
+                            npc.rangedMalus = param.getAll('r')[idx]
+                            npc.toughness = param.getAll('t')[idx]
+                            npc.armor = param.getAll('a')[idx]
+                            npc.wound = 0
+                            this.encounter.push(npc)
                         }
-                    }))
-            })
-        </script>
-    </body>
-</html>
+                    },
+                    killIt(idx) {
+                        let npc = this.encounter[idx]
+                        if (npc.wound == 4) {
+                            this.encounter.splice(idx, 1)
+                        }
+                    }
+                }))
+        })
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .npc-list {
+            margin: 0.6em 0 0 0.6em;
+        }
+        .stat {
+            text-align: center;
+            padding: 0.3em 0;
+        }
+        .parry {
+            background-color: lightblue;
+        }
+        .toughness {
+            background-color: orange;
+        }
+        .ranged {
+            background-color: lightgreen;
+        }
+        .armor {
+            background-color: lightgray;
+        }
+        h2 {
+            font-size: 120%;
+            font-weight: lighter;
+            margin: 0;
+        }
+        input[type=radio] {
+            margin-top: 0.4em;
+            margin-left: 1em;
+            vertical-align: bottom;
+        }
+        input[type=checkbox] {
+            margin-top: 0.3em;
+            vertical-align: bottom;
+        }
+        .pure-g {
+            margin-bottom: 1.5em;
+        }
+        .dead {
+            opacity: 0.3;
+        }
+    </style>     
+{% endblock %}
