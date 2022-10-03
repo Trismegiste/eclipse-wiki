@@ -10,7 +10,7 @@ This app is intended for the GM. It helps you to create and build new scenario w
 It also contains a minimalistic battlemap manager and a **Websocket** broadcaster view for players which can watch pictures, 
 battlemaps and game handouts on their smartphones (a QR code reader on the smartphone could be useful).
 
-# Why
+## Why
 Though I prefer playing around a table with friends, you lack some fancy features from VTTRPG websites (Roll20 for exemple). 
 This app is intended to fill this gap : playing around a table and keeping the fancy features of computer. 
 Why not using Roll20 ? Well, first all your players must have an account. Furthermore, Roll20 is slow, ugly, old and 
