@@ -4,3 +4,10 @@
 
 login_check:
     path: /login_check
+
+app_tracker_show:
+    path: /tracker/show
+    controller:    Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    methods: GET
+    defaults:
+        template:  'tracker/show.html.twig'

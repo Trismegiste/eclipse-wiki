@@ -29,10 +29,17 @@ class GmHelperTest extends WebTestCase
         $this->assertStringContainsString('QRious', $client->getResponse()->getContent());
     }
 
-    public function testTracker()
+    public function testTrackerQrcode()
     {
         $client = static::createClient();
         $client->request('GET', '/tracker/qrcode');
+        $this->assertResponseIsSuccessful();
+    }
+
+    public function testTrackerShow()
+    {
+        $client = static::createClient();
+        $client->request('GET', '/tracker/show');
         $this->assertResponseIsSuccessful();
     }
 
