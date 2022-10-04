@@ -1,14 +1,14 @@
 <div class="pure-g">
-    <div class="pure-u-1-4 pure-u-xxl-1-12 thumb">
+    <div class="pure-u-1-4 pure-u-xl-1-12 thumb">
         <i class="icon-video {% if item.archived %}archived{% endif %}"></i>
     </div>
-    <div class="pure-u-3-4 pure-u-xxl-2-3">
+    <div class="pure-u-3-4 pure-u-xl-2-3">
         <a href="{{ path('app_vertexcrud_show', {pk: item.pk}) }}" class="block-link">
             <h2>{{ item.title }}</h2>
             <span>Élément de scénario {% if item.archived %}archivé{% endif %}</span>
         </a>
     </div>
-    <div class="pure-u-1 pure-u-xxl-1-4">
+    <div class="pure-u-1 pure-u-xl-1-4">
         <nav class="listing-action">
             {{ include('vertex/actions.html.twig', {vertex:item}) }}
         </nav>
