@@ -6,6 +6,7 @@
         {% block metadata_header %}{% endblock %}
         <title>{% block title %}Eclipse Savage{% endblock %}</title>
         <link rel="stylesheet" href="{{ asset('purecss/pure-min.css') }}"/>
+        <link rel="stylesheet" href="{{ asset('purecss/grids-responsive-min.css') }}"/>
         <link rel="stylesheet" href="{{ asset('css/form.css') }}"/>
         <link rel="stylesheet" href="{{ asset('css/main.css') }}"/>
         <link rel="stylesheet" href="{{ asset('fontello/css/fontello.css') }}"/>
@@ -27,7 +28,7 @@
             <h1 class="big-title">{% block header_title %}{% endblock %}</h1>
             {{ include('fragment/flashes.html.twig') }}
             <div class="pure-g">
-                <aside class="pure-u-1-6">
+                <aside class="pure-u-1 pure-u-xxl-1-6">
                     {% block sidebar %}
                         <nav class="pure-menu">
                             <a href="/" class="pure-menu-heading">
@@ -50,7 +51,7 @@
                         </section>
                     {% endblock %}
                 </aside>
-                <div class="pure-u-5-6">
+                <div class="pure-u-1 pure-u-xxl-5-6">
                     <article>
                         {% block content %}{% endblock %}
                     </article>
