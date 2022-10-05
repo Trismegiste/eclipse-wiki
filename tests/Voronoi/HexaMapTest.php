@@ -67,7 +67,7 @@ class HexaMapTest extends TestCase
 
     public function testAbscissa()
     {
-        $this->assertEquals($this->sut->getAbscissa(10, 10), $this->sut->getAbscissa(10, 12));
+        $this->assertEqualsWithDelta($this->sut->getAbscissa(10, 10), $this->sut->getAbscissa(10, 12), 1e-7);
         // each column of hexagons "zig and zag"
         $this->assertNotEquals($this->sut->getAbscissa(10, 10), $this->sut->getAbscissa(10, 11));
     }
