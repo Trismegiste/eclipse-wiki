@@ -19,12 +19,39 @@ class AvatarMaker
     protected $width;
     protected $font = __DIR__ . '/OpenSansCondensed-Light.ttf';
     protected $socNetFolder;
+    protected $twig;
 
-    public function __construct(string $socNetFolder, int $width = 503, int $height = 894)
+    public function __construct(\Twig\Environment $twig, string $socNetFolder, int $width = 503, int $height = 894)
     {
         $this->height = $height;
         $this->width = $width;
         $this->socNetFolder = $socNetFolder;
+        $this->twig = $twig;
+    }
+
+    public function generate(Transhuman $npc, \GdImage $source)
+    {
+        imagesavealpha($source, true);
+        ob_start();
+        imagepng($source);
+        $profilePic = base64_encode(ob_get_clean());
+        $html = $this->twig->render('picture/wk_profile.html.twig', ['width' => $this->width, 'profile_pic' => $profilePic]);
+
+        // extensions are important for wkhtmltopng
+        $basename = "target" . rand();
+        $htmlTarget = sys_get_temp_dir() . '/' . $basename . '.html';
+        $pngTarget = sys_get_temp_dir() . '/' . $basename . '.png';
+        file_put_contents($htmlTarget, $html);
+        $matrixing = new \Symfony\Component\Process\Process([
+            'wkhtmltoimage',
+            '--width', $this->width,
+            '--height', $this->height,
+            $htmlTarget,
+            $pngTarget
+        ]);
+        $matrixing->mustRun();
+
+        return imagecreatefrompng($pngTarget);
     }
 
     /**
@@ -34,7 +61,7 @@ class AvatarMaker
      * @return resource the GD2 image resource
      * @throws \RuntimeException
      */
-    public function generate(Transhuman $npc, \GdImage $source)
+    public function old_generate(Transhuman $npc, \GdImage $source)
     {
         $target = imagecreatetruecolor($this->width, $this->height);
         $bg = imagecolorallocate($target, 0xf0, 0xf0, 0xf0);
