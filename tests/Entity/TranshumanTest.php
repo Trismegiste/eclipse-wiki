@@ -26,4 +26,15 @@ class TranshumanTest extends App\Tests\Entity\CharacterTest
         $this->assertEquals(' - ', $this->sut->getDescription());
     }
 
+    public function testDefaultHashtag()
+    {
+        $bg = new \App\Entity\Background('background');
+        $bg->motivation = ['Pour : AAA, BBB', 'Contre:CCC,DDD'];
+        $fac = new App\Entity\Faction('faction');
+        $fac->motivation = ['Pour : EEE, Fàfèf', 'Contre:Ggg,ÉéçÇô'];
+
+        $npc = new App\Entity\Transhuman('Motiv', $bg, $fac);
+        $this->assertEquals('#aaa #bbb #anti-ccc #anti-ddd #eee #fàfèf #anti-ggg #anti-ééççô', $npc->getDefaultHashtag());
+    }
+
 }

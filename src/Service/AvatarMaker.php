@@ -36,13 +36,9 @@ class AvatarMaker
         imagepng($source);
         $profilePic = base64_encode(ob_get_clean());
 
-        $socnet = [];
-        foreach ($this->filterSocNet($npc) as $key => $val) {
-            // text
-            $txt = $this->printFollowers(10 ** ($val - random_int(10, 90) / 100.0));
-            $socnet[$key] = $txt;
-        }
-
+        $socnet = array_map(function (int $val) {
+            return $this->printFollowers(10 ** ($val - random_int(10, 90) / 100.0));
+        }, $this->filterSocNet($npc));
 
         $html = $this->twig->render('picture/wk_profile.html.twig', [
             'width' => $this->width,

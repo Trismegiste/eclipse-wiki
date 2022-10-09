@@ -17,6 +17,7 @@ class Transhuman extends Character
     protected Background $background;
     protected Faction $faction;
     public ?string $surnameLang = null;
+    public ?string $hashtag = null;
 
     public function __construct(string $title, Background $bg, Faction $fac)
     {
@@ -54,4 +55,24 @@ class Transhuman extends Character
         $append = "\n" . self::avatarSection . "\n[[file:$filename]]\n";
         $this->content .= $append;
     }
+
+    public function getDefaultHashtag(): string
+    {
+        $motiv = array_merge($this->background->motivation, $this->faction->motivation);
+        $result = [];
+        foreach ($motiv as $suggest) {
+            if (preg_match('#^\s*(\S+)\s*:\s*(.+)$#', $suggest, $extract)) {
+                $position = $extract[1];
+                $listing = explode(',', $extract[2]);
+
+                $prefix = ($position === 'Contre') ? '#anti-' : '#';
+                foreach ($listing as $doct) {
+                    $result[] = $prefix . mb_strtolower(str_replace(' ', '-', trim($doct)));
+                }
+            }
+        }
+
+        return implode(' ', $result);
+    }
+
 }

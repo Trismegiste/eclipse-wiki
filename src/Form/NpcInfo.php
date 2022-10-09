@@ -9,6 +9,7 @@ namespace App\Form;
 use App\Entity\Transhuman;
 use App\Form\Type\SurnameLanguageType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -24,7 +25,8 @@ class NpcInfo extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('surnameLang', SurnameLanguageType::class);
+        $builder->add('hashtag', TextareaType::class, ['required' => false])
+                ->add('surnameLang', SurnameLanguageType::class);
     }
 
     public function getParent(): ?string
@@ -41,4 +43,5 @@ class NpcInfo extends AbstractType
     {
         $resolver->setDefault('data_class', Transhuman::class);
     }
+
 }
