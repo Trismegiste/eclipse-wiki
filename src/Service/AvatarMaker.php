@@ -35,11 +35,21 @@ class AvatarMaker
         ob_start();
         imagepng($source);
         $profilePic = base64_encode(ob_get_clean());
+
+        $socnet = [];
+        foreach ($this->filterSocNet($npc) as $key => $val) {
+            // text
+            $txt = $this->printFollowers(10 ** ($val - random_int(10, 90) / 100.0));
+            $socnet[$key] = $txt;
+        }
+
+
         $html = $this->twig->render('picture/wk_profile.html.twig', [
             'width' => $this->width,
             'profile_pic' => $profilePic,
             'npc' => $npc,
-            'font' => base64_encode(file_get_contents($this->font))
+            'font' => base64_encode(file_get_contents($this->font)),
+            'socnet' => $socnet
         ]);
 
         // extensions are important for wkhtmltopng
@@ -57,6 +67,21 @@ class AvatarMaker
         $matrixing->mustRun();
 
         return imagecreatefrompng($pngTarget);
+    }
+
+    protected function filterSocNet(Transhuman $npc): array
+    {
+        $economy = array_filter($npc->economy, function ($val, $key) {
+            if ($key === 'Ressource') {
+                return false;
+            }
+            return !empty($val);
+        }, ARRAY_FILTER_USE_BOTH);
+        uasort($economy, function ($a, $b) {
+            return $b - $a;
+        });
+
+        return array_slice($economy, 0, 3);
     }
 
     /**

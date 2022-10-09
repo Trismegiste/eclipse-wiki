@@ -25,22 +25,43 @@
                 margin: 0;
                 padding: 0 0.4em;
             }
-            .follow figure {
+            .pseudo nav {
                 margin: 10px 20px 0 0;
+            }
+            .socnet figure {
+                margin: 0 1em 0;
+            }
+            .socnet h2 {
+                font-family: 'OpenSansCondensed';
+                text-align: center;
+                font-size: 40px;
+                margin: 0;
             }
         </style>
     </head>
     <body>
         <img src="data:image/png;base64,{{ profile_pic }}" class="avatar"/>
-        <div class="pure-g">
+        <div class="pure-g pseudo">
             <div class="pure-u-2-3">
                 <h1>{{ npc.title }}</h1>
             </div>
-            <div class="pure-u-1-3 follow">
-                <figure>
+            <div class="pure-u-1-3">
+                <nav>
                     <img src="{{ absolute_url(asset('socnet/follow.svg')) }}" class="pure-img"/>
-                </figure>
+                </nav>
             </div>
         </div>
+        <section class="socnet">
+            <div class="pure-g">
+                {% for key,follower in socnet %}
+                    <div class="pure-u-1-3">
+                        <figure>
+                            <img src="{{ absolute_url(asset('socnet/' ~ key ~ '.png')) }}" class="pure-img"/>
+                        </figure>
+                        <h2>{{ follower }}</h2>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
     </body>
 </html>

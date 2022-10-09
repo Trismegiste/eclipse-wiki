@@ -183,7 +183,7 @@ class ProfilePicture extends AbstractController
      */
     public function yolo(VertexRepository $repo, AvatarMaker $maker)
     {
-        $npc = $repo->findByPk('630e3ee79c25b879a70d79c0');
+        $npc = $repo->findByPk('630e3ee79c25b879a70d7a0f');
         $profilePic = $maker->generate($npc, imagecreatefrompng('/www/tests/Service/profilepic.png'));
         return new \Symfony\Component\HttpFoundation\StreamedResponse(function () use ($profilePic) {
                     imagepng($profilePic);
