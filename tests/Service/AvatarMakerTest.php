@@ -8,16 +8,18 @@ use App\Entity\Background;
 use App\Entity\Faction;
 use App\Entity\Transhuman;
 use App\Service\AvatarMaker;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Twig\Environment;
 
-class AvatarMakerTest extends TestCase
+class AvatarMakerTest extends KernelTestCase
 {
 
     protected $sut;
 
     protected function setUp(): void
     {
-        $this->sut = new AvatarMaker('./public/socnet/');
+        $twig = static::getContainer()->get(Environment::class);
+        $this->sut = new AvatarMaker($twig, './public/socnet/');
     }
 
     protected function createNpc(): Transhuman
@@ -31,8 +33,8 @@ class AvatarMakerTest extends TestCase
     public function testGenerate()
     {
         $npc = $this->createNpc();
-        $res = $this->sut->generate($npc, imagecreatetruecolor(500, 500));
-        $this->assertInstanceOf(\GdImage::class, $res);
+        $res = $this->sut->generate($npc, imagecreatefrompng(__DIR__ . '/avatar.png'));
+        $this->assertInstanceOf(GdImage::class, $res);
         $this->assertEquals(503, imagesx($res));
         $this->assertEquals(894, imagesy($res));
     }

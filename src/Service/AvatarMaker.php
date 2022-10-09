@@ -35,7 +35,12 @@ class AvatarMaker
         ob_start();
         imagepng($source);
         $profilePic = base64_encode(ob_get_clean());
-        $html = $this->twig->render('picture/wk_profile.html.twig', ['width' => $this->width, 'profile_pic' => $profilePic]);
+        $html = $this->twig->render('picture/wk_profile.html.twig', [
+            'width' => $this->width,
+            'profile_pic' => $profilePic,
+            'npc' => $npc,
+            'font' => base64_encode(file_get_contents($this->font))
+        ]);
 
         // extensions are important for wkhtmltopng
         $basename = "target" . rand();
