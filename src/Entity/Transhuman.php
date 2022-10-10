@@ -72,7 +72,7 @@ class Transhuman extends Character
             }
         }
 
-        return implode(' ', $result);
+        return implode(' ', array_unique($result));
     }
 
 }

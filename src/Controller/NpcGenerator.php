@@ -274,7 +274,7 @@ class NpcGenerator extends AbstractController
     public function info(string $pk, Request $request): Response
     {
         $npc = $this->repository->findByPk($pk);
-        $form = $this->createForm(NpcInfo::class, $npc, ['edit' => true]);
+        $form = $this->createForm(NpcInfo::class, $npc, ['edit' => true, 'default_hashtag' => $npc->getDefaultHashtag()]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
