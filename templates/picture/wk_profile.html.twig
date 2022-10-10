@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="{{ absolute_url(asset('purecss/pure-min.css')) }}"/>
+        <link rel="stylesheet" href="file://{{ localbase }}/purecss/pure-min.css"/>
         <style>
             @font-face {
                 font-family: 'OpenSansCondensed';
@@ -56,7 +56,7 @@
             </div>
             <div class="pure-u-1-3">
                 <nav>
-                    <img src="{{ absolute_url(asset('socnet/follow.svg')) }}" class="pure-img"/>
+                    <img src="file://{{ localbase }}/socnet/follow.svg" class="pure-img"/>
                 </nav>
             </div>
         </div>
@@ -68,7 +68,7 @@
                 {% for key,follower in socnet %}
                     <div class="pure-u-1-3">
                         <figure>
-                            <img src="{{ absolute_url(asset('socnet/' ~ key ~ '.png')) }}" class="pure-img"/>
+                            <img src="file://{{ localbase }}/socnet/{{ key }}.png" class="pure-img"/>
                         </figure>
                         <h2>{{ follower }}</h2>
                     </div>

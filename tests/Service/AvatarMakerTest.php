@@ -19,7 +19,7 @@ class AvatarMakerTest extends KernelTestCase
     protected function setUp(): void
     {
         $twig = static::getContainer()->get(Environment::class);
-        $this->sut = new AvatarMaker($twig, './public/socnet/');
+        $this->sut = new AvatarMaker($twig, static::getContainer()->getParameter('kernel.project_dir') . '/public');
     }
 
     protected function createNpc(): Transhuman

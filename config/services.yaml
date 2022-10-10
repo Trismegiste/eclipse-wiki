@@ -94,8 +94,7 @@ services:
             
     # Picture
     App\Service\AvatarMaker:
-        arguments:
-            $socNetFolder: '%kernel.project_dir%/public/socnet'
+        $publicFolder: '%kernel.project_dir%/public'
 
     # Custom Types
     App\Form\Type\FullTextChoice:
