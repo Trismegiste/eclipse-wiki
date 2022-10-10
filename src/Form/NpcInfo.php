@@ -24,7 +24,7 @@ class NpcInfo extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('hashtag', Type\HashtagType::class, ['required' => false, 'default_hashtag' => $options['default_hashtag']])
+        $builder->add('hashtag', Type\HashtagType::class, ['required' => false, 'default_hashtag' => $options['data']->getDefaultHashtag()])
                 ->add('surnameLang', SurnameLanguageType::class);
     }
 
@@ -41,7 +41,6 @@ class NpcInfo extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefault('data_class', Transhuman::class);
-        $resolver->setRequired('default_hashtag');
     }
 
 }
