@@ -61,12 +61,9 @@ class Transhuman extends Character
         $motiv = array_merge($this->background->motivation, $this->faction->motivation);
         $result = [];
         foreach ($motiv as $suggest) {
-            if (preg_match('#^\s*(\S+)\s*:\s*(.+)$#', $suggest, $extract)) {
-                $position = $extract[1];
-                $listing = explode(',', $extract[2]);
-
-                $prefix = ($position === 'Contre') ? '#anti-' : '#';
-                foreach ($listing as $doct) {
+            if (preg_match('#^(Pour|Contre)[^:]*:(.+)$#', $suggest, $extract)) {  // robust regex because of some weird whitespace characters
+                $prefix = ($extract[1] === 'Contre') ? '#anti-' : '#';
+                foreach (explode(',', $extract[2]) as $doct) {
                     $result[] = $prefix . mb_strtolower(str_replace(' ', '-', trim($doct)));
                 }
             }
