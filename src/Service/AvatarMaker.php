@@ -17,7 +17,6 @@ class AvatarMaker
 
     protected $height;
     protected $width;
-    protected $font = __DIR__ . '/OpenSansCondensed-Light.ttf';
     protected $publicFolder;
     protected $twig;
 
@@ -51,7 +50,6 @@ class AvatarMaker
             'width' => $this->width,
             'profile_pic' => $profilePic,
             'npc' => $npc,
-            'font' => base64_encode(file_get_contents($this->font)),
             'socnet' => $socnet,
             'localbase' => $this->publicFolder
         ]);
