@@ -1,19 +1,10 @@
 /*
  * Generic form
 */
-.pure-form fieldset label {
-    padding-right: 1em;
-    padding-left: 0.1em;
-}
-
-.pure-form fieldset .pure-u-1-3 > label {
-    text-align: right;
-    display: block;
-}
-
-.pure-form fieldset input[type="checkbox"] {
-    margin-top: 0.6em;
-    margin-bottom: 1.1em;
+.pure-form fieldset input, 
+.pure-form fieldset select,
+.pure-form fieldset textarea {
+    margin-bottom: 0.5em;
 }
 
 .pure-form fieldset input[type="file"] {
@@ -21,16 +12,34 @@
     margin-bottom: 0.8em;
 }
 
-.pure-form fieldset input, 
-.pure-form fieldset input, 
-.pure-form fieldset select,
-.pure-form fieldset textarea {
-    margin-bottom: 0.5em;
+.pure-form fieldset input[type="radio"],
+.pure-form fieldset input[type="checkbox"] {
+    margin: 0.6em 0.2em 1.1em 0
 }
 
-.pure-form fieldset input[type="radio"] {
-    margin-top: 0.6em;
-    margin-bottom: 1.1em;
+.pure-form fieldset .form-widget label {
+    display: inline;
+    margin-right: 2em;
+}
+
+@media screen and (max-width: 48em) {
+    .pure-form fieldset .form-label label {
+        display: block;
+        margin: 0 0 0.3em;
+        color: #777;
+    }
+    
+    .form-widget {
+        margin-bottom: 1em;
+    }
+}
+
+@media screen and (min-width: 48em) {
+    .pure-form fieldset .form-label label {
+        display: block;
+        text-align: right;
+        margin-right: 1em;
+    }
 }
 
 .help-text {
