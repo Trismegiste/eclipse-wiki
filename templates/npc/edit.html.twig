@@ -9,8 +9,8 @@
     <div id="npc_stats_edges" class="collection">
         <template x-for="(edge, idx) in edges">
             <div class="pure-g">
-                <div class="pure-u-1-3"><label x-text="edge.name" x-bind:title="'Prérequis: [' + edge.rank.toUpperCase() + '] ' + edge.requis"></label></div>
-                <div class="pure-u-7-24">
+                <div class="pure-u-1 pure-u-xl-1-3 form-label"><label x-text="edge.name" x-bind:title="'Prérequis: [' + edge.rank.toUpperCase() + '] ' + edge.requis"></label></div>
+                <div class="pure-u-5-8 pure-u-xl-7-24">
                     <input x-bind:name="'npc_stats[edges][' + idx + '][name]'" type="hidden" required="required" x-model="edge.name"/>
                     <select x-bind:name="'npc_stats[edges][' + idx + '][origin]'" required="required" x-model="edge.origin">
                         <option value="Progression">Progression</option>
@@ -40,8 +40,8 @@
     <div id="npc_stats_hindrances" class="collection">
         <template x-for="(hindrance, idx) in hindrances">
             <div class="pure-g">
-                <div class="pure-u-1-3"><label x-text="hindrance.name"></label></div>
-                <div class="pure-u-1-4">
+                <div class="pure-u-1 pure-u-xl-1-3 form-label"><label x-text="hindrance.name"></label></div>
+                <div class="pure-u-1-3 pure-u-xl-1-4">
                     <template x-if="1 == hindrance.choices">
                         <label class="fakeselect">Mineur<input type="hidden" x-bind:name="'npc_stats[hindrances][' + idx + '][level]'" x-model="hindrance.choices"/></label>
                     </template>
@@ -55,7 +55,7 @@
                         </select>
                     </template>
                 </div>                
-                <div class="pure-u-1-4">
+                <div class="pure-u-1-2 pure-u-xl-1-4">
                     <input x-bind:name="'npc_stats[hindrances][' + idx + '][name]'" type="hidden" required="required" x-model="hindrance.name"/>
                     <select x-bind:name="'npc_stats[hindrances][' + idx + '][origin]'" required="required" x-model="hindrance.origin">
                         <option value="Background">Background</option>
@@ -76,8 +76,8 @@
     <div id="npc_stats_skills" class="collection">
         <template x-for="(skill, idx) in skills">
             <div class="pure-g">
-                <div class="pure-u-1-3"><label x-text="skill.name"></label></div>
-                <div class="pure-u-2-3">
+                <div class="pure-u-1 pure-u-xl-1-4 form-label"><label x-text="skill.name"></label></div>
+                <div class="pure-u-1 pure-u-xl-3-4 form-widget">
 
                     {%- for num, child in form.vars.prototype.roll %}
                         <input type="radio"
