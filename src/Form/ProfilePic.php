@@ -6,7 +6,7 @@
 
 namespace App\Form;
 
-use App\Entity\Transhuman;
+use App\Entity\Character;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -28,7 +28,7 @@ class ProfilePic extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('data_class', Transhuman::class);
+        $resolver->setDefault('data_class', Character::class);
     }
 
 }

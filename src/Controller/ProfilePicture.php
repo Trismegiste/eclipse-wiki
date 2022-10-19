@@ -42,31 +42,12 @@ class ProfilePicture extends AbstractController
     }
 
     /**
-     * Create an avatar for NPC
+     * Create a socnet profile for a Transhuman
      * @Route("/profile/create/{pk}", methods={"GET","POST"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function create(string $pk, Request $request, VertexRepository $repo, AvatarMaker $maker): Response
+    public function create(string $pk, Request $request, AvatarMaker $maker): Response
     {
-        $npc = $repo->findByPk($pk);
-        $form = $this->createForm(ProfilePic::class, $npc);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            /** @var UploadedFile $avatarFile */
-            $avatarFile = $form->get('avatar')->getData();
-            $profilePic = $maker->generate($npc, imagecreatefromstring($avatarFile->getContent()));
-            $filename = $npc->getTitle() . '-avatar.png';
-            imagepng($profilePic, join_paths($this->storage->getRootDir(), $filename));
-            if (!$npc->hasAvatarSection()) {
-                $npc->appendAvatarSection($filename);
-                $repo->save($npc);
-            }
-            $this->addFlash('success', 'Profil réseaux sociaux généré');
-
-            return new JsonResponse('', Response::HTTP_NO_CONTENT);
-        }
-
-        return $this->render('picture/profile.html.twig', ['form' => $form->createView()]);
+        
     }
 
     /**
@@ -149,25 +130,17 @@ class ProfilePicture extends AbstractController
 
     /**
      * Creates a battlemap token for a NPC
-     * @Route("/npc/token/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
+     * @Route("/npc/token/{pk}", methods={"GET","POST"}, requirements={"pk"="[\da-f]{24}"})
      */
     public function token(string $pk, Request $request): Response
     {
         $npc = $this->repository->findByPk($pk);
-        if (!$npc instanceof \App\Entity\Character) {
-            throw $this->createNotFoundException($npc->getTitle() . ' is not a Character');
-        }
-
-        $form = $this->createFormBuilder($npc)
-                ->add('token', \App\Form\Type\CropperType::class)
-                ->add('token_create', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
-                ->setMethod('PUT')
-                ->getForm();
+        $form = $this->createForm(ProfilePic::class, $npc);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $filename = 'token-' . $npc->getPk() . '.png';
-            $this->storage->storeToken($form['token']->getData(), $filename);
+            $this->storage->storeToken($form['avatar']->getData(), $filename);
             $npc->tokenPic = $filename;
             $this->repository->save($npc);
             $this->addFlash('success', 'Token généré');
@@ -175,7 +148,7 @@ class ProfilePicture extends AbstractController
             return new JsonResponse('', Response::HTTP_NO_CONTENT);
         }
 
-        return $this->render('picture/token.html.twig', ['form' => $form->createView()]);
+        return $this->render('picture/profile.html.twig', ['form' => $form->createView()]);
     }
 
 }
