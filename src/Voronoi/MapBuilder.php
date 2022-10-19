@@ -18,6 +18,7 @@ class MapBuilder
 {
 
     const defaultSizeForWeb = 1000;
+    const resizeToken = 100;
 
     protected TileProvider $provider;
     protected Storage $storage;
@@ -161,9 +162,15 @@ class MapBuilder
 
     public function dumpTokenFor(\SplFileInfo $tokenPic): void
     {
+        $source = imagecreatefrompng($tokenPic->getPathname());
+        $target = imagescale($source, self::resizeToken, self::resizeToken, IMG_BICUBIC_FIXED);
+
         echo '<g transform="scale(0.008)">';   // translate(-50, -50) is missing because of bug in svg.draggable
         echo '<image width="100" height="100" xlink:href="data:image/png;base64,';
-        echo base64_encode(file_get_contents($tokenPic->getPathname()));
+        imagesavealpha($target, true);
+        ob_start();
+        imagepng($target);
+        echo base64_encode(ob_get_clean());
         echo '"/>';
         echo '<circle cx="50" cy="50" r="50" style="fill:none;stroke:red;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />';
         echo "</g>\n";

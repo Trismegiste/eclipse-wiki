@@ -21,7 +21,7 @@ use function join_paths;
 class Storage
 {
 
-    const tokenSize = 100;
+    const tokenSize = 503;
 
     protected $root;
 
