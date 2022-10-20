@@ -167,21 +167,12 @@ class Storage
             throw new \InvalidArgumentException('Not a PNG format');
         }
 
-        $source = imagecreatefrompng($picture->getPathname());
-        if (imagesx($source) !== imagesy($source)) {
+        list($width, $height) = getimagesize($picture->getPathname());
+        if ($width !== $height) {
             throw new RuntimeException('PNG image for token is not square');
         }
 
-        $targetName = join_paths($this->getRootDir(), $filename);
-        $target = imagescale($source, self::tokenSize, self::tokenSize, IMG_BICUBIC_FIXED);
-        imagesavealpha($target, true);
-        $ret = imagepng($target, $targetName);
-        imagedestroy($source);
-        imagedestroy($target);
-
-        if (!$ret) {
-            throw new RuntimeException("Unable to save token $filename");
-        }
+        $picture->move($this->getRootDir(), $filename);
     }
 
 }
