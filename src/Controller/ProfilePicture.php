@@ -15,10 +15,10 @@ use App\Service\PlayerCastCache;
 use App\Service\Storage;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Process\InputStream;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
@@ -42,10 +42,25 @@ class ProfilePicture extends AbstractController
     }
 
     /**
-     * Create a socnet profile for a Transhuman
-     * @Route("/profile/create/{pk}", methods={"GET","POST"}, requirements={"pk"="[\da-f]{24}"})
+     * Generate a socnet profile for a unique Transhuman
+     * @Route("/profile/unique/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function create(string $pk, Request $request, AvatarMaker $maker): Response
+    public function unique(string $pk, AvatarMaker $maker): Response
+    {
+        $npc = $this->repository->findByPk($pk);
+        $pathname = $this->storage->getFileInfo($npc->tokenPic);
+        $profile = $maker->generate($npc, imagecreatefrompng($pathname->getPathname()));
+
+        return new StreamedResponse(function () use ($profile) {
+                    imagepng($profile);
+                }, 200, ['content-type' => 'image/png']);
+    }
+
+    /**
+     * Push a socnet profile for a unique Transhuman
+     * @Route("/profile/unique/{pk}", methods={"POST"}, requirements={"pk"="[\da-f]{24}"})
+     */
+    public function pushUnique(string $pk, AvatarMaker $maker): Response
     {
         
     }

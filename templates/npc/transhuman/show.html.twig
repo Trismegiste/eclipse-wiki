@@ -55,12 +55,15 @@
         </div>
     </div>
     <div class="pure-g">
-        <div class="pure-u-1">
+        <div class="pure-u-4-5">
             <h1>Informations</h1>
             <h2>{{ npc.background.title }} - {{ npc.faction.title }}</h2>
             {{ wiki(vertex.content) }}
             <h2>Backlinks</h2>
             {{ include('fragment/wiki_backlinks.html.twig') }}
+        </div>
+        <div class="pure-u-1-5">
+            <img src="{{ path('app_profilepicture_unique', {pk: npc.pk}) }}" class="pure-img"/>
         </div>
     </div>
 {% endblock %}

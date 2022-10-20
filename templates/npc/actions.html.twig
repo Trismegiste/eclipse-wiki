@@ -5,13 +5,6 @@
     {% else %}
     <a href="{{ path('app_vertexcrud_edit', {pk: npc.pk}) }}" title="Informations"><i class="icon-edit"></i></a>
     {% endif %}
-    {% if npc.category == 'transhuman' %}
-        {% if npc.surnameLang is empty %}
-        <a href="{{ path('app_profilepicture_create', {pk: npc.pk}) }}" title="Choisir l'avatar"><i class="icon-profile"></i></a>
-        {% else %}
-        <a href="{{ path('app_profilepicture_generateonthefly', {pk: npc.pk}) }}" title="Instancier un nouvel avatar"><i class="icon-profile"></i></a>
-        {% endif %}
-    {% endif %}
 <a href="{{ path('app_npcgenerator_gear', {pk: npc.pk}) }}" title="Matériel"><i class="icon-wrench"></i></a>
 <a href="{{ path('app_npcgenerator_battle', {pk: npc.pk}) }}" title="Combat"><i class="icon-gun"></i></a>
     {% if npc.category != 'freeform' %}
