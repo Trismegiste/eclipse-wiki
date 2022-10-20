@@ -62,7 +62,13 @@ class ProfilePicture extends AbstractController
      */
     public function pushUnique(string $pk, AvatarMaker $maker): Response
     {
-        
+        $npc = $this->repository->findByPk($pk);
+        $pathname = $this->storage->getFileInfo($npc->tokenPic);
+        $profile = $maker->generate($npc, imagecreatefrompng($pathname->getPathname()));
+        $path = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, $pk . '.png');
+        imagepng($profile, $path);
+
+        return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $path]);
     }
 
     /**

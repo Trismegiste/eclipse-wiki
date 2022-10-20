@@ -63,7 +63,13 @@
             {{ include('fragment/wiki_backlinks.html.twig') }}
         </div>
         <div class="pure-u-1-5">
-            <img src="{{ path('app_profilepicture_unique', {pk: npc.pk}) }}" class="pure-img"/>
+            {% if npc.tokenPic is not empty %}
+                <div class="pushable">
+                    <a href="{{ path('app_profilepicture_pushunique', {pk: npc.pk}) }}">
+                        <img src="{{ path('app_profilepicture_unique', {pk: npc.pk}) }}" class="pure-img"/>
+                    </a>
+                </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
