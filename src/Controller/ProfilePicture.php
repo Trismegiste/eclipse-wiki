@@ -60,22 +60,23 @@ class ProfilePicture extends AbstractController
      * Push a socnet profile for a unique Transhuman
      * @Route("/profile/unique/{pk}", methods={"POST"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function pushUnique(string $pk, AvatarMaker $maker): Response
+    public function pushUnique(string $pk, AvatarMaker $maker, PlayerCastCache $cache): Response
     {
         $npc = $this->repository->findByPk($pk);
         $pathname = $this->storage->getFileInfo($npc->tokenPic);
         $profile = $maker->generate($npc, imagecreatefrompng($pathname->getPathname()));
         $path = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, $pk . '.png');
         imagepng($profile, $path);
+        $cached = $cache->slimPictureForPush(new \SplFileInfo($path));
 
-        return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $path]);
+        return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $cached->getPathname()]);
     }
 
     /**
      * Show a list of NPC profiles for a Place
-     * @Route("/profile/onthefly/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
+     * @Route("/profile/template/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function generateOnTheFly(string $pk): Response
+    public function template(string $pk): Response
     {
         $repo = new RandomizerDecorator(new FileRepository());
         /** @var Transhuman $vertex */
@@ -104,9 +105,9 @@ class ProfilePicture extends AbstractController
 
     /**
      * AJAX Create a social network profile for a NPC
-     * @Route("/profile/onthefly/{pk}", methods={"POST"}, requirements={"pk"="[\da-f]{24}"})
+     * @Route("/profile/template/{pk}", methods={"POST"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function pushProfile(string $pk, Request $request, AvatarMaker $maker): JsonResponse
+    public function pushTemplate(string $pk, Request $request, AvatarMaker $maker): JsonResponse
     {
         $form = $this->createForm(ProfileOnTheFly::class);
 

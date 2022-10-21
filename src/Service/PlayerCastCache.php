@@ -72,7 +72,7 @@ class PlayerCastCache implements CacheWarmerInterface, CacheClearerInterface
         }
 
         $compressedPicture = join_paths($this->cacheDir, $picture->getBasename('.' . $picture->getExtension()) . '.jpg');
-        imagejpeg($forPlayer, $compressedPicture, 70);
+        imagejpeg($forPlayer, $compressedPicture, 75);
 
         return new SplFileInfo($compressedPicture);
     }
