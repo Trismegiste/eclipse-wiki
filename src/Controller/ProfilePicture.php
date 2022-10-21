@@ -126,30 +126,6 @@ class ProfilePicture extends AbstractController
         return new JsonResponse(['level' => 'error', 'message' => 'Invalid form'], Response::HTTP_FORBIDDEN);
     }
 
-    private function convertSvgToPng(string $svg)
-    {
-        $input = new InputStream();
-        $process = new Process([
-            'convert',
-            '-background', 'none',
-            '-strokewidth', 0,
-            '-density', 200,
-            '-resize', '503x503',
-            'svg:-', 'png:-'
-        ]);
-        $process->setInput($input);
-        $process->start();
-        $input->write($svg);
-        $input->close();
-        $process->wait();
-
-        if (0 !== $process->getExitCode()) {
-            throw new RuntimeException($process->getErrorOutput());
-        }
-
-        return imagecreatefromstring($process->getOutput());
-    }
-
     /**
      * Creates a battlemap token for a NPC
      * @Route("/npc/token/{pk}", methods={"GET","POST"}, requirements={"pk"="[\da-f]{24}"})
