@@ -301,7 +301,7 @@ class NpcGenerator extends AbstractController
         $this->repository->save($extra);
         $this->addFlash('success', "$title a été créé à partir de " . $npc->getTitle());
 
-        return $this->redirectToRoute('app_profilepicture_create', ['pk' => $extra->getPk()]);
+        return $this->redirectToRoute('app_profilepicture_token', ['pk' => $extra->getPk()]);
     }
 
     /**

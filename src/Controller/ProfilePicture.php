@@ -114,9 +114,9 @@ class ProfilePicture extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $param = $form->getData();
-            $npc = $this->repository->findByPk($param['template']);
+            $npc = $this->repository->findByPk($pk);
             $npc->setTitle($param['name']);
-            $profile = $maker->generate($npc, $this->convertSvgToPng($param['svg']));
+            $profile = $maker->generate($npc, imagecreatefrompng($param['avatar']->getPathname()));
             $path = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, $param['name'] . '.png');
             imagepng($profile, $path);
 
