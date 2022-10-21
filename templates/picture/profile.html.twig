@@ -91,14 +91,8 @@
                 let avatarId = '{{ form.vars.data.title }}' + (idx === 0 ? '' : Math.random())
                 let svgCode = multiavatar(avatarId)
 
-                // adding height and width attributes of SVG root element to fix a bug in Firefox
-                let parser = new DOMParser()
-                let doc = parser.parseFromString(svgCode, "image/svg+xml")
-                doc.rootElement.setAttribute('width', {{ avatarSize }})
-                doc.rootElement.setAttribute('height', {{ avatarSize }})
-                let exporter = new XMLSerializer()
                 // updating image
-                imgTmp.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(exporter.serializeToString(doc))
+                imgTmp.src = svgContentToDataUrl(fixSvgDimension(svgCode, {{ avatarSize }}))
                 button.src = imgTmp.src
 
                 // event for choosing avatar

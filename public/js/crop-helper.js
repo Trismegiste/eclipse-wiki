@@ -16,3 +16,20 @@ function dataURLtoFile(dataurl, filename) {
 
     return new File([u8arr], filename, {type: mime});
 }
+
+// adding height and width attributes of SVG root element to fix a bug in Firefox
+function fixSvgDimension(svgCode, side) {
+    let parser = new DOMParser()
+    let doc = parser.parseFromString(svgCode, "image/svg+xml")
+    doc.rootElement.setAttribute('width', side)
+    doc.rootElement.setAttribute('height', side)
+
+    return doc
+}
+
+// convert a SVG DOMDocument to data url
+function svgContentToDataUrl(doc) {
+    let exporter = new XMLSerializer()
+
+    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(exporter.serializeToString(doc))
+}
