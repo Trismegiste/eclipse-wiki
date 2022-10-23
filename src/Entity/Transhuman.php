@@ -72,4 +72,9 @@ class Transhuman extends Character
         return implode(' ', array_unique($result));
     }
 
+    public function isNpcTemplate(): bool
+    {
+        return !empty($this->surnameLang);
+    }
+
 }

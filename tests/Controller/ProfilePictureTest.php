@@ -24,11 +24,18 @@ class ProfilePictureTest extends WebTestCase
         $this->repository = static::getContainer()->get(VertexRepository::class);
     }
 
-    public function testCreateProfile()
+    public function testClean()
+    {
+        $this->repository->delete(iterator_to_array($this->repository->search()));
+        $this->assertCount(0, iterator_to_array($this->repository->search()));
+    }
+
+    public function testCreateToken()
     {
         $npc = new Transhuman('tmp', new Background('back'), new Faction('fact'));
         $this->repository->save($npc);
-        $crawler = $this->client->request('GET', '/profile/create/' . $npc->getPk());
+
+        $crawler = $this->client->request('GET', '/npc/token/' . $npc->getPk());
         $this->assertResponseIsSuccessful();
 
         $form = $crawler->selectButton('profile_pic_generate')->form();
@@ -45,51 +52,59 @@ class ProfilePictureTest extends WebTestCase
         return (string) $npc->getPk();
     }
 
-    /** @depends testCreateProfile */
-    public function testShowProfileOnTheFly(string $pk)
+    /** @depends testCreateToken */
+    public function testUnique(string $pk)
     {
-        $npc = $this->repository->load($pk);
-        $npc->surnameLang = 'japanese';
-        $this->repository->save($npc);
-        $crawler = $this->client->request('GET', '/profile/onthefly/' . $pk);
+        ob_start();
+        $this->client->request('GET', '/profile/unique/' . $pk);
+        ob_end_clean();
         $this->assertResponseIsSuccessful();
-
-        return $pk;
+        $this->assertEquals('image/png', $this->client->getResponse()->headers->get('content-type'));
     }
 
-    /** @depends testShowProfileOnTheFly */
-    public function testPushProfileOnTheFly(string $pk)
+    /** @depends testCreateToken */
+    public function testPushUnique(string $pk)
     {
-        $crawler = $this->client->request('GET', '/profile/onthefly/' . $pk);
-        $this->assertSelectorExists('#profile_on_the_fly_generate');
-        $this->client->submitForm('profile_on_the_fly_generate', [
-            'profile_on_the_fly' => [
-                'svg' => '<svg width="256" height="256" viewBox="0 0 256 256"/>',
-                'name' => 'Yolo',
-                'template' => $pk
-            ]
-        ]);
+        $this->client->request('POST', '/profile/unique/' . $pk);
         $this->assertResponseIsSuccessful();
         $result = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals('success', $result->level);
     }
 
-    /** @depends testCreateProfile */
-    public function testCreateToken(string $pk)
+    /** @depends testCreateToken */
+    public function testTemplateChoices(string $pk)
     {
-        $crawler = $this->client->request('GET', '/npc/token/' . $pk);
+        $npc = $this->repository->load($pk);
+        $npc->surnameLang = 'japanese';
+        $this->repository->save($npc);
+        $this->client->request('GET', '/profile/template/' . $pk);
         $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('[data-avatar]');
 
-        $form = $crawler->selectButton('form_token_create')->form();
+        return $pk;
+    }
+
+    /** @depends testTemplateChoices */
+    public function testPushTemplate(string $pk)
+    {
+        $crawler = $this->client->request('GET', '/profile/template/' . $pk);
+        $this->assertSelectorExists('#profile_on_the_fly_generate');
+        $form = $crawler->selectButton('profile_on_the_fly_generate')->form();
+
+        $form ['profile_on_the_fly[name]'] = 'Yolo';
 
         $filename = 'tmp.png';
         $image = $this->createTestChart(256);
         imagepng($image, $filename);
 
-        $form['form[token]']->upload($filename);
+        $form['profile_on_the_fly[avatar]']->upload($filename);
         $this->client->submit($form);
         $this->assertResponseIsSuccessful();
         unlink($filename);
+
+        $this->assertResponseIsSuccessful();
+        $result = json_decode($this->client->getResponse()->getContent());
+        $this->assertEquals('success', $result->level);
     }
 
 }

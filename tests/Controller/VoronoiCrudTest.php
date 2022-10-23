@@ -226,7 +226,7 @@ class VoronoiCrudTest extends WebTestCase
         $this->assertResponseRedirects();
         $this->client->followRedirect();
         $this->assertResponseIsSuccessful();
-	$this->assertEquals('app_profilepicture_generateonthefly', $this->client->getRequest()->get('_route'));
+	$this->assertEquals('app_profilepicture_template', $this->client->getRequest()->get('_route'));
     }
 
 }

@@ -8,7 +8,7 @@
 <a href="{{ path('app_profilepicture_token', {pk: npc.pk}) }}" title="Créer un token"><i class="icon-user-circle"></i></a>
 <a href="{{ path('app_npcgenerator_gear', {pk: npc.pk}) }}" title="Matériel"><i class="icon-wrench"></i></a>
 <a href="{{ path('app_npcgenerator_battle', {pk: npc.pk}) }}" title="Combat"><i class="icon-gun"></i></a>
-    {% if npc.category == 'transhuman' and npc.surnameLang is not empty %}
+    {% if npc.category == 'transhuman' and npc.npcTemplate %}
     <a href="{{ path('app_profilepicture_template', {pk: npc.pk}) }}" title="Générer un profil réseau"><i class="icon-profile"></i></a>
     {% endif %}
     {% if npc.category != 'freeform' %}

@@ -227,7 +227,7 @@ class NpcGeneratorTest extends WebTestCase
 
         $this->client->request('GET', '/npc/extra/John/' . $template->getPk());
         $this->assertResponseRedirects();
-        $this->assertStringStartsWith('/profile/create', $this->client->getResponse()->headers->get('Location'));
+        $this->assertStringStartsWith('/npc/token', $this->client->getResponse()->headers->get('Location'));
     }
 
     public function getCharacterFqcn()

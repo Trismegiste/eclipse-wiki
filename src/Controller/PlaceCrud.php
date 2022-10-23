@@ -75,7 +75,7 @@ class PlaceCrud extends GenericCrud
         }
 
         if (!empty($npc->surnameLang)) {
-            return $this->redirectToRoute('app_profilepicture_generateonthefly', ['pk' => $npc->getPk()]);
+            return $this->redirectToRoute('app_profilepicture_template', ['pk' => $npc->getPk()]);
         } else {
             $this->addFlash('error', "Cannot generate a profile from '$title' since its surname language is not defined");
 
