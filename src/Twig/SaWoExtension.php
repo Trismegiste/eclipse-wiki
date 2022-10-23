@@ -102,7 +102,7 @@ class SaWoExtension extends AbstractExtension
                 if ($v->wildCard) {
                     return 'icon-wildcard';
                 } else {
-                    return is_null($v->surnameLang) ? 'icon-male' : 'icon-extra';
+                    return $v->isNpcTemplate() ? 'icon-extra' : 'icon-male';
                 }
             default :
                 throw new OutOfBoundsException("No icon for " . get_class($v));

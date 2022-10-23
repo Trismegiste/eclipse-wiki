@@ -8,9 +8,9 @@
         Lien vers la fiche de perso
     </a>
 </p>
-{% if npc.category == 'transhuman'and npc.surnameLang is not empty %}
+{% if npc.category == 'transhuman'and npc.npcTemplate %}
     <p>
-        <a href="{{ path('app_profilepicture_generateonthefly', {pk: npc.pk}) }}" target="_blank">
+        <a href="{{ path('app_profilepicture_template', {pk: npc.pk}) }}" target="_blank">
             <i class="icon-profile"></i>
             Instancier un nouvel avatar
         </a>

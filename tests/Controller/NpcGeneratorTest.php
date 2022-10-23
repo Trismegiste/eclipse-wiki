@@ -2,8 +2,11 @@
 
 namespace App\Tests\Controller;
 
+use App\Entity\Ali;
 use App\Entity\Background;
 use App\Entity\Faction;
+use App\Entity\Freeform;
+use App\Entity\Transhuman;
 use App\Repository\CharacterFactory;
 use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -233,9 +236,9 @@ class NpcGeneratorTest extends WebTestCase
     public function getCharacterFqcn()
     {
         return [
-            [\App\Entity\Transhuman::class],
-            [\App\Entity\Ali::class],
-            [\App\Entity\Freeform::class]
+            [Transhuman::class],
+            [Ali::class],
+            [Freeform::class]
         ];
     }
 
@@ -245,6 +248,19 @@ class NpcGeneratorTest extends WebTestCase
         $iter = static::getContainer()->get(VertexRepository::class)->findByClass([$fqcn]);
         $iter->rewind();
         $this->client->request('GET', "/npc/minicard?title=" . $iter->current()->getTitle());
+        $this->assertResponseIsSuccessful();
+    }
+
+    public function testMinicardForCharacterTemplate()
+    {
+        $repo = static::getContainer()->get(VertexRepository::class);
+        $iter = $repo->findByClass(Transhuman::class);
+        $iter->rewind();
+        $npc = $iter->current();
+        $npc->surnameLang = 'japanese';
+        $repo->save($npc);
+
+        $this->client->request('GET', "/npc/minicard?title=" . $npc->getTitle());
         $this->assertResponseIsSuccessful();
     }
 
