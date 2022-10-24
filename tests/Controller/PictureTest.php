@@ -65,7 +65,7 @@ class PictureTest extends WebTestCase
         try {
             $this->storage->delete('uploaded.jpg');
         } catch (\Exception $e) {
-            
+	    // silent bug
         }
 
         $filename = 'tmp.png';
@@ -83,4 +83,17 @@ class PictureTest extends WebTestCase
         $this->client->request('GET', '/picto/get?title=processor');
         $this->assertStringStartsWith('<g', $this->client->getResponse()->getContent());
     }
+
+    public function testToken()
+    {
+        $npc = new \App\Entity\Transhuman('battle', new \App\Entity\Background('bg'), new \App\Entity\Faction('fac'));
+        $repo = static::getContainer()->get(\App\Repository\VertexRepository::class);
+        $npc->tokenPic = 'yolo.png'; // created above
+        $repo->save($npc);
+        ob_start();
+        $this->client->request('GET', '/token/get?title=battle');
+        ob_end_clean();
+        $this->assertEquals('image/svg+xml', $this->client->getResponse()->headers->get('content-type'));
+    }
+
 }
