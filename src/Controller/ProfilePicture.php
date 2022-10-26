@@ -150,18 +150,9 @@ class ProfilePicture extends AbstractController
     }
 
     /** @Route("/avatar") */
-    public function index(): Response
+    public function index(\App\Service\BoringAvatar $maker): Response
     {
-        return $this->render('avatar.svg.twig', [
-                    'SIZE' => 80,
-                    'props' => ['size' => 600],
-                    'properties' => [
-                        ['color' => "red"],
-                        ['isSquare' => true, 'color' => "green", 'translateX' => 50, 'translateY' => 30, 'rotate' => 123],
-                        ['color' => "cyan", 'translateX' => -10, 'translateY' => 20],
-                        ['color' => "black", 'translateX' => 10, 'translateY' => 10, 'rotate' => 200],
-                    ]
-        ]);
+        return new Response($maker->createBauhaus('yolo'), 200, ['content-type' => 'image/svg+xml']);
     }
 
 }
