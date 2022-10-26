@@ -37,4 +37,24 @@ class BoringAvatar
 
     }
 
+    public function getHashCode(string $name)
+    {
+         $hash = 0;
+         foreach (explode($name) as $character) {
+             $hash = (($hash<<5)-$hash)+$character;
+             $hash = $hash & $hash; // Convert to 32bit integer
+         }
+
+         return abs($hash);
+    }
+
+    public function getUnit($number, $range, $index)
+    {
+        $value = $number % $range;
+
+        if ($index && (($this->getDigit($number, $index) % 2) === 0)) {
+            return -$value;
+        } else return $value;
+    }
+
 }
