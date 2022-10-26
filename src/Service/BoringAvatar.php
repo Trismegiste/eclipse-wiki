@@ -38,13 +38,14 @@ class BoringAvatar
         shuffle($colors);
         $props = [];
 
-        for($i=0; $i<$cardinal; $i++) {
+        foreach(str_split(sha1($name), 10) as $i => $seed) {
+            $mask = intval(base_convert($seed, 16, 10)); // we have 40 bits to exploit
             $props[] = [
                 'color' => $colors[$i],
-                'isSquare' => (bool) random_int(0, 1),
-                'translateX' => random_int(0, 40) - 20,
-                'translateY' => random_int(0, 40) - 20,
-                'rotate' => random_int(0, 359)
+                'isSquare' => (bool) ($mask & 1),
+                'translateX' => (($mask >> 1) & 63) * 40 / 64 - 20,
+                'translateY' => (($mask >> 7) & 63) * 40 / 64 - 20,
+                'rotate' => ($mask >> 13) % 360
             ];
         }
 
