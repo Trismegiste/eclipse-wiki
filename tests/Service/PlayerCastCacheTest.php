@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * eclipse-wiki
+ */
+
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use App\Service\PlayerCastCache;
 
@@ -15,7 +19,7 @@ class PlayerCastCacheTest extends KernelTestCase
 
     public function getSizeConfig()
     {
-         return [[700],[1100]];
+        return [[700], [1100]];
     }
 
     /** @dataProvider getSizeConfig */
@@ -25,11 +29,11 @@ class PlayerCastCacheTest extends KernelTestCase
         $target = sys_get_temp_dir() . '/big.png';
 
         $white = imagecolorallocate($big, 255, 255, 255);
-        for($x=0;$x<$side;$x++) {
-            for($y=0;$y<$side;$y++) {
-                 if (rand() % 2) { // a lot of noise to mess with PNG compression
-                      imagesetpixel($big, $x, $y, $white);
-                 }
+        for ($x = 0; $x < $side; $x++) {
+            for ($y = 0; $y < $side; $y++) {
+                if (rand() % 2) { // a lot of noise to mess with PNG compression
+                    imagesetpixel($big, $x, $y, $white);
+                }
             }
         }
 
