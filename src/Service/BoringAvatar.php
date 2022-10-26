@@ -15,7 +15,7 @@ class BoringAvatar
 {
 
     protected $twig;
- 
+
     public function __construct(Environment $twig)
     {
         $this->twig = $twig;
@@ -26,35 +26,29 @@ class BoringAvatar
     {
         return $this->twig->render('picture/bauhaus_avatar.svg.twig', [
                     'SIZE' => 80,
-                    'props' => ['size' => 600],
-                    'properties' => [
-                        ['color' => "red"],
-                        ['isSquare' => true, 'color' => "green", 'translateX' => 50, 'translateY' => 30, 'rotate' => 123],
-                        ['color' => "cyan", 'translateX' => -10, 'translateY' => 20],
-                        ['color' => "black", 'translateX' => 10, 'translateY' => 10, 'rotate' => 200],
-                    ]
+                    'props' => ['size' => 200],
+                    'properties' => $this->getElementsProperties($name, 4)
         ]);
 
     }
 
-    public function getHashCode(string $name)
+    protected function getElementsProperties(string $name, int $cardinal): array
     {
-         $hash = 0;
-         foreach (explode($name) as $character) {
-             $hash = (($hash<<5)-$hash)+$character;
-             $hash = $hash & $hash; // Convert to 32bit integer
-         }
+        $colors = ['red', 'yellow', 'DeepSkyBlue', 'black'];
+        shuffle($colors);
+        $props = [];
 
-         return abs($hash);
-    }
+        for($i=0; $i<$cardinal; $i++) {
+            $props[] = [
+                'color' => $colors[$i],
+                'isSquare' => (bool) random_int(0, 1),
+                'translateX' => random_int(0, 40) - 20,
+                'translateY' => random_int(0, 40) - 20,
+                'rotate' => random_int(0, 359)
+            ];
+        }
 
-    public function getUnit($number, $range, $index)
-    {
-        $value = $number % $range;
-
-        if ($index && (($this->getDigit($number, $index) % 2) === 0)) {
-            return -$value;
-        } else return $value;
+        return $props;
     }
 
 }
