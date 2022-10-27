@@ -11,16 +11,15 @@ use App\Form\ProfileOnTheFly;
 use App\Form\ProfilePic;
 use App\Repository\VertexRepository;
 use App\Service\AvatarMaker;
+use App\Service\BoringAvatar;
 use App\Service\PlayerCastCache;
 use App\Service\Storage;
-use RuntimeException;
+use SplFileInfo;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\Process\InputStream;
-use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
 use Trismegiste\NameGenerator\FileRepository;
 use Trismegiste\NameGenerator\RandomizerDecorator;
@@ -67,7 +66,7 @@ class ProfilePicture extends AbstractController
         $profile = $maker->generate($npc, imagecreatefrompng($pathname->getPathname()));
         $path = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, $pk . '.png');
         imagepng($profile, $path);
-        $cached = $cache->slimPictureForPush(new \SplFileInfo($path));
+        $cached = $cache->slimPictureForPush(new SplFileInfo($path));
 
         return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $cached->getPathname()]);
     }
@@ -150,9 +149,9 @@ class ProfilePicture extends AbstractController
     }
 
     /** @Route("/avatar") */
-    public function index(\App\Service\BoringAvatar $maker): Response
+    public function index(BoringAvatar $maker): Response
     {
-        return new Response($maker->createBauhaus('yolo'), 200, ['content-type' => 'image/svg+xml']);
+        return new Response($maker->createBauhaus('yolo' . rand()), 200, ['content-type' => 'image/svg+xml']);
     }
 
 }
