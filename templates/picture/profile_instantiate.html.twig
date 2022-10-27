@@ -10,7 +10,7 @@
     <section class="pure-g quick-npc">
         {% for avatar in bauhaus %}
             <div class="pure-u-1-8">
-                <figure>
+                <figure class="avatar">
                     {{ avatar|raw }}
                 </figure>
             </div>
@@ -19,6 +19,7 @@
 {% endblock %}
 
 {% block stylesheets %}
+    {{ parent() }}
     <style>
         svg {
             width: 100%;
@@ -27,4 +28,30 @@
             margin: 1em;
         }
     </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('multiavatar/multiavatar.min.js') }}"></script>
+    <script src="{{ asset('js/crop-helper.js') }}"></script>
+    <script>
+        var onTheFly = document.querySelector('form[name=profile_on_the_fly]')
+        var avatarSample = document.querySelectorAll('.avatar')
+        var hiddenCanvas = document.getElementById('avatar-tmp')
+
+        for (const sample of avatarSample) {
+            // event for updating file widget with avatar
+            sample.addEventListener("click", function (e) {
+                let imgTmp = new Image()
+                let ctx = hiddenCanvas.getContext('2d')
+
+                imgTmp.onload = function () {
+                    ctx.drawImage(this, 0, 0)
+                    const fileInput = document.getElementById('{{ profile_on_the_fly['avatar'].vars.id }}')
+                    fileInput.files = dataURLtoFile(hiddenCanvas.toDataURL(), 'avatar.png'))
+                }
+                imgTmp.src = svgContentToDataUrl(fixSvgDimension(this.innerHTML, {{ avatarSize }}))
+            })
+        }
+    </script>
 {% endblock %}
