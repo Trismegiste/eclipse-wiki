@@ -47,8 +47,14 @@
 
                 imgTmp.onload = function () {
                     ctx.drawImage(this, 0, 0)
-                    const fileInput = document.getElementById('{{ profile_on_the_fly['avatar'].vars.id }}')
-                    fileInput.files = dataURLtoFile(hiddenCanvas.toDataURL(), 'avatar.png'))
+                    const fileInput = document.getElementById('{{ form['avatar'].vars.id }}')
+                    // convert to Blob (async)
+                    hiddenCanvas.toBlob((blob) => {
+                        const file = new File([blob], "avatar.png");
+                        const dT = new DataTransfer();
+                        dT.items.add(file);
+                        fileInput.files = dT.files;
+                    })
                 }
                 imgTmp.src = svgContentToDataUrl(fixSvgDimension(this.innerHTML, {{ avatarSize }}))
             })
