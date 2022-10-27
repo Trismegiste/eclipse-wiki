@@ -1,8 +1,12 @@
 {% extends "base.html.twig" %}
 
 {% block title %}Instancier un {{ 'NPC' }}{% endblock %}
+{% set avatarSize = 500 %}
 
 {% block content %}
+    <canvas height="{{ avatarSize }}" width="{{ avatarSize }}" id="avatar-tmp">
+    </canvas>
+    {{ form(form) }}
     <section class="pure-g quick-npc">
         {% for avatar in bauhaus %}
             <div class="pure-u-1-8">
