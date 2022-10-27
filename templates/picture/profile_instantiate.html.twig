@@ -1,0 +1,26 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Instancier un {{ 'NPC' }}{% endblock %}
+
+{% block content %}
+    <section class="pure-g quick-npc">
+        {% for avatar in bauhaus %}
+            <div class="pure-u-1-8">
+                <figure>
+                    {{ avatar|raw }}
+                </figure>
+            </div>
+        {% endfor %}
+    </section>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        svg {
+            width: 100%;
+        }
+        figure {
+            margin: 1em;
+        }
+    </style>
+{% endblock %}

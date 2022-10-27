@@ -148,10 +148,15 @@ class ProfilePicture extends AbstractController
         return $this->render('picture/profile.html.twig', ['form' => $form->createView()]);
     }
 
-    /** @Route("/avatar") */
+    /** @Route("/profile/bauhaus") */
     public function index(BoringAvatar $maker): Response
     {
-        return new Response($maker->createBauhaus('yolo' . rand()), 200, ['content-type' => 'image/svg+xml']);
+        $bauhaus = [];
+        for ($k = 0; $k < 24; $k++) {
+            $bauhaus[] = $maker->createBauhaus('yolo' . rand());
+        }
+
+        return $this->render('picture/profile_instantiate.html.twig', ['bauhaus' => $bauhaus]);
     }
 
 }
