@@ -152,7 +152,7 @@ class ProfilePicture extends AbstractController
      * Show a list of NPC profiles from a template (a Transhuman with isNpcTemplate() method returns true)
      * @Route("/profile/bauhaus/{pk}", methods={"GET", "POST"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function bauhaus(string $pk, Request $request, BoringAvatar $maker): Response
+    public function bauhaus(string $pk, Request $request): Response
     {
         $vertex = $this->repository->findByPk($pk);
         $npc = clone $vertex;
@@ -163,14 +163,8 @@ class ProfilePicture extends AbstractController
             // which button : push or create ?
         }
 
-        $bauhaus = [];
-        for ($k = 0; $k < 24; $k++) {
-            $bauhaus[] = $maker->createBauhaus('yolo' . rand());
-        }
-
         return $this->render('picture/profile_instantiate.html.twig', [
                     'form' => $form->createView(),
-                    'bauhaus' => $bauhaus,
                     'npc' => $vertex
         ]);
     }
