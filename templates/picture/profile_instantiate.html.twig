@@ -12,22 +12,26 @@
 {% endblock %}
 
 {% block _profile_on_the_fly_avatar_row %}
-    {% set avatarSize = 503 %}
+    {% set avatarSize = form.vars.avatar_size %}
 
     <canvas height="{{ avatarSize }}" width="{{ avatarSize }}" id="avatar-tmp">
     </canvas>
     {{ form_widget(form) }}
     <div class="pure-g">
-        <div class="pure-u-1-8">
-            <figure class="pixel-avatar">
-                <img src="{{ path('get_picture', {title: form.parent.vars.data.tokenPic}) }}" class="pure-img"/>
-            </figure>
-        </div>
-        <div class="pure-u-1-8">
-            <figure class="vector-avatar woke-avatar">
-            </figure>
-        </div>
-        {% for avatar in form.parent.vars.bauhaus %}
+        {% if form.vars.default_bitmap is not empty %}
+            <div class="pure-u-1-8">
+                <figure class="pixel-avatar">
+                    <img src="{{ path('get_picture', {title: form.vars.default_bitmap}) }}" class="pure-img"/>
+                </figure>
+            </div>
+        {% endif %}
+        {% for k in 1..form.vars.human_number %}
+            <div class="pure-u-1-8">
+                <figure class="vector-avatar human-avatar">
+                </figure>
+            </div>
+        {% endfor %}
+        {% for avatar in form.vars.bauhaus %}
             <div class="pure-u-1-8">
                 <figure class="vector-avatar">
                     {{ avatar|raw }}
@@ -63,8 +67,8 @@
             }
 
             // Multiavatar
-            for (const sample of document.querySelectorAll('.woke-avatar')) {
-                sample.innerHTML = multiavatar('yolo')
+            for (const sample of document.querySelectorAll('.human-avatar')) {
+                sample.innerHTML = multiavatar('yolo' + Math.random())
             }
 
             // All SVG click
@@ -92,7 +96,7 @@
             width: 100%;
         }
         figure {
-            margin: 1em;
+            margin: 0;
         }
     </style>
 {% endblock %}
