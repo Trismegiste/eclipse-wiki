@@ -13,31 +13,36 @@
 
 {% block _profile_on_the_fly_avatar_row %}
     {% set avatarSize = form.vars.avatar_size %}
-
-    <canvas height="{{ avatarSize }}" width="{{ avatarSize }}" id="avatar-tmp">
+    <canvas height="{{ avatarSize }}" width="{{ avatarSize }}" id="avatar-tmp" style="display:none">
     </canvas>
-    {{ form_widget(form) }}
-    <div class="pure-g">
+    {{ form_widget(form,{attr: {hidden:true}}) }}
+    <div class="pure-g avatar-choice">
+        {% set counter=0 %}
         {% if form.vars.default_bitmap is not empty %}
-            <div class="pure-u-1-8">
-                <figure class="pixel-avatar">
+            <div class="pure-u-1-12">
+                <input type="radio" name="choice_{{ form.vars.id }}" id="choice_{{ form.vars.id }}_{{ counter }}"/>
+                <label class="pixel-avatar" for="choice_{{ form.vars.id }}_{{ counter }}">
                     <img src="{{ path('get_picture', {title: form.vars.default_bitmap}) }}" class="pure-img"/>
-                </figure>
+                </label>
             </div>
+            {% set counter=counter+1 %}
         {% endif %}
         {% for k in 1..form.vars.human_number %}
-            <div class="pure-u-1-8">
-                <figure class="vector-avatar human-avatar">
-                </figure>
+            <div class="pure-u-1-12">
+                <input type="radio" name="choice_{{ form.vars.id }}" id="choice_{{ form.vars.id }}_{{ counter }}"/>
+                <label class="vector-avatar human-avatar" for="choice_{{ form.vars.id }}_{{ counter }}">
+                </label>
             </div>
+            {% set counter=counter+1 %}
         {% endfor %}
         {% for avatar in form.vars.bauhaus %}
-            <div class="pure-u-1-8">
-                <figure class="vector-avatar">
+            <div class="pure-u-1-12">
+                <input type="radio" name="choice_{{ form.vars.id }}" id="choice_{{ form.vars.id }}_{{ counter }}"/>
+                <label class="vector-avatar abstract-avatar" for="choice_{{ form.vars.id }}_{{ counter }}">
                     {{ avatar|raw }}
-                </figure>
-                <input type="radio"/>
+                </label>
             </div>
+            {% set counter=counter+1 %}
         {% endfor %}
     </div>
 
@@ -92,11 +97,15 @@
 {% block stylesheets %}
     {{ parent() }}
     <style>
-        svg {
-            width: 100%;
+        .avatar-choice input {
+            display: none;
         }
-        figure {
-            margin: 0;
+        .avatar-choice label {
+            padding: 0.5em;
+            display: block;
+        }
+        .avatar-choice input:checked + label, .avatar-choice input:checked + label  {
+            background-color: #555;
         }
     </style>
 {% endblock %}

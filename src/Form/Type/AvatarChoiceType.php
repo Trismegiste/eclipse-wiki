@@ -50,8 +50,8 @@ class AvatarChoiceType extends AbstractType
         $resolver->setDefaults([
             'bitmap' => null,
             'avatar_size' => 503,
-            'abstract_number' => 24,
-            'human_number' => 3
+            'abstract_number' => 5,
+            'human_number' => 6
         ]);
     }
 

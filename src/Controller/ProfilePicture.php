@@ -152,7 +152,7 @@ class ProfilePicture extends AbstractController
      * Show a list of NPC profiles from a template (a Transhuman with isNpcTemplate() method returns true)
      * @Route("/profile/bauhaus/{pk}", methods={"GET", "POST"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function bauhaus(string $pk, Request $request): Response
+    public function bauhaus(string $pk, Request $request, AvatarMaker $maker, \App\Service\WebsocketPusher $pusher, PlayerCastCache $cache): Response
     {
         $vertex = $this->repository->findByPk($pk);
         $npc = clone $vertex;
@@ -161,6 +161,21 @@ class ProfilePicture extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // which button : push or create ?
+            $avatar = $form['avatar']->getData();
+            $profile = $maker->generate($npc, imagecreatefrompng($avatar->getPathname()));
+            $path = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, $npc->getTitle() . '.png');
+            imagepng($profile, $path);
+            $cached = $cache->slimPictureForPush(new SplFileInfo($path));
+
+            try {
+                $ret = $pusher->push(json_encode([
+                    'file' => $cached->getPathname(),
+                    'action' => 'pictureBroadcast'
+                ]));
+                $this->addFlash('success', $ret);
+            } catch (\Paragi\PhpWebsocket\ConnectionException $e) {
+                $this->addFlash('error', $e->getMessage());
+            }
         }
 
         return $this->render('picture/profile_instantiate.html.twig', [
