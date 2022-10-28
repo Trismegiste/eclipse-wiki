@@ -9,7 +9,6 @@ namespace App\Form;
 use App\Entity\Transhuman;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -26,7 +25,7 @@ class ProfileOnTheFly extends AbstractType
                     'mapped' => false,
                     'bitmap' => $options['data']->tokenPic
                 ])
-                ->add('title', TextType::class)
+                ->add('title', Type\HumanNameType::class, ['language' => $options['data']->surnameLang])
                 ->add('generate', SubmitType::class)
         ;
     }

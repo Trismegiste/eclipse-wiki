@@ -14,9 +14,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Description of AvatarChoiceType
- *
- * @author florent
+ * Generates avatar with multiple services
  */
 class AvatarChoiceType extends AbstractType
 {
@@ -50,8 +48,8 @@ class AvatarChoiceType extends AbstractType
         $resolver->setDefaults([
             'bitmap' => null,
             'avatar_size' => 503,
-            'abstract_number' => 5,
-            'human_number' => 6
+            'abstract_number' => 7,
+            'human_number' => 28
         ]);
     }
 
