@@ -1,23 +1,33 @@
 {% extends "base.html.twig" %}
+{% form_theme form _self %}
 
-{% block title %}Instancier un {{ 'NPC' }}{% endblock %}
-{% set avatarSize = 503 %}
+{% block title %}Instancier un {{ npc.title }}{% endblock %}
 
-{% block content %}
+{% block header_title %}
+    {# the header menu with title #}
+    <nav style="float: right">
+        {{ include('npc/actions.html.twig', {npc:npc}) }}
+    </nav>   
+    {% block header_big_title %}{{ block('title') }}{% endblock %}
+{% endblock %}
+
+{% block _profile_on_the_fly_avatar_row %}
+    {% set avatarSize = 503 %}
+
     <canvas height="{{ avatarSize }}" width="{{ avatarSize }}" id="avatar-tmp">
     </canvas>
-    {{ form(form) }}
-    <section class="pure-g quick-npc">
+    {{ form_widget(form) }}
+    <div class="pure-g">
         <div class="pure-u-1-8">
             <figure class="pixel-avatar">
-                <img src="{{ path('get_picture', {title: npc.tokenPic}) }}" class="pure-img"/>
+                <img src="{{ path('get_picture', {title: form.parent.vars.data.tokenPic}) }}" class="pure-img"/>
             </figure>
         </div>
         <div class="pure-u-1-8">
             <figure class="vector-avatar woke-avatar">
             </figure>
         </div>
-        {% for avatar in bauhaus %}
+        {% for avatar in form.parent.vars.bauhaus %}
             <div class="pure-u-1-8">
                 <figure class="vector-avatar">
                     {{ avatar|raw }}
@@ -25,7 +35,54 @@
                 <input type="radio"/>
             </div>
         {% endfor %}
-    </section>
+    </div>
+
+    <script>
+        function putCanvasIntoFileInput() {
+            const fileInput = document.getElementById('{{ form.vars.id }}')
+            let hiddenCanvas = document.getElementById('avatar-tmp')
+            let ctx = hiddenCanvas.getContext('2d')
+            ctx.drawImage(this, 0, 0)
+            // convert to Blob (async)
+            hiddenCanvas.toBlob((blob) => {
+                const file = new File([blob], "avatar.png")
+                const dT = new DataTransfer()
+                dT.items.add(file)
+                fileInput.files = dT.files
+            })
+        }
+
+        window.addEventListener('load', () => {
+            // All pixel image click
+            for (const sample of document.querySelectorAll('.pixel-avatar')) {
+                sample.addEventListener("click", function (e) {
+                    let imgTmp = new Image()
+                    imgTmp.onload = putCanvasIntoFileInput
+                    imgTmp.src = this.querySelector('img').src
+                })
+            }
+
+            // Multiavatar
+            for (const sample of document.querySelectorAll('.woke-avatar')) {
+                sample.innerHTML = multiavatar('yolo')
+            }
+
+            // All SVG click
+            var avatarSample = document.querySelectorAll('.vector-avatar')
+            for (const sample of avatarSample) {
+                sample.addEventListener("click", function (e) {
+                    let imgTmp = new Image()
+                    imgTmp.onload = putCanvasIntoFileInput
+                    imgTmp.src = svgContentToDataUrl(fixSvgDimension(this.innerHTML, {{ avatarSize }}))
+                })
+            }
+        })
+    </script>        
+{% endblock %}
+
+
+{% block content %}
+    {{ form(form) }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -44,43 +101,4 @@
     {{ parent() }}
     <script src="{{ asset('multiavatar/multiavatar.min.js') }}"></script>
     <script src="{{ asset('js/crop-helper.js') }}"></script>
-    <script>
-        function putCanvasIntoFileInput() {
-            const fileInput = document.getElementById('{{ form['avatar'].vars.id }}')
-            let hiddenCanvas = document.getElementById('avatar-tmp')
-            let ctx = hiddenCanvas.getContext('2d')
-            ctx.drawImage(this, 0, 0)
-            // convert to Blob (async)
-            hiddenCanvas.toBlob((blob) => {
-                const file = new File([blob], "avatar.png")
-                const dT = new DataTransfer()
-                dT.items.add(file)
-                fileInput.files = dT.files
-            })
-        }
-
-        // All pixel image click
-        for (const sample of document.querySelectorAll('.pixel-avatar')) {
-            sample.addEventListener("click", function (e) {
-                let imgTmp = new Image()
-                imgTmp.onload = putCanvasIntoFileInput
-                imgTmp.src = this.querySelector('img').src
-            })
-        }
-
-        // Multiavatar
-        for (const sample of document.querySelectorAll('.woke-avatar')) {
-            sample.innerHTML = multiavatar('yolo')
-        }
-
-        // All SVG click
-        var avatarSample = document.querySelectorAll('.vector-avatar')
-        for (const sample of avatarSample) {
-            sample.addEventListener("click", function (e) {
-                let imgTmp = new Image()
-                imgTmp.onload = putCanvasIntoFileInput
-                imgTmp.src = svgContentToDataUrl(fixSvgDimension(this.innerHTML, {{ avatarSize }}))
-            })
-        }
-    </script>
 {% endblock %}

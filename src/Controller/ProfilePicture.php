@@ -155,7 +155,8 @@ class ProfilePicture extends AbstractController
     public function bauhaus(string $pk, Request $request, BoringAvatar $maker): Response
     {
         $vertex = $this->repository->findByPk($pk);
-        $form = $this->createForm(ProfileOnTheFly::class);
+        $npc = clone $vertex;
+        $form = $this->createForm(ProfileOnTheFly::class, $npc);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
