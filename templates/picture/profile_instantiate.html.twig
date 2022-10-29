@@ -6,7 +6,7 @@
 {% block header_title %}
     {# the header menu with title #}
     <nav style="float: right">
-        {{ include('npc/actions.html.twig', {npc:npc}) }}
+        {{ include('npc/actions.html.twig') }}
     </nav>   
     {% block header_big_title %}{{ block('title') }}{% endblock %}
 {% endblock %}
@@ -127,11 +127,17 @@
             display: none;
         }
         .avatar-choice label {
-            padding: 0.5em;
+            padding: 0.3em;
             display: block;
         }
         .avatar-choice input:checked + label, .avatar-choice input:checked + label  {
-            background-color: #555;
+            background-color: #777;
+        }
+        .pure-form button {
+            margin-top: 1em;
+        }
+        .pure-form .human-name input[type=radio] {
+            margin-bottom: 0.3em;
         }
     </style>
 {% endblock %}

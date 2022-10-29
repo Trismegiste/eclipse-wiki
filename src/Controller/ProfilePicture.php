@@ -6,14 +6,15 @@
 
 namespace App\Controller;
 
-use App\Entity\Transhuman;
 use App\Form\ProfileOnTheFly;
 use App\Form\ProfilePic;
+use App\Repository\CharacterFactory;
 use App\Repository\VertexRepository;
 use App\Service\AvatarMaker;
-use App\Service\BoringAvatar;
 use App\Service\PlayerCastCache;
 use App\Service\Storage;
+use App\Service\WebsocketPusher;
+use Paragi\PhpWebsocket\ConnectionException;
 use SplFileInfo;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,8 +22,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Trismegiste\NameGenerator\FileRepository;
-use Trismegiste\NameGenerator\RandomizerDecorator;
 use function join_paths;
 
 /**
@@ -72,60 +71,6 @@ class ProfilePicture extends AbstractController
     }
 
     /**
-     * Show a list of NPC profiles from a template (a Transhuman with isNpcTemplate() method returns true)
-     * @Route("/profile/template/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
-     */
-    public function template(string $pk): Response
-    {
-        $repo = new RandomizerDecorator(new FileRepository());
-        /** @var Transhuman $vertex */
-        $vertex = $this->repository->findByPk($pk);
-        $card = 24;
-
-        $listing = [];
-        foreach (['female', 'male'] as $gender) {
-            for ($k = 0; $k < $card; $k++) {
-                $lang = random_int(0, 100) < 75 ? $vertex->surnameLang : 'random';
-                $listing[$gender][] = $repo->getRandomGivenNameFor($gender, 'random') . ' ' . $repo->getRandomSurnameFor($lang);
-            }
-        }
-
-        // the form to post for generating profile on the fly
-        $form = $this->createForm(ProfileOnTheFly::class, [
-            'template' => $vertex->getPk()
-        ]);
-
-        return $this->render('picture/random_npc.html.twig', [
-                    'vertex' => $vertex,
-                    'listing' => $listing,
-                    'form' => $form->createView()
-        ]);
-    }
-
-    /**
-     * AJAX Create a social network profile for a NPC
-     * @Route("/profile/template/{pk}", methods={"POST"}, requirements={"pk"="[\da-f]{24}"})
-     */
-    public function pushTemplate(string $pk, Request $request, AvatarMaker $maker): JsonResponse
-    {
-        $form = $this->createForm(ProfileOnTheFly::class);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $param = $form->getData();
-            $npc = $this->repository->findByPk($pk);
-            $npc->setTitle($param['name']);
-            $profile = $maker->generate($npc, imagecreatefrompng($param['avatar']->getPathname()));
-            $path = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, $param['name'] . '.png');
-            imagepng($profile, $path);
-
-            return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $path]);
-        }
-
-        return new JsonResponse(['level' => 'error', 'message' => 'Invalid form'], Response::HTTP_FORBIDDEN);
-    }
-
-    /**
      * Creates a battlemap token for a NPC
      * @Route("/npc/token/{pk}", methods={"GET","POST"}, requirements={"pk"="[\da-f]{24}"})
      */
@@ -152,7 +97,7 @@ class ProfilePicture extends AbstractController
      * Show a list of NPC profiles from a template (a Transhuman with isNpcTemplate() method returns true)
      * @Route("/profile/bauhaus/{pk}", methods={"GET", "POST"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function bauhaus(string $pk, Request $request, AvatarMaker $maker, \App\Service\WebsocketPusher $pusher, PlayerCastCache $cache): Response
+    public function template(string $pk, Request $request, AvatarMaker $maker, WebsocketPusher $pusher, PlayerCastCache $cache, CharacterFactory $fac): Response
     {
         $vertex = $this->repository->findByPk($pk);
         $npc = clone $vertex;
@@ -162,19 +107,39 @@ class ProfilePicture extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // which button : push or create ?
             $avatar = $form['avatar']->getData();
-            $profile = $maker->generate($npc, imagecreatefrompng($avatar->getPathname()));
-            $path = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, $npc->getTitle() . '.png');
-            imagepng($profile, $path);
-            $cached = $cache->slimPictureForPush(new SplFileInfo($path));
 
-            try {
-                $ret = $pusher->push(json_encode([
-                    'file' => $cached->getPathname(),
-                    'action' => 'pictureBroadcast'
-                ]));
-                $this->addFlash('success', $ret);
-            } catch (\Paragi\PhpWebsocket\ConnectionException $e) {
-                $this->addFlash('error', $e->getMessage());
+            // Pushes the profile created on the fly
+            if ($form->get('push_profile')->isClicked()) {
+                $profile = $maker->generate($npc, imagecreatefrompng($avatar->getPathname()));
+                $path = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, $npc->getTitle() . '.png');
+                imagepng($profile, $path);
+                $cached = $cache->slimPictureForPush(new SplFileInfo($path));
+
+                try {
+                    $ret = $pusher->push(json_encode([
+                        'file' => $cached->getPathname(),
+                        'action' => 'pictureBroadcast'
+                    ]));
+                    $this->addFlash('success', $ret);
+                } catch (ConnectionException $e) {
+                    $this->addFlash('error', $e->getMessage());
+                }
+
+                return $this->redirectToRoute('app_profilepicture_template', ['pk' => $pk]);
+            }
+
+            // Instantiate the NPC from the template
+            if ($form->get('instantiate_npc')->isClicked()) {
+                $extra = $fac->createExtraFromTemplate($vertex, $npc->getTitle());
+                $this->repository->save($extra);
+
+                $filename = 'token-' . $extra->getPk() . '.png';
+                $this->storage->storeToken($avatar, $filename);
+                $extra->tokenPic = $filename;
+                $this->repository->save($extra);
+
+                $this->addFlash('success', $extra->getTitle() . " a été créé à partir de " . $vertex->getTitle());
+                return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $extra->getPk()]);
             }
         }
 
