@@ -95,7 +95,7 @@ class ProfilePicture extends AbstractController
 
     /**
      * Show a list of NPC profiles from a template (a Transhuman with isNpcTemplate() method returns true)
-     * @Route("/profile/bauhaus/{pk}", methods={"GET", "POST"}, requirements={"pk"="[\da-f]{24}"})
+     * @Route("/profile/template/{pk}", methods={"GET", "POST"}, requirements={"pk"="[\da-f]{24}"})
      */
     public function template(string $pk, Request $request, AvatarMaker $maker, WebsocketPusher $pusher, PlayerCastCache $cache, CharacterFactory $fac): Response
     {

@@ -32,7 +32,10 @@ class ProfilePictureTest extends WebTestCase
 
     public function testCreateToken()
     {
-        $npc = new Transhuman('tmp', new Background('back'), new Faction('fact'));
+        $factory = static::getContainer()->get(\App\Repository\CharacterFactory::class);
+        /** @var \App\Entity\Transhuman $npc */
+        $npc = $factory->create('tmp', new Background('back'), new Faction('fact'));
+        $npc->setMorph(new App\Entity\Morph('morph'));
         $this->repository->save($npc);
 
         $crawler = $this->client->request('GET', '/npc/token/' . $npc->getPk());
@@ -79,7 +82,7 @@ class ProfilePictureTest extends WebTestCase
         $this->repository->save($npc);
         $this->client->request('GET', '/profile/template/' . $pk);
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorExists('[data-avatar]');
+        $this->assertSelectorExists('canvas');
 
         return $pk;
     }
@@ -88,10 +91,10 @@ class ProfilePictureTest extends WebTestCase
     public function testPushTemplate(string $pk)
     {
         $crawler = $this->client->request('GET', '/profile/template/' . $pk);
-        $this->assertSelectorExists('#profile_on_the_fly_generate');
-        $form = $crawler->selectButton('profile_on_the_fly_generate')->form();
+        $this->assertSelectorExists('#profile_on_the_fly_push_profile');
+        $form = $crawler->selectButton('profile_on_the_fly_push_profile')->form();
 
-        $form ['profile_on_the_fly[name]'] = 'Yolo';
+        $form ['profile_on_the_fly[title]'] = 'Yolo';
 
         $filename = 'tmp.png';
         $image = $this->createTestChart(256);
@@ -99,12 +102,34 @@ class ProfilePictureTest extends WebTestCase
 
         $form['profile_on_the_fly[avatar]']->upload($filename);
         $this->client->submit($form);
-        $this->assertResponseIsSuccessful();
         unlink($filename);
 
+        $this->assertResponseRedirects('/profile/template/' . $pk);
+        $this->client->followRedirect();
         $this->assertResponseIsSuccessful();
-        $result = json_decode($this->client->getResponse()->getContent());
-        $this->assertEquals('success', $result->level);
+    }
+
+    /** @depends testTemplateChoices */
+    public function testInstantiateTemplate(string $pk)
+    {
+        $crawler = $this->client->request('GET', '/profile/template/' . $pk);
+        $this->assertSelectorExists('#profile_on_the_fly_instantiate_npc');
+        $form = $crawler->selectButton('profile_on_the_fly_instantiate_npc')->form();
+
+        $form ['profile_on_the_fly[title]'] = 'New Extra';
+
+        $filename = 'tmp.png';
+        $image = $this->createTestChart(256);
+        imagepng($image, $filename);
+
+        $form['profile_on_the_fly[avatar]']->upload($filename);
+        $this->client->submit($form);
+        unlink($filename);
+
+        $this->assertResponseRedirects();
+        $this->assertStringStartsWith('/vertex/show', $this->client->getResponse()->headers->get('location'));
+        $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
     }
 
 }
