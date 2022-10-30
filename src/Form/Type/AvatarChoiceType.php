@@ -40,7 +40,7 @@ class AvatarChoiceType extends AbstractType
         $view->vars['bauhaus'] = $bauhaus;
         $view->vars['avatar_size'] = $options['avatar_size'];
         $view->vars['default_bitmap'] = $options['bitmap'];
-        $view->vars['human_number'] = $options['human_number'];
+        $view->vars['human_number'] = $options['human_number'] + (empty($options['bitmap']) ? 1 : 0);
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -48,8 +48,8 @@ class AvatarChoiceType extends AbstractType
         $resolver->setDefaults([
             'bitmap' => null,
             'avatar_size' => 503,
-            'abstract_number' => 7,
-            'human_number' => 28
+            'abstract_number' => 6,
+            'human_number' => 29
         ]);
     }
 
