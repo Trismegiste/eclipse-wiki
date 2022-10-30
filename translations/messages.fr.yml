@@ -107,4 +107,5 @@ Broadcast: Diffuser
 Tile weight: Proportion de pièces par tuile
 Min cluster per tile: Nombre minimal de pièces par tuile
 STRAT_SVG_CARGO: Vaisseau cargo
-
+Push profile: Diffuser le profile
+Instantiate npc: Créer un Extra à partir de ce personnage
