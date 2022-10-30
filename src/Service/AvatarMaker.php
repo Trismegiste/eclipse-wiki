@@ -8,6 +8,10 @@ namespace App\Service;
 
 use App\Entity\Transhuman;
 use GdImage;
+use RuntimeException;
+use SplFileInfo;
+use Symfony\Component\Process\Process;
+use Twig\Environment;
 
 /**
  * Creating avatar for Transhuman
@@ -20,7 +24,7 @@ class AvatarMaker
     protected $publicFolder;
     protected $twig;
 
-    public function __construct(\Twig\Environment $twig, string $publicFolder, int $width = 503, int $height = 894)
+    public function __construct(Environment $twig, string $publicFolder, int $width = 503, int $height = 894)
     {
         $this->height = $height;
         $this->width = $width;
@@ -33,9 +37,9 @@ class AvatarMaker
      * @param Transhuman $npc
      * @param GdImage $source the GD resource of an avatar picture
      * @return resource the GD2 image resource
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
-    public function generate(Transhuman $npc, \SplFileInfo $source)
+    public function generate(Transhuman $npc, SplFileInfo $source): SplFileInfo
     {
         $profilePic = base64_encode(file_get_contents($source->getPathname()));
 
@@ -56,7 +60,7 @@ class AvatarMaker
         $htmlTarget = sys_get_temp_dir() . '/' . $basename . '.html';
         $pngTarget = sys_get_temp_dir() . '/' . $basename . '.png';
         file_put_contents($htmlTarget, $html);
-        $matrixing = new \Symfony\Component\Process\Process([
+        $matrixing = new Process([
             'wkhtmltoimage',
             '--width', $this->width,
             '--height', $this->height,
@@ -66,7 +70,7 @@ class AvatarMaker
         ]);
         $matrixing->mustRun();
 
-        return imagecreatefrompng($pngTarget);
+        return new SplFileInfo($pngTarget);
     }
 
     protected function filterSocNet(Transhuman $npc): array

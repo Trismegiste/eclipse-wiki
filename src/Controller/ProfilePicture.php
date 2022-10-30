@@ -15,14 +15,12 @@ use App\Service\PlayerCastCache;
 use App\Service\Storage;
 use App\Service\WebsocketPusher;
 use Paragi\PhpWebsocket\ConnectionException;
-use SplFileInfo;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use function join_paths;
 
 /**
  * Managing Social Networks Profile Pictures
@@ -49,9 +47,7 @@ class ProfilePicture extends AbstractController
         $pathname = $this->storage->getFileInfo($npc->tokenPic);
         $profile = $maker->generate($npc, $pathname);
 
-        return new StreamedResponse(function () use ($profile) {
-                    imagepng($profile);
-                }, 200, ['content-type' => 'image/png']);
+        return new BinaryFileResponse($profile);
     }
 
     /**
@@ -63,9 +59,7 @@ class ProfilePicture extends AbstractController
         $npc = $this->repository->findByPk($pk);
         $pathname = $this->storage->getFileInfo($npc->tokenPic);
         $profile = $maker->generate($npc, $pathname);
-        $path = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, $pk . '.png');
-        imagepng($profile, $path);
-        $cached = $cache->slimPictureForPush(new SplFileInfo($path));
+        $cached = $cache->slimPictureForPush($profile);
 
         return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $cached->getPathname()]);
     }
@@ -111,9 +105,7 @@ class ProfilePicture extends AbstractController
             // Pushes the profile created on the fly
             if ($form->get('push_profile')->isClicked()) {
                 $profile = $maker->generate($npc, $avatar);
-                $path = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, $npc->getTitle() . '.png');
-                imagepng($profile, $path);
-                $cached = $cache->slimPictureForPush(new SplFileInfo($path));
+                $cached = $cache->slimPictureForPush($profile);
 
                 try {
                     $ret = $pusher->push(json_encode([
