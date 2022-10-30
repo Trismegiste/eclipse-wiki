@@ -47,7 +47,7 @@ class ProfilePicture extends AbstractController
     {
         $npc = $this->repository->findByPk($pk);
         $pathname = $this->storage->getFileInfo($npc->tokenPic);
-        $profile = $maker->generate($npc, imagecreatefrompng($pathname->getPathname()));
+        $profile = $maker->generate($npc, $pathname);
 
         return new StreamedResponse(function () use ($profile) {
                     imagepng($profile);
@@ -62,7 +62,7 @@ class ProfilePicture extends AbstractController
     {
         $npc = $this->repository->findByPk($pk);
         $pathname = $this->storage->getFileInfo($npc->tokenPic);
-        $profile = $maker->generate($npc, imagecreatefrompng($pathname->getPathname()));
+        $profile = $maker->generate($npc, $pathname);
         $path = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, $pk . '.png');
         imagepng($profile, $path);
         $cached = $cache->slimPictureForPush(new SplFileInfo($path));
@@ -110,7 +110,7 @@ class ProfilePicture extends AbstractController
 
             // Pushes the profile created on the fly
             if ($form->get('push_profile')->isClicked()) {
-                $profile = $maker->generate($npc, imagecreatefrompng($avatar->getPathname()));
+                $profile = $maker->generate($npc, $avatar);
                 $path = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, $npc->getTitle() . '.png');
                 imagepng($profile, $path);
                 $cached = $cache->slimPictureForPush(new SplFileInfo($path));

@@ -35,12 +35,9 @@ class AvatarMaker
      * @return resource the GD2 image resource
      * @throws \RuntimeException
      */
-    public function generate(Transhuman $npc, \GdImage $source)
+    public function generate(Transhuman $npc, \SplFileInfo $source)
     {
-        imagesavealpha($source, true);
-        ob_start();
-        imagepng($source);
-        $profilePic = base64_encode(ob_get_clean());
+        $profilePic = base64_encode(file_get_contents($source->getPathname()));
 
         $socnet = array_map(function (int $val) {
             return $this->printFollowers(10 ** ($val - random_int(10, 90) / 100.0));
