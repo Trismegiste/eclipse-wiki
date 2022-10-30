@@ -25,7 +25,10 @@ class ProfileOnTheFly extends AbstractType
                     'mapped' => false,
                     'bitmap' => $options['data']->tokenPic
                 ])
-                ->add('title', Type\HumanNameType::class, ['language' => $options['data']->surnameLang])
+                ->add('title', Type\HumanNameType::class, [
+                    'data' => '',
+                    'language' => $options['data']->surnameLang
+                ])
                 ->add('push_profile', SubmitType::class)
                 ->add('instantiate_npc', SubmitType::class)
         ;
