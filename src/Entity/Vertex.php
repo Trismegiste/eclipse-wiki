@@ -92,4 +92,15 @@ class Vertex implements \Trismegiste\Strangelove\MongoDb\Root
         return $this->archived;
     }
 
+    public function getInternalLink(): array
+    {
+        $re = '/\[\[([^\|\]]+)(\]\]|\|)/m';
+        $matches = [];
+        preg_match_all($re, $this->content, $matches, PREG_SET_ORDER, 0);
+
+        return array_filter(array_column($matches, 1), function ($val) {
+            return false === strpos($val, ':');
+        });
+    }
+
 }

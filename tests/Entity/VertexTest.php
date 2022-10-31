@@ -63,4 +63,11 @@ class VertexTest extends PHPUnit\Framework\TestCase
         $this->assertTrue($this->sut->getArchived());
     }
 
+    public function testLinkExtractor()
+    {
+        $str = 'voila [[essai]] rien [[arf|link]] [[file:xxx]] [[ep:ext]]';
+        $this->sut->setContent($str);
+        $this->assertEquals(['essai', 'arf'], $this->sut->getInternalLink());
+    }
+
 }
