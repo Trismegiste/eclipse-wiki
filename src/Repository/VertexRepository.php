@@ -229,4 +229,24 @@ class VertexRepository extends DefaultRepository
         );
     }
 
+    public function exploreGraph(string $title, array $carry = [], int $level = 2): array
+    {
+        $vertex = $this->findByTitle($title);
+
+        if (is_null($vertex)) {
+            return $carry;
+        }
+
+        $carry[] = $title;
+
+        if ($level > 0) {
+            $newFriends = array_unique(array_merge($vertex->getInternalLink(), $this->searchByBacklinks($title)));
+            foreach ($newFriends as $item) {
+                $carry = $this->exploreGraph($item, $carry, $level - 1);
+            }
+        }
+
+        return array_unique($carry);
+    }
+
 }

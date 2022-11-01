@@ -213,4 +213,12 @@ class VertexCrud extends GenericCrud
         return $this->render('vertex/archive.html.twig', ['form' => $form->createView()]);
     }
 
+    public function network(string $title): Response
+    {
+        $vertexTitle = $this->repository->exploreGraph($title);
+        $iter = $this->repository->search(['title' => ['$in' => array_values($vertexTitle)]]);
+
+        return $this->render('vertex/graph_list.html.twig', ['network' => $iter]);
+    }
+
 }

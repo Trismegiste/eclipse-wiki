@@ -14,6 +14,10 @@
     {{ include('fragment/wiki_backlinks.html.twig') }}
 {% endblock %}
 
+{% block info %}
+    {{ render(controller('App\\Controller\\VertexCrud::network', {title: vertex.title})) }}
+{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('js/picture-pusher.js') }}"></script>
