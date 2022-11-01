@@ -20,5 +20,10 @@
     }
 </style>
 
-{{ _self.print_group('video', network.vertex) }}
-{{ _self.print_group('extra', network.transhuman) }}
+{% if network.vertex is defined %}
+    {{ _self.print_group('video', network.vertex) }}
+{% endif %}
+{% if network.transhuman is defined %}
+    {{ _self.print_group('extra', network.transhuman) }}
+{% endif %}
+
