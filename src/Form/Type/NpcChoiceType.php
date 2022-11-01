@@ -24,7 +24,7 @@ class NpcChoiceType extends AbstractType
         $this->repository = $repo;
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return ChoiceType::class;
     }

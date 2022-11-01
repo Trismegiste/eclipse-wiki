@@ -27,7 +27,7 @@ class HumanNameType extends AbstractType
         $this->repository = new RandomizerDecorator(new FileRepository());
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return TextType::class;
     }

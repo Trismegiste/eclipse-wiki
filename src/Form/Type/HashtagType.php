@@ -18,7 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class HashtagType extends AbstractType
 {
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return TextareaType::class;
     }

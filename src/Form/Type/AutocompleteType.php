@@ -26,7 +26,7 @@ class AutocompleteType extends AbstractType
         $resolver->setAllowedTypes('choices', 'iterable');
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return TextType::class;
     }
