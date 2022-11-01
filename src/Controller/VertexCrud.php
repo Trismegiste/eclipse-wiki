@@ -217,8 +217,15 @@ class VertexCrud extends GenericCrud
     {
         $vertexTitle = $this->repository->exploreGraph($title);
         $iter = $this->repository->search(['title' => ['$in' => array_values($vertexTitle)]]);
+        $dump = [];
+        foreach ($iter as $v) {
+            $dump[$v->getCategory()][] = $v->getTitle();
+        }
+        foreach ($dump as $key => $v) {
+            sort($dump[$key], SORT_LOCALE_STRING);
+        }
 
-        return $this->render('vertex/graph_list.html.twig', ['network' => $iter]);
+        return $this->render('vertex/graph_list.html.twig', ['network' => $dump]);
     }
 
 }

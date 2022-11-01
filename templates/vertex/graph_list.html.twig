@@ -1,9 +1,24 @@
 {# detail #}
-<ul>
-    {% for item in network %}
-        <li>
-            {{ item.category }}
-            {{ item.title }}
-        </li>
-    {% endfor %}
-</ul>
+{% macro print_group(icon, group) %}
+    <h2><i class="icon-{{ icon }}"></i></h2>
+    <ul class="link-list">
+        {% for item in group %}
+            <li>
+                <a href="{{ path('app_wiki', {title:item}) }}">{{ item }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endmacro %}
+
+<style>
+    .link-list {
+        list-style-type: none;
+        list-style-position: inside;
+        margin: 0;
+        padding: 0;
+        line-height: 150%;
+    }
+</style>
+
+{{ _self.print_group('video', network.vertex) }}
+{{ _self.print_group('extra', network.transhuman) }}
