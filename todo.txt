@@ -8,12 +8,12 @@ Timeline est juste un template avec 2 sections Pitch et Timeline (et le flag arc
 Le show de Timeline ajoute une fonctionnalité AJAX qui permet de barrer un élement <LI> de la liste timeline
 
 "Scenario" dans la landing page devient "Scene" : unité de lieu et de temps
-Le content de "Scene" est pré-rempli par un template "Place", "Ambiance", "NPC", "Event", "Prerequis", "Enjeu/Conséquence (outcome)" 
+Le content de "Scene" est pré-rempli par un template "Place", "Ambiance", "NPC", "Prerequis", "Event", "Enjeu/Conséquence (outcome)" 
 Non =>                    ^^^^^^^^^ il vaut mieux faire ça avec un formulaire de création seulement qui mappe tous les champs dans le content du vertex.
 
 Il faut articuler les scenarii sur le paradigme Timeline (content très vague) + Scene (content détaillé à la création)
 Est-ce qu'on migre les Vertex ? A priori on les migre vers Timeline ? Ou plutôt vers Scene vu qu'on reste sur du Vertex dans les 2 cas ?
-Puis on passe Vertex en astract
+Puis on passe Vertex en abstract
 
 Au final on garde au maximum les possibilités du wikitext
 mais on peut faire un formulaire très contraint pour créer une Scene mais tout dumpé dans le content.

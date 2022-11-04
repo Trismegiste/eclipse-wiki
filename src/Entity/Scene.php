@@ -11,5 +11,5 @@ namespace App\Entity;
  */
 class Scene extends Vertex
 {
-
+    
 }

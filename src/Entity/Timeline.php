@@ -13,5 +13,4 @@ class Timeline extends Vertex implements Archivable
 {
 
     use ArchivableImpl;
-
 }

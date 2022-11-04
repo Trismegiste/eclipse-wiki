@@ -1,0 +1,25 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Création d'une Scène{% endblock %}
+
+{% block header_title %}{{ block('title') }}{% endblock %}
+
+{% block content %}
+    <section>
+        {{ form(form) }}
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ include('fragment/init_autocomplete.html.twig', {element_id:'scene_create_ambience'}) }}
+    <script src="{{ asset('pixabay/auto-complete.min.js') }}"></script>
+    <script>
+        document.getElementById('scene_create_title').focus()
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('pixabay/auto-complete.css') }}"/>
+{% endblock %}

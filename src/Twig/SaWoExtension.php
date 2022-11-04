@@ -40,7 +40,8 @@ class SaWoExtension extends AbstractExtension
         Place::class => 'place/row.html.twig',
         Loveletter::class => 'loveletter/row.html.twig',
         Handout::class => 'handout/row.html.twig',
-        MapConfig::class => 'voronoi/row.html.twig'
+        MapConfig::class => 'voronoi/row.html.twig',
+        \App\Entity\Scene::class => 'vertex/row.html.twig'
     ];
     const showTemplate = [
         Ali::class => 'npc/ali/show.html.twig',
@@ -50,7 +51,8 @@ class SaWoExtension extends AbstractExtension
         Place::class => 'place/show.html.twig',
         Loveletter::class => 'loveletter/show.html.twig',
         Handout::class => 'handout/show.html.twig',
-        MapConfig::class => 'voronoi/show.html.twig'
+        MapConfig::class => 'voronoi/show.html.twig',
+        \App\Entity\Scene::class => 'vertex/show.html.twig',
     ];
 
     public function getFunctions(): array
