@@ -9,15 +9,15 @@ namespace App\Entity;
 /**
  * A generic document or node 
  */
-class Vertex implements \Trismegiste\Strangelove\MongoDb\Root
+class Vertex implements \Trismegiste\Strangelove\MongoDb\Root, Archivable
 {
 
     use \Trismegiste\Strangelove\MongoDb\RootImpl;
+    use ArchivableImpl;
 
     protected string $title;
     protected ?string $content = null;
     protected $lastModified;
-    protected bool $archived = false;
 
     protected function beforeSave(): void
     {
@@ -80,16 +80,6 @@ class Vertex implements \Trismegiste\Strangelove\MongoDb\Root
     public function __clone()
     {
         $this->_id = null;
-    }
-
-    public function setArchived(bool $val): void
-    {
-        $this->archived = $val;
-    }
-
-    public function getArchived(): bool
-    {
-        return $this->archived;
     }
 
     public function getInternalLink(): array
