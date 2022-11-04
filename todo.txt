@@ -1,0 +1,16 @@
+il faut ajouter une entité Timeline qui possède le flag archive
+on enlève le flag archive de Vertex (à checker pour Character)
+on deplace le parcours du graphe en aside du show du Vertex pour le mettre dans Timeline
+le parcours du graphe depuis une Timeline ne se propage pas au delà d'une autre Timeline
+Timeline est juste un template avec 2 sections Pitch et Timeline (et le flag archive)
+Le show de Timeline ajoute une fonctionnalité AJAX qui permet de barrer un élement <LI> de la liste timeline
+"Scenario" dans la landing page devient "Scene" : unité de lieu et de temps
+le content de "Scene" est pré-rempli par un template "Place", "Ambiance", "NPC", "Event", "Prerequis", "Outcome"
+
+Il faut articuler les scenarii sur le paradigme Timeline + Scene
+Est-ce qu'on migre les Vertex ?
+Est-ce qu'on les réutilise en tant de Scene ? ou en tant que Timeline ?
+Est-ce qu'on passe Vertex en astract ?
+
+Au final on garde au maximum les possibilités du wikitext
+
