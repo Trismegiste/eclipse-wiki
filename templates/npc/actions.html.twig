@@ -12,7 +12,7 @@
     <a href="{{ path('app_profilepicture_template', {pk: npc.pk}) }}" title="Générer un profil réseau"><i class="icon-profile"></i></a>
     {% endif %}
     {% if npc.category != 'freeform' %}
-    <a href="{{ path('app_npcgenerator_sleeve', {pk: npc.pk}) }}" title="Combat"><i class="icon-sleeve"></i></a>
+    <a href="{{ path('app_npcgenerator_sleeve', {pk: npc.pk}) }}" title="Resleeving"><i class="icon-sleeve"></i></a>
     {% endif %}
 <a href="{{ path('app_npcgenerator_duplicate', {pk: npc.pk}) }}" title="Dupliquer"><i class="icon-duplicate"></i></a>
 <a href="{{ path('app_vertexcrud_rename', {pk: npc.pk}) }}" title="Renommer"><i class="icon-rename"></i></a>
