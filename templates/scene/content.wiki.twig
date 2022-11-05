@@ -1,14 +1,14 @@
 {# dump the form for the wikitext content #}
 {# WARNING : DO NOT FORMAT THIS TEMPLATE OR YOU'LL ADD SOME WHITESPACES THAT MATTER IN WIKITEXT FORMAT #}
 ==Décor==
-[[{{ place }}]]
+[[{{ place|raw }}]]
 
 ==Ambiance==
 {{ ambience }}
 
 ==Personnages==
 {% for name in npc %}
-* [[{{ name }}]]
+* [[{{ name|raw }}]]
 {% endfor %}
 
 {% if prerequisite is not empty %}

@@ -43,7 +43,7 @@ class SceneCreate extends AbstractType
     {
         $builder->remove('content');
         $builder->add('place', Type\AutocompleteType::class, ['choices' => $this->getPlaceTitle()])
-                ->add('ambience', TextareaType::class, ['attr' => ['rows' => 4]])
+                ->add('ambience', Type\WikitextType::class, ['attr' => ['rows' => 4]])
                 ->add('npc', CollectionType::class, [
                     'entry_type' => Type\AutocompleteType::class,
                     'entry_options' => [
@@ -54,9 +54,9 @@ class SceneCreate extends AbstractType
                     'delete_empty' => true,
                     'data' => array_fill(0, 4, null)
                 ])
-                ->add('prerequisite', TextareaType::class, ['required' => false, 'attr' => ['rows' => 4]])
-                ->add('event', TextareaType::class, ['attr' => ['rows' => 4]])
-                ->add('outcome', TextareaType::class, ['attr' => ['rows' => 4]])
+                ->add('prerequisite', Type\WikitextType::class, ['required' => false, 'attr' => ['rows' => 4]])
+                ->add('event', Type\WikitextType::class, ['attr' => ['rows' => 4]])
+                ->add('outcome', Type\WikitextType::class, ['attr' => ['rows' => 4]])
                 ->add('append_timeline', Type\AutocompleteType::class, ['required' => false, 'choices' => $this->getTimelineTitle()])
         ;
         $builder->setDataMapper(new Type\WikitextContentMapper($this->twig, 'scene/content.wiki.twig'));
