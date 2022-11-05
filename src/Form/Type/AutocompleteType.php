@@ -13,9 +13,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Description of AutocompleteType
- *
- * @author florent
+ * Text input with pre-loaded autocomplete
  */
 class AutocompleteType extends AbstractType
 {
@@ -23,7 +21,7 @@ class AutocompleteType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired('choices');
-        $resolver->setAllowedTypes('choices', 'iterable');
+        $resolver->setAllowedTypes('choices', 'array');
     }
 
     public function getParent(): ?string
@@ -33,7 +31,7 @@ class AutocompleteType extends AbstractType
 
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['choices'] = array_values(iterator_to_array($options['choices']));
+        $view->vars['choices'] = array_values($options['choices']); // a flat array for javascript
     }
 
 }

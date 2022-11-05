@@ -13,6 +13,9 @@
 {% block javascripts %}
     {{ parent() }}
     {{ include('fragment/init_autocomplete.html.twig', {element_id:'scene_create_ambience'}) }}
+    {{ include('fragment/init_autocomplete.html.twig', {element_id:'scene_create_prerequisite'}) }}
+    {{ include('fragment/init_autocomplete.html.twig', {element_id:'scene_create_event'}) }}
+    {{ include('fragment/init_autocomplete.html.twig', {element_id:'scene_create_outcome'}) }}
     <script src="{{ asset('pixabay/auto-complete.min.js') }}"></script>
     <script>
         document.getElementById('scene_create_title').focus()

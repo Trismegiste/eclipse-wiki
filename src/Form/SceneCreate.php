@@ -6,8 +6,11 @@
 
 namespace App\Form;
 
+use App\Entity\Ali;
+use App\Entity\Freeform;
 use App\Entity\Place;
 use App\Entity\Scene;
+use App\Entity\Transhuman;
 use App\Repository\VertexRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataMapperInterface;
@@ -19,9 +22,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Traversable;
 
 /**
- * Description of SceneCreate
- *
- * @author florent
+ * Creation of a scene
  */
 class SceneCreate extends AbstractType implements DataMapperInterface
 {
@@ -40,7 +41,19 @@ class SceneCreate extends AbstractType implements DataMapperInterface
         $builder->remove('content');
         $builder->add('place', Type\AutocompleteType::class, ['choices' => $this->getPlaceTitle()])
                 ->add('ambience', TextareaType::class, ['attr' => ['rows' => 4]])
-                ->add('npc1', Type\AutocompleteType::class, ['choices' => $this->getNpcTitle()])
+                ->add('npc', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
+                    'entry_type' => Type\AutocompleteType::class,
+                    'entry_options' => [
+                        'choices' => $this->getNpcTitle(),
+                        'required' => false,
+                        'label' => false
+                    ],
+                    'delete_empty' => true,
+                    'data' => array_fill(0, 4, null)
+                ])
+                ->add('prerequisite', TextareaType::class, ['required' => false, 'attr' => ['rows' => 4]])
+                ->add('event', TextareaType::class, ['attr' => ['rows' => 4]])
+                ->add('outcome', TextareaType::class, ['attr' => ['rows' => 4]])
         ;
         $builder->setDataMapper($this);
     }
@@ -64,16 +77,26 @@ class SceneCreate extends AbstractType implements DataMapperInterface
 
     protected function getPlaceTitle(): iterable
     {
+        $choice = [];
         foreach ($this->repository->findByClass(Place::class) as $vertex) {
-            yield $vertex->getTitle();
+            $choice[] = $vertex->getTitle();
         }
+
+        return $choice;
     }
 
     protected function getNpcTitle(): iterable
     {
-        foreach ($this->repository->searchNpcWithToken() as $vertex) {
-            yield $vertex->getTitle();
+        $choice = [];
+        foreach ($this->repository->findByClass([
+            Ali::class,
+            Transhuman::class,
+            Freeform::class
+        ]) as $vertex) {
+            $choice[] = $vertex->getTitle();
         }
+
+        return $choice;
     }
 
     public function mapDataToForms($viewData, Traversable $forms)
@@ -85,10 +108,24 @@ class SceneCreate extends AbstractType implements DataMapperInterface
     {
         $fields = iterator_to_array($forms);
         ob_start();
+
         echo "==Décor==\n";
         echo '[[' . $fields['place']->getData() . "]]\n";
         echo "==Ambiance==\n";
         echo $fields['ambience']->getData() . PHP_EOL;
+        echo "==Personnages==\n";
+        foreach ($fields['npc']->getData() as $name) {
+            echo "* [[$name]]\n";
+        }
+        if (!empty($fields['prerequisite']->getData())) {
+            echo "==Prérequis==\n";
+            echo $fields['prerequisite']->getData() . PHP_EOL;
+        }
+        echo "==Événements==\n";
+        echo $fields['event']->getData() . PHP_EOL;
+        echo "==Enjeu/Conséquences==\n";
+        echo $fields['outcome']->getData() . PHP_EOL;
+
         $viewData->setContent(ob_get_clean());
     }
 
