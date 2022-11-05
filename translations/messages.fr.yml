@@ -109,3 +109,7 @@ Min cluster per tile: Nombre minimal de pièces par tuile
 STRAT_SVG_CARGO: Vaisseau cargo
 Push profile: Diffuser le profile
 Instantiate npc: Créer un Extra à partir de ce personnage
+Ambience: Ambiance
+Prerequisite: Prérequis
+Event: Événements
+Outcome: Enjeu/Conséquences

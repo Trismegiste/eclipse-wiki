@@ -10,21 +10,21 @@ use App\Entity\Ali;
 use App\Entity\Freeform;
 use App\Entity\Place;
 use App\Entity\Scene;
+use App\Entity\Timeline;
 use App\Entity\Transhuman;
 use App\Repository\VertexRepository;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\DataMapperInterface;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Traversable;
 
 /**
- * Creation of a scene
+ * It's a template for creating a scene
  */
-class SceneCreate extends AbstractType implements DataMapperInterface
+class SceneCreate extends AbstractType
 {
 
     use FormTypeUtils;
@@ -41,7 +41,7 @@ class SceneCreate extends AbstractType implements DataMapperInterface
         $builder->remove('content');
         $builder->add('place', Type\AutocompleteType::class, ['choices' => $this->getPlaceTitle()])
                 ->add('ambience', TextareaType::class, ['attr' => ['rows' => 4]])
-                ->add('npc', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
+                ->add('npc', CollectionType::class, [
                     'entry_type' => Type\AutocompleteType::class,
                     'entry_options' => [
                         'choices' => $this->getNpcTitle(),
@@ -54,8 +54,9 @@ class SceneCreate extends AbstractType implements DataMapperInterface
                 ->add('prerequisite', TextareaType::class, ['required' => false, 'attr' => ['rows' => 4]])
                 ->add('event', TextareaType::class, ['attr' => ['rows' => 4]])
                 ->add('outcome', TextareaType::class, ['attr' => ['rows' => 4]])
+                ->add('append_timeline', Type\AutocompleteType::class, ['required' => false, 'choices' => $this->getTimelineTitle()])
         ;
-        $builder->setDataMapper($this);
+        $builder->setDataMapper(new Type\WikitextContentMapper());
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -85,6 +86,16 @@ class SceneCreate extends AbstractType implements DataMapperInterface
         return $choice;
     }
 
+    protected function getTimelineTitle(): iterable
+    {
+        $choice = [];
+        foreach ($this->repository->findByClass(Timeline::class) as $vertex) {
+            $choice[] = $vertex->getTitle();
+        }
+
+        return $choice;
+    }
+
     protected function getNpcTitle(): iterable
     {
         $choice = [];
@@ -97,36 +108,6 @@ class SceneCreate extends AbstractType implements DataMapperInterface
         }
 
         return $choice;
-    }
-
-    public function mapDataToForms($viewData, Traversable $forms)
-    {
-        
-    }
-
-    public function mapFormsToData(Traversable $forms, &$viewData)
-    {
-        $fields = iterator_to_array($forms);
-        ob_start();
-
-        echo "==Décor==\n";
-        echo '[[' . $fields['place']->getData() . "]]\n";
-        echo "==Ambiance==\n";
-        echo $fields['ambience']->getData() . PHP_EOL;
-        echo "==Personnages==\n";
-        foreach ($fields['npc']->getData() as $name) {
-            echo "* [[$name]]\n";
-        }
-        if (!empty($fields['prerequisite']->getData())) {
-            echo "==Prérequis==\n";
-            echo $fields['prerequisite']->getData() . PHP_EOL;
-        }
-        echo "==Événements==\n";
-        echo $fields['event']->getData() . PHP_EOL;
-        echo "==Enjeu/Conséquences==\n";
-        echo $fields['outcome']->getData() . PHP_EOL;
-
-        $viewData->setContent(ob_get_clean());
     }
 
 }
