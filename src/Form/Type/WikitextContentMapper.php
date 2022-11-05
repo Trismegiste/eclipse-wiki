@@ -17,15 +17,15 @@ use Twig\Environment;
  */
 class WikitextContentMapper implements DataMapperInterface
 {
-    /*   protected Environment $twig;
-      protected string $template;
 
-      public function __construct(Environment $twig, string $template)
-      {
-      $this->template = $template;
-      $this->twig = $twig;
-      }
-     */
+    protected Environment $twig;
+    protected string $template;
+
+    public function __construct(Environment $twig, string $template)
+    {
+        $this->template = $template;
+        $this->twig = $twig;
+    }
 
     public function mapDataToForms($viewData, Traversable $forms)
     {
@@ -43,27 +43,12 @@ class WikitextContentMapper implements DataMapperInterface
             throw new UnexpectedTypeException($viewData, Vertex::class);
         }
 
-        $fields = iterator_to_array($forms);
-        ob_start();
-
-        echo "==Décor==\n";
-        echo '[[' . $fields['place']->getData() . "]]\n";
-        echo "==Ambiance==\n";
-        echo $fields['ambience']->getData() . PHP_EOL;
-        echo "==Personnages==\n";
-        foreach ($fields['npc']->getData() as $name) {
-            echo "* [[$name]]\n";
+        $fields = [];
+        foreach ($forms as $key => $widget) {
+            $fields[$key] = $widget->getData();
         }
-        if (!empty($fields['prerequisite']->getData())) {
-            echo "==Prérequis==\n";
-            echo $fields['prerequisite']->getData() . PHP_EOL;
-        }
-        echo "==Événements==\n";
-        echo $fields['event']->getData() . PHP_EOL;
-        echo "==Enjeu/Conséquences==\n";
-        echo $fields['outcome']->getData() . PHP_EOL;
 
-        $viewData->setContent(ob_get_clean());
+        $viewData->setContent($this->twig->render($this->template, $fields));
     }
 
 }

@@ -20,6 +20,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Twig\Environment;
 
 /**
  * It's a template for creating a scene
@@ -30,10 +31,12 @@ class SceneCreate extends AbstractType
     use FormTypeUtils;
 
     protected VertexRepository $repository;
+    protected Environment $twig;
 
-    public function __construct(VertexRepository $repo)
+    public function __construct(VertexRepository $repo, Environment $twig)
     {
         $this->repository = $repo;
+        $this->twig = $twig;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -56,7 +59,7 @@ class SceneCreate extends AbstractType
                 ->add('outcome', TextareaType::class, ['attr' => ['rows' => 4]])
                 ->add('append_timeline', Type\AutocompleteType::class, ['required' => false, 'choices' => $this->getTimelineTitle()])
         ;
-        $builder->setDataMapper(new Type\WikitextContentMapper());
+        $builder->setDataMapper(new Type\WikitextContentMapper($this->twig, 'scene/content.wiki.twig'));
     }
 
     public function configureOptions(OptionsResolver $resolver)
