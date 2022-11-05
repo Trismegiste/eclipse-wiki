@@ -12,8 +12,6 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {{ include('fragment/init_autocomplete.html.twig', {element_id:'handout_content'}) }}
-    {{ include('fragment/init_autocomplete.html.twig', {element_id:'handout_gm_info'}) }}
     <script>
         document.getElementById('handout_content').focus()
     </script>

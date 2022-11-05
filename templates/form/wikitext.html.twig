@@ -3,6 +3,10 @@
     {{ form_widget(form) }}
     <script>
         window.addEventListener('load', () => {
+            if (typeof Textcomplete === "undefined") {
+                throw new Error('Yuku TextComplete is required')
+            }
+
             let Textarea = Textcomplete.editors.Textarea
             let editor = new Textarea(document.getElementById('{{ form.vars.id }}'))
             let textcomplete = new Textcomplete(editor)

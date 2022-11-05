@@ -28,7 +28,7 @@ class LoveletterType extends AbstractType
     {
         $builder
                 ->add('player', TextType::class, ['attr' => ['class' => 'pure-input-1-3']])
-                ->add('drama', TextareaType::class, ['attr' => ['rows' => 3]])
+                ->add('drama', Type\WikitextType::class, ['attr' => ['rows' => 3]])
                 ->add('roll1', Type\RollType::class)
                 ->add('roll2', Type\RollType::class)
                 ->add('roll3', Type\RollType::class)
