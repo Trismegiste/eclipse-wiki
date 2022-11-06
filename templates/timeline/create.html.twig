@@ -1,0 +1,11 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Création d'une Timeline{% endblock %}
+
+{% block header_title %}{{ block('title') }}{% endblock %}
+
+{% block content %}
+    <section>
+        {{ form(form) }}
+    </section>
+{% endblock %}

@@ -29,7 +29,17 @@ class WikitextContentMapper implements DataMapperInterface
 
     public function mapDataToForms($viewData, Traversable $forms)
     {
-        
+        // there is no data yet, so nothing to prepopulate
+        if (null === $viewData) {
+            return;
+        }
+
+        if (!$viewData instanceof Vertex) {
+            throw new UnexpectedTypeException($viewData, Vertex::class);
+        }
+
+        $forms = iterator_to_array($forms);
+        $forms['title']->setData($viewData->getTitle());
     }
 
     public function mapFormsToData(Traversable $forms, &$viewData)

@@ -1,0 +1,12 @@
+{% extends "vertex/show.html.twig" %}
+
+{% block info %}
+    {{ render(controller('App\\Controller\\VertexCrud::network', {title: vertex.title})) }}
+{% endblock %}
+
+{% block header_title %}
+    <nav style="float: right">
+        {{ include('timeline/actions.html.twig') }}
+    </nav>   
+    {{ vertex.title }}
+{% endblock %}
