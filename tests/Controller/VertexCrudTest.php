@@ -160,17 +160,4 @@ class VertexCrudTest extends WebTestCase
         $client->followRedirect();
     }
 
-    public function testArchive()
-    {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/wiki/vertex1');
-        $this->assertResponseIsSuccessful();
-        $url = $crawler->filterXPath('//nav/a/i[@class="icon-movie-roll"]/parent::a')->attr('href');
-
-        $crawler = $client->request('GET', $url);
-        $form = $crawler->selectButton('form_archive')->form();
-        $form['form[archived]']->tick();
-        $client->submit($form);
-    }
-
 }

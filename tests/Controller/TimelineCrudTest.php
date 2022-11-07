@@ -7,7 +7,7 @@
 use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class SceneCrudTest extends WebTestCase
+class TimelineCrudTest extends WebTestCase
 {
 
     protected $client;
@@ -26,12 +26,12 @@ class SceneCrudTest extends WebTestCase
 
     public function testCreate()
     {
-        $crawler = $this->client->request('GET', '/scene/create');
+        $crawler = $this->client->request('GET', '/timeline/create');
         $this->assertResponseIsSuccessful();
-        $form = $crawler->selectButton('scene_create_create')->form();
-        $form->setValues(['scene_create' => [
-                'title' => 'Scene1',
-                'place' => 'Stage'
+        $form = $crawler->selectButton('timeline_create_create')->form();
+        $form->setValues(['timeline_create' => [
+                'title' => 'A new hope',
+                'scene' => ['Star destroyer']
         ]]);
         $this->client->submit($form);
         $this->assertResponseRedirects();
@@ -40,9 +40,9 @@ class SceneCrudTest extends WebTestCase
 
     public function testCreateWithTitle()
     {
-        $crawler = $this->client->request('GET', '/scene/create?title=baston');
-        $form = $crawler->selectButton('scene_create_create')->form();
-        $this->assertEquals('Baston', $form['scene_create']['title']->getValue());
+        $crawler = $this->client->request('GET', '/timeline/create?title=fight');
+        $form = $crawler->selectButton('timeline_create_create')->form();
+        $this->assertEquals('Fight', $form['timeline_create']['title']->getValue());
     }
 
     public function testList()
@@ -59,7 +59,7 @@ class SceneCrudTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', $show);
         $this->assertResponseIsSuccessful();
-        $this->assertPageTitleContains('Scene1');
+        $this->assertPageTitleContains('A new hope');
         $url = $crawler->filterXPath('//nav/a/i[@class="icon-edit"]/parent::a')->attr('href');
 
         return $url;
@@ -70,13 +70,13 @@ class SceneCrudTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', $edit);
         $this->assertResponseIsSuccessful();
-        $this->assertPageTitleContains('Scene1');
+        $this->assertPageTitleContains('A new hope');
         $this->assertCount(1, $crawler->selectButton('vertex_create'));
     }
 
     public function testArchive()
     {
-        $crawler = $this->client->request('GET', '/wiki/Scene1');
+        $crawler = $this->client->request('GET', '/wiki/A new hope');
         $this->assertResponseIsSuccessful();
         $url = $crawler->filterXPath('//nav/a/i[@class="icon-archive"]/parent::a')->attr('href');
 

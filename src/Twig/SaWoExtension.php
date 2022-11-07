@@ -52,7 +52,7 @@ class SaWoExtension extends AbstractExtension
         Place::class => 'place/show.html.twig',
         Loveletter::class => 'loveletter/show.html.twig',
         Handout::class => 'handout/show.html.twig',
-        Scene::class => 'vertex/show.html.twig',
+        Scene::class => 'scene/show.html.twig',
         Timeline::class => 'timeline/show.html.twig',
     ];
 
