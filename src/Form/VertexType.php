@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Type for Vertex
@@ -25,7 +26,7 @@ class VertexType extends AbstractType
     {
         if (!$options['edit']) {
             $builder
-                    ->add('title', TextType::class, ['constraints' => [new UniqueVertexTitle()]])
+                    ->add('title', TextType::class, ['constraints' => [new NotBlank(), new UniqueVertexTitle()]])
                     ->add('content', Type\WikitextType::class, ['attr' => ['rows' => 30]])
                     ->add('create', SubmitType::class);
         } else {

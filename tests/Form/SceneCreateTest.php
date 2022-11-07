@@ -24,9 +24,14 @@ class SceneCreateTest extends KernelTestCase
         $this->assertCount(0, iterator_to_array($repo->search()));
     }
 
-    public function testCreate()
+    public function testSubmitOk()
     {
-        
+        $this->sut->submit([
+            "title" => "test",
+            'place' => 'Vulcain'
+        ]);
+        $this->assertTrue($this->sut->isSynchronized());
+        $this->assertTrue($this->sut->isValid(), $this->sut->getErrors(true, true));
     }
 
 }

@@ -64,7 +64,8 @@ class SceneCreate extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefault('empty_data', function (FormInterface $form) {
-            return new Scene($form->get('title')->getData());
+            $title = $form->get('title')->getData();
+            return (!is_null($title)) ? new Scene($title) : null;
         });
     }
 
