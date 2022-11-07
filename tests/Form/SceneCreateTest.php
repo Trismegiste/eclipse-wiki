@@ -27,11 +27,17 @@ class SceneCreateTest extends KernelTestCase
     public function testSubmitOk()
     {
         $this->sut->submit([
-            "title" => "test",
-            'place' => 'Vulcain'
+            "title" => "In The Pale Moonlight",
+            'place' => 'Deep Space 9',
+            'npc' => ['Sisko', 'Garak', 'Vreenak']
         ]);
         $this->assertTrue($this->sut->isSynchronized());
         $this->assertTrue($this->sut->isValid(), $this->sut->getErrors(true, true));
+        $scene = $this->sut->getData();
+        $this->assertInstanceOf(App\Entity\Scene::class, $scene);
+        $this->assertEquals('In The Pale Moonlight', $scene->getTitle());
+        $this->assertStringContainsString('[[Deep Space 9]]', $scene->getContent());
+        $this->assertStringContainsString('* [[Sisko]]', $scene->getContent());
     }
 
 }
