@@ -4,7 +4,7 @@
 [[{{ place|raw }}]]
 
 ==Ambiance==
-{{ ambience }}
+{{ ambience|raw }}
 
 ==Personnages==
 {% for name in npc %}
@@ -13,11 +13,11 @@
 
 {% if prerequisite is not empty %}
 ==Prérequis==
-{{ prerequisite }}
+{{ prerequisite|raw }}
 {% endif %}
 
 ==Événements==
-{{ event }}
+{{ event|raw }}
 
 ==Enjeu/Conséquences==
-{{ outcome }}
+{{ outcome|raw }}
