@@ -1,24 +1,31 @@
 <?php
 
+/*
+ * eclipse-wiki
+ */
+
+use App\Entity\Vertex;
 use App\Form\Type\WikitextContentMapper;
-use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\Exception\UnexpectedTypeException;
+use Twig\Environment;
 
 class WikitextContentMapperTest extends TestCase
 {
+
     protected $sut;
     protected $twig;
 
     protected function setUp(): void
     {
-        $this->twig = $this->createMock(\Twig\Environment::class);
+        $this->twig = $this->createMock(Environment::class);
         $this->sut = new WikitextContentMapper($this->twig, 'dummy.wiki.twig');
     }
 
     public function testFormToDataWithNull()
     {
         $this->twig->expects($this->never())
-              ->method('render');
+                ->method('render');
         $obj = null;
         $this->sut->mapFormsToData(new ArrayIterator([]), $obj);
     }
@@ -34,10 +41,10 @@ class WikitextContentMapperTest extends TestCase
     public function testFormToDataValid()
     {
         $this->twig->expects($this->once())
-              ->method('render')
-              ->willReturn('content');
+                ->method('render')
+                ->willReturn('content');
 
-        $obj = new App\Entity\Vertex('old');
+        $obj = new Vertex('old');
         $this->sut->mapFormsToData(new ArrayIterator([]), $obj);
         $this->assertEquals('content', $obj->getContent());
     }

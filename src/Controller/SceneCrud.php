@@ -43,7 +43,7 @@ class SceneCrud extends GenericCrud
      */
     public function edit(string $pk, Request $request): Response
     {
-        return $this->handleEdit(VertexType::class, 'vertex/edit.html.twig', $pk, $request);
+        return $this->handleEdit(VertexType::class, 'scene/edit.html.twig', $pk, $request);
     }
 
 }
