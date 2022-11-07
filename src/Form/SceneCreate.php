@@ -20,6 +20,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Twig\Environment;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * It's a template for creating a scene
@@ -41,7 +42,10 @@ class SceneCreate extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->remove('content');
-        $builder->add('place', Type\AutocompleteType::class, ['choices' => $this->getPlaceTitle()])
+        $builder->add('place', Type\AutocompleteType::class, [
+                                                   'choices' => $this->getPlaceTitle(),
+                                                   'constraints' => [new NotBlank()] 
+                ])
                 ->add('ambience', Type\WikitextType::class, ['attr' => ['rows' => 4]])
                 ->add('npc', CollectionType::class, [
                     'entry_type' => Type\AutocompleteType::class,

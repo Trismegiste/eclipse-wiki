@@ -33,6 +33,7 @@ class SceneCrudTest extends WebTestCase
         $form = $crawler->selectButton('scene_create_create')->form();
         $form->setValues(['scene_create' => [
                 'title' => 'Scene1',
+                'place' => 'Stage'
         ]]);
         $this->client->submit($form);
         $this->assertResponseRedirects();
@@ -59,6 +60,7 @@ class SceneCrudTest extends WebTestCase
     public function testShow(string $show)
     {
         $crawler = $this->client->request('GET', $show);
+        $this->assertResponseIsSuccessful();
         $this->assertPageTitleContains('Scene1');
         $url = $crawler->filterXPath('//nav/a/i[@class="icon-edit"]/parent::a')->attr('href');
 
@@ -69,8 +71,9 @@ class SceneCrudTest extends WebTestCase
     public function testEdit(string $edit)
     {
         $crawler = $this->client->request('GET', $edit);
+        $this->assertResponseIsSuccessful();
         $this->assertPageTitleContains('Scene1');
-        $this->assertCount(1, $crawler->selectButton('scene_create'));
+        $this->assertCount(1, $crawler->selectButton('vertex_create'));
     }
 
 }
