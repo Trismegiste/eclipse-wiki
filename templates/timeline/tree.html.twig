@@ -1,7 +1,7 @@
 {# detail #}
 {% macro print_group(icon, group) %}
     <h2><i class="icon-{{ icon }}"></i></h2>
-    <ul class="link-list">
+    <ul class="link-tree">
         {% for item in group %}
             <li>
                 <a href="{{ path('app_wiki', {title:item}) }}">{{ item }}</a>
@@ -11,7 +11,7 @@
 {% endmacro %}
 
 <style>
-    .link-list {
+    .link-tree {
         list-style-type: none;
         list-style-position: inside;
         margin: 0;

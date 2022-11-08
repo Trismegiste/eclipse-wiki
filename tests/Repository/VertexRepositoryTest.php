@@ -5,6 +5,12 @@
  */
 
 use App\Command\Import;
+use App\Entity\Background;
+use App\Entity\Faction;
+use App\Entity\Freeform;
+use App\Entity\Scene;
+use App\Entity\Timeline;
+use App\Entity\Transhuman;
 use App\Entity\Vertex;
 use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -94,7 +100,7 @@ class VertexRepositoryTest extends KernelTestCase
     {
         $this->assertCount(0, $this->sut->searchNpcWithToken());
 
-        $npc = new App\Entity\Freeform('monster');
+        $npc = new Freeform('monster');
         $npc->tokenPic = 'monster.png';
         $this->sut->save($npc);
     }
@@ -103,6 +109,50 @@ class VertexRepositoryTest extends KernelTestCase
     public function testSearchNpcByTokenOne()
     {
         $this->assertCount(1, $this->sut->searchNpcWithToken());
+    }
+
+    public function testExploreOrphanTimeline()
+    {
+        $obj = new Timeline('Root');
+        $obj->setContent('nihil');
+        $this->sut->save($obj);
+
+        $res = $this->sut->exploreTimeline($obj);
+        $this->assertCount(1, $res);
+        $this->assertArrayHasKey('Root', $res);
+        $this->assertInstanceOf(Timeline::class, $res['Root']);
+
+        return $obj;
+    }
+
+    /** @depends testExploreOrphanTimeline */
+    public function testExploreUniqueSceneLinkedToTimeline(Timeline $root)
+    {
+        $obj = new Scene('Intro');
+        $obj->setContent('Part of [[Root]]');
+        $this->sut->save($obj);
+
+        $res = $this->sut->exploreTimeline($root);
+        $this->assertCount(2, $res);
+        $this->assertArrayHasKey('Root', $res);
+        $this->assertArrayHasKey('Intro', $res);
+        $this->assertInstanceOf(Scene::class, $res['Intro']);
+
+        return $root;
+    }
+
+    /** @depends testExploreUniqueSceneLinkedToTimeline */
+    public function testFriendsOfFriends(Timeline $root)
+    {
+        $npc = new Transhuman('Antagonist', new Background('nihil'), new Faction('dummy'));
+        $obj = new Scene('Fight');
+        $obj->setContent('Fight with [[Antagonist]] - Part of [[Root]]');
+        $this->sut->save([$npc, $obj]);
+
+        $res = $this->sut->exploreTimeline($root);
+        $this->assertCount(4, $res);
+        $this->assertArrayHasKey('Antagonist', $res);
+        $this->assertArrayHasKey('Fight', $res);
     }
 
 }
