@@ -46,4 +46,18 @@ class TimelineCrud extends GenericCrud
         return $this->handleEdit(VertexType::class, 'timeline/edit.html.twig', $pk, $request);
     }
 
+    public function tree(Timeline $root): Response
+    {
+        $tree = $this->repository->exploreTimeline($root);
+        $dump = [];
+        foreach ($tree as $v) {
+            $dump[$v->getCategory()][] = $v->getTitle();
+        }
+        foreach ($dump as $key => $v) {
+            sort($dump[$key], SORT_LOCALE_STRING);
+        }
+
+        return $this->render('timeline/tree.html.twig', ['network' => $dump]);
+    }
+
 }

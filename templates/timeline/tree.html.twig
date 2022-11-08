@@ -19,11 +19,12 @@
         line-height: 150%;
     }
 </style>
-
-{% if network.vertex is defined %}
-    {{ _self.print_group('video', network.vertex) }}
+{% if network.scene is defined %}
+    {{ _self.print_group('video', network.scene) }}
 {% endif %}
 {% if network.transhuman is defined %}
     {{ _self.print_group('extra', network.transhuman) }}
 {% endif %}
-
+{% if network.place is defined %}
+    {{ _self.print_group('place', network.place) }}
+{% endif %}

@@ -8,6 +8,7 @@ namespace App\Repository;
 
 use App\Entity\Ali;
 use App\Entity\Freeform;
+use App\Entity\Timeline;
 use App\Entity\Transhuman;
 use App\Entity\Vertex;
 use DomainException;
@@ -229,24 +230,22 @@ class VertexRepository extends DefaultRepository
         );
     }
 
-    public function exploreGraph(string $title, array $carry = [], int $level = 2): array
+    public function exploreTimeline(Vertex $vertex, int $level = 2, array $carry = []): array
     {
-        $vertex = $this->findByTitle($title);
-
-        if (is_null($vertex)) {
-            return $carry;
-        }
-
-        $carry[] = $title;
+        $title = $vertex->getTitle();
+        $carry[$title] = $vertex;
 
         if ($level > 0) {
-            $newFriends = array_unique(array_merge($vertex->getInternalLink(), $this->searchByBacklinks($title)));
-            foreach ($newFriends as $item) {
-                $carry = $this->exploreGraph($item, $carry, $level - 1);
+            $neighbours = array_unique(array_merge($vertex->getInternalLink(), $this->searchByBacklinks($title)));
+            foreach ($neighbours as $neighbour) {
+                $item = $this->findByTitle($neighbour);
+                if (!is_null($item) && !($item instanceof Timeline)) {
+                    $carry = $this->exploreTimeline($item, $level - 1, $carry);
+                }
             }
         }
 
-        return array_unique($carry);
+        return $carry;
     }
 
 }
