@@ -232,7 +232,9 @@ class VertexRepository extends DefaultRepository
 
     /**
      * Starts from an instance of Timeline and recursively explores all adjacent neighbours (inbound and outbound)
-     * until it reaches another Timeline instance.
+     * until it reaches another Timeline instance or it crosses a given number of edges.
+     * Imagine the whole digraph is partitioned into multiple trees (where roots are Timeline) and 
+     * some branches are connected between some trees.
      * @param Timeline $vertex the starting point
      * @param int $level how many edges before stopping exploration of the digraph
      * @return array an array of Vertex of all close neighbours (unordered)
