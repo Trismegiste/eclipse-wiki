@@ -49,12 +49,14 @@ class TimelineCrud extends GenericCrud
     public function tree(Timeline $root): Response
     {
         $tree = $this->repository->exploreTimeline($root);
+        $intl = new \Collator($this->getParameter('kernel.default_locale'));
+
         $dump = [];
         foreach ($tree as $v) {
             $dump[$v->getCategory()][] = $v->getTitle();
         }
         foreach ($dump as $key => $v) {
-            sort($dump[$key], SORT_LOCALE_STRING);
+            $intl->sort($dump[$key]);
         }
 
         return $this->render('timeline/tree.html.twig', ['network' => $dump]);
