@@ -35,6 +35,7 @@ class RemotePictureTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $img = $node->filter('img')->first()->attr('src');
         $this->client->request('GET', $img);
         $this->assertResponseIsSuccessful();
+        $this->assertStringStartsWith('image/', $this->client->getResponse()->headers->get('content-type'));
     }
 
     /** @depends testSearch */
@@ -43,6 +44,8 @@ class RemotePictureTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $pushing = $node->attr('href');
         $this->client->request('POST', $pushing);
         $this->assertResponseIsSuccessful();
+        $result = json_decode($this->client->getResponse()->getContent());
+        $this->assertEquals('success', $result->level);
     }
 
 }
