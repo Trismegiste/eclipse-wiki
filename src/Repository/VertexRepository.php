@@ -230,7 +230,14 @@ class VertexRepository extends DefaultRepository
         );
     }
 
-    public function exploreTimeline(Vertex $vertex, int $level = 2): array
+    /**
+     * Starts from an instance of Timeline and recursively explores all adjacent neighbours (inbound and outbound)
+     * until it reaches another Timeline instance.
+     * @param Timeline $vertex the starting point
+     * @param int $level how many edges before stopping exploration of the digraph
+     * @return array an array of Vertex of all close neighbours (unordered)
+     */
+    public function exploreTreeFrom(Timeline $vertex, int $level = 2): array
     {
         $carry = [];
         $this->recursionExploreTimeline($vertex, $level, $carry);
@@ -238,6 +245,7 @@ class VertexRepository extends DefaultRepository
         return $carry;
     }
 
+    // the recursion for the above method
     private function recursionExploreTimeline(Vertex $vertex, int $level, array &$carry): void
     {
         $title = $vertex->getTitle();

@@ -117,7 +117,7 @@ class VertexRepositoryTest extends KernelTestCase
         $obj->setContent('nihil');
         $this->sut->save($obj);
 
-        $res = $this->sut->exploreTimeline($obj);
+        $res = $this->sut->exploreTreeFrom($obj);
         $this->assertCount(1, $res);
         $this->assertArrayHasKey('Root', $res);
         $this->assertInstanceOf(Timeline::class, $res['Root']);
@@ -132,7 +132,7 @@ class VertexRepositoryTest extends KernelTestCase
         $obj->setContent('Part of [[Root]]');
         $this->sut->save($obj);
 
-        $res = $this->sut->exploreTimeline($root);
+        $res = $this->sut->exploreTreeFrom($root);
         $this->assertCount(2, $res);
         $this->assertArrayHasKey('Root', $res);
         $this->assertArrayHasKey('Intro', $res);
@@ -149,7 +149,7 @@ class VertexRepositoryTest extends KernelTestCase
         $obj->setContent('Fight with [[Antagonist]] - Part of [[Root]]');
         $this->sut->save([$npc, $obj]);
 
-        $res = $this->sut->exploreTimeline($root);
+        $res = $this->sut->exploreTreeFrom($root);
         $this->assertCount(4, $res);
         $this->assertArrayHasKey('Antagonist', $res);
         $this->assertArrayHasKey('Fight', $res);

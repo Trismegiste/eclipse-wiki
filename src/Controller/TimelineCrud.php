@@ -48,7 +48,7 @@ class TimelineCrud extends GenericCrud
 
     public function tree(Timeline $root): Response
     {
-        $tree = $this->repository->exploreTimeline($root);
+        $tree = $this->repository->exploreTreeFrom($root);
         $intl = new \Collator($this->getParameter('kernel.default_locale'));
 
         $dump = [];
