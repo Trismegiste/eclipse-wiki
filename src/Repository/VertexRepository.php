@@ -230,7 +230,15 @@ class VertexRepository extends DefaultRepository
         );
     }
 
-    public function exploreTimeline(Vertex $vertex, int $level = 2, array $carry = []): array
+    public function exploreTimeline(Vertex $vertex, int $level = 2): array
+    {
+        $carry = [];
+        $this->recursionExploreTimeline($vertex, $level, $carry);
+
+        return $carry;
+    }
+
+    private function recursionExploreTimeline(Vertex $vertex, int $level, array &$carry): void
     {
         $title = $vertex->getTitle();
         $carry[$title] = $vertex;
@@ -240,12 +248,10 @@ class VertexRepository extends DefaultRepository
             foreach ($neighbours as $neighbour) {
                 $item = $this->findByTitle($neighbour);
                 if (!is_null($item) && !($item instanceof Timeline)) {
-                    $carry = $this->exploreTimeline($item, $level - 1, $carry);
+                    $this->recursionExploreTimeline($item, $level - 1, $carry);
                 }
             }
         }
-
-        return $carry;
     }
 
 }
