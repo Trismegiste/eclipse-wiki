@@ -56,11 +56,16 @@ class PictureTest extends WebTestCase
 
     public function testUpload()
     {
+        $repo = static::getContainer()->get(\App\Repository\VertexRepository::class);
+        $target = new \App\Entity\Scene('target');
+        $repo->save($target);
+
         $crawler = $this->client->request('GET', '/picture/upload');
         $this->assertResponseIsSuccessful();
         $form = $crawler->selectButton('picture_upload_upload')->form();
         $form->setValues(['picture_upload' => [
-                'filename' => 'uploaded'
+                'filename' => 'uploaded',
+                'append_vertex' => 'target'
         ]]);
         try {
             $this->storage->delete('uploaded.jpg');

@@ -82,9 +82,18 @@ class HandoutCrudTest extends WebTestCase
         $crawler = $this->client->request('GET', $edit);
         $url = $crawler->filterXPath('//nav/a/i[@class="icon-qrcode"]/parent::a')->attr('href');
 
-        $this->client->request('GET', $url);
+        $crawler = $this->client->request('GET', $url);
         $this->assertResponseIsSuccessful();
         $this->assertStringContainsString('QRious', $this->client->getResponse()->getContent());
+
+        return $crawler->filter('h2.big-link')->first()->text();
+    }
+
+    /** @depends testQrCode */
+    public function testGetDocument(string $url)
+    {
+        $this->client->request('GET', $url);
+        $this->assertEquals('application/pdf', $this->client->getResponse()->headers->get('content-type'));
     }
 
 }
