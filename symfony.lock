@@ -17,9 +17,6 @@
             "config/routes/annotations.yaml"
         ]
     },
-    "doctrine/inflector": {
-        "version": "2.0.4"
-    },
     "doctrine/instantiator": {
         "version": "1.4.0"
     },
@@ -64,18 +61,6 @@
     },
     "phar-io/version": {
         "version": "3.1.1"
-    },
-    "phpdocumentor/reflection-common": {
-        "version": "2.2.0"
-    },
-    "phpdocumentor/reflection-docblock": {
-        "version": "5.3.0"
-    },
-    "phpdocumentor/type-resolver": {
-        "version": "1.6.0"
-    },
-    "phpspec/prophecy": {
-        "version": "v1.15.0"
     },
     "phpunit/php-code-coverage": {
         "version": "9.2.10"
@@ -332,15 +317,6 @@
     "symfony/intl": {
         "version": "v5.4.3"
     },
-    "symfony/maker-bundle": {
-        "version": "1.37",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "1.0",
-            "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
-        }
-    },
     "symfony/mime": {
         "version": "v5.4.3"
     },
@@ -531,9 +507,6 @@
     "theseer/tokenizer": {
         "version": "1.2.1"
     },
-    "trismegiste/rpg-map-generator": {
-        "version": "dev-master"
-    },
     "trismegiste/rpg-name-generator": {
         "version": "v1.0"
     },
@@ -548,8 +521,5 @@
     },
     "twig/twig": {
         "version": "v3.3.8"
-    },
-    "webmozart/assert": {
-        "version": "1.10.0"
     }
 }
