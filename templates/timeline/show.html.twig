@@ -17,3 +17,8 @@
         </div>
     </div>
 {% endblock %}
+
+{% block info %}
+<a href="{{ path('app_timelinecrud_pin', {pk: vertex.pk}) }}" class="pure-button"><i class="icon-menu"></i>Épingler ce scenario</a>
+{% endblock %}
+
