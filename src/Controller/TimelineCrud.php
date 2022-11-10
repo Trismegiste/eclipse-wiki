@@ -46,7 +46,7 @@ class TimelineCrud extends GenericCrud
         return $this->handleEdit(VertexType::class, 'timeline/edit.html.twig', $pk, $request);
     }
 
-    public function tree(Timeline $root): Response
+    public function tree(Timeline $root, string $mode = 'tree'): Response
     {
         $tree = $this->repository->exploreTreeFrom($root);
         $intl = new \Collator($this->getParameter('kernel.default_locale'));
@@ -59,7 +59,7 @@ class TimelineCrud extends GenericCrud
             $intl->sort($dump[$key]);
         }
 
-        return $this->render('timeline/tree.html.twig', ['network' => $dump]);
+        return $this->render('timeline/' . ['tree' => 'tree', 'toc' => 'scene_toc'][$mode] . '.html.twig', ['network' => $dump]);
     }
 
     /**
