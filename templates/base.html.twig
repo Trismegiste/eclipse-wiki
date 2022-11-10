@@ -47,7 +47,11 @@
                             </ul>
                         </nav>
                         <section class="info">
-                            {% block info %}{% endblock %}
+                            {% block info %}
+                                {% if app.session.get('pinned_timeline') is not empty %}
+                                    {{ app.session.get('pinned_timeline').title }}
+                                {% endif %}
+                            {% endblock %}
                         </section>
                     {% endblock %}
                 </aside>

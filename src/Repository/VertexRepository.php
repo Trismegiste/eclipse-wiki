@@ -256,8 +256,8 @@ class VertexRepository extends DefaultRepository
         if ($level > 0) {
             $neighbours = array_unique(array_merge($vertex->getInternalLink(), $this->searchByBacklinks($title)));
             foreach ($neighbours as $neighbour) {
-                // @todo can we skip the neighbour already fetched and stored in $carry ? I think so
-                $item = $this->findByTitle($neighbour);
+                // optim : do not fetch vertex already fetched but we must continue exploring since the current distance for this path could be shorter than a previous path
+                $item = key_exists($neighbour, $carry) ? $carry[$neighbour] : $this->findByTitle($neighbour);
                 if (!is_null($item) && !($item instanceof Timeline)) {
                     $this->recursionExploreTimeline($item, $level - 1, $carry);
                 }

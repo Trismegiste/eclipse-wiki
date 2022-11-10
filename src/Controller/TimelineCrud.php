@@ -62,4 +62,15 @@ class TimelineCrud extends GenericCrud
         return $this->render('timeline/tree.html.twig', ['network' => $dump]);
     }
 
+    /**
+     * @Route("/timeline/pin/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
+     */
+    public function pin(string $pk, Request $request): Response
+    {
+        $timeline = $this->repository->load($pk);
+        $request->getSession()->set('pinned_timeline', $timeline);
+
+        return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $pk]);
+    }
+
 }
