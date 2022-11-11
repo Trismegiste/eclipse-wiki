@@ -30,7 +30,7 @@ class HandoutType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('gm_info', TextareaType::class, [
+        $builder->add('gm_info', Type\WikitextType::class, [
                     'required' => false,
                     'attr' => ['rows' => 10],
                     'property_path' => 'gmInfo'

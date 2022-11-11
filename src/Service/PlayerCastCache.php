@@ -65,7 +65,7 @@ class PlayerCastCache implements CacheWarmerInterface, CacheClearerInterface
         $sy = imagesy($gd2);
         $maxSize = max([$sx, $sy]);
         if ($maxSize > $this->maxDimension) {
-            $forPlayer = imagescale($gd2, $sx * $this->maxDimension / $maxSize, $sy * $this->maxDimension / $maxSize);
+            $forPlayer = imagescale($gd2, intval($sx * $this->maxDimension / $maxSize), intval($sy * $this->maxDimension / $maxSize));
             imagedestroy($gd2);
         } else {
             $forPlayer = $gd2;

@@ -1,0 +1,50 @@
+{# Custom rendering for Wikitext with autocompleted wikitext links #}
+{% block wikitext_widget %}
+    {{ form_widget(form) }}
+    <script>
+        window.addEventListener('load', () => {
+            if (typeof Textcomplete === "undefined") {
+                throw new Error('Yuku TextComplete is required')
+            }
+
+            let Textarea = Textcomplete.editors.Textarea
+            let editor = new Textarea(document.getElementById('{{ form.vars.id }}'))
+            let textcomplete = new Textcomplete(editor)
+            textcomplete.register([{
+                    // Link strategy for image
+                    match: /(.*)\[\[file\:([^\]]+)$/,
+                    search: function (term, callback) {
+                        fetch('{{ path('app_picture_search') }}' + '?q=' + term)
+                                .then((response) => {
+                                    return response.json()
+                                })
+                                .then((data) => {
+                                    callback(data)
+                                })
+                    },
+                    replace: function (value) {
+                        return '$1[[file:' + value + ']] '
+                    },
+                    template: function (key, value) {
+                        return '<img src="/picture/get/' + key + '"/>'
+                    }
+                },
+                {
+                    // Link strategy for Vertex
+                    match: /(.*)\[\[([^\]]+)$/,
+                    search: function (term, callback) {
+                        fetch('{{ path('app_vertexcrud_search') }}' + '?q=' + term)
+                                .then((response) => {
+                                    return response.json()
+                                })
+                                .then((data) => {
+                                    callback(data)
+                                })
+                    },
+                    replace: function (value) {
+                        return '$1[[' + value + ']] '
+                    }
+                }])
+        })
+    </script>
+{% endblock %}

@@ -13,10 +13,11 @@ use App\Entity\Freeform;
 use App\Entity\Handout;
 use App\Entity\Loveletter;
 use App\Entity\Place;
+use App\Entity\Scene;
+use App\Entity\Timeline;
 use App\Entity\Transhuman;
 use App\Entity\Vertex;
 use App\Repository\HindranceProvider;
-use App\Entity\MapConfig;
 use OutOfBoundsException;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -40,7 +41,8 @@ class SaWoExtension extends AbstractExtension
         Place::class => 'place/row.html.twig',
         Loveletter::class => 'loveletter/row.html.twig',
         Handout::class => 'handout/row.html.twig',
-        MapConfig::class => 'voronoi/row.html.twig'
+        Scene::class => 'scene/row.html.twig',
+        Timeline::class => 'timeline/row.html.twig',
     ];
     const showTemplate = [
         Ali::class => 'npc/ali/show.html.twig',
@@ -50,7 +52,8 @@ class SaWoExtension extends AbstractExtension
         Place::class => 'place/show.html.twig',
         Loveletter::class => 'loveletter/show.html.twig',
         Handout::class => 'handout/show.html.twig',
-        MapConfig::class => 'voronoi/show.html.twig'
+        Scene::class => 'scene/show.html.twig',
+        Timeline::class => 'timeline/show.html.twig',
     ];
 
     public function getFunctions(): array

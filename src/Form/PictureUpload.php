@@ -40,11 +40,15 @@ class PictureUpload extends AbstractType
                 ->add('upload', SubmitType::class);
     }
 
-    protected function getVertexTitle(): iterable
+    protected function getVertexTitle(): array
     {
+        // we need a flat array and not a generator since this widget could be embedded in collection
+        $choice = [];
         foreach ($this->repository->findAll() as $vertex) {
-            yield $vertex->getTitle();
+            $choice[] = $vertex->getTitle();
         }
+
+        return $choice;
     }
 
 }

@@ -8,6 +8,7 @@ namespace App\Repository;
 
 use App\Entity\Ali;
 use App\Entity\Freeform;
+use App\Entity\Timeline;
 use App\Entity\Transhuman;
 use App\Entity\Vertex;
 use DomainException;
@@ -229,24 +230,39 @@ class VertexRepository extends DefaultRepository
         );
     }
 
-    public function exploreGraph(string $title, array $carry = [], int $level = 2): array
+    /**
+     * Starts from an instance of Timeline and recursively explores all adjacent neighbours (inbound and outbound)
+     * until it reaches another Timeline instance or it crosses a given number of edges.
+     * Imagine the whole digraph is partitioned into multiple trees (where roots are Timeline) and 
+     * some branches are connected between some trees.
+     * @param Timeline $vertex the starting point
+     * @param int $level how many edges before stopping exploration of the digraph
+     * @return array an array of Vertex of all close neighbours (unordered)
+     */
+    public function exploreTreeFrom(Timeline $vertex, int $level = 2): array
     {
-        $vertex = $this->findByTitle($title);
+        $carry = [];
+        $this->recursionExploreTimeline($vertex, $level, $carry);
 
-        if (is_null($vertex)) {
-            return $carry;
-        }
+        return $carry;
+    }
 
-        $carry[] = $title;
+    // the recursion for the above method
+    private function recursionExploreTimeline(Vertex $vertex, int $level, array &$carry): void
+    {
+        $title = $vertex->getTitle();
+        $carry[$title] = $vertex;
 
         if ($level > 0) {
-            $newFriends = array_unique(array_merge($vertex->getInternalLink(), $this->searchByBacklinks($title)));
-            foreach ($newFriends as $item) {
-                $carry = $this->exploreGraph($item, $carry, $level - 1);
+            $neighbours = array_unique(array_merge($vertex->getInternalLink(), $this->searchByBacklinks($title)));
+            foreach ($neighbours as $neighbour) {
+                // optim : do not fetch vertex already fetched but we must continue exploring since the current distance for this path could be shorter than a previous path
+                $item = key_exists($neighbour, $carry) ? $carry[$neighbour] : $this->findByTitle($neighbour);
+                if (!is_null($item) && !($item instanceof Timeline)) {
+                    $this->recursionExploreTimeline($item, $level - 1, $carry);
+                }
             }
         }
-
-        return array_unique($carry);
     }
 
 }

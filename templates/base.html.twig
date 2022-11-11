@@ -18,7 +18,7 @@
         {% set navigation = [
             {key: 'f1', route: 'app_vertexcrud_list', icon: 'list', label: 'Liste Vertex'},
             {key: 'f2', route: 'app_npcgenerator_create', icon: 'user-plus', label: 'Créer Transhumain'},
-            {key: 'f3', route: 'app_vertexcrud_create', icon: 'video', label: 'Créer Scénario'},
+            {key: 'f3', route: 'app_scenecrud_create', icon: 'video', label: 'Créer Scène'},
             {key: 'f4', route: 'app_placecrud_create', icon: 'place', label: 'Créer Décor'},
             {key: 'f6', route: 'app_remotepicture_search', icon: 'search', label: 'Recherche images'},
             {key: 'f7', route: 'app_gmhelper_namegenerate', icon: 'namebook', label: 'Générateur de noms'},
@@ -47,7 +47,13 @@
                             </ul>
                         </nav>
                         <section class="info">
-                            {% block info %}{% endblock %}
+                            {% block info %}
+                                {% if app.session.get('pinned_timeline') is not empty %}
+                                    {% set current_scenario = app.session.get('pinned_timeline') %}
+                                    <a href="{{ path('app_wiki', {title: current_scenario.title}) }}">{{ current_scenario.title }}</a>
+                                    {{ render(controller('App\\Controller\\TimelineCrud::tree', {root: current_scenario, mode: 'toc'})) }}
+                                {% endif %}
+                            {% endblock %}
                         </section>
                     {% endblock %}
                 </aside>

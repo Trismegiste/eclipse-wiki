@@ -1,0 +1,28 @@
+{# dump the form for the wikitext content #}
+{# WARNING : DO NOT FORMAT THIS TEMPLATE OR YOU'LL ADD SOME WHITESPACES THAT MATTER IN WIKITEXT FORMAT #}
+==Décor==
+[[{{ place|raw }}]]
+
+==Ambiance==
+{{ ambience|raw }}
+
+==Personnages==
+{% for name in npc %}
+* [[{{ name|raw }}]]
+{% endfor %}
+
+{% if prerequisite is not empty %}
+==Prérequis==
+{{ prerequisite|raw }}
+{% endif %}
+
+==Événements==
+{{ event|raw }}
+
+==Enjeu/Conséquences==
+{{ outcome|raw }}
+
+{% if append_timeline is not empty %}
+==Scénario==
+Scène incluse dans [[{{ append_timeline|raw }}]]
+{% endif %}

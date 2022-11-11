@@ -10,7 +10,6 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {{ include('fragment/init_autocomplete.html.twig', {element_id:'place_content'}) }}
     <script>
         document.getElementById('place_title').focus()
     </script>

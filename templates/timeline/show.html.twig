@@ -1,0 +1,24 @@
+{% extends "vertex/show.html.twig" %}
+
+{% block header_title %}
+    <nav style="float: right">
+        {{ include('timeline/actions.html.twig') }}
+    </nav>   
+    {{ vertex.title }}
+{% endblock %}
+
+{% block content %}
+    <div class="pure-g">
+        <div class="pure-u-3-4">
+            {{ wiki(vertex.content) }}
+        </div>
+        <div class="pure-u-1-4">
+            {{ render(controller('App\\Controller\\TimelineCrud::tree', {root: vertex})) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block info %}
+<a href="{{ path('app_timelinecrud_pin', {pk: vertex.pk}) }}" class="pure-button"><i class="icon-menu"></i>Épingler ce scenario</a>
+{% endblock %}
+

@@ -8,6 +8,7 @@ twig:
         - 'form/cropper_type.html.twig'
         - 'form/autocomplete.html.twig'
         - 'form/hashtag.html.twig'
+        - 'form/wikitext.html.twig'
 
 when@test:
     twig:
