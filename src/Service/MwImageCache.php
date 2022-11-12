@@ -49,7 +49,7 @@ class MwImageCache implements CacheWarmerInterface, CacheClearerInterface
 
     public function clear(string $cacheDir)
     {
-        $this->fs->remove(join_paths($cacheDir, self::subDir));
+  //      $this->fs->remove(join_paths($cacheDir, self::subDir));
     }
 
     public function get(string $url): BinaryFileResponse
