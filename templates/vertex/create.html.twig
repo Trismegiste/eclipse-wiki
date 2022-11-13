@@ -5,30 +5,30 @@
 {% block header_title %}{{ block('title') }}{% endblock %}
 
 {% block content %}
-    {% if from_link %}
+    {% if from_link is not empty %}
         <section>
-            <h2>Peut-être voulez-vous créer</h2>
+            <h2>Voulez-vous créer</h2>
             <div class="pure-g">
                 <div class="pure-u-1-4">
-                    <a href="{{ path('app_scenecrud_create', {title: form.vars.data.title}) }}" class="pure-button">
+                    <a href="{{ path('app_scenecrud_create', {title: from_link}) }}" class="pure-button">
                         <i class="icon-video"></i>                       
                         une Scène ?
                     </a>
                 </div>
                 <div class="pure-u-1-4">
-                    <a href="{{ path('app_npcgenerator_ali', {title: form.vars.data.title}) }}" class="pure-button">
+                    <a href="{{ path('app_npcgenerator_ali', {title: from_link}) }}" class="pure-button">
                         <i class="icon-ali"></i>                       
                         une IAL ?
                     </a>
                 </div>
                 <div class="pure-u-1-4">
-                    <a href="{{ path('app_npcgenerator_create', {title: form.vars.data.title}) }}" class="pure-button">
+                    <a href="{{ path('app_npcgenerator_create', {title: from_link}) }}" class="pure-button">
                         <i class="icon-user-plus"></i>
                         un Transhumain ?
                     </a>
                 </div>
                 <div class="pure-u-1-4">
-                    <a href="{{ path('app_placecrud_create', {title: form.vars.data.title}) }}" class="pure-button">
+                    <a href="{{ path('app_placecrud_create', {title: from_link}) }}" class="pure-button">
                         <i class="icon-place"></i>
                         un Décor ?
                     </a>
@@ -36,14 +36,4 @@
             </div>
         </section>
     {% endif %}
-    <section>
-        {{ form(form) }}
-    </section>
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        document.getElementById('vertex_title').focus()
-    </script>
 {% endblock %}

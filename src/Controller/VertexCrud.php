@@ -65,7 +65,9 @@ class VertexCrud extends GenericCrud
      */
     public function create(Request $request): Response
     {
-        return $this->handleCreate(VertexType::class, 'vertex/create.html.twig', $request);
+        $fromLink = $request->query->get('title');
+
+        return $this->render('vertex/create.html.twig', ['from_link' => $fromLink]);
     }
 
     /**
@@ -186,7 +188,7 @@ class VertexCrud extends GenericCrud
 
     protected function createEntity(string $title): Vertex
     {
-        return new Vertex($title);
+        throw new \LogicException('Cannot create abstract vertex ' . $title);
     }
 
     /**

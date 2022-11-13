@@ -7,157 +7,138 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class VertexCrudTest extends WebTestCase
 {
 
-    public function testClean()
+    protected $client;
+    protected \App\Repository\VertexRepository $repository;
+
+    protected function setUp(): void
     {
-        $client = static::createClient();
-        $repo = static::getContainer()->get(\App\Repository\VertexRepository::class);
-        $repo->delete(iterator_to_array($repo->search()));
-        $this->assertCount(0, iterator_to_array($repo->search()));
+        $this->client = static::createClient();
+        $this->repository = static::getContainer()->get(\App\Repository\VertexRepository::class);
     }
 
-    public function testCreate(): void
+    public function testClean()
     {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/vertex/create');
-        $this->assertResponseIsSuccessful();
+        $this->repository->delete(iterator_to_array($this->repository->search()));
+        $this->assertCount(0, iterator_to_array($this->repository->search()));
+    }
+
+    public function getVertexFqcn(): array
+    {
+        return [
+            [\App\Entity\Timeline::class],
+            [\App\Entity\Scene::class],
+            [\App\Entity\Scene::class],
+        ];
+    }
+
+    /** @dataProvider getVertexFqcn */
+    public function testEdit(string $fqcn)
+    {
+        $vertex = new $fqcn('TestVertex' . rand());
+        $this->repository->save($vertex);
+
+        $crawler = $this->client->request('GET', '/vertex/edit/' . $vertex->getPk());
         $form = $crawler->selectButton('vertex_create')->form();
-        $form->setValues(['vertex' => [
-                'title' => 'A title',
-                'content' => 'Some [[link1234]]'
-        ]]);
-        $crawler = $client->submit($form);
+        $form['vertex[content]'] = 'New content [[file:abcd.png]]';
+        $crawler = $this->client->submit($form);
         $this->assertResponseRedirects();
-        $client->followRedirect();
+        $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
+        usleep(1000);
     }
 
     public function testCreateWithTitle(): void
     {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/vertex/create?title=yolo');
+        $this->client->request('GET', '/vertex/create?title=yolo');
         $this->assertResponseIsSuccessful();
-        $form = $crawler->selectButton('vertex_create')->form();
-        $this->assertEquals('Yolo', $form['vertex']['title']->getValue());
+        $this->assertSelectorExists('.icon-video');
+        $this->assertSelectorExists('.icon-ali');
+        $this->assertSelectorExists('.icon-user-plus');
+        $this->assertSelectorExists('.icon-place');
     }
 
     public function testList(): void
     {
-        $client = static::createClient();
-        $client->request('GET', '/vertex/filter');
+        $this->client->request('GET', '/vertex/filter');
         $this->assertResponseIsSuccessful();
     }
 
     public function testShow()
     {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/vertex/filter');
+        $crawler = $this->client->request('GET', '/vertex/filter');
         $url = $crawler->filterXPath('//nav/a/i[@class="icon-eye"]/parent::a')->attr('href');
-        $crawler = $client->request('GET', $url);
-        $this->assertPageTitleContains('A title');
-    }
-
-    public function testEdit()
-    {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/vertex/filter');
-        $url = $crawler->filterXPath('//nav/a/i[@class="icon-edit"]/parent::a')->attr('href');
-
-        $crawler = $client->request('GET', $url);
-        $form = $crawler->selectButton('vertex_create')->form();
-        $form['vertex[content]'] = 'New content [[file:abcd.png]]';
-        $crawler = $client->submit($form);
-        $this->assertResponseRedirects();
-        $client->followRedirect();
+        $crawler = $this->client->request('GET', $url);
+        $this->assertPageTitleContains('TestVertex');
     }
 
     public function testSearch()
     {
-        $client = static::createClient();
-        $client->request('GET', '/vertex/search?q=A');
-        $choice = json_decode($client->getResponse()->getContent());
-        $this->assertCount(1, $choice);
-        $this->assertEquals('A title', $choice[0]);
+        $this->client->request('GET', '/vertex/search?q=test');
+        $choice = json_decode($this->client->getResponse()->getContent());
+        $this->assertCount(3, $choice);
+        $this->assertStringStartsWith('TestVertex', $choice[1]);
+
+        return $choice[1];
     }
 
-    public function testShowByTitle()
+    /** @depends testSearch */
+    public function testShowByTitle(string $title)
     {
-        $client = static::createClient();
-        $client->request('GET', '/wiki/A title');
+        $crawler = $this->client->request('GET', '/wiki/' . $title);
         $this->assertResponseIsSuccessful();
-    }
 
-    public function testShowNewDocument()
-    {
-        $client = static::createClient();
-        $client->request('GET', '/wiki/Unknown');
-        $this->assertResponseRedirects();
-    }
-
-    public function testTopBarMenuLink()
-    {
-        $client = static::createClient();
-        for ($k = 0; $k < 3; $k++) {
-            $crawler = $client->request('GET', '/vertex/create');
-            $form = $crawler->selectButton('vertex_create')->form();
-            $client->submit($form, ['vertex' => [
-                    'title' => "vertex$k",
-                    'content' => 'contenu ' . $k
-            ]]);
-            $this->assertResponseRedirects();
-        }
-
-        // navigation
-        $crawler = $client->request('GET', '/wiki/vertex1');
-        $this->assertResponseIsSuccessful();
         $url = $crawler->filterXPath('//nav/a/i[@class="icon-eye"]/parent::a')->attr('href');
-        $crawler = $client->request('GET', $url);
-        $this->assertPageTitleContains('vertex1');
-        $pk = $client->getRequest()->get('pk');
+        $crawler = $this->client->request('GET', $url);
+        $this->assertPageTitleContains('TestVertex');
+        $pk = $this->client->getRequest()->get('pk');
 
         return $pk;
     }
 
-    /** @depends testTopBarMenuLink */
+    public function testShowNewDocument()
+    {
+        $this->client->request('GET', '/wiki/Unknown');
+        $this->assertResponseRedirects();
+    }
+
+    /** @depends testShowByTitle */
     public function testNavigationPrevious(string $pk)
     {
-        $client = static::createClient();
-        $client->request('GET', '/vertex/previous/' . $pk);
-        $this->assertPageTitleContains('vertex2');
+        $this->client->request('GET', '/vertex/previous/' . $pk);
+        $this->assertPageTitleContains('TestVertex');
     }
 
-    /** @depends testTopBarMenuLink */
+    /** @depends testShowByTitle */
     public function testNavigationNext(string $pk)
     {
-        $client = static::createClient();
-        $client->request('GET', '/vertex/next/' . $pk);
-        $this->assertPageTitleContains('vertex0');
+        $this->client->request('GET', '/vertex/next/' . $pk);
+        $this->assertPageTitleContains('TestVertex');
     }
 
-    public function testRename()
+    /** @depends testShowByTitle */
+    public function testRename(string $pk)
     {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/wiki/vertex0');
+        $crawler = $this->client->request('GET', '/vertex/show/' . $pk);
         $this->assertResponseIsSuccessful();
         $url = $crawler->filterXPath('//nav/a/i[@class="icon-rename"]/parent::a')->attr('href');
-        $crawler = $client->request('GET', $url);
+        $crawler = $this->client->request('GET', $url);
         $form = $crawler->selectButton('form_rename')->form();
-        $form['form[title]'] = 'vertex3';
-        $crawler = $client->submit($form);
+        $form['form[title]'] = 'Renamed';
+        $crawler = $this->client->submit($form);
         $this->assertResponseRedirects();
-        $client->followRedirect();
-        $this->assertPageTitleContains('vertex3');
+        $this->client->followRedirect();
+        $this->assertPageTitleContains('Renamed');
     }
 
-    public function testDelete()
+    /** @depends testShowByTitle */
+    public function testDelete(string $pk)
     {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/vertex/filter');
-        $url = $crawler->filterXPath('//nav/a/i[@class="icon-trash-empty"]/parent::a')->attr('href');
-
-        $crawler = $client->request('GET', $url);
+        $crawler = $this->client->request('GET', '/vertex/delete/' . $pk);
         $form = $crawler->selectButton('form_delete')->form();
-        $crawler = $client->submit($form);
+        $this->client->submit($form);
         $this->assertResponseRedirects();
-        $client->followRedirect();
+        $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
     }
 
 }
