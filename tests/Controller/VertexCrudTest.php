@@ -52,7 +52,6 @@ class VertexCrudTest extends WebTestCase
         $this->client->request('GET', '/vertex/create?title=yolo');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('.icon-video');
-        $this->assertSelectorExists('.icon-ali');
         $this->assertSelectorExists('.icon-user-plus');
         $this->assertSelectorExists('.icon-place');
     }

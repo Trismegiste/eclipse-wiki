@@ -38,7 +38,7 @@ class MwImageCache implements CacheWarmerInterface, CacheClearerInterface
     public function warmUp(string $cacheDir): array
     {
         $this->fs->mkdir(join_paths($cacheDir, self::subDir));
-        
+
         return [];
     }
 
@@ -49,7 +49,13 @@ class MwImageCache implements CacheWarmerInterface, CacheClearerInterface
 
     public function clear(string $cacheDir)
     {
-  //      $this->fs->remove(join_paths($cacheDir, self::subDir));
+        $folder = join_paths($cacheDir, self::subDir);
+        if (is_dir($folder)) {
+            $iter = new Finder();
+            $iter->in($folder)->files();
+
+            $this->fs->remove($iter);
+        }
     }
 
     public function get(string $url): BinaryFileResponse
