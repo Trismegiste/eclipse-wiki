@@ -41,10 +41,7 @@ class VertexType extends AbstractType
     {
         $resolver->setDefaults([
             'edit' => false,
-            'data_class' => Vertex::class,
-            'empty_data' => function (FormInterface $form) {
-                return new Vertex($form->get('title')->getData());
-            }
+            'data_class' => Vertex::class
         ]);
     }
 

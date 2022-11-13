@@ -34,7 +34,7 @@ class VertexRepositoryTest extends KernelTestCase
 
     public function testBacklinks()
     {
-        $doc = new Vertex('one doc');
+        $doc = new Scene('one doc');
         $doc->setContent('some [[backlink]].');
         $this->sut->save($doc);
 
@@ -47,11 +47,11 @@ class VertexRepositoryTest extends KernelTestCase
     public function testPrevious()
     {
         usleep(Import::delayForTimestamp); // delay to get two different typestamps
-        $doc = new Vertex('doc 2');
+        $doc = new Scene('doc 2');
         $this->sut->save($doc);
         $pk = $doc->getPk();
         usleep(Import::delayForTimestamp); // delay to get two different typestamps
-        $doc = new Vertex('doc 3');
+        $doc = new Scene('doc 3');
         $this->sut->save($doc);
 
         $found = $this->sut->searchPreviousOf($pk);
@@ -70,7 +70,7 @@ class VertexRepositoryTest extends KernelTestCase
 
     public function testRenameTitle()
     {
-        $doc = new Vertex('Backlink');
+        $doc = new Scene('Backlink');
         $this->sut->save($doc);
 
         $modified = $this->sut->renameTitle('Backlink', 'Newlink');

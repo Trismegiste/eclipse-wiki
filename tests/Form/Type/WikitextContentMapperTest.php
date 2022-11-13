@@ -4,7 +4,7 @@
  * eclipse-wiki
  */
 
-use App\Entity\Vertex;
+use App\Entity\Scene;
 use App\Form\Type\WikitextContentMapper;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
@@ -44,7 +44,7 @@ class WikitextContentMapperTest extends TestCase
                 ->method('render')
                 ->willReturn('content');
 
-        $obj = new Vertex('old');
+        $obj = new Scene('old');
         $this->sut->mapFormsToData(new ArrayIterator([]), $obj);
         $this->assertEquals('content', $obj->getContent());
     }

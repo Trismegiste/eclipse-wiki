@@ -9,7 +9,7 @@ namespace App\Entity;
 /**
  * A generic document or node 
  */
-class Vertex implements \Trismegiste\Strangelove\MongoDb\Root, Archivable
+abstract class Vertex implements \Trismegiste\Strangelove\MongoDb\Root, Archivable
 {
 
     use \Trismegiste\Strangelove\MongoDb\RootImpl;

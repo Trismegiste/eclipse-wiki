@@ -14,7 +14,7 @@ class VertexTest extends PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->sut = new App\Entity\Vertex('yolo');
+        $this->sut = $this->getMockForAbstractClass(App\Entity\Vertex::class, ['yolo']);
     }
 
     public function testTitle()
@@ -35,7 +35,7 @@ class VertexTest extends PHPUnit\Framework\TestCase
 
     public function testCategory()
     {
-        $this->assertEquals('vertex', $this->sut->getCategory());
+        $this->assertStringStartsWith('mock', $this->sut->getCategory());
     }
 
     public function testExtractPicture()
