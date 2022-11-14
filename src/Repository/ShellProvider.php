@@ -13,7 +13,7 @@ use DOMDocument;
 use Symfony\Contracts\Cache\ItemInterface;
 
 /**
- * Description of ShellProvider
+ * Provider for shells
  */
 class ShellProvider extends CachedProvider
 {

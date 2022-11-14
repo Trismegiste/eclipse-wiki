@@ -6,13 +6,17 @@
 
 namespace App\Entity;
 
+use MongoDB\BSON\UTCDateTime;
+use Trismegiste\Strangelove\MongoDb\Root;
+use Trismegiste\Strangelove\MongoDb\RootImpl;
+
 /**
  * A generic document or node 
  */
-abstract class Vertex implements \Trismegiste\Strangelove\MongoDb\Root, Archivable
+abstract class Vertex implements Root, Archivable
 {
 
-    use \Trismegiste\Strangelove\MongoDb\RootImpl;
+    use RootImpl;
     use ArchivableImpl;
 
     protected string $title;
@@ -21,7 +25,7 @@ abstract class Vertex implements \Trismegiste\Strangelove\MongoDb\Root, Archivab
 
     protected function beforeSave(): void
     {
-        $this->lastModified = new \MongoDB\BSON\UTCDateTime();
+        $this->lastModified = new UTCDateTime();
     }
 
     public function __construct(string $str)

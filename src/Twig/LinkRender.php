@@ -11,7 +11,7 @@ use Mike42\Wikitext\HtmlRenderer;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * Description of LinkRender
+ * LinkRender is an implementation of a WikiText renderer with internal links and local files
  */
 class LinkRender extends HtmlRenderer
 {

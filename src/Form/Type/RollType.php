@@ -11,7 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Description of RollType
+ * this is a roll with difficulty
  */
 class RollType extends AbstractType
 {

@@ -10,6 +10,7 @@ use Twig\Environment;
 
 /**
  * Port of https://github.com/boringdesigners/boring-avatars
+ * Changes : far better use of the seed
  */
 class BoringAvatar
 {

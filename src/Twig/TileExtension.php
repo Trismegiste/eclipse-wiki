@@ -10,6 +10,9 @@ use App\Repository\TileProvider;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
+/**
+ * SVG Tile renderer for embedding in twig
+ */
 class TileExtension extends AbstractExtension
 {
 

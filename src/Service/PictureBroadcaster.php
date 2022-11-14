@@ -19,7 +19,7 @@ use SplObjectStorage;
 use function join_paths;
 
 /**
- * Server
+ * Websocket Server
  */
 class PictureBroadcaster implements MessageComponentInterface
 {

@@ -12,9 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Description of PictogramType
- *
- * @author florent
+ * A choice of Pictogram (a SVG for battlemaps)
  */
 class PictogramType extends AbstractType
 {

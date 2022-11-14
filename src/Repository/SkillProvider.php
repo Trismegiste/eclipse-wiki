@@ -11,7 +11,7 @@ use App\Entity\MediaWikiPage;
 use App\Entity\Skill;
 
 /**
- * Description of SkillProvider
+ * Provider for skills
  */
 class SkillProvider extends MongoDbProvider
 {

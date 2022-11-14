@@ -10,7 +10,7 @@ use MongoDB\BSON\Persistable;
 use Trismegiste\Strangelove\MongoDb\PersistableImpl;
 
 /**
- * Background for a NPC
+ * Background for a transhuman
  */
 class Background implements Indexable, Persistable
 {

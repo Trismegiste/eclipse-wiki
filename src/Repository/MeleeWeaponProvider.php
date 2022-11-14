@@ -12,7 +12,7 @@ use App\Entity\MeleeWeapon;
 use Trismegiste\Strangelove\MongoDb\Repository;
 
 /**
- * MeleeWeaponProvider
+ * Provider for melee weapons
  */
 class MeleeWeaponProvider implements GenericProvider
 {

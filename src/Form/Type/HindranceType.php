@@ -6,30 +6,34 @@
 
 namespace App\Form\Type;
 
-use App\Entity\Edge;
-use App\Repository\EdgeProvider;
+use App\Entity\Hindrance;
+use App\Repository\HindranceProvider;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\DataMapperInterface;
+use Symfony\Component\Form\Exception\UnexpectedTypeException;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Traversable;
 
 /**
  * Choice for an Hindrance
  */
-class HindranceType extends AbstractType implements \Symfony\Component\Form\DataMapperInterface
+class HindranceType extends AbstractType implements DataMapperInterface
 {
 
     protected $repository;
 
-    public function __construct(\App\Repository\HindranceProvider $repo)
+    public function __construct(HindranceProvider $repo)
     {
         $this->repository = $repo;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefault('data_class', \App\Entity\Hindrance::class);
+        $resolver->setDefault('data_class', Hindrance::class);
         $resolver->setDefault('expanded', false);
         $resolver->setDefault('empty_data', function (FormInterface $form) {
             return $this->repository->findOne($form->get('name')->getData());
@@ -40,11 +44,11 @@ class HindranceType extends AbstractType implements \Symfony\Component\Form\Data
     {
         $builder
                 ->add('name', HiddenType::class, ['mapped' => 0])
-                ->add('origin', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+                ->add('origin', ChoiceType::class, [
                     'choices' => $this->getOrigin(),
                     'expanded' => $options['expanded']
                 ])
-                ->add('level', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+                ->add('level', ChoiceType::class, [
                     'choices' => [
                         'Mineur' => 1,
                         'Majeur' => 2
@@ -68,7 +72,7 @@ class HindranceType extends AbstractType implements \Symfony\Component\Form\Data
         return array_combine($src, $src);
     }
 
-    public function mapDataToForms($viewData, \Traversable $forms)
+    public function mapDataToForms($viewData, Traversable $forms)
     {
         // there is no data yet, so nothing to prepopulate
         if (null === $viewData) {
@@ -76,8 +80,8 @@ class HindranceType extends AbstractType implements \Symfony\Component\Form\Data
         }
 
         // invalid data type
-        if (!$viewData instanceof \App\Entity\Hindrance) {
-            throw new \Symfony\Component\Form\Exception\UnexpectedTypeException($viewData, \App\Entity\Hindrance::class);
+        if (!$viewData instanceof Hindrance) {
+            throw new UnexpectedTypeException($viewData, Hindrance::class);
         }
 
         /** @var FormInterface[] $forms */
@@ -89,7 +93,7 @@ class HindranceType extends AbstractType implements \Symfony\Component\Form\Data
         $forms['level']->setData($viewData->getLevel());
     }
 
-    public function mapFormsToData(\Traversable $forms, &$edge)
+    public function mapFormsToData(Traversable $forms, &$edge)
     {
         /** @var FormInterface[] $forms */
         $forms = iterator_to_array($forms);

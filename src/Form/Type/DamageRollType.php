@@ -13,6 +13,9 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
+/**
+ * A set dice to roll
+ */
 class DamageRollType extends AbstractType implements DataTransformerInterface
 {
 
@@ -53,7 +56,7 @@ class DamageRollType extends AbstractType implements DataTransformerInterface
         // not sure why but it works 
         // Since it's a TextType, internal data is string typed. So far so good.
         // But strangley this option is not needed but in web ?!? Only in func test
-        $resolver->setDefault('data_class', null); 
+        $resolver->setDefault('data_class', null);
     }
 
 }

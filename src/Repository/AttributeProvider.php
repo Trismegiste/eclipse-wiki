@@ -13,7 +13,7 @@ use DOMDocument;
 use Symfony\Contracts\Cache\ItemInterface;
 
 /**
- * Provider for Provider
+ * Provider for Attributes
  */
 class AttributeProvider extends CachedProvider
 {

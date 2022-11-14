@@ -12,7 +12,7 @@ use App\Entity\Armor;
 use Trismegiste\Strangelove\MongoDb\Repository;
 
 /**
- * ArmorProvider
+ * Provider for armours
  */
 class ArmorProvider implements GenericProvider
 {

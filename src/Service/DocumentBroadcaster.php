@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function join_paths;
 
 /**
- * Description of DocumentBroadcaster
+ * Generates and exposes PDF for public access
  */
 class DocumentBroadcaster
 {

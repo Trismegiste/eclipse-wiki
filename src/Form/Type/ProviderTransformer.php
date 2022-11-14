@@ -12,9 +12,7 @@ use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
 /**
- * Description of ProviderTransformer
- *
- * @author flo
+ * foreign key transformer
  */
 class ProviderTransformer implements DataTransformerInterface
 {

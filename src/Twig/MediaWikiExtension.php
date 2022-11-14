@@ -7,7 +7,7 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 /**
- * Description of MediaWikiExtension
+ * Aggregator of rendered wikitext pages
  */
 class MediaWikiExtension extends AbstractExtension
 {

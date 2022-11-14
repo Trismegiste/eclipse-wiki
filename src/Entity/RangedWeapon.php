@@ -7,7 +7,7 @@
 namespace App\Entity;
 
 /**
- * Description of RangedWeapon
+ * a Ranged Weapon
  */
 class RangedWeapon extends Weapon
 {

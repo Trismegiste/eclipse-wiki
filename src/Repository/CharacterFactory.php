@@ -17,7 +17,7 @@ use App\Entity\Transhuman;
 use RuntimeException;
 
 /**
- * Description of CharacterFactory
+ * Builder for characters
  */
 class CharacterFactory
 {

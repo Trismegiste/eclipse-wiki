@@ -7,7 +7,7 @@
 namespace App\Entity;
 
 /**
- * Description of MeleeWeapon
+ * a Melee Weapon
  */
 class MeleeWeapon extends Weapon
 {

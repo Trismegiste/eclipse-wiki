@@ -7,9 +7,8 @@
 namespace App\Entity;
 
 /**
- * Is entity archivable ?
+ * Is entity archivable ? Implementation
  */
-
 trait ArchivableImpl
 {
 

@@ -7,9 +7,7 @@
 namespace App\Entity;
 
 /**
- * Description of Freeform
- *
- * @author flo
+ * a free form character : no faction, no shell, nor background
  */
 class Freeform extends Character
 {
