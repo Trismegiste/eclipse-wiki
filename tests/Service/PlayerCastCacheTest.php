@@ -44,4 +44,11 @@ class PlayerCastCacheTest extends KernelTestCase
         $this->assertInstanceOf(SplFileInfo::class, $slim);
     }
 
+    public function testClearCache()
+    {
+        $cacheDir = static::$kernel->getCacheDir();
+        $this->sut->clear($cacheDir);
+        $this->assertTrue(true);
+    }
+
 }

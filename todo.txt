@@ -1,3 +1,1 @@
 * Le show de Timeline ajoute une fonctionnalité AJAX qui permet de barrer un élement <LI> de la liste timeline
-* faire une action dans TimelineCrud qui permet de stocker en SESSION la timeline courante
-* dans le block aside gauche "info", on ajoute la liste des Scene en partant de la Timeline en session (si elle existe)
