@@ -38,15 +38,15 @@ class Export extends Command
 
     public function configure()
     {
-        $this->addArgument('target', InputArgument::REQUIRED, 'Target zip file');
+        $this->addArgument('target', InputArgument::OPTIONAL, 'Target zip file');
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        $filename = $input->getArgument('target');
-        $io = new SymfonyStyle($input, $output);
-        
         $env = $this->getApplication()->getKernel()->getEnvironment();
+        $filename = $input->getArgument('target') ?: "eclipse-wiki-$env.zip";
+
+        $io = new SymfonyStyle($input, $output);
         $io->title("Export '$env' environment to '$filename' file");
 
         $iter = $this->repo->sortedExport();
