@@ -23,13 +23,15 @@ class CharacterFactory
 {
 
     protected $attributes = [];
+    protected $moodRepository;
 
-    public function __construct(TraitProvider $pro, int $attrCount = 5)
+    public function __construct(TraitProvider $pro, FlatRepository $moodRepo, int $attrCount = 5)
     {
         $this->attributes = array_values($pro->findAttributes());
         if (count($this->attributes) !== $attrCount) {
             throw new RuntimeException("Invalid Attributes count");
         }
+        $this->moodRepository = $moodRepo;
     }
 
     public function create(string $title, Background $bg, Faction $fac): Character
@@ -79,10 +81,15 @@ class CharacterFactory
     {
         $name = $template->getTitle();
         $npc = clone $template;
+        $npc->setTitle($newName);
         $npc->surnameLang = null;
         $npc->wildCard = false;
-        $npc->setContent("C'est un [[$name]]");
-        $npc->setTitle($newName);
+        $content = "C'est un [[$name]]. ";
+
+        $mood = $this->moodRepository->findAll('adjective');
+        shuffle($mood);
+        $content .= "Sa personnalité est " . $mood[0] . ' et ' . $mood[1] . ".\n\n";
+        $npc->setContent($content);
 
         return $npc;
     }
