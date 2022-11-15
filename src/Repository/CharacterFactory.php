@@ -34,6 +34,13 @@ class CharacterFactory
         $this->moodRepository = $moodRepo;
     }
 
+    /**
+     * Creates a transhuman
+     * @param string $title
+     * @param Background $bg
+     * @param Faction $fac
+     * @return Character
+     */
     public function create(string $title, Background $bg, Faction $fac): Character
     {
         $obj = new Transhuman($title, $bg, $fac);
@@ -42,6 +49,11 @@ class CharacterFactory
         return $obj;
     }
 
+    /**
+     * Creates an ALI
+     * @param string $title
+     * @return Character
+     */
     public function createAli(string $title): Character
     {
         $char = new Ali($title);
@@ -60,6 +72,12 @@ class CharacterFactory
         }
     }
 
+    /**
+     * Creates a freeform character
+     * @param string $title
+     * @param string $type
+     * @return Character
+     */
     public function createFreeform(string $title, string $type): Character
     {
         $char = new Freeform($title);
@@ -77,6 +95,12 @@ class CharacterFactory
         return $char;
     }
 
+    /**
+     * Creates a new transhuman extra from a transhuman template. Resets contents and surnameLang
+     * @param Transhuman $template
+     * @param string $newName
+     * @return Transhuman
+     */
     public function createExtraFromTemplate(Transhuman $template, string $newName): Transhuman
     {
         $name = $template->getTitle();
