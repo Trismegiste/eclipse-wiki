@@ -1,3 +1,4 @@
+# TODO
 * Le show de Timeline ajoute une fonctionnalité AJAX qui permet de barrer un élement <LI> de la liste timeline
 * full text search
 * Artefact entity ?

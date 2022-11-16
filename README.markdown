@@ -22,7 +22,7 @@ GM have to generate a lot of these profiles anytime PCs encountered a new NPC.
 
 ## How
 With Symfony 5.4, MongoDb 4+ and a mediawiki from Fandom. It uses AlpineJs, PureCSS, SvgJs and many javascript components (frozen in the app, since
-javascript ecosystem is an insane nuclear chaos).
+javascript ecosystem is an insane nuclear chaos where BC is unknown concept).
 
 ## Where
 Run this app anywhere with :

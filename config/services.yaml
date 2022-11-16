@@ -39,9 +39,6 @@ services:
     App\Repository\VertexRepository:
         $collectionName: 'vertex'
 
-    App\Repository\CharacterFactory:
-        $moodRepo: '@app.mood.repository'
-
     # CLI
     App\Command\CheckDatabase:
         $dbName: '%mongodb.dbname%'
@@ -99,6 +96,7 @@ services:
         class: App\Repository\YamlRepository
         arguments:
             $path: '%kernel.project_dir%/database/npc_traits.yml'
+    App\Repository\FlatRepository $moodRepo: '@app.mood.repository'
 
     # Picture
     App\Service\AvatarMaker:
