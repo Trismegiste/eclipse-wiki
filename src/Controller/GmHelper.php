@@ -61,9 +61,7 @@ class GmHelper extends AbstractController
     public function tracker(VertexRepository $repo, NetTools $ntools): Response
     {
         $listing = $repo->findByClass([Ali::class, Freeform::class, Transhuman::class]);
-
-        $url = $this->generateUrl('app_tracker_show', [], UrlGeneratorInterface::ABSOLUTE_URL);
-        $lan = preg_replace('#//localhost#', '//' . $ntools->getLocalIp(), $url); // @todo hardcoded config
+        $lan = $ntools->generateUrlForExternalAccess('app_tracker_show');
 
         return $this->render('tracker/qrcode.html.twig', ['listing' => $listing, 'url_tracker' => $lan]);
     }
@@ -74,8 +72,7 @@ class GmHelper extends AbstractController
      */
     public function qrCode(NetTools $ntools): Response
     {
-        $url = $this->generateUrl('app_playercast_view', [], UrlGeneratorInterface::ABSOLUTE_URL);
-        $lan = preg_replace('#//localhost#', '//' . $ntools->getLocalIp(), $url); // @todo hardcoded config
+        $lan = $ntools->generateUrlForExternalAccess('app_playercast_view');
 
         return $this->render('player/qrcode.html.twig', ['url_cast' => $lan]);
     }
