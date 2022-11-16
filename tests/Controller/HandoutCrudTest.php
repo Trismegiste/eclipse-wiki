@@ -40,6 +40,7 @@ class HandoutCrudTest extends WebTestCase
         $this->client->submit($form);
         $this->assertResponseRedirects();
         $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
     }
 
     public function testCreateWithTitle()
@@ -62,6 +63,7 @@ class HandoutCrudTest extends WebTestCase
     public function testShow(string $show)
     {
         $crawler = $this->client->request('GET', $show);
+        $this->assertResponseIsSuccessful();
         $this->assertPageTitleContains('Handout1');
         $url = $crawler->filterXPath('//nav/a/i[@class="icon-edit"]/parent::a')->attr('href');
 
