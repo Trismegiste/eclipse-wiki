@@ -4,6 +4,7 @@
  * eclipse-wiki
  */
 
+use App\Entity\Scene;
 use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -11,27 +12,32 @@ class TimelineCrudTest extends WebTestCase
 {
 
     protected $client;
+    protected VertexRepository $repository;
 
     protected function setUp(): void
     {
         $this->client = static::createClient();
+        $this->repository = static::getContainer()->get(VertexRepository::class);
     }
 
     public function testClean()
     {
-        $repo = static::getContainer()->get(VertexRepository::class);
-        $repo->delete(iterator_to_array($repo->search()));
-        $this->assertCount(0, iterator_to_array($repo->search()));
+        $this->repository->delete(iterator_to_array($this->repository->search()));
+        $this->assertCount(0, iterator_to_array($this->repository->search()));
     }
 
     public function testCreate()
     {
+        $scene = new Scene('Star destroyer');
+        $scene->setContent('DV');
+        $this->repository->save($scene);
+
         $crawler = $this->client->request('GET', '/timeline/create');
         $this->assertResponseIsSuccessful();
         $form = $crawler->selectButton('timeline_create_create')->form();
         $form->setValues(['timeline_create' => [
                 'title' => 'A new hope',
-                'scene' => ['Star destroyer']
+                'scene' => ['[[Star destroyer]]']
         ]]);
         $this->client->submit($form);
         $this->assertResponseRedirects();
@@ -72,6 +78,23 @@ class TimelineCrudTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertPageTitleContains('A new hope');
         $this->assertCount(1, $crawler->selectButton('vertex_create'));
+    }
+
+    public function testPin()
+    {
+        $crawler = $this->client->request('GET', '/wiki/A new hope');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('aside .info i.icon-pin');
+        $url = $crawler->filter('aside .info i.icon-pin')->ancestors()->attr('href');
+
+        $this->client->request('GET', $url);
+        $this->assertResponseRedirects();
+        $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
+
+        $this->client->request('GET', '/wiki/Star destroyer');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('aside .info i.icon-movie-roll');
     }
 
     public function testArchive()

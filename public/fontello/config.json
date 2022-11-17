@@ -617,6 +617,12 @@
       ]
     },
     {
+      "uid": "5b0772e9484a1a11646793a82edd622a",
+      "css": "pin",
+      "code": 59457,
+      "src": "fontawesome"
+    },
+    {
       "uid": "b12eaf0c5363ade51a90c4f7d40d3df7",
       "css": "knight",
       "code": 59482,
