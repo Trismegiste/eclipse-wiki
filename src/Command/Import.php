@@ -15,7 +15,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use ZipArchive;
-use function join_paths;
 
 /**
  * Overwrite database with a zip
@@ -46,7 +45,7 @@ class Import extends Command
         $filename = $input->getArgument('source');
         $io = new SymfonyStyle($input, $output);
         $env = $this->getApplication()->getKernel()->getEnvironment();
-        $io->title("Import '$filename' file to '$env' environment");
+        $io->title("Import '$filename' file into '$env' environment");
 
         $answer = $io->confirm("You're going to delete all existing vertices. Do you confirm ?", false);
         if (!$answer) {
@@ -62,8 +61,8 @@ class Import extends Command
         $zip->extractTo($this->store->getRootDir());
         $zip->close();
 
-        $importJson = join_paths($this->store->getRootDir(), Export::vertexFilename);
-        $dump = \MongoDB\BSON\toPHP(\MongoDB\BSON\fromJSON(file_get_contents($importJson)));
+        $importJson = $this->store->getFileInfo(Export::vertexFilename);
+        $dump = \MongoDB\BSON\toPHP(\MongoDB\BSON\fromJSON(file_get_contents($importJson->getPathname())));
 
         $io->info('Delete old vertices');
         $this->repo->delete(iterator_to_array($this->repo->search()));

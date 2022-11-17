@@ -47,7 +47,7 @@ class Export extends Command
         $filename = $input->getArgument('target') ?: "eclipse-wiki-$env.zip";
 
         $io = new SymfonyStyle($input, $output);
-        $io->title("Export '$env' environment to '$filename' file");
+        $io->title("Export '$env' environment into '$filename' file");
 
         $iter = $this->repo->sortedExport();
         $export = \MongoDB\BSON\toJSON(\MongoDB\BSON\fromPHP(iterator_to_array($iter)));

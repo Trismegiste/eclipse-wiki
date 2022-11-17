@@ -8,7 +8,6 @@ namespace App\Service;
 
 use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function join_paths;
 
 /**
