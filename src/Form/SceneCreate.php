@@ -19,8 +19,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Twig\Environment;
+use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Twig\Environment;
 
 /**
  * It's a template for creating a scene
@@ -43,10 +45,13 @@ class SceneCreate extends AbstractType
     {
         $builder->remove('content');
         $builder->add('place', Type\AutocompleteType::class, [
-                                                   'choices' => $this->getPlaceTitle(),
-                                                   'constraints' => [new NotBlank()] 
+                    'choices' => $this->getPlaceTitle(),
+                    'required' => false
                 ])
-                ->add('ambience', Type\WikitextType::class, ['attr' => ['rows' => 4]])
+                ->add('ambience', Type\WikitextType::class, [
+                    'attr' => ['rows' => 4],
+                    'required' => false
+                ])
                 ->add('npc', CollectionType::class, [
                     'entry_type' => Type\AutocompleteType::class,
                     'entry_options' => [
@@ -67,10 +72,21 @@ class SceneCreate extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('empty_data', function (FormInterface $form) {
-            $title = $form->get('title')->getData();
-            return (!is_null($title)) ? new Scene($title) : null;
-        });
+        $resolver->setDefaults([
+            'empty_data' => function (FormInterface $form) {
+                $title = $form->get('title')->getData();
+                return (!is_null($title)) ? new Scene($title) : null;
+            },
+            'constraints' => new Callback(function (Scene $scene, ExecutionContextInterface $ctx) {
+                        $place = $ctx->getRoot()['place']->getData();
+                        $ambience = $ctx->getRoot()['ambience']->getData();
+                        if (empty($place) && empty($ambience)) {
+                            $ctx->buildViolation('Either Place or Ambience should be filled')
+                                    ->atPath('place')
+                                    ->addViolation();
+                        }
+                    })
+        ]);
     }
 
     public function getParent(): ?string

@@ -40,7 +40,7 @@ class LinkRender extends HtmlRenderer
 
     public function getInternalLinkInfo($info): array
     {
-        if (!$info['external']) {
+        if (!$info['external'] && !empty($info['title'])) {
             $info['url'] = $this->routing->generate('app_wiki', ['title' => $info['title']]);
             $info['exists'] = $this->documentExists($info['title']);
         }

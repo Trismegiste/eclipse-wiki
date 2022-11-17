@@ -1,10 +1,14 @@
 {# dump the form for the wikitext content #}
 {# WARNING : DO NOT FORMAT THIS TEMPLATE OR YOU'LL ADD SOME WHITESPACES THAT MATTER IN WIKITEXT FORMAT #}
+{% if place is not empty %}
 ==Décor==
 [[{{ place|raw }}]]
+{% endif %}
 
+{% if ambience is not empty %}
 ==Ambiance==
 {{ ambience|raw }}
+{% endif %}
 
 ==Personnages==
 {% for name in npc %}
