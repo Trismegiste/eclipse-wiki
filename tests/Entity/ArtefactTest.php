@@ -1,22 +1,25 @@
 <?php
 
 use App\Entity\Artefact;
-use App\Entity\Transhuman;
+use App\Entity\Background;
+use App\Entity\Faction;
 use App\Entity\Place;
+use App\Entity\Transhuman;
+use PHPUnit\Framework\TestCase;
 
-class ArtefactTest extends PhpUnit\Framework\TestCase
+class ArtefactTest extends TestCase
 {
 
     protected $sut;
 
-    protected function setUp():void
+    protected function setUp(): void
     {
         $this->sut = new Artefact('MacGuffin');
     }
 
     public function testTranshumanOwner()
     {
-        $owner = new Transhuman('yolo', $this->createStub(App\Entity\Background::class), $this->createStub(App\Entity\Faction::class));
+        $owner = new Transhuman('yolo', $this->createStub(Background::class), $this->createStub(Faction::class));
         $this->sut->setOwner($owner);
         $this->assertInstanceOf(Transhuman::class, $this->sut->getOwner());
         $this->assertEquals('yolo', $this->sut->getOwner()->getTitle());
