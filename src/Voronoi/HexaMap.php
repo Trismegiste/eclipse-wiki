@@ -231,7 +231,6 @@ class HexaMap implements SquareGrid
 
     /**
      * Add walls and doors on cells
-     * @todo think generic : it's "frontierProcessing"
      * @return void
      */
     public function wallProcessing(): void

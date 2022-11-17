@@ -106,13 +106,14 @@ class VoronoiCrud extends AbstractController
 
     /**
      * Edits tiles texturing of a map with direct view (loop)
-     * @Route("/voronoi/texture/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
+     * @Route("/voronoi/texture/{pk}/{tileset}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
+     * {tileset} is here for future tileset one day
      */
-    public function texture(string $pk, Request $request): Response
+    public function texture(string $pk, Request $request, $tileset = 'habitat'): Response
     {
         $place = $this->repository->load($pk);
         $form = $this->createFormBuilder($place)
-                ->add('voronoiParam', MapTextureType::class, ['tileset' => 'habitat'])  // @todo hardcoded constant
+                ->add('voronoiParam', MapTextureType::class, ['tileset' => $tileset])
                 ->add('texture', SubmitType::class)
                 ->setMethod('PUT')
                 ->getForm();

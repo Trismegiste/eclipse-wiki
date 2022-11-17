@@ -49,24 +49,22 @@ class MapPopulationType extends AbstractType
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        if ($form->isSubmitted()) {
-            return; // @todo ugly patch
-        }
+        if (!$form->isSubmitted()) {
+            /** @var MapConfig $config */
+            $config = $form->getViewData();
+            $data = $config->tilePopulation;
+            $map = $this->builder->create($config);
+            $stats = $map->getStatistics();
 
-        /** @var MapConfig $config */
-        $config = $form->getViewData();
-        $data = $config->tilePopulation;
-        $map = $this->builder->create($config);
-        $stats = $map->getStatistics();
-
-        // adding fields according to statistics of the current map
-        foreach ($stats as $key => $unused) {
-            if (!key_exists($key, $data)) {
-                $data[$key] = null;
+            // adding fields according to statistics of the current map
+            foreach ($stats as $key => $unused) {
+                if (!key_exists($key, $data)) {
+                    $data[$key] = null;
+                }
             }
-        }
 
-        $form['tilePopulation']->setData($data);
+            $form['tilePopulation']->setData($data);
+        }
     }
 
 }
