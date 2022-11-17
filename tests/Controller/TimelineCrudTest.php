@@ -82,6 +82,10 @@ class TimelineCrudTest extends WebTestCase
 
     public function testPin()
     {
+        $this->client->request('GET', '/wiki/Star destroyer');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorNotExists('aside .info i.icon-movie-roll');
+
         $crawler = $this->client->request('GET', '/wiki/A new hope');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('aside .info i.icon-pin');
