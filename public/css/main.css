@@ -247,7 +247,7 @@ i.archived {
 }
 
 .info .timeline-toc {
-    margin: 0;
+    margin: 1em 0 0;
 }
 
 /* backlinks nav */
@@ -258,4 +258,5 @@ i.archived {
 .backlinks ul li {
     display: inline-block;
     margin-right: 2em;
+    margin-bottom: 1em;
 }
