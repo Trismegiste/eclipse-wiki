@@ -1,5 +1,12 @@
-<nav>
-    {% for title in backlinks %}
-        <a href="{{ path('app_wiki', {title:title}) }}"><i class="icon-link"></i> {{ title }}</a>
-    {% endfor %}
+<nav class="backlinks">
+    <ul>
+        {% for title in backlinks %}
+            <li>
+                <a href="{{ path('app_wiki', {title:title}) }}">
+                    <i class="icon-link"></i>
+                    {{ title }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
 </nav>

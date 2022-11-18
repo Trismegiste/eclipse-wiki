@@ -245,3 +245,13 @@ i.archived {
 .info .timeline-toc {
     margin: 0;
 }
+
+/* backlinks nav */
+.backlinks ul {
+    padding: 0;
+}
+
+.backlinks ul li {
+    display: inline-block;
+    margin-right: 2em;
+}
