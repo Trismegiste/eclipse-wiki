@@ -46,20 +46,18 @@ class TimelineCrud extends GenericCrud
         return $this->handleEdit(VertexType::class, 'timeline/edit.html.twig', $pk, $request);
     }
 
-    public function tree(Timeline $root, string $mode = 'tree'): Response
+    /**
+     * Fragment : explore the graph and render the tree from a Timeline vertex
+     * @param Timeline $root
+     * @param string $mode the string 'tree' or 'toc'
+     * @return Response
+     */
+    public function tree(Timeline $root, \App\Service\DigraphExplore $explorer, string $mode = 'tree'): Response
     {
-        $tree = $this->repository->exploreTreeFrom($root);
-        $intl = new \Collator($this->getParameter('kernel.default_locale'));
+        $template = ['tree' => 'tree', 'toc' => 'scene_toc'];
+        $dump = $explorer->graphToSortedCategory($root);
 
-        $dump = [];
-        foreach ($tree as $v) {
-            $dump[$v->getCategory()][] = $v->getTitle();
-        }
-        foreach ($dump as $key => $v) {
-            $intl->sort($dump[$key]);
-        }
-
-        return $this->render('timeline/' . ['tree' => 'tree', 'toc' => 'scene_toc'][$mode] . '.html.twig', ['network' => $dump]);
+        return $this->render('timeline/' . $template[$mode] . '.html.twig', ['network' => $dump]); // fail if template does not exist
     }
 
     /**
@@ -69,6 +67,7 @@ class TimelineCrud extends GenericCrud
     {
         $timeline = $this->repository->load($pk);
         $request->getSession()->set('pinned_timeline', $timeline);
+        $this->addFlash('success', 'Scenario ' . $timeline->getTitle() . ' épinglé');
 
         return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $pk]);
     }

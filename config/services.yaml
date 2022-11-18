@@ -39,6 +39,9 @@ services:
     App\Repository\VertexRepository:
         $collectionName: 'vertex'
 
+    App\Service\DigraphExplore:
+        $locale: '%kernel.default_locale%'
+        
     # CLI
     App\Command\CheckDatabase:
         $dbName: '%mongodb.dbname%'
