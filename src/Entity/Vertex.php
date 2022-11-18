@@ -33,21 +33,38 @@ abstract class Vertex implements Root, Archivable
         $this->title = $str;
     }
 
+    /**
+     * Gets the title of this vertex
+     * @return string
+     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
+    /**
+     * Gets the content of this vertex (could be empty)
+     * @return string|null
+     */
     public function getContent(): ?string
     {
         return $this->content;
     }
 
+    /**
+     * Sets the content
+     * @param string $str
+     * @return void
+     */
     public function setContent(string $str): void
     {
         $this->content = $str;
     }
 
+    /**
+     * Gets a technical string for the category of this vertex
+     * @return string
+     */
     public function getCategory(): string
     {
         $fqcn = get_class($this);
@@ -57,11 +74,21 @@ abstract class Vertex implements Root, Archivable
         return strtolower($match[1]);
     }
 
+    /**
+     * Sets a new title for this Vertex
+     * WARNING : do not call this method unless you rename all links in all vertices inbound to this vertex
+     * @param string $newTitle
+     * @return void
+     */
     public function setTitle(string $newTitle): void
     {
         $this->title = $newTitle;
     }
 
+    /**
+     * Gets the first picture in the content (or not)
+     * @return string|null
+     */
     public function extractFirstPicture(): ?string
     {
         $picture = $this->extractPicture();
@@ -69,6 +96,10 @@ abstract class Vertex implements Root, Archivable
         return count($picture) ? $picture[0] : null;
     }
 
+    /**
+     * Gets all pictures in the content
+     * @return array
+     */
     public function extractPicture(): array
     {
         if (is_null($this->content)) {
@@ -86,6 +117,10 @@ abstract class Vertex implements Root, Archivable
         $this->_id = null;
     }
 
+    /**
+     * Gets all links (outbound) from this vertex to another (existing or not) by exploring the content
+     * @return array
+     */
     public function getInternalLink(): array
     {
         $re = '/\[\[([^\|\]]+)(\]\]|\|)/m';
