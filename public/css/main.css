@@ -238,6 +238,10 @@ i.archived {
     line-height: 150%;
 }
 
+.timeline-toc ul li {
+    margin-bottom: 0.25em;
+}
+
 .timeline-toc h2:first-child {
     margin-top: 0;
 }
