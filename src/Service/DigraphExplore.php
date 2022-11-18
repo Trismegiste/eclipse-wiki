@@ -57,8 +57,16 @@ class DigraphExplore
                 });
     }
 
+    /**
+     * Searches for all orphan vertices
+     * @return array
+     */
     public function findOrphan(): array
     {
+        // @todo a little buggy since it does not manage if a link to vertex exists or not, 
+        // and does not manage case insensitive on the first letter of the title
+        // I think we'll need to create a matrix on '_id' instead with an associative array _id=>title for checking
+
         $outbound = [];
         foreach ($this->repository->search() as $vertex) {
             /** @var \App\Entity\Vertex $vertex */

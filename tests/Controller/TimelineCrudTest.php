@@ -113,4 +113,10 @@ class TimelineCrudTest extends WebTestCase
         $this->client->submit($form);
     }
 
+    public function testFindOrphan()
+    {
+        $this->client->request('GET', '/timeline/orphan');
+        $this->assertResponseIsSuccessful();
+    }
+
 }
