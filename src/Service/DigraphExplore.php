@@ -7,6 +7,7 @@
 namespace App\Service;
 
 use App\Entity\Timeline;
+use App\Entity\Vertex;
 use App\Repository\VertexRepository;
 use Collator;
 use DateInterval;
@@ -69,7 +70,7 @@ class DigraphExplore
 
         $outbound = [];
         foreach ($this->repository->search() as $vertex) {
-            /** @var \App\Entity\Vertex $vertex */
+            /** @var Vertex $vertex */
             $source = $vertex->getTitle();
             $outbound[$source] = [];
             $target = $vertex->getInternalLink();
@@ -95,6 +96,33 @@ class DigraphExplore
         }
 
         return $orphan;
+    }
+
+    public function getAdjacencyMatrix(): array
+    {
+        // census of vertices
+        $vertexPk = [];
+        $vertexTitle = [];
+        foreach ($this->repository->search() as $vertex) {
+            $vertexPk[(string) $vertex->getPk()] = false;
+            $vertexTitle[$vertex->getTitle()] = (string) $vertex->getPk();
+        }
+
+        $matrix = [];
+        foreach ($vertexPk as $pk => $dummy) {
+            $matrix[$pk] = $vertexPk;
+        }
+
+        foreach ($vertexPk as $pk => $dummy) {
+            $target = $this->repository->load($pk);
+            $sourceTitle = $this->repository->searchByBacklinks($target->getTitle());
+            foreach ($sourceTitle as $source) {
+                $sourcePk = $vertexTitle[$source];
+                $matrix[$sourcePk][(string) $target->getPk()] = true;
+            }
+        }
+
+        return $matrix;
     }
 
 }
