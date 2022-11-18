@@ -2,6 +2,12 @@
 {% extends "timeline/tree.html.twig" %}
 
 {% block table_of_content %}
+    <h2>
+        <i class="icon-movie-roll"></i>
+        <a href="{{ path('app_wiki', {title: network.timeline.0}) }}">
+            {{ network.timeline.0 }}
+        </a>
+    </h2>
     {% if network.scene is defined %}
         {{ _self.print_group('video', network.scene) }}
     {% endif %}

@@ -1,7 +1,7 @@
 {# detail #}
 {% macro print_group(icon, group) %}
     <h2><i class="icon-{{ icon }}"></i></h2>
-    <ul class="link-tree">
+    <ul>
         {% for item in group %}
             <li>
                 <a href="{{ path('app_wiki', {title:item}) }}">{{ item }}</a>
@@ -10,23 +10,16 @@
     </ul>
 {% endmacro %}
 
-<style>
-    .link-tree {
-        list-style-type: none;
-        list-style-position: inside;
-        margin: 0;
-        padding: 0;
-        line-height: 150%;
-    }
-</style>
-{% block table_of_content %}
-    {% if network.scene is defined %}
-        {{ _self.print_group('video', network.scene) }}
-    {% endif %}
-    {% if network.transhuman is defined %}
-        {{ _self.print_group('extra', network.transhuman) }}
-    {% endif %}
-    {% if network.place is defined %}
-        {{ _self.print_group('place', network.place) }}
-    {% endif %}
-{% endblock %}
+<section class="timeline-toc">
+    {% block table_of_content %}
+        {% if network.scene is defined %}
+            {{ _self.print_group('video', network.scene) }}
+        {% endif %}
+        {% if network.transhuman is defined %}
+            {{ _self.print_group('extra', network.transhuman) }}
+        {% endif %}
+        {% if network.place is defined %}
+            {{ _self.print_group('place', network.place) }}
+        {% endif %}
+    {% endblock %}
+</section>

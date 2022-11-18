@@ -37,13 +37,6 @@
 
 {% block info %}
     {% if app.session.get('pinned_timeline') is not empty %}
-        {% set current_scenario = app.session.get('pinned_timeline') %}
-        <h2>
-            <i class="icon-movie-roll"></i>
-            <a href="{{ path('app_wiki', {title: current_scenario.title}) }}">
-                {{ current_scenario.title }}
-            </a>
-        </h2>
-        {{ render(controller('App\\Controller\\TimelineCrud::tree', {root: current_scenario, mode: 'toc'})) }}
+        {{ render(controller('App\\Controller\\TimelineCrud::tree', {root: app.session.get('pinned_timeline'), mode: 'toc'})) }}
     {% endif %}
 {% endblock %}
