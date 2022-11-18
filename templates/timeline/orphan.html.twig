@@ -1,0 +1,19 @@
+{# show orphans #}
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Vertex orphelins
+{% endblock %}
+
+{% block header_title %}{{ block('title') }}{% endblock %}
+
+{% block content %}
+    <ul>
+        {% for vertex in orphan %}
+            <li>
+                <a href="{{ path('app_wiki', {title:vertex}) }}">{{ vertex }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+

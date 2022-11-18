@@ -59,7 +59,34 @@ class DigraphExplore
 
     public function findOrphan(): array
     {
-        
+        $outbound = [];
+        foreach ($this->repository->search() as $vertex) {
+            /** @var \App\Entity\Vertex $vertex */
+            $source = $vertex->getTitle();
+            $outbound[$source] = [];
+            $target = $vertex->getInternalLink();
+            foreach ($target as $title) {
+                $outbound[$source][$title] = true;  // prevent duplicates
+            }
+        }
+
+        // now we have an outbound sparse matrix (source, target), lets build an inbound sparse matrix
+        $inbound = [];
+        foreach ($outbound as $source => $links) {
+            foreach ($links as $title => $dummy) {
+                $inbound[$title][$source] = true;
+            }
+        }
+
+        // lets find all orphans : no outbound nor inbound vertex
+        $orphan = [];
+        foreach ($outbound as $vertex => $links) {
+            if ((0 === count($links)) && !key_exists($vertex, $inbound)) {
+                $orphan[] = $vertex;
+            }
+        }
+
+        return $orphan;
     }
 
 }

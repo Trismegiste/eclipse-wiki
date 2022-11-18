@@ -30,10 +30,14 @@
         {{ _self.dashboard_item('app_npcgenerator_freeform', 'monster', 'Création libre') }}
         {{ _self.dashboard_item('app_gmhelper_help', 'help-circled', 'Aide') }}
     </div>
+    <h2>Informations sur le digraphe</h2>
+    <ul>
+        <li><a href="{{ path('app_timelinecrud_showorphan') }}">Voir les vertex orphelins</a></li>
+    </ul>
     <h2>En panne d'idée ?</h2>
     <ul>
         <li><a href="{{ path('app_idea_inspiration') }}">Avec OpenAI</a></li>
-    </ul>
+    </ul>    
     <h2>Exporter la Collection 'mwpage'</h2>
     <ul>
         <li>
