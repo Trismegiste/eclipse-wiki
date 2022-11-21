@@ -69,12 +69,14 @@ class DigraphExplore
 
         foreach ($matrix as $source => $row) {
             $isOrphan = true;
+            // check outbound vertices
             foreach ($row as $target => $link) {
                 if ($link && ($target !== $source)) {
                     $isOrphan = false;
                     break;
                 }
             }
+            // check inbound vertices
             foreach ($matrix as $inbound => $notused) {
                 if (($inbound !== $source) && $matrix[$inbound][$source]) {
                     $isOrphan = false;
@@ -89,6 +91,11 @@ class DigraphExplore
         return $orphan;
     }
 
+    /**
+     * Calculates the adjacency matrix for the current digraph stored in vertices collection
+     * WARNING : highly database-intensive
+     * @return array
+     */
     public function getAdjacencyMatrix(): array
     {
         // census of vertices
@@ -99,11 +106,13 @@ class DigraphExplore
             $vertexTitle[$vertex->getTitle()] = (string) $vertex->getPk();
         }
 
+        // init matrix
         $matrix = [];
         foreach ($vertexPk as $pk => $dummy) {
             $matrix[$pk] = $vertexPk;
         }
 
+        // fill matrix with links
         foreach ($this->repository->search() as $target) {
             $sourceTitle = $this->repository->searchByBacklinks($target->getTitle());
             foreach ($sourceTitle as $source) {
