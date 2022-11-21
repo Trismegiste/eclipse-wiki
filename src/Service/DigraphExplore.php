@@ -64,34 +64,18 @@ class DigraphExplore
      */
     public function findOrphan(): array
     {
-        // @todo a little buggy since it does not manage if a link to vertex exists or not, 
-        // and does not manage case insensitive on the first letter of the title
-        // I think we'll need to create a matrix on '_id' instead with an associative array _id=>title for checking
-
-        $outbound = [];
-        foreach ($this->repository->search() as $vertex) {
-            /** @var Vertex $vertex */
-            $source = $vertex->getTitle();
-            $outbound[$source] = [];
-            $target = $vertex->getInternalLink();
-            foreach ($target as $title) {
-                $outbound[$source][$title] = true;  // prevent duplicates
-            }
-        }
-
-        // now we have an outbound sparse matrix (source, target), lets build an inbound sparse matrix
-        $inbound = [];
-        foreach ($outbound as $source => $links) {
-            foreach ($links as $title => $dummy) {
-                $inbound[$title][$source] = true;
-            }
-        }
-
-        // lets find all orphans : no outbound nor inbound vertex
         $orphan = [];
-        foreach ($outbound as $vertex => $links) {
-            if ((0 === count($links)) && !key_exists($vertex, $inbound)) {
-                $orphan[] = $vertex;
+
+        foreach ($this->getAdjacencyMatrix() as $source => $row) {
+            $isOrphan = true;
+            foreach ($row as $target => $link) {
+                if ($link && ($target !== $source)) {
+                    $isOrphan = false;
+                    break;
+                }
+            }
+            if ($isOrphan) {
+                $orphan[] = $source;
             }
         }
 
@@ -113,8 +97,7 @@ class DigraphExplore
             $matrix[$pk] = $vertexPk;
         }
 
-        foreach ($vertexPk as $pk => $dummy) {
-            $target = $this->repository->load($pk);
+        foreach ($this->repository->search() as $target) {
             $sourceTitle = $this->repository->searchByBacklinks($target->getTitle());
             foreach ($sourceTitle as $source) {
                 $sourcePk = $vertexTitle[$source];

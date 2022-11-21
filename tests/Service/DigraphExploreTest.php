@@ -125,14 +125,20 @@ class DigraphExploreTest extends KernelTestCase
         $this->assertLinksCount(20, $matrix);
     }
 
+    public function testNoOrphan()
+    {
+        $orphan = $this->sut->findOrphan();
+        $this->assertCount(0, $orphan);
+    }
+
     public function testAddOrphan()
     {
-        $orphan = $this->buildScene('orphan');
-        $orphan->setContent('[[ThisVertexDoesNotExist]]'); // $orphan is an orphan since it is only linking to a vertex that does not exist
+        $orphan = $this->buildScene('Orphan');
+        $orphan->setContent('[[orphan]] [[ThisVertexDoesNotExist]]'); // $orphan is an orphan since it is only linking to itself and a vertex that does not exist
         $this->repository->save($orphan);
         $matrix = $this->sut->getAdjacencyMatrix();
         $this->assertCount(6, $matrix);
-        $this->assertLinksCount(20, $matrix);
+        $this->assertLinksCount(21, $matrix);
 
         $listing = $this->sut->findOrphan();
         $this->assertCount(1, $listing);
