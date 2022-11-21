@@ -11,7 +11,7 @@
     <ul>
         {% for vertex in orphan %}
             <li>
-                <a href="{{ path('app_wiki', {title:vertex}) }}">{{ vertex }}</a>
+                <a href="{{ path('app_vertexcrud_show', {pk:vertex.pk}) }}">{{ vertex.title }}</a>
             </li>
         {% endfor %}
     </ul>

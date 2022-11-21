@@ -65,11 +65,18 @@ class DigraphExplore
     public function findOrphan(): array
     {
         $orphan = [];
+        $matrix = $this->getAdjacencyMatrix();
 
-        foreach ($this->getAdjacencyMatrix() as $source => $row) {
+        foreach ($matrix as $source => $row) {
             $isOrphan = true;
             foreach ($row as $target => $link) {
                 if ($link && ($target !== $source)) {
+                    $isOrphan = false;
+                    break;
+                }
+            }
+            foreach ($matrix as $inbound => $notused) {
+                if (($inbound !== $source) && $matrix[$inbound][$source]) {
                     $isOrphan = false;
                     break;
                 }

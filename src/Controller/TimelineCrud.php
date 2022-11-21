@@ -77,7 +77,9 @@ class TimelineCrud extends GenericCrud
      */
     public function showOrphan(\App\Service\DigraphExplore $explorer): Response
     {
-        return $this->render('timeline/orphan.html.twig', ['orphan' => $explorer->findOrphan()]);
+        return $this->render('timeline/orphan.html.twig', ['orphan' => array_map(function ($pk) {
+                        return $this->repository->load($pk);
+                    }, $explorer->findOrphan())]);
     }
 
 }

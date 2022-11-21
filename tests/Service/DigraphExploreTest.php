@@ -1,6 +1,7 @@
 <?php
 
 use App\Entity\Scene;
+use App\Entity\Vertex;
 use App\Repository\VertexRepository;
 use App\Service\DigraphExplore;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -142,6 +143,28 @@ class DigraphExploreTest extends KernelTestCase
 
         $listing = $this->sut->findOrphan();
         $this->assertCount(1, $listing);
+
+        return $orphan;
+    }
+
+    /** @depends testAddOrphan */
+    public function testNotOrphanWithBacklinks(Vertex $orphan)
+    {
+        $orphan->setContent($orphan->getContent() . "[[not orphan]]");
+        $this->repository->save($orphan);
+        $matrix = $this->sut->getAdjacencyMatrix();
+        $this->assertCount(6, $matrix);
+        $this->assertLinksCount(21, $matrix);
+
+        $child = $this->buildScene('Not orphan');
+        $this->repository->save($child);
+
+        $matrix = $this->sut->getAdjacencyMatrix();
+        $this->assertCount(7, $matrix);
+        $this->assertLinksCount(22, $matrix);
+
+        $listing = $this->sut->findOrphan();
+        $this->assertCount(0, $listing);
     }
 
 }
