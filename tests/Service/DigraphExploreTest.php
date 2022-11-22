@@ -108,7 +108,7 @@ class DigraphExploreTest extends KernelTestCase
         $this->repository->delete(iterator_to_array($this->repository->search()));
         $this->assertCount(0, $this->repository->search());
 
-        // insert clique
+        // insert a 5-clique
         for ($k = 0; $k < 5; $k++) {
             $vertex[$k] = new Scene('Scene' . $k);
             $content = '';
@@ -155,6 +155,7 @@ class DigraphExploreTest extends KernelTestCase
         $matrix = $this->sut->getAdjacencyMatrix();
         $this->assertCount(6, $matrix);
         $this->assertLinksCount(21, $matrix);
+        $this->assertCount(1, $this->sut->findOrphan());
 
         $child = $this->buildScene('Not orphan');
         $this->repository->save($child);
@@ -163,8 +164,7 @@ class DigraphExploreTest extends KernelTestCase
         $this->assertCount(7, $matrix);
         $this->assertLinksCount(22, $matrix);
 
-        $listing = $this->sut->findOrphan();
-        $this->assertCount(0, $listing);
+        $this->assertCount(0, $this->sut->findOrphan());
     }
 
 }
