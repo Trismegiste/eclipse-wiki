@@ -10,6 +10,7 @@ use App\Entity\Timeline;
 use App\Entity\Vertex;
 use App\Form\TimelineCreate;
 use App\Form\VertexType;
+use App\Service\DigraphExplore;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -52,7 +53,7 @@ class TimelineCrud extends GenericCrud
      * @param string $mode the string 'tree' or 'toc'
      * @return Response
      */
-    public function tree(Timeline $root, \App\Service\DigraphExplore $explorer, string $mode = 'tree'): Response
+    public function tree(Timeline $root, DigraphExplore $explorer, string $mode = 'tree'): Response
     {
         $template = ['tree' => 'tree', 'toc' => 'scene_toc'];
         $dump = $explorer->graphToSortedCategory($root);
@@ -63,19 +64,18 @@ class TimelineCrud extends GenericCrud
     /**
      * @Route("/timeline/pin/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function pin(string $pk, Request $request): Response
+    public function pin(Timeline $timeline, Request $request): Response
     {
-        $timeline = $this->repository->load($pk);
         $request->getSession()->set('pinned_timeline', $timeline);
         $this->addFlash('success', 'Scenario ' . $timeline->getTitle() . ' épinglé');
 
-        return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $pk]);
+        return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $timeline->getPk()]);
     }
 
     /**
      * @Route("/timeline/orphan", methods={"GET"})
      */
-    public function showOrphan(\App\Service\DigraphExplore $explorer): Response
+    public function showOrphan(DigraphExplore $explorer): Response
     {
         return $this->render('timeline/orphan.html.twig', ['orphan' => array_map(function ($pk) {
                         return $this->repository->load($pk);

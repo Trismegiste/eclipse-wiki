@@ -59,10 +59,8 @@ class HandoutCrud extends GenericCrud
      * Generates the Handout PDF and prints a QR Code for player
      * @Route("/handout/qrcode/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function qrcode(string $pk, \App\Service\DocumentBroadcaster $broadcast): Response
+    public function qrcode(Handout $vertex, \App\Service\DocumentBroadcaster $broadcast): Response
     {
-        $vertex = $this->repository->findByPk($pk);
-
         $title = sprintf("Handout-%s.pdf", $vertex->getTitle());
         $html = $this->renderView('handout/pc_export.pdf.twig', ['vertex' => $vertex]);
         $lan = $broadcast->getExternalLinkForGeneratedPdf($title, $html, self::pdfOptions);
