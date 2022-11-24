@@ -49,9 +49,8 @@ class PlaceCrud extends GenericCrud
      * Page for the battlemap
      * @Route("/place/runmap/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function runMap(string $pk, Storage $storage): Response
+    public function runMap(Place $vertex, Storage $storage): Response
     {
-        $vertex = $this->repository->findByPk($pk);
         $svg = file_get_contents($storage->getFileInfo($vertex->battleMap)->getPathname());
         $tools = $this->createForm(\App\Form\RunningMapTools::class);
 
@@ -87,13 +86,8 @@ class PlaceCrud extends GenericCrud
      * Creates a Place child from the current Place
      * @Route("/place/child/{pk}", methods={"GET","POST"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function child(string $pk, Request $request): Response
+    public function child(Place $place, Request $request): Response
     {
-        $place = $this->repository->findByPk($pk);
-        if (is_null($place) || (!$place instanceof Place)) {
-            throw new NotFoundHttpException("Vertex $pk is not a Place");
-        }
-
         $title = $place->getTitle();
         $child = clone $place;
         $child->setTitle("Lieu enfant dans $title");

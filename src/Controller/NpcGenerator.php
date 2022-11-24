@@ -6,6 +6,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Character;
 use App\Entity\Transhuman;
 use App\Form\AliCreate;
 use App\Form\FreeformCreate;
@@ -26,7 +27,6 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -72,9 +72,8 @@ class NpcGenerator extends AbstractController
      * Edits a NPC
      * @Route("/npc/edit/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function edit(string $pk, Request $request): Response
+    public function edit(Character $npc, Request $request): Response
     {
-        $npc = $this->repository->findByPk($pk);
         $form = $this->createForm(NpcStats::class, $npc);
 
         $form->handleRequest($request);
@@ -138,9 +137,8 @@ class NpcGenerator extends AbstractController
      * Duplicate a NPC
      * @Route("/npc/duplicate/{pk}", methods={"GET","POST"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function duplicate(string $pk, Request $request): Response
+    public function duplicate(Character $npc, Request $request): Response
     {
-        $npc = $this->repository->findByPk($pk);
         $newNpc = clone $npc;
         $newNpc->setTitle($npc->getTitle() . ' (copie)');
 
@@ -164,9 +162,8 @@ class NpcGenerator extends AbstractController
      * Form for editing gears & stuff of NPC
      * @Route("/npc/gear/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function gear(string $pk, Request $request): Response
+    public function gear(Character $npc, Request $request): Response
     {
-        $npc = $this->repository->findByPk($pk);
         $form = $this->createForm(NpcGears::class, $npc);
 
         $form->handleRequest($request);
@@ -185,10 +182,8 @@ class NpcGenerator extends AbstractController
      * Form for editing attacks and armors of NPC
      * @Route("/npc/battle/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function battle(string $pk, Request $request): Response
+    public function battle(Character $npc, Request $request): Response
     {
-        $npc = $this->repository->findByPk($pk);
-
         $form = $this->createForm(NpcAttacks::class, $npc);
 
         $form->handleRequest($request);
@@ -225,9 +220,8 @@ class NpcGenerator extends AbstractController
      * Resleeves a NPC with a new morph
      * @Route("/npc/sleeve/{pk}", methods={"GET","PATCH"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function sleeve(string $pk, Request $request, MorphProvider $morph): Response
+    public function sleeve(Character $npc, Request $request, MorphProvider $morph): Response
     {
-        $npc = $this->repository->findByPk($pk);
         $form = $this->createFormBuilder($npc)
                 ->add('morph', ProviderChoiceType::class, [
                     'provider' => $morph,
@@ -271,9 +265,8 @@ class NpcGenerator extends AbstractController
      * Edit information of NPC
      * @Route("/npc/info/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function info(string $pk, Request $request): Response
+    public function info(Character $npc, Request $request): Response
     {
-        $npc = $this->repository->findByPk($pk);
         $form = $this->createForm(NpcInfo::class, $npc, ['edit' => true]);
 
         $form->handleRequest($request);
