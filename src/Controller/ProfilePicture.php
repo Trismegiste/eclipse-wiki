@@ -6,6 +6,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Character;
+use App\Entity\Transhuman;
 use App\Form\ProfileOnTheFly;
 use App\Form\ProfilePic;
 use App\Repository\CharacterFactory;
@@ -41,9 +43,8 @@ class ProfilePicture extends AbstractController
      * Generate a socnet profile for a unique Transhuman
      * @Route("/profile/unique/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function unique(string $pk, AvatarMaker $maker): Response
+    public function unique(Transhuman $npc, AvatarMaker $maker): Response
     {
-        $npc = $this->repository->findByPk($pk);
         $pathname = $this->storage->getFileInfo($npc->tokenPic);
         $profile = $maker->generate($npc, $pathname);
 
@@ -54,9 +55,8 @@ class ProfilePicture extends AbstractController
      * Push a socnet profile for a unique Transhuman
      * @Route("/profile/unique/{pk}", methods={"POST"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function pushUnique(string $pk, AvatarMaker $maker, PlayerCastCache $cache): Response
+    public function pushUnique(Transhuman $npc, AvatarMaker $maker, PlayerCastCache $cache): Response
     {
-        $npc = $this->repository->findByPk($pk);
         $pathname = $this->storage->getFileInfo($npc->tokenPic);
         $profile = $maker->generate($npc, $pathname);
         $cached = $cache->slimPictureForPush($profile);
@@ -68,9 +68,8 @@ class ProfilePicture extends AbstractController
      * Creates a battlemap token for a NPC
      * @Route("/npc/token/{pk}", methods={"GET","POST"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function token(string $pk, Request $request): Response
+    public function token(Character $npc, Request $request): Response
     {
-        $npc = $this->repository->findByPk($pk);
         $form = $this->createForm(ProfilePic::class, $npc);
 
         $form->handleRequest($request);
@@ -91,17 +90,15 @@ class ProfilePicture extends AbstractController
      * Show a list of NPC profiles from a template (a Transhuman with isNpcTemplate() method returns true)
      * @Route("/profile/template/{pk}", methods={"GET", "POST"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function template(string $pk, Request $request, AvatarMaker $maker, WebsocketPusher $pusher, PlayerCastCache $cache, CharacterFactory $fac): Response
+    public function template(Transhuman $vertex, Request $request, AvatarMaker $maker, WebsocketPusher $pusher, PlayerCastCache $cache, CharacterFactory $fac): Response
     {
-        $vertex = $this->repository->findByPk($pk);
         $npc = clone $vertex;
         $form = $this->createForm(ProfileOnTheFly::class, $npc);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            // which button : push or create ?
             $avatar = $form['avatar']->getData();
-
+            // which button : push profile or create new NPC ?
             // Pushes the profile created on the fly
             if ($form->get('push_profile')->isClicked()) {
                 $profile = $maker->generate($npc, $avatar);
@@ -117,7 +114,7 @@ class ProfilePicture extends AbstractController
                     $this->addFlash('error', $e->getMessage());
                 }
 
-                return $this->redirectToRoute('app_profilepicture_template', ['pk' => $pk]);
+                return $this->redirectToRoute('app_profilepicture_template', ['pk' => $vertex->getPk()]);
             }
 
             // Instantiate the NPC from the template

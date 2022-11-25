@@ -6,9 +6,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Place;
 use App\Form\GenerateMapForPlace;
 use App\Form\MapConfigType;
+use App\Form\MapPopulationType;
 use App\Form\MapTextureType;
+use App\Form\RunningMapTools;
 use App\Repository\VertexRepository;
 use App\Service\PlayerCastCache;
 use App\Voronoi\MapBuilder;
@@ -44,9 +47,8 @@ class VoronoiCrud extends AbstractController
      * Show the generated Voronoi map
      * @Route("/voronoi/storage/{pk}", methods={"GET","PATCH"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function storage(string $pk, Request $request): Response
+    public function storage(Place $place, Request $request): Response
     {
-        $place = $this->repository->findByPk($pk);
         $form = $this->createForm(GenerateMapForPlace::class, $place);
 
         $form->handleRequest($request);
@@ -65,9 +67,8 @@ class VoronoiCrud extends AbstractController
      * Creates or Edits a voronoi Map in the current Place
      * @Route("/voronoi/edit/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function edit(string $pk, Request $request): Response
+    public function edit(Place $place, Request $request): Response
     {
-        $place = $this->repository->findByPk($pk);
         $form = $this->createFormBuilder($place)
                 ->add('voronoiParam', MapConfigType::class)
                 ->add('generate', SubmitType::class)
@@ -88,9 +89,8 @@ class VoronoiCrud extends AbstractController
     /**
      * @Route("/voronoi/generate/{pk}/{fog}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function generate(string $pk, bool $fog = true): Response
+    public function generate(Place $place, bool $fog = true): Response
     {
-        $place = $this->repository->load($pk);
         $config = $place->voronoiParam;
 
         try {
@@ -109,9 +109,8 @@ class VoronoiCrud extends AbstractController
      * @Route("/voronoi/texture/{pk}/{tileset}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      * {tileset} is here for future tileset one day
      */
-    public function texture(string $pk, Request $request, $tileset = 'habitat'): Response
+    public function texture(Place $place, Request $request, $tileset = 'habitat'): Response
     {
-        $place = $this->repository->load($pk);
         $form = $this->createFormBuilder($place)
                 ->add('voronoiParam', MapTextureType::class, ['tileset' => $tileset])
                 ->add('texture', SubmitType::class)
@@ -122,7 +121,7 @@ class VoronoiCrud extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->repository->save($form->getData());
 
-            return $this->redirectToRoute('app_voronoicrud_texture', ['pk' => $pk]);
+            return $this->redirectToRoute('app_voronoicrud_texture', ['pk' => $place->getPk()]);
         }
 
         return $this->render('voronoi/texture.html.twig', ['form' => $form->createView()]);
@@ -132,15 +131,14 @@ class VoronoiCrud extends AbstractController
      * Show map to run it on the fly
      * @Route("/voronoi/runmap/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function runMap(string $pk): Response
+    public function runMap(Place $place): Response
     {
-        $place = $this->repository->load($pk);
         $map = $this->builder->create($place->voronoiParam);
         ob_start();
         $this->builder->dumpSvg($map);
         $svg = ob_get_clean();
 
-        $tools = $this->createForm(\App\Form\RunningMapTools::class);
+        $tools = $this->createForm(RunningMapTools::class);
 
         return $this->render('place/runmap.html.twig', [
                     'title' => 'Testing ' . $place->getTitle(),
@@ -152,9 +150,8 @@ class VoronoiCrud extends AbstractController
     /**
      * @Route("/voronoi/statistics/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function statistics(string $pk): Response
+    public function statistics(Place $place): Response
     {
-        $place = $this->repository->load($pk);
         $config = $place->voronoiParam;
         $map = $this->builder->create($config, false);
 
@@ -188,11 +185,10 @@ class VoronoiCrud extends AbstractController
      * Edits tiles populations of a map
      * @Route("/voronoi/populate/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function populate(string $pk, Request $request): Response
+    public function populate(Place $place, Request $request): Response
     {
-        $place = $this->repository->load($pk);
         $form = $this->createFormBuilder($place)
-                ->add('voronoiParam', \App\Form\MapPopulationType::class)
+                ->add('voronoiParam', MapPopulationType::class)
                 ->add('populate', SubmitType::class)
                 ->setMethod('PUT')
                 ->getForm();
@@ -201,7 +197,7 @@ class VoronoiCrud extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->repository->save($form->getData());
 
-            return $this->redirectToRoute('app_voronoicrud_populate', ['pk' => $pk]);
+            return $this->redirectToRoute('app_voronoicrud_populate', ['pk' => $place->getPk()]);
         }
 
         return $this->render('voronoi/populate.html.twig', ['form' => $form->createView()]);
