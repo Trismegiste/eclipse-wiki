@@ -95,8 +95,13 @@ class PlaceCrudTest extends WebTestCase
         $this->client->request('GET', $show);
         $pk = $this->client->getRequest()->get('pk');
         $crawler = $this->client->request('GET', "/place/child/$pk");
-        $this->assertCount(1, $crawler->selectButton('place_create'));
+        $this->assertSelectorExists('#place_create');
         $this->assertFormValue('form[name="place"]', 'place[title]', 'Lieu enfant dans Tatooine');
+        $form = $crawler->selectButton('place[create]')->form();
+        $this->client->submit($form);
+        $this->assertResponseRedirects();
+        $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
     }
 
 }
