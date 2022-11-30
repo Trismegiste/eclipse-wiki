@@ -133,14 +133,17 @@ class DigraphExplore
         // absolutely NOT optimized algorithm
         foreach ($this->repository->search() as $vertex) {
             $scan = $vertex->getInternalLink();
-            foreach($scan as $target) {
+            foreach ($scan as $target) {
                 if (is_null($this->repository->findByTitle($target))) {
-                     $keep[] = $target;
+                    $keep[] = $target;
                 }
             }
         }
 
-        return $keep;
+        $nondup = array_unique($keep);
+        sort($nondup);
+
+        return $nondup;
     }
 
 }
