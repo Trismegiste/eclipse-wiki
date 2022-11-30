@@ -135,15 +135,14 @@ class DigraphExplore
             $scan = $vertex->getInternalLink();
             foreach ($scan as $target) {
                 if (is_null($this->repository->findByTitle($target))) {
-                    $keep[] = $target;
+                    $keep[$target][$vertex->getTitle()] = true;
                 }
             }
         }
+        
+        ksort($keep);
 
-        $nondup = array_unique($keep);
-        sort($nondup);
-
-        return $nondup;
+        return $keep;
     }
 
 }

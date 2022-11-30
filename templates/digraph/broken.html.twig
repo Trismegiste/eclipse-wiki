@@ -8,12 +8,21 @@
 {% block header_title %}{{ block('title') }}{% endblock %}
 
 {% block content %}
-    <ul>
-        {% for vertex in broken %}
-            <li>
-                <a href="{{ path('app_wiki', {title:vertex}) }}">{{ vertex }}</a>
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="parsed-wikitext">
+        <ul>
+            {% for link, vertices in broken %}
+                <li>
+                    Lien manquant vers <a href="{{ path('app_wiki', {title:link}) }}" class="new">{{ link }}</a> dans :
+                    <ul>
+                        {% for title, dummy in vertices %}
+                            <li>
+                                <a href="{{ path('app_wiki', {title:title}) }}">{{ title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}
 
