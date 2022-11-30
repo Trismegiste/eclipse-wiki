@@ -167,4 +167,10 @@ class DigraphExploreTest extends KernelTestCase
         $this->assertCount(0, $this->sut->findOrphan());
     }
 
+    public function testBrokenLink()
+    {
+        $found = $this->sut->searchForBrokenLink();
+        $this->assertCount(1, $found);
+        $this->assertEquals('ThisVertexDoesNotExist', $found[0]);
+    }
 }

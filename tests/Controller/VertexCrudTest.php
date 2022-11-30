@@ -140,4 +140,17 @@ class VertexCrudTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    public function testFindOrphan()
+    {
+        $this->client->request('GET', '/digraph/orphan');
+        $this->assertResponseIsSuccessful();
+    }
+
+    public function testFindBroken()
+    {
+        $this->client->request('GET', '/digraph/broken');
+        $this->assertResponseIsSuccessful();
+    }
+
+
 }

@@ -124,4 +124,23 @@ class DigraphExplore
         return $matrix;
     }
 
+    /**
+     * Search for broken links in vertex content
+     */
+    public function searchForBrokenLink(): array
+    {
+        $keep = [];
+        // absolutely NOT optimized algorithm
+        foreach ($this->repository->search() as $vertex) {
+            $scan = $vertex->getInternalLink();
+            foreach($scan as $target) {
+                if (is_null($this->repository->findByTitle($target))) {
+                     $keep[] = $target;
+                }
+            }
+        }
+
+        return $keep;
+    }
+
 }

@@ -72,14 +72,4 @@ class TimelineCrud extends GenericCrud
         return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $timeline->getPk()]);
     }
 
-    /**
-     * @Route("/timeline/orphan", methods={"GET"})
-     */
-    public function showOrphan(DigraphExplore $explorer): Response
-    {
-        return $this->render('timeline/orphan.html.twig', ['orphan' => array_map(function ($pk) {
-                        return $this->repository->load($pk);
-                    }, $explorer->findOrphan())]);
-    }
-
 }

@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\DigraphExplore;
 
 /**
  * CRUD for Vertex
@@ -213,6 +214,24 @@ class VertexCrud extends GenericCrud
         }
 
         return $this->render('vertex/archive.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/digraph/orphan", methods={"GET"})
+     */
+    public function showOrphan(DigraphExplore $explorer): Response
+    {
+        return $this->render('digraph/orphan.html.twig', ['orphan' => array_map(function ($pk) {
+                        return $this->repository->load($pk);
+                    }, $explorer->findOrphan())]);
+    }
+
+    /**
+     * @Route("/digraph/broken", methods={"GET"})
+     */
+    public function showBroken(DigraphExplore $explorer): Response
+    {
+        return $this->render('digraph/broken.html.twig', ['broken' => $explorer->searchForBrokenLink()]);
     }
 
 }
