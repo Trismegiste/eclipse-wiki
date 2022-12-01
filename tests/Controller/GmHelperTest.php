@@ -1,45 +1,51 @@
 <?php
 
-namespace App\Tests\Controller;
-
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class GmHelperTest extends WebTestCase
 {
 
+    protected $client;
+
+    protected function setUp(): void
+    {
+        $this->client = static::createClient();
+    }
+
     public function testIndex(): void
     {
-        $client = static::createClient();
-        $client->request('GET', '/');
+        $this->client->request('GET', '/');
         $this->assertResponseIsSuccessful();
     }
 
     public function testNameGenerate()
     {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/gm/name');
+        $this->client->request('GET', '/gm/name');
         $this->assertResponseIsSuccessful();
     }
 
     public function testQrCode()
     {
-        $client = static::createClient();
-        $client->request('GET', '/broadcast/qrcode');
+        $this->client->request('GET', '/broadcast/qrcode');
         $this->assertResponseIsSuccessful();
-        $this->assertStringContainsString('QRious', $client->getResponse()->getContent());
+        $this->assertStringContainsString('QRious', $this->client->getResponse()->getContent());
     }
 
     public function testTrackerQrcode()
     {
-        $client = static::createClient();
-        $client->request('GET', '/tracker/qrcode');
+        $this->client->request('GET', '/tracker/qrcode');
         $this->assertResponseIsSuccessful();
     }
 
     public function testTrackerShow()
     {
-        $client = static::createClient();
-        $client->request('GET', '/tracker/show');
+        $this->client->request('GET', '/tracker/show');
+        $this->assertResponseIsSuccessful();
+    }
+
+    public function testHelp()
+    {
+        $this->client->request('GET', '/help');
         $this->assertResponseIsSuccessful();
     }
 
