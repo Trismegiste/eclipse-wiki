@@ -3,7 +3,7 @@
     {% set idButton = id ~ '_randomize' %}
     <div class="pure-g">
         <div class="pure-u-1-2">{{ form_widget(form, {attr: {class: 'pure-input-1'}}) }}</div>
-        <div class="pure-u-1-2"><a class="pure-button pure-input-1" id="{{ idButton }}"><i class="icon-d20"></i>Random</a></div>
+        <div class="pure-u-1-2"><a class="pure-button pure-input-1" id="{{ idButton }}"><i class="icon-randomize"></i>Random</a></div>
         <script>
             document.getElementById('{{ idButton }}').addEventListener('click', function (e) {
                 let widget = document.getElementById('{{ id }}')
@@ -30,7 +30,7 @@
             </select>
         </div>
         <div class="pure-u-1-4">   
-            <a class="pure-button pure-input-1" id="{{id}}_button"><i class="icon-d20"></i>Random</a>
+            <a class="pure-button pure-input-1" id="{{id}}_button"><i class="icon-randomize"></i>Random</a>
             <script>
                 document.getElementById('{{id}}_button').addEventListener('click', function (e) {
                     let field = document.getElementById('{{ id }}')
