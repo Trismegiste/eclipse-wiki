@@ -25,6 +25,7 @@ class VertexTest extends PHPUnit\Framework\TestCase
     public function testEmptyContent()
     {
         $this->assertNull($this->sut->getContent());
+        $this->assertEquals([], $this->sut->getInternalLink());
     }
 
     public function testContent()

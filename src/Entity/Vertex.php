@@ -123,6 +123,10 @@ abstract class Vertex implements Root, Archivable
      */
     public function getInternalLink(): array
     {
+        if (is_null($this->content)) {
+            return [];
+        }
+
         $re = '/\[\[([^\|\]]+)(\]\]|\|)/m';
         $matches = [];
         preg_match_all($re, $this->content, $matches, PREG_SET_ORDER, 0);
