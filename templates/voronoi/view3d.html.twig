@@ -43,8 +43,9 @@
                 sphere.position.y = 1;
 
                 // Built-in 'ground' shape.
-                const ground = BABYLON.MeshBuilder.CreateGround("ground",
-                        {width: 6, height: 6}, scene);
+//                const ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 6, height: 6}, scene);
+
+                const tile = BABYLON.MeshBuilder.CreateDisc("disc", {tessellation: 6, radius: 3}, scene);
                 
                 console.log(JSON.parse(data))
 //                var newInstance = mesh.createInstance("i" + index)
