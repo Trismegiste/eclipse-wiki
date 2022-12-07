@@ -212,14 +212,14 @@ class VoronoiCrud extends AbstractController
     }
 
     /**
-     * @Route("/voronoi/babylon/{pk}.battlemap", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
+     * @Route("/voronoi/babylon/{pk}.{_format}", methods={"GET"}, requirements={"pk"="[\da-f]{24}", "_format": "battlemap"})
      */
-    public function babylon(Place $place): Response
+    public function babylon(Place $place): JsonResponse
     {
         $config = $place->voronoiParam;
         $map = $this->builder->create($config);
-        
-        return new Response("");
+
+        return new JsonResponse([]);
     }
 
 }
