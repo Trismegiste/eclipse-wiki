@@ -45,6 +45,9 @@
                 // Built-in 'ground' shape.
                 const ground = BABYLON.MeshBuilder.CreateGround("ground",
                         {width: 6, height: 6}, scene);
+                
+                console.log(JSON.parse(data))
+//                var newInstance = mesh.createInstance("i" + index)
 
                 return true;
             },
