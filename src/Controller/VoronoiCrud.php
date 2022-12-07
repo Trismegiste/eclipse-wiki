@@ -203,4 +203,21 @@ class VoronoiCrud extends AbstractController
         return $this->render('voronoi/populate.html.twig', ['form' => $form->createView()]);
     }
 
+    /**
+     * @Route("/voronoi/view3d/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
+     */
+    public function view3d(Place $place): Response
+    {
+        return $this->render('voronoi/view3d.html.twig', ['place' => $place]);
+    }
+
+    /**
+     * @Route("/voronoi/babylon/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
+     */
+    public function babylon(Place $place): Response
+    {
+        $config = $place->voronoiParam;
+        $map = $this->builder->create($config);
+    }
+
 }
