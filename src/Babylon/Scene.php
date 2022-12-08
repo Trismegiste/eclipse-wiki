@@ -4,7 +4,7 @@ namespace App\Babylon;
 
 use App\Voronoi\HexaMap;
 
-class Battlemap implements \JsonSerializable
+class Scene implements \JsonSerializable
 {
 
     protected HexaMap $wrapped;
@@ -24,12 +24,12 @@ class Battlemap implements \JsonSerializable
                 $ground[] = [
                     'x' => $this->wrapped->getAbscissa($x,$y),
                     'y' => $y,
-                    'template' => $cell->template
+                    'cell' => $cell
                 ];
             }
         }
 
-        return ['ground'=>$ground];
+        return ['grid' => $ground];
     }
 
 }

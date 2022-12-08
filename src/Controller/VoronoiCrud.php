@@ -219,7 +219,7 @@ class VoronoiCrud extends AbstractController
         $config = $place->voronoiParam;
         $map = $this->builder->create($config);
 
-        return new JsonResponse(new \App\Babylon\Battlemap($map));
+        return new JsonResponse(new \App\Babylon\Scene($map));
     }
 
 }
