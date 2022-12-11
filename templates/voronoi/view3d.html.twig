@@ -45,22 +45,31 @@
                 myMaterial.diffuseTexture = new BABYLON.Texture("/texture/industrial.webp", scene);
                 tile.material = myMaterial;
 
-                const wall = BABYLON.Mesh.CreatePlane("wall", 2/3)
-                wall.position.y = 1/3
-                wall.position.x = 2/3 * Math.cos(Math.PI / 6)
+                const wall = BABYLON.Mesh.CreatePlane("wall", 2 / 3)
+                wall.position.y = 1 / 3
+                wall.position.x = 2 / 3 * Math.cos(Math.PI / 6)
                 wall.rotation.y = Math.PI / 2
-                const handle = new BABYLON.TransformNode("room-center")
-                wall.parent = handle
-                handle.rotation.y = -2 * Math.PI / 3
-                handle.position.x = 4/3 * Math.cos(Math.PI / 6)
+                wall.isVisible = false
 
-                const origin = BABYLON.MeshBuilder.CreateSphere('origin', {diameter:0.1})
+                const origin = BABYLON.MeshBuilder.CreateSphere('origin', {diameter: 0.1})
 
                 const battlemap = JSON.parse(data)
                 battlemap.grid.forEach((cell, k) => {
                     const ground = tile.createInstance("ground" + k)
                     ground.position.x = cell.x
-                    ground.position.z = cell.y
+                    ground.position.z = -cell.y
+
+                    for (let dir = 0; dir < 6; dir++) {
+                        console.log(cell.cell.wall)
+                        if (cell.cell.wall[dir]) {
+                            const handle = new BABYLON.TransformNode("handle" + k + '-' + dir)
+                            const tmpWall = wall.createInstance("wall-" + k + '-' + dir)
+                            tmpWall.parent = handle
+                            handle.rotation.y = -dir * Math.PI / 3
+                            handle.position.x = cell.x
+                            handle.position.z = -cell.y
+                        }
+                    }
                 })
 
                 return true;
