@@ -13,7 +13,7 @@
         const createScene = function () {
             // Creates a basic Babylon Scene object
             const scene = new BABYLON.Scene(engine)
-            //Set gravity for the scene (G force like, on Y-axis)
+            // Set gravity for the scene (G force like, on Y-axis)
             scene.gravity = new BABYLON.Vector3(0, -0.9, 0);
 
             // Creates and positions a free camera
@@ -25,15 +25,13 @@
             // Enable Collisions
             scene.collisionsEnabled = true;
 
-            //Then apply collisions and gravity to the active camera
+            // Then apply collisions and gravity to the active camera
             camera.checkCollisions = true;
             camera.applyGravity = true;
 
             //Set the ellipsoid around the camera (e.g. your player's size)
             camera.ellipsoid = new BABYLON.Vector3(0.4, 0.4, 0.4);
 
-            // This attaches the camera to the canvas
-            camera.attachControl(canvas, true)
             // Creates a light, aiming 0,1,0 - to the sky
             const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene)
             // Dim the light a small amount - 0 to 1
