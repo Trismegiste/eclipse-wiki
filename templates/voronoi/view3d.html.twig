@@ -54,12 +54,12 @@
                 let textureKey = ['default', 'cluster-sleep', 'cluster-industry']
                 let template = {}
                 textureKey.forEach((key) => {
-                    const tile = BABYLON.MeshBuilder.CreateDisc("disc-" + key, {tessellation: 6, radius: 2 / 3 - 0.01}, scene)
+                    const tile = BABYLON.MeshBuilder.CreateDisc("hexagon-" + key, {tessellation: 6, radius: 2 / 3 - 0.01}, scene)
                     tile.rotation.z = Math.PI / 6
                     tile.rotation.x = Math.PI / 2
                     tile.isVisible = false
                     const myMaterial = new BABYLON.StandardMaterial('mat-' + key, scene)
-                    myMaterial.diffuseTexture = new BABYLON.Texture("/texture/" + key + ".webp", scene)
+                    myMaterial.diffuseTexture = new BABYLON.Texture("/texture/habitat/ground/" + key + ".webp", scene)
                     tile.material = myMaterial
                     template[key] = tile
                 })
