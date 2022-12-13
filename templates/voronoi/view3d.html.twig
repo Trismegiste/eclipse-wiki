@@ -49,30 +49,42 @@
             },
             load: function (scene, data, rootUrl) {
 
-                let textureKey = ['default', 'cluster-sleep', 'cluster-industry']
-                let template = {}
+                let textureKey = ['default', 'cluster-sleep', 'cluster-industry', 'cluster-park']
+
+                // Ground templates
+                let groundTemplate = {}
                 textureKey.forEach((key) => {
                     const tile = BABYLON.MeshBuilder.CreateDisc("hexagon-" + key, {tessellation: 6, radius: 2 / 3 - 0.01}, scene)
                     tile.rotation.z = Math.PI / 6
                     tile.rotation.x = Math.PI / 2
                     tile.isVisible = false
-                    const myMaterial = new BABYLON.StandardMaterial('mat-' + key, scene)
+
+                    const myMaterial = new BABYLON.StandardMaterial('mat-ground-' + key, scene)
                     myMaterial.diffuseTexture = new BABYLON.Texture("/texture/habitat/ground/" + key + ".webp", scene)
                     tile.material = myMaterial
-                    template[key] = tile
+                    groundTemplate[key] = tile
                 })
 
-                const wall = BABYLON.Mesh.CreatePlane("wall", 2 / 3)
-                wall.position.y = 1 / 3
-                wall.position.x = 2 / 3 * Math.cos(Math.PI / 6)
-                wall.rotation.y = Math.PI / 2
-                wall.isVisible = false
+                // Wall templates
+                let wallTemplate = {}
+                textureKey.forEach((key) => {
+                    const wall = BABYLON.MeshBuilder.CreatePlane("wall-" + key, {width: 2 / 3, height: 1})
+                    wall.position.y = 0.5
+                    wall.position.x = 2 / 3 * Math.cos(Math.PI / 6)
+                    wall.rotation.y = Math.PI / 2
+                    wall.isVisible = false
+
+                    const myMaterial = new BABYLON.StandardMaterial('mat-wall-' + key, scene)
+                    myMaterial.diffuseTexture = new BABYLON.Texture("/texture/habitat/wall/" + key + ".webp", scene)
+                    wall.material = myMaterial
+                    wallTemplate[key] = wall
+                })
 
                 const origin = BABYLON.MeshBuilder.CreateSphere('origin', {diameter: 0.1})
 
                 const battlemap = JSON.parse(data)
                 battlemap.grid.forEach((cell, k) => {
-                    const ground = template[cell.obj.template].createInstance("ground" + k)
+                    const ground = groundTemplate[cell.obj.template].createInstance("ground" + k)
                     ground.position.x = cell.x
                     ground.position.z = -cell.y
                     ground.checkCollisions = true
@@ -80,7 +92,7 @@
                     for (let dir = 0; dir < 6; dir++) {
                         if (cell.obj.wall[dir]) {
                             const handle = new BABYLON.TransformNode("handle" + k + '-' + dir)
-                            const tmpWall = wall.createInstance("wall-" + k + '-' + dir)
+                            const tmpWall = wallTemplate[cell.obj.template].createInstance("wall-" + k + '-' + dir)
                             tmpWall.parent = handle
                             handle.rotation.y = -dir * Math.PI / 3
                             handle.position.x = cell.x
