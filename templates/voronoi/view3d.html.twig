@@ -20,7 +20,7 @@
             var camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 2, 0), scene);
             camera.setTarget(new BABYLON.Vector3(1, 2, -1));
             camera.attachControl(canvas, true);
-            camera.minZ = 0.45;
+            camera.minZ = 0.3;
 
             // Enable Collisions
             scene.collisionsEnabled = true;
@@ -30,7 +30,7 @@
             camera.applyGravity = true;
 
             //Set the ellipsoid around the camera (e.g. your player's size)
-            camera.ellipsoid = new BABYLON.Vector3(0.4, 0.4, 0.4);
+            camera.ellipsoid = new BABYLON.Vector3(0.2, 0.35, 0.2);
 
             // Creates a light, aiming 0,1,0 - to the sky
             const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene)
@@ -91,6 +91,7 @@
                             const handle = new BABYLON.TransformNode("handle" + k + '-' + dir)
                             const tmpWall = scene.getMeshByName('wall-' + cell.obj.template).createInstance("wall-" + k + '-' + dir)
                             tmpWall.parent = handle
+                            //tmpWall.checkCollisions = true
                             handle.rotation.y = -dir * Math.PI / 3
                             handle.position.x = cell.x
                             handle.position.z = -cell.y
