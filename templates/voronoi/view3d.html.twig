@@ -15,28 +15,26 @@
             const scene = new BABYLON.Scene(engine)
             // Set gravity for the scene (G force like, on Y-axis)
             scene.gravity = new BABYLON.Vector3(0, -0.9, 0);
-
-            // Creates and positions a free camera
-            var camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 2, 0), scene);
-            camera.setTarget(new BABYLON.Vector3(1, 2, -1));
-            camera.attachControl(canvas, true);
-            camera.minZ = 0.3;
-
             // Enable Collisions
             scene.collisionsEnabled = true;
 
+            // Creates and positions a free camera
+            var camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 2, -0.5), scene);
+            camera.setTarget(new BABYLON.Vector3(0, 2, -1));
+            camera.attachControl(canvas, true);
+            camera.minZ = 0.3;
             // Then apply collisions and gravity to the active camera
             camera.checkCollisions = true;
             camera.applyGravity = true;
-
             //Set the ellipsoid around the camera (e.g. your player's size)
-            camera.ellipsoid = new BABYLON.Vector3(0.2, 0.35, 0.2);
+            camera.ellipsoid = new BABYLON.Vector3(0.1, 0.6, 0.1);
 
             // Creates a light, aiming 0,1,0 - to the sky
             const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene)
             // Dim the light a small amount - 0 to 1
             light.intensity = 0.9
 
+            // Templates
             let textureKey = ['default', 'cluster-sleep', 'cluster-industry', 'cluster-park']
             // Ground templates
             textureKey.forEach((key) => {
@@ -52,7 +50,7 @@
 
             // Wall templates
             textureKey.forEach((key) => {
-                const wall = BABYLON.MeshBuilder.CreatePlane("wall-" + key, {width: 2 / 3, height: 1})
+                const wall = BABYLON.MeshBuilder.CreatePlane("wall-" + key, {width: 2 / 3, height: 2})
                 wall.position.y = 0.5
                 wall.position.x = 2 / 3 * Math.cos(Math.PI / 6)
                 wall.rotation.y = Math.PI / 2
@@ -62,7 +60,6 @@
                 myMaterial.diffuseTexture = new BABYLON.Texture("/texture/habitat/wall/" + key + ".webp", scene)
                 wall.material = myMaterial
             })
-
 
             return scene
         }
