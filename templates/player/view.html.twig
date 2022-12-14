@@ -1,12 +1,6 @@
 {# player screen #}
 {% extends "base.html.twig" %}
 
-{% block metadata_header %}
-    {{ parent() }}
-    {# Smartphone could drop connections because of energy saving, 3 minutes seems a common duration to refresh this page #}
-    <meta http-equiv="refresh" content="180">
-{% endblock %}
-
 {% block title %}PlayerCast{% endblock %}
 
 {% block body %}
@@ -37,10 +31,7 @@
                         this.clicSound = new Howl({
                             src: ['{{ asset('sound/clic.webm')}}', '{{ asset('sound/clic.ogg') }}']
                         })
-                        let container = document.querySelector('img')
-                        container.height = document.documentElement.clientHeight
-                        container.width = document.documentElement.clientWidth
-                        console.log(document.documentElement.clientWidth, document.documentElement.clientHeight)
+                        this.resize()
 
                         this.socket = new WebSocket(this.host)
                         this.socket.onopen = function (msg) {
@@ -61,6 +52,15 @@
                             console.log('Disconnected')
                             _this.onAir = false
                         }
+
+                        // Watch for browser/canvas resize events
+                        window.addEventListener("resize", () => {
+                            this.resize();
+                        });
+                    },
+                    resize() {
+                        this.$refs.tv.height = document.documentElement.clientHeight
+                        this.$refs.tv.width = document.documentElement.clientWidth
                     }
                 }))
         })
