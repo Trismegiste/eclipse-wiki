@@ -9,6 +9,7 @@
     <script>
         const canvas = document.getElementById("renderCanvas") // Get the canvas element
         const engine = new BABYLON.Engine(canvas, true) // Generate the BABYLON 3D engine
+        const wallHeight = 1.7
 
         const createScene = function () {
             // Creates a basic Babylon Scene object
@@ -27,7 +28,7 @@
             camera.checkCollisions = true;
             camera.applyGravity = true;
             //Set the ellipsoid around the camera (e.g. your player's size)
-            camera.ellipsoid = new BABYLON.Vector3(0.1, 0.6, 0.1);
+            camera.ellipsoid = new BABYLON.Vector3(0.1, wallHeight / 3, 0.1);
 
             // Creates a light, aiming 0,1,0 - to the sky
             const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene)
@@ -50,8 +51,8 @@
 
             // Wall templates
             textureKey.forEach((key) => {
-                const wall = BABYLON.MeshBuilder.CreatePlane("wall-" + key, {width: 2 / 3, height: 2})
-                wall.position.y = 0.5
+                const wall = BABYLON.MeshBuilder.CreatePlane("wall-" + key, {width: 2 / 3, height: wallHeight})
+                wall.position.y = wallHeight / 2
                 wall.position.x = 2 / 3 * Math.cos(Math.PI / 6)
                 wall.rotation.y = Math.PI / 2
                 wall.isVisible = false
