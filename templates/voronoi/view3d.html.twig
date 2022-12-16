@@ -49,6 +49,13 @@
                 tile.material = myMaterial
             })
 
+            // selector
+            const groundSelector = BABYLON.MeshBuilder.CreateDisc("selector-ground", {tessellation: 6, radius: 2 / 3}, scene)
+            groundSelector.rotation.z = Math.PI / 6
+            groundSelector.rotation.x = Math.PI / 2
+            groundSelector.position.y = 0.01
+            groundSelector.isVisible = false
+
             // Wall templates
             textureKey.forEach((key) => {
                 const wall = BABYLON.MeshBuilder.CreatePlane("wall-" + key, {width: 2 / 3, height: wallHeight})
@@ -64,8 +71,6 @@
 
             return scene
         }
-        const scene = createScene() //Call the createScene function
-
 
         BABYLON.SceneLoader.RegisterPlugin({
             extensions: ".battlemap",
@@ -78,11 +83,24 @@
             },
             load: function (scene, data, rootUrl) {
                 const battlemap = JSON.parse(data)
+                const layer = scene.getHighlightLayerByName('highlighting')
+
                 battlemap.grid.forEach((cell, k) => {
                     const ground = scene.getMeshByName('hexagon-' + cell.obj.template).createInstance("ground" + k)
                     ground.position.x = cell.x
                     ground.position.z = -cell.y
                     ground.checkCollisions = true
+
+                    ground.actionManager = new BABYLON.ActionManager(scene);
+                    ground.actionManager.registerAction(
+                            new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, (e) => {
+                                const selector = scene.getMeshByName('selector-ground')
+                                const current = e.meshUnderPointer
+                                selector.isVisible = true
+                                selector.position.x = current.position.x
+                                selector.position.z = current.position.z
+                            })
+                            )
 
                     for (let dir = 0; dir < 6; dir++) {
                         if (cell.obj.wall[dir]) {
@@ -101,6 +119,7 @@
             }
         })
 
+        const scene = createScene() //Call the createScene function
         BABYLON.SceneLoader.Append("/voronoi/babylon/", "{{ place.pk }}.battlemap", scene, function (scene) {})
 
         // Register a render loop to repeatedly render the scene
