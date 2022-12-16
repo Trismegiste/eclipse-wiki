@@ -55,6 +55,16 @@
             groundSelector.rotation.x = Math.PI / 2
             groundSelector.position.y = 0.01
             groundSelector.isVisible = false
+            groundSelector.actionManager = new BABYLON.ActionManager(scene);
+            groundSelector.actionManager.registerAction(
+                 new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, (e) => {
+                     console.log('move')
+                     const camera = scene.getCameraByName('FreeCamera')
+                     const current = e.meshUnderPointer
+                     camera.position.x = current.position.x
+                     camera.position.z = current.position.z
+                 })
+            )
 
             // Wall templates
             textureKey.forEach((key) => {
