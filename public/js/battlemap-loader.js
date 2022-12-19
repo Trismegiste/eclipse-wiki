@@ -18,6 +18,7 @@ const battlemapLoader = {
         camera.position.y = battlemap.side
         camera.position.z = -battlemap.side / 2
         camera.setTarget(new BABYLON.Vector3(battlemap.side / 2, 0, -battlemap.side / 2));
+        camera.maxZ = battlemap.side * 2;
 
         battlemap.grid.forEach((cell, k) => {
             const ground = scene.getMeshByName('hexagon-' + cell.obj.template).createInstance("ground" + k)

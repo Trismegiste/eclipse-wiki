@@ -24,7 +24,7 @@
             var camera = new BABYLON.UniversalCamera("player-camera", new BABYLON.Vector3(0, 2 * wallHeight / 3, 0), scene);
             camera.setTarget(new BABYLON.Vector3(0, wallHeight, -10));
             camera.attachControl(canvas)
-            camera.minZ = 0.3;
+            camera.minZ = 0.01;
             camera.fov = 60 / 180 * Math.PI
             // Then apply collisions and gravity to the active camera
             camera.checkCollisions = true;
