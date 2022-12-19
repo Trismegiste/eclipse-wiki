@@ -18,18 +18,21 @@ class Scene implements \JsonSerializable
     {
         $ground = [];
         $side = $this->wrapped->getSize();
-        for($x=0; $x<$side; $x++) {
-            for($y=0; $y<$side; $y++) {
-                $cell = $this->wrapped->getCell([$x,$y]);
+        for ($x = 0; $x < $side; $x++) {
+            for ($y = 0; $y < $side; $y++) {
+                $cell = $this->wrapped->getCell([$x, $y]);
                 $ground[] = [
-                    'x' => $this->wrapped->getAbscissa($x,$y),
+                    'x' => $this->wrapped->getAbscissa($x, $y),
                     'y' => $y,
                     'obj' => $cell
                 ];
             }
         }
 
-        return ['grid' => $ground];
+        return [
+            'side' => $this->wrapped->getSize(),
+            'grid' => $ground
+        ];
     }
 
 }

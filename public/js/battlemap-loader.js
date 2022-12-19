@@ -45,6 +45,12 @@ const battlemapLoader = {
             }
         })
 
+        const camera = scene.getCameraByName('player-camera')
+        camera.position.x = battlemap.side / 2
+        camera.position.y = battlemap.side
+        camera.position.z = -battlemap.side / 2
+        camera.setTarget(new BABYLON.Vector3(battlemap.side / 2, 0, -battlemap.side / 2));
+
         return true
     }
 }
