@@ -6,9 +6,10 @@
 
 {% block javascripts %}
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="{{ asset('js/battlemap-loader.js') }}"></script>
     <script>
         const canvas = document.getElementById("renderCanvas") // Get the canvas element
-        const engine = new BABYLON.Engine(canvas, true) // Generate the BABYLON 3D engine
+        const engine = new BABYLON.Engine(canvas) // Generate the BABYLON 3D engine
         const wallHeight = 1.7
 
         const createScene = function () {
@@ -57,14 +58,14 @@
             groundSelector.isVisible = false
             groundSelector.actionManager = new BABYLON.ActionManager(scene);
             groundSelector.actionManager.registerAction(
-                 new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, (e) => {
-                     console.log('move')
-                     const camera = scene.getCameraByName('FreeCamera')
-                     const current = e.meshUnderPointer
-                     camera.position.x = current.position.x
-                     camera.position.z = current.position.z
-                 })
-            )
+                    new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, (e) => {
+                        console.log('move')
+                        const camera = scene.getCameraByName('FreeCamera')
+                        const current = e.meshUnderPointer
+                        camera.position.x = current.position.x
+                        camera.position.z = current.position.z
+                    })
+                    )
 
             // Wall templates
             textureKey.forEach((key) => {
@@ -82,52 +83,7 @@
             return scene
         }
 
-        BABYLON.SceneLoader.RegisterPlugin({
-            extensions: ".battlemap",
-            importMesh: function (meshesNames, scene, data, rootUrl, meshes, particleSystems, skeletons) {
-                return true
-            },
-            loadAssets(scene, data, rootUrl) {
-                var container = new AssetContainer(scene)
-                return container
-            },
-            load: function (scene, data, rootUrl) {
-                const battlemap = JSON.parse(data)
-                const layer = scene.getHighlightLayerByName('highlighting')
-
-                battlemap.grid.forEach((cell, k) => {
-                    const ground = scene.getMeshByName('hexagon-' + cell.obj.template).createInstance("ground" + k)
-                    ground.position.x = cell.x
-                    ground.position.z = -cell.y
-                    ground.checkCollisions = true
-
-                    ground.actionManager = new BABYLON.ActionManager(scene);
-                    ground.actionManager.registerAction(
-                            new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, (e) => {
-                                const selector = scene.getMeshByName('selector-ground')
-                                const current = e.meshUnderPointer
-                                selector.isVisible = true
-                                selector.position.x = current.position.x
-                                selector.position.z = current.position.z
-                            })
-                            )
-
-                    for (let dir = 0; dir < 6; dir++) {
-                        if (cell.obj.wall[dir]) {
-                            const handle = new BABYLON.TransformNode("handle" + k + '-' + dir)
-                            const tmpWall = scene.getMeshByName('wall-' + cell.obj.template).createInstance("wall-" + k + '-' + dir)
-                            tmpWall.parent = handle
-                            //tmpWall.checkCollisions = true
-                            handle.rotation.y = -dir * Math.PI / 3
-                            handle.position.x = cell.x
-                            handle.position.z = -cell.y
-                        }
-                    }
-                })
-
-                return true
-            }
-        })
+        BABYLON.SceneLoader.RegisterPlugin(battlemapLoader)
 
         const scene = createScene() //Call the createScene function
         BABYLON.SceneLoader.Append("/voronoi/babylon/", "{{ place.pk }}.battlemap", scene, function (scene) {})
