@@ -57,6 +57,10 @@
             groundSelector.rotation.x = Math.PI / 2
             groundSelector.position.y = 0.01
             groundSelector.isVisible = false
+            const selectorMat = new BABYLON.StandardMaterial('mat-selector')
+            selectorMat.diffuseColor = new BABYLON.Color3(1, 0, 0)
+            selectorMat.alpha = 0.5
+            groundSelector.material = selectorMat
             groundSelector.actionManager = new BABYLON.ActionManager(scene);
             groundSelector.actionManager.registerAction(
                     new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, (e) => {

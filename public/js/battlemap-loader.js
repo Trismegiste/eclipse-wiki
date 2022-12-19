@@ -13,7 +13,11 @@ const battlemapLoader = {
     },
     load: function (scene, data, rootUrl) {
         const battlemap = JSON.parse(data)
-        const layer = scene.getHighlightLayerByName('highlighting')
+        const camera = scene.getCameraByName('player-camera')
+        camera.position.x = battlemap.side / 2
+        camera.position.y = battlemap.side
+        camera.position.z = -battlemap.side / 2
+        camera.setTarget(new BABYLON.Vector3(battlemap.side / 2, 0, -battlemap.side / 2));
 
         battlemap.grid.forEach((cell, k) => {
             const ground = scene.getMeshByName('hexagon-' + cell.obj.template).createInstance("ground" + k)
@@ -37,19 +41,13 @@ const battlemapLoader = {
                     const handle = new BABYLON.TransformNode("handle" + k + '-' + dir)
                     const tmpWall = scene.getMeshByName('wall-' + cell.obj.template).createInstance("wall-" + k + '-' + dir)
                     tmpWall.parent = handle
-                    //tmpWall.checkCollisions = true
+                    tmpWall.checkCollisions = true
                     handle.rotation.y = -dir * Math.PI / 3
                     handle.position.x = cell.x
                     handle.position.z = -cell.y
                 }
             }
         })
-
-        const camera = scene.getCameraByName('player-camera')
-        camera.position.x = battlemap.side / 2
-        camera.position.y = battlemap.side
-        camera.position.z = -battlemap.side / 2
-        camera.setTarget(new BABYLON.Vector3(battlemap.side / 2, 0, -battlemap.side / 2));
 
         return true
     }
