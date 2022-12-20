@@ -65,15 +65,16 @@
             groundSelector.actionManager.registerAction(
                     new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, (e) => {
                         const camera = scene.getCameraByName('player-camera')
-                        const current = e.meshUnderPointer
+                        const target = e.meshUnderPointer.position.clone()
+                        target.y = camera.position.y
 
                         const frameRate = 10
-                        const xSlide = new BABYLON.Animation("xSlide", "position", frameRate, BABYLON.Animation.ANIMATIONTYPE_VECTOR3)
-                        xSlide.setKeys([
+                        const moving = new BABYLON.Animation("moving", "position", frameRate, BABYLON.Animation.ANIMATIONTYPE_VECTOR3)
+                        moving.setKeys([
                             {frame: 0, value: camera.position},
-                            {frame: frameRate, value: new BABYLON.Vector3(current.position.x, camera.position.y, current.position.z)}
+                            {frame: frameRate, value: target}
                         ])
-                        camera.animations.push(xSlide)
+                        camera.animations.push(moving)
                         scene.beginAnimation(camera, 0, frameRate)
                     })
                     )
