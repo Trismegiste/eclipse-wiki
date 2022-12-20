@@ -252,6 +252,7 @@ class HexaMap implements SquareGrid
                         if (!(array_key_exists($keys[0], $roomConnection) &&
                                 array_key_exists($keys[1], $roomConnection[$keys[0]]))) {
                             $center->door[$direction] = true;
+                            $cell->door[(3 + $direction) % 6] = true;
                             $roomConnection[$keys[0]][$keys[1]] = true;
                         }
                     }
