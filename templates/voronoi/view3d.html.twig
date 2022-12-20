@@ -67,8 +67,14 @@
                         const camera = scene.getCameraByName('player-camera')
                         const current = e.meshUnderPointer
 
-                        camera.position.x = current.position.x
-                        camera.position.z = current.position.z
+                        const frameRate = 10
+                        const xSlide = new BABYLON.Animation("xSlide", "position", frameRate, BABYLON.Animation.ANIMATIONTYPE_VECTOR3)
+                        xSlide.setKeys([
+                            {frame: 0, value: camera.position},
+                            {frame: frameRate, value: new BABYLON.Vector3(current.position.x, camera.position.y, current.position.z)}
+                        ])
+                        camera.animations.push(xSlide)
+                        scene.beginAnimation(camera, 0, frameRate)
                     })
                     )
 
