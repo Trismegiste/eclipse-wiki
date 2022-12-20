@@ -40,9 +40,10 @@ const battlemapLoader = {
             for (let dir = 0; dir < 6; dir++) {
                 if (cell.obj.wall[dir]) {
                     const handle = new BABYLON.TransformNode("handle" + k + '-' + dir)
-                    const tmpWall = scene.getMeshByName('wall-' + cell.obj.template).createInstance("wall-" + k + '-' + dir)
+                    const meshName = cell.obj.door[dir] ? 'door' : 'wall-' + cell.obj.template
+                    const tmpWall = scene.getMeshByName(meshName).createInstance("wall-" + k + '-' + dir)
                     tmpWall.parent = handle
-                    tmpWall.checkCollisions = true
+                    tmpWall.checkCollisions = !cell.obj.door[dir]
                     handle.rotation.y = -dir * Math.PI / 3
                     handle.position.x = cell.x
                     handle.position.z = -cell.y
