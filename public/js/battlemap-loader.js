@@ -13,6 +13,7 @@ const battlemapLoader = {
     },
     load: function (scene, data, rootUrl) {
         const battlemap = JSON.parse(data)
+
         const camera = scene.getCameraByName('player-camera')
         camera.position.x = battlemap.side / 2
         camera.position.y = battlemap.side
@@ -70,8 +71,8 @@ const battlemapLoader = {
             if (cell.obj.npc) {
                 const manager = spriteManager[cell.obj.npc.label]
                 const npc = new BABYLON.Sprite("npc-" + k, manager)
-                npc.width = 1
-                npc.height = 1
+                npc.width = 0.5
+                npc.height = 0.5
                 npc.position = new BABYLON.Vector3(cell.x, 0.75, -cell.y)
             }
         })
