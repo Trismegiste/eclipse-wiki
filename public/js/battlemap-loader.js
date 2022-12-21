@@ -47,6 +47,17 @@ const battlemapLoader = {
                     handle.rotation.y = -dir * Math.PI / 3
                     handle.position.x = cell.x
                     handle.position.z = -cell.y
+
+                    // clickable door
+                    if (cell.obj.door[dir]) {
+                        tmpWall.actionManager = new BABYLON.ActionManager(scene);
+                        tmpWall.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger,
+                            (e) => {
+                                const current = e.meshUnderPointer
+                                current.isVisible = false
+                            }
+                        ))
+                    }
                 }
             }
         })
