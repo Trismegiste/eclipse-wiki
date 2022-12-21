@@ -20,6 +20,13 @@ const battlemapLoader = {
         camera.setTarget(new BABYLON.Vector3(battlemap.side / 2, 0, -battlemap.side / 2));
         camera.maxZ = battlemap.side * 2;
 
+        // map token
+        let spriteManager = {}
+        battlemap.npc.forEach((npc) => {
+            spriteManager[npc.label] = new BABYLON.SpriteManager('token-' + npc.label, '/picture/get/' + npc.picture, 2000, 504)
+        })
+
+        // Grid of HexaCell
         battlemap.grid.forEach((cell, k) => {
             const ground = scene.getMeshByName('hexagon-' + cell.obj.template).createInstance("ground" + k)
             ground.position.x = cell.x
@@ -51,14 +58,21 @@ const battlemapLoader = {
                     // clickable door
                     if (cell.obj.door[dir]) {
                         tmpWall.actionManager = new BABYLON.ActionManager(scene);
-                        tmpWall.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger,
-                            (e) => {
-                                const current = e.meshUnderPointer
-                                current.isVisible = false
-                            }
-                        ))
+                        tmpWall.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, (e) => {
+                            const current = e.meshUnderPointer
+                            current.isVisible = false
+                        }))
                     }
                 }
+            }
+
+            // token if any
+            if (cell.obj.npc) {
+                const manager = spriteManager[cell.obj.npc.label]
+                const npc = new BABYLON.Sprite("npc-" + k, manager)
+                npc.width = 1
+                npc.height = 1
+                npc.position = new BABYLON.Vector3(cell.x, 0.75, -cell.y)
             }
         })
 

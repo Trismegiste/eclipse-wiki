@@ -399,6 +399,7 @@ class HexaMap implements SquareGrid
         // keep npc for generating SVG, we need abstract ID for <defs> tag
         $this->npcToken = [];
         foreach ($npcPerTile as $cfg) {
+            /** @var \App\Entity\TileNpcConfig $cfg */
             $this->npcToken[] = $cfg->npc;
         }
 
@@ -418,7 +419,7 @@ class HexaMap implements SquareGrid
 
     /**
      * Gets assoc array between token ID and NPC
-     * @return array
+     * @return array an array of \App\Entity\MapToken
      */
     public function getNpcToken(): array
     {
