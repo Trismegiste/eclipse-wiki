@@ -14,7 +14,7 @@ const battlemapLoader = {
     load: function (scene, data, rootUrl) {
         const battlemap = JSON.parse(data)
 
-        this.setCamera(scene, battlemap.side)
+        this.setCamera(scene, battlemap.side, battlemap.wallHeight)
         this.setLight(scene)
         this.createGround(scene, battlemap.texture)
         this.createWall(scene, battlemap.texture, battlemap.wallHeight)
@@ -79,7 +79,7 @@ const battlemapLoader = {
 
         return true
     },
-    setCamera: function (scene, side) {
+    setCamera: function (scene, side, wallHeight) {
         const camera = scene.getCameraByName('player-camera')
         camera.position = new BABYLON.Vector3(side / 2, side, -side / 2)
         camera.setTarget(new BABYLON.Vector3(side / 2, 0, -side / 2))
