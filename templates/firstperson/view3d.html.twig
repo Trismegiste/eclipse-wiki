@@ -8,27 +8,21 @@
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
     <script src="{{ asset('js/battlemap-loader.js') }}"></script>
     <script>
+        BABYLON.SceneLoader.RegisterPlugin(battlemapLoader)
         const canvas = document.getElementById("renderCanvas") // Get the canvas element
         const engine = new BABYLON.Engine(canvas) // Generate the BABYLON 3D engine
 
-        const createScene = function () {
-            // Creates Scene object
-            const scene = new BABYLON.Scene(engine)
-            scene.gravity = new BABYLON.Vector3(0, -0.9, 0);
-            scene.collisionsEnabled = true;
+        // Creates Scene object
+        const scene = new BABYLON.Scene(engine)
+        scene.gravity = new BABYLON.Vector3(0, -0.9, 0);
+        scene.collisionsEnabled = true;
 //            scene.fogMode = BABYLON.Scene.FOGMODE_EXP
 
-            // Creates and positions a free camera
-            var camera = new BABYLON.UniversalCamera("player-camera", new BABYLON.Vector3(0, 0, 0), scene)
-            camera.setTarget(new BABYLON.Vector3(0, 0, -1))
-            camera.attachControl(canvas)
-         
-            return scene
-        }
+        // Creates and positions a free camera
+        const camera = new BABYLON.UniversalCamera("player-camera", new BABYLON.Vector3(0, 0, 0), scene)
+        camera.setTarget(new BABYLON.Vector3(0, 0, -1))
+        camera.attachControl(canvas)
 
-        BABYLON.SceneLoader.RegisterPlugin(battlemapLoader)
-
-        const scene = createScene() //Call the createScene function
         BABYLON.SceneLoader.Append("/fps/babylon/", "{{ place.pk }}.battlemap", scene, function (scene) {})
 
         // Register a render loop to repeatedly render the scene
