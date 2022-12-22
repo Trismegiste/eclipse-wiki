@@ -18,6 +18,7 @@ const battlemapLoader = {
         this.setLight(scene)
         this.createGround(scene, battlemap.texture)
         this.createWall(scene, battlemap.texture, battlemap.wallHeight)
+        this.createSelector(scene)
 
         // map token
         let spriteManager = {}
@@ -121,5 +122,34 @@ const battlemapLoader = {
             myMaterial.diffuseTexture = new BABYLON.Texture("/texture/habitat/wall/" + key + ".webp", scene)
             wall.material = myMaterial
         })
+    },
+    createSelector: function (scene) {
+        // selector
+        const groundSelector = BABYLON.MeshBuilder.CreateDisc("selector-ground", {tessellation: 6, radius: 2 / 3}, scene)
+        groundSelector.rotation.z = Math.PI / 6
+        groundSelector.rotation.x = Math.PI / 2
+        groundSelector.position.y = 0.01
+        groundSelector.isVisible = false
+        const selectorMat = new BABYLON.StandardMaterial('mat-selector')
+        selectorMat.diffuseColor = new BABYLON.Color3(1, 0, 0)
+        selectorMat.alpha = 0.5
+        groundSelector.material = selectorMat
+        groundSelector.actionManager = new BABYLON.ActionManager(scene);
+        groundSelector.actionManager.registerAction(
+                new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, (e) => {
+                    const camera = scene.getCameraByName('player-camera')
+                    const target = e.meshUnderPointer.position.clone()
+                    target.y = camera.position.y
+
+                    const frameRate = 10
+                    const moving = new BABYLON.Animation("moving", "position", frameRate, BABYLON.Animation.ANIMATIONTYPE_VECTOR3)
+                    moving.setKeys([
+                        {frame: 0, value: camera.position},
+                        {frame: frameRate, value: target}
+                    ])
+                    camera.animations.push(moving)
+                    scene.beginAnimation(camera, 0, frameRate)
+                })
+                )
     }
 }
