@@ -19,6 +19,7 @@ const battlemapLoader = {
         this.createGround(scene, battlemap.texture)
         this.createWall(scene, battlemap.texture, battlemap.wallHeight)
         this.createSelector(scene)
+        this.createDoor(scene, battlemap.wallHeight)
 
         // map token
         let spriteManager = {}
@@ -151,5 +152,18 @@ const battlemapLoader = {
                     scene.beginAnimation(camera, 0, frameRate)
                 })
                 )
+    },
+    createDoor: function (scene, wallHeight) {
+        // Generic door
+        const door = BABYLON.MeshBuilder.CreatePlane('door', {width: 2 / 3, height: wallHeight})
+        door.position.y = wallHeight / 2
+        door.position.x = 2 / 3 * Math.cos(Math.PI / 6)
+        door.rotation.y = Math.PI / 2
+        door.isVisible = false
+
+        const doorMat = new BABYLON.StandardMaterial('mat-door', scene)
+        doorMat.diffuseTexture = new BABYLON.Texture("/texture/habitat/door.webp", scene)
+        door.material = doorMat
+
     }
 }
