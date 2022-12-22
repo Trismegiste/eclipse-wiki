@@ -32,7 +32,8 @@ class Scene implements \JsonSerializable
         return [
             'side' => $this->wrapped->getSize(),
             'grid' => $ground,
-            'npc' => $this->wrapped->getNpcToken()
+            'npc' => $this->wrapped->getNpcToken(),
+            'wallHeight' => 1.5
         ];
     }
 

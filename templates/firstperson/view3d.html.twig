@@ -110,7 +110,7 @@
         BABYLON.SceneLoader.RegisterPlugin(battlemapLoader)
 
         const scene = createScene() //Call the createScene function
-        BABYLON.SceneLoader.Append("/voronoi/babylon/", "{{ place.pk }}.battlemap", scene, function (scene) {})
+        BABYLON.SceneLoader.Append("/fps/babylon/", "{{ place.pk }}.battlemap", scene, function (scene) {})
 
         // Register a render loop to repeatedly render the scene
         engine.runRenderLoop(function () {

@@ -14,12 +14,7 @@ const battlemapLoader = {
     load: function (scene, data, rootUrl) {
         const battlemap = JSON.parse(data)
 
-        const camera = scene.getCameraByName('player-camera')
-        camera.position.x = battlemap.side / 2
-        camera.position.y = battlemap.side
-        camera.position.z = -battlemap.side / 2
-        camera.setTarget(new BABYLON.Vector3(battlemap.side / 2, 0, -battlemap.side / 2));
-        camera.maxZ = battlemap.side * 2;
+        this.createCamera(scene, battlemap.side)
 
         // map token
         let spriteManager = {}
@@ -78,5 +73,14 @@ const battlemapLoader = {
         })
 
         return true
+    },
+    createCamera: function (scene, side) {
+        const camera = scene.getCameraByName('player-camera')
+        camera.position.x = side / 2
+        camera.position.y = side
+        camera.position.z = -side / 2
+        camera.setTarget(new BABYLON.Vector3(side / 2, 0, -side / 2));
+        camera.maxZ = side * 2;
+
     }
 }
