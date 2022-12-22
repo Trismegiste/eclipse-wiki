@@ -13,26 +13,17 @@
         const wallHeight = 1.5
 
         const createScene = function () {
-            // Creates a basic Babylon Scene object
+            // Creates Scene object
             const scene = new BABYLON.Scene(engine)
-            // Set gravity for the scene (G force like, on Y-axis)
             scene.gravity = new BABYLON.Vector3(0, -0.9, 0);
-            // Enable Collisions
             scene.collisionsEnabled = true;
 //            scene.fogMode = BABYLON.Scene.FOGMODE_EXP
 
             // Creates and positions a free camera
-            var camera = new BABYLON.UniversalCamera("player-camera", new BABYLON.Vector3(0, 2 * wallHeight / 3, 0), scene);
-            camera.setTarget(new BABYLON.Vector3(0, wallHeight, -10));
+            var camera = new BABYLON.UniversalCamera("player-camera", new BABYLON.Vector3(0, 0, 0), scene)
+            camera.setTarget(new BABYLON.Vector3(0, 0, -1))
             camera.attachControl(canvas)
-            camera.minZ = 0.01;
-            camera.fov = 60 / 180 * Math.PI
-            // Then apply collisions and gravity to the active camera
-            camera.checkCollisions = true;
-            camera.applyGravity = true;
-            //Set the ellipsoid around the camera (e.g. your player's size)
-            camera.ellipsoid = new BABYLON.Vector3(0.1, wallHeight / 3, 0.1);
-
+         
             // Creates a light, aiming 0,1,0 - to the sky
             const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene)
             // Dim the light a small amount - 0 to 1

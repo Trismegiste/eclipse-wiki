@@ -14,7 +14,7 @@ const battlemapLoader = {
     load: function (scene, data, rootUrl) {
         const battlemap = JSON.parse(data)
 
-        this.createCamera(scene, battlemap.side)
+        this.setCamera(scene, battlemap.side)
 
         // map token
         let spriteManager = {}
@@ -74,13 +74,18 @@ const battlemapLoader = {
 
         return true
     },
-    createCamera: function (scene, side) {
+    setCamera: function (scene, side) {
         const camera = scene.getCameraByName('player-camera')
-        camera.position.x = side / 2
-        camera.position.y = side
-        camera.position.z = -side / 2
-        camera.setTarget(new BABYLON.Vector3(side / 2, 0, -side / 2));
-        camera.maxZ = side * 2;
+        camera.position = new BABYLON.Vector3(side / 2, side, -side / 2)
+        camera.setTarget(new BABYLON.Vector3(side / 2, 0, -side / 2))
+        camera.minZ = 0.01
+        camera.maxZ = side * 2
+        camera.fov = 60 / 180 * Math.PI
+        // Then apply collisions and gravity to the active camera
+        camera.checkCollisions = true;
+        camera.applyGravity = true;
+        //Set the ellipsoid around the camera (e.g. your player's size)
+        camera.ellipsoid = new BABYLON.Vector3(0.1, wallHeight / 3, 0.1);
 
     }
 }
