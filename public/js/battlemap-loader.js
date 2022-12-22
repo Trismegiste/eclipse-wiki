@@ -16,6 +16,7 @@ const battlemapLoader = {
 
         this.setCamera(scene, battlemap.side)
         this.setLight(scene)
+        this.createGround(scene, battlemap.texture)
 
         // map token
         let spriteManager = {}
@@ -92,5 +93,18 @@ const battlemapLoader = {
         // Creates a light, aiming 0,1,0 - to the sky
         const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene)
         light.intensity = 0.9
+    },
+    createGround: function (scene, textureKey) {
+        // Ground templates
+        textureKey.forEach((key) => {
+            const tile = BABYLON.MeshBuilder.CreateDisc("hexagon-" + key, {tessellation: 6, radius: 2 / 3 - 0.01}, scene)
+            tile.rotation.z = Math.PI / 6
+            tile.rotation.x = Math.PI / 2
+            tile.isVisible = false
+
+            const myMaterial = new BABYLON.StandardMaterial('mat-ground-' + key, scene)
+            myMaterial.diffuseTexture = new BABYLON.Texture("/texture/habitat/ground/" + key + ".webp", scene)
+            tile.material = myMaterial
+        })
     }
 }

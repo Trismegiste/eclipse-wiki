@@ -26,17 +26,6 @@
          
             // Templates
             let textureKey = ['default', 'cluster-sleep', 'cluster-industry', 'cluster-park']
-            // Ground templates
-            textureKey.forEach((key) => {
-                const tile = BABYLON.MeshBuilder.CreateDisc("hexagon-" + key, {tessellation: 6, radius: 2 / 3 - 0.01}, scene)
-                tile.rotation.z = Math.PI / 6
-                tile.rotation.x = Math.PI / 2
-                tile.isVisible = false
-
-                const myMaterial = new BABYLON.StandardMaterial('mat-ground-' + key, scene)
-                myMaterial.diffuseTexture = new BABYLON.Texture("/texture/habitat/ground/" + key + ".webp", scene)
-                tile.material = myMaterial
-            })
 
             // selector
             const groundSelector = BABYLON.MeshBuilder.CreateDisc("selector-ground", {tessellation: 6, radius: 2 / 3}, scene)
