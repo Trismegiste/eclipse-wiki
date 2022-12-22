@@ -24,11 +24,6 @@
             camera.setTarget(new BABYLON.Vector3(0, 0, -1))
             camera.attachControl(canvas)
          
-            // Creates a light, aiming 0,1,0 - to the sky
-            const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene)
-            // Dim the light a small amount - 0 to 1
-            light.intensity = 0.9
-
             // Templates
             let textureKey = ['default', 'cluster-sleep', 'cluster-industry', 'cluster-park']
             // Ground templates

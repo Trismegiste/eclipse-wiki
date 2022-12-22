@@ -15,6 +15,7 @@ const battlemapLoader = {
         const battlemap = JSON.parse(data)
 
         this.setCamera(scene, battlemap.side)
+        this.setLight(scene)
 
         // map token
         let spriteManager = {}
@@ -86,6 +87,10 @@ const battlemapLoader = {
         camera.applyGravity = true;
         //Set the ellipsoid around the camera (e.g. your player's size)
         camera.ellipsoid = new BABYLON.Vector3(0.1, wallHeight / 3, 0.1);
-
+    },
+    setLight: function (scene) {
+        // Creates a light, aiming 0,1,0 - to the sky
+        const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene)
+        light.intensity = 0.9
     }
 }
