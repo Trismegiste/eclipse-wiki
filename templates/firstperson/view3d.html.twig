@@ -24,9 +24,6 @@
             camera.setTarget(new BABYLON.Vector3(0, 0, -1))
             camera.attachControl(canvas)
          
-            // Templates
-            let textureKey = ['default', 'cluster-sleep', 'cluster-industry', 'cluster-park']
-
             // selector
             const groundSelector = BABYLON.MeshBuilder.CreateDisc("selector-ground", {tessellation: 6, radius: 2 / 3}, scene)
             groundSelector.rotation.z = Math.PI / 6
@@ -54,19 +51,6 @@
                         scene.beginAnimation(camera, 0, frameRate)
                     })
                     )
-
-            // Wall templates
-            textureKey.forEach((key) => {
-                const wall = BABYLON.MeshBuilder.CreatePlane("wall-" + key, {width: 2 / 3, height: wallHeight})
-                wall.position.y = wallHeight / 2
-                wall.position.x = 2 / 3 * Math.cos(Math.PI / 6)
-                wall.rotation.y = Math.PI / 2
-                wall.isVisible = false
-
-                const myMaterial = new BABYLON.StandardMaterial('mat-wall-' + key, scene)
-                myMaterial.diffuseTexture = new BABYLON.Texture("/texture/habitat/wall/" + key + ".webp", scene)
-                wall.material = myMaterial
-            })
 
             // Generic door
             const door = BABYLON.MeshBuilder.CreatePlane('door', {width: 2 / 3, height: wallHeight})

@@ -17,6 +17,7 @@ const battlemapLoader = {
         this.setCamera(scene, battlemap.side)
         this.setLight(scene)
         this.createGround(scene, battlemap.texture)
+        this.createWall(scene, battlemap.texture, battlemap.wallHeight)
 
         // map token
         let spriteManager = {}
@@ -105,6 +106,20 @@ const battlemapLoader = {
             const myMaterial = new BABYLON.StandardMaterial('mat-ground-' + key, scene)
             myMaterial.diffuseTexture = new BABYLON.Texture("/texture/habitat/ground/" + key + ".webp", scene)
             tile.material = myMaterial
+        })
+    },
+    createWall: function (scene, textureKey, wallHeight) {
+        // Wall templates
+        textureKey.forEach((key) => {
+            const wall = BABYLON.MeshBuilder.CreatePlane("wall-" + key, {width: 2 / 3, height: wallHeight})
+            wall.position.y = wallHeight / 2
+            wall.position.x = 2 / 3 * Math.cos(Math.PI / 6)
+            wall.rotation.y = Math.PI / 2
+            wall.isVisible = false
+
+            const myMaterial = new BABYLON.StandardMaterial('mat-wall-' + key, scene)
+            myMaterial.diffuseTexture = new BABYLON.Texture("/texture/habitat/wall/" + key + ".webp", scene)
+            wall.material = myMaterial
         })
     }
 }
