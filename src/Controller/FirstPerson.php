@@ -28,9 +28,9 @@ class FirstPerson extends AbstractController
     }
 
     /**
-     * @Route("/fps/view3d/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
+     * @Route("/fps/explore/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function view3d(Place $place): Response
+    public function explore(Place $place): Response
     {
         return $this->render('firstperson/view3d.html.twig', ['place' => $place]);
     }

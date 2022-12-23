@@ -7,6 +7,7 @@
     <a href="{{ path('app_voronoicrud_populate', {pk: vertex.pk}) }}" title="Population"><i class="icon-extra"></i></a>
     <a href="{{ path('app_voronoicrud_statistics', {pk: vertex.pk}) }}" title="Statistiques de la battlemap"><i class="icon-info-circled"></i></a>
     <a href="{{ path('app_voronoicrud_storage', {pk: vertex.pk}) }}" title="Stocker la battlemap"><i class="icon-download"></i></a>
+    <a href="{{ path('app_firstperson_explore', {pk: vertex.pk}) }}" target="_blank" title="Explorer la Battlemap en 3D"><i class="icon-view3d"></i></a>
     {% endif %}
     {% if vertex.battleMap is not empty %}
     <a href="{{ path('app_placecrud_runmap', {pk: vertex.pk}) }}" target="_blank" title="Lancer la Battlemap"><i class="icon-runmap"></i></a>
