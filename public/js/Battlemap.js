@@ -7,9 +7,14 @@ class Battlemap
     side;
     wallHeight;
     texture;
+    scene;
 
-    setCamera(scene) {
-        const camera = scene.getCameraByName('player-camera')
+    constructor(scene) {
+        this.scene = scene
+    }
+
+    setCamera() {
+        const camera = this.scene.getCameraByName('player-camera')
         camera.position = new BABYLON.Vector3(this.side / 2, this.side, -this.side / 2)
         camera.setTarget(new BABYLON.Vector3(this.side / 2, 0, -this.side / 2))
         camera.minZ = 0.01
@@ -22,27 +27,27 @@ class Battlemap
         camera.ellipsoid = new BABYLON.Vector3(0.1, this.wallHeight / 3, 0.1);
     }
 
-    setLight(scene) {
+    setLight() {
         // Creates a light, aiming 0,1,0 - to the sky
-        const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene)
+        const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), this.scene)
         light.intensity = 1.5
     }
 
-    createGround(scene) {
+    createGround() {
         // Ground templates
         this.texture.forEach((key) => {
-            const tile = BABYLON.MeshBuilder.CreateDisc("hexagon-" + key, {tessellation: 6, radius: 2 / 3 - 0.01}, scene)
+            const tile = BABYLON.MeshBuilder.CreateDisc("hexagon-" + key, {tessellation: 6, radius: 2 / 3 - 0.01}, this.scene)
             tile.rotation.z = Math.PI / 6
             tile.rotation.x = Math.PI / 2
             tile.isVisible = false
 
-            const myMaterial = new BABYLON.StandardMaterial('mat-ground-' + key, scene)
-            myMaterial.diffuseTexture = new BABYLON.Texture("/texture/habitat/ground/" + key + ".webp", scene)
+            const myMaterial = new BABYLON.StandardMaterial('mat-ground-' + key, this.scene)
+            myMaterial.diffuseTexture = new BABYLON.Texture("/texture/habitat/ground/" + key + ".webp", this.scene)
             tile.material = myMaterial
         })
     }
 
-    createWall(scene) {
+    createWall() {
         // Wall templates
         this.texture.forEach((key) => {
             const wall = BABYLON.MeshBuilder.CreatePlane("wall-" + key, {width: 2 / 3, height: this.wallHeight})
@@ -51,15 +56,15 @@ class Battlemap
             wall.rotation.y = Math.PI / 2
             wall.isVisible = false
 
-            const myMaterial = new BABYLON.StandardMaterial('mat-wall-' + key, scene)
-            myMaterial.diffuseTexture = new BABYLON.Texture("/texture/habitat/wall/" + key + ".webp", scene)
+            const myMaterial = new BABYLON.StandardMaterial('mat-wall-' + key, this.scene)
+            myMaterial.diffuseTexture = new BABYLON.Texture("/texture/habitat/wall/" + key + ".webp", this.scene)
             wall.material = myMaterial
         })
     }
 
-    createSelector(scene) {
+    createSelector() {
         // selector
-        const groundSelector = BABYLON.MeshBuilder.CreateDisc("selector-ground", {tessellation: 6, radius: 2 / 3}, scene)
+        const groundSelector = BABYLON.MeshBuilder.CreateDisc("selector-ground", {tessellation: 6, radius: 2 / 3}, this.scene)
         groundSelector.rotation.z = Math.PI / 6
         groundSelector.rotation.x = Math.PI / 2
         groundSelector.position.y = 0.01
@@ -68,10 +73,10 @@ class Battlemap
         selectorMat.diffuseColor = new BABYLON.Color3(1, 0, 0)
         selectorMat.alpha = 0.5
         groundSelector.material = selectorMat
-        groundSelector.actionManager = new BABYLON.ActionManager(scene);
+        groundSelector.actionManager = new BABYLON.ActionManager(this.scene);
         groundSelector.actionManager.registerAction(
                 new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, (e) => {
-                    const camera = scene.getCameraByName('player-camera')
+                    const camera = this.scene.getCameraByName('player-camera')
                     const target = e.meshUnderPointer.position.clone()
                     target.y = camera.position.y
 
@@ -82,12 +87,12 @@ class Battlemap
                         {frame: frameRate, value: target}
                     ])
                     camera.animations.push(moving)
-                    scene.beginAnimation(camera, 0, frameRate)
+                    this.scene.beginAnimation(camera, 0, frameRate)
                 })
                 )
     }
 
-    createDoor(scene) {
+    createDoor() {
         // Generic door
         const door = BABYLON.MeshBuilder.CreatePlane('door', {width: 2 / 3, height: this.wallHeight})
         door.position.y = this.wallHeight / 2
@@ -95,12 +100,12 @@ class Battlemap
         door.rotation.y = Math.PI / 2
         door.isVisible = false
 
-        const doorMat = new BABYLON.StandardMaterial('mat-door', scene)
-        doorMat.diffuseTexture = new BABYLON.Texture("/texture/habitat/door.webp", scene)
+        const doorMat = new BABYLON.StandardMaterial('mat-door', this.scene)
+        doorMat.diffuseTexture = new BABYLON.Texture("/texture/habitat/door.webp", this.scene)
         door.material = doorMat
     }
 
-    build(scene) {
+    build() {
         // map token
         let spriteManager = {}
         this.npc.forEach((npc) => {
@@ -109,15 +114,15 @@ class Battlemap
 
         // Grid of HexaCell
         this.grid.forEach((cell, k) => {
-            const ground = scene.getMeshByName('hexagon-' + cell.obj.template).createInstance("ground" + k)
+            const ground = this.scene.getMeshByName('hexagon-' + cell.obj.template).createInstance("ground" + k)
             ground.position.x = cell.x
             ground.position.z = -cell.y
             ground.checkCollisions = true
 
-            ground.actionManager = new BABYLON.ActionManager(scene);
+            ground.actionManager = new BABYLON.ActionManager(this.scene);
             ground.actionManager.registerAction(
                     new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, (e) => {
-                        const selector = scene.getMeshByName('selector-ground')
+                        const selector = this.scene.getMeshByName('selector-ground')
                         const current = e.meshUnderPointer
                         selector.isVisible = true
                         selector.position.x = current.position.x
@@ -129,7 +134,7 @@ class Battlemap
                 if (cell.obj.wall[dir]) {
                     const handle = new BABYLON.TransformNode("handle" + k + '-' + dir)
                     const meshName = cell.obj.door[dir] ? 'door' : 'wall-' + cell.obj.template
-                    const tmpWall = scene.getMeshByName(meshName).createInstance("wall-" + k + '-' + dir)
+                    const tmpWall = this.scene.getMeshByName(meshName).createInstance("wall-" + k + '-' + dir)
                     tmpWall.parent = handle
                     tmpWall.checkCollisions = !cell.obj.door[dir]
                     handle.rotation.y = -dir * Math.PI / 3
@@ -138,7 +143,7 @@ class Battlemap
 
                     // clickable door
                     if (cell.obj.door[dir]) {
-                        tmpWall.actionManager = new BABYLON.ActionManager(scene);
+                        tmpWall.actionManager = new BABYLON.ActionManager(this.scene);
                         tmpWall.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, (e) => {
                             const current = e.meshUnderPointer
                             current.isVisible = false
@@ -156,5 +161,15 @@ class Battlemap
                 npc.position = new BABYLON.Vector3(cell.x, 0.75, -cell.y)
             }
         })
+    }
+
+    initialize() {
+        this.setCamera()
+        this.setLight()
+        this.createGround()
+        this.createWall()
+        this.createSelector()
+        this.createDoor()
+        this.build()
     }
 }

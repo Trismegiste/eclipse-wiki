@@ -12,15 +12,9 @@ const battlemapLoader = {
         return container
     },
     load: function (scene, data, rootUrl) {
-        const battlemap = Object.assign(new Battlemap(), JSON.parse(data))
+        const battlemap = Object.assign(new Battlemap(scene), JSON.parse(data))
 
-        battlemap.setCamera(scene)
-        battlemap.setLight(scene)
-        battlemap.createGround(scene)
-        battlemap.createWall(scene)
-        battlemap.createSelector(scene)
-        battlemap.createDoor(scene)
-        battlemap.build(scene)
+        battlemap.initialize()
 
         return true
     }
