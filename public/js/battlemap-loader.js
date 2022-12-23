@@ -14,7 +14,7 @@ const battlemapLoader = {
     load: function (scene, data, rootUrl) {
         const battlemap = Object.assign(new Battlemap(scene), JSON.parse(data))
 
-        battlemap.initialize()
+        battlemap.create()
 
         return true
     }

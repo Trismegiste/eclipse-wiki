@@ -33,7 +33,7 @@ class Battlemap
         light.intensity = 1.5
     }
 
-    createGround() {
+    declareGround() {
         // Ground templates
         this.texture.forEach((key) => {
             const tile = BABYLON.MeshBuilder.CreateDisc("hexagon-" + key, {tessellation: 6, radius: 2 / 3 - 0.01}, this.scene)
@@ -47,7 +47,7 @@ class Battlemap
         })
     }
 
-    createWall() {
+    declareWall() {
         // Wall templates
         this.texture.forEach((key) => {
             const wall = BABYLON.MeshBuilder.CreatePlane("wall-" + key, {width: 2 / 3, height: this.wallHeight})
@@ -62,7 +62,7 @@ class Battlemap
         })
     }
 
-    createSelector() {
+    declareSelector() {
         // selector
         const groundSelector = BABYLON.MeshBuilder.CreateDisc("selector-ground", {tessellation: 6, radius: 2 / 3}, this.scene)
         groundSelector.rotation.z = Math.PI / 6
@@ -92,7 +92,7 @@ class Battlemap
                 )
     }
 
-    createDoor() {
+    declareDoor() {
         // Generic door
         const door = BABYLON.MeshBuilder.CreatePlane('door', {width: 2 / 3, height: this.wallHeight})
         door.position.y = this.wallHeight / 2
@@ -105,7 +105,7 @@ class Battlemap
         door.material = doorMat
     }
 
-    build() {
+    buildGrid() {
         // map token
         let spriteManager = {}
         this.npc.forEach((npc) => {
@@ -163,13 +163,13 @@ class Battlemap
         })
     }
 
-    initialize() {
+    create() {
         this.setCamera()
         this.setLight()
-        this.createGround()
-        this.createWall()
-        this.createSelector()
-        this.createDoor()
-        this.build()
+        this.declareGround()
+        this.declareWall()
+        this.declareSelector()
+        this.declareDoor()
+        this.buildGrid()
     }
 }
