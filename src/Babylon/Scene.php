@@ -34,7 +34,7 @@ class Scene implements \JsonSerializable
             'grid' => $ground,
             'npc' => $this->wrapped->getNpcToken(),
             'wallHeight' => 1.5,
-            'texture' => ['default', 'cluster-sleep', 'cluster-industry', 'cluster-park']
+            'texture' => ['default', 'cluster-sleep', 'cluster-industry', 'cluster-park', 'cluster-entertainment']
         ];
     }
 

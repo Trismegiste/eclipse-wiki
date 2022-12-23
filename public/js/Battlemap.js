@@ -6,6 +6,7 @@ class Battlemap
 {
     side;
     wallHeight;
+    texture;
 
     setCamera(scene) {
         const camera = scene.getCameraByName('player-camera')

@@ -23,5 +23,5 @@ const battlemapLoader = {
         battlemap.build(scene)
 
         return true
-    },
+    }
 }
