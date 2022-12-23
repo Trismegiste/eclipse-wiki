@@ -173,3 +173,5 @@ class Battlemap
         this.buildGrid()
     }
 }
+
+module.exports = Battlemap

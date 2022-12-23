@@ -22,3 +22,7 @@
 /doc/coverage
 /doc/api
 /public/upload
+
+### JS
+/node_modules
+/package-lock.json
