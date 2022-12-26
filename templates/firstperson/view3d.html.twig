@@ -6,7 +6,7 @@
 
 {% block javascripts %}
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
-    <script src="{{ asset('js/Battlemap.js') }}"></script>
+    <script src="{{ asset('js/Battlemap.js') }}?{{ random() }}"></script>
     <script src="{{ asset('js/battlemap-loader.js') }}"></script>
     <script>
         BABYLON.SceneLoader.RegisterPlugin(battlemapLoader)

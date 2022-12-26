@@ -8,6 +8,8 @@ class Battlemap
     wallHeight;
     texture;
     scene;
+    npc = []
+    spriteManager = {}
 
     constructor(scene) {
         this.scene = scene
@@ -106,12 +108,6 @@ class Battlemap
     }
 
     buildGrid() {
-        // map token
-        let spriteManager = {}
-        this.npc.forEach((npc) => {
-            spriteManager[npc.label] = new BABYLON.SpriteManager('token-' + npc.label, '/picture/get/' + npc.picture, 2000, 504)
-        })
-
         // Grid of HexaCell
         this.grid.forEach((cell, k) => {
             const ground = this.scene.getMeshByName('hexagon-' + cell.obj.template).createInstance("ground" + k)
@@ -154,13 +150,36 @@ class Battlemap
 
             // token if any
             if (cell.obj.npc) {
-                const manager = spriteManager[cell.obj.npc.label]
-                const npc = new BABYLON.Sprite("npc-" + k, manager)
-                npc.width = 0.5
-                npc.height = 0.5
-                npc.position = new BABYLON.Vector3(cell.x, 0.75, -cell.y)
+                this.appendNpcAt(cell.obj.npc, cell.x, cell.y, k)
             }
         })
+    }
+
+    declareToken() {
+        // map token
+        this.npc.forEach((npc) => {
+            const sp = new BABYLON.SpriteManager('token-' + npc.label, '/picture/get/' + npc.picture, 2000, 504)
+            sp.isPickable = true
+            this.spriteManager[npc.label] = sp
+        })
+
+        this.scene.onPointerDown = function (evt) {
+            let pickResult = this.pickSprite(this.pointerX, this.pointerY)
+            if (pickResult.hit && pickResult.pickedSprite) {
+                const sprite = pickResult.pickedSprite
+                console.log(sprite.metadata.template)
+            }
+        }
+    }
+
+    appendNpcAt(token, x, y, idx) {
+        const manager = this.spriteManager[token.label]
+        const npc = new BABYLON.Sprite("npc-" + idx, manager)
+        npc.width = 0.5
+        npc.height = 0.5
+        npc.position = new BABYLON.Vector3(x, 0.75, -y)
+        npc.metadata = {template: token.label}
+        npc.isPickable = true
     }
 
     create() {
@@ -170,6 +189,7 @@ class Battlemap
         this.declareWall()
         this.declareSelector()
         this.declareDoor()
+        this.declareToken()
         this.buildGrid()
     }
 }
