@@ -120,6 +120,7 @@ class Battlemap
                 new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnRightPickTrigger, (e) => {
                     const target = e.meshUnderPointer
                     console.log(target.metadata)
+                    document.querySelector('canvas').dispatchEvent(new CustomEvent('selectcell', {"bubbles": true, detail: target.metadata}))
                 })
                 )
     }
