@@ -26,7 +26,8 @@ class Battlemap
         camera.checkCollisions = true;
         camera.applyGravity = true;
         //Set the ellipsoid around the camera (e.g. your player's size)
-        camera.ellipsoid = new BABYLON.Vector3(0.1, this.wallHeight / 3, 0.1);
+        camera.ellipsoid = new BABYLON.Vector3(0.1, this.wallHeight / 3, 0.1)
+        //   camera.inputs.removeByType("FreeCameraKeyboardMoveInput")
     }
 
     setLight() {
@@ -75,9 +76,11 @@ class Battlemap
         selectorMat.diffuseColor = new BABYLON.Color3(1, 0, 0)
         selectorMat.alpha = 0.5
         groundSelector.material = selectorMat
+
         groundSelector.actionManager = new BABYLON.ActionManager(this.scene);
+        // left click
         groundSelector.actionManager.registerAction(
-                new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, (e) => {
+                new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, (e) => {
                     const camera = this.scene.getCameraByName('player-camera')
                     const target = e.meshUnderPointer.position.clone()
                     target.y = camera.position.y
@@ -90,6 +93,14 @@ class Battlemap
                     ])
                     camera.animations.push(moving)
                     this.scene.beginAnimation(camera, 0, frameRate)
+                })
+                )
+
+        // right click
+        groundSelector.actionManager.registerAction(
+                new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnRightPickTrigger, (e) => {
+                    const target = e.meshUnderPointer
+                    console.log(target.metadata)
                 })
                 )
     }
@@ -110,10 +121,11 @@ class Battlemap
     buildGrid() {
         // Grid of HexaCell
         this.grid.forEach((cell, k) => {
-            const ground = this.scene.getMeshByName('hexagon-' + cell.obj.template).createInstance("ground" + k)
+            const ground = this.scene.getMeshByName('hexagon-' + cell.content.template).createInstance("ground" + k)
             ground.position.x = cell.x
             ground.position.z = -cell.y
             ground.checkCollisions = true
+            ground.metadata = cell.content
 
             ground.actionManager = new BABYLON.ActionManager(this.scene);
             ground.actionManager.registerAction(
@@ -123,24 +135,25 @@ class Battlemap
                         selector.isVisible = true
                         selector.position.x = current.position.x
                         selector.position.z = current.position.z
+                        selector.metadata = current.metadata
                     })
                     )
 
             for (let dir = 0; dir < 6; dir++) {
-                if (cell.obj.wall[dir]) {
+                if (cell.content.wall[dir]) {
                     const handle = new BABYLON.TransformNode("handle" + k + '-' + dir)
-                    const meshName = cell.obj.door[dir] ? 'door' : 'wall-' + cell.obj.template
+                    const meshName = cell.content.door[dir] ? 'door' : 'wall-' + cell.content.template
                     const tmpWall = this.scene.getMeshByName(meshName).createInstance("wall-" + k + '-' + dir)
                     tmpWall.parent = handle
-                    tmpWall.checkCollisions = !cell.obj.door[dir]
+                    tmpWall.checkCollisions = !cell.content.door[dir]
                     handle.rotation.y = -dir * Math.PI / 3
                     handle.position.x = cell.x
                     handle.position.z = -cell.y
 
                     // clickable door
-                    if (cell.obj.door[dir]) {
+                    if (cell.content.door[dir]) {
                         tmpWall.actionManager = new BABYLON.ActionManager(this.scene);
-                        tmpWall.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, (e) => {
+                        tmpWall.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, (e) => {
                             const current = e.meshUnderPointer
                             current.isVisible = false
                         }))
@@ -149,8 +162,8 @@ class Battlemap
             }
 
             // token if any
-            if (cell.obj.npc) {
-                this.appendNpcAt(cell.obj.npc, cell.x, cell.y, k)
+            if (cell.content.npc) {
+                this.appendNpcAt(cell.content.npc, cell.x, cell.y, k)
             }
         })
     }
@@ -159,17 +172,8 @@ class Battlemap
         // map token
         this.npc.forEach((npc) => {
             const sp = new BABYLON.SpriteManager('token-' + npc.label, '/picture/get/' + npc.picture, 2000, 504)
-            sp.isPickable = true
             this.spriteManager[npc.label] = sp
         })
-
-        this.scene.onPointerDown = function (evt) {
-            let pickResult = this.pickSprite(this.pointerX, this.pointerY)
-            if (pickResult.hit && pickResult.pickedSprite) {
-                const sprite = pickResult.pickedSprite
-                console.log(sprite.metadata.template)
-            }
-        }
     }
 
     appendNpcAt(token, x, y, idx) {
@@ -178,8 +182,6 @@ class Battlemap
         npc.width = 0.5
         npc.height = 0.5
         npc.position = new BABYLON.Vector3(x, 0.75, -y)
-        npc.metadata = {template: token.label}
-        npc.isPickable = true
     }
 
     create() {

@@ -24,7 +24,7 @@ class Scene implements \JsonSerializable
                 $ground[] = [
                     'x' => $this->wrapped->getAbscissa($x, $y),
                     'y' => $y,
-                    'obj' => $cell
+                    'content' => $cell
                 ];
             }
         }
