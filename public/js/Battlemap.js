@@ -10,6 +10,7 @@ class Battlemap
     scene;
     npc = []
     spriteManager = {}
+    wheelSpeed = 1.4
 
     constructor(scene) {
         this.scene = scene
@@ -19,7 +20,7 @@ class Battlemap
         const camera = this.scene.getCameraByName('player-camera')
         camera.position = new BABYLON.Vector3(this.side / 2, this.side, -this.side / 2)
         camera.setTarget(new BABYLON.Vector3(this.side / 2, 0, -this.side / 2))
-        camera.minZ = 0.01
+        camera.minZ = 0.3
         camera.maxZ = this.side * 2
         camera.fov = 60 / 180 * Math.PI
         // Then apply collisions and gravity to the active camera
@@ -27,7 +28,25 @@ class Battlemap
         camera.applyGravity = true;
         //Set the ellipsoid around the camera (e.g. your player's size)
         camera.ellipsoid = new BABYLON.Vector3(0.1, this.wallHeight / 3, 0.1)
-        //   camera.inputs.removeByType("FreeCameraKeyboardMoveInput")
+        camera.inputs.removeByType("FreeCameraKeyboardMoveInput")
+
+        this.scene.onPointerObservable.add((pointerInfo) => {
+            switch (pointerInfo.type) {
+                case BABYLON.PointerEventTypes.POINTERWHEEL:
+                    const event = pointerInfo.event
+                    event.preventDefault()
+                    if (event.wheelDelta > 0) {
+                        camera.position.y /= this.wheelSpeed
+                    } else {
+                        camera.position.y *= this.wheelSpeed
+                    }
+                    const minHeight = 2 * this.wallHeight / 3
+                    if (camera.position.y < minHeight) {
+                        camera.position.y = minHeight
+                    }
+                    break;
+            }
+        })
     }
 
     setLight() {
