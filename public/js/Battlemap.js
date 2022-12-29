@@ -200,9 +200,9 @@ class Battlemap
     appendNpcAt(token, x, y, idx) {
         const manager = this.spriteManager[token.label]
         const npc = new BABYLON.Sprite("npc-" + idx, manager)
-        npc.width = 0.5
-        npc.height = 0.5
-        npc.position = new BABYLON.Vector3(x, 0.75, -y)
+        npc.width = 0.6
+        npc.height = 0.6
+        npc.position = new BABYLON.Vector3(x, 0.7, -y)
     }
 
     create() {
