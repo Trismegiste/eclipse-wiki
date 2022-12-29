@@ -97,9 +97,9 @@ class Battlemap
         groundSelector.material = selectorMat
 
         groundSelector.actionManager = new BABYLON.ActionManager(this.scene);
-        // left click
+        // click to move
         groundSelector.actionManager.registerAction(
-                new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, (e) => {
+                new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnRightPickTrigger, (e) => {
                     const camera = this.scene.getCameraByName('player-camera')
                     const target = e.meshUnderPointer.position.clone()
                     target.y = camera.position.y
@@ -115,9 +115,9 @@ class Battlemap
                 })
                 )
 
-        // right click
+        // click to info
         groundSelector.actionManager.registerAction(
-                new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnRightPickTrigger, (e) => {
+                new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, (e) => {
                     let metadata = e.meshUnderPointer.metadata
                     metadata.x = e.meshUnderPointer.position.x
                     metadata.y = e.meshUnderPointer.position.z
@@ -150,7 +150,7 @@ class Battlemap
 
             ground.actionManager = new BABYLON.ActionManager(this.scene);
             ground.actionManager.registerAction(
-                    new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, (e) => {
+                    new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, e => {
                         const selector = this.scene.getMeshByName('selector-ground')
                         const current = e.meshUnderPointer
                         selector.isVisible = true
@@ -174,7 +174,7 @@ class Battlemap
                     // clickable door
                     if (cell.content.door[dir]) {
                         tmpWall.actionManager = new BABYLON.ActionManager(this.scene);
-                        tmpWall.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, (e) => {
+                        tmpWall.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, e => {
                             const current = e.meshUnderPointer
                             current.isVisible = false
                         }))
