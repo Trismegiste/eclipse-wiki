@@ -118,9 +118,10 @@ class Battlemap
         // right click
         groundSelector.actionManager.registerAction(
                 new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnRightPickTrigger, (e) => {
-                    const target = e.meshUnderPointer
-                    console.log(target.metadata)
-                    document.querySelector('canvas').dispatchEvent(new CustomEvent('selectcell', {"bubbles": true, detail: target.metadata}))
+                    let metadata = e.meshUnderPointer.metadata
+                    metadata.x = e.meshUnderPointer.position.x
+                    metadata.y = e.meshUnderPointer.position.z
+                    document.querySelector('canvas').dispatchEvent(new CustomEvent('selectcell', {"bubbles": true, detail: metadata}))
                 })
                 )
     }
