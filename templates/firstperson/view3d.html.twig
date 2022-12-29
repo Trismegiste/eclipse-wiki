@@ -11,7 +11,7 @@
                 <template x-if="cellInfo !== null">
                     <div>
                         <hgroup>
-                            <h2 x-text="'Room ' + cellInfo.uid"></h2>
+                            <h2 x-text="'Room ' + cellInfo.uid + '(@' + cellInfo.cellIndex + ')'"></h2>
                             <h3 x-text="'Type ' + cellInfo.template"></h3>
                         </hgroup>
                         <p>Distance = <span x-text="distanceFromCamera(cellInfo.x, cellInfo.y)"></span></p>

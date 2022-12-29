@@ -11,6 +11,7 @@ class Battlemap
     npc = []
     spriteManager = {}
     wheelSpeed = 1.4
+    cellIndexOfCamera = null
 
     constructor(scene) {
         this.scene = scene
@@ -99,10 +100,11 @@ class Battlemap
         groundSelector.actionManager = new BABYLON.ActionManager(this.scene);
         // click to move
         groundSelector.actionManager.registerAction(
-                new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnRightPickTrigger, (e) => {
+                new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnRightPickTrigger, e => {
                     const camera = this.scene.getCameraByName('player-camera')
                     const target = e.meshUnderPointer.position.clone()
                     target.y = camera.position.y
+                    this.cellIndexOfCamera = e.meshUnderPointer.metadata.cellIndex
 
                     const frameRate = 10
                     const moving = new BABYLON.Animation("moving", "position", frameRate, BABYLON.Animation.ANIMATIONTYPE_VECTOR3)
@@ -117,7 +119,7 @@ class Battlemap
 
         // click to info
         groundSelector.actionManager.registerAction(
-                new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, (e) => {
+                new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, e => {
                     let metadata = e.meshUnderPointer.metadata
                     metadata.x = e.meshUnderPointer.position.x
                     metadata.y = e.meshUnderPointer.position.z
@@ -142,11 +144,12 @@ class Battlemap
     buildGrid() {
         // Grid of HexaCell
         this.grid.forEach((cell, k) => {
-            const ground = this.scene.getMeshByName('hexagon-' + cell.content.template).createInstance("ground" + k)
+            const ground = this.scene.getMeshByName('hexagon-' + cell.content.template).createInstance("ground-" + k)
             ground.position.x = cell.x
             ground.position.z = -cell.y
             ground.checkCollisions = true
             ground.metadata = cell.content
+            ground.metadata.cellIndex = k
 
             ground.actionManager = new BABYLON.ActionManager(this.scene);
             ground.actionManager.registerAction(
@@ -205,6 +208,25 @@ class Battlemap
         npc.position = new BABYLON.Vector3(x, 0.7, -y)
     }
 
+    drawCeiling() {
+        const width = (this.side + 1) * (2 * Math.sqrt(3) / 3)
+        const height = (this.side + 1)
+        // ceiling
+        const ceiling = BABYLON.MeshBuilder.CreateTiledPlane("ceiling", {
+            sideOrientation: BABYLON.Mesh.BACKSIDE,
+            width,
+            height,
+            tileSize: 1,
+            tileWidth: 1
+        })
+        ceiling.isPickable = false
+        ceiling.translate(new BABYLON.Vector3(width / 2 - 1, this.wallHeight, 1 - height / 2), 1, BABYLON.Space.WORLD)
+        ceiling.rotation.x = Math.PI / 2
+        const ceilingMat = new BABYLON.StandardMaterial('mat-ceiling', this.scene)
+        ceilingMat.emissiveTexture = new BABYLON.Texture("/texture/habitat/ceiling.webp", this.scene)
+        ceiling.material = ceilingMat
+    }
+
     create() {
         this.setCamera()
         this.setLight()
@@ -214,6 +236,7 @@ class Battlemap
         this.declareDoor()
         this.declareToken()
         this.buildGrid()
+        this.drawCeiling()
     }
 }
 
