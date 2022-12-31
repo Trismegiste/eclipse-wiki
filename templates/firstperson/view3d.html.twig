@@ -67,7 +67,7 @@
                         this.cellInfo = event.detail
                         if (this.cellInfo.npc !== null) {
                             const npc = this.cellInfo.npc
-                            this.selectedNpc = this.findSpriteByName('token-' + npc.label, 'npc-' + this.cellInfo.cellIndex)
+                            this.selectedNpc = npc.npcName
                             fetch('{{ path('app_npcgenerator_minicard') }}?title=' + npc.label)
                                     .then(response => {
                                         return response.text()

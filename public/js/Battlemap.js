@@ -10,6 +10,7 @@ class Battlemap
     scene;
     npc = []
     spriteManager = {}
+    spriteDictionary = {}
     wheelSpeed = 1.4
 
     constructor(scene) {
@@ -101,11 +102,12 @@ class Battlemap
         // click to move
         groundSelector.actionManager.registerAction(
                 new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnRightPickTrigger, e => {
+                    const mode = groundSelector.metadata.movingMode
                     let objToAnimate;
-                    if (groundSelector.metadata.movingMode === 'camera') {
+                    if (mode === 'camera') {
                         objToAnimate = this.scene.getCameraByName('player-camera')
                     } else {
-                        objToAnimate = groundSelector.metadata.characterToMove
+                        objToAnimate = this.spriteDictionary[groundSelector.metadata.characterToMove]
                     }
 
                     const target = e.meshUnderPointer.position.clone()
@@ -192,7 +194,7 @@ class Battlemap
 
             // token if any
             if (cell.content.npc) {
-                this.appendNpcAt(cell.content.npc, cell.x, cell.y, k)
+                ground.metadata.npc.npcName = this.appendNpcAt(cell.content.npc, cell.x, cell.y)
             }
         })
     }
@@ -205,12 +207,16 @@ class Battlemap
         })
     }
 
-    appendNpcAt(token, x, y, idx) {
+    appendNpcAt(token, x, y) {
         const manager = this.spriteManager[token.label]
-        const npc = new BABYLON.Sprite("npc-" + idx, manager)
+        const name = token.label + ' ' + manager.sprites.length
+        const npc = new BABYLON.Sprite(name, manager)
         npc.width = 0.6
         npc.height = 0.6
         npc.position = new BABYLON.Vector3(x, 0.7, -y)
+        this.spriteDictionary[name] = npc
+
+        return name
     }
 
     drawCeiling() {
