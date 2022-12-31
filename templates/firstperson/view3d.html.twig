@@ -11,7 +11,7 @@
                 <template x-if="cellInfo !== null">
                     <div>
                         <hgroup>
-                            <h2 x-text="'Room ' + cellInfo.uid + '(@' + cellInfo.cellIndex + ')'"></h2>
+                            <h2 x-text="'Room ' + cellInfo.uid + ' @' + cellInfo.cellIndex"></h2>
                             <h3 x-text="'Type ' + cellInfo.template"></h3>
                         </hgroup>
                         <p>Distance = <span x-text="distanceFromCamera(cellInfo.x, cellInfo.y)"></span></p>
@@ -19,6 +19,7 @@
                 </template>
                 <hr/>
                 <div x-ref="characterCard"></div>
+                <button x-on:click="moveMode">Move mode</button>
             </article>
             <hr/>
             {{ include('fragment/flashes.html.twig') }}
@@ -61,10 +62,12 @@
         document.addEventListener('alpine:init', () => {
             Alpine.data('displayCellInfo', () => ({
                     cellInfo: null,
+                    selectedNpc: null,
                     display(event) {
                         this.cellInfo = event.detail
                         if (this.cellInfo.npc !== null) {
                             const npc = this.cellInfo.npc
+                            this.selectedNpc = this.findSpriteByName('token-' + npc.label, 'npc-' + this.cellInfo.cellIndex)
                             fetch('{{ path('app_npcgenerator_minicard') }}?title=' + npc.label)
                                     .then(response => {
                                         return response.text()
@@ -75,6 +78,7 @@
                                     })
                         } else {
                             this.$refs.characterCard.innerHTML = ''
+                            this.selectedNpc = null
                         }
                     },
                     distanceFromCamera(x, y) {
@@ -82,6 +86,24 @@
                         const dy = camera.position.z - y
 
                         return Math.ceil(Math.sqrt(dx * dx + dy * dy) / (2 * Math.sqrt(3) / 3) - 0.05)
+                    },
+                    moveMode() {
+                        const selector = scene.getMeshByName('selector-ground')
+                        if (this.selectedNpc !== null) {
+                            selector.metadata.movingMode = 'character'
+                            console.log(this.selectedNpc)
+                        }
+                    },
+                    findSpriteByName(managerName, spriteName) {
+                        for (let manager of scene.spriteManagers) {
+                            if (manager.name === managerName) {
+                                for (let sprite of manager.sprites) {
+                                    if (sprite.name === spriteName) {
+                                        return sprite
+                                    }
+                                }
+                            }
+                        }
                     }
                 }))
         })

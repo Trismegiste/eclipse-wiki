@@ -11,7 +11,6 @@ class Battlemap
     npc = []
     spriteManager = {}
     wheelSpeed = 1.4
-    cellIndexOfCamera = null
 
     constructor(scene) {
         this.scene = scene
@@ -96,6 +95,7 @@ class Battlemap
         selectorMat.diffuseColor = new BABYLON.Color3(1, 0, 0)
         selectorMat.alpha = 0.5
         groundSelector.material = selectorMat
+        groundSelector.metadata = {movingMode: 'camera', cellInfo: null}
 
         groundSelector.actionManager = new BABYLON.ActionManager(this.scene);
         // click to move
@@ -104,7 +104,6 @@ class Battlemap
                     const camera = this.scene.getCameraByName('player-camera')
                     const target = e.meshUnderPointer.position.clone()
                     target.y = camera.position.y
-                    this.cellIndexOfCamera = e.meshUnderPointer.metadata.cellIndex
 
                     const frameRate = 10
                     const moving = new BABYLON.Animation("moving", "position", frameRate, BABYLON.Animation.ANIMATIONTYPE_VECTOR3)
@@ -120,7 +119,7 @@ class Battlemap
         // click to info
         groundSelector.actionManager.registerAction(
                 new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, e => {
-                    let metadata = e.meshUnderPointer.metadata
+                    let metadata = e.meshUnderPointer.metadata.cellInfo
                     metadata.x = e.meshUnderPointer.position.x
                     metadata.y = e.meshUnderPointer.position.z
                     document.querySelector('canvas').dispatchEvent(new CustomEvent('selectcell', {"bubbles": true, detail: metadata}))
@@ -159,7 +158,7 @@ class Battlemap
                         selector.isVisible = true
                         selector.position.x = current.position.x
                         selector.position.z = current.position.z
-                        selector.metadata = current.metadata
+                        selector.metadata.cellInfo = current.metadata
                     })
                     )
 
