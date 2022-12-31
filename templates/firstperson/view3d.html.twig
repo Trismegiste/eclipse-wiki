@@ -91,7 +91,7 @@
                         const selector = scene.getMeshByName('selector-ground')
                         if (this.selectedNpc !== null) {
                             selector.metadata.movingMode = 'character'
-                            console.log(this.selectedNpc)
+                            selector.metadata.characterToMove = this.selectedNpc
                         }
                     },
                     findSpriteByName(managerName, spriteName) {

@@ -95,24 +95,30 @@ class Battlemap
         selectorMat.diffuseColor = new BABYLON.Color3(1, 0, 0)
         selectorMat.alpha = 0.5
         groundSelector.material = selectorMat
-        groundSelector.metadata = {movingMode: 'camera', cellInfo: null}
+        groundSelector.metadata = {movingMode: 'camera', cellInfo: null, characterToMove: null}
 
         groundSelector.actionManager = new BABYLON.ActionManager(this.scene);
         // click to move
         groundSelector.actionManager.registerAction(
                 new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnRightPickTrigger, e => {
-                    const camera = this.scene.getCameraByName('player-camera')
+                    let objToAnimate;
+                    if (groundSelector.metadata.movingMode === 'camera') {
+                        objToAnimate = this.scene.getCameraByName('player-camera')
+                    } else {
+                        objToAnimate = groundSelector.metadata.characterToMove
+                    }
+
                     const target = e.meshUnderPointer.position.clone()
-                    target.y = camera.position.y
+                    target.y = objToAnimate.position.y
 
                     const frameRate = 10
                     const moving = new BABYLON.Animation("moving", "position", frameRate, BABYLON.Animation.ANIMATIONTYPE_VECTOR3)
                     moving.setKeys([
-                        {frame: 0, value: camera.position},
+                        {frame: 0, value: objToAnimate.position},
                         {frame: frameRate, value: target}
                     ])
-                    camera.animations.push(moving)
-                    this.scene.beginAnimation(camera, 0, frameRate)
+                    objToAnimate.animations.push(moving)
+                    this.scene.beginAnimation(objToAnimate, 0, frameRate)
                 })
                 )
 
