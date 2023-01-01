@@ -94,7 +94,7 @@
                     moveMode() {
                         const selector = scene.getMeshByName('selector-ground')
                         if (this.selectedNpc !== null) {
-                            selector.metadata.movingMode = 'character'
+                            scene.metadata.cursorMode = 'character'
                             selector.metadata.characterToMove = this.selectedNpc
                             selector.metadata.characterToMoveFromCellIndex = this.selectedNpcTileIndex
                         }
