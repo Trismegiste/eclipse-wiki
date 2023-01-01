@@ -97,22 +97,23 @@ class BattlemapBuilder
         selectorMat.diffuseColor = new BABYLON.Color3(1, 0, 0)
         selectorMat.alpha = 0.5
         groundSelector.material = selectorMat
-        groundSelector.metadata = {cellInfo: null, characterToMove: null}
 
         groundSelector.actionManager = new BABYLON.ActionManager(this.scene);
         // click to move
         groundSelector.actionManager.registerAction(
                 new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnRightPickTrigger, e => {
-                    const model = groundSelector.metadata
                     let objToAnimate;
                     if (this.scene.metadata.cursorMode === 'camera') {
                         objToAnimate = this.scene.getCameraByName('player-camera')
                     } else {
-                        objToAnimate = this.spriteDictionary[model.characterToMove]
-                        const sourceTile = this.getGroundTileByIndex(model.characterToMoveFromCellIndex)
-                        if (model.cellInfo.npc !== null) {
+                        const sourceTileInfo = this.getTileInfo(this.scene.metadata.sourceTileIndex)
+                        const targetTileInfo = this.getTileInfo(groundSelector.metadata)
+                        if (targetTileInfo.npc !== null) {
                             return;
                         }
+                        objToAnimate = this.spriteDictionary[sourceTileInfo.npc.npcName]
+                        targetTileInfo.npc = sourceTileInfo.npc
+                        sourceTileInfo.npc = null
                     }
 
                     const target = e.meshUnderPointer.position.clone()
@@ -132,7 +133,7 @@ class BattlemapBuilder
         // click to info
         groundSelector.actionManager.registerAction(
                 new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, e => {
-                    let metadata = e.meshUnderPointer.metadata.cellInfo
+                    let metadata = this.getTileInfo(groundSelector.metadata)
                     metadata.x = e.meshUnderPointer.position.x
                     metadata.y = e.meshUnderPointer.position.z
                     document.querySelector('canvas').dispatchEvent(new CustomEvent('selectcell', {"bubbles": true, detail: metadata}))
@@ -142,6 +143,10 @@ class BattlemapBuilder
 
     getGroundTileByIndex(idx) {
         return this.scene.getMeshByName('ground-' + idx)
+    }
+
+    getTileInfo(idx) {
+        return this.getGroundTileByIndex(idx).metadata
     }
 
     declareDoor() {
@@ -164,6 +169,7 @@ class BattlemapBuilder
             ground.position.x = cell.x
             ground.position.z = -cell.y
             ground.checkCollisions = true
+            // model injected into the tile
             ground.metadata = cell.content
             ground.metadata.cellIndex = k
 
@@ -175,7 +181,8 @@ class BattlemapBuilder
                         selector.isVisible = true
                         selector.position.x = current.position.x
                         selector.position.z = current.position.z
-                        selector.metadata.cellInfo = current.metadata
+                        // we store the cell index into the metadata of the selector
+                        selector.metadata = current.metadata.cellIndex
                     })
                     )
 

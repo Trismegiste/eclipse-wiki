@@ -3,9 +3,10 @@
  */
 
 /**
- * The model for the player of the battlemap scene
+ * The model for running the battlemap scene
  */
 class BattlemapPlayer
 {
     cursorMode = 'camera'
+    sourceTileIndex = null
 }

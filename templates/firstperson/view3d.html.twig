@@ -63,14 +63,10 @@
         document.addEventListener('alpine:init', () => {
             Alpine.data('displayCellInfo', () => ({
                     cellInfo: null,
-                    selectedNpc: null,
-                    selectedNpcTileIndex: null,
                     display(event) {
                         this.cellInfo = event.detail
                         if (this.cellInfo.npc !== null) {
                             const npc = this.cellInfo.npc
-                            this.selectedNpc = npc.npcName
-                            this.selectedNpcTileIndex = this.cellInfo.cellIndex
                             fetch('{{ path('app_npcgenerator_minicard') }}?title=' + npc.label)
                                     .then(response => {
                                         return response.text()
@@ -81,8 +77,6 @@
                                     })
                         } else {
                             this.$refs.characterCard.innerHTML = ''
-                            this.selectedNpc = null
-                            this.selectedNpcTileIndex = null
                         }
                     },
                     distanceFromCamera(x, y) {
@@ -92,12 +86,8 @@
                         return Math.ceil(Math.sqrt(dx * dx + dy * dy) / (2 * Math.sqrt(3) / 3) - 0.05)
                     },
                     moveMode() {
-                        const selector = scene.getMeshByName('selector-ground')
-                        if (this.selectedNpc !== null) {
-                            scene.metadata.cursorMode = 'character'
-                            selector.metadata.characterToMove = this.selectedNpc
-                            selector.metadata.characterToMoveFromCellIndex = this.selectedNpcTileIndex
-                        }
+                        scene.metadata.cursorMode = 'character'
+                        scene.metadata.sourceTileIndex = this.cellInfo.cellIndex
                     },
                     findSpriteByName(managerName, spriteName) {
                         for (let manager of scene.spriteManagers) {
