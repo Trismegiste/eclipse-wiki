@@ -2,7 +2,7 @@
  * eclipse-wiki
  */
 
-class Battlemap
+class BattlemapBuilder
 {
     side;
     wallHeight;
@@ -15,6 +15,7 @@ class Battlemap
 
     constructor(scene) {
         this.scene = scene
+        this.scene.metadata = new BattlemapPlayer()
     }
 
     setCamera() {
@@ -258,5 +259,3 @@ class Battlemap
         this.drawCeiling()
     }
 }
-
-module.exports = Battlemap

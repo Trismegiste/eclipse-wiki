@@ -12,7 +12,7 @@ const battlemapLoader = {
         return container
     },
     load: function (scene, data, rootUrl) {
-        const battlemap = Object.assign(new Battlemap(scene), JSON.parse(data))
+        const battlemap = Object.assign(new BattlemapBuilder(scene), JSON.parse(data))
 
         battlemap.create()
 
