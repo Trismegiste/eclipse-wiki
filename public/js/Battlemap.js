@@ -102,12 +102,16 @@ class Battlemap
         // click to move
         groundSelector.actionManager.registerAction(
                 new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnRightPickTrigger, e => {
-                    const mode = groundSelector.metadata.movingMode
+                    const model = groundSelector.metadata
                     let objToAnimate;
-                    if (mode === 'camera') {
+                    if (model.movingMode === 'camera') {
                         objToAnimate = this.scene.getCameraByName('player-camera')
                     } else {
-                        objToAnimate = this.spriteDictionary[groundSelector.metadata.characterToMove]
+                        objToAnimate = this.spriteDictionary[model.characterToMove]
+                        const sourceTile = this.getGroundTileByIndex(model.characterToMoveFromCellIndex)
+                        if (model.cellInfo.npc !== null) {
+                            return;
+                        }
                     }
 
                     const target = e.meshUnderPointer.position.clone()
@@ -133,6 +137,10 @@ class Battlemap
                     document.querySelector('canvas').dispatchEvent(new CustomEvent('selectcell', {"bubbles": true, detail: metadata}))
                 })
                 )
+    }
+
+    getGroundTileByIndex(idx) {
+        return this.scene.getMeshByName('ground-' + idx)
     }
 
     declareDoor() {

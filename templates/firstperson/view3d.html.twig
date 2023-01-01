@@ -63,11 +63,13 @@
             Alpine.data('displayCellInfo', () => ({
                     cellInfo: null,
                     selectedNpc: null,
+                    selectedNpcTileIndex: null,
                     display(event) {
                         this.cellInfo = event.detail
                         if (this.cellInfo.npc !== null) {
                             const npc = this.cellInfo.npc
                             this.selectedNpc = npc.npcName
+                            this.selectedNpcTileIndex = this.cellInfo.cellIndex
                             fetch('{{ path('app_npcgenerator_minicard') }}?title=' + npc.label)
                                     .then(response => {
                                         return response.text()
@@ -79,6 +81,7 @@
                         } else {
                             this.$refs.characterCard.innerHTML = ''
                             this.selectedNpc = null
+                            this.selectedNpcTileIndex = null
                         }
                     },
                     distanceFromCamera(x, y) {
@@ -92,6 +95,7 @@
                         if (this.selectedNpc !== null) {
                             selector.metadata.movingMode = 'character'
                             selector.metadata.characterToMove = this.selectedNpc
+                            selector.metadata.characterToMoveFromCellIndex = this.selectedNpcTileIndex
                         }
                     },
                     findSpriteByName(managerName, spriteName) {
