@@ -86,7 +86,7 @@ class BattlemapBuilder
         })
     }
 
-    declareSelector() {
+    declareGroundCursor() {
         // selector
         const groundSelector = BABYLON.MeshBuilder.CreateDisc("selector-ground", {tessellation: 6, radius: 2 / 3}, this.scene)
         groundSelector.rotation.z = Math.PI / 6
@@ -95,7 +95,7 @@ class BattlemapBuilder
         groundSelector.isVisible = false
         const selectorMat = new BABYLON.StandardMaterial('mat-selector')
         selectorMat.diffuseColor = new BABYLON.Color3(1, 0, 0)
-        selectorMat.alpha = 0.5
+        selectorMat.alpha = 0.4
         groundSelector.material = selectorMat
 
         groundSelector.actionManager = new BABYLON.ActionManager(this.scene);
@@ -103,10 +103,14 @@ class BattlemapBuilder
         groundSelector.actionManager.registerAction(
                 new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnRightPickTrigger, e => {
                     let objToAnimate;
-                    if (this.scene.metadata.cursorMode === 'camera') {
+                    if (this.scene.metadata.viewMode === 'fps') {
+                        // move camera
                         objToAnimate = this.scene.getCameraByName('player-camera')
                     } else {
-                        const sourceTileInfo = this.getTileInfo(this.scene.metadata.sourceTileIndex)
+                        if (this.scene.metadata.selectedOnTileIndex === null) {
+                            return;
+                        }
+                        const sourceTileInfo = this.getTileInfo(this.scene.metadata.selectedOnTileIndex)
                         const targetTileInfo = this.getTileInfo(groundSelector.metadata)
                         if (targetTileInfo.npc !== null) {
                             return;
@@ -114,6 +118,8 @@ class BattlemapBuilder
                         objToAnimate = this.spriteDictionary[sourceTileInfo.npc.npcName]
                         targetTileInfo.npc = sourceTileInfo.npc
                         sourceTileInfo.npc = null
+                        this.scene.metadata.selectedOnTileIndex = groundSelector.metadata
+
                     }
 
                     const target = e.meshUnderPointer.position.clone()
@@ -133,12 +139,33 @@ class BattlemapBuilder
         // click to info
         groundSelector.actionManager.registerAction(
                 new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, e => {
+                    const selector = this.scene.getMeshByName('selector-item')
                     let metadata = this.getTileInfo(groundSelector.metadata)
-                    metadata.x = e.meshUnderPointer.position.x
-                    metadata.y = e.meshUnderPointer.position.z
-                    document.querySelector('canvas').dispatchEvent(new CustomEvent('selectcell', {"bubbles": true, detail: metadata}))
+                    if (metadata.npc !== null) {
+                        selector.isVisible = true
+                        selector.position.x = groundSelector.position.x
+                        selector.position.z = groundSelector.position.z
+                        this.scene.metadata.selectedOnTileIndex = groundSelector.metadata
+                    } else {
+                        selector.isVisible = false
+                        this.scene.metadata.selectedOnTileIndex = null
+                    }
                 })
                 )
+    }
+
+    declareSelector() {
+        const itemSelector = BABYLON.MeshBuilder.CreateTorus("selector-item", {
+            tessellation: 36,
+            diameter: 0.8,
+            thickness: 0.15
+        }, this.scene)
+
+        const selectorMat = new BABYLON.StandardMaterial('mat-selector')
+        selectorMat.diffuseColor = new BABYLON.Color3(0, 1, 0)
+        selectorMat.alpha = 0.8
+        itemSelector.material = selectorMat
+        itemSelector.isPickable = false
     }
 
     getGroundTileByIndex(idx) {
@@ -287,6 +314,7 @@ class BattlemapBuilder
         this.setLight()
         this.declareGround()
         this.declareWall()
+        this.declareGroundCursor()
         this.declareSelector()
         this.declareDoor()
         this.declareToken()

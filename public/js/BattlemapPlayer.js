@@ -7,7 +7,6 @@
  */
 class BattlemapPlayer
 {
-    cursorMode = 'camera'
-    sourceTileIndex = null
-    viewMode = 'rts'
+    viewMode = 'fps'
+    selectedOnTileIndex = null
 }
