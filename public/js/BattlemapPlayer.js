@@ -9,4 +9,5 @@ class BattlemapPlayer
 {
     cursorMode = 'camera'
     sourceTileIndex = null
+    viewMode = 'rts'
 }

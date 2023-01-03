@@ -254,6 +254,34 @@ class BattlemapBuilder
         ceiling.material = ceilingMat
     }
 
+    drawUI() {
+        const advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI")
+        advancedTexture.idealWidth = 1000
+        const panel = new BABYLON.GUI.StackPanel()
+        advancedTexture.addControl(panel)
+        panel.verticalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_TOP
+        panel.left = '5px'
+        panel.top = '5px'
+
+        const fps = BABYLON.GUI.RadioButton.AddRadioButtonWithHeader('FPS', 'view', false, (widget, value) => {
+            if (value) {
+                this.scene.metadata.viewMode = 'fps'
+            }
+        })
+        fps.height = '25px'
+        fps.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT
+        panel.addControl(fps)
+
+        const rts = BABYLON.GUI.RadioButton.AddRadioButtonWithHeader('RTS', 'view', false, (widget, value) => {
+            if (value) {
+                this.scene.metadata.viewMode = 'rts'
+            }
+        })
+        rts.height = '25px'
+        rts.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT
+        panel.addControl(rts)
+    }
+
     create() {
         this.setCamera()
         this.setLight()
@@ -264,5 +292,6 @@ class BattlemapBuilder
         this.declareToken()
         this.buildGrid()
         this.drawCeiling()
+        this.drawUI()
     }
 }
