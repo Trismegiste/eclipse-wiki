@@ -110,16 +110,21 @@ class BattlemapBuilder
                         if (this.scene.metadata.selectedOnTileIndex === null) {
                             return;
                         }
+
                         const sourceTileInfo = this.getTileInfo(this.scene.metadata.selectedOnTileIndex)
                         const targetTileInfo = this.getTileInfo(groundSelector.metadata)
                         if (targetTileInfo.npc !== null) {
                             return;
                         }
+
                         objToAnimate = this.spriteDictionary[sourceTileInfo.npc.npcName]
                         targetTileInfo.npc = sourceTileInfo.npc
                         sourceTileInfo.npc = null
+                        // move item selector
                         this.scene.metadata.selectedOnTileIndex = groundSelector.metadata
-
+                        const itemSelector = this.scene.getMeshByName('selector-item')
+                        itemSelector.position.x = groundSelector.position.x
+                        itemSelector.position.z = groundSelector.position.z
                     }
 
                     const target = e.meshUnderPointer.position.clone()
