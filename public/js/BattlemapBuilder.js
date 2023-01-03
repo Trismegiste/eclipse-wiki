@@ -118,9 +118,10 @@ class BattlemapBuilder
                         }
 
                         objToAnimate = this.spriteDictionary[sourceTileInfo.npc.npcName]
+                        // move NPC in model :
                         targetTileInfo.npc = sourceTileInfo.npc
                         sourceTileInfo.npc = null
-                        // move item selector
+                        // move item selector :
                         this.scene.metadata.selectedOnTileIndex = groundSelector.metadata
                         const itemSelector = this.scene.getMeshByName('selector-item')
                         itemSelector.position.x = groundSelector.position.x
@@ -155,6 +156,11 @@ class BattlemapBuilder
                         selector.isVisible = false
                         this.scene.metadata.selectedOnTileIndex = null
                     }
+                    // in any case, fire an event for alpinejs :
+                    const detail = {...metadata}
+                    detail.x = e.meshUnderPointer.position.x
+                    detail.y = e.meshUnderPointer.position.z
+                    document.querySelector('canvas').dispatchEvent(new CustomEvent('selectcell', {"bubbles": true, detail}))
                 })
                 )
     }
