@@ -19,7 +19,7 @@ class BattlemapBuilder
     }
 
     setCamera() {
-        const camera = this.scene.getCameraByName('player-camera')
+        const camera = this.scene.getCameraByName('gm-camera')
         camera.position = new BABYLON.Vector3(this.side / 2, this.side, -this.side / 2)
         camera.setTarget(new BABYLON.Vector3(this.side / 2, 0, -this.side / 2))
         camera.minZ = 0.3
@@ -105,7 +105,7 @@ class BattlemapBuilder
                     let objToAnimate;
                     if (this.scene.metadata.viewMode === 'fps') {
                         // move camera
-                        objToAnimate = this.scene.getCameraByName('player-camera')
+                        objToAnimate = this.scene.getCameraByName('gm-camera')
                     } else {
                         if (this.scene.metadata.selectedOnTileIndex === null) {
                             return;
