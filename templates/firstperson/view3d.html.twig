@@ -44,7 +44,7 @@
         scene.collisionsEnabled = true;
         //            scene.fogMode = BABYLON.Scene.FOGMODE_EXP
 
-        // Creates and positions a free camera
+        // Creates and positions a free camera for GM
         const camera = new BABYLON.UniversalCamera("gm-camera", new BABYLON.Vector3(0, 0, 0), scene)
         camera.setTarget(new BABYLON.Vector3(0, 0, -1))
         camera.attachControl(canvas)
@@ -84,21 +84,6 @@
                         const dy = camera.position.z - y
 
                         return Math.ceil(Math.sqrt(dx * dx + dy * dy) / (2 * Math.sqrt(3) / 3) - 0.05)
-                    },
-                    moveMode() {
-                        scene.metadata.cursorMode = 'character'
-                        scene.metadata.sourceTileIndex = this.cellInfo.cellIndex
-                    },
-                    findSpriteByName(managerName, spriteName) {
-                        for (let manager of scene.spriteManagers) {
-                            if (manager.name === managerName) {
-                                for (let sprite of manager.sprites) {
-                                    if (sprite.name === spriteName) {
-                                        return sprite
-                                    }
-                                }
-                            }
-                        }
                     }
                 }))
         })
