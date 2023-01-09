@@ -8,6 +8,8 @@
         </div>
         <aside class="pure-u-1 pure-u-xl-1-5">
             <article x-data="displayCellInfo" x-on:selectcell.window="display($event)">
+                {{ form(tools) }}
+                <hr/>
                 <template x-if="cellInfo !== null">
                     <div>
                         <hgroup>
@@ -79,12 +81,18 @@
                             this.$refs.characterCard.innerHTML = ''
                         }
                     },
+
                     distanceFromCamera(x, y) {
                         const dx = camera.position.x - x
                         const dy = camera.position.z - y
 
                         return Math.ceil(Math.sqrt(dx * dx + dy * dy) / (2 * Math.sqrt(3) / 3) - 0.05)
+                    },
+
+                    characterAdd(npcTitle) {
+                        alert('add ' + npcTitle)
                     }
+
                 }))
         })
 
