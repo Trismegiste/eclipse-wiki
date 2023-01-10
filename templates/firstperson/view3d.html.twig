@@ -65,6 +65,7 @@
         document.addEventListener('alpine:init', () => {
             Alpine.data('displayCellInfo', () => ({
                     cellInfo: null,
+                    newCharacter: null,
                     display(event) {
                         this.cellInfo = event.detail
                         if (this.cellInfo.npc !== null) {
@@ -90,7 +91,13 @@
                     },
 
                     characterAdd(npcTitle) {
-                        alert('add ' + npcTitle)
+                        fetch('{{ path('app_npcgenerator_show', {_format:'json'}) }}?title=' + npcTitle)
+                                    .then(response => {
+                                        return response.json()
+                                    })
+                                    .then(npc => {
+                                        const payload = { title: npc.title, pic: npc.tokenPic }
+                                    })
                     }
 
                 }))
