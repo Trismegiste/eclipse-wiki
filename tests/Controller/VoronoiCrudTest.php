@@ -232,8 +232,7 @@ class VoronoiCrudTest extends WebTestCase
     /** @depends testGenerateSvgWithNpc */
     public function testJsonBattlemap(string $pk)
     {
-        $this->client->request('GET', "/voronoi/babylon/$pk.battlemap");
-
-        print_r($this->client->getResponse()->getContent());
+        $this->client->request('GET', "/fps/babylon/$pk.battlemap");
+        $this->assertResponseIsSuccessful();
     }
 }
