@@ -147,20 +147,34 @@ class BattlemapBuilder
                 new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, e => {
                     const selector = this.scene.getMeshByName('selector-item')
                     let metadata = this.getTileInfo(groundSelector.metadata)
-                    if (metadata.npc !== null) {
-                        selector.isVisible = true
-                        selector.position.x = groundSelector.position.x
-                        selector.position.z = groundSelector.position.z
-                        this.scene.metadata.selectedOnTileIndex = groundSelector.metadata
-                    } else {
-                        selector.isVisible = false
-                        this.scene.metadata.selectedOnTileIndex = null
+
+                    switch (this.scene.metadata.viewMode) {
+                        case 'fps':
+                        case 'rts':
+                            if (metadata.npc !== null) {
+                                selector.isVisible = true
+                                selector.position.x = groundSelector.position.x
+                                selector.position.z = groundSelector.position.z
+                                this.scene.metadata.selectedOnTileIndex = groundSelector.metadata
+                            } else {
+                                selector.isVisible = false
+                                this.scene.metadata.selectedOnTileIndex = null
+                            }
+                            // in any case, fire an event for alpinejs :
+                            const detail = {...metadata}
+                            detail.x = e.meshUnderPointer.position.x
+                            detail.y = e.meshUnderPointer.position.z
+                            document.querySelector('canvas').dispatchEvent(new CustomEvent('selectcell', {"bubbles": true, detail}))
+                            break;
+                        case 'populate':
+                            if (this.scene.metadata.populateWithNpc !== null) {
+                                const key = this.scene.metadata.populateWithNpc
+                                console.log(key, this.spriteManager[key])
+                                const uniqueName = this.appendNpcAt({label: key}, groundSelector.position.x, groundSelector.position.z)
+                                metadata.npc = {label: key, npcName: uniqueName}
+                            }
+                            break;
                     }
-                    // in any case, fire an event for alpinejs :
-                    const detail = {...metadata}
-                    detail.x = e.meshUnderPointer.position.x
-                    detail.y = e.meshUnderPointer.position.z
-                    document.querySelector('canvas').dispatchEvent(new CustomEvent('selectcell', {"bubbles": true, detail}))
                 })
                 )
     }
@@ -248,7 +262,7 @@ class BattlemapBuilder
 
             // token if any
             if (cell.content.npc) {
-                ground.metadata.npc.npcName = this.appendNpcAt(cell.content.npc, cell.x, cell.y)
+                ground.metadata.npc.npcName = this.appendNpcAt(cell.content.npc, cell.x, -cell.y)
             }
         })
     }
@@ -267,7 +281,7 @@ class BattlemapBuilder
         const npc = new BABYLON.Sprite(name, manager)
         npc.width = 0.6
         npc.height = 0.6
-        npc.position = new BABYLON.Vector3(x, 0.7, -y)
+        npc.position = new BABYLON.Vector3(x, 0.7, y)
         this.spriteDictionary[name] = npc
 
         return name
@@ -318,6 +332,22 @@ class BattlemapBuilder
         rts.height = '25px'
         rts.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT
         panel.addControl(rts)
+
+        const npcSelector = document.querySelector('form select')
+        npcSelector.addEventListener('change', e => {
+            const npcTitle = e.target.value
+            if (this.spriteManager[npcTitle] === undefined) {
+                // append missing sprite manager
+                fetch('/npc/show.json?title=' + npcTitle).then(resp => {
+                    return resp.json()
+                }).then(npc => {
+                    const sp = new BABYLON.SpriteManager('token-' + npcTitle, '/picture/get/' + npc.tokenPic, 2000, 504)
+                    this.spriteManager[npcTitle] = sp
+                    this.scene.metadata.viewMode = 'populate'
+                    this.scene.metadata.populateWithNpc = npcTitle
+                })
+            }
+        })
     }
 
     create() {

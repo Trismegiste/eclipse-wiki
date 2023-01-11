@@ -9,4 +9,5 @@ class BattlemapPlayer
 {
     viewMode = 'fps'
     selectedOnTileIndex = null
+    populateWithNpc = null
 }
