@@ -32,7 +32,7 @@ class FirstPerson extends AbstractController
      */
     public function explore(Place $place): Response
     {
-        $tools = $this->createForm(\App\Form\Type\NpcChoiceType::class);
+        $tools = $this->createForm(\App\Form\RunningMap3dGui::class);
         return $this->render('firstperson/view3d.html.twig', ['place' => $place, 'tools' => $tools->createView()]);
     }
 

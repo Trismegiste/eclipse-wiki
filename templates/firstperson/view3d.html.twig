@@ -65,6 +65,16 @@
         document.addEventListener('alpine:init', () => {
             Alpine.data('displayCellInfo', () => ({
                     cellInfo: null,
+
+                    changeMode(event) {
+                        scene.metadata.viewMode = event.target.value
+                    },
+
+                    changeNpc(event) {
+                        scene.metadata.viewMode = 'populate'
+                        scene.metadata.populateWithNpc = event.target.value
+                    },
+
                     display(event) {
                         this.cellInfo = event.detail
                         if (this.cellInfo.npc !== null) {
