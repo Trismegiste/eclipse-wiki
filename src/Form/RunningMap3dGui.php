@@ -21,12 +21,12 @@ class RunningMap3dGui extends AbstractType
         $builder
                 ->add('viewMode', ChoiceType::class, [
                     'choices'=> ['FPS' => 'fps', 'RTS'=>'rts', 'Perso'=>'populate'],
-                    'attr' => ['x-on:change' => 'changeMode'],
-                    'expanded' => true
+                    'attr' => ['x-model' => 'state.viewMode'],
+                    'expanded' => false
                 ])
                 ->add('populateWith', \App\Form\Type\NpcChoiceType::class, [
                     'placeholder' => '---------',
-                    'attr' => ['x-on:change' => 'changeNpc'],
+                    'attr' => ['x-model' => 'state.populateWithNpc'],
                 ])
         ;
     }

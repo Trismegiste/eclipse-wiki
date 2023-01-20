@@ -15,7 +15,6 @@ class BattlemapBuilder
 
     constructor(scene) {
         this.scene = scene
-        this.scene.metadata = new BattlemapPlayer()
     }
 
     setCamera() {
@@ -167,11 +166,25 @@ class BattlemapBuilder
                             document.querySelector('canvas').dispatchEvent(new CustomEvent('selectcell', {"bubbles": true, detail}))
                             break;
                         case 'populate':
-                            if (this.scene.metadata.populateWithNpc !== null) {
-                                const key = this.scene.metadata.populateWithNpc
-                                console.log(key, this.spriteManager[key])
-                                const uniqueName = this.appendNpcAt({label: key}, groundSelector.position.x, groundSelector.position.z)
-                                metadata.npc = {label: key, npcName: uniqueName}
+                            if ((metadata.npc === null) && (this.scene.metadata.populateWithNpc !== null)) {
+                                const npcTitle = this.scene.metadata.populateWithNpc
+                                // does spritemanager exist ?
+                                if (this.spriteManager[npcTitle] === undefined) {
+                                    // append missing sprite manager
+                                    fetch('/npc/show.json?title=' + npcTitle).then(resp => {
+                                        return resp.json()
+                                    }).then(npc => {
+                                        const sp = new BABYLON.SpriteManager('token-' + npcTitle, '/picture/get/' + npc.tokenPic, 2000, 504)
+                                        this.spriteManager[npcTitle] = sp
+                                        // append sprite
+                                        const uniqueName = this.appendNpcAt({label: npcTitle}, groundSelector.position.x, groundSelector.position.z)
+                                        metadata.npc = {label: npcTitle, npcName: uniqueName}
+                                    })
+                                } else {
+                                    // append sprite
+                                    const uniqueName = this.appendNpcAt({label: npcTitle}, groundSelector.position.x, groundSelector.position.z)
+                                    metadata.npc = {label: npcTitle, npcName: uniqueName}
+                                }
                             }
                             break;
                     }
@@ -306,24 +319,6 @@ class BattlemapBuilder
         ceiling.material = ceilingMat
     }
 
-    connectUI() {
-        const npcSelector = document.querySelector('form select')
-        npcSelector.addEventListener('change', e => {
-            const npcTitle = e.target.value
-            if (this.spriteManager[npcTitle] === undefined) {
-                // append missing sprite manager
-                fetch('/npc/show.json?title=' + npcTitle).then(resp => {
-                    return resp.json()
-                }).then(npc => {
-                    const sp = new BABYLON.SpriteManager('token-' + npcTitle, '/picture/get/' + npc.tokenPic, 2000, 504)
-                    this.spriteManager[npcTitle] = sp
-                    this.scene.metadata.viewMode = 'populate'
-                    this.scene.metadata.populateWithNpc = npcTitle
-                })
-            }
-        })
-    }
-
     create() {
         this.setCamera()
         this.setLight()
@@ -335,6 +330,5 @@ class BattlemapBuilder
         this.declareToken()
         this.buildGrid()
         this.drawCeiling()
-        this.connectUI()
     }
 }

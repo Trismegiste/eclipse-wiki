@@ -42,6 +42,7 @@
 
         // Creates Scene object
         const scene = new BABYLON.Scene(engine)
+        scene.metadata = new BattlemapPlayer()
         scene.gravity = new BABYLON.Vector3(0, -0.9, 0);
         scene.collisionsEnabled = true;
         //            scene.fogMode = BABYLON.Scene.FOGMODE_EXP
@@ -65,14 +66,10 @@
         document.addEventListener('alpine:init', () => {
             Alpine.data('displayCellInfo', () => ({
                     cellInfo: null,
+                    state: null,
 
-                    changeMode(event) {
-                        scene.metadata.viewMode = event.target.value
-                    },
-
-                    changeNpc(event) {
-                        scene.metadata.viewMode = 'populate'
-                        scene.metadata.populateWithNpc = event.target.value
+                    init() {
+                        this.state = scene.metadata
                     },
 
                     display(event) {
