@@ -168,6 +168,7 @@ class BattlemapBuilder
                         case 'populate':
                             if ((metadata.npc === null) && (this.scene.metadata.populateWithNpc !== null)) {
                                 const npcTitle = this.scene.metadata.populateWithNpc
+                                metadata.npc = {label: npcTitle}  // immediately update model to prevent double insertion
                                 // does spritemanager exist ?
                                 if (this.spriteManager[npcTitle] === undefined) {
                                     // append missing sprite manager
@@ -178,12 +179,12 @@ class BattlemapBuilder
                                         this.spriteManager[npcTitle] = sp
                                         // append sprite
                                         const uniqueName = this.appendNpcAt({label: npcTitle}, groundSelector.position.x, groundSelector.position.z)
-                                        metadata.npc = {label: npcTitle, npcName: uniqueName}
+                                        metadata.npc.npcName = uniqueName
                                     })
                                 } else {
                                     // append sprite
                                     const uniqueName = this.appendNpcAt({label: npcTitle}, groundSelector.position.x, groundSelector.position.z)
-                                    metadata.npc = {label: npcTitle, npcName: uniqueName}
+                                    metadata.npc.npcName = uniqueName
                                 }
                             }
                             break;

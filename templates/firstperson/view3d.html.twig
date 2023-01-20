@@ -72,6 +72,16 @@
                         this.state = scene.metadata
                     },
 
+                    changeMode(event) {
+                        if (event.target.value !== 'populate') {
+                            this.state.populateWithNpc = null
+                        }
+                    },
+
+                    changeNpc(event) {
+                        this.state.viewMode = 'populate'
+                    },
+
                     display(event) {
                         this.cellInfo = event.detail
                         if (this.cellInfo.npc !== null) {
