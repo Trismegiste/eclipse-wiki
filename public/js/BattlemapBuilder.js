@@ -98,33 +98,39 @@ class BattlemapBuilder
         groundSelector.material = selectorMat
 
         groundSelector.actionManager = new BABYLON.ActionManager(this.scene);
-        // click to move
+
+        // right click behavior
         groundSelector.actionManager.registerAction(
                 new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnRightPickTrigger, e => {
                     let objToAnimate;
-                    if (this.scene.metadata.viewMode === 'fps') {
+                    switch (this.scene.metadata.viewMode) {
                         // move camera
-                        objToAnimate = this.scene.getCameraByName('gm-camera')
-                    } else {
-                        if (this.scene.metadata.selectedOnTileIndex === null) {
-                            return;
-                        }
+                        case 'fps':
+                            objToAnimate = this.scene.getCameraByName('gm-camera')
+                            break
+                        case 'rts':
+                            if (this.scene.metadata.selectedOnTileIndex === null) {
+                                return;
+                            }
 
-                        const sourceTileInfo = this.getTileInfo(this.scene.metadata.selectedOnTileIndex)
-                        const targetTileInfo = this.getTileInfo(groundSelector.metadata)
-                        if (targetTileInfo.npc !== null) {
-                            return;
-                        }
+                            const sourceTileInfo = this.getTileInfo(this.scene.metadata.selectedOnTileIndex)
+                            const targetTileInfo = this.getTileInfo(groundSelector.metadata)
+                            if (targetTileInfo.npc !== null) {
+                                return;
+                            }
 
-                        objToAnimate = this.spriteDictionary[sourceTileInfo.npc.npcName]
-                        // move NPC in model :
-                        targetTileInfo.npc = sourceTileInfo.npc
-                        sourceTileInfo.npc = null
-                        // move item selector :
-                        this.scene.metadata.selectedOnTileIndex = groundSelector.metadata
-                        const itemSelector = this.scene.getMeshByName('selector-item')
-                        itemSelector.position.x = groundSelector.position.x
-                        itemSelector.position.z = groundSelector.position.z
+                            objToAnimate = this.spriteDictionary[sourceTileInfo.npc.npcName]
+                            // move NPC in model :
+                            targetTileInfo.npc = sourceTileInfo.npc
+                            sourceTileInfo.npc = null
+                            // move item selector :
+                            this.scene.metadata.selectedOnTileIndex = groundSelector.metadata
+                            const itemSelector = this.scene.getMeshByName('selector-item')
+                            itemSelector.position.x = groundSelector.position.x
+                            itemSelector.position.z = groundSelector.position.z
+                            break
+                        case 'populate':
+                            return
                     }
 
                     const target = e.meshUnderPointer.position.clone()
