@@ -70,6 +70,19 @@
 
                     init() {
                         this.state = scene.metadata
+
+                        Mousetrap.bind('r', () => {
+                            this.state.viewMode = 'rts'
+                            return false
+                        })
+                        Mousetrap.bind('f', () => {
+                            this.state.viewMode = 'fps'
+                            return false
+                        })
+                        Mousetrap.bind('p', () => {
+                            this.state.viewMode = 'populate'
+                            return false
+                        })
                     },
 
                     changeMode(event) {
