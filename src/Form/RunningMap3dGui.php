@@ -20,7 +20,12 @@ class RunningMap3dGui extends AbstractType
     {
         $builder
                 ->add('viewMode', ChoiceType::class, [
-                    'choices' => ['FPS' => 'fps', 'RTS' => 'rts', 'Personnage' => 'populate'],
+                    'choices' => [
+                        'FPS' => 'fps',
+                        'RTS' => 'rts',
+                        'Personnage' => 'populate',
+                        'Suppression' => 'delete'
+                    ],
                     'attr' => [
                         'x-model' => 'state.viewMode',
                         'x-on:change' => 'changeMode'

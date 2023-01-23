@@ -129,6 +129,7 @@ class BattlemapBuilder
                             itemSelector.position.x = groundSelector.position.x
                             itemSelector.position.z = groundSelector.position.z
                             break
+                        case 'delete':
                         case 'populate':
                             return
                     }
@@ -147,7 +148,7 @@ class BattlemapBuilder
                 })
                 )
 
-        // click to info
+        // left click behavior
         groundSelector.actionManager.registerAction(
                 new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, e => {
                     const selector = this.scene.getMeshByName('selector-item')
@@ -193,7 +194,16 @@ class BattlemapBuilder
                                     metadata.npc.npcName = uniqueName
                                 }
                             }
-                            break;
+                            break
+                        case 'delete':
+                            if (metadata.npc === null) {
+                                return;
+                            }
+                            const key = metadata.npc.npcName
+                            const sp = this.spriteDictionary[key]
+                            this.spriteDictionary[key] = null
+                            sp.dispose()
+                            metadata.npc = null
                     }
                 })
                 )
