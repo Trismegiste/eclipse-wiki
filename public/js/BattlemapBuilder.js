@@ -44,7 +44,11 @@ class BattlemapBuilder
                     const minHeight = 2 * this.wallHeight / 3
                     if (camera.position.y < minHeight) {
                         camera.position.y = minHeight
+                        this.scene.fogMode = BABYLON.Scene.FOGMODE_EXP
+                    } else {
+                        this.scene.fogMode = BABYLON.Scene.FOGMODE_NONE
                     }
+
                     break;
             }
         })
@@ -54,6 +58,14 @@ class BattlemapBuilder
         // Creates a light, aiming 0,1,0 - to the sky
         const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), this.scene)
         light.intensity = 1.5
+
+        const headlight = new BABYLON.PointLight('headlight', new BABYLON.Vector3(1, 1, 1), this.scene)
+        headlight.diffuse = BABYLON.Color3.White()
+        headlight.range = 6
+        this.scene.registerBeforeRender(() => {
+            const camera = this.scene.getCameraByName('gm-camera')
+            headlight.position = camera.position
+        })
     }
 
     declareGround() {
