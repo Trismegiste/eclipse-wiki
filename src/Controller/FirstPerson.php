@@ -47,4 +47,16 @@ class FirstPerson extends AbstractController
         return new JsonResponse(new Scene($map));
     }
 
+    /**
+     * @Route("/fps/publish", methods={"POST"})
+     */
+    public function publish(\Symfony\Component\HttpFoundation\Request $request): JsonResponse
+    {
+        $playerDir = join_paths($this->getParameter('kernel.cache_dir'), \App\Service\PlayerCastCache::subDir);
+        /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $screenshot */
+        $screenshot = $request->files->get('picture')->move($playerDir, 'tmp-map.svg');
+
+        return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $screenshot->getPathname()]);
+    }
+
 }

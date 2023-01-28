@@ -52,6 +52,26 @@ class BattlemapBuilder
                     break;
             }
         })
+
+        this.scene.onKeyboardObservable.add((kbInfo) => {
+            switch (kbInfo.type) {
+                case BABYLON.KeyboardEventTypes.KEYUP:
+                    switch (kbInfo.event.keyCode) {
+                        case 32:
+                            BABYLON.ScreenshotTools.CreateScreenshotAsync(this.scene.getEngine(), camera, {width: 1920, height: 1080}).then(data => {
+                                const formData = new FormData()
+                                formData.append('picture', new Blob([BABYLON.DecodeBase64UrlToBinary(data)], {type: 'image/png'}))
+                                fetch('/fps/publish', {
+                                    method: 'post',
+                                    body: formData,
+                                    redirect: 'manual'
+                                })
+                            })
+                            break
+                    }
+                    break
+            }
+        })
     }
 
     setLight() {
