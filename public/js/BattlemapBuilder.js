@@ -61,7 +61,7 @@ class BattlemapBuilder
 
         const headlight = new BABYLON.PointLight('headlight', new BABYLON.Vector3(1, 1, 1), this.scene)
         headlight.diffuse = BABYLON.Color3.White()
-        headlight.range = 6
+        headlight.range = 8
         this.scene.registerBeforeRender(() => {
             const camera = this.scene.getCameraByName('gm-camera')
             headlight.position = camera.position
@@ -79,6 +79,10 @@ class BattlemapBuilder
             const myMaterial = new BABYLON.StandardMaterial('mat-ground-' + key, this.scene)
             myMaterial.diffuseTexture = new BABYLON.Texture("/texture/habitat/ground/" + key + ".webp", this.scene)
             tile.material = myMaterial
+
+            if (key === 'default') {
+                myMaterial.bumpTexture = new BABYLON.Texture("/texture/habitat/ground/" + key + "-bump.webp", this.scene)
+            }
         })
     }
 
@@ -94,6 +98,10 @@ class BattlemapBuilder
             const myMaterial = new BABYLON.StandardMaterial('mat-wall-' + key, this.scene)
             myMaterial.diffuseTexture = new BABYLON.Texture("/texture/habitat/wall/" + key + ".webp", this.scene)
             wall.material = myMaterial
+
+            if (key === 'default') {
+                myMaterial.bumpTexture = new BABYLON.Texture("/texture/habitat/wall/" + key + "-bump.webp", this.scene)
+            }
         })
     }
 
@@ -253,6 +261,7 @@ class BattlemapBuilder
 
         const doorMat = new BABYLON.StandardMaterial('mat-door', this.scene)
         doorMat.diffuseTexture = new BABYLON.Texture("/texture/habitat/door.webp", this.scene)
+        doorMat.bumpTexture = new BABYLON.Texture("/texture/habitat/door-bump.webp", this.scene)
         door.material = doorMat
     }
 
@@ -344,7 +353,9 @@ class BattlemapBuilder
         ceiling.translate(new BABYLON.Vector3(width / 2 - 1, this.wallHeight, 1 - height / 2), 1, BABYLON.Space.WORLD)
         ceiling.rotation.x = Math.PI / 2
         const ceilingMat = new BABYLON.StandardMaterial('mat-ceiling', this.scene)
-        ceilingMat.emissiveTexture = new BABYLON.Texture("/texture/habitat/ceiling.webp", this.scene)
+        ceilingMat.emissiveColor = BABYLON.Color3.White()
+        ceilingMat.diffuseTexture = new BABYLON.Texture("/texture/habitat/ceiling.webp", this.scene)
+        ceilingMat.bumpTexture = new BABYLON.Texture("/texture/habitat/ceiling-bump.webp", this.scene)
         ceiling.material = ceilingMat
     }
 
