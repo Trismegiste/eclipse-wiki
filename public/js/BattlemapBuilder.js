@@ -53,24 +53,58 @@ class BattlemapBuilder
             }
         })
 
-        this.scene.onKeyboardObservable.add((kbInfo) => {
+        this.scene.onKeyboardObservable.add(kbInfo => {
             switch (kbInfo.type) {
                 case BABYLON.KeyboardEventTypes.KEYUP:
                     switch (kbInfo.event.keyCode) {
                         case 32:
-                            BABYLON.ScreenshotTools.CreateScreenshotAsync(this.scene.getEngine(), camera, {width: 1920, height: 1080}).then(data => {
-                                const formData = new FormData()
-                                formData.append('picture', new Blob([BABYLON.DecodeBase64UrlToBinary(data)], {type: 'image/png'}))
-                                fetch('/fps/publish', {
-                                    method: 'post',
-                                    body: formData,
-                                    redirect: 'manual'
-                                })
-                            })
+                            if (this.scene.metadata.selectedOnTileIndex !== null) {
+                                this.postScreenshotFrom(this.scene.metadata.selectedOnTileIndex)
+                            }
                             break
                     }
                     break
             }
+        })
+    }
+
+    async postScreenshotFrom(idx) {
+        const tileWithSelect = this.getGroundTileByIndex(idx)
+        const center = tileWithSelect.position.clone()
+        center.y = this.wallHeight / 2
+        let pov = new BABYLON.UniversalCamera("npc-camera", center, this.scene)
+        pov.minZ = 0.3
+        pov.maxZ = this.side * 2
+        pov.fov = 45 / 180 * Math.PI
+
+        let target = []
+        for (let k = 0; k < 6; k++) {
+            target[k] = center.clone()
+        }
+        target[0].x++
+        target[1].z++
+        target[2].z--
+        target[3].x--
+        target[4].y++
+        target[5].y--
+        this.scene.activeCamera = pov
+        const formData = new FormData()
+        for (let k = 0; k < 6; k++) {
+            pov.setTarget(target[k])
+            this.scene.render()
+            let data = await BABYLON.ScreenshotTools.CreateScreenshotUsingRenderTargetAsync(this.scene.getEngine(), pov, 500, "image/png", 1, false, null, true)
+            formData.append(`picture[${k}]`, new Blob([BABYLON.DecodeBase64UrlToBinary(data)], {type: 'image/png'}))
+        }
+
+        // post the form
+        fetch('/fps/publish', {
+            method: 'post',
+            body: formData,
+            redirect: 'manual'
+        }).finally(res => {
+            // restore camera
+            this.scene.activeCamera = this.scene.getCameraByName('gm-camera')
+            pov.dispose()
         })
     }
 

@@ -54,9 +54,12 @@ class FirstPerson extends AbstractController
     {
         $playerDir = join_paths($this->getParameter('kernel.cache_dir'), \App\Service\PlayerCastCache::subDir);
         /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $screenshot */
-        $screenshot = $request->files->get('picture')->move($playerDir, 'tmp-map.svg');
+        $screenshot = $request->files->get('picture');
+        foreach ($screenshot as $idx => $pic) {
+            $pic->move($playerDir, "tmp-map-$idx.png");
+        }
 
-        return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $screenshot->getPathname()]);
+        return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $screenshot[5]->getPathname()]);
     }
 
 }
