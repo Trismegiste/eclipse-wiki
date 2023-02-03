@@ -52,14 +52,26 @@ class FirstPerson extends AbstractController
      */
     public function publish(\Symfony\Component\HttpFoundation\Request $request): JsonResponse
     {
-        $playerDir = join_paths($this->getParameter('kernel.cache_dir'), \App\Service\PlayerCastCache::subDir);
         /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $screenshot */
         $screenshot = $request->files->get('picture');
+        $cube = [];
         foreach ($screenshot as $idx => $pic) {
-            $pic->move($playerDir, "tmp-map-$idx.png");
+            list($w,$h) = getimagesize($pic->getPathname());
+            // @todo need checks on size
+            $cube[$idx] = imagecreatefrompng($pic->getPathname());
         }
 
-        return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $screenshot[5]->getPathname()]);
+        $cubemap = imagecreatetruecolor(4 * $w, 3 * $h);
+        $target = join_paths($this->getParameter('kernel.cache_dir'), \App\Service\PlayerCastCache::subDir, 'tmp-cubemap.jpg');
+        imagecopy($cubemap, $cube[0], 0, $h, 0, 0, $w, $h);
+        imagecopy($cubemap, $cube[1], $w, $h, 0, 0, $w, $h);
+        imagecopy($cubemap, $cube[2], 2*$w, $h, 0, 0, $w, $h);
+        imagecopy($cubemap, $cube[3], 3*$w, $h, 0, 0, $w, $h);
+        imagecopy($cubemap, $cube[4], 2*$w, 0, 0, 0, $w, $h);
+        imagecopy($cubemap, $cube[5], 2*$w, 2*$h, 0, 0, $w, $h);
+        imagejpeg($cubemap, $target);
+
+        return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $target]);
     }
 
 }
