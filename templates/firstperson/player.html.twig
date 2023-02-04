@@ -38,7 +38,7 @@
         //mapping sprite
         var faceUV = new Array(6);
         for (let i = 0; i < 6; i++) {
-            faceUV[i] = new BABYLON.Vector4(i / 6, 0, (i + 1) / 6, 1);
+            faceUV[i] = new BABYLON.Vector4((i + 1) / 6, 0, i / 6, 1);
         }
 
         //wrap set

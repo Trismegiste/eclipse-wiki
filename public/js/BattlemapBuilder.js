@@ -83,8 +83,8 @@ class BattlemapBuilder
         }
         target[0].z++
         target[1].z--
-        target[2].x--
-        target[3].x++
+        target[2].x++
+        target[3].x--
         target[4].y++
         target[5].y--
         this.scene.activeCamera = pov
