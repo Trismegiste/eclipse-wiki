@@ -92,7 +92,7 @@ class BattlemapBuilder
         for (let k = 0; k < 6; k++) {
             pov.setTarget(target[k])
             this.scene.render()
-            let data = await BABYLON.ScreenshotTools.CreateScreenshotUsingRenderTargetAsync(this.scene.getEngine(), pov, 1000, "image/png", 1, false, null, true)
+            let data = await BABYLON.ScreenshotTools.CreateScreenshotUsingRenderTargetAsync(this.scene.getEngine(), pov, 1200, "image/png", 1, true, null, true)
             formData.append(`picture[${k}]`, new Blob([BABYLON.DecodeBase64UrlToBinary(data)], {type: 'image/png'}))
         }
 
