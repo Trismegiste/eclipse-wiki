@@ -35,16 +35,11 @@
         var columns = 4;  // 4 columns
         var rows = 3;  // 3 row
 
-        //alien sprite
+        //mapping sprite
         var faceUV = new Array(6);
-
-        //set all faces
-        faceUV[0] = new BABYLON.Vector4(0, 1 / rows, 1 / columns, 2 / rows) // back
-        faceUV[1] = new BABYLON.Vector4(2 / columns, 1 / rows, 3 / columns, 2 / rows) // front
-        faceUV[2] = new BABYLON.Vector4(3 / columns, 1 / rows, 4 / columns, 2 / rows) // right
-        faceUV[3] = new BABYLON.Vector4(1 / columns, 1 / rows, 2 / columns, 2 / rows) // left
-        faceUV[4] = new BABYLON.Vector4(2 / columns, 2 / rows, 3 / columns, 3 / rows) // up
-        faceUV[5] = new BABYLON.Vector4(2 / columns, 0, 3 / columns, 1 / rows) // down
+        for (let i = 0; i < 6; i++) {
+            faceUV[i] = new BABYLON.Vector4(i / 6, 0, (i + 1) / 6, 1);
+        }
 
         //wrap set
         var options = {
