@@ -1,0 +1,87 @@
+{# player screen #}
+{% extends "base.html.twig" %}
+
+{% block title %}PlayerCast 3D{% endblock %}
+
+{% block body %}
+    <div>
+        <canvas id="renderCanvas">
+        </canvas>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script>
+        const container = document.querySelector('canvas')
+        container.height = document.documentElement.clientHeight
+        container.width = document.documentElement.clientWidth
+
+        const canvas = document.getElementById("renderCanvas") // Get the canvas element
+        const engine = new BABYLON.Engine(canvas) // Generate the BABYLON 3D engine
+
+        // Creates Scene object
+        const scene = new BABYLON.Scene(engine)
+        const camera = new BABYLON.UniversalCamera("camera1", new BABYLON.Vector3(0, 0, 0), scene)
+        camera.setTarget(new BABYLON.Vector3(1, 0, 0))
+        camera.minZ = 0.1
+        camera.attachControl(canvas, true)
+        camera.inputs.removeByType("FreeCameraKeyboardMoveInput")
+
+        const mat = new BABYLON.StandardMaterial("mat", scene)
+        mat.emissiveTexture = new BABYLON.Texture("/cubemap.png", scene)
+
+        var columns = 4;  // 4 columns
+        var rows = 3;  // 3 row
+
+        //alien sprite
+        var faceUV = new Array(6);
+
+        //set all faces
+        faceUV[0] = new BABYLON.Vector4(0, 1 / rows, 1 / columns, 2 / rows) // back
+        faceUV[1] = new BABYLON.Vector4(2 / columns, 1 / rows, 3 / columns, 2 / rows) // front
+        faceUV[2] = new BABYLON.Vector4(3 / columns, 1 / rows, 4 / columns, 2 / rows) // right
+        faceUV[3] = new BABYLON.Vector4(1 / columns, 1 / rows, 2 / columns, 2 / rows) // left
+        faceUV[4] = new BABYLON.Vector4(2 / columns, 2 / rows, 3 / columns, 3 / rows) // up
+        faceUV[5] = new BABYLON.Vector4(2 / columns, 0, 3 / columns, 1 / rows) // down
+
+        //wrap set
+        var options = {
+            faceUV: faceUV,
+            wrap: true,
+            sideOrientation: BABYLON.Mesh.BACKSIDE
+        };
+
+        const box = BABYLON.MeshBuilder.CreateBox('box', options, scene);
+        box.material = mat;
+
+        // Register a render loop to repeatedly render the scene
+        engine.runRenderLoop(function () {
+            scene.render()
+        })
+        // Watch for browser/canvas resize events
+        window.addEventListener("resize", function () {
+            engine.resize()
+        })
+
+        const socket = new WebSocket('{{ host }}')
+        socket.onmessage = function (msg) {
+            console.log('update')
+            mat.emissiveTexture.dispose()
+            mat.emissiveTexture = BABYLON.RawTexture.LoadFromDataString('tmp', msg.data, scene)
+        }
+
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+    </style>
+{% endblock %}

@@ -75,14 +75,14 @@ class BattlemapBuilder
         let pov = new BABYLON.UniversalCamera("npc-camera", center, this.scene)
         pov.minZ = 0.3
         pov.maxZ = this.side * 2
-        pov.fov = 45 / 180 * Math.PI
+        pov.fov = 90 / 180 * Math.PI
 
         let target = []
         for (let k = 0; k < 6; k++) {
             target[k] = center.clone()
         }
-        target[0].x++
-        target[1].z++
+        target[0].z++
+        target[1].x++
         target[2].z--
         target[3].x--
         target[4].y++
@@ -92,7 +92,7 @@ class BattlemapBuilder
         for (let k = 0; k < 6; k++) {
             pov.setTarget(target[k])
             this.scene.render()
-            let data = await BABYLON.ScreenshotTools.CreateScreenshotUsingRenderTargetAsync(this.scene.getEngine(), pov, 500, "image/png", 1, false, null, true)
+            let data = await BABYLON.ScreenshotTools.CreateScreenshotUsingRenderTargetAsync(this.scene.getEngine(), pov, 1000, "image/png", 1, false, null, true)
             formData.append(`picture[${k}]`, new Blob([BABYLON.DecodeBase64UrlToBinary(data)], {type: 'image/png'}))
         }
 
