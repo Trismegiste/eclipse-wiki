@@ -14,10 +14,6 @@
     {{ parent() }}
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
     <script>
-        const container = document.querySelector('canvas')
-        container.height = document.documentElement.clientHeight
-        container.width = document.documentElement.clientWidth
-
         const canvas = document.getElementById("renderCanvas") // Get the canvas element
         const engine = new BABYLON.Engine(canvas) // Generate the BABYLON 3D engine
 
@@ -57,6 +53,9 @@
         })
         // Watch for browser/canvas resize events
         window.addEventListener("resize", function () {
+            const container = document.querySelector('canvas')
+            container.height = document.documentElement.clientHeight
+            container.width = document.documentElement.clientWidth
             engine.resize()
         })
 
