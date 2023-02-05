@@ -4,19 +4,16 @@
 {% block title %}PlayerCast 3D{% endblock %}
 
 {% block body %}
-    <div>
-        <canvas id="renderCanvas">
-        </canvas>
-    </div>
+    <canvas id="renderCanvas">
+    </canvas>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/gui/babylon.gui.js"></script>
     <script>
         const canvas = document.getElementById("renderCanvas") // Get the canvas element
-        canvas.height = document.documentElement.clientHeight
-        canvas.width = document.documentElement.clientWidth
         const engine = new BABYLON.Engine(canvas) // Generate the BABYLON 3D engine
 
         // Creates Scene object
@@ -51,14 +48,29 @@
         const box = BABYLON.MeshBuilder.CreateBox('box', options, scene);
         box.material = mat;
 
+        // GUI
+        const playerUI = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("playerUI")
+        const button = BABYLON.GUI.Button.CreateSimpleButton("but", "Fullscreen")
+        button.width = "120px"
+        button.height = "60px"
+        button.color = "white"
+        button.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT
+        button.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM
+        button.onPointerClickObservable.add(() => {
+            if (!engine.isFullscreen) {
+                engine.enterFullscreen()
+            } else {
+                engine.exitFullscreen()
+            }
+        })
+        playerUI.addControl(button)
+
         // Register a render loop to repeatedly render the scene
         engine.runRenderLoop(function () {
             scene.render()
         })
         // Watch for browser/canvas resize events
         window.addEventListener("resize", function () {
-            canvas.height = document.documentElement.clientHeight
-            canvas.width = document.documentElement.clientWidth
             engine.resize()
         })
 
@@ -75,9 +87,9 @@
     {{ parent() }}
     <style>
         #renderCanvas {
-            width: 100%;
-            height: 100%;
-            touch-action: none;
+            height: 85vh;
+            width: 100vw;
+            display: block;
         }
     </style>
 {% endblock %}
