@@ -81,7 +81,7 @@ class FirstPerson extends AbstractController
 
     /**
      * The actual player screen updated with websocket
-     * @Route("/fps/player", methods={"GET"})
+     * @Route("/player/fps", methods={"GET"})
      */
     public function player(): Response
     {

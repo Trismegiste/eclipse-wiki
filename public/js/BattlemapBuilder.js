@@ -71,9 +71,9 @@ class BattlemapBuilder
     async postScreenshotFrom(idx) {
         const tileWithSelect = this.getGroundTileByIndex(idx)
         const center = tileWithSelect.position.clone()
-        center.y = this.wallHeight / 2
+        center.y = 2 * this.wallHeight / 3
         let pov = new BABYLON.UniversalCamera("npc-camera", center, this.scene)
-        pov.minZ = 0.3
+        pov.minZ = 0.4
         pov.maxZ = this.side * 2
         pov.fov = 90 / 180 * Math.PI
 
@@ -88,11 +88,19 @@ class BattlemapBuilder
         target[4].y++
         target[5].y--
         this.scene.activeCamera = pov
+        // save temporary state
+        const groundSelector = this.scene.getMeshByName('selector-ground')
+        const itemSelector = this.scene.getMeshByName('selector-item')
+        groundSelector.isVisible = false
+        itemSelector.isVisible = false
+        const currentFog = this.scene.fogMode
+        this.scene.fogMode = BABYLON.Scene.FOGMODE_EXP
+
         const formData = new FormData()
         for (let k = 0; k < 6; k++) {
             pov.setTarget(target[k])
             this.scene.render()
-            let data = await BABYLON.ScreenshotTools.CreateScreenshotUsingRenderTargetAsync(this.scene.getEngine(), pov, 1200, "image/png", 1, true, null, true)
+            let data = await BABYLON.ScreenshotTools.CreateScreenshotUsingRenderTargetAsync(this.scene.getEngine(), pov, 1280, "image/png", 1, true, null, true)
             formData.append(`picture[${k}]`, new Blob([BABYLON.DecodeBase64UrlToBinary(data)], {type: 'image/png'}))
         }
 
@@ -105,6 +113,10 @@ class BattlemapBuilder
             // restore camera
             this.scene.activeCamera = this.scene.getCameraByName('gm-camera')
             pov.dispose()
+            // restore original state
+            groundSelector.isVisible = true
+            itemSelector.isVisible = true
+            this.scene.fogMode = currentFog
         })
     }
 
@@ -113,12 +125,19 @@ class BattlemapBuilder
         const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), this.scene)
         light.intensity = 1.5
 
-        const headlight = new BABYLON.PointLight('headlight', new BABYLON.Vector3(1, 1, 1), this.scene)
+        const headlight = new BABYLON.PointLight('headlight', new BABYLON.Vector3(0, 2 * this.wallHeight / 3, 0), this.scene)
         headlight.diffuse = BABYLON.Color3.White()
         headlight.range = 8
+
         this.scene.registerBeforeRender(() => {
-            const camera = this.scene.getCameraByName('gm-camera')
-            headlight.position = camera.position
+            if (this.scene.metadata.selectedOnTileIndex !== null) {
+                const selector = this.scene.getMeshByName('selector-item')
+                headlight.position.x = selector.position.x
+                headlight.position.z = selector.position.z
+                headlight.setEnabled(true)
+            } else {
+                headlight.setEnabled(false)
+            }
         })
     }
 
