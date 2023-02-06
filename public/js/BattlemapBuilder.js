@@ -153,7 +153,7 @@ class BattlemapBuilder
             myMaterial.diffuseTexture = new BABYLON.Texture("/texture/habitat/ground/" + key + ".webp", this.scene)
             tile.material = myMaterial
 
-            if (key === 'default') {
+            if (key === 'cluster-energy') {
                 myMaterial.bumpTexture = new BABYLON.Texture("/texture/habitat/ground/" + key + "-bump.webp", this.scene)
             }
         })
