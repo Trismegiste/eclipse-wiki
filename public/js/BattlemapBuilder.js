@@ -167,11 +167,8 @@ class BattlemapBuilder
 
             const myMaterial = new BABYLON.StandardMaterial('mat-wall-' + key, this.scene)
             myMaterial.diffuseTexture = new BABYLON.Texture("/texture/habitat/wall/" + key + ".webp", this.scene)
+            myMaterial.bumpTexture = new BABYLON.Texture("/texture/habitat/wall/" + key + "-bump.webp", this.scene)
             wall.material = myMaterial
-
-            if (key === 'default') {
-                myMaterial.bumpTexture = new BABYLON.Texture("/texture/habitat/wall/" + key + "-bump.webp", this.scene)
-            }
         })
     }
 
