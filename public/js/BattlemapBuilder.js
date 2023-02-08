@@ -12,6 +12,7 @@ class BattlemapBuilder
     spriteManager = {}
     spriteDictionary = {}
     wheelSpeed = 1.4
+    theme;
 
     constructor(scene) {
         this.scene = scene
@@ -150,8 +151,8 @@ class BattlemapBuilder
             tile.isVisible = false
 
             const myMaterial = new BABYLON.StandardMaterial('mat-ground-' + key, this.scene)
-            myMaterial.diffuseTexture = new BABYLON.Texture("/texture/habitat/ground/" + key + ".webp", this.scene)
-            myMaterial.bumpTexture = new BABYLON.Texture("/texture/habitat/ground/" + key + "-bump.webp", this.scene)
+            myMaterial.diffuseTexture = new BABYLON.Texture("/texture/" + this.theme + "/ground/" + key + ".webp", this.scene)
+            myMaterial.bumpTexture = new BABYLON.Texture("/texture/" + this.theme + "/ground/" + key + "-bump.webp", this.scene)
             tile.material = myMaterial
         })
     }
@@ -166,8 +167,8 @@ class BattlemapBuilder
             wall.isVisible = false
 
             const myMaterial = new BABYLON.StandardMaterial('mat-wall-' + key, this.scene)
-            myMaterial.diffuseTexture = new BABYLON.Texture("/texture/habitat/wall/" + key + ".webp", this.scene)
-            myMaterial.bumpTexture = new BABYLON.Texture("/texture/habitat/wall/" + key + "-bump.webp", this.scene)
+            myMaterial.diffuseTexture = new BABYLON.Texture("/texture/" + this.theme + "/wall/" + key + ".webp", this.scene)
+            myMaterial.bumpTexture = new BABYLON.Texture("/texture/" + this.theme + "/wall/" + key + "-bump.webp", this.scene)
             wall.material = myMaterial
         })
     }
@@ -327,8 +328,8 @@ class BattlemapBuilder
         door.isVisible = false
 
         const doorMat = new BABYLON.StandardMaterial('mat-door', this.scene)
-        doorMat.diffuseTexture = new BABYLON.Texture("/texture/habitat/door.webp", this.scene)
-        doorMat.bumpTexture = new BABYLON.Texture("/texture/habitat/door-bump.webp", this.scene)
+        doorMat.diffuseTexture = new BABYLON.Texture("/texture/" + this.theme + "/door.webp", this.scene)
+        doorMat.bumpTexture = new BABYLON.Texture("/texture/" + this.theme + "/door-bump.webp", this.scene)
         door.material = doorMat
     }
 
@@ -421,8 +422,8 @@ class BattlemapBuilder
         ceiling.rotation.x = Math.PI / 2
         const ceilingMat = new BABYLON.StandardMaterial('mat-ceiling', this.scene)
         ceilingMat.emissiveColor = BABYLON.Color3.White()
-        ceilingMat.diffuseTexture = new BABYLON.Texture("/texture/habitat/ceiling.webp", this.scene)
-        ceilingMat.bumpTexture = new BABYLON.Texture("/texture/habitat/ceiling-bump.webp", this.scene)
+        ceilingMat.diffuseTexture = new BABYLON.Texture("/texture/" + this.theme + "/ceiling.webp", this.scene)
+        ceilingMat.bumpTexture = new BABYLON.Texture("/texture/" + this.theme + "/ceiling-bump.webp", this.scene)
         ceiling.material = ceilingMat
     }
 
