@@ -1,0 +1,137 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <div class="pure-g">
+        <div class="pure-u-1 pure-u-xl-4-5">
+            <canvas id="renderCanvas">
+            </canvas>
+        </div>
+        <aside class="pure-u-1 pure-u-xl-1-5">
+            <article x-data="displayCellInfo" x-on:selectcell.window="display($event)">
+                {{ form(tools) }}
+                <hr/>
+                <template x-if="cellInfo !== null">
+                    <div>
+                        <hgroup>
+                            <h2 x-text="'Room ' + cellInfo.uid + ' @' + cellInfo.cellIndex"></h2>
+                            <h3 x-text="'Type ' + cellInfo.template"></h3>
+                        </hgroup>
+                        <p>Distance = <span x-text="distanceFromCamera(cellInfo.x, cellInfo.y)"></span></p>
+                    </div>
+                </template>
+                <hr/>
+                <div x-ref="characterCard"></div>
+            </article>
+            <hr/>
+            {{ include('fragment/flashes.html.twig') }}
+        </aside>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="{{ asset('js/BattlemapBuilder.js') }}?{{ random() }}"></script>
+    <script src="{{ asset('js/BattlemapPlayer.js') }}?{{ random() }}"></script>
+    <script src="{{ asset('js/battlemap-loader.js') }}"></script>
+    <script src="{{ asset('js/picture-pusher.js') }}"></script>
+    <script>
+        BABYLON.SceneLoader.RegisterPlugin(battlemapLoader)
+        const canvas = document.getElementById("renderCanvas") // Get the canvas element
+        const engine = new BABYLON.Engine(canvas) // Generate the BABYLON 3D engine
+
+        // Creates Scene object
+        const scene = new BABYLON.Scene(engine)
+        scene.metadata = new BattlemapPlayer()
+        scene.gravity = new BABYLON.Vector3(0, -0.9, 0);
+        scene.collisionsEnabled = true;
+        scene.fogColor = scene.clearColor = BABYLON.Color3.Black()
+        scene.fogDensity = 0.07
+
+        // Creates and positions a free camera for GM
+        const camera = new BABYLON.UniversalCamera("gm-camera", new BABYLON.Vector3(0, 0, 0), scene)
+        camera.setTarget(new BABYLON.Vector3(0, 0, -1))
+        camera.attachControl(canvas)
+
+        BABYLON.SceneLoader.Append("/fps/babylon/", "{{ place.pk }}.battlemap", scene, function (scene) {})
+
+        // Register a render loop to repeatedly render the scene
+        engine.runRenderLoop(function () {
+            scene.render()
+        })
+        // Watch for browser/canvas resize events
+        window.addEventListener("resize", function () {
+            engine.resize()
+        })
+
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('displayCellInfo', () => ({
+                    cellInfo: null,
+                    state: null,
+
+                    init() {
+                        this.state = scene.metadata
+
+                        Mousetrap.bind('r', () => {
+                            this.state.viewMode = 'rts'
+                            return false
+                        })
+                        Mousetrap.bind('f', () => {
+                            this.state.viewMode = 'fps'
+                            return false
+                        })
+                        Mousetrap.bind('p', () => {
+                            this.state.viewMode = 'populate'
+                            return false
+                        })
+                    },
+
+                    changeMode(event) {
+                        if (event.target.value !== 'populate') {
+                            this.state.populateWithNpc = null
+                        }
+                    },
+
+                    changeNpc(event) {
+                        this.state.viewMode = 'populate'
+                    },
+
+                    display(event) {
+                        this.cellInfo = event.detail
+                        if (this.cellInfo.npc !== null) {
+                            const npc = this.cellInfo.npc
+                            fetch('{{ path('app_npcgenerator_minicard') }}?title=' + npc.label)
+                                    .then(response => {
+                                        return response.text()
+                                    })
+                                    .then(content => {
+                                        this.$refs.characterCard.innerHTML = content
+                                        Pushable_subscribe(document.querySelectorAll('.pushable a'))
+                                    })
+                        } else {
+                            this.$refs.characterCard.innerHTML = ''
+                        }
+                    },
+
+                    distanceFromCamera(x, y) {
+                        const dx = camera.position.x - x
+                        const dy = camera.position.z - y
+
+                        return Math.ceil(Math.sqrt(dx * dx + dy * dy) / (2 * Math.sqrt(3) / 3) - 0.05)
+                    }
+
+                }))
+        })
+
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+    </style>
+{% endblock %}

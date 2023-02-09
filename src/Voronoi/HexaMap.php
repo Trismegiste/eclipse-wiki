@@ -252,6 +252,7 @@ class HexaMap implements SquareGrid
                         if (!(array_key_exists($keys[0], $roomConnection) &&
                                 array_key_exists($keys[1], $roomConnection[$keys[0]]))) {
                             $center->door[$direction] = true;
+                            $cell->door[(3 + $direction) % 6] = true;
                             $roomConnection[$keys[0]][$keys[1]] = true;
                         }
                     }
@@ -398,6 +399,7 @@ class HexaMap implements SquareGrid
         // keep npc for generating SVG, we need abstract ID for <defs> tag
         $this->npcToken = [];
         foreach ($npcPerTile as $cfg) {
+            /** @var \App\Entity\TileNpcConfig $cfg */
             $this->npcToken[] = $cfg->npc;
         }
 
@@ -417,7 +419,7 @@ class HexaMap implements SquareGrid
 
     /**
      * Gets assoc array between token ID and NPC
-     * @return array
+     * @return array an array of \App\Entity\MapToken
      */
     public function getNpcToken(): array
     {

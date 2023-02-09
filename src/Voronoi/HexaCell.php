@@ -56,7 +56,7 @@ class HexaCell implements BattlemapItem
 
     public function dumpDoor(float $cx, float $y): void
     {
-        for ($direction = HexaCell::EAST; $direction <= HexaCell::SOUTHEAST; $direction++) {
+        for ($direction = HexaCell::EAST; $direction <= HexaCell::WEST; $direction++) {
             if ($this->door[$direction]) {
                 $angle = -60 * $direction;
                 echo "<use xlink:href=\"#eastdoor\" transform=\"translate($cx $y) rotate($angle)\"/>\n";

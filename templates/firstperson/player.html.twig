@@ -1,0 +1,95 @@
+{# player screen #}
+{% extends "base.html.twig" %}
+
+{% block title %}PlayerCast 3D{% endblock %}
+
+{% block body %}
+    <canvas id="renderCanvas">
+    </canvas>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/gui/babylon.gui.js"></script>
+    <script>
+        const canvas = document.getElementById("renderCanvas") // Get the canvas element
+        const engine = new BABYLON.Engine(canvas) // Generate the BABYLON 3D engine
+
+        // Creates Scene object
+        const scene = new BABYLON.Scene(engine)
+        const camera = new BABYLON.UniversalCamera("camera1", new BABYLON.Vector3(0, 0, 0), scene)
+        camera.setTarget(new BABYLON.Vector3(1, 0, 0))
+        camera.minZ = 0.1
+        camera.attachControl(canvas, true)
+        camera.inputs.removeByType("FreeCameraKeyboardMoveInput")
+        camera.inputs.attached.mouse.touchEnabled = true;
+        camera.inputs.remove(camera.inputs.attached.touch);
+
+        const mat = new BABYLON.StandardMaterial("mat", scene)
+        mat.emissiveTexture = new BABYLON.Texture("/cubemap.png", scene)
+
+        var columns = 4;  // 4 columns
+        var rows = 3;  // 3 row
+
+        //mapping sprite
+        var faceUV = new Array(6);
+        for (let i = 0; i < 6; i++) {
+            faceUV[i] = new BABYLON.Vector4((i + 1) / 6, 0, i / 6, 1);
+        }
+
+        //wrap set
+        var options = {
+            faceUV: faceUV,
+            wrap: true,
+            sideOrientation: BABYLON.Mesh.BACKSIDE
+        };
+
+        const box = BABYLON.MeshBuilder.CreateBox('box', options, scene);
+        box.material = mat;
+
+        // GUI
+        const playerUI = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("playerUI")
+        const button = BABYLON.GUI.Button.CreateSimpleButton("but", "Fullscreen")
+        button.width = "120px"
+        button.height = "60px"
+        button.color = "white"
+        button.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT
+        button.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM
+        button.onPointerClickObservable.add(() => {
+            if (!engine.isFullscreen) {
+                engine.enterFullscreen()
+            } else {
+                engine.exitFullscreen()
+            }
+        })
+        playerUI.addControl(button)
+
+        // Register a render loop to repeatedly render the scene
+        engine.runRenderLoop(function () {
+            scene.render()
+        })
+        // Watch for browser/canvas resize events
+        window.addEventListener("resize", function () {
+            engine.resize()
+        })
+
+        const socket = new WebSocket('{{ host }}')
+        socket.onmessage = function (msg) {
+            console.log('update')
+            mat.emissiveTexture.dispose()
+            mat.emissiveTexture = BABYLON.RawTexture.LoadFromDataString('tmp', msg.data, scene)
+        }
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        #renderCanvas {
+            height: 85vh;
+            width: 100vw;
+            display: block;
+        }
+    </style>
+{% endblock %}

@@ -308,4 +308,15 @@ class NpcGenerator extends AbstractController
         return $this->render('npc/minicard.html.twig', ['npc' => $npc]);
     }
 
+   /**
+     * Get NPC in json format
+     * @Route("/npc/show.{_format}", methods={"GET"}, requirements={"_format"="json"})
+     */
+    public function show(Request $request): Response
+    {
+        $npc = $this->repository->findByTitle($request->get('title'));
+
+        return new \Symfony\Component\HttpFoundation\JsonResponse($npc);
+    }
+
 }
