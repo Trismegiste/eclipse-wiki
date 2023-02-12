@@ -41,7 +41,31 @@ class FirstPerson extends AbstractController
     public function explore(Place $place): Response
     {
         $tools = $this->createForm(RunningMap3dGui::class);
-        return $this->render('firstperson/view3d.html.twig', ['place' => $place, 'tools' => $tools->createView()]);
+        $legend = $this->createFormBuilder()
+                ->add('legend', \Symfony\Component\Form\Extension\Core\Type\TextareaType::class)
+                ->add('name', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+                ->getForm();
+        $writer = $this->createFormBuilder(null, ['attr' => ['x-on:submit' => "write"]])
+                ->setAction($this->generateUrl('app_firstperson_write', ['pk' => $place->getPk()]))
+                ->add('content', \Symfony\Component\Form\Extension\Core\Type\HiddenType::class)
+                ->add('write', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+                ->getForm();
+        return $this->render('firstperson/view3d.html.twig', [
+                    'place' => $place,
+                    'tools' => $tools->createView(),
+                    'legend' => $legend->createView(),
+                    'writer' => $writer->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/fps/write/{pk}", methods={"POST"}, requirements={"pk"="[\da-f]{24}"})
+     */
+    public function write(Place $place): JsonResponse
+    {
+
+
+        return new JsonResponse();
     }
 
     /**
