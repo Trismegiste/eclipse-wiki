@@ -35,7 +35,7 @@
 {% block javascripts %}
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
     <script src="{{ asset('js/BattlemapBuilder.js') }}?{{ random() }}"></script>
-    <script src="{{ asset('js/BattlemapPlayer.js') }}?{{ random() }}"></script>
+    <script src="{{ asset('js/BattlemapDocument.js') }}?{{ random() }}"></script>
     <script src="{{ asset('js/battlemap-loader.js') }}"></script>
     <script src="{{ asset('js/picture-pusher.js') }}"></script>
     <script>
@@ -45,7 +45,7 @@
 
         // Creates Scene object
         const scene = new BABYLON.Scene(engine)
-        scene.metadata = new BattlemapPlayer()
+        scene.metadata = new BattlemapDocument()
         scene.gravity = new BABYLON.Vector3(0, -0.9, 0);
         scene.collisionsEnabled = true;
         scene.fogColor = scene.clearColor = BABYLON.Color3.Black()

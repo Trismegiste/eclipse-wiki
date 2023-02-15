@@ -388,7 +388,7 @@ class BattlemapBuilder
 
     declareToken() {
         // map token
-        this.npc.forEach((npc) => {
+        this.npc.forEach(npc => {
             const sp = new BABYLON.SpriteManager('token-' + npc.label, '/picture/get/' + npc.picture, 2000, 504)
             this.spriteManager[npc.label] = sp
         })
@@ -428,6 +428,14 @@ class BattlemapBuilder
     }
 
     create() {
+        // transfert the model
+        this.scene.metadata.theme = this.theme
+        this.scene.metadata.side = this.side
+        this.scene.metadata.npc = this.npc
+        this.scene.metadata.wallHeight = this.wallHeight
+        this.scene.metadata.texture = this.texture
+
+        // build the scene from the model
         this.setCamera()
         this.setLight()
         this.declareGround()

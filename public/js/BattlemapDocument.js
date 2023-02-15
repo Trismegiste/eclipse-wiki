@@ -5,8 +5,16 @@
 /**
  * The model for running the battlemap scene
  */
-class BattlemapPlayer
+class BattlemapDocument
 {
+    // from the battle map
+    theme
+    side
+    npc = []
+    wallHeight
+    texture = []
+
+    // status
     viewMode = 'fps'
     selectedOnTileIndex = null
     populateWithNpc = null
