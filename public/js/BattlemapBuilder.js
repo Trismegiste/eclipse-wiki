@@ -4,32 +4,31 @@
 
 class BattlemapBuilder
 {
-    side;
-    wallHeight;
-    texture;
-    scene;
-    npc = []
     spriteManager = {}
     spriteDictionary = {}
     wheelSpeed = 1.4
-    theme;
+    scene = null
 
     constructor(scene) {
         this.scene = scene
     }
 
+    getDoc() {
+        return this.scene.metadata
+    }
+
     setCamera() {
         const camera = this.scene.getCameraByName('gm-camera')
-        camera.position = new BABYLON.Vector3(this.side / 2, this.side, -this.side / 2)
-        camera.setTarget(new BABYLON.Vector3(this.side / 2, 0, -this.side / 2))
+        camera.position = new BABYLON.Vector3(this.getDoc().side / 2, this.getDoc().side, -this.getDoc().side / 2)
+        camera.setTarget(new BABYLON.Vector3(this.getDoc().side / 2, 0, -this.getDoc().side / 2))
         camera.minZ = 0.3
-        camera.maxZ = this.side * 2
+        camera.maxZ = this.getDoc().side * 2
         camera.fov = 60 / 180 * Math.PI
         // Then apply collisions and gravity to the active camera
         camera.checkCollisions = true;
         camera.applyGravity = true;
         //Set the ellipsoid around the camera (e.g. your player's size)
-        camera.ellipsoid = new BABYLON.Vector3(0.1, this.wallHeight / 3, 0.1)
+        camera.ellipsoid = new BABYLON.Vector3(0.1, this.getDoc().wallHeight / 3, 0.1)
         camera.inputs.removeByType("FreeCameraKeyboardMoveInput")
 
         this.scene.onPointerObservable.add((pointerInfo) => {
@@ -42,7 +41,7 @@ class BattlemapBuilder
                     } else {
                         camera.position.y *= this.wheelSpeed
                     }
-                    const minHeight = 2 * this.wallHeight / 3
+                    const minHeight = 2 * this.getDoc().wallHeight / 3
                     if (camera.position.y < minHeight) {
                         camera.position.y = minHeight
                         this.scene.fogMode = BABYLON.Scene.FOGMODE_EXP
@@ -72,10 +71,10 @@ class BattlemapBuilder
     async postScreenshotFrom(idx) {
         const tileWithSelect = this.getGroundTileByIndex(idx)
         const center = tileWithSelect.position.clone()
-        center.y = 2 * this.wallHeight / 3
+        center.y = 2 * this.getDoc().wallHeight / 3
         let pov = new BABYLON.UniversalCamera("npc-camera", center, this.scene)
         pov.minZ = 0.4
-        pov.maxZ = this.side * 2
+        pov.maxZ = this.getDoc().side * 2
         pov.fov = 90 / 180 * Math.PI
 
         let target = []
@@ -126,7 +125,7 @@ class BattlemapBuilder
         const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), this.scene)
         light.intensity = 1.5
 
-        const headlight = new BABYLON.PointLight('headlight', new BABYLON.Vector3(0, 2 * this.wallHeight / 3, 0), this.scene)
+        const headlight = new BABYLON.PointLight('headlight', new BABYLON.Vector3(0, 2 * this.getDoc().wallHeight / 3, 0), this.scene)
         headlight.diffuse = BABYLON.Color3.White()
         headlight.range = 8
 
@@ -144,31 +143,31 @@ class BattlemapBuilder
 
     declareGround() {
         // Ground templates
-        this.texture.forEach((key) => {
+        this.getDoc().texture.forEach((key) => {
             const tile = BABYLON.MeshBuilder.CreateDisc("hexagon-" + key, {tessellation: 6, radius: 2 / 3 - 0.01}, this.scene)
             tile.rotation.z = Math.PI / 6
             tile.rotation.x = Math.PI / 2
             tile.isVisible = false
 
             const myMaterial = new BABYLON.StandardMaterial('mat-ground-' + key, this.scene)
-            myMaterial.diffuseTexture = new BABYLON.Texture("/texture/" + this.theme + "/ground/" + key + ".webp", this.scene)
-            myMaterial.bumpTexture = new BABYLON.Texture("/texture/" + this.theme + "/ground/" + key + "-bump.webp", this.scene)
+            myMaterial.diffuseTexture = new BABYLON.Texture("/texture/" + this.getDoc().theme + "/ground/" + key + ".webp", this.scene)
+            myMaterial.bumpTexture = new BABYLON.Texture("/texture/" + this.getDoc().theme + "/ground/" + key + "-bump.webp", this.scene)
             tile.material = myMaterial
         })
     }
 
     declareWall() {
         // Wall templates
-        this.texture.forEach((key) => {
-            const wall = BABYLON.MeshBuilder.CreatePlane("wall-" + key, {width: 2 / 3, height: this.wallHeight})
-            wall.position.y = this.wallHeight / 2
+        this.getDoc().texture.forEach((key) => {
+            const wall = BABYLON.MeshBuilder.CreatePlane("wall-" + key, {width: 2 / 3, height: this.getDoc().wallHeight})
+            wall.position.y = this.getDoc().wallHeight / 2
             wall.position.x = 2 / 3 * Math.cos(Math.PI / 6)
             wall.rotation.y = Math.PI / 2
             wall.isVisible = false
 
             const myMaterial = new BABYLON.StandardMaterial('mat-wall-' + key, this.scene)
-            myMaterial.diffuseTexture = new BABYLON.Texture("/texture/" + this.theme + "/wall/" + key + ".webp", this.scene)
-            myMaterial.bumpTexture = new BABYLON.Texture("/texture/" + this.theme + "/wall/" + key + "-bump.webp", this.scene)
+            myMaterial.diffuseTexture = new BABYLON.Texture("/texture/" + this.getDoc().theme + "/wall/" + key + ".webp", this.scene)
+            myMaterial.bumpTexture = new BABYLON.Texture("/texture/" + this.getDoc().theme + "/wall/" + key + "-bump.webp", this.scene)
             wall.material = myMaterial
         })
     }
@@ -321,21 +320,21 @@ class BattlemapBuilder
 
     declareDoor() {
         // Generic door
-        const door = BABYLON.MeshBuilder.CreatePlane('door', {width: 2 / 3, height: this.wallHeight})
-        door.position.y = this.wallHeight / 2
+        const door = BABYLON.MeshBuilder.CreatePlane('door', {width: 2 / 3, height: this.getDoc().wallHeight})
+        door.position.y = this.getDoc().wallHeight / 2
         door.position.x = 2 / 3 * Math.cos(Math.PI / 6)
         door.rotation.y = Math.PI / 2
         door.isVisible = false
 
         const doorMat = new BABYLON.StandardMaterial('mat-door', this.scene)
-        doorMat.diffuseTexture = new BABYLON.Texture("/texture/" + this.theme + "/door.webp", this.scene)
-        doorMat.bumpTexture = new BABYLON.Texture("/texture/" + this.theme + "/door-bump.webp", this.scene)
+        doorMat.diffuseTexture = new BABYLON.Texture("/texture/" + this.getDoc().theme + "/door.webp", this.scene)
+        doorMat.bumpTexture = new BABYLON.Texture("/texture/" + this.getDoc().theme + "/door-bump.webp", this.scene)
         door.material = doorMat
     }
 
     buildGrid() {
         // Grid of HexaCell
-        this.grid.forEach((cell, k) => {
+        this.getDoc().grid.forEach((cell, k) => {
             const ground = this.scene.getMeshByName('hexagon-' + cell.content.template).createInstance("ground-" + k)
             ground.position.x = cell.x
             ground.position.z = -cell.y
@@ -388,7 +387,7 @@ class BattlemapBuilder
 
     declareToken() {
         // map token
-        this.npc.forEach(npc => {
+        this.getDoc().npc.forEach(npc => {
             const sp = new BABYLON.SpriteManager('token-' + npc.label, '/picture/get/' + npc.picture, 2000, 504)
             this.spriteManager[npc.label] = sp
         })
@@ -407,8 +406,8 @@ class BattlemapBuilder
     }
 
     drawCeiling() {
-        const width = (this.side + 1) * (2 * Math.sqrt(3) / 3)
-        const height = (this.side + 1)
+        const width = (this.getDoc().side + 1) * (2 * Math.sqrt(3) / 3)
+        const height = (this.getDoc().side + 1)
         // ceiling
         const ceiling = BABYLON.MeshBuilder.CreateTiledPlane("ceiling", {
             sideOrientation: BABYLON.Mesh.BACKSIDE,
@@ -418,23 +417,16 @@ class BattlemapBuilder
             tileWidth: 1
         })
         ceiling.isPickable = false
-        ceiling.translate(new BABYLON.Vector3(width / 2 - 1, this.wallHeight, 1 - height / 2), 1, BABYLON.Space.WORLD)
+        ceiling.translate(new BABYLON.Vector3(width / 2 - 1, this.getDoc().wallHeight, 1 - height / 2), 1, BABYLON.Space.WORLD)
         ceiling.rotation.x = Math.PI / 2
         const ceilingMat = new BABYLON.StandardMaterial('mat-ceiling', this.scene)
         ceilingMat.emissiveColor = BABYLON.Color3.White()
-        ceilingMat.diffuseTexture = new BABYLON.Texture("/texture/" + this.theme + "/ceiling.webp", this.scene)
-        ceilingMat.bumpTexture = new BABYLON.Texture("/texture/" + this.theme + "/ceiling-bump.webp", this.scene)
+        ceilingMat.diffuseTexture = new BABYLON.Texture("/texture/" + this.getDoc().theme + "/ceiling.webp", this.scene)
+        ceilingMat.bumpTexture = new BABYLON.Texture("/texture/" + this.getDoc().theme + "/ceiling-bump.webp", this.scene)
         ceiling.material = ceilingMat
     }
 
     create() {
-        // transfert the model
-        this.scene.metadata.theme = this.theme
-        this.scene.metadata.side = this.side
-        this.scene.metadata.npc = this.npc
-        this.scene.metadata.wallHeight = this.wallHeight
-        this.scene.metadata.texture = this.texture
-
         // build the scene from the model
         this.setCamera()
         this.setLight()

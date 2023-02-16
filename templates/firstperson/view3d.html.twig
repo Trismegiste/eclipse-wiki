@@ -8,7 +8,7 @@
             <canvas id="renderCanvas">
             </canvas>
         </div>
-        <aside class="pure-u-1 pure-u-xl-1-5">
+   {#     <aside class="pure-u-1 pure-u-xl-1-5">
             <article x-data="displayCellInfo" x-on:selectcell.window="display($event)">
                 {{ form(tools) }}
                 <hr/>
@@ -28,7 +28,7 @@
             </article>
             <hr/>
             {{ include('fragment/flashes.html.twig') }}
-        </aside>
+        </aside> #}
     </div>
 {% endblock %}
 
@@ -45,7 +45,6 @@
 
         // Creates Scene object
         const scene = new BABYLON.Scene(engine)
-        scene.metadata = new BattlemapDocument()
         scene.gravity = new BABYLON.Vector3(0, -0.9, 0);
         scene.collisionsEnabled = true;
         scene.fogColor = scene.clearColor = BABYLON.Color3.Black()

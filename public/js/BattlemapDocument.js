@@ -7,14 +7,15 @@
  */
 class BattlemapDocument
 {
-    // from the battle map
+    // the battle map document
     theme
     side
     npc = []
     wallHeight
     texture = []
+    grid = []
 
-    // status
+    // current status
     viewMode = 'fps'
     selectedOnTileIndex = null
     populateWithNpc = null
