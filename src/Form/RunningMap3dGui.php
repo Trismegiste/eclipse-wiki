@@ -27,7 +27,7 @@ class RunningMap3dGui extends AbstractType
                         'Suppression' => 'delete'
                     ],
                     'attr' => [
-                        'x-model' => 'state.viewMode',
+                        'x-ref' => 'viewMode',
                         'x-on:change' => 'changeMode'
                     ],
                     'expanded' => false
@@ -35,7 +35,7 @@ class RunningMap3dGui extends AbstractType
                 ->add('populateWith', \App\Form\Type\NpcChoiceType::class, [
                     'placeholder' => '---------',
                     'attr' => [
-                        'x-model' => 'state.populateWithNpc',
+                        'x-ref' => 'populateWithNpc',
                         'x-on:change' => 'changeNpc'
                     ],
                 ])
