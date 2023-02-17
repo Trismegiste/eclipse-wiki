@@ -120,6 +120,7 @@
                     write(event) {
                         event.preventDefault()
                         const form = new FormData(event.target)
+                        form.set('form[content]', JSON.stringify(scene.metadata))
                         fetch(event.target.action, {
                             method: 'post',
                             body: form,
