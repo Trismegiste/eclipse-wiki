@@ -317,7 +317,7 @@ class BattlemapBuilder
     }
 
     getTileInfo(idx) {
-        return this.getGroundTileByIndex(idx).metadata
+        return this.scene.metadata.grid[idx].content
     }
 
     declareDoor() {
@@ -341,9 +341,8 @@ class BattlemapBuilder
             ground.position.x = cell.x
             ground.position.z = -cell.y
             ground.checkCollisions = true
-            // model injected into the tile
-            ground.metadata = cell.content
-            ground.metadata.cellIndex = k
+            // keep track of index
+            ground.metadata = k
 
             ground.actionManager = new BABYLON.ActionManager(this.scene);
             ground.actionManager.registerAction(
@@ -354,7 +353,7 @@ class BattlemapBuilder
                         selector.position.x = current.position.x
                         selector.position.z = current.position.z
                         // we store the cell index into the metadata of the selector
-                        selector.metadata = current.metadata.cellIndex
+                        selector.metadata = current.metadata
                     })
                     )
 
@@ -382,7 +381,7 @@ class BattlemapBuilder
 
             // token if any
             if (cell.content.npc) {
-                ground.metadata.npc.npcName = this.appendNpcAt(cell.content.npc, cell.x, -cell.y)
+                cell.content.npc.npcName = this.appendNpcAt(cell.content.npc, cell.x, -cell.y)
             }
         })
     }
