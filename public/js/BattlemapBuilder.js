@@ -11,6 +11,9 @@ class BattlemapBuilder
 
     constructor(scene) {
         this.scene = scene
+        scene.collisionsEnabled = true;
+        scene.fogColor = scene.clearColor = BABYLON.Color3.Black()
+        scene.fogDensity = 0.07
     }
 
     getDoc() {
@@ -24,9 +27,8 @@ class BattlemapBuilder
         camera.minZ = 0.3
         camera.maxZ = this.getDoc().side * 2
         camera.fov = 60 / 180 * Math.PI
-        // Then apply collisions and gravity to the active camera
+        // Then apply collisions to the active camera
         camera.checkCollisions = true;
-        camera.applyGravity = true;
         //Set the ellipsoid around the camera (e.g. your player's size)
         camera.ellipsoid = new BABYLON.Vector3(0.1, this.getDoc().wallHeight / 3, 0.1)
         camera.inputs.removeByType("FreeCameraKeyboardMoveInput")
