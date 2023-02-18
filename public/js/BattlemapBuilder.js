@@ -5,7 +5,6 @@
 class BattlemapBuilder
 {
     spriteManager = {}
-    spriteDictionary = {}
     wheelSpeed = 1.4
     scene = null
 
@@ -208,7 +207,7 @@ class BattlemapBuilder
                                 return;
                             }
 
-                            objToAnimate = this.spriteDictionary[sourceTileInfo.npc.npcName]
+                            objToAnimate = sourceTileInfo.npc.npcSpritePtr
                             // move NPC in model :
                             targetTileInfo.npc = sourceTileInfo.npc
                             sourceTileInfo.npc = null
@@ -274,13 +273,11 @@ class BattlemapBuilder
                                         const sp = new BABYLON.SpriteManager('token-' + npcTitle, '/picture/get/' + npc.tokenPic, 2000, 504)
                                         this.spriteManager[npcTitle] = sp
                                         // append sprite
-                                        const uniqueName = this.appendNpcAt({label: npcTitle}, groundSelector.position.x, groundSelector.position.z)
-                                        metadata.npc.npcName = uniqueName
+                                        this.appendNpcAt(metadata.npc, groundSelector.position.x, groundSelector.position.z)
                                     })
                                 } else {
                                     // append sprite
-                                    const uniqueName = this.appendNpcAt({label: npcTitle}, groundSelector.position.x, groundSelector.position.z)
-                                    metadata.npc.npcName = uniqueName
+                                    this.appendNpcAt(metadata.npc, groundSelector.position.x, groundSelector.position.z)
                                 }
                             }
                             break
@@ -288,9 +285,7 @@ class BattlemapBuilder
                             if (metadata.npc === null) {
                                 return;
                             }
-                            const key = metadata.npc.npcName
-                            const sp = this.spriteDictionary[key]
-                            this.spriteDictionary[key] = null
+                            const sp =  metadata.npc.npcSpritePtr
                             sp.dispose()
                             metadata.npc = null
                     }
@@ -381,7 +376,7 @@ class BattlemapBuilder
 
             // token if any
             if (cell.content.npc) {
-                cell.content.npc.npcName = this.appendNpcAt(cell.content.npc, cell.x, -cell.y)
+                this.appendNpcAt(cell.content.npc, cell.x, -cell.y)
             }
         })
     }
@@ -394,16 +389,14 @@ class BattlemapBuilder
         })
     }
 
-    appendNpcAt(token, x, y) {
-        const manager = this.spriteManager[token.label]
-        const name = token.label + ' ' + manager.sprites.length
-        const npc = new BABYLON.Sprite(name, manager)
-        npc.width = 0.6
-        npc.height = 0.6
-        npc.position = new BABYLON.Vector3(x, 0.7, y)
-        this.spriteDictionary[name] = npc
-
-        return name
+    appendNpcAt(npcContent, x, y) {
+        const manager = this.spriteManager[npcContent.label]
+        const name = npcContent.label + Math.random()
+        const sprite = new BABYLON.Sprite(name, manager)
+        sprite.width = 0.6
+        sprite.height = 0.6
+        sprite.position = new BABYLON.Vector3(x, 0.7, y)
+        npcContent.npcSpritePtr = sprite
     }
 
     drawCeiling() {

@@ -120,7 +120,9 @@
                     write(event) {
                         event.preventDefault()
                         const form = new FormData(event.target)
-                        form.set('form[content]', JSON.stringify(scene.metadata))
+                        form.set('form[content]', JSON.stringify(scene.metadata, (k, v) => {
+                            return (k === 'npcSpritePtr') ? undefined : v
+                        }))
                         fetch(event.target.action, {
                             method: 'post',
                             body: form,
