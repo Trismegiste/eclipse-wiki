@@ -269,9 +269,10 @@ class BattlemapBuilder
                                     // append missing sprite manager
                                     fetch('/npc/show.json?title=' + npcTitle).then(resp => {
                                         return resp.json()
-                                    }).then(npc => {
-                                        const sp = new BABYLON.SpriteManager('token-' + npcTitle, '/picture/get/' + npc.tokenPic, 2000, 504)
+                                    }).then(npcInfo => {
+                                        const sp = new BABYLON.SpriteManager('token-' + npcTitle, '/picture/get/' + npcInfo.tokenPic, 2000, 504)
                                         this.spriteManager[npcTitle] = sp
+                                        this.getDoc().npcToken.push({label: npcTitle, picture: npcInfo.tokenPic})
                                         // append sprite
                                         this.appendNpcAt(metadata.npc, groundSelector.position.x, groundSelector.position.z)
                                     })
@@ -285,7 +286,7 @@ class BattlemapBuilder
                             if (metadata.npc === null) {
                                 return;
                             }
-                            const sp =  metadata.npc.npcSpritePtr
+                            const sp = metadata.npc.npcSpritePtr
                             sp.dispose()
                             metadata.npc = null
                     }
@@ -381,9 +382,9 @@ class BattlemapBuilder
         })
     }
 
-    declareToken() {
+    declareNpcToken() {
         // map token
-        this.getDoc().npc.forEach(npc => {
+        this.getDoc().npcToken.forEach(npc => {
             const sp = new BABYLON.SpriteManager('token-' + npc.label, '/picture/get/' + npc.picture, 2000, 504)
             this.spriteManager[npc.label] = sp
         })
@@ -429,7 +430,7 @@ class BattlemapBuilder
         this.declareGroundCursor()
         this.declareSelector()
         this.declareDoor()
-        this.declareToken()
+        this.declareNpcToken()
         this.buildGrid()
         this.drawCeiling()
     }
