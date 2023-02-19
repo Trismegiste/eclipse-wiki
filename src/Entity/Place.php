@@ -18,6 +18,7 @@ class Place extends Vertex
     public $gravity;
     public ?string $youtubeUrl = null;
     public ?string $battleMap = null;
+    public ?string $battlemap3d = null;
     public ?MapConfig $voronoiParam = null;
 
 }

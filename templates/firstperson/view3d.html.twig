@@ -120,7 +120,7 @@
                     write(event) {
                         event.preventDefault()
                         const form = new FormData(event.target)
-                        form.set('form[content]', JSON.stringify(scene.metadata, (k, v) => {
+                        form.set('battlemap3d_write[battlemap3d]', JSON.stringify(scene.metadata, (k, v) => {
                             return (k === 'npcSpritePtr') ? undefined : v
                         }))
                         fetch(event.target.action, {
@@ -129,8 +129,8 @@
                             redirect: 'manual'
                         }).then(function (response) {
                             return response.json()
-                        }).then(function (json) {
-                            //
+                        }).then(function (status) {
+                            pushFlash(event.target, status.level, status.message)
                         })
                     }
 

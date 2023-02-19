@@ -8,7 +8,9 @@ namespace App\Controller;
 
 use App\Babylon\Scene;
 use App\Entity\Place;
+use App\Form\Battlemap3dWrite;
 use App\Form\RunningMap3dGui;
+use App\Repository\VertexRepository;
 use App\Service\PlayerCastCache;
 use App\Service\WebsocketPusher;
 use App\Voronoi\MapBuilder;
@@ -28,11 +30,13 @@ class FirstPerson extends AbstractController
 
     protected MapBuilder $builder;
     protected $pusher;
+    protected VertexRepository $repository;
 
-    public function __construct(MapBuilder $builder, WebsocketPusher $fac)
+    public function __construct(VertexRepository $repo, MapBuilder $builder, WebsocketPusher $fac)
     {
         $this->builder = $builder;
         $this->pusher = $fac;
+        $this->repository = $repo;
     }
 
     /**
@@ -45,11 +49,11 @@ class FirstPerson extends AbstractController
                 ->add('legend', \Symfony\Component\Form\Extension\Core\Type\TextareaType::class)
                 ->add('name', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
                 ->getForm();
-        $writer = $this->createFormBuilder(null, ['attr' => ['x-on:submit' => "write"]])
-                ->setAction($this->generateUrl('app_firstperson_write', ['pk' => $place->getPk()]))
-                ->add('content', \Symfony\Component\Form\Extension\Core\Type\HiddenType::class)
-                ->add('write', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
-                ->getForm();
+
+        $writer = $this->createForm(Battlemap3dWrite::class, $place, [
+            'action' => $this->generateUrl('app_firstperson_write', ['pk' => $place->getPk()])
+        ]);
+
         return $this->render('firstperson/view3d.html.twig', [
                     'place' => $place,
                     'tools' => $tools->createView(),
@@ -59,13 +63,20 @@ class FirstPerson extends AbstractController
     }
 
     /**
-     * @Route("/fps/write/{pk}", methods={"POST"}, requirements={"pk"="[\da-f]{24}"})
+     * @Route("/fps/write/{pk}", methods={"PATCH"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function write(Place $place): JsonResponse
+    public function write(Place $place, Request $request): JsonResponse
     {
+        $writer = $this->createForm(Battlemap3dWrite::class, $place);
+        $writer->handleRequest($request);
+        if ($writer->isSubmitted() && $writer->isValid()) {
+            $vertex = $writer->getData();
+            $this->repository->save($vertex);
 
+            return new JsonResponse(['level' => 'success', 'message' => 'Saved']);
+        }
 
-        return new JsonResponse();
+        return new JsonResponse(['level' => 'error', 'message' => $writer->getErrors(true, true)]);
     }
 
     /**
