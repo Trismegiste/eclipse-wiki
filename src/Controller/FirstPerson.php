@@ -97,19 +97,17 @@ class FirstPerson extends AbstractController
     {
         /** @var UploadedFile $screenshot */
         $screenshot = $request->files->get('picture');
-        $cube = [];
-        foreach ($screenshot as $idx => $pic) {
-            list($w, $h) = getimagesize($pic->getPathname());
-            // @todo need checks on size
-            $cube[$idx] = imagecreatefrompng($pic->getPathname());
-        }
-
+        list($w, $h) = getimagesize($screenshot[0]->getPathname());
         $cubemap = imagecreatetruecolor(6 * $w, $h);
-        $target = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, 'tmp-cubemap.jpg');
+
         for ($k = 0; $k < 6; $k++) {
-            imagecopy($cubemap, $cube[$k], $k * $w, 0, 0, 0, $w, $h);
+            $side = imagecreatefrompng($screenshot[$k]->getPathname());
+            imagecopy($cubemap, $side, $k * $w, 0, 0, 0, $w, $h);
+            imagedestroy($side);
         }
+        $target = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, 'tmp-cubemap.jpg');
         imagejpeg($cubemap, $target);
+        imagedestroy($cubemap);
 
         return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $target]);
     }
