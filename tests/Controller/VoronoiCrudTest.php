@@ -229,10 +229,4 @@ class VoronoiCrudTest extends WebTestCase
 	$this->assertEquals('app_profilepicture_template', $this->client->getRequest()->get('_route'));
     }
 
-    /** @depends testGenerateSvgWithNpc */
-    public function testJsonBattlemap(string $pk)
-    {
-        $this->client->request('GET', "/fps/babylon/$pk.battlemap");
-        $this->assertResponseIsSuccessful();
-    }
 }

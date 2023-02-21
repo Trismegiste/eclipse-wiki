@@ -8,6 +8,7 @@ namespace App\Form\Type;
 
 use App\Service\Storage;
 use Symfony\Component\Form\DataTransformerInterface;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 use function join_paths;
 
 /**
@@ -27,6 +28,19 @@ class Battlemap3dTransfo implements DataTransformerInterface
 
     public function reverseTransform($content): string
     {
+        if (empty($content)) {
+            $failure = new TransformationFailedException("Content is empty");
+            $failure->setInvalidMessage('Battlemap is empty');
+            throw $failure;
+        }
+
+        json_decode($content);
+        if (json_last_error() !== 0) {
+            $failure = new TransformationFailedException("JSON is not valid");
+            $failure->setInvalidMessage('Battlemap format is not valid');
+            throw $failure;
+        }
+
         $filename = 'map3d-' . $this->uniqueId . '.json';
         file_put_contents(join_paths($this->storage->getRootDir(), $filename), $content);
 

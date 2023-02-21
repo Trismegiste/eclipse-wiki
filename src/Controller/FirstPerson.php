@@ -76,7 +76,7 @@ class FirstPerson extends AbstractController
             return new JsonResponse(['level' => 'success', 'message' => 'Saved']);
         }
 
-        return new JsonResponse(['level' => 'error', 'message' => $writer->getErrors(true, true)]);
+        return new JsonResponse(['level' => 'error', 'message' => (string) $writer->getErrors(true, true)], 400);
     }
 
     /**
