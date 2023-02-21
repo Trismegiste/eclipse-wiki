@@ -112,6 +112,8 @@ class FirstPersonTest extends WebTestCase
             $form["cubemap_broadcast[picture][$k]"]->upload($filename);
         }
         $this->client->submit($form);
+        $this->assertResponseIsSuccessful();
+        echo $this->client->getResponse()->getContent();
     }
 
 }
