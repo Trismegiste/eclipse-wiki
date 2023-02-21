@@ -121,7 +121,7 @@ class FirstPerson extends AbstractController
             return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $target]);
         }
 
-        return new JsonResponse(null, 500);
+        return new JsonResponse(['level' => 'error', 'message' => (string) $form->getErrors(true, true)], 400);
     }
 
     /**
