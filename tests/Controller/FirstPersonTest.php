@@ -56,14 +56,14 @@ class FirstPersonTest extends WebTestCase
     /** @depends testCreate */
     public function testJsonBattlemap(string $pk)
     {
-        $this->client->request('GET', "/fps/babylon/$pk.battlemap");
+        $this->client->request('GET', "/fps/scene/$pk.battlemap");
         $this->assertResponseIsSuccessful();
     }
 
     /** @depends testCreate */
-    public function testExplore(string $pk)
+    public function testEdit(string $pk)
     {
-        $this->client->request('GET', "/fps/explore/$pk");
+        $this->client->request('GET', "/fps/edit/$pk");
         $this->assertResponseIsSuccessful();
     }
 
@@ -80,7 +80,7 @@ class FirstPersonTest extends WebTestCase
         $doc = join_paths($store->getRootDir(), "map3d-$pk.json");
         @unlink($doc);
 
-        $crawler = $this->client->request('GET', "/fps/explore/$pk");
+        $crawler = $this->client->request('GET', "/fps/edit/$pk");
         $this->assertSelectorExists('#battlemap3d_write_write');
         $form = $crawler->selectButton('battlemap3d_write_write')->form();
         $this->client->submit($form, [
@@ -100,7 +100,7 @@ class FirstPersonTest extends WebTestCase
     /** @depends testCreate */
     public function testBroadcast(string $pk)
     {
-        $crawler = $this->client->request('GET', "/fps/explore/$pk");
+        $crawler = $this->client->request('GET', "/fps/edit/$pk");
         $this->assertSelectorExists('#cubemap_broadcast_send');
         $form = $crawler->selectButton('cubemap_broadcast_send')->form();
 

@@ -40,13 +40,13 @@ class FirstPerson extends AbstractController
     }
 
     /**
-     * @Route("/fps/explore/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
+     * @Route("/fps/edit/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function explore(Place $place): Response
+    public function edit(Place $place): Response
     {
         $tools = $this->createForm(RunningMap3dGui::class);
         $broadcast = $this->createForm(\App\Form\CubemapBroadcast::class, null, [
-            'action' => $this->generateUrl('app_firstperson_publish')
+            'action' => $this->generateUrl('app_firstperson_broadcast')
         ]);
 
         $legend = $this->createFormBuilder()
@@ -55,10 +55,10 @@ class FirstPerson extends AbstractController
                 ->getForm();
 
         $writer = $this->createForm(Battlemap3dWrite::class, $place, [
-            'action' => $this->generateUrl('app_firstperson_write', ['pk' => $place->getPk()])
+            'action' => $this->generateUrl('app_firstperson_export', ['pk' => $place->getPk()])
         ]);
 
-        return $this->render('firstperson/view3d.html.twig', [
+        return $this->render('firstperson/edit.html.twig', [
                     'place' => $place,
                     'tools' => $tools->createView(),
                     'legend' => $legend->createView(),
@@ -68,9 +68,9 @@ class FirstPerson extends AbstractController
     }
 
     /**
-     * @Route("/fps/write/{pk}", methods={"PATCH"}, requirements={"pk"="[\da-f]{24}"})
+     * @Route("/fps/export/{pk}", methods={"PATCH"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function write(Place $place, Request $request): JsonResponse
+    public function export(Place $place, Request $request): JsonResponse
     {
         $writer = $this->createForm(Battlemap3dWrite::class, $place);
         $writer->handleRequest($request);
@@ -85,7 +85,7 @@ class FirstPerson extends AbstractController
     }
 
     /**
-     * @Route("/fps/babylon/{pk}.{_format}", methods={"GET"}, requirements={"pk"="[\da-f]{24}", "_format": "battlemap"})
+     * @Route("/fps/scene/{pk}.{_format}", methods={"GET"}, requirements={"pk"="[\da-f]{24}", "_format": "battlemap"})
      */
     public function babylon(Place $place): JsonResponse
     {
@@ -96,9 +96,9 @@ class FirstPerson extends AbstractController
     }
 
     /**
-     * @Route("/fps/publish", methods={"POST"})
+     * @Route("/fps/broadcast", methods={"POST"})
      */
-    public function publish(Request $request): JsonResponse
+    public function broadcast(Request $request): JsonResponse
     {
         $form = $this->createForm(\App\Form\CubemapBroadcast::class);
         $form->handleRequest($request);
