@@ -45,6 +45,10 @@ class FirstPerson extends AbstractController
     public function explore(Place $place): Response
     {
         $tools = $this->createForm(RunningMap3dGui::class);
+        $broadcast = $this->createForm(\App\Form\CubemapBroadcast::class, null, [
+            'action' => $this->generateUrl('app_firstperson_publish')
+        ]);
+
         $legend = $this->createFormBuilder()
                 ->add('legend', \Symfony\Component\Form\Extension\Core\Type\TextareaType::class)
                 ->add('name', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
@@ -58,7 +62,8 @@ class FirstPerson extends AbstractController
                     'place' => $place,
                     'tools' => $tools->createView(),
                     'legend' => $legend->createView(),
-                    'writer' => $writer->createView()
+                    'writer' => $writer->createView(),
+                    'broadcast' => $broadcast->createView()
         ]);
     }
 
@@ -95,21 +100,28 @@ class FirstPerson extends AbstractController
      */
     public function publish(Request $request): JsonResponse
     {
-        /** @var UploadedFile $screenshot */
-        $screenshot = $request->files->get('picture');
-        list($w, $h) = getimagesize($screenshot[0]->getPathname());
-        $cubemap = imagecreatetruecolor(6 * $w, $h);
+        $form = $this->createForm(\App\Form\CubemapBroadcast::class);
+        $form->handleRequest($request);
 
-        for ($k = 0; $k < 6; $k++) {
-            $side = imagecreatefrompng($screenshot[$k]->getPathname());
-            imagecopy($cubemap, $side, $k * $w, 0, 0, 0, $w, $h);
-            imagedestroy($side);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $screenshot */
+            $screenshot = $form['picture']->getData();
+            list($w, $h) = getimagesize($screenshot[0]->getPathname());
+            $cubemap = imagecreatetruecolor(6 * $w, $h);
+
+            for ($k = 0; $k < 6; $k++) {
+                $side = imagecreatefrompng($screenshot[$k]->getPathname());
+                imagecopy($cubemap, $side, $k * $w, 0, 0, 0, $w, $h);
+                imagedestroy($side);
+            }
+            $target = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, 'tmp-cubemap.jpg');
+            imagejpeg($cubemap, $target);
+            imagedestroy($cubemap);
+
+            return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $target]);
         }
-        $target = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, 'tmp-cubemap.jpg');
-        imagejpeg($cubemap, $target);
-        imagedestroy($cubemap);
 
-        return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $target]);
+        return new JsonResponse(null, 500);
     }
 
     /**

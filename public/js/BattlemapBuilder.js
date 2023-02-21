@@ -97,16 +97,17 @@ class BattlemapBuilder
         const currentFog = this.scene.fogMode
         this.scene.fogMode = BABYLON.Scene.FOGMODE_EXP
 
-        const formData = new FormData()
+        const formElem = document.querySelector('form[name=cubemap_broadcast]')
+        const formData = new FormData(formElem)
         for (let k = 0; k < 6; k++) {
             pov.setTarget(target[k])
             this.scene.render()
             let data = await BABYLON.ScreenshotTools.CreateScreenshotUsingRenderTargetAsync(this.scene.getEngine(), pov, 1280, "image/png", 1, true, null, true)
-            formData.append(`picture[${k}]`, new Blob([BABYLON.DecodeBase64UrlToBinary(data)], {type: 'image/png'}))
+            formData.append(`cubemap_broadcast[picture][${k}]`, new Blob([BABYLON.DecodeBase64UrlToBinary(data)], {type: 'image/png'}))
         }
 
         // post the form
-        fetch('/fps/publish', {
+        fetch(formElem.action, {
             method: 'post',
             body: formData,
             redirect: 'manual'
