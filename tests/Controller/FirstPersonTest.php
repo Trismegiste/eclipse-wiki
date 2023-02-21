@@ -113,7 +113,8 @@ class FirstPersonTest extends WebTestCase
         }
         $this->client->submit($form);
         $this->assertResponseIsSuccessful();
-        echo $this->client->getResponse()->getContent();
+        $response = json_decode($this->client->getResponse()->getContent());
+        $this->assertEquals('success', $response->level);
     }
 
 }
