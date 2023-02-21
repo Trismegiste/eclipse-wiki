@@ -97,4 +97,21 @@ class FirstPersonTest extends WebTestCase
         $this->assertFileExists($doc);
     }
 
+    /** @depends testCreate */
+    public function testBroadcast(string $pk)
+    {
+        $crawler = $this->client->request('GET', "/fps/explore/$pk");
+        $this->assertSelectorExists('#cubemap_broadcast_send');
+        $form = $crawler->selectButton('cubemap_broadcast_send')->form();
+
+        $filename = join_paths(sys_get_temp_dir(), 'tmp.png');
+        $image = imagecreatetruecolor(50, 50);
+        imagepng($image, $filename);
+
+        for ($k = 0; $k < 6; $k++) {
+            $form["cubemap_broadcast[picture][$k]"]->upload($filename);
+        }
+        $this->client->submit($form);
+    }
+
 }

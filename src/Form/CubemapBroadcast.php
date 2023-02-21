@@ -9,6 +9,7 @@ namespace App\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
@@ -27,6 +28,7 @@ class CubemapBroadcast extends AbstractType
                             'entry_type' => FileType::class,
                             'data' => array_fill(0, 6, null)
                         ])
+                ->add('send', SubmitType::class)
         ;
     }
 
