@@ -7,6 +7,7 @@ class BattlemapBuilder
     spriteManager = {}
     wheelSpeed = 1.4
     scene = null
+    cameraMinZ = 0.35
 
     // hexagonal torus selector when clicking on tile :
     tileSelector
@@ -28,7 +29,7 @@ class BattlemapBuilder
         const camera = this.scene.getCameraByName('gm-camera')
         camera.position = new BABYLON.Vector3(this.getDoc().side / 2, this.getDoc().side, -this.getDoc().side / 2)
         camera.setTarget(new BABYLON.Vector3(this.getDoc().side / 2, 0, -this.getDoc().side / 2))
-        camera.minZ = 0.3
+        camera.minZ = this.cameraMinZ
         camera.maxZ = this.getDoc().side * 2
         camera.fov = 60 / 180 * Math.PI
         // Then apply collisions to the active camera
@@ -79,7 +80,7 @@ class BattlemapBuilder
         const center = tileWithSelect.position.clone()
         center.y = 2 * this.getDoc().wallHeight / 3
         let pov = new BABYLON.UniversalCamera("npc-camera", center, this.scene)
-        pov.minZ = 0.4
+        pov.minZ = this.cameraMinZ
         pov.maxZ = this.getDoc().side * 2
         pov.fov = 90 / 180 * Math.PI
 
