@@ -30,6 +30,7 @@ class HexaCell implements BattlemapItem
     public array $wall = [false, false, false, false, false, false]; // CCW, from EAST (0°) to SOUTHEAST (300°)
     public array $door = [false, false, false, false, false, false]; // CCW, from EAST (0°) to SOUTHEAST (300°)
     public ?\App\Entity\MapToken $npc = null;
+    public ?string $legend = null;
 
     public function __construct(int $uid, string $template = 'default', bool $growable = true)
     {
@@ -78,7 +79,7 @@ class HexaCell implements BattlemapItem
         if (!is_null($this->npc)) {
             // "-0.4" is a bugfix for svg.draggable.js
             printf('<use xlink:href="#%s" x="%f" y="%f" data-npc-title="%s"/>', basename($this->npc->picture, '.png'),
-                      $x - 0.4, $y - 0.4, $this->npc->label);
+                    $x - 0.4, $y - 0.4, $this->npc->label);
         }
     }
 

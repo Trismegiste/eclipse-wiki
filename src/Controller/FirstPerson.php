@@ -49,8 +49,10 @@ class FirstPerson extends AbstractController
             'action' => $this->generateUrl('app_firstperson_broadcast')
         ]);
 
-        $legend = $this->createFormBuilder()
-                ->add('legend', \Symfony\Component\Form\Extension\Core\Type\TextareaType::class)
+        $legend = $this->createFormBuilder(null, ['attr' => ['x-on:submit' => "setLegend"]])
+                ->add('legend', \Symfony\Component\Form\Extension\Core\Type\TextareaType::class, [
+                    'attr' => ['x-model' => 'cellInfo.legend']
+                ])
                 ->add('name', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
                 ->getForm();
 

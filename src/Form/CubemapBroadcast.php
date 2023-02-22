@@ -15,9 +15,7 @@ use Symfony\Component\Validator\Constraints\Count;
 use Symfony\Component\Validator\Constraints\NotNull;
 
 /**
- * Description of CubemapBroadcast
- *
- * @author trismegiste
+ * 6 pictures for a cubemap texture
  */
 class CubemapBroadcast extends AbstractType
 {

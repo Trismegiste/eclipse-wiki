@@ -21,6 +21,8 @@
                             <h3 x-text="'Type ' + cellInfo.template"></h3>
                         </hgroup>
                         <p>Distance = <span x-text="distanceFromCamera(cellInfo.x, cellInfo.y)"></span></p>
+                        <hr/>
+                        {{ form(legend) }}
                     </div>
                 </template>
                 <hr/>
@@ -133,6 +135,11 @@
                         }).then(function (status) {
                             pushFlash(event.target, status.level, status.message)
                         })
+                    },
+
+                    setLegend(event) {
+                        event.preventDefault()
+                        scene.metadata.grid[this.cellInfo.cellIndex].content.legend = this.cellInfo.legend
                     }
 
                 }))
