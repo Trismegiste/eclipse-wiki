@@ -208,7 +208,13 @@ class BattlemapBuilder
                                 return;
                             }
 
+                            // a NPC must be present at the selected tile :
                             const sourceTileInfo = this.getTileInfo(this.scene.metadata.selectedOnTileIndex)
+                            if (sourceTileInfo.npc === null) {
+                                return;
+                            }
+
+                            // no NPC must be present at the selected tile :
                             const targetTileInfo = this.getTileInfo(groundSelector.metadata)
                             if (targetTileInfo.npc !== null) {
                                 return;
@@ -252,19 +258,16 @@ class BattlemapBuilder
                     switch (this.scene.metadata.viewMode) {
                         case 'fps':
                         case 'rts':
-                            if (metadata.npc !== null) {
-                                selector.isVisible = true
-                                selector.position.x = groundSelector.position.x
-                                selector.position.z = groundSelector.position.z
-                                this.scene.metadata.selectedOnTileIndex = groundSelector.metadata
-                            } else {
-                                selector.isVisible = false
-                                this.scene.metadata.selectedOnTileIndex = null
-                            }
-                            // in any case, fire an event for alpinejs :
+                            selector.isVisible = true
+                            selector.position.x = groundSelector.position.x
+                            selector.position.z = groundSelector.position.z
+                            this.scene.metadata.selectedOnTileIndex = groundSelector.metadata
+
+                            // fire an event for alpinejs :
                             const detail = {...metadata}
                             detail.x = e.meshUnderPointer.position.x
                             detail.y = e.meshUnderPointer.position.z
+                            detail.cellIndex = groundSelector.metadata
                             document.querySelector('canvas').dispatchEvent(new CustomEvent('selectcell', {"bubbles": true, detail}))
                             break;
                         case 'populate':
