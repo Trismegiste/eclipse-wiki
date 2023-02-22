@@ -8,6 +8,11 @@ class BattlemapBuilder
     wheelSpeed = 1.4
     scene = null
 
+    // hexagonal torus selector when clicking on tile :
+    tileSelector
+    // hexagonal cursor when hovering on tiles :
+    tileCursor
+
     constructor(scene) {
         this.scene = scene
         scene.collisionsEnabled = true;
@@ -90,8 +95,8 @@ class BattlemapBuilder
         target[5].y--
         this.scene.activeCamera = pov
         // save temporary state
-        const groundSelector = this.scene.getMeshByName('selector-ground')
-        const itemSelector = this.scene.getMeshByName('selector-item')
+        const groundSelector = this.tileCursor
+        const itemSelector = this.tileSelector
         groundSelector.isVisible = false
         itemSelector.isVisible = false
         const currentFog = this.scene.fogMode
@@ -133,7 +138,7 @@ class BattlemapBuilder
 
         this.scene.registerBeforeRender(() => {
             if (this.scene.metadata.selectedOnTileIndex !== null) {
-                const selector = this.scene.getMeshByName('selector-item')
+                const selector = this.tileSelector
                 headlight.position.x = selector.position.x
                 headlight.position.z = selector.position.z
                 headlight.setEnabled(true)
@@ -185,6 +190,7 @@ class BattlemapBuilder
         selectorMat.diffuseColor = new BABYLON.Color3(1, 0, 0)
         selectorMat.alpha = 0.4
         groundSelector.material = selectorMat
+        this.tileCursor = groundSelector
 
         groundSelector.actionManager = new BABYLON.ActionManager(this.scene);
 
@@ -214,7 +220,7 @@ class BattlemapBuilder
                             sourceTileInfo.npc = null
                             // move item selector :
                             this.scene.metadata.selectedOnTileIndex = groundSelector.metadata
-                            const itemSelector = this.scene.getMeshByName('selector-item')
+                            const itemSelector = this.tileSelector
                             itemSelector.position.x = groundSelector.position.x
                             itemSelector.position.z = groundSelector.position.z
                             break
@@ -240,7 +246,7 @@ class BattlemapBuilder
         // left click behavior
         groundSelector.actionManager.registerAction(
                 new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, e => {
-                    const selector = this.scene.getMeshByName('selector-item')
+                    const selector = this.tileSelector
                     let metadata = this.getTileInfo(groundSelector.metadata)
 
                     switch (this.scene.metadata.viewMode) {
@@ -297,9 +303,9 @@ class BattlemapBuilder
 
     declareSelector() {
         const itemSelector = BABYLON.MeshBuilder.CreateTorus("selector-item", {
-            tessellation: 36,
-            diameter: 0.8,
-            thickness: 0.15
+            tessellation: 6,
+            diameter: 1.2,
+            thickness: 0.1
         }, this.scene)
 
         const selectorMat = new BABYLON.StandardMaterial('mat-selector')
@@ -307,6 +313,7 @@ class BattlemapBuilder
         selectorMat.alpha = 0.8
         itemSelector.material = selectorMat
         itemSelector.isPickable = false
+        this.tileSelector = itemSelector
     }
 
     getGroundTileByIndex(idx) {
@@ -344,7 +351,7 @@ class BattlemapBuilder
             ground.actionManager = new BABYLON.ActionManager(this.scene);
             ground.actionManager.registerAction(
                     new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, e => {
-                        const selector = this.scene.getMeshByName('selector-ground')
+                        const selector = this.tileCursor
                         const current = e.meshUnderPointer
                         selector.isVisible = true
                         selector.position.x = current.position.x
