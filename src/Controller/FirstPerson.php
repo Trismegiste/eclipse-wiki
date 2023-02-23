@@ -8,8 +8,10 @@ namespace App\Controller;
 
 use App\Babylon\Scene;
 use App\Entity\Place;
-use App\Form\Battlemap3dWrite;
-use App\Form\RunningMap3dGui;
+use App\Form\Tool3d\Battlemap3dWrite;
+use App\Form\Tool3d\CubemapBroadcast;
+use App\Form\Tool3d\RunningMap3dGui;
+use App\Form\Tool3d\TileLegend;
 use App\Repository\VertexRepository;
 use App\Service\PlayerCastCache;
 use App\Service\WebsocketPusher;
@@ -44,18 +46,12 @@ class FirstPerson extends AbstractController
      */
     public function edit(Place $place): Response
     {
+        // Toolbar with forms :
         $tools = $this->createForm(RunningMap3dGui::class);
-        $broadcast = $this->createForm(\App\Form\CubemapBroadcast::class, null, [
+        $broadcast = $this->createForm(CubemapBroadcast::class, null, [
             'action' => $this->generateUrl('app_firstperson_broadcast')
         ]);
-
-        $legend = $this->createFormBuilder(null, ['attr' => ['x-on:submit' => "setLegend"]])
-                ->add('legend', \Symfony\Component\Form\Extension\Core\Type\TextareaType::class, [
-                    'attr' => ['x-model' => 'cellInfo.legend']
-                ])
-                ->add('name', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
-                ->getForm();
-
+        $legend = $this->createForm(TileLegend::class);
         $writer = $this->createForm(Battlemap3dWrite::class, $place, [
             'action' => $this->generateUrl('app_firstperson_export', ['pk' => $place->getPk()])
         ]);
@@ -102,7 +98,7 @@ class FirstPerson extends AbstractController
      */
     public function broadcast(Request $request): JsonResponse
     {
-        $form = $this->createForm(\App\Form\CubemapBroadcast::class);
+        $form = $this->createForm(CubemapBroadcast::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
