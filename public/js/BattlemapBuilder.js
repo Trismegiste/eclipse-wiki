@@ -391,6 +391,11 @@ class BattlemapBuilder
             if (cell.content.npc) {
                 this.appendNpcAt(cell.content.npc, cell.x, -cell.y)
             }
+
+            // legend if any
+            if (cell.content.legend) {
+                this.scene.setLegendAtCell(k, cell.content.legend)
+            }
         })
     }
 

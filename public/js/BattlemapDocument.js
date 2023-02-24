@@ -10,8 +10,8 @@ class BattlemapDocument
     // the battle map document
     theme
     side
-    npc = []
     wallHeight
+    npcToken = []
     texture = []
     grid = []
 

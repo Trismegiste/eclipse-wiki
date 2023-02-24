@@ -17,6 +17,7 @@ use App\Service\PlayerCastCache;
 use App\Service\WebsocketPusher;
 use App\Voronoi\MapBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -85,12 +86,15 @@ class FirstPerson extends AbstractController
     /**
      * @Route("/fps/scene/{pk}.{_format}", methods={"GET"}, requirements={"pk"="[\da-f]{24}", "_format": "battlemap"})
      */
-    public function babylon(Place $place): JsonResponse
+    public function babylon(Place $place, \App\Service\Storage $storage): Response
     {
-        $config = $place->voronoiParam;
-        $map = $this->builder->create($config);
-
-        return new JsonResponse(new Scene($map));
+        if (is_null($place->battlemap3d)) {
+            $config = $place->voronoiParam;
+            $map = $this->builder->create($config);
+            return new JsonResponse(new Scene($map));
+        } else {
+            return $storage->createResponse($place->battlemap3d);
+        }
     }
 
     /**
@@ -129,6 +133,29 @@ class FirstPerson extends AbstractController
     public function player(): Response
     {
         return $this->render('firstperson/player.html.twig', ['host' => $this->pusher->getUrl()]);
+    }
+
+    /**
+     * Delete the current battlemap
+     * @Route("/fps/delete/{pk}", methods={"GET","DELETE"}, requirements={"pk"="[\da-f]{24}"})
+     */
+    public function delete(Place $place, Request $request): Response
+    {
+        $form = $this->createFormBuilder($place)
+                ->add('delete', SubmitType::class, ['attr' => ['class' => 'button-delete']])
+                ->setMethod('DELETE')
+                ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $place->battlemap3d = null;
+            $this->repository->save($place);
+            $this->addFlash('success', 'La battlemap a été réinitialisée à sa version générée');
+
+            return $this->redirectToRoute('app_firstperson_edit', ['pk' => $place->getPk()]);
+        }
+
+        return $this->render('firstperson/delete.html.twig', ['form' => $form->createView()]);
     }
 
 }

@@ -1,0 +1,18 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ form.vars.data.title }}{% endblock %}
+
+{% block header_title %}
+    {# the header menu with title #}
+    <nav style="float: right">
+        {{ include('place/actions.html.twig', {vertex:form.vars.data}) }}
+    </nav>   
+    {% block header_big_title %}{{ form.vars.data.title }}{% endblock %}
+{% endblock %}
+
+{% block content %}
+    <h2>Êtes-vous sûr de vouloir supprimer la Battlemap 3D incluse dans
+        <strong>{{ form.vars.data.title }}</strong> ?</h2>
+    <span>La battlemap reviendra à sa version quand elle a été algorithmiquement générée.</span>
+    {{ form(form) }}
+{% endblock %}

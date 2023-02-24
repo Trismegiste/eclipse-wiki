@@ -32,10 +32,10 @@ class Scene implements \JsonSerializable
         return [
             'theme' => 'habitat',
             'side' => $this->wrapped->getSize(),
-            'grid' => $ground,
-            'npcToken' => $this->wrapped->getNpcToken(),
             'wallHeight' => 1.5,
-            'texture' => ['default', 'cluster', 'void', 'cluster-sleep', 'cluster-energy', 'cluster-neutral', 'cluster-industry', 'cluster-park', 'cluster-entertainment', 'cluster-oxygen']
+            'npcToken' => $this->wrapped->getNpcToken(),
+            'texture' => ['default', 'cluster', 'void', 'cluster-sleep', 'cluster-energy', 'cluster-neutral', 'cluster-industry', 'cluster-park', 'cluster-entertainment', 'cluster-oxygen'],
+            'grid' => $ground
         ];
     }
 
