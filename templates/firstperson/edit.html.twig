@@ -50,29 +50,6 @@
         // Creates Scene object
         const scene = new BABYLON.Scene(engine)
 
-        // Writer extension
-        const TextWriter = BABYLON.MeshWriter(scene)
-        const setLegendAtCell = (cellIndex, message) => {
-            const cell = scene.metadata.grid[cellIndex]
-
-            if (cell.content.legendPtr) {
-                cell.content.legendPtr.dispose()
-            }
-            const legendTxt = new TextWriter(message, {
-                anchor: "center",
-                "letter-height": 0.1,
-                "letter-thickness": 0.001,
-                "colors": {diffuse: "#00ff00"},
-                position: {
-                    x: cell.x,
-                    y: 0.02,
-                    z: -cell.y
-                }
-            })
-            cell.content.legend = message
-            cell.content.legendPtr = legendTxt
-        }
-
         // Creates and positions a free camera for GM
         const camera = new BABYLON.UniversalCamera("gm-camera", new BABYLON.Vector3(0, 0, 0), scene)
         camera.setTarget(new BABYLON.Vector3(0, 0, -1))
@@ -164,7 +141,7 @@
 
                     setLegend(event) {
                         event.preventDefault()
-                        setLegendAtCell(this.cellInfo.cellIndex, this.cellInfo.legend)
+                        scene.setLegendAtCell(this.cellInfo.cellIndex, this.cellInfo.legend)
                     }
 
                 }))

@@ -433,8 +433,34 @@ class BattlemapBuilder
         ceiling.material = ceilingMat
     }
 
+    declareWriter() {
+        // Writer extension
+        this.scene.TextWriter = BABYLON.MeshWriter(this.scene)
+        this.scene.setLegendAtCell = function (cellIndex, message) {
+            const cell = this.metadata.grid[cellIndex]
+
+            if (cell.content.legendPtr) {
+                cell.content.legendPtr.dispose()
+            }
+            const legendTxt = new this.TextWriter(message, {
+                anchor: "center",
+                "letter-height": 0.1,
+                "letter-thickness": 0.001,
+                "colors": {diffuse: "#00ff00"},
+                position: {
+                    x: cell.x,
+                    y: 0.02,
+                    z: -cell.y
+                }
+            })
+            cell.content.legend = message
+            cell.content.legendPtr = legendTxt
+        }
+    }
+
     create() {
         // build the scene from the model
+        this.declareWriter()
         this.setCamera()
         this.setLight()
         this.declareGround()
