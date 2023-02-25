@@ -91,7 +91,10 @@ class FirstPerson extends AbstractController
         if (is_null($place->battlemap3d)) {
             $config = $place->voronoiParam;
             $map = $this->builder->create($config);
-            return new JsonResponse(new Scene($map));
+            $doc = new \App\Entity\BattlemapDocument();
+            $map->dumpMap($doc);
+
+            return new JsonResponse($doc);
         } else {
             return $storage->createResponse($place->battlemap3d);
         }

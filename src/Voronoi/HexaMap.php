@@ -426,4 +426,24 @@ class HexaMap implements SquareGrid
         return $this->npcToken;
     }
 
+    public function dumpMap(\App\Entity\BattlemapDocument $visitor): void
+    {
+        $visitor->theme = 'habitat';
+        $visitor->side = $this->getSize();
+        $visitor->wallHeight = 1.5;
+        $visitor->npcToken = $this->npcToken;
+        $visitor->texture = ['default', 'cluster', 'void', 'cluster-sleep', 'cluster-energy', 'cluster-neutral', 'cluster-industry', 'cluster-park', 'cluster-entertainment', 'cluster-oxygen'];
+
+        foreach ($this->grid as $x => $column) {
+            foreach ($column as $y => $cell) {
+                /** @var HexaCell $cell */
+                $visitor->grid[] = [
+                    'x' => $this->getAbscissa($x, $y),
+                    'y' => $y,
+                    'content' => $cell
+                ];
+            }
+        }
+    }
+
 }
