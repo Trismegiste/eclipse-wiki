@@ -22,7 +22,8 @@ class TileLegend extends AbstractType
     {
         $builder
                 ->add('legend', TextType::class, [
-                    'attr' => ['x-model' => 'cellInfo.legend']
+                    'attr' => ['x-model' => 'cellInfo.legend'],
+                    'required' => false
                 ])
                 ->add('set_legend', SubmitType::class)
         ;

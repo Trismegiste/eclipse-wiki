@@ -447,19 +447,25 @@ class BattlemapBuilder
             if (cell.content.legendPtr) {
                 cell.content.legendPtr.dispose()
             }
-            const legendTxt = new this.TextWriter(message, {
-                anchor: "center",
-                "letter-height": 0.1,
-                "letter-thickness": 0.001,
-                "colors": {diffuse: "#00ff00"},
-                position: {
-                    x: cell.x,
-                    y: 0.02,
-                    z: -cell.y
-                }
-            })
-            cell.content.legend = message
-            cell.content.legendPtr = legendTxt
+
+            if (message.length > 0) {
+                const legendTxt = new this.TextWriter(message, {
+                    anchor: "center",
+                    "letter-height": 0.1,
+                    "letter-thickness": 0.001,
+                    "colors": {diffuse: "#00ff00"},
+                    position: {
+                        x: cell.x,
+                        y: 0.02,
+                        z: -cell.y
+                    }
+                })
+                cell.content.legend = message
+                cell.content.legendPtr = legendTxt
+            } else {
+                cell.content.legend = null
+                cell.content.legendPtr = null
+            }
         }
     }
 
