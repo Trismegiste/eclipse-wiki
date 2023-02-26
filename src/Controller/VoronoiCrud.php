@@ -89,15 +89,17 @@ class VoronoiCrud extends AbstractController
     /**
      * @Route("/voronoi/generate/{pk}/{fog}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function generate(Place $place, bool $fog = true): Response
+    public function generate(\App\Voronoi\SvgDumper $dumper, Place $place, bool $fog = true): Response
     {
         $config = $place->voronoiParam;
 
         try {
             $map = $this->builder->create($config);
+            $doc = new \App\Entity\BattlemapDocument();
+            $map->dumpMap($doc);
 
-            return new StreamedResponse(function () use ($map, $fog) {
-                        $this->builder->dumpSvg($map, $fog);
+            return new StreamedResponse(function () use ($doc, $dumper) {
+                        $dumper->flush($doc);
                     }, Response::HTTP_OK, ['content-type' => 'image/svg+xml']);
         } catch (RuntimeException $e) {
             return new BinaryFileResponse($this->getParameter('twig.default_path') . '/voronoi/fail.svg', 200, [], false, null, false, false);

@@ -27,7 +27,7 @@ class BattlemapBuilder
 
     setCamera() {
         const camera = this.scene.getCameraByName('gm-camera')
-        camera.position = new BABYLON.Vector3(this.getDoc().side / 2, this.getDoc().side, -this.getDoc().side / 2)
+        camera.position = new BABYLON.Vector3(this.getDoc().side / 2, this.getDoc().side, -this.getDoc().side / 2 - 1)
         camera.setTarget(new BABYLON.Vector3(this.getDoc().side / 2, 0, -this.getDoc().side / 2))
         camera.minZ = this.cameraMinZ
         camera.maxZ = this.getDoc().side * 2

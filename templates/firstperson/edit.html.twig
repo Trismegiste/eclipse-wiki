@@ -13,6 +13,11 @@
                 {{ form(tools) }}
                 <hr/>
                 {{ form(writer) }}
+                {% if place.battlemap3d is not empty %}
+                    <div class="pure-form">
+                        <a href="{{ path('app_firstperson_delete', {pk: place.pk}) }}" class="pure-button button-delete pure-input-1">Regénérer la map</a>
+                    </div>
+                {% endif %}
                 <hr/>
                 <template x-if="cellInfo !== null">
                     <div>
