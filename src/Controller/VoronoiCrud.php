@@ -44,26 +44,6 @@ class VoronoiCrud extends AbstractController
     }
 
     /**
-     * Show the generated Voronoi map
-     * @Route("/voronoi/storage/{pk}", methods={"GET","PATCH"}, requirements={"pk"="[\da-f]{24}"})
-     */
-    public function storage(Place $place, Request $request): Response
-    {
-        $form = $this->createForm(GenerateMapForPlace::class, $place);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $vertex = $form->getData();
-            $this->repository->save($vertex);
-            $this->addFlash('success', 'Battlemap générée et stockée');
-
-            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
-        }
-
-        return $this->render('voronoi/storage.html.twig', ['form' => $form->createView()]);
-    }
-
-    /**
      * Creates or Edits a voronoi Map in the current Place
      * @Route("/voronoi/edit/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
@@ -130,26 +110,6 @@ class VoronoiCrud extends AbstractController
     }
 
     /**
-     * Show map to run it on the fly
-     * @Route("/voronoi/runmap/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
-     */
-    public function runMap(Place $place): Response
-    {
-        $map = $this->builder->create($place->voronoiParam);
-        ob_start();
-        $this->builder->dumpSvg($map);
-        $svg = ob_get_clean();
-
-        $tools = $this->createForm(RunningMapTools::class);
-
-        return $this->render('place/runmap.html.twig', [
-                    'title' => 'Testing ' . $place->getTitle(),
-                    'tools' => $tools->createView(),
-                    'svg' => $svg
-        ]);
-    }
-
-    /**
      * @Route("/voronoi/statistics/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
     public function statistics(Place $place): Response
@@ -158,29 +118,6 @@ class VoronoiCrud extends AbstractController
         $map = $this->builder->create($config, false);
 
         return $this->render('voronoi/statistics.html.twig', ['vertex' => $place, 'stats' => $map->getStatistics()]);
-    }
-
-    /**
-     * AJAX Pushes the modified SVG to websocket server
-     * @Route("/voronoi/broadcast", methods={"POST"})
-     */
-    public function pushPlayerView(Request $request): JsonResponse
-    {
-        $playerDir = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir);
-        /** @var UploadedFile $svgContent */
-        $svgContent = $request->files->get('svg')->move($playerDir, 'tmp-map.svg');
-        // the moving was necessary because wkhtmltoimage fails to load a SVG file without extension
-        $target = join_paths($playerDir, 'tmp-map.png');
-        $process = new Process([
-            'wkhtmltoimage',
-            '--quality', 50,
-            '--crop-w', MapBuilder::defaultSizeForWeb,
-            $svgContent->getPathname(),
-            $target
-        ]);
-        $process->mustRun();
-
-        return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $target]);
     }
 
     /**

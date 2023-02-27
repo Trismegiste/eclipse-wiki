@@ -76,19 +76,6 @@ class VoronoiCrudTest extends WebTestCase
         return $pk;
     }
 
-    /** @depends testCreate */
-    public function testStorage(string $pk)
-    {
-        $crawler = $this->client->request('GET', "/voronoi/storage/$pk");
-        $this->assertResponseIsSuccessful();
-        $this->assertSelectorExists('article img');
-        $form = $crawler->selectButton('generate_map_for_place_store_battlemap')->form();
-        $this->client->submit($form);
-        $this->assertResponseRedirects();
-
-        return $pk;
-    }
-
     /** @depends testEdit */
     public function testStatistics(string $pk)
     {
@@ -128,33 +115,6 @@ class VoronoiCrudTest extends WebTestCase
     }
 
     /** @depends testGenerateSvg */
-    public function testRunningOnTheFly(string $pk)
-    {
-        $this->client->request('GET', "/voronoi/runmap/$pk");
-        $this->assertResponseIsSuccessful();
-
-        return $pk;
-    }
-
-    /** @depends testRunningOnTheFly */
-    public function testPushPlayerView(string $pk)
-    {
-        ob_start();
-        $this->client->request('GET', "/voronoi/generate/$pk");
-        $map = ob_get_clean();
-        $target = 'tmp.svg';
-        file_put_contents($target, $map);
-
-        $this->client->request('POST', "/voronoi/broadcast", [], ['svg' => new UploadedFile($target, $target)]);
-        $this->assertResponseIsSuccessful();
-        $response = $this->client->getResponse()->getContent();
-        $this->assertJson($response);
-        $response = json_decode($response);
-        $this->assertEquals('success', $response->level);
-        $this->assertStringContainsString('Broadcast', $response->message);
-    }
-
-    /** @depends testStorage */
     public function testBattlemapThumbnail(string $pk)
     {
         $this->client->request('GET', "/battlemap/thumbnail/$pk");
@@ -162,13 +122,6 @@ class VoronoiCrudTest extends WebTestCase
         $this->assertEquals('image/jpeg', $this->client->getResponse()->headers->get('Content-Type'));
 
         return $pk;
-    }
-
-    /** @depends testBattlemapThumbnail */
-    public function testRunningBattlemap(string $pk)
-    {
-        $this->client->request('GET', "/place/runmap/$pk");
-        $this->assertResponseIsSuccessful();
     }
 
     /** @depends testTextures */
