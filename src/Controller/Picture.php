@@ -113,26 +113,36 @@ class Picture extends AbstractController
      * Returns a pixelized thumbnail for the vector battlemap linked to the Place given by its pk
      * @Route("/battlemap/thumbnail/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function battlemapThumbnail(string $pk, VertexRepository $repository, Request $request): Response
+    public function battlemapThumbnail(\App\Entity\Place $place, VertexRepository $repository, Request $request, MapBuilder $builder, \App\Voronoi\SvgDumper $dumper): Response
     {
-        $place = $repository->findByPk($pk);
+        // plusieurs possibilités pour migrer la thumbnail :
+        // 1 - stocker le BattlemapDocument dans la Place plutôt que dans un fichier JSON dans Storage. Ça permet de récupérer un BattlemapDocument exploitale par SvgDumper
+        // ======>>>>>>>> 2 - renderiser seulement l'hexamap qui ne sera pas à jour par rapport au JSON - CHOIX ACTUEL
+        // 3 - renderiser côté client avec Babylon une version plus light du fichier (pas de texture)
+        // 4 - plutôt que de json_encoder, on peut utiliser toJSON et fromPHP sauf que le client envoie un json sans type dans l'export
+        // 5 - faire un SvgDumper qui travaille sur un BattlemapDocument dés-objectifié (sans HexaCell ni MapToken)
+        if (is_null($place->battlemap3d)) {
+            throw $this->createNotFoundException();
+        }
 
-        $battlemapSvg = $this->storage->getFileInfo($place->battleMap);
         // folder for caching :
         $cacheDir = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir);
-        $targetName = join_paths($cacheDir, $battlemapSvg->getBasename('.svg'));
+        $targetName = join_paths($cacheDir, 'tmp-' . $place->getPk());
 
         // managing HTTP Cache
         if (file_exists("$targetName.jpg")) {
             $response = new BinaryFileResponse("$targetName.jpg");
-            $response->setLastModified(new DateTime('@' . $battlemapSvg->getMTime()));
+            $response->setLastModified(new DateTime('@' . $place->getPk()->getTimestamp()));
             if ($response->isNotModified($request)) {
                 return $response;
             }
         }
 
         $output = fopen("$targetName.html", 'w');
-        $source = fopen($battlemapSvg->getPathname(), 'r');
+        $map = $builder->create($place->voronoiParam);
+        $doc = new \App\Entity\BattlemapDocument();
+        $map->dumpMap($doc);
+
         $widthForMap = MapBuilder::defaultSizeForWeb;
         fwrite(
                 $output,
@@ -148,12 +158,13 @@ class Picture extends AbstractController
 <body style="width:$widthForMap">
 YOLO
         );
-        while ($buf = fread($source, 10000)) {
-            fwrite($output, $buf);
-        }
+
+        ob_start();
+        $dumper->flush($doc);
+        fwrite($output, ob_get_clean());
+
         fwrite($output, '</body></html>');
         fclose($output);
-        fclose($source);
 
         $matrixing = new Process([
             'wkhtmltoimage',
@@ -172,7 +183,7 @@ YOLO
         $convert->mustRun();
 
         $response = new BinaryFileResponse("$targetName.jpg");
-        $response->setLastModified(new DateTime('@' . $battlemapSvg->getMTime()));
+        $response->setLastModified(new DateTime('@' . $place->getPk()->getTimestamp()));
 
         return $response;
     }
