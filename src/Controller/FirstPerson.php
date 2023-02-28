@@ -6,7 +6,7 @@
 
 namespace App\Controller;
 
-use App\Babylon\Scene;
+use App\Entity\BattlemapDocument;
 use App\Entity\Place;
 use App\Form\Tool3d\Battlemap3dWrite;
 use App\Form\Tool3d\CubemapBroadcast;
@@ -14,6 +14,7 @@ use App\Form\Tool3d\RunningMap3dGui;
 use App\Form\Tool3d\TileLegend;
 use App\Repository\VertexRepository;
 use App\Service\PlayerCastCache;
+use App\Service\Storage;
 use App\Service\WebsocketPusher;
 use App\Voronoi\MapBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -86,12 +87,12 @@ class FirstPerson extends AbstractController
     /**
      * @Route("/fps/scene/{pk}.{_format}", methods={"GET"}, requirements={"pk"="[\da-f]{24}", "_format": "battlemap"})
      */
-    public function babylon(Place $place, \App\Service\Storage $storage): Response
+    public function babylon(Place $place, Storage $storage): Response
     {
         if (is_null($place->battlemap3d)) {
             $config = $place->voronoiParam;
             $map = $this->builder->create($config);
-            $doc = new \App\Entity\BattlemapDocument();
+            $doc = new BattlemapDocument();
             $map->dumpMap($doc);
 
             return new JsonResponse($doc);

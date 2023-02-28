@@ -17,9 +17,6 @@ use RuntimeException;
 class MapBuilder
 {
 
-    const defaultSizeForWeb = 1000;
-    const resizeToken = 100;
-
     protected TileProvider $provider;
     protected Storage $storage;
     protected MapDrawer $drawer;

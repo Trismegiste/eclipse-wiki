@@ -10,7 +10,6 @@ use App\Entity\Place;
 use App\Entity\Transhuman;
 use App\Entity\Vertex;
 use App\Form\PlaceType;
-use App\Service\Storage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

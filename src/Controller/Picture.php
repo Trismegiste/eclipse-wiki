@@ -6,12 +6,15 @@
 
 namespace App\Controller;
 
+use App\Entity\BattlemapDocument;
+use App\Entity\Place;
 use App\Form\PictureUpload;
 use App\Repository\VertexRepository;
 use App\Service\PictoProvider;
 use App\Service\PlayerCastCache;
 use App\Service\Storage;
 use App\Voronoi\MapBuilder;
+use App\Voronoi\SvgDumper;
 use DateTime;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +22,6 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
 use function join_paths;
@@ -113,7 +115,7 @@ class Picture extends AbstractController
      * Returns a pixelized thumbnail for the vector battlemap linked to the Place given by its pk
      * @Route("/battlemap/thumbnail/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function battlemapThumbnail(\App\Entity\Place $place, VertexRepository $repository, Request $request, MapBuilder $builder, \App\Voronoi\SvgDumper $dumper): Response
+    public function battlemapThumbnail(Place $place, Request $request, MapBuilder $builder, SvgDumper $dumper): Response
     {
         // plusieurs possibilités pour migrer la thumbnail :
         // 1 - stocker le BattlemapDocument dans la Place plutôt que dans un fichier JSON dans Storage. Ça permet de récupérer un BattlemapDocument exploitale par SvgDumper
@@ -140,10 +142,10 @@ class Picture extends AbstractController
 
         $output = fopen("$targetName.html", 'w');
         $map = $builder->create($place->voronoiParam);
-        $doc = new \App\Entity\BattlemapDocument();
+        $doc = new BattlemapDocument();
         $map->dumpMap($doc);
 
-        $widthForMap = MapBuilder::defaultSizeForWeb;
+        $widthForMap = SvgDumper::defaultSizeForWeb;
         fwrite(
                 $output,
                 <<<YOLO

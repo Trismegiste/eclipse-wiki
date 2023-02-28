@@ -6,27 +6,22 @@
 
 namespace App\Controller;
 
+use App\Entity\BattlemapDocument;
 use App\Entity\Place;
-use App\Form\GenerateMapForPlace;
 use App\Form\MapConfigType;
 use App\Form\MapPopulationType;
 use App\Form\MapTextureType;
-use App\Form\RunningMapTools;
 use App\Repository\VertexRepository;
-use App\Service\PlayerCastCache;
 use App\Voronoi\MapBuilder;
+use App\Voronoi\SvgDumper;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
-use function join_paths;
 
 /**
  * CRUD controler for Hexagonal map
@@ -69,13 +64,13 @@ class VoronoiCrud extends AbstractController
     /**
      * @Route("/voronoi/generate/{pk}/{fog}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function generate(\App\Voronoi\SvgDumper $dumper, Place $place, bool $fog = true): Response
+    public function generate(SvgDumper $dumper, Place $place, bool $fog = true): Response
     {
         $config = $place->voronoiParam;
 
         try {
             $map = $this->builder->create($config);
-            $doc = new \App\Entity\BattlemapDocument();
+            $doc = new BattlemapDocument();
             $map->dumpMap($doc);
 
             return new StreamedResponse(function () use ($doc, $dumper) {
