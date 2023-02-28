@@ -114,16 +114,6 @@ class VoronoiCrudTest extends WebTestCase
         return $pk;
     }
 
-    /** @depends testGenerateSvg */
-    public function testBattlemapThumbnail(string $pk)
-    {
-        $this->client->request('GET', "/battlemap/thumbnail/$pk");
-        $this->assertResponseIsSuccessful();
-        $this->assertEquals('image/jpeg', $this->client->getResponse()->headers->get('Content-Type'));
-
-        return $pk;
-    }
-
     /** @depends testTextures */
     public function testPopulate(string $pk)
     {

@@ -115,28 +115,6 @@ class HexaMapTest extends TestCase
         }
     }
 
-    public function testAllDump()
-    {
-        while ($this->sut->iterateNeighbourhood() > 0);
-        $this->sut->erodeWith(new HexaCell(7), 6); // borders are eroded
-        $this->sut->wallProcessing();
-
-        ob_start();
-        $this->sut->dumpGround();
-        $this->sut->dumpWall();
-        $this->sut->dumpDoor();
-        $this->sut->dumpLegend();
-        $this->sut->dumpFogOfWar();
-        $fragment = ob_get_clean();
-
-        $this->assertStringContainsString('<use', $fragment);
-        $this->assertStringContainsString('#eastwall', $fragment);
-        $this->assertStringContainsString('#eastdoor', $fragment);
-        $this->assertStringContainsString('#default', $fragment);
-        $this->assertStringContainsString('#fogofwar', $fragment);
-        $this->assertStringContainsString('text-anchor', $fragment);
-    }
-
     public function testStatistics()
     {
         $this->sut->setCell([5, 5], new HexaCell(111));

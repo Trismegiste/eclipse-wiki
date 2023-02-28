@@ -46,22 +46,6 @@ class PlaceCrud extends GenericCrud
     }
 
     /**
-     * Page for the battlemap
-     * @Route("/place/runmap/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
-     */
-    public function runMap(Place $vertex, Storage $storage): Response
-    {
-        $svg = file_get_contents($storage->getFileInfo($vertex->battleMap)->getPathname());
-        $tools = $this->createForm(\App\Form\RunningMapTools::class);
-
-        return $this->render('place/runmap.html.twig', [
-                    'title' => 'Running ' . $vertex->getTitle(),
-                    'tools' => $tools->createView(),
-                    'svg' => $svg
-        ]);
-    }
-
-    /**
      * Redirection to default NPC or Profile on the fly
      * @Route("/place/npc/{title}", methods={"GET"})
      */

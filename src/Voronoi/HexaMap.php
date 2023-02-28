@@ -34,86 +34,6 @@ class HexaMap implements SquareGrid
         return ($x - floor($y / 2)) / sin(M_PI / 3) + $y / tan(M_PI / 3);
     }
 
-    public function dumpGround(): void
-    {
-        foreach ($this->grid as $x => $column) {
-            foreach ($column as $y => $cell) {
-                if (!is_null($cell)) {
-                    /** @var HexaCell $cell */
-                    $cell->dumpGround($this->getAbscissa($x, $y), $y);
-                }
-            }
-        }
-    }
-
-    public function dumpWall(): void
-    {
-        foreach ($this->grid as $x => $column) {
-            foreach ($column as $y => $cell) {
-                if (!is_null($cell)) {
-                    /** @var HexaCell $cell */
-                    $cell->dumpWall($this->getAbscissa($x, $y), $y);
-                }
-            }
-        }
-    }
-
-    public function dumpDoor(): void
-    {
-        foreach ($this->grid as $x => $column) {
-            foreach ($column as $y => $cell) {
-                if (!is_null($cell)) {
-                    /** @var HexaCell $cell */
-                    $cell->dumpDoor($this->getAbscissa($x, $y), $y);
-                }
-            }
-        }
-    }
-
-    public function dumpLegend(): void
-    {
-        foreach ($this->getCoordPerRoom() as $uid => $roomCoord) {
-            list($x, $y, $cell) = array_pop($roomCoord);
-            $cell->dumpLegend($this->num2alpha($uid), $this->getAbscissa($x, $y), $y);
-        }
-    }
-
-    public function dumpFogOfWar(): void
-    {
-        foreach ($this->getCoordPerRoom() as $uid => $roomCoord) {
-            echo "<g class=\"fog-of-war\">";
-            $title = $this->num2alpha($uid);
-            echo "<title>{$roomCoord[0][2]->template} $title</title>";
-            foreach ($roomCoord as $cell) {
-                list($x, $y) = $cell;
-                $cx = $this->getAbscissa($x, $y);
-                echo "<use xlink:href=\"#fogofwar\" x=\"$cx\" y=\"$y\"/>";
-            }
-            echo '</g>';
-        }
-    }
-
-    public function dumpNpc(): void
-    {
-        foreach ($this->grid as $x => $column) {
-            foreach ($column as $y => $cell) {
-                /** @var HexaCell $cell */
-                $cell->dumpNpc($this->getAbscissa($x, $y), $y);
-            }
-        }
-    }
-
-    protected function num2alpha(int $n)
-    {
-        $r = '';
-        for ($i = 1; $n >= 0 && $i < 10; $i++) {
-            $r = chr(0x41 + (int) floor($n % pow(26, $i) / pow(26, $i - 1))) . $r;
-            $n -= pow(26, $i);
-        }
-
-        return $r;
-    }
-
     /**
      * Sets a cell of the grid
      * @param array $coord
@@ -426,6 +346,11 @@ class HexaMap implements SquareGrid
         return $this->npcToken;
     }
 
+    /**
+     * Exports this map to a BattlemapDocument
+     * @param \App\Entity\BattlemapDocument $visitor
+     * @return void
+     */
     public function dumpMap(\App\Entity\BattlemapDocument $visitor): void
     {
         $visitor->theme = 'habitat';

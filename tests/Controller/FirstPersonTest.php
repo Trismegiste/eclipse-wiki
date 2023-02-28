@@ -95,6 +95,8 @@ class FirstPersonTest extends WebTestCase
 
         // storage
         $this->assertFileExists($doc);
+
+        return $pk;
     }
 
     /** @depends testCreate */
@@ -115,6 +117,14 @@ class FirstPersonTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $response = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals('success', $response->level);
+    }
+
+    /** @depends testWrite */
+    public function testBattlemapThumbnail(string $pk)
+    {
+        $this->client->request('GET', "/battlemap/thumbnail/$pk");
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals('image/jpeg', $this->client->getResponse()->headers->get('Content-Type'));
     }
 
 }

@@ -189,21 +189,6 @@ YOLO
     }
 
     /**
-     * Show token from storage
-     * @Route("/token/get", methods={"GET"})
-     */
-    public function readToken(Request $request, VertexRepository $repo, MapBuilder $builder): Response
-    {
-        $title = $request->query->get('title');
-        $npc = $repo->findByTitle($title);
-        $pic = $this->storage->getFileInfo($npc->tokenPic);
-
-        return new StreamedResponse(function () use ($builder, $pic) {
-                    $builder->dumpTokenFor($pic);
-                }, 200, ['content-type' => 'image/svg+xml']);
-    }
-
-    /**
      * Show pictogram from folder. Returns a SVG fragment
      * @Route("/picto/get", methods={"GET"})
      */
