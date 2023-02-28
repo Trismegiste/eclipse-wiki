@@ -134,7 +134,7 @@ class Picture extends AbstractController
         // managing HTTP Cache
         if (file_exists("$targetName.jpg")) {
             $response = new BinaryFileResponse("$targetName.jpg");
-            $response->setLastModified(new DateTime('@' . $place->getPk()->getTimestamp()));
+            $response->setEtag(md5(serialize($place->voronoiParam)));
             if ($response->isNotModified($request)) {
                 return $response;
             }
@@ -185,7 +185,7 @@ YOLO
         $convert->mustRun();
 
         $response = new BinaryFileResponse("$targetName.jpg");
-        $response->setLastModified(new DateTime('@' . $place->getPk()->getTimestamp()));
+        $response->setEtag(md5(serialize($place->voronoiParam)));
 
         return $response;
     }
