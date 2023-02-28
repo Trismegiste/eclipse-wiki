@@ -95,7 +95,10 @@ class FirstPerson extends AbstractController
             $doc = new BattlemapDocument();
             $map->dumpMap($doc);
 
-            return new JsonResponse($doc);
+            $resp = new JsonResponse($doc);
+            $resp->setLastModified(new \DateTime());
+
+            return $resp;
         } else {
             return $storage->createResponse($place->battlemap3d);
         }
