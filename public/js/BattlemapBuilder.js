@@ -189,7 +189,7 @@ class BattlemapBuilder
         groundSelector.isVisible = false
         const selectorMat = new BABYLON.StandardMaterial('mat-selector')
         selectorMat.diffuseColor = new BABYLON.Color3(1, 0, 0)
-        selectorMat.alpha = 0.4
+        selectorMat.alpha = 0.3
         groundSelector.material = selectorMat
         this.tileCursor = groundSelector
 
@@ -313,8 +313,9 @@ class BattlemapBuilder
         }, this.scene)
 
         const selectorMat = new BABYLON.StandardMaterial('mat-selector')
-        selectorMat.diffuseColor = new BABYLON.Color3(0, 1, 0)
+        selectorMat.emissiveColor = new BABYLON.Color3(0, 1, 0)
         selectorMat.alpha = 0.8
+        selectorMat.disableLighting = true
         itemSelector.material = selectorMat
         itemSelector.isPickable = false
         this.tileSelector = itemSelector
