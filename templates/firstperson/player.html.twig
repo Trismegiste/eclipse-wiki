@@ -29,16 +29,13 @@
         const mat = new BABYLON.StandardMaterial("mat", scene)
         mat.emissiveTexture = new BABYLON.Texture("/cubemap.png", scene)
 
-        var columns = 4;  // 4 columns
-        var rows = 3;  // 3 row
-
-        //mapping sprite
+        // mapping cubemap
         var faceUV = new Array(6);
         for (let i = 0; i < 6; i++) {
             faceUV[i] = new BABYLON.Vector4((i + 1) / 6, 0, i / 6, 1);
         }
 
-        //wrap set
+        // wrap set
         var options = {
             faceUV: faceUV,
             wrap: true,
