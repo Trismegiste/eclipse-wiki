@@ -69,8 +69,14 @@ class PlaceCrud extends GenericCrud
     {
         $npc = $this->repository->findByTitle($title);
 
-        if (is_null($npc) || (!$npc instanceof Transhuman)) {
-            throw new NotFoundHttpException("$title is not a Transhuman");
+        if (is_null($npc)) {
+            throw new NotFoundHttpException("$title does not exist");
+        }
+
+        if (!$npc instanceof Transhuman) {
+            $this->addFlash('error', "Cannot generate a profile from '$title' since it's not a transhuman");
+
+            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $npc->getPk()]);
         }
 
         if (!empty($npc->surnameLang)) {
