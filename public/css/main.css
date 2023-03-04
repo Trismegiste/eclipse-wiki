@@ -148,6 +148,8 @@ a.new {
 .thumb img {
     max-height: 200px;
     max-width: 200px;
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
 }
 
 li.textcomplete-item img {
