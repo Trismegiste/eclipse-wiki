@@ -13,13 +13,19 @@
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
     <script src="https://cdn.babylonjs.com/gui/babylon.gui.js"></script>
     <script>
+        const doc ={{ doc|json_encode()|raw }}
+                const centerCell = doc.grid[(doc.side + 1) * (doc.side - 1) / 2]
+
         const canvas = document.getElementById("renderCanvas") // Get the canvas element
         const engine = new BABYLON.Engine(canvas) // Generate the BABYLON 3D engine
 
         // Creates Scene object
         const scene = new BABYLON.Scene(engine)
-        const camera = new BABYLON.UniversalCamera("camera1", new BABYLON.Vector3(0, 0, 0), scene)
-        camera.setTarget(new BABYLON.Vector3(1, 0, 0))
+        const eyePosition = new BABYLON.Vector3(0, doc.wallHeight * 2 / 3, 0)
+        const camera = new BABYLON.UniversalCamera("camera1", eyePosition, scene)
+        const target = eyePosition.clone()
+        target.x++
+        camera.setTarget(target)
         camera.minZ = 0.1
         camera.attachControl(canvas, true)
         camera.inputs.removeByType("FreeCameraKeyboardMoveInput")
@@ -39,11 +45,51 @@
         var options = {
             faceUV: faceUV,
             wrap: true,
-            sideOrientation: BABYLON.Mesh.BACKSIDE
-        };
+            sideOrientation: BABYLON.Mesh.BACKSIDE,
+            size: 50
+        }
 
         const box = BABYLON.MeshBuilder.CreateBox('box', options, scene);
-        box.material = mat;
+        box.material = mat
+        box.position = eyePosition
+
+        const tile = BABYLON.MeshBuilder.CreateDisc("hexagon", {tessellation: 6, radius: 2 / 3 - 0.01}, scene)
+        tile.rotation.z = Math.PI / 6
+        tile.rotation.x = Math.PI / 2
+        tile.isVisible = false
+
+        const invisible = new BABYLON.StandardMaterial('invisible')
+        invisible.emissiveColor = new BABYLON.Color3(1, 1, 1)
+        invisible.alpha = 0
+        tile.material = invisible
+
+        const selected = new BABYLON.StandardMaterial('selected')
+        selected.emissiveColor = new BABYLON.Color3(0, 1, 0)
+        selected.alpha = 0.3
+
+        doc.grid.forEach((cell, k) => {
+            const ground = tile.clone("ground-" + k)
+            ground.isVisible = true
+            ground.position.x = cell.x - centerCell.x
+            ground.position.z = -(cell.y - centerCell.y)
+
+            ground.actionManager = new BABYLON.ActionManager(scene)
+            ground.actionManager.registerAction(
+                    new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, e => {
+                        e.meshUnderPointer.material = selected
+                    })
+                    )
+            ground.actionManager.registerAction(
+                    new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, e => {
+                        e.meshUnderPointer.material = invisible
+                    })
+                    )
+            ground.actionManager.registerAction(
+                    new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, e => {
+                        console.log(e.meshUnderPointer.position)
+                    })
+                    )
+        })
 
         // GUI
         const playerUI = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("playerUI")
@@ -71,6 +117,7 @@
             engine.resize()
         })
 
+        // Websockets
         const socket = new WebSocket('{{ host }}')
         socket.onmessage = function (msg) {
             console.log('update')
