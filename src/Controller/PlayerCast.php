@@ -33,7 +33,7 @@ class PlayerCast extends AbstractController
      */
     public function view(): Response
     {
-        return $this->render('player/view.html.twig', ['host' => $this->pusher->getUrl()]);
+        return $this->render('player/view.html.twig', ['url_picture' => $this->pusher->getUrlPicture()]);
     }
 
     /**

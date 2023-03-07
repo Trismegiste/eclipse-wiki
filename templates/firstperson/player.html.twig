@@ -118,7 +118,7 @@
         })
 
         // Websockets
-        const socket = new WebSocket('{{ host }}')
+        const socket = new WebSocket('{{ url_picture }}')
         socket.onmessage = function (msg) {
             console.log('update')
             mat.emissiveTexture.dispose()

@@ -142,7 +142,7 @@ class FirstPerson extends AbstractController
         $doc = new BattlemapDocument();
         (new \App\Voronoi\HexaMap(25))->dumpMap($doc);
 
-        return $this->render('firstperson/player.html.twig', ['doc' => $doc, 'host' => $this->pusher->getUrl()]);
+        return $this->render('firstperson/player.html.twig', ['doc' => $doc, 'url_picture' => $this->pusher->getUrlPicture()]);
     }
 
     /**
