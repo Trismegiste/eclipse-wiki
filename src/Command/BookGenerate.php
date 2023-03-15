@@ -32,7 +32,7 @@ class BookGenerate extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title('Book');
 
-        file_put_contents('index.html', $this->twig->render('book/Eclipse Phase.html.twig', ['title' => 'Eclipse Phase']));
+        file_put_contents('index.html', $this->twig->render('book/Eclipse Phase.html.twig', ['titre' => 'Eclipse Phase']));
 
         return self::SUCCESS;
     }
