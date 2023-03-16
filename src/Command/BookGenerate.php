@@ -41,12 +41,17 @@ class BookGenerate extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $io->title('Book');
+        $io->title($this->getDescription());
+
+        $target = $input->getArgument('target');
+        $content = $this->twig->render('book/testing.html.twig', ['titre' => 'Eclipse Phase']);
+        file_put_contents("$target.html", $content);
 
         $this->pdfWriter->generateFromHtml(
-                $this->twig->render('book/Eclipse Phase.html.twig', ['titre' => 'Eclipse Phase']),
-                $input->getArgument('target'),
-                ['page-size' => 'A5']
+                $content,
+                $target,
+                ['page-size' => 'A5'],
+                true
         );
 
         return self::SUCCESS;
