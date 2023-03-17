@@ -8,13 +8,12 @@
 
             /* title */
             h1 {
-                padding-top: 1em;
                 font-size: 1.4em;
                 border-bottom: black solid thin;
             }
 
             h2 {
-                font-size: 1.2em;
+                font-size: 1.1em;
             }
 
             h1.big-title {
@@ -162,23 +161,17 @@
             }
 
             @media print {
-                h1.h0 {
-                    page-break-before: always !important;
+                .chapter {
+                    page-break-after: always !important;
                 }
-                article {
-                    page-break-inside: avoid !important;
-                }
-                .portable-infobox {
-                    page-break-inside: avoid !important;
-                }
-                img {
+                h1.h0 + article ~ article {
                     page-break-inside: avoid !important;
                 }
             }
 
             @page {
                 size: A5;
-                margin: 0 0.2in;
+                margin: 0.1in;
             }
         </style>       
     </head>
