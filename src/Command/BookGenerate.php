@@ -22,9 +22,9 @@ class BookGenerate extends Command
 
     protected static $defaultName = 'book:generate';
     protected Environment $twig;
-    protected Pdf $pdfWriter;
+    protected $pdfWriter;
 
-    public function __construct(Environment $twig, Pdf $pdfWriter)
+    public function __construct(Environment $twig, \App\Service\Pdf\ChromiumPdfWriter $pdfWriter)
     {
         parent::__construct();
         $this->twig = $twig;
@@ -47,12 +47,7 @@ class BookGenerate extends Command
         $content = $this->twig->render('book/testing.html.twig', ['titre' => 'Eclipse Phase']);
         file_put_contents("$target.html", $content);
 
-        $this->pdfWriter->generateFromHtml(
-                $content,
-                $target,
-                ['page-size' => 'A5'],
-                true
-        );
+        $this->pdfWriter->write(new \SplFileInfo("$target.html"), new \SplFileInfo($target));
 
         return self::SUCCESS;
     }
