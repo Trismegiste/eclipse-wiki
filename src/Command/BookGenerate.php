@@ -33,7 +33,7 @@ class BookGenerate extends Command
 
     protected function configure()
     {
-        $this->setDescription('Generate a book from the MW')
+        $this->setDescription('Generate a book from the MediaWiki')
                 ->addArgument('target', InputArgument::REQUIRED)
         ;
     }

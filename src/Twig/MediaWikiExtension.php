@@ -52,7 +52,7 @@ class MediaWikiExtension extends AbstractExtension
     {
         $content = $this->api->getPageByName($title);
 
-        return "<article><h1>$title</h1>\n$content</article>\n";
+        return "<article>\n<h1>$title</h1>\n$content\n</article>\n";
     }
 
     public function externalWikiLink(string $key): string

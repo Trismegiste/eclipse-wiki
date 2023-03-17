@@ -144,6 +144,7 @@
 
             .lien-article-detail img {
                 margin-right: 0.3em;
+                vertical-align: middle;
             }
 
             /* Responsive design */
@@ -162,14 +163,16 @@
 
             @media print {
                 h1.h0 {
-                    break-before: always;
+                    page-break-before: always !important;
                 }
                 article {
-                    break-inside: avoid;
-                    vertical-align: baseline;
+                    page-break-inside: avoid !important;
                 }
                 .portable-infobox {
-                    break-inside: avoid;
+                    page-break-inside: avoid !important;
+                }
+                img {
+                    page-break-inside: avoid !important;
                 }
             }
         </style>       
