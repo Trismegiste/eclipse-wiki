@@ -76,6 +76,9 @@ services:
     App\Service\DocumentBroadcaster:
         $cacheDir: '%kernel.cache_dir%'
 
+    App\Service\Pdf\ChromiumPdfWriter:
+        $cacheDir: '%kernel.cache_dir%'
+
     # CACHE    
     App\Service\MwImageCache:
         $cacheDir: '%kernel.cache_dir%'
