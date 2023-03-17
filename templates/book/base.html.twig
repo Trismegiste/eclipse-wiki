@@ -177,7 +177,6 @@
             }
 
             @page {
-                /* chromium --headless --disable-gpu --print-to-pdf=t4.pdf --no-sandbox t4.pdf.html */
                 size: A5;
                 margin: 0 0.2in;
             }
@@ -188,9 +187,16 @@
         {% block body %}
         {% endblock %}
         <script>
+            // lazyload pictures
             var img = document.getElementsByClassName('lazyload')
             for (var i = 0; i < img.length; i++) {
                 img[i].attributes['src'].value = img[i].attributes['data-src'].value
+            }
+
+            // remove links to prevent annoying popup on e-readers
+            var link = document.querySelectorAll('a')
+            for (var i = 0; i < link.length; i++) {
+                link[i].attributes['href'].value = '#'
             }
         </script>
     </body>

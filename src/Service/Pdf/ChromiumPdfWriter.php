@@ -40,8 +40,7 @@ class ChromiumPdfWriter implements Writer
     {
         $source = new \SplFileInfo(join_paths($this->cacheDir, 'book-' . time() . '.html'));
         $content = $this->twig->render($template, $param);
-        $filtered = preg_replace('#<a href="[^"]+"#', '<a href="#"', $content); // @todo not all links
-        file_put_contents($source->getPathname(), $filtered);
+        file_put_contents($source->getPathname(), $content);
 
         $this->write($source, $target);
     }
