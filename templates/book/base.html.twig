@@ -175,6 +175,12 @@
                     page-break-inside: avoid !important;
                 }
             }
+
+            @page {
+                /* chromium --headless --disable-gpu --print-to-pdf=t4.pdf --no-sandbox t4.pdf.html */
+                size: A5;
+                margin: 0 0.2in;
+            }
         </style>       
     </head>
     <body>
