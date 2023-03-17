@@ -38,9 +38,10 @@ class ChromiumPdfWriter implements Writer
 
     public function renderToPdf(string $template, array $param, SplFileInfo $target): void
     {
-        $content = $this->twig->render($template, $param);
         $source = new \SplFileInfo(join_paths($this->cacheDir, 'book-' . time() . '.html'));
-        file_put_contents($source->getPathname(), $content);
+        $content = $this->twig->render($template, $param);
+        $filtered = preg_replace('#<a href="[^"]+"#', '<a href="#"', $content); // @todo not all links
+        file_put_contents($source->getPathname(), $filtered);
 
         $this->write($source, $target);
     }
