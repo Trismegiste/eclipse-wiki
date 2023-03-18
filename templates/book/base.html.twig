@@ -206,14 +206,10 @@
                 link[i].attributes['href'].value = '#'
             }
 
-            // remove lazy loading
-            (function loadlazy() {
-                let img = document.querySelector('img[loading=lazy]')
-                if (img) {
-                    img.removeAttribute('loading')
-                    setTimeout(loadlazy, 1000);
-                }
-            })();
+            // trigger lazy loading for chromium
+            for (let y = 0; y < window.scrollMaxY; y++) {
+                window.scrollBy(0, 1)
+            }
         </script>
     </body>
 </html>
