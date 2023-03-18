@@ -207,9 +207,13 @@
             }
 
             // remove lazy loading
-            document.querySelectorAll('img[loading=lazy]').forEach(elem => {
-                elem.removeAttribute('loading')
-            })
+            (function loadlazy() {
+                let img = document.querySelector('img[loading=lazy]')
+                if (img) {
+                    img.removeAttribute('loading')
+                    setTimeout(loadlazy, 1000);
+                }
+            })();
         </script>
     </body>
 </html>
