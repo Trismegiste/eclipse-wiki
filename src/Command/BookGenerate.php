@@ -44,7 +44,7 @@ class BookGenerate extends Command
 
         $target = $input->getArgument('target');
 
-        $this->pdfWriter->renderToPdf('book/testing.html.twig', ['titre' => 'Eclipse Phase'], new SplFileInfo($target));
+        $this->pdfWriter->renderToPdf('book/Eclipse Phase.html.twig', ['titre' => 'Eclipse Phase'], new SplFileInfo($target));
 
         return self::SUCCESS;
     }

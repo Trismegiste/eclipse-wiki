@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
     <head>
         <title>{{ titre }}</title>
@@ -6,7 +7,7 @@
         <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css" integrity="sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5" crossorigin="anonymous"/>
         <style>
 
-            /* title */
+            /* all titles */
             h1 {
                 font-size: 1.4em;
                 border-bottom: black solid thin;
@@ -39,7 +40,7 @@
                 margin-bottom: -0.3em;
             }
 
-            /* box align */
+            /* infobox align */
             aside {
                 float: right;
             }
@@ -52,6 +53,7 @@
                 width: 270px;
                 background-color: #f0f0f0;
                 margin-left: 2em;
+                margin-bottom: 1em;
             }
             .pi-item {
                 padding: 0.6em 0;
@@ -180,6 +182,18 @@
         {% block body %}
         {% endblock %}
         <script>
+            // cleaning "Voir aussi"
+            document.querySelectorAll('#Voir_aussi').forEach(elem => {
+                let title = elem.parentElement
+                title.nextElementSibling.remove()
+                title.remove()
+            })
+
+            // cleaning "Article détaillé"
+            document.querySelectorAll('.lien-article-detail').forEach(elem => {
+                elem.remove()
+            })
+
             // lazyload pictures
             var img = document.getElementsByClassName('lazyload')
             for (var i = 0; i < img.length; i++) {
@@ -191,6 +205,11 @@
             for (var i = 0; i < link.length; i++) {
                 link[i].attributes['href'].value = '#'
             }
+
+            // remove lazy loading
+            document.querySelectorAll('img[loading=lazy]').forEach(elem => {
+                elem.removeAttribute('loading')
+            })
         </script>
     </body>
 </html>
