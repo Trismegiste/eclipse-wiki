@@ -182,19 +182,19 @@
         {% block body %}
         {% endblock %}
         <script>
-            // cleaning "Voir aussi"
+            // removing "Voir aussi"
             document.querySelectorAll('#Voir_aussi').forEach(elem => {
                 let title = elem.parentElement
                 title.nextElementSibling.remove()
                 title.remove()
             })
 
-            // cleaning "Article détaillé"
+            // removing "Article détaillé"
             document.querySelectorAll('.lien-article-detail').forEach(elem => {
                 elem.remove()
             })
 
-            // lazyload pictures
+            // custom lazyload pictures
             var img = document.getElementsByClassName('lazyload')
             for (var i = 0; i < img.length; i++) {
                 img[i].attributes['src'].value = img[i].attributes['data-src'].value
@@ -204,11 +204,6 @@
             var link = document.querySelectorAll('a')
             for (var i = 0; i < link.length; i++) {
                 link[i].attributes['href'].value = '#'
-            }
-
-            // trigger lazy loading for chromium
-            for (let y = 0; y < window.scrollMaxY; y++) {
-                window.scrollBy(0, 1)
             }
         </script>
     </body>

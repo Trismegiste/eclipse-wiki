@@ -6,8 +6,14 @@
 
 namespace App\Service\Pdf;
 
+use DOMDocument;
+use DOMElement;
 use SplFileInfo;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig\Environment;
+use function join_paths;
+use function str_starts_with;
 
 /**
  * PDF writer with headless Chromium
@@ -15,13 +21,15 @@ use Symfony\Component\Process\Process;
 class ChromiumPdfWriter implements Writer
 {
 
-    protected \Twig\Environment $twig;
+    protected Environment $twig;
     protected $cacheDir;
+    protected $routing;
 
-    public function __construct(\Twig\Environment $twig, string $cacheDir)
+    public function __construct(Environment $twig, string $cacheDir, UrlGeneratorInterface $routing)
     {
         $this->twig = $twig;
         $this->cacheDir = $cacheDir;
+        $this->routing = $routing;
     }
 
     public function write(SplFileInfo $source, SplFileInfo $target): void
@@ -38,11 +46,29 @@ class ChromiumPdfWriter implements Writer
 
     public function renderToPdf(string $template, array $param, SplFileInfo $target): void
     {
-        $source = new \SplFileInfo(join_paths($this->cacheDir, 'book-' . time() . '.html'));
+        $source = new \SplFileInfo(join_paths($this->cacheDir, 'book-fandom-' . time() . '.html'));
         $content = $this->twig->render($template, $param);
         file_put_contents($source->getPathname(), $content);
 
-        $this->write($source, $target);
+        // redirect to localhost for downloading pictures (caching)
+        $doc = new DOMDocument("1.0", "utf-8");
+        libxml_use_internal_errors(true); // because HTML5 tags warning
+        $doc->loadHTML($content);
+        $errors = libxml_get_errors();
+        $elements = $doc->getElementsByTagName('img');
+        foreach ($elements as $img) {
+            /** @var DOMElement $img */
+            $src = $img->getAttribute('src');
+            if (str_starts_with($src, 'http')) {
+                $img->setAttribute('src', 'http://localhost:8000' . $this->routing->generate('app_remotepicture_read', ['url' => urlencode($src)])); // @todo remove hardcoded
+                $img->removeAttribute('srcset');
+            }
+        }
+
+        $local = new \SplFileInfo(join_paths($this->cacheDir, 'book-local-' . time() . '.html'));
+        $doc->saveHTMLFile($local->getPathname());
+
+        $this->write($local, $target);
     }
 
 }
