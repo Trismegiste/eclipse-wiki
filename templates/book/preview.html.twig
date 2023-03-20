@@ -1,0 +1,31 @@
+{% extends "book/base.html.twig" %}
+{% block body %}     
+    {{ dump_page('Pitch Eclipse Phase')}}
+    <section class="chapter">
+        <h1 class="h0">Commencement</h1>
+        {{ dump_page('Cadre de jeu')}}
+        {{ dump_page('Création de PJ')}}
+    </section>
+    <section class="chapter">
+        <h1 class="h0">Historiques</h1>
+        {{ dump_category('Historique', 2) }}
+    </section>
+    <section class="chapter">
+        <h1 class="h0">Factions</h1>
+        {{ dump_category('Faction', 2) }}
+    </section>  
+    <section class="chapter">
+        <h1 class="h0">Réseaux sociaux</h1>
+        {{ dump_page('Réseaux sociaux')}}
+        {{ dump_page('Cercle-A')}}
+        {{ dump_page('CivicNet')}}
+    </section>            
+    <section class="chapter">
+        <h1 class="h0">Atouts</h1>
+        {{ dump_category('Atout', 3) }}
+    </section>
+    <section class="chapter">
+        <h1 class="h0">Biomorphes</h1>
+        {{ dump_category('Biomorphe', 3) }}        
+    </section>
+{% endblock %}
