@@ -40,6 +40,7 @@ class ChromiumPdfWriter implements Writer
             '--print-to-pdf=' . $target->getPathname(),
             $source->getPathname()
         ]);
+        $chromium->setTimeout(300);
 
         $chromium->mustRun();
     }
