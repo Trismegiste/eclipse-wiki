@@ -45,7 +45,7 @@ class BookGenerate extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
 
-        $template = 'book/' . ($input->getOption('preview') ? 'preview' : 'Eclipse Phase') . '.html.twig';
+        $template = 'book/' . ($input->getOption('preview') ? 'preview' : 'sourcebook') . '.html.twig';
         $tmpFile = new SplFileInfo('tmp.pdf');
         $target = new SplFileInfo($input->getArgument('target'));
 
@@ -62,8 +62,8 @@ class BookGenerate extends Command
         $tocgen = new TocGenerator();
 
         $receipe = $tocgen->extractMeta($source, 1, 1, 'Eclipse Phase');
-        $receipe = $tocgen->extractMeta($source, 1, 1, 'Commencement', $receipe);
-        $receipe = $tocgen->extractMeta($source, 1, 2, 'Cadre de', $receipe);
+        $receipe = $tocgen->extractMeta($source, 2, 1, 'Commencement', $receipe);
+        $receipe = $tocgen->extractMeta($source, 2, 2, 'Cadre de', $receipe);
 
         $toc = $tocgen->generateToc($source, $receipe);
 
