@@ -37,9 +37,10 @@ class MediaWikiExtension extends AbstractExtension
         $dump = '<article>' . $this->api->getPageByName("Catégorie:$category") . "</article>\n";
         foreach ($page as $item) {
             $title = $item->title;
+            $anchor = $this->getAnchorFor($title);
             $content = $this->api->getPage($item->pageid);
             $dump .= "<article>\n";
-            $dump .= "<h1>$title</h1>\n";
+            $dump .= "$anchor<h1>$title</h1>\n";
             $dump .= $content;
             $dump .= "</article>\n";
             usleep(100000);
@@ -51,13 +52,21 @@ class MediaWikiExtension extends AbstractExtension
     public function dumpPage(string $title): string
     {
         $content = $this->api->getPageByName($title);
+        $anchor = $this->getAnchorFor($title);
 
-        return "<article>\n<h1>$title</h1>\n$content\n</article>\n";
+        return "<article>\n$anchor<h1>$title</h1>\n$content\n</article>\n";
     }
 
     public function externalWikiLink(string $key): string
     {
         return "https://{$this->wikiSource}/fr/wiki/$key";
+    }
+
+    protected function getAnchorFor(string $title): string
+    {
+        $id = preg_replace('#[^_A-Za-z0-9]#', '.', urlencode(str_replace(' ', '_', $title)));
+
+        return "<a id=\"$id\"></a>";
     }
 
 }

@@ -10,7 +10,7 @@
                 font-size: 16px;
                 zoom: 1;
             }
-            
+
             /* all titles */
             h1 {
                 font-size: 1.4em;
@@ -204,11 +204,17 @@
                 img[i].attributes['src'].value = img[i].attributes['data-src'].value
             }
 
-            // remove links to prevent annoying popup on e-readers
-            var link = document.querySelectorAll('a')
-            for (var i = 0; i < link.length; i++) {
-                link[i].attributes['href'].value = '#'
-            }
+            // remove links to prevent annoying popup on e-readers, except keeping only internal links
+            document.querySelectorAll('a[href]').forEach(link => {
+                let target = link.attributes['href'].value
+                if (target.startsWith('/fr/wiki/')) {
+                    // please watch the corresponding anchor in MediaWikiExtension
+                    target = target.substring(9).replaceAll(new RegExp('[^_A-Za-z0-9]', 'gm'), '.')
+                } else {
+                    target = ''
+                }
+                link.attributes['href'].value = '#' + target
+            })
         </script>
     </body>
 </html>
