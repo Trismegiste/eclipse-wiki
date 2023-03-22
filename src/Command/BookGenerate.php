@@ -16,6 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Generates RPG books
@@ -25,11 +26,13 @@ class BookGenerate extends Command
 
     protected static $defaultName = 'book:generate';
     protected Writer $pdfWriter;
+    protected UrlGeneratorInterface $routing;
 
-    public function __construct(ChromiumPdfWriter $pdfWriter)
+    public function __construct(ChromiumPdfWriter $pdfWriter, UrlGeneratorInterface $router)
     {
         parent::__construct();
         $this->pdfWriter = $pdfWriter;
+        $this->routing = $router;
     }
 
     protected function configure()
@@ -37,6 +40,7 @@ class BookGenerate extends Command
         $this->setDescription('Generate a book from the MediaWiki')
                 ->addArgument('target', InputArgument::REQUIRED)
                 ->addOption('preview', null, InputOption::VALUE_NONE)
+                ->addOption('port', null, InputOption::VALUE_REQUIRED, 'Port to local HTTP server', 8000)
         ;
     }
 
@@ -49,6 +53,7 @@ class BookGenerate extends Command
         $tmpFile = new SplFileInfo('tmp.pdf');
         $target = new SplFileInfo($input->getArgument('target'));
 
+        $this->routing->getContext()->setHttpPort($input->getOption('port'));
         $this->pdfWriter->renderToPdf($template, ['titre' => 'Eclipse Phase'], $tmpFile);
 
         $this->createToc($tmpFile, $target);

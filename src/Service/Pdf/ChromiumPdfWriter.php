@@ -61,7 +61,7 @@ class ChromiumPdfWriter implements Writer
             /** @var DOMElement $img */
             $src = $img->getAttribute('src');
             if (str_starts_with($src, 'http')) {
-                $img->setAttribute('src', 'http://localhost:8000' . $this->routing->generate('app_remotepicture_read', ['url' => urlencode($src)])); // @todo remove hardcoded
+                $img->setAttribute('src', $this->routing->generate('app_remotepicture_read', ['url' => urlencode($src)], UrlGeneratorInterface::ABSOLUTE_URL));
                 $img->removeAttribute('srcset');
             }
         }
