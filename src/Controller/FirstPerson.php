@@ -63,7 +63,8 @@ class FirstPerson extends AbstractController
                     'tools' => $tools->createView(),
                     'legend' => $legend->createView(),
                     'writer' => $writer->createView(),
-                    'broadcast' => $broadcast->createView()
+                    'broadcast' => $broadcast->createView(),
+                    'url_feedback' => $this->pusher->getUrlFeedback()
         ]);
     }
 

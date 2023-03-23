@@ -71,8 +71,8 @@
             ground.actionManager = new BABYLON.ActionManager(scene)
             ground.actionManager.registerAction(
                     new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, e => {
-                        feedbackSocket.send(JSON.stringify({message: 'yolo'}))
                         const current = e.meshUnderPointer
+                        feedbackSocket.send(JSON.stringify({deltaX: current.position.x, deltaY: current.position.z}))
                         const frameRate = 10
                         const blinking = new BABYLON.Animation("blinking", "material.alpha", frameRate, BABYLON.Animation.ANIMATIONTYPE_FLOAT)
                         blinking.setKeys([

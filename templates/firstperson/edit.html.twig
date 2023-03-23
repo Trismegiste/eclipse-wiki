@@ -152,6 +152,11 @@
                 }))
         })
 
+        const feedbackSocket = new WebSocket('{{ url_feedback }}')
+        feedbackSocket.onmessage = function (msg) {
+            console.log(msg)
+        }
+
     </script>
 {% endblock %}
 

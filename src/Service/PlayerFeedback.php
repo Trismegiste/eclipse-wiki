@@ -30,7 +30,7 @@ class PlayerFeedback implements MessageComponentInterface
 
     public function onClose(ConnectionInterface $conn)
     {
-        
+        $this->clients->detach($conn);
     }
 
     public function onError(ConnectionInterface $conn, Exception $e)
@@ -40,12 +40,15 @@ class PlayerFeedback implements MessageComponentInterface
 
     public function onMessage(ConnectionInterface $conn, MessageInterface $msg)
     {
-        
+        $this->logger->info($msg);
+        foreach ($this->clients as $client) {
+            $client->send($msg);
+        }
     }
 
     public function onOpen(ConnectionInterface $conn)
     {
-        
+        $this->clients->attach($conn);
     }
 
 }
