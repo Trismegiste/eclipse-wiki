@@ -155,10 +155,11 @@
         const feedbackSocket = new WebSocket('{{ url_feedback }}')
         feedbackSocket.onmessage = function (msg) {
             const relativ = JSON.parse(msg.data)
-            // this line below is very dumb
-            const ground = scene.metadata.grid[scene.metadata.playerViewOnTileIndex]
-            let playerClick = {x: ground.x + relativ.deltaX, y: ground.y + relativ.deltaY}
-            console.log(playerClick)
+            const idx = scene.metadata.playerViewOnTileIndex
+            if (idx !== null) {
+                const ground = scene.metadata.grid[idx]
+                scene.movePlayerCursor(ground.x + relativ.deltaX, relativ.deltaY - ground.y)
+            }
         }
 
     </script>

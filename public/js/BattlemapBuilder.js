@@ -322,6 +322,33 @@ class BattlemapBuilder
         this.tileSelector = itemSelector
     }
 
+    declarePlayerCursor() {
+        let sphere = BABYLON.MeshBuilder.CreateSphere('player-cursor')
+        sphere.position.y = 0.5
+        this.playerCursor = sphere
+        const selectorMat = new BABYLON.StandardMaterial('mat-player-cursor')
+        selectorMat.emissiveColor = new BABYLON.Color3(1, 1, 0)
+        selectorMat.alpha = 0
+        selectorMat.disableLighting = true
+        sphere.material = selectorMat
+        sphere.isPickable = false
+        // inject new method for player cursor
+        this.scene.movePlayerCursor = function (x, y) {
+            sphere.position.x = x
+            sphere.position.z = y
+            sphere.material.alpha = 0
+
+            const frameRate = 10
+            const blinking = new BABYLON.Animation("blinking", "material.alpha", frameRate, BABYLON.Animation.ANIMATIONTYPE_FLOAT)
+            blinking.setKeys([
+                {frame: 0, value: 1},
+                {frame: frameRate, value: 0}
+            ])
+            sphere.animations.push(blinking)
+            this.beginAnimation(sphere, 0, frameRate)
+        }
+    }
+
     getGroundTileByIndex(idx) {
         return this.scene.getMeshByName('ground-' + idx)
     }
@@ -480,6 +507,7 @@ class BattlemapBuilder
         this.declareWall()
         this.declareGroundCursor()
         this.declareSelector()
+        this.declarePlayerCursor()
         this.declareDoor()
         this.declareNpcToken()
         this.buildGrid()
