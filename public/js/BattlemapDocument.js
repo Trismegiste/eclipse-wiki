@@ -19,4 +19,5 @@ class BattlemapDocument
     viewMode = 'fps'
     selectedOnTileIndex = null
     populateWithNpc = null
+    playerViewOnTileIndex = null
 }

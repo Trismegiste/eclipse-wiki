@@ -76,6 +76,7 @@ class BattlemapBuilder
     }
 
     async postScreenshotFrom(idx) {
+        this.getDoc().playerViewOnTileIndex = idx
         const tileWithSelect = this.getGroundTileByIndex(idx)
         const center = tileWithSelect.position.clone()
         center.y = 2 * this.getDoc().wallHeight / 3
