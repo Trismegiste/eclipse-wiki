@@ -58,35 +58,28 @@
         tile.rotation.x = Math.PI / 2
         tile.isVisible = false
 
-        const invisible = new BABYLON.StandardMaterial('invisible')
-        invisible.emissiveColor = new BABYLON.Color3(1, 1, 1)
-        invisible.alpha = 0
-        tile.material = invisible
-
-        const selected = new BABYLON.StandardMaterial('selected')
-        selected.emissiveColor = new BABYLON.Color3(0, 1, 0)
-        selected.alpha = 0.3
-
         doc.grid.forEach((cell, k) => {
             const ground = tile.clone("ground-" + k)
             ground.isVisible = true
             ground.position.x = cell.x - centerCell.x
             ground.position.z = -(cell.y - centerCell.y)
+            const selected = new BABYLON.StandardMaterial('selected-' + k)
+            selected.emissiveColor = new BABYLON.Color3(0, 1, 0)
+            selected.alpha = 0
+            ground.material = selected
 
             ground.actionManager = new BABYLON.ActionManager(scene)
             ground.actionManager.registerAction(
-                    new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, e => {
-                        e.meshUnderPointer.material = selected
-                    })
-                    )
-            ground.actionManager.registerAction(
-                    new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, e => {
-                        e.meshUnderPointer.material = invisible
-                    })
-                    )
-            ground.actionManager.registerAction(
-                    new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, e => {
-                        console.log(e.meshUnderPointer.position)
+                    new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, e => {
+                        const current = e.meshUnderPointer
+                        const frameRate = 10
+                        const blinking = new BABYLON.Animation("blinking", "material.alpha", frameRate, BABYLON.Animation.ANIMATIONTYPE_FLOAT)
+                        blinking.setKeys([
+                            {frame: 0, value: 1},
+                            {frame: frameRate, value: 0}
+                        ])
+                        current.animations.push(blinking)
+                        scene.beginAnimation(current, 0, frameRate)
                     })
                     )
         })
