@@ -127,7 +127,7 @@ class FirstPerson extends AbstractController
             imagejpeg($cubemap, $target);
             imagedestroy($cubemap);
 
-            return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $target]);
+            return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $target, 'imgType' => '3d']);
         }
 
         return new JsonResponse(['level' => 'error', 'message' => (string) $form->getErrors(true, true)], 400);
@@ -142,7 +142,7 @@ class FirstPerson extends AbstractController
         $doc = new BattlemapDocument();
         (new \App\Voronoi\HexaMap(25))->dumpMap($doc);
 
-        return $this->render('firstperson/player.html.twig', ['doc' => $doc, 'url_picture' => $this->pusher->getUrlPicture()]);
+        return $this->render('firstperson/player.html.twig', ['doc' => $doc, 'url_picture' => $this->pusher->getUrlCubemap()]);
     }
 
     /**

@@ -108,7 +108,7 @@ class ProfilePicture extends AbstractController
                     $ret = $pusher->push(json_encode([
                         'file' => $cached->getPathname(),
                         'action' => 'pictureBroadcast'
-                    ]));
+                            ]), '2d');
                     $this->addFlash('success', $ret);
                 } catch (ConnectionException $e) {
                     $this->addFlash('error', $e->getMessage());

@@ -47,13 +47,14 @@ class PlayerCast extends AbstractController
 
     //  /!\ -- Big security breach : internally called ONLY -- /!\
     // DO NOT EXPOSE THIS CONTROLLER PUBLICLY
-    public function internalPushFile(string $pathname): JsonResponse
+    public function internalPushFile(string $pathname, string $imgType = '2d'): JsonResponse
     {
         try {
             $ret = $this->pusher->push(json_encode([
                 'file' => $pathname,
                 'action' => 'pictureBroadcast'
-            ]));
+                    ]),
+                    $imgType);
 
             return new JsonResponse(['level' => 'success', 'message' => $ret], Response::HTTP_OK);
         } catch (ConnectionException $e) {
