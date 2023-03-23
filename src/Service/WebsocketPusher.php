@@ -17,6 +17,7 @@ class WebsocketPusher
 
     const ROUTE_PICTURE = '/picture';
     const ROUTE_CUBEMAP = '/cubemap';
+    const ROUTE_FEEDBACK = '/feedback';
 
     protected $localIp;
     protected $wsPort;
@@ -39,11 +40,17 @@ class WebsocketPusher
         return 'ws://' . $this->localIp . ':' . $this->wsPort . self::ROUTE_CUBEMAP;
     }
 
+    public function getUrlFeedback(): string
+    {
+        return 'ws://' . $this->localIp . ':' . $this->wsPort . self::ROUTE_FEEDBACK;
+    }
+
     public function createServer(): App
     {
         $app = new App($this->localIp, $this->wsPort, '0.0.0.0');
         $app->route(self::ROUTE_PICTURE, new PictureBroadcaster($this->logger), ['*']);
         $app->route(self::ROUTE_CUBEMAP, new PictureBroadcaster($this->logger), ['*']);
+        $app->route(self::ROUTE_FEEDBACK, new PlayerFeedback($this->logger), ['*']);
 
         return $app;
     }

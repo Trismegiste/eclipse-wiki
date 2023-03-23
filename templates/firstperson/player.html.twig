@@ -71,6 +71,7 @@
             ground.actionManager = new BABYLON.ActionManager(scene)
             ground.actionManager.registerAction(
                     new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, e => {
+                        feedbackSocket.send(JSON.stringify({message: 'yolo'}))
                         const current = e.meshUnderPointer
                         const frameRate = 10
                         const blinking = new BABYLON.Animation("blinking", "material.alpha", frameRate, BABYLON.Animation.ANIMATIONTYPE_FLOAT)
@@ -111,12 +112,14 @@
         })
 
         // Websockets
-        const socket = new WebSocket('{{ url_picture }}')
-        socket.onmessage = function (msg) {
+        const cubemapSocket = new WebSocket('{{ url_cubemap }}')
+        cubemapSocket.onmessage = function (msg) {
             console.log('update')
             mat.emissiveTexture.dispose()
             mat.emissiveTexture = BABYLON.RawTexture.LoadFromDataString('tmp', msg.data, scene)
         }
+
+        const feedbackSocket = new WebSocket('{{ url_feedback }}')
     </script>
 {% endblock %}
 
