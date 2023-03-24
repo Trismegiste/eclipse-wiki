@@ -74,7 +74,7 @@ class GmHelper extends AbstractController
     {
         $lan = $ntools->generateUrlForExternalAccess('app_playercast_view');
 
-        return $this->render('player/qrcode.html.twig', ['url_cast' => $lan]);
+        return $this->render('player/qrcode_picture.html.twig', ['url_cast' => $lan]);
     }
 
     /**
@@ -85,7 +85,7 @@ class GmHelper extends AbstractController
     {
         $lan = $ntools->generateUrlForExternalAccess('app_firstperson_player');
 
-        return $this->render('player/qrcode.html.twig', ['url_cast' => $lan]);
+        return $this->render('player/qrcode_fps.html.twig', ['url_cast' => $lan]);
     }
 
     /**
