@@ -342,10 +342,10 @@ class BattlemapBuilder
             const blinking = new BABYLON.Animation("blinking", "material.alpha", frameRate, BABYLON.Animation.ANIMATIONTYPE_FLOAT)
             blinking.setKeys([
                 {frame: 0, value: 1},
-                {frame: frameRate, value: 0}
+                {frame: 2 * frameRate, value: 0}
             ])
             sphere.animations.push(blinking)
-            this.beginAnimation(sphere, 0, frameRate)
+            this.beginAnimation(sphere, 0, 2 * frameRate)
         }
     }
 
