@@ -10,7 +10,6 @@ use App\Entity\Place;
 use App\Entity\Transhuman;
 use App\Entity\Vertex;
 use App\Form\PlaceType;
-use App\Service\Storage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -43,22 +42,6 @@ class PlaceCrud extends GenericCrud
     protected function createEntity(string $title): Vertex
     {
         return new Place($title);
-    }
-
-    /**
-     * Page for the battlemap
-     * @Route("/place/runmap/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
-     */
-    public function runMap(Place $vertex, Storage $storage): Response
-    {
-        $svg = file_get_contents($storage->getFileInfo($vertex->battleMap)->getPathname());
-        $tools = $this->createForm(\App\Form\RunningMapTools::class);
-
-        return $this->render('place/runmap.html.twig', [
-                    'title' => 'Running ' . $vertex->getTitle(),
-                    'tools' => $tools->createView(),
-                    'svg' => $svg
-        ]);
     }
 
     /**

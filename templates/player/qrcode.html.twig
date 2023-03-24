@@ -13,7 +13,10 @@
             </figure>
         </div>
     </div>
-    <h2 class="big-link">{{ url_cast }}</h2>
+    <h2 class="big-link">
+        {{ url_cast }}
+        <a href="{{ url_cast }}" target="_blank"><i class="icon-export"></i></a>
+    </h2>
 {% endblock %}
 
 {% block javascripts %}

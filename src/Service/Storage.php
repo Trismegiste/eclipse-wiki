@@ -53,7 +53,7 @@ class Storage
         }
 
         $file = new BinaryFileResponse($path);
-        $file->setAutoEtag();
+        clearstatcache(true, $path);
         $file->setAutoLastModified();
 
         return $file;

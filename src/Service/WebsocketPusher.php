@@ -15,6 +15,10 @@ use Ratchet\App;
 class WebsocketPusher
 {
 
+    const ROUTE_PICTURE = '/picture';
+    const ROUTE_CUBEMAP = '/cubemap';
+    const ROUTE_FEEDBACK = '/feedback';
+
     protected $localIp;
     protected $wsPort;
     protected $logger;
@@ -26,22 +30,35 @@ class WebsocketPusher
         $this->logger = $websoxLogger;
     }
 
-    public function getUrl(): string
+    public function getUrlPicture(): string
     {
-        return 'ws://' . $this->localIp . ':' . $this->wsPort;
+        return 'ws://' . $this->localIp . ':' . $this->wsPort . self::ROUTE_PICTURE;
+    }
+
+    public function getUrlCubemap(): string
+    {
+        return 'ws://' . $this->localIp . ':' . $this->wsPort . self::ROUTE_CUBEMAP;
+    }
+
+    public function getUrlFeedback(): string
+    {
+        return 'ws://' . $this->localIp . ':' . $this->wsPort . self::ROUTE_FEEDBACK;
     }
 
     public function createServer(): App
     {
         $app = new App($this->localIp, $this->wsPort, '0.0.0.0');
-        $app->route('/', new PictureBroadcaster($this->logger), ['*']);
+        $app->route(self::ROUTE_PICTURE, new PictureBroadcaster($this->logger), ['*']);
+        $app->route(self::ROUTE_CUBEMAP, new PictureBroadcaster($this->logger), ['*']);
+        $app->route(self::ROUTE_FEEDBACK, new PlayerFeedback($this->logger), ['*']);
 
         return $app;
     }
 
-    public function push(string $data): string
+    public function push(string $data, string $imgType): string
     {
-        $sp = new \Paragi\PhpWebsocket\Client($this->localIp, $this->wsPort, ['X-Pusher: Symfony']);
+        $route = ['2d' => self::ROUTE_PICTURE, '3d' => self::ROUTE_CUBEMAP][$imgType];
+        $sp = new \Paragi\PhpWebsocket\Client($this->localIp, $this->wsPort, ['X-Pusher: Symfony'], $err, 10, false, false, $route);
         $sp->write($data);
         $reading = $sp->read();
         $this->logger->debug("Server responded with: $reading");

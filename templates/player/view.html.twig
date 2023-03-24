@@ -22,7 +22,7 @@
 
         document.addEventListener('alpine:init', () => {
             Alpine.data('spa', () => ({
-                    host: '{{ host }}',
+                    host: '{{ url_picture }}',
                     onAir: false,
                     clicSound: null,
                     socket: null,

@@ -26,7 +26,7 @@ class PlayerCastDaemon extends Command
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $io->title("WebSocket Server listenig on " . $this->factory->getUrl());
+        $io->title("WebSocket Server listenig on " . $this->factory->getUrlPicture());
 
         $app = $this->factory->createServer();
         $app->run();

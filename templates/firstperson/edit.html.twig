@@ -13,6 +13,11 @@
                 {{ form(tools) }}
                 <hr/>
                 {{ form(writer) }}
+                {% if place.battlemap3d is not empty %}
+                    <div class="pure-form">
+                        <a href="{{ path('app_firstperson_delete', {pk: place.pk}) }}" class="pure-button button-delete pure-input-1">Regénérer la map</a>
+                    </div>
+                {% endif %}
                 <hr/>
                 <template x-if="cellInfo !== null">
                     <div>
@@ -21,6 +26,8 @@
                             <h3 x-text="'Type ' + cellInfo.template"></h3>
                         </hgroup>
                         <p>Distance = <span x-text="distanceFromCamera(cellInfo.x, cellInfo.y)"></span></p>
+                        <hr/>
+                        {{ form(legend) }}
                     </div>
                 </template>
                 <hr/>
@@ -28,6 +35,7 @@
             </article>
             <hr/>
             {{ include('fragment/flashes.html.twig') }}
+            {{ form(broadcast,{attr: {hidden:true}}) }}
         </aside>
     </div>
 {% endblock %}
@@ -38,6 +46,7 @@
     <script src="{{ asset('js/BattlemapDocument.js') }}?{{ random() }}"></script>
     <script src="{{ asset('js/battlemap-loader.js') }}"></script>
     <script src="{{ asset('js/picture-pusher.js') }}"></script>
+    <script src="{{ asset('babylon/meshwriter.min.js') }}"></script>
     <script>
         BABYLON.SceneLoader.RegisterPlugin(battlemapLoader)
         const canvas = document.getElementById("renderCanvas") // Get the canvas element
@@ -45,18 +54,13 @@
 
         // Creates Scene object
         const scene = new BABYLON.Scene(engine)
-        scene.metadata = new BattlemapDocument()
-        scene.gravity = new BABYLON.Vector3(0, -0.9, 0);
-        scene.collisionsEnabled = true;
-        scene.fogColor = scene.clearColor = BABYLON.Color3.Black()
-        scene.fogDensity = 0.07
 
         // Creates and positions a free camera for GM
         const camera = new BABYLON.UniversalCamera("gm-camera", new BABYLON.Vector3(0, 0, 0), scene)
         camera.setTarget(new BABYLON.Vector3(0, 0, -1))
         camera.attachControl(canvas)
 
-        BABYLON.SceneLoader.Append("/fps/babylon/", "{{ place.pk }}.battlemap", scene, function (scene) {})
+        BABYLON.SceneLoader.Append("/fps/scene/", "{{ place.pk }}.battlemap", scene, function (scene) {})
 
         // Register a render loop to repeatedly render the scene
         engine.runRenderLoop(function () {
@@ -70,33 +74,32 @@
         document.addEventListener('alpine:init', () => {
             Alpine.data('displayCellInfo', () => ({
                     cellInfo: null,
-                    state: null,
 
                     init() {
-                        this.state = scene.metadata
-
                         Mousetrap.bind('r', () => {
-                            this.state.viewMode = 'rts'
+                            this.$refs.viewMode.value = scene.metadata.viewMode = 'rts'
                             return false
                         })
                         Mousetrap.bind('f', () => {
-                            this.state.viewMode = 'fps'
+                            this.$refs.viewMode.value = scene.metadata.viewMode = 'fps'
                             return false
                         })
                         Mousetrap.bind('p', () => {
-                            this.state.viewMode = 'populate'
+                            this.$refs.viewMode.value = scene.metadata.viewMode = 'populate'
                             return false
                         })
                     },
 
                     changeMode(event) {
+                        scene.metadata.viewMode = event.target.value
                         if (event.target.value !== 'populate') {
-                            this.state.populateWithNpc = null
+                            this.$refs.populateWithNpc.value = scene.metadata.populateWithNpc = null
                         }
                     },
 
                     changeNpc(event) {
-                        this.state.viewMode = 'populate'
+                        this.$refs.viewMode.value = scene.metadata.viewMode = 'populate'
+                        scene.metadata.populateWithNpc = event.target.value
                     },
 
                     display(event) {
@@ -126,19 +129,38 @@
                     write(event) {
                         event.preventDefault()
                         const form = new FormData(event.target)
+                        const excluded = ['npcSpritePtr', 'legendPtr']
+                        form.set('battlemap3d_write[battlemap3d]', JSON.stringify(scene.metadata, (key, value) => {
+                            return (-1 === excluded.indexOf(key)) ? value : undefined
+                        }))
                         fetch(event.target.action, {
                             method: 'post',
                             body: form,
                             redirect: 'manual'
                         }).then(function (response) {
                             return response.json()
-                        }).then(function (json) {
-                            //
+                        }).then(function (status) {
+                            pushFlash(event.target, status.level, status.message)
                         })
+                    },
+
+                    setLegend(event) {
+                        event.preventDefault()
+                        scene.setLegendAtCell(this.cellInfo.cellIndex, this.cellInfo.legend)
                     }
 
                 }))
         })
+
+        const feedbackSocket = new WebSocket('{{ url_feedback }}')
+        feedbackSocket.onmessage = function (msg) {
+            const relativ = JSON.parse(msg.data)
+            const idx = scene.metadata.playerViewOnTileIndex
+            if (idx !== null) {
+                const ground = scene.metadata.grid[idx]
+                scene.movePlayerCursor(ground.x + relativ.deltaX, relativ.deltaY - ground.y)
+            }
+        }
 
     </script>
 {% endblock %}

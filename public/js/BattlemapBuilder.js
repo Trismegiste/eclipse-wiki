@@ -4,32 +4,38 @@
 
 class BattlemapBuilder
 {
-    side;
-    wallHeight;
-    texture;
-    scene;
-    npc = []
     spriteManager = {}
-    spriteDictionary = {}
     wheelSpeed = 1.4
-    theme;
+    scene = null
+    cameraMinZ = 0.35
+
+    // hexagonal torus selector when clicking on tile :
+    tileSelector
+    // hexagonal cursor when hovering on tiles :
+    tileCursor
 
     constructor(scene) {
         this.scene = scene
+        scene.collisionsEnabled = true;
+        scene.fogColor = scene.clearColor = BABYLON.Color3.Black()
+        scene.fogDensity = 0.07
+    }
+
+    getDoc() {
+        return this.scene.metadata
     }
 
     setCamera() {
         const camera = this.scene.getCameraByName('gm-camera')
-        camera.position = new BABYLON.Vector3(this.side / 2, this.side, -this.side / 2)
-        camera.setTarget(new BABYLON.Vector3(this.side / 2, 0, -this.side / 2))
-        camera.minZ = 0.3
-        camera.maxZ = this.side * 2
+        camera.position = new BABYLON.Vector3(this.getDoc().side / 2, this.getDoc().side, -this.getDoc().side / 2 - 1)
+        camera.setTarget(new BABYLON.Vector3(this.getDoc().side / 2, 0, -this.getDoc().side / 2))
+        camera.minZ = this.cameraMinZ
+        camera.maxZ = this.getDoc().side * 2
         camera.fov = 60 / 180 * Math.PI
-        // Then apply collisions and gravity to the active camera
+        // Then apply collisions to the active camera
         camera.checkCollisions = true;
-        camera.applyGravity = true;
         //Set the ellipsoid around the camera (e.g. your player's size)
-        camera.ellipsoid = new BABYLON.Vector3(0.1, this.wallHeight / 3, 0.1)
+        camera.ellipsoid = new BABYLON.Vector3(0.1, this.getDoc().wallHeight / 3, 0.1)
         camera.inputs.removeByType("FreeCameraKeyboardMoveInput")
 
         this.scene.onPointerObservable.add((pointerInfo) => {
@@ -42,7 +48,7 @@ class BattlemapBuilder
                     } else {
                         camera.position.y *= this.wheelSpeed
                     }
-                    const minHeight = 2 * this.wallHeight / 3
+                    const minHeight = 2 * this.getDoc().wallHeight / 3
                     if (camera.position.y < minHeight) {
                         camera.position.y = minHeight
                         this.scene.fogMode = BABYLON.Scene.FOGMODE_EXP
@@ -70,12 +76,13 @@ class BattlemapBuilder
     }
 
     async postScreenshotFrom(idx) {
+        this.getDoc().playerViewOnTileIndex = idx
         const tileWithSelect = this.getGroundTileByIndex(idx)
         const center = tileWithSelect.position.clone()
-        center.y = 2 * this.wallHeight / 3
+        center.y = 2 * this.getDoc().wallHeight / 3
         let pov = new BABYLON.UniversalCamera("npc-camera", center, this.scene)
-        pov.minZ = 0.4
-        pov.maxZ = this.side * 2
+        pov.minZ = this.cameraMinZ
+        pov.maxZ = this.getDoc().side * 2
         pov.fov = 90 / 180 * Math.PI
 
         let target = []
@@ -90,23 +97,24 @@ class BattlemapBuilder
         target[5].y--
         this.scene.activeCamera = pov
         // save temporary state
-        const groundSelector = this.scene.getMeshByName('selector-ground')
-        const itemSelector = this.scene.getMeshByName('selector-item')
+        const groundSelector = this.tileCursor
+        const itemSelector = this.tileSelector
         groundSelector.isVisible = false
         itemSelector.isVisible = false
         const currentFog = this.scene.fogMode
         this.scene.fogMode = BABYLON.Scene.FOGMODE_EXP
 
-        const formData = new FormData()
+        const formElem = document.querySelector('form[name=cubemap_broadcast]')
+        const formData = new FormData(formElem)
         for (let k = 0; k < 6; k++) {
             pov.setTarget(target[k])
             this.scene.render()
             let data = await BABYLON.ScreenshotTools.CreateScreenshotUsingRenderTargetAsync(this.scene.getEngine(), pov, 1280, "image/png", 1, true, null, true)
-            formData.append(`picture[${k}]`, new Blob([BABYLON.DecodeBase64UrlToBinary(data)], {type: 'image/png'}))
+            formData.append(`cubemap_broadcast[picture][${k}]`, new Blob([BABYLON.DecodeBase64UrlToBinary(data)], {type: 'image/png'}))
         }
 
         // post the form
-        fetch('/fps/publish', {
+        fetch(formElem.action, {
             method: 'post',
             body: formData,
             redirect: 'manual'
@@ -126,13 +134,13 @@ class BattlemapBuilder
         const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), this.scene)
         light.intensity = 1.5
 
-        const headlight = new BABYLON.PointLight('headlight', new BABYLON.Vector3(0, 2 * this.wallHeight / 3, 0), this.scene)
+        const headlight = new BABYLON.PointLight('headlight', new BABYLON.Vector3(0, 2 * this.getDoc().wallHeight / 3, 0), this.scene)
         headlight.diffuse = BABYLON.Color3.White()
         headlight.range = 8
 
         this.scene.registerBeforeRender(() => {
             if (this.scene.metadata.selectedOnTileIndex !== null) {
-                const selector = this.scene.getMeshByName('selector-item')
+                const selector = this.tileSelector
                 headlight.position.x = selector.position.x
                 headlight.position.z = selector.position.z
                 headlight.setEnabled(true)
@@ -144,31 +152,31 @@ class BattlemapBuilder
 
     declareGround() {
         // Ground templates
-        this.texture.forEach((key) => {
+        this.getDoc().texture.forEach((key) => {
             const tile = BABYLON.MeshBuilder.CreateDisc("hexagon-" + key, {tessellation: 6, radius: 2 / 3 - 0.01}, this.scene)
             tile.rotation.z = Math.PI / 6
             tile.rotation.x = Math.PI / 2
             tile.isVisible = false
 
             const myMaterial = new BABYLON.StandardMaterial('mat-ground-' + key, this.scene)
-            myMaterial.diffuseTexture = new BABYLON.Texture("/texture/" + this.theme + "/ground/" + key + ".webp", this.scene)
-            myMaterial.bumpTexture = new BABYLON.Texture("/texture/" + this.theme + "/ground/" + key + "-bump.webp", this.scene)
+            myMaterial.diffuseTexture = new BABYLON.Texture("/texture/" + this.getDoc().theme + "/ground/" + key + ".webp", this.scene)
+            myMaterial.bumpTexture = new BABYLON.Texture("/texture/" + this.getDoc().theme + "/ground/" + key + "-bump.webp", this.scene)
             tile.material = myMaterial
         })
     }
 
     declareWall() {
         // Wall templates
-        this.texture.forEach((key) => {
-            const wall = BABYLON.MeshBuilder.CreatePlane("wall-" + key, {width: 2 / 3, height: this.wallHeight})
-            wall.position.y = this.wallHeight / 2
+        this.getDoc().texture.forEach((key) => {
+            const wall = BABYLON.MeshBuilder.CreatePlane("wall-" + key, {width: 2 / 3, height: this.getDoc().wallHeight})
+            wall.position.y = this.getDoc().wallHeight / 2
             wall.position.x = 2 / 3 * Math.cos(Math.PI / 6)
             wall.rotation.y = Math.PI / 2
             wall.isVisible = false
 
             const myMaterial = new BABYLON.StandardMaterial('mat-wall-' + key, this.scene)
-            myMaterial.diffuseTexture = new BABYLON.Texture("/texture/" + this.theme + "/wall/" + key + ".webp", this.scene)
-            myMaterial.bumpTexture = new BABYLON.Texture("/texture/" + this.theme + "/wall/" + key + "-bump.webp", this.scene)
+            myMaterial.diffuseTexture = new BABYLON.Texture("/texture/" + this.getDoc().theme + "/wall/" + key + ".webp", this.scene)
+            myMaterial.bumpTexture = new BABYLON.Texture("/texture/" + this.getDoc().theme + "/wall/" + key + "-bump.webp", this.scene)
             wall.material = myMaterial
         })
     }
@@ -182,8 +190,9 @@ class BattlemapBuilder
         groundSelector.isVisible = false
         const selectorMat = new BABYLON.StandardMaterial('mat-selector')
         selectorMat.diffuseColor = new BABYLON.Color3(1, 0, 0)
-        selectorMat.alpha = 0.4
+        selectorMat.alpha = 0.3
         groundSelector.material = selectorMat
+        this.tileCursor = groundSelector
 
         groundSelector.actionManager = new BABYLON.ActionManager(this.scene);
 
@@ -201,19 +210,25 @@ class BattlemapBuilder
                                 return;
                             }
 
+                            // a NPC must be present at the selected tile :
                             const sourceTileInfo = this.getTileInfo(this.scene.metadata.selectedOnTileIndex)
+                            if (sourceTileInfo.npc === null) {
+                                return;
+                            }
+
+                            // no NPC must be present at the selected tile :
                             const targetTileInfo = this.getTileInfo(groundSelector.metadata)
                             if (targetTileInfo.npc !== null) {
                                 return;
                             }
 
-                            objToAnimate = this.spriteDictionary[sourceTileInfo.npc.npcName]
+                            objToAnimate = sourceTileInfo.npc.npcSpritePtr
                             // move NPC in model :
                             targetTileInfo.npc = sourceTileInfo.npc
                             sourceTileInfo.npc = null
                             // move item selector :
                             this.scene.metadata.selectedOnTileIndex = groundSelector.metadata
-                            const itemSelector = this.scene.getMeshByName('selector-item')
+                            const itemSelector = this.tileSelector
                             itemSelector.position.x = groundSelector.position.x
                             itemSelector.position.z = groundSelector.position.z
                             break
@@ -239,25 +254,22 @@ class BattlemapBuilder
         // left click behavior
         groundSelector.actionManager.registerAction(
                 new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, e => {
-                    const selector = this.scene.getMeshByName('selector-item')
+                    const selector = this.tileSelector
                     let metadata = this.getTileInfo(groundSelector.metadata)
 
                     switch (this.scene.metadata.viewMode) {
                         case 'fps':
                         case 'rts':
-                            if (metadata.npc !== null) {
-                                selector.isVisible = true
-                                selector.position.x = groundSelector.position.x
-                                selector.position.z = groundSelector.position.z
-                                this.scene.metadata.selectedOnTileIndex = groundSelector.metadata
-                            } else {
-                                selector.isVisible = false
-                                this.scene.metadata.selectedOnTileIndex = null
-                            }
-                            // in any case, fire an event for alpinejs :
+                            selector.isVisible = true
+                            selector.position.x = groundSelector.position.x
+                            selector.position.z = groundSelector.position.z
+                            this.scene.metadata.selectedOnTileIndex = groundSelector.metadata
+
+                            // fire an event for alpinejs :
                             const detail = {...metadata}
                             detail.x = e.meshUnderPointer.position.x
                             detail.y = e.meshUnderPointer.position.z
+                            detail.cellIndex = groundSelector.metadata
                             document.querySelector('canvas').dispatchEvent(new CustomEvent('selectcell', {"bubbles": true, detail}))
                             break;
                         case 'populate':
@@ -269,17 +281,16 @@ class BattlemapBuilder
                                     // append missing sprite manager
                                     fetch('/npc/show.json?title=' + npcTitle).then(resp => {
                                         return resp.json()
-                                    }).then(npc => {
-                                        const sp = new BABYLON.SpriteManager('token-' + npcTitle, '/picture/get/' + npc.tokenPic, 2000, 504)
+                                    }).then(npcInfo => {
+                                        const sp = new BABYLON.SpriteManager('token-' + npcTitle, '/picture/get/' + npcInfo.tokenPic, 2000, 504)
                                         this.spriteManager[npcTitle] = sp
+                                        this.getDoc().npcToken.push({label: npcTitle, picture: npcInfo.tokenPic})
                                         // append sprite
-                                        const uniqueName = this.appendNpcAt({label: npcTitle}, groundSelector.position.x, groundSelector.position.z)
-                                        metadata.npc.npcName = uniqueName
+                                        this.appendNpcAt(metadata.npc, groundSelector.position.x, groundSelector.position.z)
                                     })
                                 } else {
                                     // append sprite
-                                    const uniqueName = this.appendNpcAt({label: npcTitle}, groundSelector.position.x, groundSelector.position.z)
-                                    metadata.npc.npcName = uniqueName
+                                    this.appendNpcAt(metadata.npc, groundSelector.position.x, groundSelector.position.z)
                                 }
                             }
                             break
@@ -287,9 +298,7 @@ class BattlemapBuilder
                             if (metadata.npc === null) {
                                 return;
                             }
-                            const key = metadata.npc.npcName
-                            const sp = this.spriteDictionary[key]
-                            this.spriteDictionary[key] = null
+                            const sp = metadata.npc.npcSpritePtr
                             sp.dispose()
                             metadata.npc = null
                     }
@@ -299,16 +308,45 @@ class BattlemapBuilder
 
     declareSelector() {
         const itemSelector = BABYLON.MeshBuilder.CreateTorus("selector-item", {
-            tessellation: 36,
-            diameter: 0.8,
-            thickness: 0.15
+            tessellation: 6,
+            diameter: 1.2,
+            thickness: 0.1
         }, this.scene)
 
         const selectorMat = new BABYLON.StandardMaterial('mat-selector')
-        selectorMat.diffuseColor = new BABYLON.Color3(0, 1, 0)
+        selectorMat.emissiveColor = new BABYLON.Color3(0, 1, 0)
         selectorMat.alpha = 0.8
+        selectorMat.disableLighting = true
         itemSelector.material = selectorMat
         itemSelector.isPickable = false
+        this.tileSelector = itemSelector
+    }
+
+    declarePlayerCursor() {
+        let sphere = BABYLON.MeshBuilder.CreateSphere('player-cursor')
+        sphere.position.y = 0.5
+        this.playerCursor = sphere
+        const selectorMat = new BABYLON.StandardMaterial('mat-player-cursor')
+        selectorMat.emissiveColor = new BABYLON.Color3(1, 1, 0)
+        selectorMat.alpha = 0
+        selectorMat.disableLighting = true
+        sphere.material = selectorMat
+        sphere.isPickable = false
+        // inject new method for player cursor
+        this.scene.movePlayerCursor = function (x, y) {
+            sphere.position.x = x
+            sphere.position.z = y
+            sphere.material.alpha = 0
+
+            const frameRate = 10
+            const blinking = new BABYLON.Animation("blinking", "material.alpha", frameRate, BABYLON.Animation.ANIMATIONTYPE_FLOAT)
+            blinking.setKeys([
+                {frame: 0, value: 1},
+                {frame: 2 * frameRate, value: 0}
+            ])
+            sphere.animations.push(blinking)
+            this.beginAnimation(sphere, 0, 2 * frameRate)
+        }
     }
 
     getGroundTileByIndex(idx) {
@@ -316,44 +354,43 @@ class BattlemapBuilder
     }
 
     getTileInfo(idx) {
-        return this.getGroundTileByIndex(idx).metadata
+        return this.scene.metadata.grid[idx].content
     }
 
     declareDoor() {
         // Generic door
-        const door = BABYLON.MeshBuilder.CreatePlane('door', {width: 2 / 3, height: this.wallHeight})
-        door.position.y = this.wallHeight / 2
+        const door = BABYLON.MeshBuilder.CreatePlane('door', {width: 2 / 3, height: this.getDoc().wallHeight})
+        door.position.y = this.getDoc().wallHeight / 2
         door.position.x = 2 / 3 * Math.cos(Math.PI / 6)
         door.rotation.y = Math.PI / 2
         door.isVisible = false
 
         const doorMat = new BABYLON.StandardMaterial('mat-door', this.scene)
-        doorMat.diffuseTexture = new BABYLON.Texture("/texture/" + this.theme + "/door.webp", this.scene)
-        doorMat.bumpTexture = new BABYLON.Texture("/texture/" + this.theme + "/door-bump.webp", this.scene)
+        doorMat.diffuseTexture = new BABYLON.Texture("/texture/" + this.getDoc().theme + "/door.webp", this.scene)
+        doorMat.bumpTexture = new BABYLON.Texture("/texture/" + this.getDoc().theme + "/door-bump.webp", this.scene)
         door.material = doorMat
     }
 
     buildGrid() {
         // Grid of HexaCell
-        this.grid.forEach((cell, k) => {
+        this.getDoc().grid.forEach((cell, k) => {
             const ground = this.scene.getMeshByName('hexagon-' + cell.content.template).createInstance("ground-" + k)
             ground.position.x = cell.x
             ground.position.z = -cell.y
             ground.checkCollisions = true
-            // model injected into the tile
-            ground.metadata = cell.content
-            ground.metadata.cellIndex = k
+            // keep track of index
+            ground.metadata = k
 
             ground.actionManager = new BABYLON.ActionManager(this.scene);
             ground.actionManager.registerAction(
                     new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, e => {
-                        const selector = this.scene.getMeshByName('selector-ground')
+                        const selector = this.tileCursor
                         const current = e.meshUnderPointer
                         selector.isVisible = true
                         selector.position.x = current.position.x
                         selector.position.z = current.position.z
                         // we store the cell index into the metadata of the selector
-                        selector.metadata = current.metadata.cellIndex
+                        selector.metadata = current.metadata
                     })
                     )
 
@@ -381,34 +418,37 @@ class BattlemapBuilder
 
             // token if any
             if (cell.content.npc) {
-                ground.metadata.npc.npcName = this.appendNpcAt(cell.content.npc, cell.x, -cell.y)
+                this.appendNpcAt(cell.content.npc, cell.x, -cell.y)
+            }
+
+            // legend if any
+            if (cell.content.legend) {
+                this.scene.setLegendAtCell(k, cell.content.legend)
             }
         })
     }
 
-    declareToken() {
+    declareNpcToken() {
         // map token
-        this.npc.forEach(npc => {
+        this.getDoc().npcToken.forEach(npc => {
             const sp = new BABYLON.SpriteManager('token-' + npc.label, '/picture/get/' + npc.picture, 2000, 504)
             this.spriteManager[npc.label] = sp
         })
     }
 
-    appendNpcAt(token, x, y) {
-        const manager = this.spriteManager[token.label]
-        const name = token.label + ' ' + manager.sprites.length
-        const npc = new BABYLON.Sprite(name, manager)
-        npc.width = 0.6
-        npc.height = 0.6
-        npc.position = new BABYLON.Vector3(x, 0.7, y)
-        this.spriteDictionary[name] = npc
-
-        return name
+    appendNpcAt(npcContent, x, y) {
+        const manager = this.spriteManager[npcContent.label]
+        const name = npcContent.label + Math.random()
+        const sprite = new BABYLON.Sprite(name, manager)
+        sprite.width = 0.6
+        sprite.height = 0.6
+        sprite.position = new BABYLON.Vector3(x, 0.7, y)
+        npcContent.npcSpritePtr = sprite
     }
 
     drawCeiling() {
-        const width = (this.side + 1) * (2 * Math.sqrt(3) / 3)
-        const height = (this.side + 1)
+        const width = (this.getDoc().side + 1) * (2 * Math.sqrt(3) / 3)
+        const height = (this.getDoc().side + 1)
         // ceiling
         const ceiling = BABYLON.MeshBuilder.CreateTiledPlane("ceiling", {
             sideOrientation: BABYLON.Mesh.BACKSIDE,
@@ -418,32 +458,58 @@ class BattlemapBuilder
             tileWidth: 1
         })
         ceiling.isPickable = false
-        ceiling.translate(new BABYLON.Vector3(width / 2 - 1, this.wallHeight, 1 - height / 2), 1, BABYLON.Space.WORLD)
+        ceiling.translate(new BABYLON.Vector3(width / 2 - 1, this.getDoc().wallHeight, 1 - height / 2), 1, BABYLON.Space.WORLD)
         ceiling.rotation.x = Math.PI / 2
         const ceilingMat = new BABYLON.StandardMaterial('mat-ceiling', this.scene)
         ceilingMat.emissiveColor = BABYLON.Color3.White()
-        ceilingMat.diffuseTexture = new BABYLON.Texture("/texture/" + this.theme + "/ceiling.webp", this.scene)
-        ceilingMat.bumpTexture = new BABYLON.Texture("/texture/" + this.theme + "/ceiling-bump.webp", this.scene)
+        ceilingMat.diffuseTexture = new BABYLON.Texture("/texture/" + this.getDoc().theme + "/ceiling.webp", this.scene)
+        ceilingMat.bumpTexture = new BABYLON.Texture("/texture/" + this.getDoc().theme + "/ceiling-bump.webp", this.scene)
         ceiling.material = ceilingMat
     }
 
-    create() {
-        // transfert the model
-        this.scene.metadata.theme = this.theme
-        this.scene.metadata.side = this.side
-        this.scene.metadata.npc = this.npc
-        this.scene.metadata.wallHeight = this.wallHeight
-        this.scene.metadata.texture = this.texture
+    declareWriter() {
+        // Writer extension
+        this.scene.TextWriter = BABYLON.MeshWriter(this.scene)
+        this.scene.setLegendAtCell = function (cellIndex, message) {
+            const cell = this.metadata.grid[cellIndex]
 
+            if (cell.content.legendPtr) {
+                cell.content.legendPtr.dispose()
+            }
+
+            if (message.length > 0) {
+                const legendTxt = new this.TextWriter(message, {
+                    anchor: "center",
+                    "letter-height": 0.1,
+                    "letter-thickness": 0.001,
+                    "colors": {diffuse: "#00ff00"},
+                    position: {
+                        x: cell.x,
+                        y: 0.02,
+                        z: -cell.y
+                    }
+                })
+                cell.content.legend = message
+                cell.content.legendPtr = legendTxt
+            } else {
+                cell.content.legend = null
+                cell.content.legendPtr = null
+            }
+        }
+    }
+
+    create() {
         // build the scene from the model
+        this.declareWriter()
         this.setCamera()
         this.setLight()
         this.declareGround()
         this.declareWall()
         this.declareGroundCursor()
         this.declareSelector()
+        this.declarePlayerCursor()
         this.declareDoor()
-        this.declareToken()
+        this.declareNpcToken()
         this.buildGrid()
         this.drawCeiling()
     }

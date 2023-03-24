@@ -6,12 +6,15 @@
 
 namespace App\Controller;
 
+use App\Entity\BattlemapDocument;
+use App\Entity\Place;
 use App\Form\PictureUpload;
 use App\Repository\VertexRepository;
 use App\Service\PictoProvider;
 use App\Service\PlayerCastCache;
 use App\Service\Storage;
 use App\Voronoi\MapBuilder;
+use App\Voronoi\SvgDumper;
 use DateTime;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +22,6 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
 use function join_paths;
@@ -113,27 +115,37 @@ class Picture extends AbstractController
      * Returns a pixelized thumbnail for the vector battlemap linked to the Place given by its pk
      * @Route("/battlemap/thumbnail/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
-    public function battlemapThumbnail(string $pk, VertexRepository $repository, Request $request): Response
+    public function battlemapThumbnail(Place $place, Request $request, MapBuilder $builder, SvgDumper $dumper): Response
     {
-        $place = $repository->findByPk($pk);
+        // plusieurs possibilités pour migrer la thumbnail :
+        // 1 - stocker le BattlemapDocument dans la Place plutôt que dans un fichier JSON dans Storage. Ça permet de récupérer un BattlemapDocument exploitale par SvgDumper
+        // ======>>>>>>>> 2 - renderiser seulement l'hexamap qui ne sera pas à jour par rapport au JSON - CHOIX ACTUEL
+        // 3 - renderiser côté client avec Babylon une version plus light du fichier (pas de texture)
+        // 4 - plutôt que de json_encoder, on peut utiliser toJSON et fromPHP sauf que le client envoie un json sans type dans l'export
+        // 5 - faire un SvgDumper qui travaille sur un BattlemapDocument dés-objectifié (sans HexaCell ni MapToken)
+        if (is_null($place->battlemap3d)) {
+            throw $this->createNotFoundException();
+        }
 
-        $battlemapSvg = $this->storage->getFileInfo($place->battleMap);
         // folder for caching :
         $cacheDir = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir);
-        $targetName = join_paths($cacheDir, $battlemapSvg->getBasename('.svg'));
+        $targetName = join_paths($cacheDir, 'tmp-' . $place->getPk());
 
         // managing HTTP Cache
         if (file_exists("$targetName.jpg")) {
             $response = new BinaryFileResponse("$targetName.jpg");
-            $response->setLastModified(new DateTime('@' . $battlemapSvg->getMTime()));
+            $response->setEtag(md5(serialize($place->voronoiParam)));
             if ($response->isNotModified($request)) {
                 return $response;
             }
         }
 
         $output = fopen("$targetName.html", 'w');
-        $source = fopen($battlemapSvg->getPathname(), 'r');
-        $widthForMap = MapBuilder::defaultSizeForWeb;
+        $map = $builder->create($place->voronoiParam);
+        $doc = new BattlemapDocument();
+        $map->dumpMap($doc);
+
+        $widthForMap = SvgDumper::defaultSizeForWeb;
         fwrite(
                 $output,
                 <<<YOLO
@@ -148,12 +160,13 @@ class Picture extends AbstractController
 <body style="width:$widthForMap">
 YOLO
         );
-        while ($buf = fread($source, 10000)) {
-            fwrite($output, $buf);
-        }
+
+        ob_start();
+        $dumper->flush($doc);
+        fwrite($output, ob_get_clean());
+
         fwrite($output, '</body></html>');
         fclose($output);
-        fclose($source);
 
         $matrixing = new Process([
             'wkhtmltoimage',
@@ -172,24 +185,9 @@ YOLO
         $convert->mustRun();
 
         $response = new BinaryFileResponse("$targetName.jpg");
-        $response->setLastModified(new DateTime('@' . $battlemapSvg->getMTime()));
+        $response->setEtag(md5(serialize($place->voronoiParam)));
 
         return $response;
-    }
-
-    /**
-     * Show token from storage
-     * @Route("/token/get", methods={"GET"})
-     */
-    public function readToken(Request $request, VertexRepository $repo, MapBuilder $builder): Response
-    {
-        $title = $request->query->get('title');
-        $npc = $repo->findByTitle($title);
-        $pic = $this->storage->getFileInfo($npc->tokenPic);
-
-        return new StreamedResponse(function () use ($builder, $pic) {
-                    $builder->dumpTokenFor($pic);
-                }, 200, ['content-type' => 'image/svg+xml']);
     }
 
     /**
