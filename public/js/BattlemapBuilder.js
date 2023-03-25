@@ -109,7 +109,7 @@ class BattlemapBuilder
         for (let k = 0; k < 6; k++) {
             pov.setTarget(target[k])
             this.scene.render()
-            let data = await BABYLON.ScreenshotTools.CreateScreenshotUsingRenderTargetAsync(this.scene.getEngine(), pov, 1280, "image/png", 1, true, null, true)
+            let data = await BABYLON.ScreenshotTools.CreateScreenshotUsingRenderTargetAsync(this.scene.getEngine(), pov, 800, "image/png", 1, true, null, true)
             formData.append(`cubemap_broadcast[picture][${k}]`, new Blob([BABYLON.DecodeBase64UrlToBinary(data)], {type: 'image/png'}))
         }
 

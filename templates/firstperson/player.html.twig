@@ -27,6 +27,7 @@
         target.x++
         camera.setTarget(target)
         camera.minZ = 0.1
+        camera.fov = Math.PI / 3
         camera.attachControl(canvas, true)
         camera.inputs.removeByType("FreeCameraKeyboardMoveInput")
         camera.inputs.attached.mouse.touchEnabled = true;

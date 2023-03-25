@@ -125,7 +125,7 @@ class FirstPerson extends AbstractController
                 imagedestroy($side);
             }
             $target = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, 'tmp-cubemap.jpg');
-            imagejpeg($cubemap, $target);
+            imagejpeg($cubemap, $target, 50);
             imagedestroy($cubemap);
 
             return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $target, 'imgType' => '3d']);
