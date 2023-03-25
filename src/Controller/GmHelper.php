@@ -14,7 +14,6 @@ use App\Service\NetTools;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Trismegiste\NameGenerator\FileRepository;
 use Trismegiste\NameGenerator\RandomizerDecorator;
 
@@ -26,8 +25,8 @@ class GmHelper extends AbstractController
 
     /**
      * Landing page
-     * @Route("/", methods={"GET"})
      */
+    #[Route("/", methods: ["GET"])]
     public function index(): Response
     {
         return $this->render('landing.html.twig');
@@ -35,8 +34,8 @@ class GmHelper extends AbstractController
 
     /**
      * Names generator
-     * @Route("/gm/name/{card}", methods={"GET"})
      */
+    #[Route("/gm/name/{card}", methods: ["GET"])]
     public function nameGenerate(int $card = 15): Response
     {
         $repo = new RandomizerDecorator(new FileRepository());
@@ -56,8 +55,8 @@ class GmHelper extends AbstractController
 
     /**
      * Generates a QR Code for external initiative tracker
-     * @Route("/tracker/qrcode", methods={"GET"})
      */
+    #[Route("/tracker/qrcode", methods: ["GET"])]
     public function tracker(VertexRepository $repo, NetTools $ntools): Response
     {
         $listing = $repo->findByClass([Ali::class, Freeform::class, Transhuman::class]);
@@ -68,8 +67,8 @@ class GmHelper extends AbstractController
 
     /**
      * Creates a QR Code for the link to player screen
-     * @Route("/broadcast/qrcode", methods={"GET"})
      */
+    #[Route("/broadcast/qrcode", methods: ["GET"])]
     public function qrCode(NetTools $ntools): Response
     {
         $lan = $ntools->generateUrlForExternalAccess('app_playercast_view');
@@ -79,8 +78,8 @@ class GmHelper extends AbstractController
 
     /**
      * Creates a QR Code for the link to player screen
-     * @Route("/broadcast/qrcode3d", methods={"GET"})
      */
+    #[Route("/broadcast/qrcode3d", methods: ["GET"])]
     public function qrCode3d(NetTools $ntools): Response
     {
         $lan = $ntools->generateUrlForExternalAccess('app_firstperson_player');
@@ -90,8 +89,8 @@ class GmHelper extends AbstractController
 
     /**
      * Help page
-     * @Route("/help", methods={"GET"})
      */
+    #[Route("/help", methods: ["GET"])]
     public function help(): Response
     {
         return $this->render('help.html.twig');
