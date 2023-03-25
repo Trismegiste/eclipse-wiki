@@ -16,7 +16,6 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/howler.core.min.js') }}"></script>    
     <script>
         var urlCreator = window.URL || window.webkitURL
 
@@ -24,39 +23,42 @@
             Alpine.data('spa', () => ({
                     host: '{{ url_picture }}',
                     onAir: false,
-                    clicSound: null,
                     socket: null,
                     init() {
-                        var _this = this
-                        this.clicSound = new Howl({
-                            src: ['{{ asset('sound/clic.webm')}}', '{{ asset('sound/clic.ogg') }}']
-                        })
                         this.resize()
-
-                        this.socket = new WebSocket(this.host)
-                        this.socket.onopen = function (msg) {
-                            console.log('Connecting to ' + _this.host)
-                            _this.onAir = true
-                        }
-
-                        this.socket.onmessage = function (msg) {
-                            console.log('New picture')
-                            _this.$refs.tv.src = urlCreator.createObjectURL(msg.data)
-                            _this.$refs.tv.onload = function () {
-                                urlCreator.revokeObjectURL(this.src)
-                            }
-                            _this.clicSound.play()
-                        }
-
-                        this.socket.onclose = function () {
-                            console.log('Disconnected')
-                            _this.onAir = false
-                        }
-
+                        this.connect()
                         // Watch for browser/canvas resize events
                         window.addEventListener("resize", () => {
                             this.resize();
-                        });
+                        })
+                        // check if lost websocket connection when focus
+                        document.addEventListener('visibilitychange', () => {
+                            if (document.visibilityState === 'visible') {
+                                if (this.socket.readyState === 3) {
+                                    this.connect()
+                                }
+                            }
+                        })
+                    },
+                    connect() {
+                        this.socket = new WebSocket(this.host)
+                        this.socket.onopen = (msg) => {
+                            console.log('Connecting to ' + this.host)
+                            this.onAir = true
+                        }
+
+                        this.socket.onmessage = (msg) => {
+                            console.log('New picture')
+                            this.$refs.tv.src = urlCreator.createObjectURL(msg.data)
+                            this.$refs.tv.onload = function () {
+                                urlCreator.revokeObjectURL(this.src)
+                            }
+                        }
+
+                        this.socket.onclose = () => {
+                            console.log('Disconnected')
+                            this.onAir = false
+                        }
                     },
                     resize() {
                         this.$refs.tv.height = document.documentElement.clientHeight
