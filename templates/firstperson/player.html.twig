@@ -113,14 +113,33 @@
         })
 
         // Websockets
-        const cubemapSocket = new WebSocket('{{ url_cubemap }}')
-        cubemapSocket.onmessage = function (msg) {
-            console.log('update')
-            mat.emissiveTexture.dispose()
-            mat.emissiveTexture = BABYLON.RawTexture.LoadFromDataString('tmp', msg.data, scene)
-        }
+        var cubemapSocket;
+        var feedbackSocket;
 
-        const feedbackSocket = new WebSocket('{{ url_feedback }}')
+        function connectCubemap() {
+            cubemapSocket = new WebSocket('{{ url_cubemap }}')
+            cubemapSocket.onmessage = function (msg) {
+                console.log('update')
+                mat.emissiveTexture.dispose()
+                mat.emissiveTexture = BABYLON.RawTexture.LoadFromDataString('tmp', msg.data, scene)
+            }
+        }
+        function connectFeedback() {
+            feedbackSocket = new WebSocket('{{ url_feedback }}')
+        }
+        connectCubemap()
+        connectFeedback()
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                if (cubemapSocket.readyState === 3) {
+                    connectCubemap()
+                }
+                if (feedbackSocket.readyState === 3) {
+                    connectFeedback()
+                }
+            }
+        })
     </script>
 {% endblock %}
 
