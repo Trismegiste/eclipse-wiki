@@ -62,7 +62,9 @@
         camera.setTarget(new BABYLON.Vector3(0, 0, -1))
         camera.attachControl(canvas)
 
-        BABYLON.SceneLoader.Append("/fps/scene/", "{{ place.pk }}.battlemap", scene, function (scene) {})
+        BABYLON.SceneLoader.Append("/fps/scene/", "{{ place.pk }}.battlemap", scene, function (scene) {
+            scene.metadata.viewMode = 'fps' // reset the view mode disregarding previous value            
+        })
 
         // Register a render loop to repeatedly render the scene
         engine.runRenderLoop(function () {
