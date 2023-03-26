@@ -6,7 +6,11 @@
 
 namespace App\Service;
 
+use Paragi\PhpWebsocket\Client;
+use Psr\Log\LoggerInterface;
 use Ratchet\App;
+use SplFileInfo;
+use function join_paths;
 
 /**
  * A websocket client that pushes messages to Websocket server
@@ -22,12 +26,14 @@ class WebsocketPusher
     protected $localIp;
     protected $wsPort;
     protected $logger;
+    protected string $publicDir;
 
-    public function __construct(NetTools $nettools, \Psr\Log\LoggerInterface $websoxLogger, int $websocketPort)
+    public function __construct(NetTools $nettools, LoggerInterface $websoxLogger, int $websocketPort, string $publicFolder)
     {
         $this->localIp = $nettools->getLocalIp();
         $this->wsPort = $websocketPort;
         $this->logger = $websoxLogger;
+        $this->publicDir = $publicFolder;
     }
 
     public function getUrlPicture(): string
@@ -45,11 +51,16 @@ class WebsocketPusher
         return 'ws://' . $this->localIp . ':' . $this->wsPort . self::ROUTE_FEEDBACK;
     }
 
+    protected function createDefault(string $pic): \SplFileInfo
+    {
+        return new SplFileInfo(join_paths($this->publicDir, 'img', $pic));
+    }
+
     public function createServer(): App
     {
         $app = new App($this->localIp, $this->wsPort, '0.0.0.0');
-        $app->route(self::ROUTE_PICTURE, new PictureBroadcaster($this->logger), ['*']);
-        $app->route(self::ROUTE_CUBEMAP, new PictureBroadcaster($this->logger), ['*']);
+        $app->route(self::ROUTE_PICTURE, new PictureBroadcaster($this->logger, $this->createDefault('mire.png')), ['*']);
+        $app->route(self::ROUTE_CUBEMAP, new PictureBroadcaster($this->logger, $this->createDefault('cubemap.png')), ['*']);
         $app->route(self::ROUTE_FEEDBACK, new PlayerFeedback($this->logger), ['*']);
 
         return $app;
@@ -58,7 +69,7 @@ class WebsocketPusher
     public function push(string $data, string $imgType): string
     {
         $route = ['2d' => self::ROUTE_PICTURE, '3d' => self::ROUTE_CUBEMAP][$imgType];
-        $sp = new \Paragi\PhpWebsocket\Client($this->localIp, $this->wsPort, ['X-Pusher: Symfony'], $err, 10, false, false, $route);
+        $sp = new Client($this->localIp, $this->wsPort, ['X-Pusher: Symfony'], $err, 10, false, false, $route);
         $sp->write($data);
         $reading = $sp->read();
         $this->logger->debug("Server responded with: $reading");

@@ -121,7 +121,8 @@ services:
     App\Service\WebsocketPusher:
         arguments:
             $websocketPort: '%websocket_port%'   
-            
+            $publicFolder: '%kernel.project_dir%/public'
+         
     # Storage
     App\Service\Storage:
         arguments:

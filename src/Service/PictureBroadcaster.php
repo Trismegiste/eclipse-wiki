@@ -14,9 +14,9 @@ use Ratchet\RFC6455\Messaging\Frame;
 use Ratchet\RFC6455\Messaging\Message;
 use Ratchet\RFC6455\Messaging\MessageInterface;
 use Ratchet\WebSocket\MessageComponentInterface;
+use RuntimeException;
 use SplFileInfo;
 use SplObjectStorage;
-use function join_paths;
 
 /**
  * Websocket Server
@@ -28,10 +28,10 @@ class PictureBroadcaster implements MessageComponentInterface
     protected $currentFile = null;
     protected $logger;
 
-    public function __construct(LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger, \SplFileInfo $defaultPicture)
     {
         $this->clients = new SplObjectStorage();
-        $this->currentFile = new SplFileInfo(join_paths(__DIR__, 'mire.png'));
+        $this->currentFile = $defaultPicture;
         $this->logger = $logger;
     }
 
@@ -83,7 +83,7 @@ class PictureBroadcaster implements MessageComponentInterface
     {
         // players don't send messages, only Symfony
         if (!$this->isRequestFromSymfony($from->httpRequest)) {
-            throw new \RuntimeException('Other clients than Symfony cannot send messages');
+            throw new RuntimeException('Other clients than Symfony cannot send messages');
         }
 
         $this->logger->debug('Websocket Server receiving message ' . $msg . ' from ' . $this->getFirstUserAgent($from->httpRequest));
