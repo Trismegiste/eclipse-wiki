@@ -19,7 +19,7 @@ class PictureBroadcasterTest extends WebTestCase
     protected function setUp(): void
     {
         $this->logger = $this->createMock(LoggerInterface::class);
-        $this->sut = new PictureBroadcaster($this->logger);
+        $this->sut = new PictureBroadcaster($this->logger, new SplFileInfo(join_paths(__DIR__, 'profilepic.png')));
     }
 
     public function testOpen()
