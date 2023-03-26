@@ -357,7 +357,7 @@ class HexaMap implements SquareGrid
         $visitor->side = $this->getSize();
         $visitor->wallHeight = 1.5;
         $visitor->npcToken = $this->npcToken;
-        $visitor->texture = ['default', 'cluster', 'void', 'cluster-sleep', 'cluster-energy', 'cluster-neutral', 'cluster-industry', 'cluster-park', 'cluster-entertainment', 'cluster-oxygen'];
+        $texture = [];
 
         foreach ($this->grid as $x => $column) {
             foreach ($column as $y => $cell) {
@@ -367,8 +367,11 @@ class HexaMap implements SquareGrid
                     'y' => $y,
                     'content' => $cell
                 ];
+                $texture[$cell->template] = true;
             }
         }
+
+        $visitor->texture = array_keys($texture);
     }
 
 }
