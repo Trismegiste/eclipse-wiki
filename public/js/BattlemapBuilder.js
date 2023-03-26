@@ -369,6 +369,15 @@ class BattlemapBuilder
         doorMat.diffuseTexture = new BABYLON.Texture("/texture/" + this.getDoc().theme + "/door.webp", this.scene)
         doorMat.bumpTexture = new BABYLON.Texture("/texture/" + this.getDoc().theme + "/door-bump.webp", this.scene)
         door.material = doorMat
+
+        // generic open door
+        const openDoor = door.clone('open-door')
+        const openDoorMat = new BABYLON.StandardMaterial('mat-opendoor', this.scene)
+        openDoorMat.diffuseTexture = new BABYLON.Texture("/texture/" + this.getDoc().theme + "/door-open.webp", this.scene)
+        openDoorMat.diffuseTexture.hasAlpha = true
+        openDoorMat.bumpTexture = new BABYLON.Texture("/texture/" + this.getDoc().theme + "/door-bump.webp", this.scene)
+        openDoor.material = openDoorMat
+        openDoor.isVisible = false
     }
 
     buildGrid() {
@@ -413,7 +422,13 @@ class BattlemapBuilder
                         tmpWall.actionManager = new BABYLON.ActionManager(this.scene);
                         tmpWall.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, e => {
                             const current = e.meshUnderPointer
-                            current.isVisible = false
+                            const openDoor = this.scene.getMeshByName('open-door').createInstance("open-" + current.name)
+                            openDoor.position = current.position
+                            openDoor.rotation = current.rotation
+                            openDoor.parent = handle
+                            openDoor.isVisible = true
+                            openDoor.isPickable = false
+                            current.dispose()
                         }))
                     }
                 }

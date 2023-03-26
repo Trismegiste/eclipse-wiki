@@ -367,7 +367,10 @@ class HexaMap implements SquareGrid
                     'y' => $y,
                     'content' => $cell
                 ];
-                $texture[$cell->template] = true;
+                // compil all used textures
+                if (!is_null($cell)) {
+                    $texture[$cell->template] = true;
+                }
             }
         }
 
