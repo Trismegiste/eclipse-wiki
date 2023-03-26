@@ -359,7 +359,7 @@ class BattlemapBuilder
 
     declareDoor() {
         // Generic door
-        const door = BABYLON.MeshBuilder.CreatePlane('door', {width: 2 / 3, height: this.getDoc().wallHeight})
+        const door = BABYLON.MeshBuilder.CreatePlane('door', {width: 2 / 3, height: this.getDoc().wallHeight, sideOrientation: BABYLON.Mesh.DOUBLESIDE})
         door.position.y = this.getDoc().wallHeight / 2
         door.position.x = 2 / 3 * Math.cos(Math.PI / 6)
         door.rotation.y = Math.PI / 2
@@ -397,6 +397,9 @@ class BattlemapBuilder
             for (let dir = 0; dir < 6; dir++) {
                 if (cell.content.wall[dir]) {
                     const handle = new BABYLON.TransformNode("handle" + k + '-' + dir)
+                    if (cell.content.door[dir] && (dir < 3)) {
+                        continue
+                    }
                     const meshName = cell.content.door[dir] ? 'door' : 'wall-' + cell.content.template
                     const tmpWall = this.scene.getMeshByName(meshName).createInstance("wall-" + k + '-' + dir)
                     tmpWall.parent = handle
