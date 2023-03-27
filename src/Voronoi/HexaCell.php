@@ -31,6 +31,7 @@ class HexaCell
     public array $door = [false, false, false, false, false, false]; // CCW, from EAST (0°) to SOUTHEAST (300°)
     public ?\App\Entity\MapToken $npc = null;
     public ?string $legend = null;
+    public ?string $pictogram = null;
 
     public function __construct(int $uid, string $template = 'default', bool $growable = true)
     {

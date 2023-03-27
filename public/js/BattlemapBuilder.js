@@ -443,7 +443,25 @@ class BattlemapBuilder
             if (cell.content.legend) {
                 this.scene.setLegendAtCell(k, cell.content.legend)
             }
+
+            // pictogram if any
+            if (cell.content.pictogram) {
+                this.appendPictogram(k, cell.content.pictogram, cell.x, -cell.y)
+            }
         })
+    }
+
+    appendPictogram(idx, title, x, z) {
+        const picto = BABYLON.MeshBuilder.CreatePlane("picto-" + idx, {width: 0.8, height: 0.8})
+        picto.position = new BABYLON.Vector3(x, 0.011, z)
+        picto.rotation.x = Math.PI / 2
+        const mat = new BABYLON.StandardMaterial('mat-picto-' + idx, this.scene)
+        const svg = new BABYLON.Texture("/picto/get?title=" + title, this.scene)
+        mat.emissiveColor = BABYLON.Color3.Green()
+        mat.opacityTexture = svg
+        mat.disableLighting = true
+        picto.material = mat
+        picto.isPickable = false
     }
 
     declareNpcToken() {

@@ -7,7 +7,6 @@
 namespace App\Service;
 
 use DOMDocument;
-use DOMXPath;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -15,6 +14,8 @@ use Symfony\Component\Finder\Finder;
  */
 class PictoProvider
 {
+
+    const textureSize = 100;
 
     protected $pictoFolder;
 
@@ -41,11 +42,10 @@ class PictoProvider
     {
         $doc = new DOMDocument();
         $doc->load($this->pictoFolder . "/$key.svg");
-        $xpath = new DOMXPath($doc);
-        $xpath->registerNamespace('svg', 'http://www.w3.org/2000/svg');
-        $extract = $xpath->query('/svg:svg/svg:g')->item(0);
+        $doc->documentElement->setAttribute('width', self::textureSize);
+        $doc->documentElement->setAttribute('height', self::textureSize);
 
-        return $extract->C14N();
+        return $doc->saveXML();
     }
 
 }
