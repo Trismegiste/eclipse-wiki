@@ -13,6 +13,8 @@ class BattlemapBuilder
     tileSelector
     // hexagonal cursor when hovering on tiles :
     tileCursor
+    // pictogram dictionary
+    pictogram = new Map()
 
     constructor(scene) {
         this.scene = scene
@@ -452,13 +454,17 @@ class BattlemapBuilder
     }
 
     appendPictogram(idx, title, x, z) {
+        if (!this.pictogram.has(title)) {
+            const svg = new BABYLON.Texture("/picto/get?title=" + title, this.scene)
+            this.pictogram.set(title, svg)
+        }
+
         const picto = BABYLON.MeshBuilder.CreatePlane("picto-" + idx, {width: 0.8, height: 0.8})
         picto.position = new BABYLON.Vector3(x, 0.011, z)
         picto.rotation.x = Math.PI / 2
         const mat = new BABYLON.StandardMaterial('mat-picto-' + idx, this.scene)
-        const svg = new BABYLON.Texture("/picto/get?title=" + title, this.scene)
         mat.emissiveColor = BABYLON.Color3.Green()
-        mat.opacityTexture = svg
+        mat.opacityTexture = this.pictogram.get(title)
         mat.disableLighting = true
         picto.material = mat
         picto.isPickable = false
