@@ -64,6 +64,7 @@ class FirstPersonTest extends WebTestCase
     public function testEdit(string $pk)
     {
         $this->client->request('GET', "/fps/edit/$pk");
+        $this->assertSelectorNotExists("a[href='/fps/delete/$pk']", 'The button should not be here since there is no json battlemap document yet');
         $this->assertResponseIsSuccessful();
     }
 
@@ -125,6 +126,23 @@ class FirstPersonTest extends WebTestCase
         $this->client->request('GET', "/battlemap/thumbnail/$pk");
         $this->assertResponseIsSuccessful();
         $this->assertEquals('image/jpeg', $this->client->getResponse()->headers->get('Content-Type'));
+
+        return $pk;
+    }
+
+    /** @depends testBattlemapThumbnail */
+    public function testResetMap(string $pk)
+    {
+        $this->client->request('GET', "/fps/edit/$pk");
+        $this->assertSelectorExists("a[href='/fps/delete/$pk']", 'The button should be here since the json battlemap document has been written');
+        $crawler = $this->client->request('GET', "/fps/delete/$pk");
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('form button#form_delete');
+        $form = $crawler->selectButton('form_delete')->form();
+        $this->client->submit($form);
+
+        $place = $this->repository->findByPk($pk);
+        $this->assertEmpty($place->battlemap3d);
     }
 
 }
