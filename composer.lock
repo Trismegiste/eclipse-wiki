@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3a7e67d95752389460fdf2df9a6a6a94",
+    "content-hash": "e4b55b2fa554b9f5dae0c8e0a349fcf6",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -6240,7 +6240,7 @@
         },
         {
             "name": "trismegiste/rpg-name-generator",
-            "version": "dev-master",
+            "version": "v1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Trismegiste/rpg-name-generator.git",
@@ -6260,7 +6260,6 @@
             "require-dev": {
                 "phpunit/phpunit": "^9.5"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -6285,7 +6284,7 @@
         },
         {
             "name": "trismegiste/strangelove-bundle",
-            "version": "dev-master",
+            "version": "2.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Trismegiste/strangelove-bundle.git",
@@ -6312,7 +6311,6 @@
                 "symfony/web-profiler-bundle": "^5.4|6.*",
                 "symfony/yaml": "^5.4|6.*"
             },
-            "default-branch": true,
             "bin": [
                 "bin/strangelove-wizard.php"
             ],
@@ -8856,10 +8854,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "trismegiste/rpg-name-generator": 20,
-        "trismegiste/strangelove-bundle": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

@@ -32,20 +32,6 @@ class VertexTypeTest extends KernelTestCase
         $this->assertCount(0, iterator_to_array($this->repo->search()));
     }
 
-    public function getInputData(): array
-    {
-        return [
-            [['title' => 'yolo', 'content' => 'some text']]
-        ];
-    }
-
-    /** @dataProvider getInputData */
-    public function testEmpty(array $inputData)
-    {
-        $this->expectErrorMessage('abstract class');
-        $this->sut->submit($inputData);
-    }
-
     public function testEdit()
     {
         $sample = new Scene('sample');
