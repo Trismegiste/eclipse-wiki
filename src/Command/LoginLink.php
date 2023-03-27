@@ -9,6 +9,7 @@ namespace App\Command;
 use App\Command\QrCode\ConsoleWriter;
 use App\Service\NetTools;
 use Endroid\QrCode\Builder\Builder;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -23,10 +24,10 @@ use Symfony\Component\Security\Http\LoginLink\LoginLinkHandlerInterface;
 /**
  * Generates a magic link to connect
  */
+#[AsCommand(name: 'app:link')]
 class LoginLink extends Command
 {
 
-    protected static $defaultName = 'app:link';
     protected $handler;
     protected $provider;
     protected $tools;
@@ -42,9 +43,9 @@ class LoginLink extends Command
     public function configure()
     {
         $this->setDescription('Generates login link to connect to the web server')
-            ->addArgument('port', InputArgument::OPTIONAL, 'The port on which the web server is running', 8000)
-            ->addOption('firefox', 'f', InputOption::VALUE_NONE, 'Launch Firefox')
-            ->addOption('qrcode', 'c', InputOption::VALUE_NONE, 'Print QR-Code')
+                ->addArgument('port', InputArgument::OPTIONAL, 'The port on which the web server is running', 8000)
+                ->addOption('firefox', 'f', InputOption::VALUE_NONE, 'Launch Firefox')
+                ->addOption('qrcode', 'c', InputOption::VALUE_NONE, 'Print QR-Code')
         ;
     }
 
@@ -71,9 +72,9 @@ class LoginLink extends Command
         // print qr code
         if ($input->getOption('qrcode')) {
             $result = Builder::create()
-                ->writer(new ConsoleWriter())
-                ->data($loginLink)
-                ->build();
+                    ->writer(new ConsoleWriter())
+                    ->data($loginLink)
+                    ->build();
 
             $output->writeln($result->getString());
         }

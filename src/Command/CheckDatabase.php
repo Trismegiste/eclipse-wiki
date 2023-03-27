@@ -8,6 +8,7 @@ namespace App\Command;
 
 use MongoDB\Driver\Command as MongoCommand;
 use MongoDB\Driver\Manager;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -16,10 +17,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Default config for the mongo database
  */
+#[AsCommand(name: 'app:check:mongo')]
 class CheckDatabase extends Command
 {
 
-    protected static $defaultName = 'app:check:mongo';
     protected $dbName;
     protected $manager;
 

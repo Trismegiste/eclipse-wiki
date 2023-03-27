@@ -8,6 +8,7 @@ namespace App\Command;
 
 use App\Entity\MediaWikiPage;
 use App\Service\MediaWiki;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
@@ -20,10 +21,10 @@ use Trismegiste\Strangelove\MongoDb\Repository;
 /**
  * Dump html pages from the wiki in MongoDb
  */
+#[AsCommand(name: 'mw:dump')]
 class Dumper extends Command
 {
 
-    protected static $defaultName = 'mw:dump';
     protected $repository;
     protected $mediaWiki;
 

@@ -10,6 +10,7 @@ use App\Service\Pdf\ChromiumPdfWriter;
 use App\Service\Pdf\TocGenerator;
 use App\Service\Pdf\Writer;
 use SplFileInfo;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,10 +22,10 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Generates RPG books
  */
+#[AsCommand(name: 'book:generate')]
 class BookGenerate extends Command
 {
 
-    protected static $defaultName = 'book:generate';
     protected Writer $pdfWriter;
     protected UrlGeneratorInterface $routing;
 

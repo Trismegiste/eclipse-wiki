@@ -8,6 +8,7 @@ namespace App\Command;
 
 use App\Repository\VertexRepository;
 use App\Service\Storage;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
@@ -20,12 +21,12 @@ use ZipArchive;
 /**
  * Export database into zip
  */
+#[AsCommand(name: 'db:export')]
 class Export extends Command
 {
 
     const vertexFilename = 'vertex.json';
 
-    protected static $defaultName = 'db:export';
     protected $repo;
     protected $store;
 

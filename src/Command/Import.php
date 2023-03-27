@@ -8,6 +8,7 @@ namespace App\Command;
 
 use App\Repository\VertexRepository;
 use App\Service\Storage;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
@@ -19,12 +20,12 @@ use ZipArchive;
 /**
  * Overwrite database with a zip
  */
+#[AsCommand(name: 'db:import')]
 class Import extends Command
 {
 
     const delayForTimestamp = 1000;
 
-    protected static $defaultName = 'db:import';
     protected $repo;
     protected $store;
 
