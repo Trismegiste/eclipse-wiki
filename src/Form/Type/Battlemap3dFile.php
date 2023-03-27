@@ -25,7 +25,7 @@ class Battlemap3dFile extends AbstractType
         $this->storage = $storage;
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return HiddenType::class;
     }
