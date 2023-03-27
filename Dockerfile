@@ -51,6 +51,8 @@ RUN apt-get update && apt-get install -y chromium
 RUN apt-get update && apt-get install -y pip
 RUN pip install -U pdf.tocgen
 
+RUN apt-get update && apt-get install -y unzip
+
 COPY ./docker/php.ini /usr/local/etc/php
 
 EXPOSE 8000
