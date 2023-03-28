@@ -519,6 +519,7 @@ class BattlemapBuilder
                 cell.content.legendPtr.dispose()
             }
 
+            // @todo check if message is null
             if (message.length > 0) {
                 const legendTxt = new this.TextWriter(message, {
                     anchor: "center",

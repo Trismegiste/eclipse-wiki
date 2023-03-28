@@ -6,6 +6,7 @@
 
 namespace App\Form\Tool3d;
 
+use App\Form\Type\PictogramType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -23,6 +24,11 @@ class TileLegend extends AbstractType
         $builder
                 ->add('legend', TextType::class, [
                     'attr' => ['x-model' => 'cellInfo.legend'],
+                    'required' => false
+                ])
+                ->add('pictogram', PictogramType::class, [
+                    'attr' => ['x-model' => 'cellInfo.pictogram'],
+                    'placeholder' => '-----------------',
                     'required' => false
                 ])
                 ->add('set_legend', SubmitType::class)
