@@ -31,8 +31,8 @@ class RemotePicture extends AbstractController
 
     /**
      * Image search against the remote MediaWiki
-     * @Route("/remote/search", methods={"GET"})
      */
+    #[Route('/remote/search', methods: ['GET'])]
     public function search(Request $request, MediaWiki $mw): Response
     {
         $form = $this->createFormBuilder()
@@ -53,8 +53,8 @@ class RemotePicture extends AbstractController
 
     /**
      * Show image from MediaWiki
-     * @Route("/remote/get", methods={"GET"})
      */
+    #[Route('/remote/get', methods: ['GET'])]
     public function read(Request $request): Response
     {
         $url = rawurldecode($request->query->get('url'));
@@ -63,8 +63,8 @@ class RemotePicture extends AbstractController
 
     /**
      * Pushes a picture (from the remote MediaWiki) to player screen
-     * @Route("/remote/push", methods={"POST"})
      */
+    #[Route('/remote/push', methods: ['POST'])]
     public function push(Request $request, PlayerCastCache $cache): JsonResponse
     {
         $url = rawurldecode($request->query->get('url'));

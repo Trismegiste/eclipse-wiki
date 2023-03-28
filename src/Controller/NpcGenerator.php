@@ -50,8 +50,8 @@ class NpcGenerator extends AbstractController
 
     /**
      * Creates a transhuman
-     * @Route("/npc/create", methods={"GET","POST"})
      */
+    #[Route('/npc/create', methods: ['GET', 'POST'])]
     public function create(Request $request): Response
     {
         $title = $request->query->get('title', '');
@@ -70,8 +70,8 @@ class NpcGenerator extends AbstractController
 
     /**
      * Edits a NPC
-     * @Route("/npc/edit/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/npc/edit/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function edit(Character $npc, Request $request): Response
     {
         $form = $this->createForm(NpcStats::class, $npc);
@@ -99,8 +99,8 @@ class NpcGenerator extends AbstractController
 
     /**
      * AJAX for getting background info
-     * @Route("/npc/background/info", methods={"GET"})
      */
+    #[Route('/npc/background/info', methods: ['GET'])]
     public function getBackground(Request $request, BackgroundProvider $provider): Response
     {
         $key = $request->query->get('key');
@@ -111,8 +111,8 @@ class NpcGenerator extends AbstractController
 
     /**
      * AJAX for getting faction info
-     * @Route("/npc/faction/info", name="app_npcgenerator_getfaction", methods={"GET"})
      */
+    #[Route('/npc/faction/info', methods: ['GET'], name: 'app_npcgenerator_getfaction')]
     public function getFaction(Request $request, FactionProvider $provider): Response
     {
         $key = $request->query->get('key');
@@ -123,8 +123,8 @@ class NpcGenerator extends AbstractController
 
     /**
      * AJAX for getting morph info
-     * @Route("/npc/morph/info", methods={"GET"})
      */
+    #[Route('/npc/morph/info', methods: ['GET'])]
     public function getMorph(Request $request, MorphProvider $provider): Response
     {
         $key = $request->query->get('key');
@@ -135,8 +135,8 @@ class NpcGenerator extends AbstractController
 
     /**
      * Duplicate a NPC
-     * @Route("/npc/duplicate/{pk}", methods={"GET","POST"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/npc/duplicate/{pk}', methods: ['GET', 'POST'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function duplicate(Character $npc, Request $request): Response
     {
         $newNpc = clone $npc;
@@ -160,8 +160,8 @@ class NpcGenerator extends AbstractController
 
     /**
      * Form for editing gears & stuff of NPC
-     * @Route("/npc/gear/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/npc/gear/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function gear(Character $npc, Request $request): Response
     {
         $form = $this->createForm(NpcGears::class, $npc);
@@ -180,8 +180,8 @@ class NpcGenerator extends AbstractController
 
     /**
      * Form for editing attacks and armors of NPC
-     * @Route("/npc/battle/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/npc/battle/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function battle(Character $npc, Request $request): Response
     {
         $form = $this->createForm(NpcAttacks::class, $npc);
@@ -200,8 +200,8 @@ class NpcGenerator extends AbstractController
 
     /**
      * Creates an A.L.I
-     * @Route("/npc/ali", methods={"GET","POST"})
      */
+    #[Route('/npc/ali', methods: ['GET', 'POST'])]
     public function ali(Request $request): Response
     {
         $form = $this->createForm(AliCreate::class);
@@ -218,8 +218,8 @@ class NpcGenerator extends AbstractController
 
     /**
      * Resleeves a NPC with a new morph
-     * @Route("/npc/sleeve/{pk}", methods={"GET","PATCH"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/npc/sleeve/{pk}', methods: ['GET', 'PATCH'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function sleeve(Character $npc, Request $request, MorphProvider $morph): Response
     {
         $form = $this->createFormBuilder($npc)
@@ -245,8 +245,8 @@ class NpcGenerator extends AbstractController
 
     /**
      * Creates a freeform character
-     * @Route("/npc/freeform", methods={"GET","POST"})
      */
+    #[Route('/npc/freeform', methods: ['GET', 'POST'])]
     public function freeform(Request $request): Response
     {
         $form = $this->createForm(FreeformCreate::class);
@@ -263,8 +263,8 @@ class NpcGenerator extends AbstractController
 
     /**
      * Edit information of NPC
-     * @Route("/npc/info/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/npc/info/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function info(Character $npc, Request $request): Response
     {
         $form = $this->createForm(NpcInfo::class, $npc, ['edit' => true]);
@@ -282,8 +282,8 @@ class NpcGenerator extends AbstractController
 
     /**
      * Creates an Extra NPC from a template and a new name
-     * @Route("/npc/extra/{title}/{template}", methods={"GET"}, requirements={"template"="[\da-f]{24}"})
      */
+    #[Route('/npc/extra/{title}/{template}', methods: ['GET'], requirements: ['template' => '[\\da-f]{24}'])]
     public function createExtra(string $title, string $template, CharacterFactory $fac): Response
     {
         $npc = $this->repository->findByPk($template);
@@ -299,8 +299,8 @@ class NpcGenerator extends AbstractController
 
     /**
      * Ajax get character in json
-     * @Route("/npc/minicard", methods={"GET"})
      */
+    #[Route('/npc/minicard', methods: ['GET'])]
     public function minicard(Request $request): Response
     {
         $npc = $this->repository->findByTitle($request->get('title'));
@@ -310,8 +310,8 @@ class NpcGenerator extends AbstractController
 
    /**
      * Get NPC in json format
-     * @Route("/npc/show.{_format}", methods={"GET"}, requirements={"_format"="json"})
      */
+    #[Route('/npc/show.{_format}', methods: ['GET'], requirements: ['_format' => 'json'])]
     public function show(Request $request): Response
     {
         $npc = $this->repository->findByTitle($request->get('title'));

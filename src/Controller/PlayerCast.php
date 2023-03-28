@@ -29,8 +29,8 @@ class PlayerCast extends AbstractController
 
     /**
      * The actual player screen updated with websocket
-     * @Route("/player/view", methods={"GET"})
      */
+    #[Route('/player/view', methods: ['GET'])]
     public function view(): Response
     {
         return $this->render('player/view.html.twig', ['url_picture' => $this->pusher->getUrlPicture()]);
@@ -38,8 +38,8 @@ class PlayerCast extends AbstractController
 
     /**
      * Returns a generated document
-     * @Route("/player/getdoc/{filename}", methods={"GET"})
      */
+    #[Route('/player/getdoc/{filename}', methods: ['GET'])]
     public function getDocument(string $filename, DocumentBroadcaster $broad): Response
     {
         return $broad->createResponseForFilename($filename);

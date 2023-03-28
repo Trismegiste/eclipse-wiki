@@ -41,8 +41,8 @@ class Picture extends AbstractController
 
     /**
      * Ajax for searching local images
-     * @Route("/picture/search", methods={"GET"})
      */
+    #[Route('/picture/search', methods: ['GET'])]
     public function search(Request $request): JsonResponse
     {
         $title = $request->query->get('q', '');
@@ -58,8 +58,8 @@ class Picture extends AbstractController
 
     /**
      * Show image from storage
-     * @Route("/picture/get/{title}", name="get_picture", methods={"GET"})
      */
+    #[Route('/picture/get/{title}', methods: ['GET'], name: 'get_picture')]
     public function read(string $title): Response
     {
         return $this->storage->createResponse($title);
@@ -67,8 +67,8 @@ class Picture extends AbstractController
 
     /**
      * Pushes a picture (from the Storage) to player screen
-     * @Route("/picture/push/{title}", methods={"POST"})
      */
+    #[Route('/picture/push/{title}', methods: ['POST'])]
     public function push(string $title, PlayerCastCache $cache): JsonResponse
     {
         $picture = $cache->slimPictureForPush($this->storage->getFileInfo($title));
@@ -78,8 +78,8 @@ class Picture extends AbstractController
 
     /**
      * Upload a new picture
-     * @Route("/picture/upload", methods={"GET","POST"})
      */
+    #[Route('/picture/upload', methods: ['GET', 'POST'])]
     public function upload(Request $request, VertexRepository $repository): Response
     {
         $form = $this->createForm(PictureUpload::class);
@@ -113,8 +113,8 @@ class Picture extends AbstractController
 
     /**
      * Returns a pixelized thumbnail for the vector battlemap linked to the Place given by its pk
-     * @Route("/battlemap/thumbnail/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/battlemap/thumbnail/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function battlemapThumbnail(Place $place, Request $request, MapBuilder $builder, SvgDumper $dumper): Response
     {
         // plusieurs possibilités pour migrer la thumbnail :
@@ -192,8 +192,8 @@ YOLO
 
     /**
      * Show pictogram from folder. Returns a SVG fragment
-     * @Route("/picto/get", methods={"GET"})
      */
+    #[Route('/picto/get', methods: ['GET'])]
     public function readPictogram(Request $request, PictoProvider $provider): Response
     {
         $title = $request->query->get('title');

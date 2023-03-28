@@ -20,8 +20,8 @@ class Dump extends AbstractController
 
     /**
      * Dumps all edges
-     * @Route("/dump/edge", methods={"GET"})
      */
+    #[Route('/dump/edge', methods: ['GET'])]
     public function edge(EdgeProvider $repo)
     {
         $listing = $repo->getListing();
@@ -31,8 +31,8 @@ class Dump extends AbstractController
 
     /**
      * Dumps all skills
-     * @Route("/dump/skill", methods={"GET"})
      */
+    #[Route('/dump/skill', methods: ['GET'])]
     public function skill(SkillProvider $repo)
     {
         $listing = $repo->getListing();
@@ -42,8 +42,8 @@ class Dump extends AbstractController
 
     /**
      * Dumps all hindrances
-     * @Route("/dump/hindrance", methods={"GET"})
      */
+    #[Route('/dump/hindrance', methods: ['GET'])]
     public function hindrance(HindranceProvider $repo)
     {
         $listing = $repo->getListing();
@@ -53,8 +53,8 @@ class Dump extends AbstractController
 
     /**
      * Dumps all gears
-     * @Route("/dump/gear", methods={"GET"})
      */
+    #[Route('/dump/gear', methods: ['GET'])]
     public function gear(\App\Repository\GearProvider $repo)
     {
         $listing = $repo->getListing();
@@ -64,8 +64,8 @@ class Dump extends AbstractController
 
     /**
      * Dumps all ranged weapons
-     * @Route("/dump/rw", methods={"GET"})
      */
+    #[Route('/dump/rw', methods: ['GET'])]
     public function rangedWeapon(\App\Repository\RangedWeaponProvider $repo)
     {
         $listing = $repo->getListing();

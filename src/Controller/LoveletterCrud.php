@@ -40,8 +40,8 @@ class LoveletterCrud extends GenericCrud
 
     /**
      * Creates a Love letter
-     * @Route("/loveletter/create", methods={"GET","POST"})
      */
+    #[Route('/loveletter/create', methods: ['GET', 'POST'])]
     public function create(Request $request): Response
     {
         return $this->handleCreate(LoveletterType::class, 'loveletter/create.html.twig', $request);
@@ -49,8 +49,8 @@ class LoveletterCrud extends GenericCrud
 
     /**
      * Edits a Love letter
-     * @Route("/loveletter/edit/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/loveletter/edit/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function edit(string $pk, Request $request): Response
     {
         return $this->handleEdit(LoveletterType::class, 'loveletter/edit.html.twig', $pk, $request);
@@ -58,8 +58,8 @@ class LoveletterCrud extends GenericCrud
 
     /**
      * Generate PDF for a Love letter
-     * @Route("/loveletter/pdf/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/loveletter/pdf/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function pdf(Loveletter $vertex): Response
     {
         $title = sprintf("Loveletter-%s-%s.pdf", $vertex->player, $vertex->getTitle());
@@ -73,8 +73,8 @@ class LoveletterCrud extends GenericCrud
 
     /**
      * Generates the Love letter PDF and prints a QR Code for player
-     * @Route("/loveletter/qrcode/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/loveletter/qrcode/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function qrcode(Loveletter $vertex, \App\Service\DocumentBroadcaster $broadcast): Response
     {
         $title = sprintf("Loveletter-%s-%s.pdf", $vertex->player, $vertex->getTitle());
@@ -88,8 +88,8 @@ class LoveletterCrud extends GenericCrud
 
     /**
      * Selection of the PC for the different resolution of the love letter
-     * @Route("/loveletter/select/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/loveletter/select/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function select(string $pk, Request $request): Response
     {
         return $this->handleEdit(LoveletterPcChoice::class, 'loveletter/select.html.twig', $pk, $request);

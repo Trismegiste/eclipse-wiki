@@ -26,21 +26,21 @@ class SceneCrud extends GenericCrud
     }
 
     /**
-     * @Route("/scene/create", methods={"GET","POST"})
      * @param Request $request
      * @return Response
      */
+    #[Route('/scene/create', methods: ['GET', 'POST'])]
     public function create(Request $request): Response
     {
         return $this->handleCreate(SceneCreate::class, 'scene/create.html.twig', $request);
     }
 
     /**
-     * @Route("/scene/edit/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      * @param string $pk
      * @param Request $request
      * @return Response
      */
+    #[Route('/scene/edit/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function edit(string $pk, Request $request): Response
     {
         return $this->handleEdit(VertexType::class, 'scene/edit.html.twig', $pk, $request);

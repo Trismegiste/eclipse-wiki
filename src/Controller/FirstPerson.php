@@ -44,8 +44,8 @@ class FirstPerson extends AbstractController
     }
 
     /**
-     * @Route("/fps/edit/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/fps/edit/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function edit(Place $place): Response
     {
         // Toolbar with forms :
@@ -69,8 +69,8 @@ class FirstPerson extends AbstractController
     }
 
     /**
-     * @Route("/fps/export/{pk}", methods={"PATCH"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/fps/export/{pk}', methods: ['PATCH'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function export(Place $place, Request $request): JsonResponse
     {
         $writer = $this->createForm(Battlemap3dWrite::class, $place);
@@ -86,8 +86,8 @@ class FirstPerson extends AbstractController
     }
 
     /**
-     * @Route("/fps/scene/{pk}.{_format}", methods={"GET"}, requirements={"pk"="[\da-f]{24}", "_format": "battlemap"})
      */
+    #[Route('/fps/scene/{pk}.{_format}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}', '_format' => 'battlemap'])]
     public function babylon(Place $place, Storage $storage): Response
     {
         if (is_null($place->battlemap3d)) {
@@ -106,8 +106,8 @@ class FirstPerson extends AbstractController
     }
 
     /**
-     * @Route("/fps/broadcast", methods={"POST"})
      */
+    #[Route('/fps/broadcast', methods: ['POST'])]
     public function broadcast(Request $request): JsonResponse
     {
         $form = $this->createForm(CubemapBroadcast::class);
@@ -136,8 +136,8 @@ class FirstPerson extends AbstractController
 
     /**
      * The actual player screen updated with websocket
-     * @Route("/player/fps", methods={"GET"})
      */
+    #[Route('/player/fps', methods: ['GET'])]
     public function player(): Response
     {
         $doc = new BattlemapDocument();
@@ -152,8 +152,8 @@ class FirstPerson extends AbstractController
 
     /**
      * Delete the current battlemap
-     * @Route("/fps/delete/{pk}", methods={"GET","DELETE"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/fps/delete/{pk}', methods: ['GET', 'DELETE'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function delete(Place $place, Request $request): Response
     {
         $form = $this->createFormBuilder($place)

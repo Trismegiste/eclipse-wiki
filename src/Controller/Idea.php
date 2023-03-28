@@ -22,8 +22,8 @@ class Idea extends AbstractController
 {
 
     /**
-     * @Route("/idea")
      */
+    #[Route('/idea')]
     public function inspiration(Request $request, \App\Service\OpenAi $ai): Response
     {
         $form = $this->createFormBuilder()

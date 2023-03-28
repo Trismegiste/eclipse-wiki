@@ -27,21 +27,21 @@ class TimelineCrud extends GenericCrud
     }
 
     /**
-     * @Route("/timeline/create", methods={"GET","POST"})
      * @param Request $request
      * @return Response
      */
+    #[Route('/timeline/create', methods: ['GET', 'POST'])]
     public function create(Request $request): Response
     {
         return $this->handleCreate(TimelineCreate::class, 'timeline/create.html.twig', $request);
     }
 
     /**
-     * @Route("/timeline/edit/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      * @param string $pk
      * @param Request $request
      * @return Response
      */
+    #[Route('/timeline/edit/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function edit(string $pk, Request $request): Response
     {
         return $this->handleEdit(VertexType::class, 'timeline/edit.html.twig', $pk, $request);
@@ -62,8 +62,8 @@ class TimelineCrud extends GenericCrud
     }
 
     /**
-     * @Route("/timeline/pin/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/timeline/pin/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function pin(Timeline $timeline, Request $request): Response
     {
         $request->getSession()->set('pinned_timeline', $timeline);

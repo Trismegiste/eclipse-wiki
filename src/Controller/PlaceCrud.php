@@ -23,8 +23,8 @@ class PlaceCrud extends GenericCrud
 
     /**
      * Creates a Place
-     * @Route("/place/create", methods={"GET","POST"})
      */
+    #[Route('/place/create', methods: ['GET', 'POST'])]
     public function create(Request $request): Response
     {
         return $this->handleCreate(PlaceType::class, 'place/create.html.twig', $request);
@@ -32,8 +32,8 @@ class PlaceCrud extends GenericCrud
 
     /**
      * Edits a Place
-     * @Route("/place/edit/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/place/edit/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function edit(string $pk, Request $request): Response
     {
         return $this->handleEdit(PlaceType::class, 'place/edit.html.twig', $pk, $request);
@@ -46,8 +46,8 @@ class PlaceCrud extends GenericCrud
 
     /**
      * Redirection to default NPC or Profile on the fly
-     * @Route("/place/npc/{title}", methods={"GET"})
      */
+    #[Route('/place/npc/{title}', methods: ['GET'])]
     public function npcShow(string $title): Response
     {
         $npc = $this->repository->findByTitle($title);
@@ -73,8 +73,8 @@ class PlaceCrud extends GenericCrud
 
     /**
      * Creates a Place child from the current Place
-     * @Route("/place/child/{pk}", methods={"GET","POST"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/place/child/{pk}', methods: ['GET', 'POST'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function child(Place $place, Request $request): Response
     {
         $title = $place->getTitle();
