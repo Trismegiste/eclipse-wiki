@@ -217,6 +217,7 @@ class VertexCrud extends GenericCrud
     }
 
     /**
+     * Show the list of orphan vertices
      */
     #[Route('/digraph/orphan', methods: ['GET'])]
     public function showOrphan(DigraphExplore $explorer): Response
@@ -227,6 +228,7 @@ class VertexCrud extends GenericCrud
     }
 
     /**
+     * Show the list of broken links (or missing pages)
      */
     #[Route('/digraph/broken', methods: ['GET'])]
     public function showBroken(DigraphExplore $explorer): Response

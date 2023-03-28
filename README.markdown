@@ -1,4 +1,4 @@
-# Eclipse Phase TTRPG Live Gamemaster Wiki Manager Application
+# Eclipse Phase TTRPG Live Gamemaster Wiki Manager
 
 ## What 
 It's a webapp for building and running sessions for the tabletop-role-playing game Eclipse Phase.
@@ -7,26 +7,30 @@ The detail of this conversion can be found on a Fandom french mediawiki, since E
 
 ## Who
 This app is intended for the GM. It helps you to create and build new scenario with a limited wikitext language and can stores your images.
-It also contains a minimalistic battlemap manager and a **Websocket** broadcaster view for players which can watch pictures, 
-battlemaps and game handouts on their smartphones (a QR code reader on the smartphone could be useful).
+It also contains a **3D battlemaps** manager and a **Websocket** broadcaster for players, who can watch pictures,
+first person views on battlemaps and game handouts on their smartphones (a QR code reader on the smartphone could be useful).
 
 ## Why
-Though I prefer playing around a table with friends, you lack some fancy features from VTTRPG websites (Roll20 for exemple). 
+Though I prefer playing around a table with friends, I miss some fancy features from VTTRPG websites (Roll20 for exemple). 
 This app is intended to fill this gap : playing around a table and keeping the fancy features of computer. 
 Why not using Roll20 ? Well, first all your players must have an account. Furthermore, Roll20 is slow, ugly, old and 
 totally fails when it comes to improvisation. You cannot create on the fly new character, new battlemaps and so on, the UX is a major failure.
 
-This app comes with NPC name generator, avatar generator, battlemaps generator, Handouts generator, Love letters manager, and most important : 
+This app comes with NPC name generator, avatar generator, 3D battlemaps generator, Handouts generator, Love letters manager, and most important : 
 a NPC profile generator for the 7 in-game social networks. Since your PC in the game can watch thoses profiles in Augmented Reality, the
-GM have to generate a lot of these profiles anytime PCs encountered a new NPC.
+GM have to generate a lot of these profiles anytime PCs encountered a new NPC or simply walk in a space station.
 
 ## How
-With Symfony 5.4, MongoDb 4+ and a mediawiki from Fandom. It uses AlpineJs, PureCSS, SvgJs and many javascript components (frozen in the app, since
-javascript ecosystem is an insane nuclear chaos where BC is unknown concept).
+With Symfony 6.2, MongoDb 4+ and a mediawiki from Fandom. It uses AlpineJs, PureCSS, BabylonJS, Autocomplete and many more javascript components 
+(frozen in the app, since javascript ecosystem is Hell on Earth).
 
 ## Where
 Run this app anywhere with :
 ```bash
 $ docker compose up
 ```
+# Features
+Here are some features of this app :
 
+## Dashboard
+Big icons for tablet
