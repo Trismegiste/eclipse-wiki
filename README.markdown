@@ -33,4 +33,43 @@ $ docker compose up
 Here are some features of this app :
 
 ## Dashboard
-Big icons for tablet
+Big icons for tablet. Keyboard shortcuts (Fn) for laptop. Fully responsive
+![dashboard](/doc/capture-0.jpg)
+## Listing
+The search bar has an autocomplete for quick search. Fully responsive
+![dashboard](/doc/capture-1.jpg)
+## Creation of NPC
+All profiles (backgrounds, factions and morphs) are downloaded from the mediawiki fandom
+![dashboard](/doc/capture-2.jpg)
+## NPC sheet
+You can roll dice for each Trait. Each roll uses https://www.random.org/ for true quantum randomness
+![dashboard](/doc/capture-3.jpg)
+## Picture profile of NPC
+Use of cropper. If you don't have pictures, you can select a random generated avatar
+![dashboard](/doc/capture-4.jpg)
+## Social network profile
+The profile pic is used for generating NPC profile and for token on battlemap. By clicking on the profile, you send it to your player's smartphones through websocket. By clicking on other pictures (on local storage) send them to players too.
+![dashboard](/doc/capture-11.jpg)
+## On-the-fly profile
+For generic NPC, yu can generate a new profile on-the-fly (or create a new NPC) by selecting a random name and a random avatar
+![dashboard](/doc/capture-5.jpg)
+## Random NPC names
+A big selection a random names for your NPC. There are millions. This is a selection according to cultures in Eclipse Phase
+![dashboard](/doc/capture-6.jpg)
+## Procedural battlemap
+Based on cellular growth algorithms (voronoi). You can choose colors and how to populate each colors with NPC
+![dashboard](/doc/capture-9.jpg)
+## Procedural battlemap
+You can add various shape to design your map
+![dashboard](/doc/capture-10.jpg)
+## GM view for procedural battlemaps
+After the creation of a battlemap, you can fly through it. By selecting a tile and pressing spacebar you send the FPS view for players
+![dashboard](/doc/capture-7.jpg)
+## Easy connection
+Each player connected on the same LAN can QR-code to the app for viewing pictures and 3D views
+![dashboard](/doc/capture-12.jpg)
+## The Player view
+It's a first-person-shooter-like panorama (very light, no need for powerfull smartphone). The player can click on a tile to send a ping in the GM view through websocket. Fully responsive.
+![dashboard](/doc/capture-8.jpg)
+
+
