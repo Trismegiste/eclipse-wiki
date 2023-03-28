@@ -26,8 +26,8 @@ class VertexCrud extends GenericCrud
 
     /**
      * Lists all vertex (and subclasses). The page calls the VertexCrud::filter controller with AJAX
-     * @Route("/vertex/list", methods={"GET"})
      */
+    #[Route('/vertex/list', methods: ['GET'])]
     public function list(/* some filters */): Response
     {
         return $this->render('vertex/list.html.twig');
@@ -35,8 +35,8 @@ class VertexCrud extends GenericCrud
 
     /**
      * Showing a vertex vertex by its primary key
-     * @Route("/vertex/show/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/vertex/show/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function show(string $pk): Response
     {
         $vertex = $this->repository->findByPk($pk);
@@ -48,8 +48,8 @@ class VertexCrud extends GenericCrud
 
     /**
      * Showing a vertex by its title. If it does not exist, redirect to creation
-     * @Route("/wiki/{title}", methods={"GET"}, name="app_wiki")
      */
+    #[Route('/wiki/{title}', methods: ['GET'], name: 'app_wiki')]
     public function wikiShow(string $title): Response
     {
         $vertex = $this->repository->findByTitle($title);
@@ -62,8 +62,8 @@ class VertexCrud extends GenericCrud
 
     /**
      * Creates a new vertex
-     * @Route("/vertex/create", methods={"GET","POST"})
      */
+    #[Route('/vertex/create', methods: ['GET', 'POST'])]
     public function create(Request $request): Response
     {
         $fromLink = $request->query->get('title');
@@ -73,8 +73,8 @@ class VertexCrud extends GenericCrud
 
     /**
      * Editing a vertex (simple : title & content)
-     * @Route("/vertex/edit/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/vertex/edit/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function edit(string $pk, Request $request): Response
     {
         return $this->handleEdit(VertexType::class, 'vertex/edit.html.twig', $pk, $request);
@@ -82,8 +82,8 @@ class VertexCrud extends GenericCrud
 
     /**
      * Deleting a vertex
-     * @Route("/vertex/delete/{pk}", methods={"GET","DELETE"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/vertex/delete/{pk}', methods: ['GET', 'DELETE'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function delete(string $pk, Request $request): Response
     {
         $vertex = $this->repository->findByPk($pk);
@@ -106,8 +106,8 @@ class VertexCrud extends GenericCrud
 
     /**
      * Ajax for searching vertices by title
-     * @Route("/vertex/search", methods={"GET"})
      */
+    #[Route('/vertex/search', methods: ['GET'])]
     public function search(Request $request): JsonResponse
     {
         $title = $request->query->get('q', '');
@@ -121,8 +121,8 @@ class VertexCrud extends GenericCrud
 
     /**
      * Show previous vertex from a PK
-     * @Route("/vertex/previous/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/vertex/previous/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function seekPrevious(string $pk): Response
     {
         $vertex = $this->repository->searchPreviousOf($pk);
@@ -135,8 +135,8 @@ class VertexCrud extends GenericCrud
 
     /**
      * Show next vertex from a PK
-     * @Route("/vertex/next/{pk}", methods={"GET"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/vertex/next/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function seekNext(string $pk): Response
     {
         $vertex = $this->repository->searchNextOf($pk);
@@ -149,8 +149,8 @@ class VertexCrud extends GenericCrud
 
     /**
      * Renaming a vertex
-     * @Route("/vertex/rename/{pk}", methods={"GET","PUT"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/vertex/rename/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function rename(string $pk, Request $request): Response
     {
         $vertex = $this->repository->findByPk($pk);
@@ -177,8 +177,8 @@ class VertexCrud extends GenericCrud
 
     /**
      * Ajax for the listing
-     * @Route("/vertex/filter", methods={"GET"})
      */
+    #[Route('/vertex/filter', methods: ['GET'])]
     public function filter(Request $request): Response
     {
         $keyword = $request->query->get('query', '');
@@ -194,8 +194,8 @@ class VertexCrud extends GenericCrud
 
     /**
      * Archiving a vertex
-     * @Route("/vertex/archive/{pk}", methods={"GET","PATCH"}, requirements={"pk"="[\da-f]{24}"})
      */
+    #[Route('/vertex/archive/{pk}', methods: ['GET', 'PATCH'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function archive(string $pk, Request $request): Response
     {
         $vertex = $this->repository->findByPk($pk);
@@ -217,8 +217,8 @@ class VertexCrud extends GenericCrud
     }
 
     /**
-     * @Route("/digraph/orphan", methods={"GET"})
      */
+    #[Route('/digraph/orphan', methods: ['GET'])]
     public function showOrphan(DigraphExplore $explorer): Response
     {
         return $this->render('digraph/orphan.html.twig', ['orphan' => array_map(function ($pk) {
@@ -227,8 +227,8 @@ class VertexCrud extends GenericCrud
     }
 
     /**
-     * @Route("/digraph/broken", methods={"GET"})
      */
+    #[Route('/digraph/broken', methods: ['GET'])]
     public function showBroken(DigraphExplore $explorer): Response
     {
         return $this->render('digraph/broken.html.twig', ['broken' => $explorer->searchForBrokenLink()]);
