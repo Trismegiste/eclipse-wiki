@@ -10,15 +10,15 @@ use App\Entity\Vertex;
 use App\Repository\VertexRepository;
 use LogicException;
 use RuntimeException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
+use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Param converter for Vertex collection
  */
-class VertexConverter implements ParamConverterInterface
+class VertexConverter implements ValueResolverInterface
 {
 
     protected VertexRepository $repository;
@@ -28,25 +28,26 @@ class VertexConverter implements ParamConverterInterface
         $this->repository = $repo;
     }
 
-    public function apply(Request $request, ParamConverter $configuration): bool
+    public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
+        // get the argument type (e.g. Timeline)
+        $argumentType = $argument->getType();
+        if (!$argumentType || !is_subclass_of($argumentType, Vertex::class, true)) {
+            return [];
+        }
+
+        // check if there is a PK in parameters
         $pk = $request->attributes->get('pk');
         if (empty($pk)) {
-            throw new LogicException("Bad config : Attribute 'pk' is missing");
+            throw new LogicException("Bad config : Vertex can be only instantied with an attribute 'pk' in the route");
         }
 
         try {
             $entity = $this->repository->load($pk);
-            $request->attributes->set($configuration->getName(), $entity);
-            return true; // not sure if this is useful
+            return [$entity];
         } catch (RuntimeException $e) {
-            throw new NotFoundHttpException($configuration->getClass() . " '$pk' not found", $e);
+            throw new NotFoundHttpException("$argumentType with the primary key '$pk' is not found", $e);
         }
-    }
-
-    public function supports(ParamConverter $configuration): bool
-    {
-        return is_subclass_of($configuration->getClass(), Vertex::class, true);
     }
 
 }

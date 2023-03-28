@@ -14,7 +14,6 @@
         "endroid/qr-code": "^4.0",
         "knplabs/knp-snappy-bundle": "^1.8",
         "paragi/php-websocket-client": "^1.0",
-        "sensio/framework-extra-bundle": "^6.2",
         "symfony/asset": "^6.2",
         "symfony/console": "^6.2",
         "symfony/dotenv": "^6.2",
