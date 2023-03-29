@@ -85,13 +85,7 @@ services:
         
     App\Service\PlayerCastCache:
         $cacheDir: '%kernel.cache_dir%'
-            
-    # Open AI
-    App\Service\OpenAi:
-        arguments:
-            $secret: '%env(resolve:OPENAI_SECRETKEY)%'
-            $engine: 'davinci'
-            
+
    # FLAT FILE
     app.choicetype.repository:
         class: App\Repository\YamlRepository
