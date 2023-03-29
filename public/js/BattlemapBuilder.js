@@ -448,7 +448,7 @@ class BattlemapBuilder
 
             // pictogram if any
             if (cell.content.pictogram) {
-                this.scene.setPictogramAtCell(k, cell.content.pictogram)
+                this.scene.setPictogramAtCell(k, cell.content.pictogram, cell.content.markerColor)
             }
         })
     }
@@ -525,7 +525,7 @@ class BattlemapBuilder
     }
 
     declarePictoWriter() {
-        this.scene.setPictogramAtCell = (cellIndex, title) => {
+        this.scene.setPictogramAtCell = (cellIndex, title, color) => {
             const cell = this.scene.metadata.grid[cellIndex]
 
             let picto = this.scene.getMeshByName('picto-' + cellIndex)
@@ -554,14 +554,16 @@ class BattlemapBuilder
 
                 // set the material
                 const mat = new BABYLON.StandardMaterial('mat-picto-' + cellIndex, this.scene)
-                mat.emissiveColor = BABYLON.Color3.Green()
+                mat.emissiveColor = BABYLON.Color3.FromHexString(color)
                 mat.opacityTexture = this.pictogram.get(title)
                 mat.disableLighting = true
                 picto.material = mat
                 cell.content.pictogram = title
+                cell.content.markerColor = color
             } else {
                 // else reset
                 cell.content.pictogram = null
+                cell.content.markerColor = null
             }
         }
     }

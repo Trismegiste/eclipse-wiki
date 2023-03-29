@@ -32,6 +32,7 @@ class HexaCell
     public ?\App\Entity\MapToken $npc = null;
     public ?string $legend = null;
     public ?string $pictogram = null;
+    public ?string $markerColor = null;
 
     public function __construct(int $uid, string $template = 'default', bool $growable = true)
     {

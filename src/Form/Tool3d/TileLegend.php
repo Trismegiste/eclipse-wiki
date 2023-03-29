@@ -8,6 +8,7 @@ namespace App\Form\Tool3d;
 
 use App\Form\Type\PictogramType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -29,6 +30,10 @@ class TileLegend extends AbstractType
                 ->add('pictogram', PictogramType::class, [
                     'attr' => ['x-model' => 'cellInfo.pictogram'],
                     'placeholder' => '-----------------',
+                    'required' => false
+                ])
+                ->add('markerColor', ColorType::class, [
+                    'attr' => ['x-model' => 'cellInfo.markerColor'],
                     'required' => false
                 ])
                 ->add('set_legend', SubmitType::class)

@@ -151,7 +151,7 @@
                     setLegend(event) {
                         event.preventDefault()
                         scene.setLegendAtCell(this.cellInfo.cellIndex, this.cellInfo.legend)
-                        scene.setPictogramAtCell(this.cellInfo.cellIndex, this.cellInfo.pictogram)
+                        scene.setPictogramAtCell(this.cellInfo.cellIndex, this.cellInfo.pictogram, this.cellInfo.markerColor)
                     }
 
                 }))
