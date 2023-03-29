@@ -151,9 +151,7 @@
                     setLegend(event) {
                         event.preventDefault()
                         scene.setLegendAtCell(this.cellInfo.cellIndex, this.cellInfo.legend)
-                        console.log(this.cellInfo.pictogram)
-                        // @todo new prototype method for writing pictogram like 'setLegendAtCell' above
-                        scene.metadata.grid[this.cellInfo.cellIndex].content.pictogram = this.cellInfo.pictogram
+                        scene.setPictogramAtCell(this.cellInfo.cellIndex, this.cellInfo.pictogram)
                     }
 
                 }))

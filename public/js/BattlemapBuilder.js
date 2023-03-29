@@ -448,26 +448,9 @@ class BattlemapBuilder
 
             // pictogram if any
             if (cell.content.pictogram) {
-                this.appendPictogram(k, cell.content.pictogram, cell.x, -cell.y)
+                this.scene.setPictogramAtCell(k, cell.content.pictogram)
             }
         })
-    }
-
-    appendPictogram(idx, title, x, z) {
-        if (!this.pictogram.has(title)) {
-            const svg = new BABYLON.Texture("/picto/get?title=" + title, this.scene)
-            this.pictogram.set(title, svg)
-        }
-
-        const picto = BABYLON.MeshBuilder.CreatePlane("picto-" + idx, {width: 0.8, height: 0.8})
-        picto.position = new BABYLON.Vector3(x, 0.011, z)
-        picto.rotation.x = Math.PI / 2
-        const mat = new BABYLON.StandardMaterial('mat-picto-' + idx, this.scene)
-        mat.emissiveColor = BABYLON.Color3.Green()
-        mat.opacityTexture = this.pictogram.get(title)
-        mat.disableLighting = true
-        picto.material = mat
-        picto.isPickable = false
     }
 
     declareNpcToken() {
@@ -520,7 +503,7 @@ class BattlemapBuilder
             }
 
             // @todo check if message is null
-            if (message.length > 0) {
+            if (message && (message.length > 0)) {
                 const legendTxt = new this.TextWriter(message, {
                     anchor: "center",
                     "letter-height": 0.1,
@@ -541,9 +524,52 @@ class BattlemapBuilder
         }
     }
 
+    declarePictoWriter() {
+        this.scene.setPictogramAtCell = (cellIndex, title) => {
+            const cell = this.scene.metadata.grid[cellIndex]
+
+            let picto = this.scene.getMeshByName('picto-' + cellIndex)
+
+            // if there is no title and there is a picto : delete it
+            if (!title && picto) {
+                picto.dispose()
+            }
+
+            // if the mesh for the picto does not exist, create it
+            if (!picto) {
+                picto = BABYLON.MeshBuilder.CreatePlane("picto-" + cellIndex, {width: 0.8, height: 0.8})
+                picto.position = new BABYLON.Vector3(cell.x, 0.011, -cell.y)
+                picto.rotation.x = Math.PI / 2
+                picto.isPickable = false
+            }
+
+            if (title && (title.length > 0)) {
+                // if there is a non-empty title
+
+                // load the texture if non-existing
+                if (!this.pictogram.has(title)) {
+                    const svg = new BABYLON.Texture("/picto/get?title=" + title, this.scene)
+                    this.pictogram.set(title, svg)
+                }
+
+                // set the material
+                const mat = new BABYLON.StandardMaterial('mat-picto-' + cellIndex, this.scene)
+                mat.emissiveColor = BABYLON.Color3.Green()
+                mat.opacityTexture = this.pictogram.get(title)
+                mat.disableLighting = true
+                picto.material = mat
+                cell.content.pictogram = title
+            } else {
+                // else reset
+                cell.content.pictogram = null
+            }
+        }
+    }
+
     create() {
         // build the scene from the model
         this.declareWriter()
+        this.declarePictoWriter()
         this.setCamera()
         this.setLight()
         this.declareGround()
