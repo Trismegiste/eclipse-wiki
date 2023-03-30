@@ -3,9 +3,9 @@
 {% block content %}
     <div x-data="searchEngine">
         <form class="pure-form" x-on:submit="goToFirst">
-            <input type="text" x-model="keyword" id="search" class="pure-input-1 mousetrap"/>
+            <input type="text" x-model="keyword" x-ref="search" class="pure-input-1 mousetrap"/>
         </form>
-        <section class="entity-listing" x-html="await filter(keyword)">
+        <section class="entity-listing" x-html="filteredList">
         </section>
     </div>
 {% endblock %}
@@ -13,23 +13,15 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        async function filter(input) {
-            let response = await fetch('{{ path('app_vertexcrud_filter') }}?query=' + input)
-
-            return await response.text()
-        }
-
-        document.getElementById('search').focus()
-
         document.addEventListener('alpine:init', () => {
             Alpine.data('searchEngine', () => ({
                     keyword: '',
                     init() {
-                        let current = this
-                        Mousetrap.bind('escape', function () {
-                            current.keyword = ''
+                        Mousetrap.bind('escape', () => {
+                            this.keyword = ''
                             return false
                         })
+                        this.$refs.search.focus()
                     },
                     goToFirst(e) {
                         e.preventDefault()
@@ -37,6 +29,17 @@
                         if (elem) {
                             location.href = elem.href
                         }
+                    },
+                    filteredList() {
+                        return fetch('{{ path('app_vertexcrud_filter') }}?query=' + this.keyword)
+                                .then(response => {
+                                    if (response.ok) {
+                                        return response.text()
+                                    } else {
+                                        pushFlash(this.$root, 'error', 'Error in text search')
+                                        return ''
+                                    }
+                                })
                     }
                 }))
         })
