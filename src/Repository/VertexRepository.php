@@ -150,20 +150,26 @@ class VertexRepository extends DefaultRepository
      */
     public function filterBy(string $keyword): IteratorIterator
     {
-        $filter = [];
         if (!empty($keyword)) {
-            $filter = ['$or' => [
-                    ['title' => new Regex(preg_quote($keyword), 'i')],
-                    ['content' => new Regex(preg_quote($keyword), 'i')]
-            ]];
+            $cursor = $this->manager->executeQuery($this->getNamespace(),
+                    new Query(['$text' => ['$search' => $keyword]], [
+                        'projection' => [
+                            'content' => false,
+                            'score' => ['$meta' => "textScore"]
+                        ],
+                        'sort' => [
+                            'score' => ['$meta' => "textScore"]
+                        ]
+                            ])
+            );
+        } else {
+            $cursor = $this->manager->executeQuery($this->getNamespace(), new Query([], [
+                        'sort' => [
+                            'archived' => 1,
+                            'lastModified' => -1
+                        ]
+            ]));
         }
-
-        $cursor = $this->manager->executeQuery($this->getNamespace(), new Query($filter, [
-                    'sort' => [
-                        'archived' => 1,
-                        'lastModified' => -1
-                    ]
-        ]));
 
         return new IteratorIterator($cursor);
     }

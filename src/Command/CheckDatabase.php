@@ -49,6 +49,12 @@ class CheckDatabase extends Command
                     'name' => "nonDuplicateTitle",
                     'key' => ['title' => 1],
                     'unique' => true
+                ],
+                [
+                    'name' => 'FullTextSearch',
+                    'key' => ['title' => 'text', 'content' => 'text'],
+                    'weights' => ['title' => 5],
+                    'default_language' => "french"
                 ]
             ]
         ]);
