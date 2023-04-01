@@ -213,7 +213,7 @@ class NpcGenerator extends AbstractController
             return $this->redirectToRoute('app_npcgenerator_edit', ['pk' => $npc->getPk()]);
         }
 
-        return $this->render('form.html.twig', ['title' => 'IAL', 'form' => $form->createView()]);
+        return $this->render('form.html.twig', ['title' => 'Création IAL', 'form' => $form->createView()]);
     }
 
     /**
@@ -258,7 +258,7 @@ class NpcGenerator extends AbstractController
             return $this->redirectToRoute('app_npcgenerator_edit', ['pk' => $npc->getPk()]);
         }
 
-        return $this->render('form.html.twig', ['title' => 'PNJ libre', 'form' => $form->createView()]);
+        return $this->render('form.html.twig', ['title' => 'Création PNJ libre', 'form' => $form->createView()]);
     }
 
     /**

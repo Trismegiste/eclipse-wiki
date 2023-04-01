@@ -67,7 +67,11 @@ abstract class Vertex implements Root, Archivable
      */
     public function getCategory(): string
     {
-        $fqcn = get_class($this);
+        return static::getCategoryForVertex(get_class($this));
+    }
+
+    static public function getCategoryForVertex(string $fqcn): string
+    {
         $match = [];
         preg_match('#([^\\\\]+)$#', $fqcn, $match);
 

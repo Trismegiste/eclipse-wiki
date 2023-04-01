@@ -236,4 +236,13 @@ class VertexCrud extends GenericCrud
         return $this->render('digraph/broken.html.twig', ['broken' => $explorer->searchForBrokenLink()]);
     }
 
+    /**
+     * Show statistics
+     */
+    #[Route('/digraph/stats', methods: ['GET'])]
+    public function showStats(DigraphExplore $explorer): Response
+    {
+        return $this->render('digraph/stats.html.twig', ['counting' => $explorer->getCounting()]);
+    }
+
 }

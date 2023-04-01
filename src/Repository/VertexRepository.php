@@ -271,4 +271,17 @@ class VertexRepository extends DefaultRepository
         }
     }
 
+    public function countByClass(): \MongoDB\Driver\Cursor
+    {
+        $cursor = $this->manager->executeCommand($this->dbName, new \MongoDB\Driver\Command([
+                    'aggregate' => $this->collectionName,
+                    'pipeline' => [
+                        ['$group' => ['_id' => ['key' => '$__pclass', 'archived' => '$archived'], 'count' => ['$sum' => 1]]]
+                    ],
+                    'cursor' => new \stdClass
+        ]));
+
+        return $cursor;
+    }
+
 }
