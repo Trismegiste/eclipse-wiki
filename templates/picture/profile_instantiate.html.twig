@@ -86,6 +86,11 @@
                 })
             }
         })
+
+        const fileInput = document.getElementById('{{ form.vars.id }}')
+        fileInput.addEventListener('invalid', (event) => {
+            pushFlash(event.target, 'error', 'Choose a picture')
+        })
     </script>        
 {% endblock %}
 
@@ -96,7 +101,7 @@
             {% for name in gender %}
                 <div class="pure-u-1-6 form-widget">
                     <label>
-                        <input type="radio" name="choice_{{ form.vars.id }}" value="{{ name }}"/>
+                        <input type="radio" name="choice_{{ form.vars.id }}" value="{{ name }}" required="required"/>
                         {{ name }}
                     </label>
                 </div>
