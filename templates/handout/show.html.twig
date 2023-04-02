@@ -10,10 +10,12 @@
 {% block content %}
     <h2>Pour {{ vertex.target }}</h2>
     <div class="pure-g">
-        <section class="pure-u-1 pure-u-xl-1-2">
+        <section class="pure-u-1 pure-u-xl-11-24">
             {{ parent() }}  
         </section>
-        <section class="pure-u-1 pure-u-xl-1-2">
+        <section class="pure-u-xl-1-24">
+        </section>
+        <section class="pure-u-1 pure-u-xl-11-24">
             {{ wiki(vertex.gmInfo) }}
         </section>
     </div>
