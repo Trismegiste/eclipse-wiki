@@ -145,19 +145,4 @@ class DigraphExplore
         return $keep;
     }
 
-    public function getCounting(): array
-    {
-        $cursor = $this->repository->countByClass();
-        $stats = [];
-        foreach ($cursor as $entry) {
-            $fqcn = Vertex::getCategoryForVertex($entry->_id->key);
-            if (!key_exists($fqcn, $stats)) {
-                $stats[$fqcn] = ['archived' => 0, 'running' => 0];
-            }
-            $stats[$fqcn][$entry->_id->archived ? 'archived' : 'running'] = $entry->count;
-        }
-
-        return $stats;
-    }
-
 }

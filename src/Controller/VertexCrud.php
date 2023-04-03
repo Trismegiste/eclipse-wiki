@@ -240,9 +240,9 @@ class VertexCrud extends GenericCrud
      * Show statistics
      */
     #[Route('/digraph/stats', methods: ['GET'])]
-    public function showStats(DigraphExplore $explorer): Response
+    public function showStats(): Response
     {
-        return $this->render('digraph/stats.html.twig', ['counting' => $explorer->getCounting()]);
+        return $this->render('digraph/stats.html.twig', ['counting' => $this->repository->countByClass()]);
     }
 
 }

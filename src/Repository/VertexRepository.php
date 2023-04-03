@@ -7,6 +7,7 @@
 namespace App\Repository;
 
 use App\Entity\Ali;
+use App\Entity\Cursor\AggregateCounter;
 use App\Entity\Freeform;
 use App\Entity\Timeline;
 use App\Entity\Transhuman;
@@ -18,6 +19,8 @@ use MongoDB\BSON\Binary;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\Regex;
 use MongoDB\BSON\UTCDateTime;
+use MongoDB\Driver\Command;
+use MongoDB\Driver\Cursor;
 use MongoDB\Driver\Query;
 use RuntimeException;
 use Trismegiste\Strangelove\MongoDb\DefaultRepository;
@@ -271,15 +274,30 @@ class VertexRepository extends DefaultRepository
         }
     }
 
-    public function countByClass(): \MongoDB\Driver\Cursor
+    public function countByClass(): Cursor
     {
-        $cursor = $this->manager->executeCommand($this->dbName, new \MongoDB\Driver\Command([
+        $cursor = $this->manager->executeReadCommand($this->dbName, new Command([
                     'aggregate' => $this->collectionName,
                     'pipeline' => [
-                        ['$group' => ['_id' => ['key' => '$__pclass', 'archived' => '$archived'], 'count' => ['$sum' => 1]]]
+                        // first stage :
+                        [
+                            '$group' => [
+                                // primary key to regroup :
+                                '_id' => ['key' => '$__pclass'],
+                                // count 1 for each
+                                'total' => ['$sum' => 1],
+                                // count 1 or 0 according to field 'archived'
+                                'archived' => [
+                                    '$sum' => [
+                                        '$cond' => ['if' => '$archived', 'then' => 1, 'else' => 0]
+                                    ]
+                                ]
+                            ]
+                        ]
                     ],
-                    'cursor' => new \stdClass
+                    'cursor' => ['batchSize' => 0]
         ]));
+        $cursor->setTypeMap(['root' => AggregateCounter::class]);
 
         return $cursor;
     }

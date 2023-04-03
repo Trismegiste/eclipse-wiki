@@ -12,15 +12,15 @@
         <thead>
             <tr>
                 <th>Type vertex</th>
-                <th>Actif</th>
+                <th>Nombre</th>
                 <th>Archivé</th>
             </tr>
         </thead>
         <tbody>
-            {% for type, entry in counting %}
+            {% for entry in counting %}
                 <tr>
-                    <td>{{ type|capitalize }}</td>
-                    <td>{{ entry.running }}</td>
+                    <td>{{ entry.category|capitalize }}</td>
+                    <td>{{ entry.total }}</td>
                     <td>{{ entry.archived }}</td>
                 </tr>
             {% endfor %}
