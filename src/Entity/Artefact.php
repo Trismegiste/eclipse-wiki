@@ -13,6 +13,7 @@ class Artefact extends Vertex
 {
 
     protected Vertex $owner;
+    protected string $encumbrance;
 
     public function setOwner(Character|Place $container): void
     {
