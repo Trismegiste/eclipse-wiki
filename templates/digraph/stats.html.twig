@@ -17,14 +17,22 @@
             </tr>
         </thead>
         <tbody>
+            {% set grand_total = 0 %}
             {% for entry in counting %}
                 <tr>
                     <td>{{ entry.category|capitalize }}</td>
                     <td>{{ entry.total }}</td>
                     <td>{{ entry.archived }}</td>
                 </tr>
+                {% set grand_total = grand_total + entry.total %}
             {% endfor %}
         </tbody>
+        <tfoot>
+            <tr>
+                <th>Total</th>
+                <th>{{ grand_total }}</th>
+            </tr>
+        </tfoot>
     </table>
 {% endblock %}
 

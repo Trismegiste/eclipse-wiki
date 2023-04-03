@@ -274,25 +274,34 @@ class VertexRepository extends DefaultRepository
         }
     }
 
+    /**
+     * Returns a count, archived or not for each Vertex subclass
+     * @return Cursor a cursor that iterates on AggregateCounter objects
+     */
     public function countByClass(): Cursor
     {
         $cursor = $this->manager->executeReadCommand($this->dbName, new Command([
                     'aggregate' => $this->collectionName,
+                    // the pipeline is an array of stages
                     'pipeline' => [
-                        // first stage :
+                        // first stage, grouping and counting :
                         [
                             '$group' => [
-                                // primary key to regroup :
+                                // primary key to group :
                                 '_id' => ['key' => '$__pclass'],
-                                // count 1 for each
+                                // adds 1 for each document
                                 'total' => ['$sum' => 1],
-                                // count 1 or 0 according to field 'archived'
+                                // adds 1 or 0 according to field 'archived'
                                 'archived' => [
                                     '$sum' => [
                                         '$cond' => ['if' => '$archived', 'then' => 1, 'else' => 0]
                                     ]
                                 ]
                             ]
+                        ],
+                        // second stage, sorting :
+                        [
+                            '$sort' => ['total' => -1]
                         ]
                     ],
                     'cursor' => ['batchSize' => 0]
