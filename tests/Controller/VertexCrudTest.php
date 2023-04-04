@@ -152,5 +152,10 @@ class VertexCrudTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    public function testShowStats()
+    {
+        $this->client->request('GET', '/digraph/stats');
+        $this->assertResponseIsSuccessful();
+    }
 
 }

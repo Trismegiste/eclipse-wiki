@@ -153,6 +153,23 @@ class VertexRepositoryTest extends KernelTestCase
         $this->assertCount(4, $res);
         $this->assertArrayHasKey('Antagonist', $res);
         $this->assertArrayHasKey('Fight', $res);
+
+        return $obj;
+    }
+
+    /** @depends testFriendsOfFriends */
+    public function testStatistics(Scene $scene)
+    {
+        $scene->setArchived(true);
+        $this->sut->save($scene);
+        $res = $this->sut->countByClass();
+        $stat = iterator_to_array($res);
+        foreach($stat as $row) {
+            if ($row->fqcn === Scene::class) {
+                $this->assertEquals(6, $row->total);
+                $this->assertEquals(1, $row->archived);
+            }
+        }
     }
 
 }
