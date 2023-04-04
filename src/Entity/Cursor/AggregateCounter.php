@@ -18,13 +18,13 @@ class AggregateCounter implements Persistable
 
     use PersistableImpl;
 
-    public array $_id;
+    public string $fqcn;
     public int $total;
     public int $archived;
 
     public function getCategory(): string
     {
-        return Vertex::getCategoryForVertex($this->_id['key']);
+        return Vertex::getCategoryForVertex($this->fqcn);
     }
 
 }

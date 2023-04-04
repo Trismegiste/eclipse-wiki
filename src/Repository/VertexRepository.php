@@ -299,7 +299,11 @@ class VertexRepository extends DefaultRepository
                                 ]
                             ]
                         ],
-                        // second stage, sorting :
+                        // second stage, projecting for removing noise
+                        [
+                            '$project' => ['fqcn' => '$_id.key', 'total' => true, 'archived' => true, '_id' => false]
+                        ],
+                        // third stage, sorting :
                         [
                             '$sort' => ['total' => -1]
                         ]
