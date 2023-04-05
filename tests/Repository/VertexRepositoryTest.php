@@ -164,12 +164,19 @@ class VertexRepositoryTest extends KernelTestCase
         $this->sut->save($scene);
         $res = $this->sut->countByClass();
         $stat = iterator_to_array($res);
-        foreach($stat as $row) {
+        foreach ($stat as $row) {
             if ($row->fqcn === Scene::class) {
                 $this->assertEquals(6, $row->total);
                 $this->assertEquals(1, $row->archived);
             }
         }
+    }
+
+    public function testQueryDigraph()
+    {
+        $iter = $this->sut->dumpAllEdges();
+        $edges = iterator_to_array($iter);
+        $this->assertCount(4, $edges);
     }
 
 }

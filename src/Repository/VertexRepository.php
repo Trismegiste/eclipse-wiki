@@ -315,4 +315,29 @@ class VertexRepository extends DefaultRepository
         return $cursor;
     }
 
+    public function dumpAllEdges(): Cursor
+    {
+        $cursor = $this->manager->executeReadCommand($this->dbName, new Command([
+                    'aggregate' => $this->collectionName,
+                    // the pipeline is an array of stages
+                    'pipeline' => [
+                        // extract all links and add the array
+                        ['$addFields' => ['returnObject' => ['$regexFindAll' => ['input' => '$content', 'regex' => new Regex('\[\[([^\]\|]+)')]]]],
+                        // remove noise
+                        ['$project' => ['title' => true, 'returnObject' => true]],
+                        // unwind on matched link
+                        ['$unwind' => '$returnObject'],
+                        // project on captures
+                        ['$project' => ['title' => true, 'outbound' => '$returnObject.captures']],
+                        // unwind the only capture
+                        ['$unwind' => '$outbound'],
+                        // skip external links (namespaced ou file)
+                        ['$match' => ['$nor' => [['outbound' => new Regex(':')]]]]
+                    ],
+                    'cursor' => ['batchSize' => 0]
+        ]));
+
+        return $cursor;
+    }
+
 }
