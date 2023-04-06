@@ -315,7 +315,11 @@ class VertexRepository extends DefaultRepository
         return $cursor;
     }
 
-    public function dumpAllEdges(): Cursor
+    /**
+     * Gets all links in all vertices (existing or not)
+     * @return Cursor
+     */
+    public function dumpAllInternalLinks(): Cursor
     {
         $cursor = $this->manager->executeReadCommand($this->dbName, new Command([
                     'aggregate' => $this->collectionName,
@@ -325,19 +329,85 @@ class VertexRepository extends DefaultRepository
                         ['$addFields' => ['returnObject' => ['$regexFindAll' => ['input' => '$content', 'regex' => new Regex('\[\[([^\]\|]+)')]]]],
                         // remove noise
                         ['$project' => ['title' => true, 'returnObject' => true]],
-                        // unwind on matched link
+                        // unwind for each link in content
                         ['$unwind' => '$returnObject'],
-                        // project on captures
+                        // remove noise : keeping only captures list
                         ['$project' => ['title' => true, 'outbound' => '$returnObject.captures']],
-                        // unwind the only capture
+                        // unwind the only capture (there is only one capture parenthesis per Regex but the return value is always an array)
                         ['$unwind' => '$outbound'],
-                        // skip external links (namespaced ou file)
-                        ['$match' => ['$nor' => [['outbound' => new Regex(':')]]]]
+                        // skip external links (namespaced ou file, containing a colon)
+                        ['$match' => ['$nor' => [['outbound' => new Regex(':')]]]] // is there a better way to do this ?
                     ],
                     'cursor' => ['batchSize' => 0]
         ]));
 
         return $cursor;
+    }
+
+    /**
+     * Calculates the adjacency matrix for the current digraph stored in vertices collection
+     * @return array
+     */
+    public function getAdjacencyMatrix(): array
+    {
+        // census of vertices
+        $cursor = $this->manager->executeQuery($this->getNamespace(), new Query([], ['projection' => ['_id' => true]]));
+        $vertexPk = [];
+        foreach ($cursor as $vertex) {
+            $vertexPk[(string) $vertex->_id] = false;
+        }
+
+        // init matrix
+        $matrix = [];
+        foreach ($vertexPk as $pk => $dummy) {
+            $matrix[$pk] = $vertexPk;
+        }
+
+        /*
+          db.vertex.aggregate([
+          {$addFields: {returnObject: {$regexFindAll: {input:'$content', regex: /\[\[([^\]\|]+)/}}}},
+          {$unwind: '$returnObject'},
+          {$unwind: '$returnObject.captures'},
+          {$lookup: {from: 'vertex', as: 'internalLink', let: {searchTitle: '$returnObject.captures'}, pipeline: [ {$match: {$expr: {$eq: [0, {$strcasecmp: ['$$searchTitle', '$title' ]}] }}}] }},
+          {$project: {title: true, linkLabel: '$returnObject.captures', outboundVertexId: '$internalLink._id', outboundVertexTitle: '$internalLink.title' }},
+          {$unwind: '$outboundVertexId'},
+          {$unwind:'$outboundVertexTitle'} ])
+         */
+        $cursor = $this->manager->executeReadCommand($this->dbName, new Command([
+                    'aggregate' => $this->collectionName,
+                    'cursor' => ['batchSize' => 0],
+                    // the pipeline is an array of stages
+                    'pipeline' => [
+                        // extract all links and add the array
+                        ['$addFields' => ['returnObject' => ['$regexFindAll' => ['input' => '$content', 'regex' => new Regex('\[\[([^\]\|]+)')]]]],
+                        // unwind on all links in the content
+                        ['$unwind' => '$returnObject'],
+                        // unwind on all captures in one link (only one)
+                        ['$unwind' => '$returnObject.captures'],
+                        // left join in the same collection
+                        [
+                            '$lookup' => [
+                                'from' => $this->collectionName,
+                                'as' => 'internalLink',
+                                'let' => ['searchTitle' => '$returnObject.captures'], // this is alias
+                                'pipeline' => [
+                                    // match on title, case insensitive
+                                    ['$match' => ['$expr' => ['$eq' => [0, ['$strcasecmp' => ['$$searchTitle', '$title']]]]]]
+                                ]
+                            ]
+                        ],
+                        // remove noise
+                        ['$project' => ['title' => true, 'linkLabel' => '$returnObject.captures', 'outboundVertexId' => '$internalLink._id']],
+                        // unwind on the id found
+                        ['$unwind' => '$outboundVertexId']
+                    ]
+        ]));
+
+        foreach ($cursor as $edge) {
+            $matrix[(string) $edge->_id][(string) $edge->outboundVertexId] = true;
+        }
+
+        return $matrix;
     }
 
 }

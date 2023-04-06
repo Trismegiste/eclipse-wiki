@@ -172,11 +172,28 @@ class VertexRepositoryTest extends KernelTestCase
         }
     }
 
-    public function testQueryDigraph()
+    public function testInternalsLinks()
     {
-        $iter = $this->sut->dumpAllEdges();
+        $iter = $this->sut->dumpAllInternalLinks();
         $edges = iterator_to_array($iter);
         $this->assertCount(4, $edges);
+    }
+
+    public function testAdjacencyMatrix()
+    {
+        $matrix = $this->sut->getAdjacencyMatrix();
+        $this->assertCount(9, $matrix);
+
+        $edgeCount = 0;
+        foreach ($matrix as $row) {
+            foreach ($row as $cnx) {
+                if ($cnx) {
+                    $edgeCount++;
+                }
+            }
+        }
+
+        $this->assertEquals(4, $edgeCount);
     }
 
 }

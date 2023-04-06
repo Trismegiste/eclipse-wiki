@@ -93,35 +93,11 @@ class DigraphExplore
 
     /**
      * Calculates the adjacency matrix for the current digraph stored in vertices collection
-     * WARNING : highly database-intensive
      * @return array
      */
     public function getAdjacencyMatrix(): array
     {
-        // census of vertices
-        $vertexPk = [];
-        $vertexTitle = [];
-        foreach ($this->repository->search() as $vertex) {
-            $vertexPk[(string) $vertex->getPk()] = false;
-            $vertexTitle[$vertex->getTitle()] = (string) $vertex->getPk();
-        }
-
-        // init matrix
-        $matrix = [];
-        foreach ($vertexPk as $pk => $dummy) {
-            $matrix[$pk] = $vertexPk;
-        }
-
-        // fill matrix with links
-        foreach ($this->repository->search() as $target) {
-            $sourceTitle = $this->repository->searchByBacklinks($target->getTitle());
-            foreach ($sourceTitle as $source) {
-                $sourcePk = $vertexTitle[$source];
-                $matrix[$sourcePk][(string) $target->getPk()] = true;
-            }
-        }
-
-        return $matrix;
+        return $this->repository->getAdjacencyMatrix();
     }
 
     /**
