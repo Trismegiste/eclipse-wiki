@@ -4,14 +4,15 @@
  * eclipse-wiki
  */
 
-use App\Entity\Place;
-use App\Repository\VertexRepository;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Entity\Background;
 use App\Entity\Faction;
 use App\Entity\Morph;
+use App\Entity\Place;
+use App\Repository\CharacterFactory;
+use App\Repository\VertexRepository;
+use App\Service\Storage;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class VoronoiCrudTest extends WebTestCase
 {
@@ -118,20 +119,28 @@ class VoronoiCrudTest extends WebTestCase
     public function testPopulate(string $pk)
     {
         // fixtures
-        $fac = static::getContainer()->get(\App\Repository\CharacterFactory::class);
+        $fac = static::getContainer()->get(CharacterFactory::class);
         $npc = $fac->create('Wizard', new Background('back'), new Faction('fact'));
         $npc->setMorph(new Morph('morph'));
         $npc->tokenPic = 'Wizard-token.png';
         $npc->surnameLang = 'english';
         $this->repository->save($npc);
 
+        // creates a token for the NPC
+        /** @var Storage $storage */
+        $storage = static::getContainer()->get(Storage::class);
+        $tokenPic = join_paths($storage->getRootDir(), $npc->tokenPic);
+        $tokenGd = imagecreatetruecolor(Storage::tokenSize, Storage::tokenSize);
+        imagepng($tokenGd, $tokenPic);
+
+        // post the form to populate the battlemap
         $crawler = $this->client->request('GET', "/voronoi/populate/$pk");
         $this->assertResponseIsSuccessful();
         $form = $crawler->selectButton('form_populate')->form();
         $form->setValues(['form[voronoiParam][tilePopulation]' => [
                 'cluster-sleep' => [
                     'npc' => 'Wizard',
-                    'tilePerNpc' => 6
+                    'tilePerNpc' => 4
                 ]
         ]]);
         $this->client->submit($form);
@@ -169,7 +178,7 @@ class VoronoiCrudTest extends WebTestCase
         $this->assertResponseRedirects();
         $this->client->followRedirect();
         $this->assertResponseIsSuccessful();
-	$this->assertEquals('app_profilepicture_template', $this->client->getRequest()->get('_route'));
+        $this->assertEquals('app_profilepicture_template', $this->client->getRequest()->get('_route'));
     }
 
 }
