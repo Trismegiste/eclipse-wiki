@@ -44,6 +44,7 @@ class FirstPerson extends AbstractController
     }
 
     /**
+     * Runs and edits the map in the GM view
      */
     #[Route('/fps/edit/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function edit(Place $place): Response
@@ -69,6 +70,7 @@ class FirstPerson extends AbstractController
     }
 
     /**
+     * Saves the battlemap into JSON
      */
     #[Route('/fps/export/{pk}', methods: ['PATCH'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function export(Place $place, Request $request): JsonResponse
@@ -86,6 +88,8 @@ class FirstPerson extends AbstractController
     }
 
     /**
+     * Gets the battlemap for a Place
+     * If it already exists, it sends back, or it generates it with voronoi algorithm
      */
     #[Route('/fps/scene/{pk}.{_format}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}', '_format' => 'battlemap'])]
     public function babylon(Place $place, Storage $storage): Response
@@ -106,6 +110,7 @@ class FirstPerson extends AbstractController
     }
 
     /**
+     * Broadcast the cubemap view by receiving the 6 camera pictures
      */
     #[Route('/fps/broadcast', methods: ['POST'])]
     public function broadcast(Request $request): JsonResponse

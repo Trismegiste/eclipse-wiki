@@ -530,21 +530,16 @@ class BattlemapBuilder
 
             let picto = this.scene.getMeshByName('picto-' + cellIndex)
 
-            // if there is no title and there is a picto : delete it
-            if (!title && picto) {
-                picto.dispose()
-            }
-
-            // if the mesh for the picto does not exist, create it
-            if (!picto) {
-                picto = BABYLON.MeshBuilder.CreatePlane("picto-" + cellIndex, {width: 0.8, height: 0.8})
-                picto.position = new BABYLON.Vector3(cell.x, 0.011, -cell.y)
-                picto.rotation.x = Math.PI / 2
-                picto.isPickable = false
-            }
-
+            // if the new picto title is not empty
             if (title && (title.length > 0)) {
-                // if there is a non-empty title
+
+                // if the mesh for the picto does not exist, create it
+                if (!picto) {
+                    picto = BABYLON.MeshBuilder.CreatePlane("picto-" + cellIndex, {width: 0.8, height: 0.8})
+                    picto.position = new BABYLON.Vector3(cell.x, 0.011, -cell.y)
+                    picto.rotation.x = Math.PI / 2
+                    picto.isPickable = false
+                }
 
                 // load the texture if non-existing
                 if (!this.pictogram.has(title)) {
@@ -558,10 +553,15 @@ class BattlemapBuilder
                 mat.opacityTexture = this.pictogram.get(title)
                 mat.disableLighting = true
                 picto.material = mat
+                // model
                 cell.content.pictogram = title
                 cell.content.markerColor = color
             } else {
                 // else reset
+                if (picto) {
+                    picto.dispose()
+                }
+                // model
                 cell.content.pictogram = null
                 cell.content.markerColor = null
             }
