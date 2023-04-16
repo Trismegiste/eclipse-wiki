@@ -151,7 +151,12 @@
                     setLegend(event) {
                         event.preventDefault()
                         scene.setLegendAtCell(this.cellInfo.cellIndex, this.cellInfo.legend)
-                        scene.setPictogramAtCell(this.cellInfo.cellIndex, this.cellInfo.pictogram, this.cellInfo.markerColor)
+
+                        let formColor = this.cellInfo.markerColor
+                        if (formColor === null) {
+                            formColor = '#000000'
+                        }
+                        scene.setPictogramAtCell(this.cellInfo.cellIndex, this.cellInfo.pictogram, formColor)
                     }
 
                 }))
