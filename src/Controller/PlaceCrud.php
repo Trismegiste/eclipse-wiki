@@ -95,4 +95,27 @@ class PlaceCrud extends GenericCrud
         return $this->render('place/create.html.twig', ['form' => $form->createView()]);
     }
 
+    public function connectionToPlace(Place $place): Response
+    {
+        $pk = (string) $place->getPk();
+        $matrix = $this->repository->getAdjacencyMatrix();
+        $edges = [];
+
+        foreach ($matrix[$pk] as $target => $flag) {
+            if ($flag) {
+                $edges[] = new \MongoDB\BSON\ObjectId($target);
+            }
+        }
+
+        foreach ($matrix as $source => $row) {
+            if ($row[$pk]) {
+                $edges[] = new \MongoDB\BSON\ObjectId($source);
+            }
+        }
+
+        $iter = $this->repository->findByClass(Place::class, ['_id' => ['$in' => $edges]]);
+
+        return $this->render('fragment/place_connect.html.twig', ['connection' => $iter]);
+    }
+
 }

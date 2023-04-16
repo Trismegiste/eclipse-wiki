@@ -1,0 +1,10 @@
+<ul>
+    {% for vertex in connection %}
+        <li>
+            <a href="{{ path('app_vertexcrud_show', {pk: vertex.pk}) }}">
+                <i class="icon-place"></i>
+                {{ vertex.title }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>        

@@ -44,6 +44,9 @@
             <div class="conditions">
                 <i class="icon-temperature"></i>{{ vertex.temperature }}
             </div>
+            <div class="place-connections">
+                {{ render(controller('App\\Controller\\PlaceCrud::connectionToPlace', {place: vertex})) }}
+            </div>
             {% if vertex.battlemap3d is not empty %}
                 <div class="pure-g">
                     <div class="pure-u-1">
@@ -73,6 +76,12 @@
         }
         aside img {
             margin: auto;
+        }
+        aside .place-connections ul {
+            list-style-type: none;
+            line-height: 160%;
+            background-color: #eee;
+            padding: 1em;
         }
     </style>
 {% endblock %}
