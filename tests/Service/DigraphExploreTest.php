@@ -175,4 +175,18 @@ class DigraphExploreTest extends KernelTestCase
         $this->assertEquals(['Orphan' => true], $found['ThisVertexDoesNotExist']);
     }
 
+    public function testConnectedPlace()
+    {
+        $level1 = new App\Entity\Place('level1');
+        $level1->setContent('[[level2]]');
+        $level2 = new App\Entity\Place('level2');
+        $level2->setContent('[[level3]]');
+        $level3 = new App\Entity\Place('level3');
+        $this->repository->save([$level1, $level2, $level3]);
+
+        $this->assertCount(1, $this->sut->searchForConnectedPlace($level1));
+        $this->assertCount(2, $this->sut->searchForConnectedPlace($level2));
+        $this->assertCount(1, $this->sut->searchForConnectedPlace($level3));
+    }
+
 }

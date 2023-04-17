@@ -6,11 +6,13 @@
 
 namespace App\Service;
 
+use App\Entity\Place;
 use App\Entity\Timeline;
-use App\Entity\Vertex;
 use App\Repository\VertexRepository;
 use Collator;
 use DateInterval;
+use IteratorIterator;
+use MongoDB\BSON\ObjectId;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Trismegiste\Strangelove\MongoDb\Repository;
@@ -119,6 +121,32 @@ class DigraphExplore
         ksort($keep);
 
         return $keep;
+    }
+
+    /**
+     * Search of connected places (inbound/outbound) for a given Place
+     * @param Place $place
+     * @return IteratorIterator
+     */
+    public function searchForConnectedPlace(Place $place): IteratorIterator
+    {
+        $pk = (string) $place->getPk();
+        $matrix = $this->repository->getAdjacencyMatrix();
+        $edges = [];
+
+        foreach ($matrix[$pk] as $target => $flag) {
+            if ($flag) {
+                $edges[] = new ObjectId($target);
+            }
+        }
+
+        foreach ($matrix as $source => $row) {
+            if ($row[$pk]) {
+                $edges[] = new ObjectId($source);
+            }
+        }
+
+        return $this->repository->findByClass(Place::class, ['_id' => ['$in' => $edges]]);
     }
 
 }

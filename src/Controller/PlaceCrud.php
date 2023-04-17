@@ -10,6 +10,7 @@ use App\Entity\Place;
 use App\Entity\Transhuman;
 use App\Entity\Vertex;
 use App\Form\PlaceType;
+use App\Service\DigraphExplore;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -95,27 +96,9 @@ class PlaceCrud extends GenericCrud
         return $this->render('place/create.html.twig', ['form' => $form->createView()]);
     }
 
-    public function connectionToPlace(Place $place): Response
+    public function connectionToPlace(Place $place, DigraphExplore $digraph): Response
     {
-        $pk = (string) $place->getPk();
-        $matrix = $this->repository->getAdjacencyMatrix();
-        $edges = [];
-
-        foreach ($matrix[$pk] as $target => $flag) {
-            if ($flag) {
-                $edges[] = new \MongoDB\BSON\ObjectId($target);
-            }
-        }
-
-        foreach ($matrix as $source => $row) {
-            if ($row[$pk]) {
-                $edges[] = new \MongoDB\BSON\ObjectId($source);
-            }
-        }
-
-        $iter = $this->repository->findByClass(Place::class, ['_id' => ['$in' => $edges]]);
-
-        return $this->render('fragment/place_connect.html.twig', ['connection' => $iter]);
+        return $this->render('fragment/place_connect.html.twig', ['connection' => $digraph->searchForConnectedPlace($place)]);
     }
 
 }
