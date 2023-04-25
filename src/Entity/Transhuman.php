@@ -12,8 +12,6 @@ namespace App\Entity;
 class Transhuman extends Character
 {
 
-    const avatarSection = '==Avatar==';
-
     protected Background $background;
     protected Faction $faction;
     public ?string $surnameLang = null;
@@ -39,21 +37,6 @@ class Transhuman extends Character
     public function getDescription(): string
     {
         return $this->background->title . ' - ' . $this->faction->title;
-    }
-
-    public function hasAvatarSection(): bool
-    {
-        if (is_null($this->content)) {
-            return false;
-        }
-
-        return false !== strpos($this->content, self::avatarSection);
-    }
-
-    public function appendAvatarSection(string $filename): void
-    {
-        $append = "\n" . self::avatarSection . "\n[[file:$filename]]\n";
-        $this->content .= $append;
     }
 
     public function getDefaultHashtag(): string

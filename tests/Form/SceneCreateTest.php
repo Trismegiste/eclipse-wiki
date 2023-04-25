@@ -1,5 +1,11 @@
 <?php
 
+use App\Entity\Background;
+use App\Entity\Faction;
+use App\Entity\Place;
+use App\Entity\Scene;
+use App\Entity\Timeline;
+use App\Entity\Transhuman;
 use App\Form\SceneCreate;
 use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -22,6 +28,12 @@ class SceneCreateTest extends KernelTestCase
         $repo = static::getContainer()->get(VertexRepository::class);
         $repo->delete(iterator_to_array($repo->search()));
         $this->assertCount(0, iterator_to_array($repo->search()));
+        $info = [
+            new Place('Earth'),
+            new Transhuman('Kirk', new Background('Orphan'), new Faction('Officer')),
+            new Timeline('TOS')
+        ];
+        $repo->save($info);
     }
 
     public function testSubmitOk()
@@ -34,7 +46,7 @@ class SceneCreateTest extends KernelTestCase
         $this->assertTrue($this->sut->isSynchronized());
         $this->assertTrue($this->sut->isValid(), $this->sut->getErrors(true, true));
         $scene = $this->sut->getData();
-        $this->assertInstanceOf(App\Entity\Scene::class, $scene);
+        $this->assertInstanceOf(Scene::class, $scene);
         $this->assertEquals('In The Pale Moonlight', $scene->getTitle());
         $this->assertStringContainsString('[[Deep Space 9]]', $scene->getContent());
         $this->assertStringContainsString('* [[Sisko]]', $scene->getContent());
