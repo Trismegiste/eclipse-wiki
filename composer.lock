@@ -6112,16 +6112,16 @@
         },
         {
             "name": "trismegiste/wikitext",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Trismegiste/wikitext.git",
-                "reference": "41aa148683bd0906bd6115aa9f2107a2a01e0c10"
+                "reference": "dba72199b5d96907dc6251d565dc8d8532f8471c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Trismegiste/wikitext/zipball/41aa148683bd0906bd6115aa9f2107a2a01e0c10",
-                "reference": "41aa148683bd0906bd6115aa9f2107a2a01e0c10",
+                "url": "https://api.github.com/repos/Trismegiste/wikitext/zipball/dba72199b5d96907dc6251d565dc8d8532f8471c",
+                "reference": "dba72199b5d96907dc6251d565dc8d8532f8471c",
                 "shasum": ""
             },
             "require-dev": {
@@ -6152,9 +6152,9 @@
             ],
             "description": "PHP wikitext parser",
             "support": {
-                "source": "https://github.com/Trismegiste/wikitext/tree/1.0.1"
+                "source": "https://github.com/Trismegiste/wikitext/tree/1.0.2"
             },
-            "time": "2022-06-03T12:27:12+00:00"
+            "time": "2023-04-26T09:15:03+00:00"
         },
         {
             "name": "twig/extra-bundle",

@@ -30,7 +30,7 @@ class LinkRender extends HtmlRenderer
     {
         $picture = $this->routing->generate('get_picture', ['title' => $info['url']]);
         $info['thumb'] = $picture;
-        $info['url'] = $this->routing->generate('app_picture_push', ['title' =>  $info['url']]);
+        $info['url'] = $this->routing->generate('app_picture_push', ['title' => $info['url']]);
         $info['thumbnail'] = true;
         $info['caption'] = false;
         $info['class'] = 'pushable';
@@ -51,6 +51,15 @@ class LinkRender extends HtmlRenderer
     protected function documentExists(string $title): bool
     {
         return (bool) $this->repository->findByTitle($title);
+    }
+
+    public function getTemplateMarkup($template)
+    {
+        if ($template === 'task') {
+            return '<input type="checkbox" class="task-update" {{{2}}}/><label class="task-title">' . "{{{1}}}</label>";
+        }
+
+        return parent::getTemplateMarkup($template);
     }
 
 }

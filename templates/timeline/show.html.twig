@@ -21,3 +21,16 @@
 {% block info %}
     <a href="{{ path('app_timelinecrud_pin', {pk: vertex.pk}) }}" class="pure-button"><i class="icon-pin"></i>Épingler ce scenario</a>
 {% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        input[type=checkbox].task-update {
+            margin-right: 0.5em;
+        }
+
+        input[type=checkbox].task-update:checked + label.task-title {
+            text-decoration: line-through;
+        }
+    </style>
+{% endblock %}
