@@ -22,6 +22,7 @@ class MorphProvider extends CachedProvider
 
                     $content = $this->wiki->getPageByName($key);
                     $doc = new DOMDocument("1.0", "utf-8");
+                    libxml_use_internal_errors(true); // because other xml/svg namespace warning
                     $doc->loadXML($content);
 
                     $xpath = new \DOMXpath($doc);
@@ -54,6 +55,7 @@ class MorphProvider extends CachedProvider
                     $item->expiresAfter(\DateInterval::createFromDateString('1 day'));
 
                     $doc = new DOMDocument("1.0", "utf-8");
+                    libxml_use_internal_errors(true); // because other xml/svg namespace warning
                     $content = $this->wiki->getPageByName('Type de Morphe');
                     $doc->loadXML(strip_tags($content, '<div><ul><li><a>'));
                     $xpath = new \DOMXpath($doc);
