@@ -38,7 +38,7 @@ class TraitProvider
             return $this->wiki->searchPageFromCategory(self::skillCategory, 50);
         });
 
-        usort($skills, function($a, $b) {
+        usort($skills, function ($a, $b) {
             return strcmp(iconv('UTF-8', 'ASCII//TRANSLIT', $a->title), iconv('UTF-8', 'ASCII//TRANSLIT', $b->title));
         });
 
@@ -53,21 +53,23 @@ class TraitProvider
     public function findAttributes(): array
     {
         return $this->cache->get('attribute_list', function (ItemInterface $item) {
-                $item->expiresAfter(DateInterval::createFromDateString('1 day'));
+                    $item->expiresAfter(DateInterval::createFromDateString('1 day'));
 
-                $content = $this->wiki->getPageByName(self::attributesPage);
-                $doc = new \DOMDocument("1.0", "utf-8");
-                $doc->loadXML($content);
-                $xpath = new \DOMXpath($doc);
-                $elements = $xpath->query("//tr/td[1]");
+                    $content = $this->wiki->getPageByName(self::attributesPage);
+                    $doc = new \DOMDocument("1.0", "utf-8");
+                    libxml_use_internal_errors(true); // because other xml/svg namespace warning
 
-                for ($k = 0; $k < 5; $k++) {
-                    $name = trim($elements->item($k)->textContent);
-                    $listing[$name] = $name;
-                }
+                    $doc->loadXML($content);
+                    $xpath = new \DOMXpath($doc);
+                    $elements = $xpath->query("//tr/td[1]");
 
-                return $listing;
-            });
+                    for ($k = 0; $k < 5; $k++) {
+                        $name = trim($elements->item($k)->textContent);
+                        $listing[$name] = $name;
+                    }
+
+                    return $listing;
+                });
     }
 
     public function findSocialNetworks(): array

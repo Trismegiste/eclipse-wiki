@@ -38,7 +38,7 @@ class TimelineCreateTest extends KernelTestCase
         $this->assertEquals('Scénario', $data->getTitle());
         $this->assertStringContainsString('Résumé', $data->getContent());
         $this->assertStringContainsString('==Timeline==', $data->getContent());
-        $this->assertStringContainsString('* Scène1', $data->getContent());
+        $this->assertStringContainsString('* {{task|Scène1', $data->getContent());
     }
 
 }
