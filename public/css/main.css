@@ -101,29 +101,13 @@ h2 {
     line-height: 150%;
 }
 
-/*
-.parsed-wikitext ul, .parsed-wikitext h2 {
-    column-span: all;
+.parsed-wikitext tr:nth-child(even) {
+    background-color: #f0f0f0;
 }
 
-.parsed-wikitext h2, .dividing-title {
-    border-bottom: 1px black solid;
+.parsed-wikitext td {
+    padding: 0.3em 0.6em;
 }
-
-.parsed-wikitext {
-    column-width: 22em;
-    column-gap: 3em;
-    orphans: 3;  // NOT SUPPORTED in Firefox
-}
-
-.parsed-wikitext > :first-child {
-    margin-top: 0;
-}
-
-.parsed-wikitext > h2 + p, .parsed-wikitext > h2 + h3 {
-    margin-top: 0
-}
-*/
 
 .diceroller {
     font-size: 200%;
