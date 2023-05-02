@@ -28,7 +28,7 @@ class DumperTest extends KernelTestCase
         $kernel = self::bootKernel();
         $application = new Application($kernel);
 
-        $command = $application->find('mw:dump');
+        $command = $application->find('mediawiki:dump-to-local');
         $commandTester = new CommandTester($command);
         $commandTester->execute(['category' => $cat, '--limit' => $limit]);
 
@@ -42,7 +42,7 @@ class DumperTest extends KernelTestCase
         $kernel = self::bootKernel();
         $application = new Application($kernel);
 
-        $command = $application->find('mw:dump');
+        $command = $application->find('mediawiki:dump-to-local');
         $commandTester = new CommandTester($command);
         $this->expectException(RuntimeException::class);
         $commandTester->execute(['category' => 'xxxx-yolo', '--limit' => 1]);

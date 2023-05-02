@@ -13,7 +13,7 @@ class LoginLinkTest extends KernelTestCase
         $kernel = self::bootKernel();
         $application = new Application($kernel);
 
-        $command = $application->find('app:link');
+        $command = $application->find('auth:get-link');
         $commandTester = new CommandTester($command);
         $commandTester->execute(['--qrcode' => true]);
 

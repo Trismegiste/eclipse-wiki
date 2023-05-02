@@ -13,12 +13,12 @@ class CheckDatabaseTest extends KernelTestCase
         $kernel = self::bootKernel();
         $application = new Application($kernel);
 
-        $command = $application->find('app:check:mongo');
+        $command = $application->find('db:install');
         $commandTester = new CommandTester($command);
         $commandTester->execute([]);
 
         // the output of the command in the console
         $output = $commandTester->getDisplay();
-        $this->assertStringContainsString('configuration', $output);
+        $this->assertStringContainsString('Indices creation OK', $output);
     }
 }
