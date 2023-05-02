@@ -39,7 +39,8 @@ class Export extends Command
 
     public function configure()
     {
-        $this->addArgument('target', InputArgument::OPTIONAL, 'Target zip file');
+        $this->addArgument('target', InputArgument::OPTIONAL, 'Target zip file')
+                ->setDescription("Export all pictures and vertices into one big ZIP file");
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int

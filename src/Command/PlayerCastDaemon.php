@@ -24,6 +24,11 @@ class PlayerCastDaemon extends Command
         $this->factory = $fac;
     }
 
+    protected function configure()
+    {
+        $this->setDescription('Lauch Playercast Daemon (Websocket server)');
+    }
+
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

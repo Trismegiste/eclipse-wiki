@@ -38,7 +38,7 @@ class BookGenerate extends Command
 
     protected function configure()
     {
-        $this->setDescription('Generate a book from the MediaWiki')
+        $this->setDescription('Generate a book from the remote MediaWiki')
                 ->addArgument('target', InputArgument::REQUIRED)
                 ->addOption('preview', null, InputOption::VALUE_NONE)
                 ->addOption('port', null, InputOption::VALUE_REQUIRED, 'Port to local HTTP server', 8000)

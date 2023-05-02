@@ -19,9 +19,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Trismegiste\Strangelove\MongoDb\Repository;
 
 /**
- * Dump html pages from the wiki in MongoDb
+ * Dump html pages from the MediaWiki to MongoDb
  */
-#[AsCommand(name: 'mw:dump')]
+#[AsCommand(name: 'mediawiki:dump-to-local')]
 class Dumper extends Command
 {
 
@@ -38,7 +38,7 @@ class Dumper extends Command
     protected function configure(): void
     {
         $this
-                ->setDescription('Dump pages to MongoDb')
+                ->setDescription('Dump remote MediaWiki pages to MongoDb')
                 ->addArgument('category', InputArgument::REQUIRED)
                 ->addOption('limit', null, InputOption::VALUE_REQUIRED, 'How many', 50);
     }

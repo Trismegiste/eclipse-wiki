@@ -17,7 +17,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Default config for the mongo database
  */
-#[AsCommand(name: 'app:check:mongo')]
+#[AsCommand(name: 'db:install')]
 class CheckDatabase extends Command
 {
 
@@ -33,7 +33,7 @@ class CheckDatabase extends Command
 
     protected function configure()
     {
-        $this->setDescription('Check the configuration of mongodb');
+        $this->setDescription('Install config for MongoDb');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -41,7 +41,7 @@ class CheckDatabase extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
 
-        $io->section("Création de l'index pour l'unicité des title dans la collection 'vertex'");
+        $io->section("Indices creation for 'vertex' collection");
         $cmd = new MongoCommand([
             'createIndexes' => 'vertex',
             'indexes' => [
@@ -63,7 +63,7 @@ class CheckDatabase extends Command
         $response = $cursor->toArray()[0];
 
         if ($response->ok) {
-            $io->success('Création des index OK');
+            $io->success('Indices creation OK');
         } else {
             $io->error($response->note);
         }

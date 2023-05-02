@@ -35,7 +35,8 @@ class PictureCensus extends Command
 
     protected function configure()
     {
-        $this->addOption('purge', null, InputOption::VALUE_NONE, 'Delete pictures');
+        $this->addOption('purge', null, InputOption::VALUE_NONE, 'Delete pictures')
+                ->setDescription("Search for unused pictures in the Storage (no link in vertices) and optionally purge");
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int

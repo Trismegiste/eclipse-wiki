@@ -24,7 +24,7 @@ use Symfony\Component\Security\Http\LoginLink\LoginLinkHandlerInterface;
 /**
  * Generates a magic link to connect
  */
-#[AsCommand(name: 'app:link')]
+#[AsCommand(name: 'auth:get-link')]
 class LoginLink extends Command
 {
 

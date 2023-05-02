@@ -38,7 +38,8 @@ class Import extends Command
 
     public function configure()
     {
-        $this->addArgument('source', InputArgument::REQUIRED, 'Source zip file');
+        $this->addArgument('source', InputArgument::REQUIRED, 'Source zip file')
+                ->setDescription("OVERWRITE all pictures and vertices from one big ZIP file");
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int
