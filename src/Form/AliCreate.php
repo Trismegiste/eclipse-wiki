@@ -7,9 +7,11 @@
 namespace App\Form;
 
 use App\Entity\Ali;
+use App\Entity\Vertex;
 use App\Form\Type\ProviderChoiceType;
 use App\Repository\CharacterFactory;
 use App\Repository\ShellProvider;
+use App\Validator\UniqueVertexTitle;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -17,6 +19,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
 
 /**
  * Description of AliCreate
@@ -36,10 +40,17 @@ class AliCreate extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('wildCard', CheckboxType::class, ['required' => false])
-            ->add('title', TextType::class, ['attr' => ['placeholder' => 'Choisissez un nom']])
-            ->add('morph', ProviderChoiceType::class, ['provider' => $this->shell, 'placeholder' => '--- Choisissez une coquille ---'])
-            ->add('generate', SubmitType::class);
+                ->add('wildCard', CheckboxType::class, ['required' => false])
+                ->add('title', TextType::class, [
+                    'attr' => ['placeholder' => 'Choisissez un nom'],
+                    'constraints' => [
+                        new Regex(Vertex::FORBIDDEN_REGEX_TITLE, match: false),
+                        new NotBlank(),
+                        new UniqueVertexTitle()
+                    ]
+                ])
+                ->add('morph', ProviderChoiceType::class, ['provider' => $this->shell, 'placeholder' => '--- Choisissez une coquille ---'])
+                ->add('generate', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

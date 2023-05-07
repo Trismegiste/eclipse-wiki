@@ -19,6 +19,8 @@ abstract class Vertex implements Root, Archivable
     use RootImpl;
     use ArchivableImpl;
 
+    const FORBIDDEN_REGEX_TITLE = '#[\[\]\|\{\}]#';
+
     protected string $title;
     protected ?string $content = null;
     protected $lastModified;

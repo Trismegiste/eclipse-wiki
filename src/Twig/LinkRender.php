@@ -56,7 +56,7 @@ class LinkRender extends HtmlRenderer
     public function getTemplateMarkup($template)
     {
         if ($template === 'task') {
-            return '<input type="checkbox" class="task-update" {{{2}}}/><label class="task-title">' . "{{{1}}}</label>";
+            return '<input type="checkbox" class="task-update" {{{2}}}/><label class="task-title">{{{1}}}</label>';
         }
 
         return parent::getTemplateMarkup($template);

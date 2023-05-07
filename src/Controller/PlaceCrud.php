@@ -82,7 +82,9 @@ class PlaceCrud extends GenericCrud
         $child = clone $place;
         $child->setTitle("Lieu enfant dans $title");
         $child->setContent("Localisé sur [[$title]]");
-        $child->battleMap = null;
+        $child->battlemap3d = null;
+        $child->voronoiParam = null;
+        // @todo faire qqc pour cette initialisation => methode __clone ? Dans la factory des Vertex ?
         $form = $this->createForm(PlaceType::class, $child);
 
         $form->handleRequest($request);
