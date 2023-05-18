@@ -6,6 +6,7 @@ gravity:
     - 'Éris (1/12 g)'
     - 'Pluton (1/16 g)'
     - 'Obéron (1/28 g)'
+    - 'Infime (1/100 g)'
     - 'Microgravité (0 g)'
     
 temperature:
