@@ -19,10 +19,22 @@ class TraitProviderTest extends KernelTestCase
         $this->sut = static::getContainer()->get(TraitProvider::class);
     }
 
-    public function testFindAtrributes()
+    public function testAtrributes()
     {
         $attr = $this->sut->findAttributes();
         $this->assertCount(5, $attr);
+    }
+
+    public function testSkills()
+    {
+        $listing = $this->sut->findSkills();
+        $this->assertCount(27, $listing);
+    }
+
+    public function testSocNet()
+    {
+        $listing = $this->sut->findSocialNetworks();
+        $this->assertCount(7, $listing);
     }
 
 }
