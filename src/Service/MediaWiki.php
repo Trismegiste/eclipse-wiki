@@ -161,7 +161,8 @@ class MediaWiki
 
         $content = strip_tags($htmlContent, '<a><div><figure><img>');
         $doc = new DOMDocument("1.0", "utf-8");
-        $doc->loadXML($content);
+        libxml_use_internal_errors(true); // because other xml/svg namespace warning
+        $doc->loadHTML($content);
         $xpath = new \DOMXpath($doc);
         $elements = $xpath->query('//a[@class="image"]/img');
         foreach ($elements as $img) {

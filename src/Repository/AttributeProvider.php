@@ -30,10 +30,10 @@ class AttributeProvider extends CachedProvider
         return $this->cache->get('attribute_object_list', function (ItemInterface $item) {
                     $item->expiresAfter(DateInterval::createFromDateString('1 day'));
 
-                    $content = $this->wiki->getPageByName('Attributs');
+                    $content = $this->wiki->getPageByName(TraitProvider::attributesPage);
                     $doc = new DOMDocument("1.0", "utf-8");
                     libxml_use_internal_errors(true); // because other xml/svg namespace warning
-                    $doc->loadXML($content);
+                    $doc->loadHTML($content);
                     $xpath = new \DOMXpath($doc);
                     $elements = $xpath->query("//tr/td[1]");
 

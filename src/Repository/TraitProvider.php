@@ -59,9 +59,9 @@ class TraitProvider
                     $doc = new \DOMDocument("1.0", "utf-8");
                     libxml_use_internal_errors(true); // because other xml/svg namespace warning
 
-                    $doc->loadXML($content);
+                    $doc->loadHTML($content);
                     $xpath = new \DOMXpath($doc);
-                    $elements = $xpath->query("//tr/td[1]");
+                    $elements = $xpath->query('//table/tbody/tr[position()>=2]/td[1]');
 
                     for ($k = 0; $k < 5; $k++) {
                         $name = trim($elements->item($k)->textContent);
