@@ -4,7 +4,6 @@
  * Eclipse Wiki
  */
 
-
 use App\Repository\CharacterFactory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
