@@ -31,8 +31,11 @@ class TraitProvider
 
     public function findSkills(): array
     {
-        // @todo Using SkillProvider (like I've done below for findAttributes method) should be D.R.Y 
+        // @todo Using SkillProvider here (like I've done below for findAttributes method) should be D.R.Y
         // but the behavior of that repository is very different since it's calling MongoDb cached pages
+        // I don't think it's a good idea. 
+        // Granted it'll be local but also far more bloated since we'll instantiate 
+        // a bunch of complex objects from the DB just to keep the title. Silly.
         $skills = $this->cache->get('skill_list', function (ItemInterface $item) {
             $item->expiresAfter(DateInterval::createFromDateString('1 day'));
 
