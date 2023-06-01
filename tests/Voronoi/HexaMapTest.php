@@ -131,8 +131,39 @@ class HexaMapTest extends TestCase
 
         $this->sut->texturing(['tile' => 1], []);
         $stat = $this->sut->getStatistics();
+        $this->assertCount(1, $stat);
         $this->assertArrayHasKey('tile', $stat);
         $this->assertEquals(2, $stat['tile']['rooms']);
+        $this->assertArrayNotHasKey('default', $stat);
+    }
+
+    public function testTexturingWithMinCount()
+    {
+        $this->sut->setCell([5, 5], new HexaCell(111));
+        while ($this->sut->iterateNeighbourhood() > 0);
+
+        $this->sut->texturing([], ['tile' => 1]);
+        $stat = $this->sut->getStatistics();
+        $this->assertCount(2, $stat);
+        $this->assertArrayHasKey('tile', $stat);
+        $this->assertEquals(1, $stat['tile']['rooms']);
+        $this->assertEquals(1, $stat['default']['rooms']);
+    }
+
+    public function testPopulating()
+    {
+        while ($this->sut->iterateNeighbourhood() > 0);
+        $cfg = new \App\Entity\TileNpcConfig();
+        $cfg->npc = new App\Entity\MapToken('dummy.png', 'NPC');
+        $cfg->tilePerNpc = 5;
+
+        $this->sut->populating(['default' => $cfg]);
+        $stat = $this->sut->getStatistics();
+        $this->assertCount(1, $stat);
+        $averageNpcCount = $this->sut->getSize() * $this->sut->getSize() / $cfg->tilePerNpc;
+        $this->assertEqualsWithDelta($averageNpcCount, $stat['default']['npcCount'], $averageNpcCount / 2, "You're very unlucky");
+
+        $this->assertCount(1, $this->sut->getNpcToken());
     }
 
 }
