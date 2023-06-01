@@ -21,10 +21,9 @@ class TraitProvider
     protected $cache;
 
     const skillCategory = 'Compétence';
-    const attributesPage = 'Attributs';
     const socNetCategory = 'Réseau social';
 
-    public function __construct(MediaWiki $param, CacheInterface $cache)
+    public function __construct(MediaWiki $param, CacheInterface $cache, protected AttributeProvider $attributesRepo)
     {
         $this->wiki = $param;
         $this->cache = $cache;
@@ -32,6 +31,8 @@ class TraitProvider
 
     public function findSkills(): array
     {
+        // @todo Using SkillProvider (like I've done below for findAttributes method) should be D.R.Y 
+        // but the behavior of that repository is very different since it's calling MongoDb cached pages
         $skills = $this->cache->get('skill_list', function (ItemInterface $item) {
             $item->expiresAfter(DateInterval::createFromDateString('1 day'));
 
@@ -52,24 +53,12 @@ class TraitProvider
 
     public function findAttributes(): array
     {
-        return $this->cache->get('attribute_list', function (ItemInterface $item) {
-                    $item->expiresAfter(DateInterval::createFromDateString('1 day'));
+        $listing = $this->attributesRepo->getListing();
+        array_walk($listing, function (&$v, $k) {
+            $v = $k;
+        });
 
-                    $content = $this->wiki->getPageByName(self::attributesPage);
-                    $doc = new \DOMDocument("1.0", "utf-8");
-                    libxml_use_internal_errors(true); // because other xml/svg namespace warning
-
-                    $doc->loadHTML($content);
-                    $xpath = new \DOMXpath($doc);
-                    $elements = $xpath->query('//table/tbody/tr[position()>=2]/td[1]');
-
-                    for ($k = 0; $k < 5; $k++) {
-                        $name = trim($elements->item($k)->textContent);
-                        $listing[$name] = $name;
-                    }
-
-                    return $listing;
-                });
+        return $listing;
     }
 
     public function findSocialNetworks(): array
