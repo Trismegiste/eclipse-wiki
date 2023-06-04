@@ -36,7 +36,7 @@ class Import extends Command
         $this->store = $store;
     }
 
-    public function configure()
+    public function configure(): void
     {
         $this->addArgument('source', InputArgument::REQUIRED, 'Source zip file')
                 ->setDescription("OVERWRITE all pictures and vertices from one big ZIP file");

@@ -40,7 +40,7 @@ class LoginLink extends Command
         $this->tools = $tools;
     }
 
-    public function configure()
+    public function configure(): void
     {
         $this->setDescription('Generates login link to connect to the web server')
                 ->addArgument('port', InputArgument::OPTIONAL, 'The port on which the web server is running', 8000)

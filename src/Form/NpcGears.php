@@ -29,7 +29,7 @@ class NpcGears extends AbstractType
         $this->provider = $pro;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('gear_list', ChoiceType::class, [
@@ -54,7 +54,7 @@ class NpcGears extends AbstractType
             ->setMethod('PUT');
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('data_class', Character::class);
     }

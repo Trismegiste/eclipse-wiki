@@ -28,7 +28,7 @@ class MapPopulationType extends AbstractType
         $this->builder = $mapBuilder;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('tilePopulation', CollectionType::class, [
             'entry_type' => Type\TileNpcConfigType::class,
@@ -42,12 +42,12 @@ class MapPopulationType extends AbstractType
         ]);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('data_class', MapConfig::class);
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         if (!$form->isSubmitted()) {
             /** @var MapConfig $config */

@@ -24,7 +24,7 @@ class LoveletterType extends AbstractType
 
     use FormTypeUtils;
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
                 ->add('player', TextType::class, ['attr' => ['class' => 'pure-input-1-3']])
@@ -39,7 +39,7 @@ class LoveletterType extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('empty_data', function (FormInterface $form) {
             return new Loveletter($form->get('title')->getData());
@@ -51,7 +51,7 @@ class LoveletterType extends AbstractType
         return VertexType::class;
     }
 
-    public function finishView(FormView $view, FormInterface $form, array $options)
+    public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         $this->changeAttribute($view, 'content', 'rows', 3);
         $this->changeLabel($view, 'content', 'Context');

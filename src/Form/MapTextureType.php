@@ -29,13 +29,13 @@ class MapTextureType extends AbstractType
         $this->provider = $provider;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('data_class', MapConfig::class);
         $resolver->setRequired('tileset');
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('tileWeight', CollectionType::class, [
                     'entry_type' => IntegerType::class,
@@ -56,7 +56,7 @@ class MapTextureType extends AbstractType
         ;
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $tileSet = $this->provider->getClusterSet($options['tileset']);
 

@@ -34,7 +34,7 @@ class MapConfigType extends AbstractType
         $this->provider = $shapeProvider;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
                 ->add('side', IntegerType::class, ['constraints' => [new NotBlank(), new Positive()]])
@@ -64,7 +64,7 @@ class MapConfigType extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => MapConfig::class,

@@ -41,7 +41,7 @@ class SceneCreate extends AbstractType
         $this->twig = $twig;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->remove('content');
         $builder->add('place', Type\AutocompleteType::class, [
@@ -70,7 +70,7 @@ class SceneCreate extends AbstractType
         $builder->setDataMapper(new Type\WikitextContentMapper($this->twig, 'scene/content.wiki.twig'));
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'empty_data' => function (FormInterface $form) {
@@ -94,7 +94,7 @@ class SceneCreate extends AbstractType
         return VertexType::class;
     }
 
-    public function finishView(FormView $view, FormInterface $form, array $options)
+    public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         $this->moveChildAtEnd($view, 'create');
     }

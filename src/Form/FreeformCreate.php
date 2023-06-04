@@ -33,7 +33,7 @@ class FreeformCreate extends AbstractType
         $this->factory = $factory;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
                 ->add('wildCard', CheckboxType::class, ['required' => false])
@@ -53,7 +53,7 @@ class FreeformCreate extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('data_class', Freeform::class);
         $resolver->setDefault('empty_data', function (FormInterface $form) {

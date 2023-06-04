@@ -28,7 +28,7 @@ class HandoutType extends AbstractType
         return VertexType::class;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('gm_info', Type\WikitextType::class, [
                     'required' => false,
@@ -38,7 +38,7 @@ class HandoutType extends AbstractType
                 ->add('target', TextType::class);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('data_class', Handout::class);
         $resolver->setDefault('empty_data', function (FormInterface $form) {
@@ -46,7 +46,7 @@ class HandoutType extends AbstractType
         });
     }
 
-    public function finishView(FormView $view, FormInterface $form, array $options)
+    public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         $this->moveChildAtBegin($view, 'target');
         $this->moveChildAtEnd($view, 'create');

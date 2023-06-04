@@ -27,7 +27,7 @@ class PictureUpload extends AbstractType
         $this->repository = $repo;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('filename', TextType::class, [
                     'attr' => ['autocomplete' => 'off']

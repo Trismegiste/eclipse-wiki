@@ -24,7 +24,7 @@ class PlayerCastDaemon extends Command
         $this->factory = $fac;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Lauch Playercast Daemon (Websocket server)');
     }

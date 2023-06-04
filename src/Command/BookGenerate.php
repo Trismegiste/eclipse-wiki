@@ -36,7 +36,7 @@ class BookGenerate extends Command
         $this->routing = $router;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Generate a book from the remote MediaWiki')
                 ->addArgument('target', InputArgument::REQUIRED)

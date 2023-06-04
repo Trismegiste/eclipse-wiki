@@ -36,7 +36,7 @@ class NpcStats extends AbstractType
         $this->hindrance = $hindrance;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('attributes', CollectionType::class, [
@@ -121,7 +121,7 @@ class NpcStats extends AbstractType
             ->setMethod('PUT');
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('data_class', Character::class);
     }

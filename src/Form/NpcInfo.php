@@ -22,7 +22,7 @@ class NpcInfo extends AbstractType
 
     use FormTypeUtils;
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('hashtag', Type\HashtagType::class, ['required' => false, 'default_hashtag' => $options['data']->getDefaultHashtag()])
                 ->add('surnameLang', SurnameLanguageType::class);
@@ -33,12 +33,12 @@ class NpcInfo extends AbstractType
         return VertexType::class;
     }
 
-    public function finishView(FormView $view, FormInterface $form, array $options)
+    public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         $this->moveChildAtEnd($view, 'create');
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('data_class', Transhuman::class);
     }

@@ -35,7 +35,7 @@ class TimelineCreate extends AbstractType
         $this->twig = $twig;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->remove('content');
         $builder->add('elevator_pitch', WikitextType::class, ['attr' => ['rows' => 4]])
@@ -53,7 +53,7 @@ class TimelineCreate extends AbstractType
         $builder->setDataMapper(new WikitextContentMapper($this->twig, 'timeline/content.wiki.twig'));
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('empty_data', function (FormInterface $form) {
             return new Timeline($form->get('title')->getData());
@@ -65,7 +65,7 @@ class TimelineCreate extends AbstractType
         return VertexType::class;
     }
 
-    public function finishView(FormView $view, FormInterface $form, array $options)
+    public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         $this->moveChildAtEnd($view, 'create');
     }

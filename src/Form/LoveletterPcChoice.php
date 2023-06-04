@@ -21,13 +21,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class LoveletterPcChoice extends AbstractType
 {
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('data_class', Loveletter::class);
         $resolver->setDefined('edit');
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
                 ->add('pc_choice', ChoiceType::class, [
@@ -40,7 +40,7 @@ class LoveletterPcChoice extends AbstractType
                 ->setMethod('PUT');
     }
 
-    public function finishView(FormView $view, FormInterface $form, array $options)
+    public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         $resolution = $form->getData()->resolution;
         $choiceWidget = $view['pc_choice'];
