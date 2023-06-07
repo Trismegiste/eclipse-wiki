@@ -30,23 +30,16 @@ class AttributeProvider extends CachedProvider
 
     public function getListing(): array
     {
-        return $this->cache->get('attribute_object_list', function (ItemInterface $item) {
-                    $item->expiresAfter(DateInterval::createFromDateString('1 day'));
+        $doc = $this->wiki->getDocumentByName(self::attributesPage);
+        $xpath = new \DOMXpath($doc);
+        $elements = $xpath->query("//tr/td[1]");
 
-                    $content = $this->wiki->getPageByName(self::attributesPage);
-                    $doc = new DOMDocument("1.0", "utf-8");
-                    libxml_use_internal_errors(true); // because other xml/svg namespace warning
-                    $doc->loadHTML($content);
-                    $xpath = new \DOMXpath($doc);
-                    $elements = $xpath->query("//tr/td[1]");
+        for ($k = 0; $k < self::attributesCount; $k++) {
+            $name = trim($elements->item($k)->textContent);
+            $listing[$name] = new Attribute($name);
+        }
 
-                    for ($k = 0; $k < self::attributesCount; $k++) {
-                        $name = trim($elements->item($k)->textContent);
-                        $listing[$name] = new Attribute($name);
-                    }
-
-                    return $listing;
-                });
+        return $listing;
     }
 
 }

@@ -20,11 +20,7 @@ class MorphProvider extends CachedProvider
         return $this->cache->get('morph_page_' . $this->sanitize($key), function (ItemInterface $item) use ($key) {
                     $item->expiresAfter(\DateInterval::createFromDateString('1 day'));
 
-                    $content = $this->wiki->getPageByName($key);
-                    $doc = new DOMDocument("1.0", "utf-8");
-                    libxml_use_internal_errors(true); // because other xml/svg namespace warning
-                    $doc->loadHTML($content);
-
+                    $doc = $this->wiki->getDocumentByName($key);
                     $xpath = new \DOMXpath($doc);
                     $obj = new \App\Entity\Morph($key);
 
@@ -54,10 +50,7 @@ class MorphProvider extends CachedProvider
         return $this->cache->get('morph_list', function (ItemInterface $item) {
                     $item->expiresAfter(\DateInterval::createFromDateString('1 day'));
 
-                    $doc = new DOMDocument("1.0", "utf-8");
-                    libxml_use_internal_errors(true); // because other xml/svg namespace warning
-                    $content = $this->wiki->getPageByName('Type de Morphe');
-                    $doc->loadHTML(strip_tags($content, '<div><ul><li><a>'));
+                    $doc = $this->wiki->getDocumentByName('Type de Morphe');
                     $xpath = new \DOMXpath($doc);
 
                     $elements = $xpath->query("//ul[1]/li/a[contains(@href,'gorie:')]/@href");

@@ -46,6 +46,16 @@ class MediaWiki
         return $this->getPageBy('page', $name);
     }
 
+    public function getDocumentByName(string $name): DOMDocument
+    {
+        $content = $this->getPageByName($name);
+        $doc = new DOMDocument("1.0", "UTF-8");
+        libxml_use_internal_errors(true); // because other xml/svg namespace warning
+        $doc->loadHTML('<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><body>' . $content . '</body></html>');
+
+        return $doc;
+    }
+
     protected function getPageBy(string $field, string $value): string
     {
         $response = $this->sendQuery([

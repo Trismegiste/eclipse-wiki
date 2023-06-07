@@ -22,10 +22,7 @@ class ShellProvider extends CachedProvider
     {
         return $this->cache->get('shell_page_' . $this->sanitize($key), function (ItemInterface $item) use ($key) {
                     $item->expiresAfter(\DateInterval::createFromDateString('1 day'));
-                    $content = $this->wiki->getPageByName($key);
-                    $doc = new DOMDocument("1.0", "utf-8");
-                    libxml_use_internal_errors(true); // because other xml/svg namespace warning
-                    $doc->loadHTML($content);
+                    $doc = $this->wiki->getDocumentByName($key);
 
                     $xpath = new \DOMXpath($doc);
                     $obj = new Morph($key);

@@ -23,11 +23,7 @@ class BackgroundProvider extends CachedProvider
         return $this->cache->get('background_page_' . $sanitizedKey, function (ItemInterface $item) use ($key) {
                     $item->expiresAfter(\DateInterval::createFromDateString('1 day'));
 
-                    $content = $this->wiki->getPageByName($key);
-                    $doc = new DOMDocument("1.0", "utf-8");
-                    libxml_use_internal_errors(true); // because other xml/svg namespace warning
-                    $doc->loadHTML($content);
-
+                    $doc = $this->wiki->getDocumentByName($key);
                     $xpath = new \DOMXpath($doc);
                     $obj = new Background($key);
 
