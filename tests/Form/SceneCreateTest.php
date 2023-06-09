@@ -14,8 +14,7 @@ use Symfony\Component\Form\Form;
 class SceneCreateTest extends KernelTestCase
 {
 
-    /** @var Form */
-    protected $sut;
+    protected Form $sut;
 
     protected function setUp(): void
     {
@@ -50,6 +49,33 @@ class SceneCreateTest extends KernelTestCase
         $this->assertEquals('In The Pale Moonlight', $scene->getTitle());
         $this->assertStringContainsString('[[Deep Space 9]]', $scene->getContent());
         $this->assertStringContainsString('* [[Sisko]]', $scene->getContent());
+    }
+
+    public function getInvalidChar(): array
+    {
+        return [
+            ['['],
+            ['|'],
+            [']'],
+            ['{'],
+            ['}'],
+        ];
+    }
+
+    /** @dataProvider getInvalidChar */
+    public function testInvalidCharForTitle(string $invalidChar)
+    {
+        $this->sut->submit([
+            "title" => "The Void $invalidChar",
+            'place' => 'Voyager',
+            'npc' => ['Kim', 'Kat', 'Tuvok']
+        ]);
+        $this->assertTrue($this->sut->isSynchronized());
+        $this->assertFalse($this->sut->isValid());
+        $this->assertFalse($this->sut['title']->isValid());
+        $this->assertStringContainsString('pas valide', $this->sut['title']->getErrors(true, true));
+        $scene = $this->sut->getData();
+        $this->assertInstanceOf(Scene::class, $scene);
     }
 
 }
