@@ -1,0 +1,39 @@
+{# Custom rendering for tree with autocompleted wikitext links #}
+{% block wiki_tree_widget %}
+    {{ form_widget(form) }}
+    <div id="{{ form.vars.id }}_tree" class="tree_widget"></div>
+    <script>
+        window.addEventListener('load', () => {
+            if (typeof SortableTree === "undefined") {
+                throw new Error('SortableTree is required')
+            }
+
+            const nodeData = [{{ form.vars.data|raw }}]
+
+            const tree = new SortableTree({
+                nodes: nodeData,
+                element: document.querySelector('#{{ form.vars.id }}_tree'),
+                renderLabel: (data) => {
+                    return `<input type="checkbox"/><span>${data.title}</span>`
+                },
+                onChange: ({ nodes, movedNode, srcParentNode, targetParentNode }) => {
+                    console.log(dumpTree(nodes[0]))
+                },
+                onClick: (event, node) => {
+                    node.label.querySelector('span').innerHTML += ' yolo'
+                    node.data.title += ' yolo'
+                }
+            })
+
+            function dumpTree(elem) {
+                let dump = tree.getNode(elem.id).data
+                dump.nodes = []
+                for (let child of elem.subnodes) {
+                    dump.nodes.push(dumpTree(child))
+                }
+
+                return dump
+            }
+        })
+    </script>
+{% endblock %}

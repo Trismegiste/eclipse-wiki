@@ -8,8 +8,8 @@ namespace App\Controller;
 
 use App\Entity\Timeline;
 use App\Entity\Vertex;
-use App\Form\TimelineCreate;
-use App\Form\VertexType;
+use App\Form\TimelineType;
+use App\Form\Type\WikiTreeType;
 use App\Service\DigraphExplore;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,7 +33,7 @@ class TimelineCrud extends GenericCrud
     #[Route('/timeline/create', methods: ['GET', 'POST'])]
     public function create(Request $request): Response
     {
-        return $this->handleCreate(TimelineCreate::class, 'timeline/create.html.twig', $request);
+        return $this->handleCreate(TimelineType::class, 'timeline/create.html.twig', $request);
     }
 
     /**
@@ -44,7 +44,7 @@ class TimelineCrud extends GenericCrud
     #[Route('/timeline/edit/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function edit(string $pk, Request $request): Response
     {
-        return $this->handleEdit(VertexType::class, 'timeline/edit.html.twig', $pk, $request);
+        return $this->handleEdit(WikiTreeType::class, 'timeline/edit.html.twig', $pk, $request);
     }
 
     /**

@@ -11,5 +11,33 @@ namespace App\Entity;
  */
 class Timeline extends Vertex
 {
-    
+
+    protected PlotNode $tree;
+
+    public function getTree(): PlotNode
+    {
+        return $this->tree;
+    }
+
+    public function setTree(PlotNode $tree): void
+    {
+        $this->tree = $tree;
+    }
+
+    protected function beforeSave(): void
+    {
+        parent::beforeSave();
+        $accumul = [];
+        $this->flattenTree($accumul, $this->tree->nodes, 1);
+        $this->content = implode(PHP_EOL, $accumul);
+    }
+
+    protected function flattenTree(array &$accumul, array $children, int $level): void
+    {
+        foreach ($children as $child) {
+            $accumul[] = str_repeat('*', $level) . ' ' . $child->title;
+            $this->flattenTree($accumul, $child->nodes, $level + 1);
+        }
+    }
+
 }
