@@ -44,7 +44,7 @@ class TimelineCrud extends GenericCrud
     #[Route('/timeline/edit/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function edit(string $pk, Request $request): Response
     {
-        return $this->handleEdit(WikiTreeType::class, 'timeline/edit.html.twig', $pk, $request);
+        return $this->handleEdit(TimelineType::class, 'timeline/edit.html.twig', $pk, $request);
     }
 
     /**

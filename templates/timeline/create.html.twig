@@ -19,13 +19,12 @@
     {{ parent() }}
     <link href="https://unpkg.com/sortable-tree/dist/sortable-tree.css" rel="stylesheet"/>
 
-
     <style>
         .tree_widget {
-            --st-label-height: 3.75rem;
+            --st-label-height: 2.5rem;
             --st-subnodes-padding-left: 3rem;
             --st-collapse-icon-width: 1.5rem;
-            --st-collapse-icon-height: 3.75rem;
+            --st-collapse-icon-height: 2.5rem;
             --st-collapse-icon-size: 0.9rem;
             display: flex;
             flex-direction: column;
@@ -57,7 +56,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem;
+            padding: 0 0 0 1rem;
             width: 100%;
             height: 100%;
             border: 2px solid;
@@ -82,9 +81,8 @@
             cursor: move !important;
         }
 
-
         :root {
-            --color: hsl(217, 11%, 90%);
+            --color: #333;
             /*    --background: hsl(217, 11%, 10%); */
             --accent-color: hsl(215, 100%, 58%);
             --accent-background: hsl(215, 71%, 12%);
@@ -93,8 +91,12 @@
             --muted-color: hsl(217, 11%, 46%);
         }
 
+        form .tree__label > input[type=checkbox] {
+            margin-right: 1em; 
+        }
+
         .tree__label > input[type=checkbox]:checked + span {
-            opacity: 0.3;
+            opacity: 0.4;
         }
     </style>
 {% endblock %}

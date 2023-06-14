@@ -17,7 +17,8 @@
                     return `<input type="checkbox"/><span>${data.title}</span>`
                 },
                 onChange: ({ nodes, movedNode, srcParentNode, targetParentNode }) => {
-                    console.log(dumpTree(nodes[0]))
+                    let hidden = document.querySelector('#{{ form.vars.id }}')
+                    hidden.value = JSON.stringify(dumpTree(nodes[0]))
                 },
                 onClick: (event, node) => {
                     node.label.querySelector('span').innerHTML += ' yolo'
@@ -26,8 +27,7 @@
             })
 
             function dumpTree(elem) {
-                let dump = tree.getNode(elem.id).data
-                dump.nodes = []
+                let dump = {data: tree.getNode(elem.id).data, nodes: []}
                 for (let child of elem.subnodes) {
                     dump.nodes.push(dumpTree(child))
                 }

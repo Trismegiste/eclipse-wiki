@@ -41,16 +41,24 @@ class WikiTreeType extends AbstractType implements DataTransformerInterface
             throw $failure;
         }
 
-        return $data;
+        return $this->backtrackCreateNode($data);
+    }
+
+    protected function backtrackCreateNode(\stdClass $node): PlotNode
+    {
+        $tree = new PlotNode(title: $node->data->title, finished: $node->data->finished);
+        foreach($node->nodes as $child) {
+            $tree->nodes[] = $this->backtrackCreateNode($child);
+        }
+
+        return $tree;
     }
 
     public function transform(mixed $value)
     {
-        $value = new PlotNode('Root', [
-            new PlotNode('Act 1', [new PlotNode('Scene 1.1'), new PlotNode('Scene 1.2', [new PlotNode('Event 1.2.1')])]),
-            new PlotNode('Act 2'),
-            new PlotNode('Act 3', [new PlotNode('Scene 3.1')]),
-        ]);
+        if (empty($value)) {
+            $value = new PlotNode('Root');
+        }
 
         return json_encode($value);
     }
