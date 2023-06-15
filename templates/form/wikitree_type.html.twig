@@ -5,24 +5,38 @@
     <script>
         window.addEventListener('load', () => {
             if (typeof SortableTree === "undefined") {
-                throw new Error('SortableTree is required')
+                throw new Error('SortableTree is not included')
             }
 
+            const hiddenTree = document.querySelector('#{{ form.vars.id }}')
             const nodeData = [{{ form.vars.data|raw }}]
 
             const tree = new SortableTree({
                 nodes: nodeData,
                 element: document.querySelector('#{{ form.vars.id }}_tree'),
                 renderLabel: (data) => {
-                    return `<input type="checkbox"/><span>${data.title}</span>`
+                    return `<input type="checkbox"/>
+                                <span>${data.title}</span>
+                                <button class="pure-button"><i class="icon-newchild"></i></button>
+                                <button class="pure-button"><i class="icon-trash-empty"></i></button>`
                 },
                 onChange: ({ nodes, movedNode, srcParentNode, targetParentNode }) => {
-                    let hidden = document.querySelector('#{{ form.vars.id }}')
-                    hidden.value = JSON.stringify(dumpTree(nodes[0]))
+                    hiddenTree.value = JSON.stringify(dumpTree(nodes[0]))
                 },
                 onClick: (event, node) => {
+
                     node.label.querySelector('span').innerHTML += ' yolo'
                     node.data.title += ' yolo'
+
+                    if (event.target.tagName === 'I') {
+                        event.preventDefault()
+                        let icon = event.target
+                        switch (icon.className) {
+                            case 'icon-newchild':
+                                console.log(dumpTree(tree.root.querySelector('sortable-tree-node')))
+                                break;
+                        }
+                    }
                 }
             })
 

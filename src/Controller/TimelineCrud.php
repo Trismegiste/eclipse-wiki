@@ -62,6 +62,7 @@ class TimelineCrud extends GenericCrud
     }
 
     /**
+     * Pin the current timeline in the user session
      */
     #[Route('/timeline/pin/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function pin(Timeline $timeline, Request $request): Response

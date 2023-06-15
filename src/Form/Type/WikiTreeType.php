@@ -47,7 +47,7 @@ class WikiTreeType extends AbstractType implements DataTransformerInterface
     protected function backtrackCreateNode(\stdClass $node): PlotNode
     {
         $tree = new PlotNode(title: $node->data->title, finished: $node->data->finished);
-        foreach($node->nodes as $child) {
+        foreach ($node->nodes as $child) {
             $tree->nodes[] = $this->backtrackCreateNode($child);
         }
 
