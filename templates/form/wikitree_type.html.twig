@@ -14,9 +14,12 @@
             const tree = new SortableTree({
                 nodes: nodeData,
                 element: document.querySelector('#{{ form.vars.id }}_tree'),
+                initCollapseLevel: 4,
+              //  stateId: 'some-tree',
                 renderLabel: (data) => {
                     return `<input type="checkbox"/>
                                 <span>${data.title}</span>
+                                <button class="pure-button"><i class="icon-edit"></i></button>
                                 <button class="pure-button"><i class="icon-newchild"></i></button>
                                 <button class="pure-button"><i class="icon-trash-empty"></i></button>`
                 },
@@ -25,15 +28,18 @@
                 },
                 onClick: (event, node) => {
 
-                    node.label.querySelector('span').innerHTML += ' yolo'
-                    node.data.title += ' yolo'
+                    // node.label.querySelector('span').innerHTML += ' yolo'
+                    // node.data.title += ' yolo'
 
                     if (event.target.tagName === 'I') {
                         event.preventDefault()
                         let icon = event.target
                         switch (icon.className) {
                             case 'icon-newchild':
-                                console.log(dumpTree(tree.root.querySelector('sortable-tree-node')))
+                                let newChild = {data: {title: 'New child', finished: false}, nodes: []}
+                                let originalNode = backtrackOriginalNodeWithData(nodeData[0], node.data)
+                                originalNode.nodes.push(newChild)
+                                hiddenTree.value = JSON.stringify(nodeData[0])
                                 break;
                         }
                     }
@@ -47,6 +53,21 @@
                 }
 
                 return dump
+            }
+
+            function backtrackOriginalNodeWithData(node, data) {
+                if (node.data === data) {
+                    return node
+                }
+
+                for (let child of node.nodes) {
+                    let found = backtrackOriginalNodeWithData(child, data)
+                    if (found !== null) {
+                        return found
+                    }
+                }
+
+                return null
             }
         })
     </script>
