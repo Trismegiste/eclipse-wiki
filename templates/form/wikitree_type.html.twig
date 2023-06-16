@@ -2,20 +2,23 @@
 {% block wiki_tree_widget %}
     {{ form_widget(form) }}
     <div id="{{ form.vars.id }}_tree" class="tree_widget"></div>
+    <textarea id="{{ form.vars.id }}_edit" class="pure-input-1"></textarea>
     <script>
         window.addEventListener('load', () => {
             if (typeof SortableTree === "undefined") {
                 throw new Error('SortableTree is not included')
             }
 
-            const hiddenTree = document.querySelector('#{{ form.vars.id }}')
+            const hiddenTree = document.getElementById('{{ form.vars.id }}')
+            const editArea = document.getElementById('{{ form.vars.id }}_edit')
             const nodeData = [{{ form.vars.data|raw }}]
+            let currentlyEditedNode = null
 
             const tree = new SortableTree({
                 nodes: nodeData,
-                element: document.querySelector('#{{ form.vars.id }}_tree'),
+                element: document.getElementById('{{ form.vars.id }}_tree'),
                 initCollapseLevel: 4,
-              //  stateId: 'some-tree',
+                //  stateId: 'some-tree',
                 renderLabel: (data) => {
                     return `<input type="checkbox"/>
                                 <span>${data.title}</span>
@@ -32,28 +35,42 @@
                 }
             })
 
-            document.querySelectorAll('i.icon-newchild').forEach(elem => {
-                 let button = elem.parentElement
-                 button.addEventListener('click', event => {
-                     let node = button.parentElement.parentElement
-                     let newChild = {data: {title: 'New child', finished: false}, nodes: []}
-                     let originalNode = backtrackOriginalNodeWithData(nodeData[0], node.data)
-                     originalNode.nodes.push(newChild)
-                     hiddenTree.value = JSON.stringify(nodeData[0])
-                 })
+            document.querySelectorAll('#{{ form.vars.id }}_tree i.icon-newchild').forEach(elem => {
+                let button = elem.parentElement
+                button.addEventListener('click', event => {
+                    let node = button.parentElement.parentElement
+                    let newChild = {data: {title: 'New child', finished: false}, nodes: []}
+                    let originalNode = backtrackOriginalNodeWithData(nodeData[0], node.data)
+                    originalNode.nodes.push(newChild)
+                    hiddenTree.value = JSON.stringify(nodeData[0])
+                })
             })
 
-            document.querySelectorAll('i.icon-trash-empty').forEach(elem => {
-                 let button = elem.parentElement
-                 button.addEventListener('click', event => {
-                     let node = button.parentElement.parentElement
-                     let parentNode = node.parentElement.parentElement
-                     let originalNode = backtrackOriginalNodeWithData(nodeData[0], node.data)
-                     let originalParentNode = backtrackOriginalNodeWithData(nodeData[0], parentNode.data)
-                     let idx = originalParentNode.nodes.indexOf(originalNode)
-                     originalParentNode.nodes.splice(idx, 1)
-                     hiddenTree.value = JSON.stringify(nodeData[0])
-                 })
+            document.querySelectorAll('#{{ form.vars.id }}_tree i.icon-trash-empty').forEach(elem => {
+                let button = elem.parentElement
+                button.addEventListener('click', event => {
+                    let node = button.parentElement.parentElement
+                    let parentNode = node.parentElement.parentElement
+                    let originalNode = backtrackOriginalNodeWithData(nodeData[0], node.data)
+                    let originalParentNode = backtrackOriginalNodeWithData(nodeData[0], parentNode.data)
+                    let idx = originalParentNode.nodes.indexOf(originalNode)
+                    originalParentNode.nodes.splice(idx, 1)
+                    hiddenTree.value = JSON.stringify(nodeData[0])
+                })
+            })
+
+            document.querySelectorAll('#{{ form.vars.id }}_tree i.icon-edit').forEach(elem => {
+                let button = elem.parentElement
+                button.addEventListener('click', event => {
+                    event.preventDefault()
+                    let node = button.parentElement.parentElement
+                    editArea.innerHTML = node.data.title
+                    currentlyEditedNode = node
+                })
+            })
+
+            editArea.addEventListener('change', event => {
+                console.log(event)
             })
 
             function dumpTree(elem) {
