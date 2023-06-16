@@ -27,23 +27,33 @@
                     hiddenTree.value = JSON.stringify(dumpTree(nodes[0]))
                 },
                 onClick: (event, node) => {
-
                     // node.label.querySelector('span').innerHTML += ' yolo'
                     // node.data.title += ' yolo'
-
-                    if (event.target.tagName === 'I') {
-                        event.preventDefault()
-                        let icon = event.target
-                        switch (icon.className) {
-                            case 'icon-newchild':
-                                let newChild = {data: {title: 'New child', finished: false}, nodes: []}
-                                let originalNode = backtrackOriginalNodeWithData(nodeData[0], node.data)
-                                originalNode.nodes.push(newChild)
-                                hiddenTree.value = JSON.stringify(nodeData[0])
-                                break;
-                        }
-                    }
                 }
+            })
+
+            document.querySelectorAll('i.icon-newchild').forEach(elem => {
+                 let button = elem.parentElement
+                 button.addEventListener('click', event => {
+                     let node = button.parentElement.parentElement
+                     let newChild = {data: {title: 'New child', finished: false}, nodes: []}
+                     let originalNode = backtrackOriginalNodeWithData(nodeData[0], node.data)
+                     originalNode.nodes.push(newChild)
+                     hiddenTree.value = JSON.stringify(nodeData[0])
+                 })
+            })
+
+            document.querySelectorAll('i.icon-trash-empty').forEach(elem => {
+                 let button = elem.parentElement
+                 button.addEventListener('click', event => {
+                     let node = button.parentElement.parentElement
+                     let parentNode = node.parentElement.parentElement
+                     let originalNode = backtrackOriginalNodeWithData(nodeData[0], node.data)
+                     let originalParentNode = backtrackOriginalNodeWithData(nodeData[0], parentNode.data)
+                     let idx = originalParentNode.nodes.indexOf(originalNode)
+                     originalParentNode.nodes.splice(idx, 1)
+                     hiddenTree.value = JSON.stringify(nodeData[0])
+                 })
             })
 
             function dumpTree(elem) {
