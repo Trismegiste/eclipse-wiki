@@ -14,9 +14,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Description of TimelineType
- *
- * @author florent
+ * Timeline with tree form
  */
 class TimelineType extends AbstractType
 {

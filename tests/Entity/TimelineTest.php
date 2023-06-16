@@ -18,18 +18,16 @@ class TimelineTest extends TestCase
         $this->sut = new Timeline('Scenar');
     }
 
-
     public function getComplexTree()
     {
-         return [[
-            new PlotNode('Root', [
-                    new PlotNode('Act 1', [new PlotNode('Scene 1.1'), new PlotNode('Scene 1.2', [new PlotNode('Event 1.2.1')])]),
-                    new PlotNode('Act 2'),
-                    new PlotNode('Act 3', [new PlotNode('Scene 3.1')]),
-            ])
-	]];
+        return [[
+        new PlotNode('Root', [
+            new PlotNode('Act 1', [new PlotNode('Scene 1.1'), new PlotNode('Scene 1.2', [new PlotNode('Event 1.2.1')])]),
+            new PlotNode('Act 2'),
+            new PlotNode('Act 3', [new PlotNode('Scene 3.1')]),
+                ])
+        ]];
     }
-
 
     /** @dataProvider getComplexTree */
     public function testFlattenTree($tree)
@@ -41,11 +39,11 @@ class TimelineTest extends TestCase
         $this->assertStringEndsWith('3.1', $dump['content']);
     }
 
-
     /** @dataProvider getComplexTree */
     public function testSerialization($tree)
     {
         $this->sut->setTree($tree);
-        $this->assertStringStartsWith('{"data":{"title":"Root"',json_encode($this->sut->getTree()));
+        $this->assertStringStartsWith('{"data":{"title":"Root"', json_encode($this->sut->getTree()));
     }
+
 }

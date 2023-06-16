@@ -12,12 +12,12 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="https://unpkg.com/sortable-tree/dist/sortable-tree.js"></script>
+    <script src="{{ asset('marcantondahmen/sortable-tree.js') }}"></script>
 {% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
-    <link href="https://unpkg.com/sortable-tree/dist/sortable-tree.css" rel="stylesheet"/>
+    <link href="{{ asset('marcantondahmen/sortable-tree.css') }}" rel="stylesheet"/>
 
     <style>
         .tree_widget {
@@ -92,7 +92,7 @@
         }
 
         form .tree__label > input[type=checkbox] {
-            margin-right: 1em; 
+            margin-right: 1em;
             margin-top: 1em;
         }
 

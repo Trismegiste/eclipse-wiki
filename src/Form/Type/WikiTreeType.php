@@ -14,9 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Description of WikiTreeType
- *
- * @author florent
+ * Tree editor
  */
 class WikiTreeType extends AbstractType implements DataTransformerInterface
 {
