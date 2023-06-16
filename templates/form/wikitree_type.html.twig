@@ -40,7 +40,7 @@
                 button.addEventListener('click', event => {
                     let node = button.parentElement.parentElement
                     let newChild = {data: {title: 'New child', finished: false}, nodes: []}
-                    let originalNode = backtrackOriginalNodeWithData(nodeData[0], node.data)
+                    let originalNode = backtrackOriginalNodeWithData(nodeData[0], node.data)  // mauvaise idée d'utiliser nodeData car il n'est pas mis à jour lors du SortableTree::onChange
                     originalNode.nodes.push(newChild)
                     hiddenTree.value = JSON.stringify(nodeData[0])
                 })
@@ -64,13 +64,20 @@
                 button.addEventListener('click', event => {
                     event.preventDefault()
                     let node = button.parentElement.parentElement
+                    editArea.hidden = false
+                    editArea.focus()
                     editArea.innerHTML = node.data.title
                     currentlyEditedNode = node
                 })
             })
 
-            editArea.addEventListener('change', event => {
-                console.log(event)
+            editArea.addEventListener('blur', event => {
+                currentlyEditedNode.data.title = editArea.value
+                currentlyEditedNode.label.querySelector('span').innerHTML = editArea.value
+                hiddenTree.value = JSON.stringify(nodeData[0])
+                editArea.value = ''
+                editArea.hidden = true
+                currentlyEditedNode = null
             })
 
             function dumpTree(elem) {
