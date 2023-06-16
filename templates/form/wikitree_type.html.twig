@@ -2,7 +2,7 @@
 {% block wiki_tree_widget %}
     {{ form_widget(form) }}
     <div id="{{ form.vars.id }}_tree" class="tree_widget"></div>
-    <textarea id="{{ form.vars.id }}_edit" class="pure-input-1"></textarea>
+    <textarea id="{{ form.vars.id }}_edit" class="pure-input-1" hidden="true"></textarea>
     <script>
         window.addEventListener('load', () => {
             if (typeof SortableTree === "undefined") {
@@ -11,11 +11,11 @@
 
             const hiddenTree = document.getElementById('{{ form.vars.id }}')
             const editArea = document.getElementById('{{ form.vars.id }}_edit')
-            const nodeData = [{{ form.vars.data|raw }}]
+            let nodeData = [{{ form.vars.data|raw }}][0]
             let currentlyEditedNode = null
 
             const tree = new SortableTree({
-                nodes: nodeData,
+                nodes: [nodeData],
                 element: document.getElementById('{{ form.vars.id }}_tree'),
                 initCollapseLevel: 4,
                 //  stateId: 'some-tree',
@@ -27,7 +27,8 @@
                                 <button class="pure-button"><i class="icon-trash-empty"></i></button>`
                 },
                 onChange: ({ nodes, movedNode, srcParentNode, targetParentNode }) => {
-                    hiddenTree.value = JSON.stringify(dumpTree(nodes[0]))
+                    nodeData = dumpTree(nodes[0])
+                    hiddenTree.value = JSON.stringify(nodeData)
                 },
                 onClick: (event, node) => {
                     // node.label.querySelector('span').innerHTML += ' yolo'
@@ -40,9 +41,9 @@
                 button.addEventListener('click', event => {
                     let node = button.parentElement.parentElement
                     let newChild = {data: {title: 'New child', finished: false}, nodes: []}
-                    let originalNode = backtrackOriginalNodeWithData(nodeData[0], node.data)  // mauvaise idée d'utiliser nodeData car il n'est pas mis à jour lors du SortableTree::onChange
+                    let originalNode = backtrackOriginalNodeWithData(nodeData, node.data)
                     originalNode.nodes.push(newChild)
-                    hiddenTree.value = JSON.stringify(nodeData[0])
+                    hiddenTree.value = JSON.stringify(nodeData)
                 })
             })
 
@@ -51,11 +52,11 @@
                 button.addEventListener('click', event => {
                     let node = button.parentElement.parentElement
                     let parentNode = node.parentElement.parentElement
-                    let originalNode = backtrackOriginalNodeWithData(nodeData[0], node.data)
-                    let originalParentNode = backtrackOriginalNodeWithData(nodeData[0], parentNode.data)
+                    let originalNode = backtrackOriginalNodeWithData(nodeData, node.data)
+                    let originalParentNode = backtrackOriginalNodeWithData(nodeData, parentNode.data)
                     let idx = originalParentNode.nodes.indexOf(originalNode)
                     originalParentNode.nodes.splice(idx, 1)
-                    hiddenTree.value = JSON.stringify(nodeData[0])
+                    hiddenTree.value = JSON.stringify(nodeData)
                 })
             })
 
@@ -74,7 +75,7 @@
             editArea.addEventListener('blur', event => {
                 currentlyEditedNode.data.title = editArea.value
                 currentlyEditedNode.label.querySelector('span').innerHTML = editArea.value
-                hiddenTree.value = JSON.stringify(nodeData[0])
+                hiddenTree.value = JSON.stringify(nodeData)
                 editArea.value = ''
                 editArea.hidden = true
                 currentlyEditedNode = null
