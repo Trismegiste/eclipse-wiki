@@ -67,7 +67,7 @@
                     let node = button.parentElement.parentElement
                     editArea.hidden = false
                     editArea.focus()
-                    editArea.innerHTML = node.data.title
+                    editArea.value = node.data.title
                     currentlyEditedNode = node
                 })
             })
