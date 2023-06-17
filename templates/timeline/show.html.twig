@@ -25,12 +25,9 @@
 {% block stylesheets %}
     {{ parent() }}
     <style>
-        input[type=checkbox].task-update {
-            margin-right: 0.5em;
-        }
-
-        input[type=checkbox].task-update:checked + label.task-title {
-            text-decoration: line-through;
+        .parsed-wikitext ul strike {
+            opacity: 0.3;
+            text-decoration: none;
         }
     </style>
 {% endblock %}

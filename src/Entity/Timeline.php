@@ -35,7 +35,11 @@ class Timeline extends Vertex
     protected function flattenTree(array &$accumul, array $children, int $level): void
     {
         foreach ($children as $child) {
-            $accumul[] = str_repeat('*', $level) . ' ' . $child->title;
+            $label = $child->title;
+            if ($child->finished) {
+                $label = "<strike>$label</strike>";
+            }
+            $accumul[] = str_repeat('*', $level) . ' ' . $label;
             $this->flattenTree($accumul, $child->nodes, $level + 1);
         }
     }

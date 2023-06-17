@@ -42,6 +42,7 @@ class TimelineType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         $this->moveChildAtEnd($view, 'create');
+        $this->changeLabel($view, 'create', 'Save all labels');
     }
 
 }
