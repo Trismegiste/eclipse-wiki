@@ -33,6 +33,7 @@ class TimelineType extends AbstractType
         $builder
                 ->add('elevatorPitch', WikitextType::class, ['attr' => ['rows' => 4]])
                 ->add('tree', Type\WikiTreeType::class, empty($options['data']) ? [] : ['state_key' => (string) $options['data']->getPk()])
+                ->add('debriefing', WikitextType::class, ['required' => false, 'attr' => ['rows' => 6]])
         ;
     }
 

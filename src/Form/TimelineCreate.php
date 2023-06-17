@@ -33,12 +33,13 @@ class TimelineCreate extends AbstractType
                 ->add('tree', CollectionType::class, [
                     'entry_type' => WikitextType::class,
                     'entry_options' => [
-                        'attr' => ['rows' => 2],
+                        'attr' => ['rows' => 3],
                         'required' => false,
                         'label' => false
                     ],
                     'delete_empty' => true,
-                    'data' => array_fill(0, 5, null)
+                    'data' => array_fill(0, 5, null),
+                    'label' => '5 acts'
                 ])
         ;
         $builder->get('tree')->setDataMapper(new Type\TreeBuilderMapper());

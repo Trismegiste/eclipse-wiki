@@ -29,15 +29,17 @@ class Timeline extends Vertex
     protected function beforeSave(): void
     {
         parent::beforeSave();
+        $accumul = [];
+        $this->flattenTree($accumul, $this->tree->nodes, 1);
+        $tree = implode(PHP_EOL, $accumul);
         $this->content = <<<WIKITEXT
 ==Elevator pitch==
 {$this->elevatorPitch}
 ==Timeline==
+$tree
+==Debriefing==
+{$this->debriefing}
 WIKITEXT;
-        $accumul = [];
-        $this->flattenTree($accumul, $this->tree->nodes, 1);
-        $this->content .= PHP_EOL . implode(PHP_EOL, $accumul);
-        $this->content .= PHP_EOL . '==Debriefing==' . PHP_EOL . $this->debriefing;
     }
 
     protected function flattenTree(array &$accumul, array $children, int $level): void
