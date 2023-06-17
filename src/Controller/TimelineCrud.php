@@ -33,7 +33,7 @@ class TimelineCrud extends GenericCrud
     #[Route('/timeline/create', methods: ['GET', 'POST'])]
     public function create(Request $request): Response
     {
-        return $this->handleCreate(TimelineType::class, 'timeline/create.html.twig', $request);
+        return $this->handleCreate(\App\Form\TimelineCreate::class, 'timeline/create.html.twig', $request);
     }
 
     /**

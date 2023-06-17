@@ -12,7 +12,9 @@ namespace App\Entity;
 class Timeline extends Vertex
 {
 
+    public ?string $elevatorPitch;
     protected PlotNode $tree;
+    public ?string $debriefing = null;
 
     public function getTree(): PlotNode
     {
@@ -27,9 +29,15 @@ class Timeline extends Vertex
     protected function beforeSave(): void
     {
         parent::beforeSave();
+        $this->content = <<<WIKITEXT
+==Elevator pitch==
+{$this->elevatorPitch}
+==Timeline==
+WIKITEXT;
         $accumul = [];
         $this->flattenTree($accumul, $this->tree->nodes, 1);
-        $this->content = implode(PHP_EOL, $accumul);
+        $this->content .= PHP_EOL . implode(PHP_EOL, $accumul);
+        $this->content .= PHP_EOL . '==Debriefing==' . PHP_EOL . $this->debriefing;
     }
 
     protected function flattenTree(array &$accumul, array $children, int $level): void

@@ -7,6 +7,7 @@
 namespace App\Form;
 
 use App\Entity\Timeline;
+use App\Form\Type\WikitextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -29,7 +30,10 @@ class TimelineType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->remove('content');
-        $builder->add('tree', Type\WikiTreeType::class, empty($options['data']) ? [] : ['state_key' => (string) $options['data']->getPk()]);
+        $builder
+                ->add('elevatorPitch', WikitextType::class, ['attr' => ['rows' => 4]])
+                ->add('tree', Type\WikiTreeType::class, empty($options['data']) ? [] : ['state_key' => (string) $options['data']->getPk()])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -42,7 +46,9 @@ class TimelineType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         $this->moveChildAtEnd($view, 'create');
-        $this->changeLabel($view, 'create', 'Save all labels');
+        if (!empty($options['data'])) {
+            $this->changeLabel($view, 'create', 'Save all labels');
+        }
     }
 
 }

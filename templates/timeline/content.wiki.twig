@@ -1,8 +1,0 @@
-{# dump the form for the wikitext content #}
-{# WARNING : DO NOT FORMAT THIS TEMPLATE OR YOU'LL ADD SOME WHITESPACES THAT MATTER IN WIKITEXT FORMAT #}
-==Elevator pitch==
-{{ elevator_pitch|raw }}
-==Timeline==
-{% for descr in scene %}
-* {{'{{task|'}}{{ descr|raw }}{{'}}'}}
-{% endfor %}

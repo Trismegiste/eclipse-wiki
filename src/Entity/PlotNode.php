@@ -6,13 +6,15 @@
 
 namespace App\Entity;
 
+use ArrayAccess;
+use JsonSerializable;
 use MongoDB\BSON\Persistable;
 use Trismegiste\Strangelove\MongoDb\PersistableImpl;
 
 /**
  * A node in the plot tree
  */
-class PlotNode implements Persistable, \JsonSerializable
+class PlotNode implements Persistable, JsonSerializable, ArrayAccess, \IteratorAggregate
 {
 
     use PersistableImpl;
@@ -33,6 +35,31 @@ class PlotNode implements Persistable, \JsonSerializable
         ];
 
         return $json;
+    }
+
+    public function offsetExists(mixed $offset): bool
+    {
+        return key_exists($offset, $this->nodes);
+    }
+
+    public function offsetGet(mixed $offset): mixed
+    {
+        return $this->nodes[$offset];
+    }
+
+    public function offsetSet(mixed $offset, mixed $value): void
+    {
+        $this->nodes[$offset] = $value;
+    }
+
+    public function offsetUnset(mixed $offset): void
+    {
+        unset($this->nodes[$offset]);
+    }
+
+    public function getIterator(): \Traversable
+    {
+        return new \IteratorIterator($this->nodes);
     }
 
 }

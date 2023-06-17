@@ -26,20 +26,11 @@ class TimelineCreate extends AbstractType
 
     use FormTypeUtils;
 
-    protected VertexRepository $repository;
-    protected Environment $twig;
-
-    public function __construct(VertexRepository $repo, Environment $twig)
-    {
-        $this->repository = $repo;
-        $this->twig = $twig;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->remove('content');
-        $builder->add('elevator_pitch', WikitextType::class, ['attr' => ['rows' => 4]])
-                ->add('scene', CollectionType::class, [
+        $builder->add('elevatorPitch', WikitextType::class, ['attr' => ['rows' => 4]])
+                ->add('tree', CollectionType::class, [
                     'entry_type' => WikitextType::class,
                     'entry_options' => [
                         'attr' => ['rows' => 2],
@@ -50,7 +41,7 @@ class TimelineCreate extends AbstractType
                     'data' => array_fill(0, 5, null)
                 ])
         ;
-        $builder->setDataMapper(new WikitextContentMapper($this->twig, 'timeline/content.wiki.twig'));
+        $builder->get('tree')->setDataMapper(new Type\TreeBuilderMapper());
     }
 
     public function configureOptions(OptionsResolver $resolver): void
