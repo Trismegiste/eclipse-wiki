@@ -66,4 +66,16 @@ class WikiTreeType extends AbstractType implements DataTransformerInterface
         $builder->addModelTransformer($this);
     }
 
+    public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver): void
+    {
+        $resolver->setDefined('state_key');
+    }
+
+    public function buildView(\Symfony\Component\Form\FormView $view, \Symfony\Component\Form\FormInterface $form, array $options): void
+    {
+        if (key_exists('state_key', $options)) {
+            $view->vars['state_key'] = 'tree-state-' . $options['state_key'];
+        }
+    }
+
 }

@@ -18,7 +18,9 @@
                 nodes: [nodeData],
                 element: document.getElementById('{{ form.vars.id }}_tree'),
                 initCollapseLevel: 4,
-                //  stateId: 'some-tree',
+                {% if form.vars.state_key is defined %}
+                    stateId: '{{ form.vars.state_key }}',
+                {% endif %}
                 renderLabel: (data) => {
                     let state = data.finished ? 'finished-node' : ''
                     return `<span class="${state}">${data.title}</span>

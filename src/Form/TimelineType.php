@@ -29,7 +29,7 @@ class TimelineType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->remove('content');
-        $builder->add('tree', Type\WikiTreeType::class);
+        $builder->add('tree', Type\WikiTreeType::class, empty($options['data']) ? [] : ['state_key' => (string) $options['data']->getPk()]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
