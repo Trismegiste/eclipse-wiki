@@ -117,6 +117,30 @@
 
                 return null
             }
+
+            if (typeof Textcomplete === "undefined") {
+                throw new Error('Yuku TextComplete is required')
+            }
+
+            let Textarea = Textcomplete.editors.Textarea
+            let editor = new Textarea(editArea)
+            let textcomplete = new Textcomplete(editor)
+            textcomplete.register([{
+                // Link strategy for Vertex
+                match: /(.*)\[\[([^\]]+)$/,
+                search: function (term, callback) {
+                    fetch('{{ path('app_vertexcrud_search') }}' + '?q=' + term)
+                            .then((response) => {
+                                return response.json()
+                            })
+                            .then((data) => {
+                                callback(data)
+                            })
+                },
+                replace: function (value) {
+                    return '$1[[' + value + ']] '
+                }
+            }])
         })
     </script>
 {% endblock %}

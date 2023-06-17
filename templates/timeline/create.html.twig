@@ -1,8 +1,17 @@
 {% extends "base.html.twig" %}
+{% form_theme form _self %}
 
 {% block title %}Création d'une Timeline{% endblock %}
 
 {% block header_title %}{{ block('title') }}{% endblock %}
+
+{% block _timeline_create_tree_entry_row %}
+    <div class="pure-g">
+        <div class="pure-u-1">
+            {{ form_widget(form, {attr:{class:'pure-input-1'}}) }}
+        </div>
+    </div>
+{% endblock %}
 
 {% block content %}
     <section>
