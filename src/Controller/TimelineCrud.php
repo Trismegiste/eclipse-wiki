@@ -44,7 +44,18 @@ class TimelineCrud extends GenericCrud
     #[Route('/timeline/edit/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function edit(string $pk, Request $request): Response
     {
-        return $this->handleEdit(TimelineType::class, 'timeline/edit.html.twig', $pk, $request);
+        $vertex = $this->repository->findByPk($pk);
+        $form = $this->createForm(TimelineType::class, $vertex, ['edit' => true]);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $vertex = $form->getData();
+            $this->repository->save($vertex);
+
+            return $this->redirectToRoute('app_timelinecrud_edit', ['pk' => $vertex->getPk()]);
+        }
+
+        return $this->render('timeline/edit.html.twig', ['form' => $form->createView()]);
     }
 
     /**

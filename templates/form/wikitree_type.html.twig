@@ -20,11 +20,12 @@
                 initCollapseLevel: 4,
                 //  stateId: 'some-tree',
                 renderLabel: (data) => {
-                    return `<input type="checkbox"/>
-                                <span>${data.title}</span>
+                    let state = data.finished ? 'finished-node' : ''
+                    return `<span class="${state}">${data.title}</span>
                                 <button class="pure-button"><i class="icon-edit"></i></button>
                                 <button class="pure-button"><i class="icon-newchild"></i></button>
-                                <button class="pure-button"><i class="icon-trash-empty"></i></button>`
+                                <button class="pure-button"><i class="icon-trash-empty"></i></button>
+                                <button class="pure-button"><i class="icon-archive"></i></button>`
                 },
                 onChange: ({ nodes, movedNode, srcParentNode, targetParentNode }) => {
                     nodeData = dumpTree(nodes[0])
@@ -79,6 +80,16 @@
                 editArea.value = ''
                 editArea.hidden = true
                 currentlyEditedNode = null
+            })
+
+            document.querySelectorAll('#{{ form.vars.id }}_tree i.icon-archive').forEach(elem => {
+                let button = elem.parentElement
+                button.addEventListener('click', event => {
+                    let node = button.parentElement.parentElement
+                    let originalNode = backtrackOriginalNodeWithData(nodeData, node.data)
+                    originalNode.data.finished = !originalNode.data.finished
+                    hiddenTree.value = JSON.stringify(nodeData)
+                })
             })
 
             function dumpTree(elem) {
