@@ -9,6 +9,7 @@ namespace App\Form;
 use App\Entity\Timeline;
 use App\Form\Type\WikitextType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -34,6 +35,7 @@ class TimelineType extends AbstractType
                 ->add('elevatorPitch', WikitextType::class, ['attr' => ['rows' => 4]])
                 ->add('tree', Type\WikiTreeType::class, empty($options['data']) ? [] : ['state_key' => (string) $options['data']->getPk()])
                 ->add('debriefing', WikitextType::class, ['required' => false, 'attr' => ['rows' => 6]])
+                ->add('update_stay', SubmitType::class)
         ;
     }
 
@@ -48,7 +50,7 @@ class TimelineType extends AbstractType
     {
         $this->moveChildAtEnd($view, 'create');
         if (!empty($options['data'])) {
-            $this->changeLabel($view, 'create', 'Save all labels');
+            $this->changeLabel($view, 'create', 'Save labels and view');
         }
     }
 

@@ -52,7 +52,9 @@ class TimelineCrud extends GenericCrud
             $vertex = $form->getData();
             $this->repository->save($vertex);
 
-            return $this->redirectToRoute('app_timelinecrud_edit', ['pk' => $vertex->getPk()]);
+            $target = $form->get('create')->isClicked() ? 'app_vertexcrud_show' : 'app_timelinecrud_edit';
+
+            return $this->redirectToRoute($target, ['pk' => $vertex->getPk()]);
         }
 
         return $this->render('timeline/edit.html.twig', ['form' => $form->createView()]);
