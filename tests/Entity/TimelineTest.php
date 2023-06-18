@@ -33,10 +33,11 @@ class TimelineTest extends TestCase
     public function testFlattenTree($tree)
     {
         $this->sut->setTree($tree);
+        $this->sut->elevatorPitch = 'pitch';
 
         $dump = $this->sut->bsonSerialize();
-        $this->assertStringStartsWith('* Act 1', $dump['content']);
-        $this->assertStringEndsWith('3.1', $dump['content']);
+        $this->assertStringStartsWith('==Elevator', $dump['content']);
+        $this->assertStringEndsWith("Debriefing==\n", $dump['content']);
     }
 
     /** @dataProvider getComplexTree */

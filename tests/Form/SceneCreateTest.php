@@ -27,10 +27,14 @@ class SceneCreateTest extends KernelTestCase
         $repo = static::getContainer()->get(VertexRepository::class);
         $repo->delete(iterator_to_array($repo->search()));
         $this->assertCount(0, iterator_to_array($repo->search()));
+
+        $plot = new Timeline('TOS');
+        $plot->setTree(new \App\Entity\PlotNode('root'));
+        $plot->elevatorPitch = 'Space';
         $info = [
             new Place('Earth'),
             new Transhuman('Kirk', new Background('Orphan'), new Faction('Officer')),
-            new Timeline('TOS')
+            $plot
         ];
         $repo->save($info);
     }
