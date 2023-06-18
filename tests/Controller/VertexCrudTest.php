@@ -25,7 +25,7 @@ class VertexCrudTest extends WebTestCase
     public function getVertexFqcn(): array
     {
         return [
-            [\App\Entity\Timeline::class],
+            [\App\Entity\Scene::class],
             [\App\Entity\Scene::class],
             [\App\Entity\Scene::class],
         ];

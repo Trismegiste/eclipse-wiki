@@ -37,7 +37,8 @@ class TimelineCrudTest extends WebTestCase
         $form = $crawler->selectButton('timeline_create_create')->form();
         $form->setValues(['timeline_create' => [
                 'title' => 'A new hope',
-                'scene' => ['[[Star destroyer]]']
+                'elevatorPitch' => 'In space',
+                'tree' => ['[[Star destroyer]]']
         ]]);
         $this->client->submit($form);
         $this->assertResponseRedirects();
@@ -77,7 +78,7 @@ class TimelineCrudTest extends WebTestCase
         $crawler = $this->client->request('GET', $edit);
         $this->assertResponseIsSuccessful();
         $this->assertPageTitleContains('A new hope');
-        $this->assertCount(1, $crawler->selectButton('vertex_create'));
+        $this->assertCount(1, $crawler->selectButton('timeline_create'));
     }
 
     public function testPin()

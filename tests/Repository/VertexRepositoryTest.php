@@ -114,7 +114,8 @@ class VertexRepositoryTest extends KernelTestCase
     public function testExploreOrphanTimeline()
     {
         $obj = new Timeline('Root');
-        $obj->setContent('nihil');
+        $obj->setTree(new \App\Entity\PlotNode('root'));
+        $obj->elevatorPitch = 'nihil';
         $this->sut->save($obj);
 
         $res = $this->sut->exploreTreeFrom($obj);
