@@ -53,13 +53,4 @@ class LinkRender extends HtmlRenderer
         return (bool) $this->repository->findByTitle($title);
     }
 
-    public function getTemplateMarkup($template)
-    {
-        if ($template === 'task') {
-            return '<input type="checkbox" class="task-update" {{{2}}}/><label class="task-title">{{{1}}}</label>';
-        }
-
-        return parent::getTemplateMarkup($template);
-    }
-
 }
