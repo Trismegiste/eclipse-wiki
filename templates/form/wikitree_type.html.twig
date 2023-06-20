@@ -26,7 +26,7 @@
                     return `<span class="${state}">${data.title}</span>
                                 <button class="pure-button"><i class="icon-edit"></i></button>
                                 <button class="pure-button"><i class="icon-newchild"></i></button>
-                                <button class="pure-button button-delete"><i class="icon-trash-empty"></i></button>
+                                <button class="pure-button"><i class="icon-trash-empty"></i></button>
                                 <button class="pure-button"><i class="icon-archive"></i></button>`
                 },
                 onChange: ({ nodes, movedNode, srcParentNode, targetParentNode }) => {
@@ -53,13 +53,18 @@
             document.querySelectorAll('#{{ form.vars.id }}_tree i.icon-trash-empty').forEach(elem => {
                 let button = elem.parentElement
                 button.addEventListener('click', event => {
-                    let node = button.parentElement.parentElement
-                    let parentNode = node.parentElement.parentElement
-                    let originalNode = backtrackOriginalNodeWithData(nodeData, node.data)
-                    let originalParentNode = backtrackOriginalNodeWithData(nodeData, parentNode.data)
-                    let idx = originalParentNode.nodes.indexOf(originalNode)
-                    originalParentNode.nodes.splice(idx, 1)
-                    hiddenTree.value = JSON.stringify(nodeData)
+                    if (button.dataset.alive === 'true') {
+                        let node = button.parentElement.parentElement
+                        let parentNode = node.parentElement.parentElement
+                        let originalNode = backtrackOriginalNodeWithData(nodeData, node.data)
+                        let originalParentNode = backtrackOriginalNodeWithData(nodeData, parentNode.data)
+                        let idx = originalParentNode.nodes.indexOf(originalNode)
+                        originalParentNode.nodes.splice(idx, 1)
+                        hiddenTree.value = JSON.stringify(nodeData)
+                    } else {
+                        button.dataset.alive = 'true'
+                        event.preventDefault()
+                    }
                 })
             })
 
@@ -118,6 +123,10 @@
                 return null
             }
 
+            // copy-pasted from wikitext.html.twig but it's far more simple than create a compound form.
+            // And furthemore, I don't need the same behavior since images are not allowed in node title.
+            // The other way is to create a global javascript variable to store the link strategy but the route is generated with twig
+            // "Not great, not terrible"
             if (typeof Textcomplete === "undefined") {
                 throw new Error('Yuku TextComplete is required')
             }
