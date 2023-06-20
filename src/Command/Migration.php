@@ -33,6 +33,8 @@ class Migration extends Command
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
+        throw new \RuntimeException("Obsolete : Keep it for future migration");
+
         $io = new SymfonyStyle($input, $output);
         $io->title("Migration");
 
