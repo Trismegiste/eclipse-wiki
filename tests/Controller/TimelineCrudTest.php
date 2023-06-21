@@ -78,7 +78,24 @@ class TimelineCrudTest extends WebTestCase
         $crawler = $this->client->request('GET', $edit);
         $this->assertResponseIsSuccessful();
         $this->assertPageTitleContains('A new hope');
-        $this->assertCount(1, $crawler->selectButton('timeline_create'));
+        $button = $crawler->selectButton('timeline_create');
+        $this->assertCount(1, $button);
+        // changing tree
+        $form = $button->form();
+        $jsonTree = $form->get('timeline[tree]')->getValue();
+        $this->assertStringStartsWith('{"data":{"title":"Root"', $jsonTree);
+        $tree = json_decode($jsonTree);
+        $tree->nodes[] = new App\Entity\PlotNode('Tantive IV');
+        $form->get('timeline[tree]')->setValue(json_encode($tree));
+        $this->client->submit($form);
+        $this->assertResponseRedirects();
+        $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
+
+        $pk = $this->client->getRequest()->get('pk');
+        $this->client->request('GET', "/vertex/show/$pk");
+        $this->assertResponseIsSuccessful();
+        $this->assertStringContainsString('Tantive', $this->client->getResponse()->getContent());
     }
 
     public function testPin()

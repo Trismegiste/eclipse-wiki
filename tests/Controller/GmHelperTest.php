@@ -49,4 +49,11 @@ class GmHelperTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    public function testQrCode3D()
+    {
+        $this->client->request('GET', '/broadcast/qrcode3d');
+        $this->assertResponseIsSuccessful();
+        $this->assertStringContainsString('QRious', $this->client->getResponse()->getContent());
+    }
+
 }
