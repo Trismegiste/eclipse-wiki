@@ -42,14 +42,22 @@ class PlotNode implements Persistable, JsonSerializable, ArrayAccess, \IteratorA
         return key_exists($offset, $this->nodes);
     }
 
-    public function offsetGet(mixed $offset): mixed
+    public function offsetGet(mixed $offset): PlotNode
     {
         return $this->nodes[$offset];
     }
 
     public function offsetSet(mixed $offset, mixed $value): void
     {
-        $this->nodes[$offset] = $value;
+        if (!$value instanceof PlotNode) {
+            throw new \UnexpectedValueException('Only PlotNode objects are expected');
+        }
+
+        if (is_null($offset)) {
+            array_push($this->nodes, $value);
+        } else {
+            $this->nodes[$offset] = $value;
+        }
     }
 
     public function offsetUnset(mixed $offset): void
@@ -59,7 +67,7 @@ class PlotNode implements Persistable, JsonSerializable, ArrayAccess, \IteratorA
 
     public function getIterator(): \Traversable
     {
-        return new \IteratorIterator($this->nodes);
+        return new \ArrayIterator($this->nodes);
     }
 
 }
