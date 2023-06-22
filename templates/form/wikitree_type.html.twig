@@ -82,6 +82,7 @@
                 hiddenTree.value = JSON.stringify(nodeData)
                 editArea.value = ''
                 editArea.hidden = true
+                currentlyEditedNode.label.querySelector('button').focus()
                 currentlyEditedNode = null
             })
 
