@@ -69,6 +69,7 @@
                 button.addEventListener('click', event => {
                     event.preventDefault()
                     let node = button.parentElement.parentElement
+                    node.append(editArea)
                     editArea.hidden = false
                     editArea.focus()
                     editArea.value = node.data.title
