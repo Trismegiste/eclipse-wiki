@@ -82,6 +82,11 @@ class MediaWiki
         return json_decode($response->getContent());
     }
 
+    /**
+     * Gets the wikitext code for a given page
+     * @param string $name
+     * @return string
+     */
     public function getWikitextByName(string $name): string
     {
         $response = $this->sendQuery([
@@ -92,6 +97,26 @@ class MediaWiki
         ]);
 
         return $response->parse->wikitext->{'*'};
+    }
+
+    /**
+     * Gets the XML Parsed Tree for a given page
+     * @param string $name
+     * @return string
+     */
+    public function getTreeAndHtmlByName(string $name): array
+    {
+        $response = $this->sendQuery([
+            'action' => 'parse',
+            'format' => 'json',
+            'page' => $name,
+            'prop' => 'parsetree|text',
+            'disablelimitreport' => 1,
+            'disableeditsection' => 1,
+            'disabletoc' => 1
+        ]);
+
+        return ['tree' => $response->parse->parsetree->{'*'}, 'html' => $response->parse->text->{'*'}];
     }
 
     public function getTemplateData(string $templateName): array
