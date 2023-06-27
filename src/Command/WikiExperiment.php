@@ -31,10 +31,7 @@ class WikiExperiment extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $dump = $this->mediaWiki->getTreeAndHtmlByName('Furie');
-
-        $doc = new \DOMDocument();
-        $doc->loadXML($dump['tree']);
+        $doc = $this->mediaWiki->getTreeAndHtmlDomByName('Furie')['tree'];
 
         $bonusList = [];
 
