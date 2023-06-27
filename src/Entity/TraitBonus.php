@@ -1,3 +1,5 @@
+<?php
+
 /*
  * eclipse-wiki
  */
@@ -5,7 +7,7 @@
 namespace App\Entity;
 
 use MongoDB\BSON\Persistable;
-use Trismegiste\StrangeloveBundle\PersitableImpl;
+use Trismegiste\Strangelove\MongoDb\PersistableImpl;
 
 /**
  * A bonus on a Trait
@@ -13,7 +15,7 @@ use Trismegiste\StrangeloveBundle\PersitableImpl;
 class TraitBonus implements Persistable
 {
 
-    use PersitableImpl;
+    use PersistableImpl;
 
     public int $dieType;
     public int $flat;

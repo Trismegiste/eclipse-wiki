@@ -36,6 +36,8 @@ class WikiExperiment extends Command
         $doc = new \DOMDocument();
         $doc->loadXML($dump['tree']);
 
+        $bonusList = [];
+
         $skillBonus = new \DOMXPath($doc);
         $iter = $skillBonus->query('//h[@level=2][contains(text(), "Avantage")]/following-sibling::template/title[normalize-space()="RaceBonusCompétence"]/parent::template');
         $templateParam = new \DOMXPath($doc);
@@ -44,8 +46,10 @@ class WikiExperiment extends Command
             $skill = $paramIter->item(0)->nodeValue;
             $paramIter = $templateParam->query('part/name[@index="1"]/following-sibling::value', $bonus);
             $bonus = $paramIter->item(0)->nodeValue;
-            var_dump($skill, $bonus);
+            $bonusList[$skill] = new \App\Entity\TraitBonus($bonus);
         }
+
+        var_dump($bonusList);
 
         return Command::SUCCESS;
     }
