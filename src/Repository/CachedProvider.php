@@ -15,7 +15,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 abstract class CachedProvider implements GenericProvider
 {
 
-    protected $wiki;
+    protected MediaWiki $wiki;
     protected $cache;
 
     public function __construct(MediaWiki $param, CacheInterface $cache)

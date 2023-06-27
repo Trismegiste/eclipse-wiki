@@ -119,8 +119,8 @@ class MediaWiki
         libxml_use_internal_errors(true); // because other xml/svg namespace warning
         $html = new DOMDocument("1.0", "UTF-8");
         $html->loadHTML('<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><body>' .
-                 $response->parse->text->{'*'} .
-                 '</body></html>');
+                $response->parse->text->{'*'} .
+                '</body></html>');
 
         $tree = new DOMDocument("1.0", "UTF-8");
         $tree->loadXML($response->parse->parsetree->{'*'});
