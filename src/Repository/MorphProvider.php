@@ -30,8 +30,8 @@ class MorphProvider extends CachedProvider
 
     public function findOne(string $key): Indexable
     {
-        //  return $this->cache->get('morph_page_' . $this->sanitize($key), function (ItemInterface $item) use ($key) {
-        //           $item->expiresAfter(DateInterval::createFromDateString('1 day'));
+          return $this->cache->get('morph_page_' . $this->sanitize($key), function (ItemInterface $item) use ($key) {
+                   $item->expiresAfter(DateInterval::createFromDateString('1 day'));
 
         $page = $this->wiki->getTreeAndHtmlDomByName($key);
         $obj = new Morph($key);
@@ -39,7 +39,7 @@ class MorphProvider extends CachedProvider
         $this->hydrateWithTree($obj, $page['tree']);
 
         return $obj;
-        //     });
+             });
     }
 
     protected function hydrateWithHtml(Morph $obj, DOMDocument $doc): void
