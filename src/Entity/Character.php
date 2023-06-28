@@ -210,4 +210,10 @@ abstract class Character extends Vertex implements \JsonSerializable
     }
 
     abstract public function getDescription(): string;
+
+    public function getSkillRolls(): \Iterator
+    {
+        return new ModifiedSkillRolls($this->skills, $this->morph->skillBonus);
+    }
+
 }
