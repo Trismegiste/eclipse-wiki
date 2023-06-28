@@ -6,12 +6,15 @@
 
 namespace App\Repository;
 
+use App\Entity\Hindrance;
 use App\Entity\Indexable;
 use App\Entity\Morph;
 use App\Entity\TraitBonus;
+use App\Service\MediaWiki;
 use DateInterval;
 use DOMDocument;
 use DOMXPath;
+use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 
 /**
@@ -20,18 +23,23 @@ use Symfony\Contracts\Cache\ItemInterface;
 class MorphProvider extends CachedProvider
 {
 
+    public function __construct(MediaWiki $param, CacheInterface $cache, protected EdgeProvider $edgeRepo, protected HindranceProvider $hindRepo)
+    {
+        parent::__construct($param, $cache);
+    }
+
     public function findOne(string $key): Indexable
     {
-        return $this->cache->get('morph_page_' . $this->sanitize($key), function (ItemInterface $item) use ($key) {
-                    $item->expiresAfter(DateInterval::createFromDateString('1 day'));
+        //  return $this->cache->get('morph_page_' . $this->sanitize($key), function (ItemInterface $item) use ($key) {
+        //           $item->expiresAfter(DateInterval::createFromDateString('1 day'));
 
-                    $page = $this->wiki->getTreeAndHtmlDomByName($key);
-                    $obj = new Morph($key);
-                    $this->hydrateWithHtml($obj, $page['html']);
-                    $this->hydrateWithTree($obj, $page['tree']);
+        $page = $this->wiki->getTreeAndHtmlDomByName($key);
+        $obj = new Morph($key);
+        $this->hydrateWithHtml($obj, $page['html']);
+        $this->hydrateWithTree($obj, $page['tree']);
 
-                    return $obj;
-                });
+        return $obj;
+        //     });
     }
 
     protected function hydrateWithHtml(Morph $obj, DOMDocument $doc): void
@@ -56,10 +64,18 @@ class MorphProvider extends CachedProvider
         $obj->price = $elements->item(0)->textContent;
     }
 
+    /*
+     * {{RaceBonusAtttribut|1|VIG}}
+     * {{RaceAtout|Sang-froid}}
+     * {{RaceBonusCompétence|1|Combat}}
+     * {{RaceHandicap|m|Loyal}}
+     */
+
     protected function hydrateWithTree(Morph $obj, DOMDocument $doc): void
     {
-        // Extracts bonus on Skills
         $crawler = new DOMXPath($doc);
+
+        // Extracts bonus on Skills
         $iter = $crawler->query('//h[@level=2][contains(text(), "Avantage")]/following-sibling::template/title[normalize-space()="RaceBonusCompétence"]/parent::template');
         foreach ($iter as $bonus) {
             $paramIter = $crawler->query('part/name[@index="2"]/following-sibling::value', $bonus);
@@ -78,6 +94,36 @@ class MorphProvider extends CachedProvider
             $bonus = $paramIter->item(0)->nodeValue;
             $obj->attributeBonus[$attr] = new TraitBonus($bonus);
         }
+
+        // Extracts edges
+        $edgeList = [];
+        $iter = $crawler->query('//h[@level=2][contains(text(), "Avantage")]/following-sibling::template/title[normalize-space()="RaceAtout"]/parent::template');
+        foreach ($iter as $edge) {
+            $paramIter = $crawler->query('part/name[@index="1"]/following-sibling::value', $edge);
+            $key = $paramIter->item(0)->nodeValue;
+            /** @var \App\Entity\Edge $found */
+            $found = $this->edgeRepo->findOne($key);
+            $found->origin = 'Morphe';
+            $edgeList[] = $found;
+        }
+        $obj->setEdges($edgeList);
+
+        // Extracts Hindrances
+        $hindList = [];
+        $convertLevel = ['m' => Hindrance::MINOR, 'M' => Hindrance::MAJOR];
+        $iter = $crawler->query('//h[@level=2][contains(text(), "savantage")]/following-sibling::template/title[normalize-space()="RaceHandicap"]/parent::template');
+        foreach ($iter as $hind) {
+            $paramIter = $crawler->query('part/name[@index="1"]/following-sibling::value', $hind);
+            $level = $paramIter->item(0)->nodeValue;
+            $paramIter = $crawler->query('part/name[@index="2"]/following-sibling::value', $hind);
+            $key = $paramIter->item(0)->nodeValue;
+            /** @var Hindrance $found */
+            $found = $this->hindRepo->findOne($key);
+            $found->setLevel($convertLevel[$level]);
+            $found->origin = 'Morphe';
+            $hindList[] = $found;
+        }
+        $obj->setHindrances($hindList);
     }
 
     public function getListing(): array
