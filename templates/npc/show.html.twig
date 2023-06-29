@@ -77,9 +77,9 @@
                 {% block attributes_dice %}
                     <h2>Attributs</h2>
                     <table class="pure-table">
-                        {% for attr in npc.attributes %}
+                        {% for attr in npc.attributeRolls %}
                             <tr>
-                                <td>{{ attr.name }}</td>
+                                <td>{{ attr.label }}</td>
                                 <td>{{ _self.print_trait(attr) }}</td>
                             </tr>
                         {% endfor %}
@@ -90,9 +90,9 @@
                 {% block skills_dice %}
                     <h2>Compétences</h2>
                     <table class="pure-table">
-                        {% for skill in npc.skills %}
+                        {% for skill in npc.skillRolls %}
                             <tr>
-                                <td>{{ skill.name }}</td>
+                                <td>{{ skill.label }}</td>
                                 <td>{{ _self.print_trait(skill) }}</td>
                             </tr>
                         {% endfor %}

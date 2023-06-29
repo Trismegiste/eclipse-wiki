@@ -29,7 +29,7 @@ class TraitRoll
         $this->side = $side;
     }
 
-    public function getSide(): int
+    public function getDice(): int
     {
         return $this->side;
     }
@@ -37,6 +37,11 @@ class TraitRoll
     public function getModifier(): int
     {
         return $this->modifier;
+    }
+
+    public function getLabel(): string
+    {
+        return $this->label;
     }
 
 }
