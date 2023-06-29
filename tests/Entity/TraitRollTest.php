@@ -41,7 +41,7 @@ class TraitRollTest extends TestCase
 
         $sut = new TraitRoll($attr, $bonus);
 
-        $this->assertEquals($sideResult, $sut->getSide());
+        $this->assertEquals($sideResult, $sut->getDice());
         $this->assertEquals($flatResult, $sut->getModifier());
     }
 
@@ -53,7 +53,7 @@ class TraitRollTest extends TestCase
         $attr->modifier = $mod12;
         $sut = new TraitRoll($attr);
 
-        $this->assertEquals($side, $sut->getSide());
+        $this->assertEquals($side, $sut->getDice());
         $this->assertEquals($mod12, $sut->getModifier());
     }
 
