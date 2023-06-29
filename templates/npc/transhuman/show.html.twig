@@ -10,6 +10,12 @@
                 <a href="{{ wikilink(hind.name) }}">{{ hind.name }} ({{ level_hindrance(hind.level) }})</a>
             </li>
         {% endfor %}
+        {% for hind in npc.morph.hindrances %}
+            <li>
+                Morphe
+                <a href="{{ wikilink(hind.name) }}">{{ hind.name }} ({{ level_hindrance(hind.level) }})</a>
+            </li>
+        {% endfor %}
     </ul>
 {% endblock %}
 
@@ -19,6 +25,11 @@
         {% for edge in npc.edges %}
             <li>
                 <a href="{{ wikilink(edge.name) }}">{{ edge.name }}</a>
+            </li>
+        {% endfor %}
+        {% for edge in npc.morph.edges %}
+            <li>
+                <a href="{{ wikilink(edge.name) }}">{{ edge.name }}</a> (Morphe)
             </li>
         {% endfor %}
     </ul>
