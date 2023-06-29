@@ -21,7 +21,10 @@ class MorphProviderTest extends TestCase
         $cache->expects($this->once())
             ->method('get')
             ->willReturn([]);
-        $this->sut = new MorphProvider($api, $cache);
+        $ep = $this->createStub(App\Repository\EdgeProvider::class);
+        $hp = $this->createStub(App\Repository\HindranceProvider::class);
+
+        $this->sut = new MorphProvider($api, $cache, $ep, $hp);
     }
 
     public function testListing()
