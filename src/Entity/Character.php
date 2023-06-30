@@ -217,12 +217,12 @@ abstract class Character extends Vertex implements \JsonSerializable
 
     public function getSkillRolls(): \Iterator
     {
-        return new SkillRollIterator($this->skills, $this->morph->skillBonus);
+        return new SkillRollIterator($this->skills, $this->morph);
     }
 
     public function getAttributeRolls(): \Iterator
     {
-        return new AttributeRollIterator($this->attributes, $this->morph->attributeBonus);
+        return new AttributeRollIterator($this->attributes, $this->morph);
     }
 
 }

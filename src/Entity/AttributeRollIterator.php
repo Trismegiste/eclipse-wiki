@@ -12,7 +12,7 @@ namespace App\Entity;
 class AttributeRollIterator extends \ArrayIterator
 {
 
-    public function __construct(array $traitList, protected array $bonus = [])
+    public function __construct(array $traitList, protected Morph $morph)
     {
         parent::__construct($traitList);
     }
@@ -20,8 +20,7 @@ class AttributeRollIterator extends \ArrayIterator
     public function current(): mixed
     {
         $currentTrait = parent::current();
-        $key = $currentTrait->getAbbrev();
-        $bonus = key_exists($key, $this->bonus) ? $this->bonus[$key] : null;
+        $bonus = $this->morph->searchAttributeBonus($currentTrait->getAbbrev());
 
         return new TraitRoll($currentTrait, $bonus);
     }

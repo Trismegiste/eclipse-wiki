@@ -18,7 +18,7 @@ class Attack implements Persistable
     use PersistableImpl;
 
     public string $title;
-    public $roll; // a Skill 
+    public Skill $roll;
     public int $rollBonus = 0; // circonstantial bonus
     public int $rateOfFire = 1;
     public $damage;

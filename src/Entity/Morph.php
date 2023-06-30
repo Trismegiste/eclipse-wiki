@@ -41,4 +41,9 @@ class Morph implements Indexable, Persistable
         return key_exists($abbrev, $this->attributeBonus) ? $this->attributeBonus[$abbrev] : null;
     }
 
+    public function searchSkillBonus(string $name): ?TraitBonus
+    {
+        return key_exists($name, $this->skillBonus) ? $this->skillBonus[$name] : null;
+    }
+
 }
