@@ -26,4 +26,9 @@ class Attribute extends SaWoTrait implements Persistable, \JsonSerializable
         ];
     }
 
+    public function getAbbrev(): string
+    {
+        return mb_substr(mb_strtoupper($this->name), 0, 3);
+    }
+
 }

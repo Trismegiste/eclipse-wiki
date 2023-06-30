@@ -21,4 +21,11 @@ class AttributeTest extends SaWoTraitTest
         $this->assertJson(json_encode($this->sut));
     }
 
+    public function testAbbrev()
+    {
+        $this->assertEquals('YOL', $this->sut->getAbbrev());
+        $diacritic = $this->create('éçü');
+        $this->assertEquals('ÉÇÜ', $diacritic->getAbbrev());
+    }
+
 }

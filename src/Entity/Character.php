@@ -14,6 +14,8 @@ use Trismegiste\Strangelove\MongoDb\RootImpl;
 abstract class Character extends Vertex implements \JsonSerializable
 {
 
+    const TOUGHNESS_ATTR = 'Vigueur';
+
     use RootImpl;
     use EdgeContainer;
 
@@ -181,7 +183,7 @@ abstract class Character extends Vertex implements \JsonSerializable
      */
     public function getToughness(): int
     {
-        $vigor = $this->getAttributeByName('Vigueur');
+        $vigor = $this->getAttributeByName(self::TOUGHNESS_ATTR);
 
         $toughness = 2 + $vigor->dice / 2 + (int) floor($vigor->modifier / 2);
         $toughness += $this->toughnessBonus;
@@ -219,6 +221,13 @@ abstract class Character extends Vertex implements \JsonSerializable
     public function getAttributeRolls(): \Iterator
     {
         return new AttributeRollIterator($this->attributes, $this->morph->attributeBonus);
+    }
+
+    public function getAttributeRollByName(string $name): TraitRoll
+    {
+        $attr = $this->getAttributeByName($name);
+
+        return new TraitRoll($attr);
     }
 
 }

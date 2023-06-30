@@ -20,7 +20,7 @@ class AttributeRollIterator extends \ArrayIterator
     public function current(): mixed
     {
         $currentTrait = parent::current();
-        $key = mb_substr(mb_strtoupper($currentTrait->getName()), 0, 3);
+        $key = $currentTrait->getAbbrev();
         $bonus = (key_exists($key, $this->bonus)) ? $this->bonus[$key] : null;
 
         return new TraitRoll($currentTrait, $bonus);
