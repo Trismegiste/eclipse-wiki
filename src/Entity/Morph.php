@@ -36,4 +36,9 @@ class Morph implements Indexable, Persistable
         return $this->title;
     }
 
+    public function searchAttributeBonus(string $abbrev): ?TraitBonus
+    {
+        return key_exists($abbrev, $this->attributeBonus) ? $this->attributeBonus[$abbrev] : null;
+    }
+
 }

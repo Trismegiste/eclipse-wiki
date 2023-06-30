@@ -21,7 +21,7 @@ class AttributeRollIterator extends \ArrayIterator
     {
         $currentTrait = parent::current();
         $key = $currentTrait->getAbbrev();
-        $bonus = (key_exists($key, $this->bonus)) ? $this->bonus[$key] : null;
+        $bonus = key_exists($key, $this->bonus) ? $this->bonus[$key] : null;
 
         return new TraitRoll($currentTrait, $bonus);
     }

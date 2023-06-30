@@ -184,8 +184,10 @@ abstract class Character extends Vertex implements \JsonSerializable
     public function getToughness(): int
     {
         $vigor = $this->getAttributeByName(self::TOUGHNESS_ATTR);
+        $bonus = !is_null($this->morph) ? $this->morph->searchAttributeBonus($vigor->getAbbrev()) : null;
+        $roll = new TraitRoll($vigor, $bonus);
 
-        $toughness = 2 + $vigor->dice / 2 + (int) floor($vigor->modifier / 2);
+        $toughness = 2 + $roll->getDice() / 2 + (int) floor($roll->getModifier() / 2);
         $toughness += $this->toughnessBonus;
         $toughness += $this->getTotalArmor();
 
@@ -221,13 +223,6 @@ abstract class Character extends Vertex implements \JsonSerializable
     public function getAttributeRolls(): \Iterator
     {
         return new AttributeRollIterator($this->attributes, $this->morph->attributeBonus);
-    }
-
-    public function getAttributeRollByName(string $name): TraitRoll
-    {
-        $attr = $this->getAttributeByName($name);
-
-        return new TraitRoll($attr);
     }
 
 }
