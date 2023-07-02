@@ -30,16 +30,16 @@ class MorphProvider extends CachedProvider
 
     public function findOne(string $key): Indexable
     {
-          return $this->cache->get('morph_page_' . $this->sanitize($key), function (ItemInterface $item) use ($key) {
-                   $item->expiresAfter(DateInterval::createFromDateString('1 day'));
+        return $this->cache->get('morph_page_' . $this->sanitize($key), function (ItemInterface $item) use ($key) {
+                    $item->expiresAfter(DateInterval::createFromDateString('1 day'));
 
-        $page = $this->wiki->getTreeAndHtmlDomByName($key);
-        $obj = new Morph($key);
-        $this->hydrateWithHtml($obj, $page['html']);
-        $this->hydrateWithTree($obj, $page['tree']);
+                    $page = $this->wiki->getTreeAndHtmlDomByName($key);
+                    $obj = new Morph($key);
+                    $this->hydrateWithHtml($obj, $page['html']);
+                    $this->hydrateWithTree($obj, $page['tree']);
 
-        return $obj;
-             });
+                    return $obj;
+                });
     }
 
     protected function hydrateWithHtml(Morph $obj, DOMDocument $doc): void
@@ -101,10 +101,14 @@ class MorphProvider extends CachedProvider
         foreach ($iter as $edge) {
             $paramIter = $crawler->query('part/name[@index="1"]/following-sibling::value', $edge);
             $key = $paramIter->item(0)->nodeValue;
-            /** @var \App\Entity\Edge $found */
-            $found = $this->edgeRepo->findOne($key);
-            $found->origin = 'Morphe';
-            $edgeList[] = $found;
+            try {
+                /** @var \App\Entity\Edge $found */
+                $found = $this->edgeRepo->findOne($key);
+                $found->origin = 'Morphe';
+                $edgeList[] = $found;
+            } catch (\RuntimeException $e) {
+                // skip unknown edge
+            }
         }
         $obj->setEdges($edgeList);
 
@@ -117,11 +121,15 @@ class MorphProvider extends CachedProvider
             $level = $paramIter->item(0)->nodeValue;
             $paramIter = $crawler->query('part/name[@index="2"]/following-sibling::value', $hind);
             $key = $paramIter->item(0)->nodeValue;
-            /** @var Hindrance $found */
-            $found = $this->hindRepo->findOne($key);
-            $found->setLevel($convertLevel[$level]);
-            $found->origin = 'Morphe';
-            $hindList[] = $found;
+            try {
+                /** @var Hindrance $found */
+                $found = $this->hindRepo->findOne($key);
+                $found->setLevel($convertLevel[$level]);
+                $found->origin = 'Morphe';
+                $hindList[] = $found;
+            } catch (\RuntimeException $e) {
+                // skip unknown hindrance
+            }
         }
         $obj->setHindrances($hindList);
     }

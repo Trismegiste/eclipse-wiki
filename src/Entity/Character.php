@@ -225,4 +225,9 @@ abstract class Character extends Vertex implements \JsonSerializable
         return new AttributeRollIterator($this->attributes, $this->morph);
     }
 
+    public function getAttackRolls(): \Iterator
+    {
+        return new AttackRollIterator($this->attacks, $this->morph);
+    }
+
 }

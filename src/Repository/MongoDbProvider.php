@@ -28,6 +28,9 @@ abstract class MongoDbProvider implements GenericProvider
         $it = $this->repository->search(['category' => $this->getCategory(), 'title' => $key]);
         $it->rewind();
         $page = $it->current();
+        if (is_null($page)) {
+            throw new \RuntimeException("$key is not a valid page in " . $this->getCategory());
+        }
 
         return $this->createFromPage($page);
     }

@@ -21,7 +21,7 @@ class Attack implements Persistable
     public Skill $roll;
     public int $rollBonus = 0; // circonstantial bonus
     public int $rateOfFire = 1;
-    public $damage;
+    public DamageRoll $damage;
     public int $armorPiercing = 0;
     public string $reach; // a string : melee, 1, 12/24/48, Cone, MBT...
 

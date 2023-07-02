@@ -1,7 +1,8 @@
 {% extends "vertex/show.html.twig" %}
 {% set npc = vertex %}
 {% macro print_trait(trait, rof = 1, bonus = 0) %}
-    <button x-on:click="$dispatch('roll', { dice: {{ trait.dice }}, modifier: {{ trait.modifier + bonus }}, rof: {{ rof }} })" class="pure-button">
+    <button x-on:click="$dispatch('roll', { dice: {{ trait.dice }}, modifier: {{ trait.modifier + bonus }}, rof: {{ rof }} })"
+            class="pure-button {{ trait.altered ? 'modified-roll' : ''}}">
         d{{ trait.dice }}
         {% set delta = trait.modifier + bonus %}
         {% if delta > 0 %}
@@ -138,12 +139,12 @@
             <div class="pure-u-1">
                 <h2>Attaques</h2>
                 <table class="pure-table">
-                    {% for item in npc.attacks %}
+                    {% for item in npc.attackRolls %}
                         <tr>
                             <td>{{ item.title }}</td>
                             <td>{{ item.reach }}</td>
                             <td>{{ item.rateOfFire }}×</td>
-                            <td>{{ item.roll.name }}</td>
+                            <td>{{ item.roll.label }}</td>
                             <td>{{ _self.print_trait(item.roll, item.rateOfFire, item.rollBonus) }}</td>
                             <td>{{ _self.print_damage(item.damage) }}</td>
                             <td>PA {{ item.armorPiercing }}</td>                            
@@ -259,4 +260,13 @@
 
         })
     </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .modified-roll {
+            color: darkred;
+        }
+    </style>
 {% endblock %}
