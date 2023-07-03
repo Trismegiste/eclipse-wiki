@@ -200,6 +200,11 @@ abstract class Character extends Vertex implements \JsonSerializable
         $torso = array_filter($this->armors, function (Armor $a) {
             return false !== strpos($a->zone, 'T');
         });
+        // adding armor from morph
+        if ($this->morph && ($this->morph->bodyArmor > 0)) {
+            $tmp = new Armor($this->morph->getUId(), $this->morph->bodyArmor);
+            $torso[] = $tmp;
+        }
 
         // reverse order
         usort($torso, function (Armor $a, Armor $b) {

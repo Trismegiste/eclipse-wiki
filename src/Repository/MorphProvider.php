@@ -134,6 +134,12 @@ class MorphProvider extends CachedProvider
             }
         }
         $obj->setHindrances($hindList);
+
+        // Extracts armor
+        $iter = $crawler->query('//h[@level=2][contains(text(), "Avantage")]/following-sibling::template/title[normalize-space()="RaceArmure"]/parent::template/part/name[@index="1"]/following-sibling::value');
+        if ($iter->count()) {
+            $obj->bodyArmor = 2 * $iter->item(0)->nodeValue;
+        }
     }
 
     public function getListing(): array

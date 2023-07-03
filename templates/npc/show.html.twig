@@ -132,6 +132,13 @@
                             <td class="right-text">{{ item.zone }}</td>
                         </tr>
                     {% endfor %}
+                    {% if npc.morph.bodyArmor > 0 %}
+                        <tr>
+                            <td>Morphe</td>
+                            <td>{{ npc.morph.bodyArmor }}</td>
+                            <td class="right-text">T/B/J/H</td>
+                        </tr>
+                    {% endif %}
                 </table>
             </div>
         </div>

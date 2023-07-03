@@ -25,6 +25,7 @@ class Morph implements Indexable, Persistable
     public $price;
     public array $skillBonus = [];
     public array $attributeBonus = [];
+    public int $bodyArmor = 0;
 
     public function __construct(string $param)
     {
