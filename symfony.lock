@@ -112,9 +112,6 @@
     "react/promise": {
         "version": "v2.9.0"
     },
-    "react/promise-timer": {
-        "version": "v1.8.0"
-    },
     "react/socket": {
         "version": "v1.11.0"
     },

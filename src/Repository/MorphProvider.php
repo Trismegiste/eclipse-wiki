@@ -69,6 +69,8 @@ class MorphProvider extends CachedProvider
      * {{RaceAtout|Sang-froid}}
      * {{RaceBonusCompétence|1|Combat}}
      * {{RaceHandicap|m|Loyal}}
+     * {{RaceArmure|2}}
+     * RaceBonusResistance
      */
 
     protected function hydrateWithTree(Morph $obj, DOMDocument $doc): void
