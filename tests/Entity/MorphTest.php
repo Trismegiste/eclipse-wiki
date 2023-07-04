@@ -7,10 +7,26 @@
 class MorphTest extends PHPUnit\Framework\TestCase
 {
 
+    protected $sut;
+
+    protected function setUp(): void
+    {
+        $this->sut = new App\Entity\Morph('yolo');
+    }
+
     public function testUid()
     {
-        $sut = new App\Entity\Morph('yolo');
-        $this->assertEquals('yolo', $sut->getUId());
+        $this->assertEquals('yolo', $this->sut->getUId());
+    }
+
+    public function testSearchAttributeEmpty()
+    {
+        $this->assertNull($this->sut->searchAttributeBonus('UNK'));
+    }
+
+    public function testSearchSkillEmpty()
+    {
+        $this->assertNull($this->sut->searchSkillBonus('unknown'));
     }
 
 }
