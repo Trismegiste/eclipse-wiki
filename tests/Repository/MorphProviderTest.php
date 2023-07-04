@@ -26,15 +26,19 @@ class MorphProviderTest extends TestCase
 
     protected function buildMorphDocument()
     {
-        $doc = new DOMDocument();
-        $doc->loadHTML('<div data-source="type"><div>Biomorphe</div></div><div data-source="cout"><div>3</div></div>');
+        libxml_use_internal_errors(true); // because other xml/svg namespace warning
+        $doc = new DOMDocument("1.0", "UTF-8");
+        $doc->loadHTMLFile(dirname(__DIR__) . '/fixtures/fury.html');
 
         return $doc;
     }
 
     protected function buildMorphTree()
     {
-        return new DOMDocument();
+        $doc = new DOMDocument("1.0", "UTF-8");
+        $doc->load(dirname(__DIR__) . '/fixtures/fury.xml');
+
+        return $doc;
     }
 
     protected function setUp(): void
@@ -48,16 +52,23 @@ class MorphProviderTest extends TestCase
 
         $api->expects($this->any())
                 ->method('searchPageFromCategory')
-                ->willReturn([(object) ['title' => 'Basique']]);
+                ->willReturn([(object) ['title' => 'Furie']]);
 
         $api->expects($this->any())
                 ->method('getTreeAndHtmlDomByName')
                 ->willReturn(['html' => $this->buildMorphDocument(), 'tree' => $this->buildMorphTree()]);
 
         $cache = new ArrayAdapter();
-        //  $cache = new Symfony\Component\Cache\Adapter\NullAdapter();
-        $ep = $this->createStub(EdgeProvider::class);
-        $hp = $this->createStub(HindranceProvider::class);
+
+        $ep = $this->createMock(EdgeProvider::class);
+        $ep->expects($this->any())
+                ->method('findOne')
+                ->willReturn(new App\Entity\Edge('ETest', 'N', 'Pro'));
+
+        $hp = $this->createMock(HindranceProvider::class);
+        $hp->expects($this->any())
+                ->method('findOne')
+                ->willReturn(new App\Entity\Hindrance('HTest'));
 
         $this->sut = new MorphProvider($api, $cache, $ep, $hp);
     }
@@ -72,8 +83,13 @@ class MorphProviderTest extends TestCase
 
     public function testFindOne()
     {
-        $morph = $this->sut->findOne('Basique');
+        $morph = $this->sut->findOne('Furie');
         $this->assertInstanceOf(\App\Entity\Morph::class, $morph);
+        $this->assertCount(3, $morph->getEdges());
+        $this->assertCount(1, $morph->getHindrances());
+        $this->assertCount(2, $morph->attributeBonus);
+        $this->assertCount(3, $morph->skillBonus);
+        $this->assertEquals(4, $morph->bodyArmor);
     }
 
 }

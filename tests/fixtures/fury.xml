@@ -1,0 +1,142 @@
+<root>
+    <template>
+        <title>InfoboxMorphe</title>
+        <part>
+            <name>type</name>
+            <equals>=</equals>
+            <value>bio</value>
+        </part>
+        <part>
+            <name>image1</name>
+            <equals>=</equals>
+            <value>Fury.jpg</value>
+        </part>
+        <part>
+            <name>pc</name>
+            <equals>=</equals>
+            <value>1</value>
+        </part>
+        <part>
+            <name>cout</name>
+            <equals>=</equals>
+            <value>6</value>
+        </part>
+    </template>
+    Les furies sont des morphes de combat.
+
+    <h level="2" i="1">== Avantages ==</h>
+    * <template>
+        <title>RaceTranshumain</title>
+    </template>
+    <template lineStart="1">
+        <title>RaceBiomodes</title>
+    </template>
+    * Immunité aux poisons (1)
+    * Peau tissée : <template>
+        <title>RaceArmure</title>
+        <part>
+            <name index="1"/>
+            <value>2</value>
+        </part>
+    </template>
+    * Neurachem : <template>
+        <title>RaceExtraAction</title>
+        <part>
+            <name index="1"/>
+            <value>1</value>
+        </part>
+    </template>
+    <template lineStart="1">
+        <title>RaceVisionAméliorée</title>
+    </template>
+    * <template>
+        <title>RaceBonusAtttribut</title>
+        <part>
+            <name index="1"/>
+            <value>1</value>
+        </part>
+        <part>
+            <name index="2"/>
+            <value>FOR</value>
+        </part>
+    </template>
+    * <template>
+        <title>RaceBonusAtttribut</title>
+        <part>
+            <name index="1"/>
+            <value>1</value>
+        </part>
+        <part>
+            <name index="2"/>
+            <value>VIG</value>
+        </part>
+    </template>
+    * <template>
+        <title>RaceAtout</title>
+        <part>
+            <name index="1"/>
+            <value>Sang-froid</value>
+        </part>
+    </template>
+    * <template>
+        <title>RaceAtout</title>
+        <part>
+            <name index="1"/>
+            <value>Tête froide</value>
+        </part>
+    </template>
+    * <template>
+        <title>RaceAtout</title>
+        <part>
+            <name index="1"/>
+            <value>Double flingue</value>
+        </part>
+    </template>
+    * <template>
+        <title>RaceBonusCompétence</title>
+        <part>
+            <name index="1"/>
+            <value>1</value>
+        </part>
+        <part>
+            <name index="2"/>
+            <value>Combat</value>
+        </part>
+    </template>
+    * <template>
+        <title>RaceBonusCompétence</title>
+        <part>
+            <name index="1"/>
+            <value>1</value>
+        </part>
+        <part>
+            <name index="2"/>
+            <value>Tir</value>
+        </part>
+    </template>
+    * <template>
+        <title>RaceBonusCompétence</title>
+        <part>
+            <name index="1"/>
+            <value>1</value>
+        </part>
+        <part>
+            <name index="2"/>
+            <value>Athlétisme</value>
+        </part>
+    </template>
+
+    <h level="2" i="2">== Désavantages ==</h>
+    * <template>
+        <title>RaceHandicap</title>
+        <part>
+            <name index="1"/>
+            <value>m</value>
+        </part>
+        <part>
+            <name index="2"/>
+            <value>Loyal</value>
+        </part>
+    </template>
+    [[Catégorie:Biomorphe]]
+</root>

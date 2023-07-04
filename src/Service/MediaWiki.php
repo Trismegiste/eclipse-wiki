@@ -51,7 +51,7 @@ class MediaWiki
         $content = $this->getPageByName($name);
         $doc = new DOMDocument("1.0", "UTF-8");
         libxml_use_internal_errors(true); // because other xml/svg namespace warning
-        $doc->loadHTML('<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><body>' . $content . '</body></html>');
+        $doc->loadHTML('<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"></head><body>' . $content . '</body></html>');
 
         return $doc;
     }
@@ -118,7 +118,7 @@ class MediaWiki
 
         libxml_use_internal_errors(true); // because other xml/svg namespace warning
         $html = new DOMDocument("1.0", "UTF-8");
-        $html->loadHTML('<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><body>' .
+        $html->loadHTML('<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"></head><body>' .
                 $response->parse->text->{'*'} .
                 '</body></html>');
 
