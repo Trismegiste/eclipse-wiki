@@ -189,7 +189,7 @@ abstract class Character extends Vertex implements \JsonSerializable
 
         $toughness = 2 + $roll->getDice() / 2 + (int) floor($roll->getModifier() / 2);
         $toughness += $this->toughnessBonus;
-        $toughness += $this?->morph->toughnessBonus;
+        $toughness += $this->morph?->toughnessBonus;
         $toughness += $this->getTotalArmor();
 
         return $toughness;
