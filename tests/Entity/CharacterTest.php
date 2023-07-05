@@ -182,4 +182,23 @@ abstract class CharacterTest extends TestCase
         $this->assertEquals('aaaa', $dump['skills'][0]->getName());
     }
 
+    public function testFullModifiedToughness()
+    {
+        $morph = new Morph('B');
+        $morph->toughnessBonus = 1;
+        $this->sut->setMorph($morph);
+
+        $armor = new Armor();
+        $armor->protect = 4;
+        $armor->zone = 'T';
+        $this->sut->setArmors([$armor]);
+
+        $this->sut->toughnessBonus = 2;
+
+        $attr = new Attribute('Vigueur');
+        $attr->dice = 6;
+        $this->sut->attributes[] = $attr;
+
+        $this->assertEquals(12, $this->sut->getToughness());
+    }
 }
