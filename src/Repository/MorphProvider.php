@@ -70,7 +70,7 @@ class MorphProvider extends CachedProvider
      * {{RaceBonusCompétence|1|Combat}}
      * {{RaceHandicap|m|Loyal}}
      * {{RaceArmure|2}}
-     * RaceBonusResistance
+     * RaceBonusRésistance
      */
 
     protected function hydrateWithTree(Morph $obj, DOMDocument $doc): void
@@ -139,6 +139,12 @@ class MorphProvider extends CachedProvider
         $iter = $crawler->query('//h[@level=2][contains(text(), "Avantage")]/following-sibling::template/title[normalize-space()="RaceArmure"]/parent::template/part/name[@index="1"]/following-sibling::value');
         if ($iter->count()) {
             $obj->bodyArmor = 2 * $iter->item(0)->nodeValue;
+        }
+
+        // Extracts toughness bonus
+        $iter = $crawler->query('//h[@level=2][contains(text(), "Avantage")]/following-sibling::template/title[normalize-space()="RaceBonusRésistance"]/parent::template/part/name[@index="1"]/following-sibling::value');
+        if ($iter->count()) {
+            $obj->toughnessBonus = (int) $iter->item(0)->nodeValue;
         }
     }
 
