@@ -13,10 +13,10 @@ class MediaWikiTest extends KernelTestCase
         $this->sut = static::getContainer()->get(MediaWiki::class);
     }
 
-    public function testGetPageByName()
+    public function testGetDocumentByName()
     {
-        $ret = $this->sut->getPageByName('mars');
-        $this->assertStringContainsString('civilisation', $ret);
+        $ret = $this->sut->getDocumentByName('mars');
+        $this->assertInstanceOf(DOMDocument::class, $ret);
     }
 
     public function testGetTemplateData()
@@ -54,6 +54,16 @@ class MediaWikiTest extends KernelTestCase
         $ret = $this->sut->extractUrlFromGallery($gallery);
         $this->assertGreaterThan(0, count($ret));
         $this->assertNotEmpty($ret[0]->thumbnail);
+    }
+
+    public function testGetTreeByName()
+    {
+        $ret = $this->sut->getTreeAndHtmlDomByName('Furie');
+        $this->assertIsArray($ret);
+        $this->assertInstanceOf(DOMDocument::class, $ret['tree']);
+        $this->assertInstanceOf(DOMDocument::class, $ret['html']);
+        $this->assertEquals('root', $ret['tree']->firstChild->nodeName);
+        $this->assertEquals('html', $ret['html']->firstChild->nodeName);
     }
 
 }
