@@ -27,4 +27,13 @@ class AttackRollIterator extends \ArrayIterator
         return new AttackRoll($attack, $bonus);
     }
 
+    public function offsetGet(mixed $key): AttackRoll
+    {
+        $attack = parent::offsetGet($key);
+        $currentTrait = $attack->roll;
+        $bonus = $this->morph->searchSkillBonus($currentTrait->getName());
+
+        return new AttackRoll($attack, $bonus);
+    }
+
 }

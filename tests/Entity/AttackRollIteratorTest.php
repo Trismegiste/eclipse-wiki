@@ -38,4 +38,8 @@ class AttackRollIteratorTest extends TestCase
         }
     }
 
+    public function testRandomAccess()
+    {
+        $this->assertInstanceOf(AttackRoll::class, $this->sut[0]);
+    }
 }
