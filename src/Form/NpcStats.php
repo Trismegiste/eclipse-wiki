@@ -173,6 +173,7 @@ class NpcStats extends AbstractType
 
     private function getFilterEdge(): array
     {
+        // @todo very ugly, should by replaced by a query on EdgeProvider and a domain translation
         return [
             'Combat' => 'cbt',
             'Légendaire' => 'leg',
