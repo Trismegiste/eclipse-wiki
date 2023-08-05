@@ -14,6 +14,7 @@
                     <a href="{{ picture.full }}" target="_blank">
                         <img src="{{ picture.thumb }}" class="pure-img"/>
                     </a>
+                    <div class="legend">{{ picture.width }}</div>
                 </div>
             </div>
         {% endfor %}
@@ -23,8 +24,12 @@
 {% block stylesheets %}
     {{ parent() }}
     <style>
-        .search .thumbnail img {
+        .search .thumbnail {
             margin-bottom: 1em;
+            text-align: center;
+        }
+        .search img {
+            margin: auto;
         }
     </style>
 {% endblock %}

@@ -12,7 +12,6 @@ use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use UnexpectedValueException;
-use function str_contains;
 
 /**
  * Client for InvokeAI Stable Diffusion
@@ -30,6 +29,7 @@ class InvokeAi
     public function searchPicture(string $query, int $capFound = 10): array
     {
         $keywords = explode(' ', $query);
+        $keywordCount = count($keywords);
         $found = [];
         $offset = 0;
 
@@ -37,15 +37,13 @@ class InvokeAi
             $resp = $this->getImagesList($offset, self::BATCH_SIZE);
             foreach ($resp->items as $picture) {
                 $prompt = $this->searchPromptFor($picture->image_name);
-                if (is_null($prompt)) {
-                    continue;
+                if (count(array_intersect($keywords, $prompt)) === $keywordCount) {
+                    $found[] = (object) [
+                                'full' => $this->baseUrl . $picture->image_url,
+                                'thumb' => $this->baseUrl . $picture->thumbnail_url,
+                                'width' => $picture->width
+                    ];
                 }
-                foreach ($keywords as $keyword) {
-                    if (!str_contains($prompt, $keyword)) {
-                        continue 2;
-                    }
-                }
-                $found[] = (object) ['full' => $this->baseUrl . $picture->image_url, 'thumb' => $this->baseUrl . $picture->thumbnail_url];
             }
             $offset += self::BATCH_SIZE;
         } while (count($resp->items) === $resp->limit);
@@ -80,19 +78,19 @@ class InvokeAi
                 });
     }
 
-    protected function searchPromptFor(string $name): ?string
+    protected function searchPromptFor(string $name): array
     {
         $metadata = $this->getImageMetadata($name);
 
         if (!is_null($metadata->metadata)) {
-            return $metadata->metadata->positive_prompt;
+            return explode(' ', $metadata->metadata->positive_prompt);
         }
 
         if (isset($metadata?->graph?->nodes?->esrgan)) {
             return $this->searchPromptFor($metadata->graph->nodes->esrgan->image->image_name);
         }
 
-        return null;
+        return [];
     }
 
 }
