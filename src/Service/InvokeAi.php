@@ -6,9 +6,13 @@
 
 namespace App\Service;
 
+use DateInterval;
 use stdClass;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use UnexpectedValueException;
+use function str_contains;
 
 /**
  * Client for InvokeAI Stable Diffusion
@@ -18,7 +22,7 @@ class InvokeAi
 
     const BATCH_SIZE = 100;
 
-    public function __construct(protected HttpClientInterface $client, protected string $baseUrl)
+    public function __construct(protected HttpClientInterface $client, protected string $baseUrl, protected CacheInterface $invokeaiCache)
     {
         
     }
@@ -57,15 +61,25 @@ class InvokeAi
             throw new UnexpectedValueException('API returned ' . $response->getStatusCode() . ' status code');
         }
 
-        return json_decode($response->getContent());
+        $listing = json_decode($response->getContent());
+        usort($listing->items, function (object $a, object $b) {
+            return strcmp($b->updated_at, $a->updated_at);
+        });
+
+        return $listing;
     }
 
     protected function getImageMetadata(string $name): ?stdClass
     {
-        $response = $this->client->request('GET', $this->baseUrl . "api/v1/images/$name/metadata");
-        $metadata = json_decode($response->getContent());
+        $pngMeta = $this->invokeaiCache->get('metadata-' . $name, function (ItemInterface $item) use ($name): \stdClass {
+            $item->expiresAfter(DateInterval::createFromDateString('1 month'));
+            $response = $this->client->request('GET', $this->baseUrl . "api/v1/images/$name/metadata");
+            $metadata = json_decode($response->getContent());
 
-        return $metadata->metadata;
+            return $metadata;
+        });
+
+        return $pngMeta->metadata;
     }
 
 }
