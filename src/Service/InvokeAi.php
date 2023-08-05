@@ -36,12 +36,12 @@ class InvokeAi
         do {
             $resp = $this->getImagesList($offset, self::BATCH_SIZE);
             foreach ($resp->items as $picture) {
-                $metadata = $this->getImageMetadata($picture->image_name);
-                if (is_null($metadata)) {
+                $prompt = $this->searchPromptFor($picture->image_name);
+                if (is_null($prompt)) {
                     continue;
                 }
                 foreach ($keywords as $keyword) {
-                    if (!str_contains($metadata->positive_prompt, $keyword)) {
+                    if (!str_contains($prompt, $keyword)) {
                         continue 2;
                     }
                 }
@@ -71,15 +71,28 @@ class InvokeAi
 
     protected function getImageMetadata(string $name): ?stdClass
     {
-        $pngMeta = $this->invokeaiCache->get('metadata-' . $name, function (ItemInterface $item) use ($name): \stdClass {
-            $item->expiresAfter(DateInterval::createFromDateString('1 month'));
-            $response = $this->client->request('GET', $this->baseUrl . "api/v1/images/$name/metadata");
-            $metadata = json_decode($response->getContent());
+        return $this->invokeaiCache->get('metadata-' . $name, function (ItemInterface $item) use ($name): \stdClass {
+                    $item->expiresAfter(DateInterval::createFromDateString('1 month'));
+                    $response = $this->client->request('GET', $this->baseUrl . "api/v1/images/$name/metadata");
+                    $metadata = json_decode($response->getContent());
 
-            return $metadata;
-        });
+                    return $metadata;
+                });
+    }
 
-        return $pngMeta->metadata;
+    protected function searchPromptFor(string $name): ?string
+    {
+        $metadata = $this->getImageMetadata($name);
+
+        if (!is_null($metadata->metadata)) {
+            return $metadata->metadata->positive_prompt;
+        }
+
+        if (isset($metadata?->graph?->nodes?->esrgan)) {
+            return $this->searchPromptFor($metadata->graph->nodes->esrgan->image->image_name);
+        }
+
+        return null;
     }
 
 }
