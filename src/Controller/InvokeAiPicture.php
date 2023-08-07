@@ -9,9 +9,11 @@ namespace App\Controller;
 use App\Service\InvokeAi;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use UnexpectedValueException;
 
 /**
  * Controller for accessing remote picture on InvokeAI
@@ -39,7 +41,13 @@ class InvokeAiPicture extends AbstractController
         $listing = [];
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $listing = $this->remote->searchPicture($form['query']->getData());
+            try {
+                $listing = $this->remote->searchPicture($form['query']->getData());
+            } catch (UnexpectedValueException $e) {
+                $this->addFlash('error', $e->getMessage());
+            } catch (TransportException $e) {
+                $this->addFlash('error', $e->getMessage());
+            }
         }
 
         return $this->render('invokeai/search.html.twig', ['form' => $form->createView(), 'gallery' => $listing]);
