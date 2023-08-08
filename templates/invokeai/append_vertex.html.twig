@@ -1,0 +1,9 @@
+{# Append InvokeAI picture to vertex #}
+{% extends "base.html.twig" %}
+
+{% block title %}Append picture{% endblock %}
+{% block header_title %}{{ form.vars.data.title }}{% endblock %}
+
+{% block content %}
+    {{ form(form) }}
+{% endblock %}

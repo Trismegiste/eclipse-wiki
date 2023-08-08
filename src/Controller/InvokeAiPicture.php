@@ -18,10 +18,11 @@ use UnexpectedValueException;
 /**
  * Controller for accessing remote picture on InvokeAI
  */
+#[Route('/invokeai')]
 class InvokeAiPicture extends AbstractController
 {
 
-    public function __construct(protected InvokeAi $remote)
+    public function __construct(protected InvokeAi $remote, protected \App\Repository\VertexRepository $repository)
     {
         
     }
@@ -29,7 +30,7 @@ class InvokeAiPicture extends AbstractController
     /**
      * Image search against InvokeAI api
      */
-    #[Route('/invokeai/search', methods: ['GET'])]
+    #[Route('/search', methods: ['GET'])]
     public function search(Request $request): Response
     {
         $form = $this->createFormBuilder()
@@ -51,6 +52,20 @@ class InvokeAiPicture extends AbstractController
         }
 
         return $this->render('invokeai/search.html.twig', ['form' => $form->createView(), 'gallery' => $listing]);
+    }
+
+    #[Route('/vertex/{pk}/append', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
+    public function appendVertex(string $pk, Request $request): Response
+    {
+        $vertex = $this->repository->findByPk($pk);
+        $form = $this->createFormBuilder($vertex)
+                ->add('append', SubmitType::class)
+                ->getForm();
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+        }
+
+        return $this->render('invokeai/append_vertex.html.twig', ['form' => $form->createView()]);
     }
 
 }

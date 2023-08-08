@@ -1,4 +1,5 @@
 {% extends "base.html.twig" %}
+{% form_theme form _self %}
 
 {% block title %}{{ form.vars.data.title }}{% endblock %}
 
@@ -19,4 +20,26 @@
 
 {% block content %}
     {{ form(form) }}
+{% endblock %}
+
+{% block _place_content_label %}
+    {{ form_label(form) }}
+    <div class="minitools">
+        <a href="{{ path('app_invokeaipicture_appendvertex', {pk: form.parent.vars.data.pk}) }}" class="pure-button" title="Append InvokeAI">
+            <i class="icon-dcgan"></i>
+        </a>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        form .minitools {
+            text-align: right;
+            margin-right: 1em;
+        }
+        form .minitools i {
+            font-size: 150%;
+        }
+    </style>
 {% endblock %}
