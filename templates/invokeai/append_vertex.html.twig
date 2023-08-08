@@ -1,9 +1,58 @@
 {# Append InvokeAI picture to vertex #}
 {% extends "base.html.twig" %}
+{% form_theme form _self %}
 
 {% block title %}Append picture{% endblock %}
 {% block header_title %}{{ form.vars.data.title }}{% endblock %}
 
 {% block content %}
     {{ form(form) }}
+{% endblock %}
+
+{% block _form_filename_widget %}
+    {{ form_widget(form,{attr:{hidden:true}}) }}
+    <input type="text" class="{{form.vars.attr.class|default('pure-input-1')}}" id="{{form.vars.id}}_autocomplete"/>
+    <script>
+        window.addEventListener('load', () => {
+            const autocompleteField = document.getElementById('{{form.vars.id}}_autocomplete')
+            const filenameField = document.getElementById('{{form.vars.id}}')
+            autocompleteField.focus()
+            new autoComplete({
+                selector: '#{{ form.vars.id }}_autocomplete',
+                minChars: 3,
+                source: function (term, suggest) {
+                    term = term.toLowerCase()
+                    fetch('{{ path('app_invokeaipicture_ajaxsearch') }}?q=' + term)
+                            .then(response => {
+                                return response.json()
+                            })
+                            .then(data => {
+                                suggest(data)
+                            })
+                },
+                renderItem: function (item, search) {
+                    return '<div class="autocomplete-suggestion" data-pathname="' + item.full + '"><img src="' + item.thumb + '"/></div>'
+                },
+                onSelect: function (e, term, item) {
+                    const pathname = item.getAttribute('data-pathname')
+                    filenameField.value = pathname
+                }
+            })
+        })
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('pixabay/auto-complete.css') }}"/>
+    <style>
+        .autocomplete-suggestion img {
+            width: 80px;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('pixabay/auto-complete.min.js') }}"></script>
 {% endblock %}

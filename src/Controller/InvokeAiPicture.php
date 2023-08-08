@@ -6,10 +6,13 @@
 
 namespace App\Controller;
 
+use App\Repository\VertexRepository;
 use App\Service\InvokeAi;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpClient\Exception\TransportException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,7 +25,7 @@ use UnexpectedValueException;
 class InvokeAiPicture extends AbstractController
 {
 
-    public function __construct(protected InvokeAi $remote, protected \App\Repository\VertexRepository $repository)
+    public function __construct(protected InvokeAi $remote, protected VertexRepository $repository)
     {
         
     }
@@ -59,6 +62,7 @@ class InvokeAiPicture extends AbstractController
     {
         $vertex = $this->repository->findByPk($pk);
         $form = $this->createFormBuilder($vertex)
+                ->add('filename', TextType::class, ['mapped' => false])
                 ->add('append', SubmitType::class)
                 ->getForm();
         if ($form->isSubmitted() && $form->isValid()) {
@@ -66,6 +70,21 @@ class InvokeAiPicture extends AbstractController
         }
 
         return $this->render('invokeai/append_vertex.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * AJAX Image search against InvokeAI api
+     */
+    #[Route('/ajax/search', methods: ['GET'])]
+    public function ajaxSearch(Request $request): JsonResponse
+    {
+        $query = $request->query->get('q');
+        try {
+            $listing = $this->remote->searchPicture($query);
+            return $this->json($listing);
+        } catch (\Exception $e) {
+            return $this->json([], 500);
+        }
     }
 
 }
