@@ -6,18 +6,16 @@
 
 namespace App\Controller;
 
-use App\Entity\Vertex;
+use App\Form\AppendRemotePicture;
 use App\Repository\VertexRepository;
 use App\Service\InvokeAi;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\NotBlank;
 use UnexpectedValueException;
 
 /**
@@ -64,18 +62,7 @@ class InvokeAiPicture extends AbstractController
     {
         $vertex = $this->repository->load($pk);
 
-        $form = $this->createFormBuilder($vertex)
-                ->add('content', TextType::class, [
-                    'label' => "Prompt fragments",
-                    'setter' => function (Vertex &$v, string $data) {
-                        $v->setContent($v->getContent() . " [$data]");
-                    },
-                    'data' => null,
-                    'constraints' => [new NotBlank()]
-                ])
-                ->add('append', SubmitType::class)
-                ->setMethod('PUT')
-                ->getForm();
+        $form = $this->createForm(AppendRemotePicture::class, $vertex);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
