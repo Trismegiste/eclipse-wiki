@@ -6,6 +6,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Vertex;
 use App\Repository\VertexRepository;
 use App\Service\InvokeAi;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use UnexpectedValueException;
 
 /**
@@ -60,13 +62,27 @@ class InvokeAiPicture extends AbstractController
     #[Route('/vertex/{pk}/append', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function appendVertex(string $pk, Request $request): Response
     {
-        $vertex = $this->repository->findByPk($pk);
+        $vertex = $this->repository->load($pk);
+
         $form = $this->createFormBuilder($vertex)
-                ->add('filename', TextType::class, ['mapped' => false])
+                ->add('content', TextType::class, [
+                    'label' => "Prompt fragments",
+                    'setter' => function (Vertex &$v, string $data) {
+                        $v->setContent($v->getContent() . " [$data]");
+                    },
+                    'data' => null,
+                    'constraints' => [new NotBlank()]
+                ])
                 ->add('append', SubmitType::class)
+                ->setMethod('PUT')
                 ->getForm();
+
+        $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            
+            $this->repository->save($form->getData());
+            $this->addFlash('success', 'Ajouté');
+
+            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $pk]);
         }
 
         return $this->render('invokeai/append_vertex.html.twig', ['form' => $form->createView()]);

@@ -9,8 +9,8 @@
     {{ form(form) }}
 {% endblock %}
 
-{% block _form_filename_widget %}
-    {{ form_widget(form,{attr:{hidden:true}}) }}
+{% block _form_content_widget %}
+    {{ form_widget(form,{attr:{hidden:false}}) }}
     <input type="text" class="{{form.vars.attr.class|default('pure-input-1')}}" id="{{form.vars.id}}_autocomplete"/>
     <img id="{{ form.vars.id }}_preview"/>
     <script>
@@ -19,6 +19,7 @@
             const filenameField = document.getElementById('{{form.vars.id}}')
             const previewImg = document.getElementById('{{form.vars.id}}_preview')
             autocompleteField.focus()
+
             new autoComplete({
                 selector: '#{{ form.vars.id }}_autocomplete',
                 minChars: 3,
@@ -33,7 +34,9 @@
                             })
                 },
                 renderItem: function (item, search) {
-                    return '<div class="autocomplete-suggestion" data-pathname="' + item.full + '" data-thumb="' + item.thumb + '"><img src="' + item.thumb + '"/></div>'
+                    return '<div class="autocomplete-suggestion" data-pathname="' + item.full +
+                            '" data-thumb="' + item.thumb +
+                            '"><img src="' + item.thumb + '"/></div>'
                 },
                 onSelect: function (e, term, item) {
                     filenameField.value = item.getAttribute('data-pathname')
