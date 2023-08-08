@@ -34,22 +34,25 @@ class InvokeAi
      */
     public function searchPicture(string $query, int $capFound = 10): array
     {
-        $keywords = explode(' ', $query);
-        $keywordCount = count($keywords);
+        $keywords = $this->splittingPrompt(strtolower($query));
         $found = [];
         $offset = 0;
 
         do {
             $resp = $this->getImagesList($offset, self::BATCH_SIZE);
             foreach ($resp->items as $picture) {
-                $prompt = $this->searchPromptFor($picture->image_name);
-                if (count(array_intersect($keywords, $prompt)) === $keywordCount) {
-                    $found[] = (object) [
-                                'full' => $this->baseUrl . $picture->image_url,
-                                'thumb' => $this->baseUrl . $picture->thumbnail_url,
-                                'width' => $picture->width
-                    ];
+                $prompt = strtolower($this->searchPromptFor($picture->image_name));
+                foreach ($keywords as $word) {
+                    if (!str_contains($prompt, $word)) {
+                        continue 2;
+                    }
                 }
+
+                $found[] = (object) [
+                            'full' => $this->baseUrl . $picture->image_url,
+                            'thumb' => $this->baseUrl . $picture->thumbnail_url,
+                            'width' => $picture->width
+                ];
             }
             $offset += self::BATCH_SIZE;
         } while (count($resp->items) === $resp->limit);
@@ -66,18 +69,21 @@ class InvokeAi
      */
     protected function getImagesList(int $offset, int $limit): stdClass
     {
-        $response = $this->client->request('GET', $this->baseUrl . "api/v1/images/?limit=$limit&offset=$offset");
+        return $this->invokeaiCache->get("picturelisting-$offset-$limit", function (ItemInterface $item) use ($limit, $offset): \stdClass {
+                    $item->expiresAfter(DateInterval::createFromDateString('1 minute'));
+                    $response = $this->client->request('GET', $this->baseUrl . "api/v1/images/?limit=$limit&offset=$offset");
 
-        if ($response->getStatusCode() !== 200) {
-            throw new UnexpectedValueException('API returned ' . $response->getStatusCode() . ' status code');
-        }
+                    if ($response->getStatusCode() !== 200) {
+                        throw new UnexpectedValueException('API returned ' . $response->getStatusCode() . ' status code');
+                    }
 
-        $listing = json_decode($response->getContent());
-        usort($listing->items, function (object $a, object $b) {
-            return strcmp($b->updated_at, $a->updated_at);
-        });
+                    $listing = json_decode($response->getContent());
+                    usort($listing->items, function (object $a, object $b) {
+                        return strcmp($b->updated_at, $a->updated_at);
+                    });
 
-        return $listing;
+                    return $listing;
+                });
     }
 
     /**
@@ -101,13 +107,13 @@ class InvokeAi
      * @param string $name
      * @return array
      */
-    protected function searchPromptFor(string $name): array
+    protected function searchPromptFor(string $name): string
     {
         $metadata = $this->getImageMetadata($name);
 
         // if there is metadata field, gets the positive prompt
         if (!is_null($metadata->metadata)) {
-            return explode(' ', $metadata->metadata->positive_prompt);
+            return $metadata->metadata->positive_prompt;
         }
 
         // else, check if this is an embiggen image ?
@@ -116,7 +122,12 @@ class InvokeAi
             return $this->searchPromptFor($metadata->graph->nodes->esrgan->image->image_name);
         }
 
-        return [];
+        return '';
+    }
+
+    private function splittingPrompt(string $subject): array
+    {
+        return preg_split("/[\s,]+/", $subject, 0, PREG_SPLIT_NO_EMPTY);
     }
 
 }
