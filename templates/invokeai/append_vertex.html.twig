@@ -21,6 +21,17 @@
         .autocomplete-suggestion img {
             width: 80px;
         }
+        #append_remote_picture > .form-error {
+            background-color: lightpink;
+            text-align: center;
+        }
+        #append_remote_picture > .form-error ul {
+            padding: 1em;
+        }
+        form[name=append_remote_picture]:invalid button {
+            opacity: 0.3;
+            pointer-events: none;
+        }
     </style>
 {% endblock %}
 
