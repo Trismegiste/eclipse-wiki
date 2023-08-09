@@ -9,19 +9,34 @@
     {{ form(form) }}
 {% endblock %}
 
-{% block _append_remote_picture_content_widget %}
-    {{ form_widget(form, {attr:{hidden:true}}) }}
-    <input type="text" class="{{form.vars.attr.class|default('pure-input-1')}}" id="{{form.vars.id}}_autocomplete"/>
+{% block _append_remote_picture_prompt_keywords_widget %}
+    {{ form_widget(form) }}
     <img id="{{ form.vars.id }}_preview"/>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('pixabay/auto-complete.css') }}"/>
+    <style>
+        .autocomplete-suggestion img {
+            width: 80px;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('pixabay/auto-complete.min.js') }}"></script>
     <script>
         window.addEventListener('load', () => {
-            const autocompleteField = document.getElementById('{{form.vars.id}}_autocomplete')
-            const filenameField = document.getElementById('{{form.vars.id}}')
-            const previewImg = document.getElementById('{{form.vars.id}}_preview')
-            autocompleteField.focus()
+            const promptField = document.getElementById('{{form.prompt_keywords.vars.id}}')
+            const remoteField = document.getElementById('{{form.picture_url.vars.id}}')
+            const localField = document.getElementById('{{form.local_name.vars.id}}')
+            const previewImg = document.getElementById('{{form.prompt_keywords.vars.id}}_preview')
+            promptField.focus()
 
             new autoComplete({
-                selector: '#{{ form.vars.id }}_autocomplete',
+                selector: '#{{ form.prompt_keywords.vars.id }}',
                 minChars: 3,
                 source: function (term, suggest) {
                     term = term.toLowerCase()
@@ -39,25 +54,14 @@
                             '"><img src="' + item.thumb + '"/></div>'
                 },
                 onSelect: function (e, term, item) {
-                    filenameField.value = item.getAttribute('data-pathname')
+                    remoteField.value = item.getAttribute('data-pathname')
                     previewImg.src = item.getAttribute('data-thumb')
                 }
             })
+
+            promptField.addEventListener('keyup', event => {
+                localField.value = '{{ form.vars.data.title }} - ' + promptField.value
+            })
         })
     </script>
-{% endblock %}
-
-{% block stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('pixabay/auto-complete.css') }}"/>
-    <style>
-        .autocomplete-suggestion img {
-            width: 80px;
-        }
-    </style>
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('pixabay/auto-complete.min.js') }}"></script>
 {% endblock %}

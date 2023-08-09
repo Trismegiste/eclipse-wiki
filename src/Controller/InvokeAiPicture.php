@@ -67,7 +67,7 @@ class InvokeAiPicture extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->repository->save($form->getData());
-            $this->addFlash('success', 'Ajouté');
+            $this->addFlash('success', $form['local_name']->getData() . ' downloaded and append');
 
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $pk]);
         }
