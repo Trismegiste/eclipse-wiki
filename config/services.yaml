@@ -137,3 +137,7 @@ services:
 
     App\Service\PictoProvider:
         - '%kernel.project_dir%/database/pictogram'
+
+    # InvokeAI
+    App\Service\InvokeAi:
+        $baseUrl: '%env(resolve:STABLE_DIFFUSION_URL)%'

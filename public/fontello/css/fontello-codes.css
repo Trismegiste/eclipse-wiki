@@ -31,6 +31,7 @@
 .icon-picture:before { content: '\e81b'; } /* '' */
 .icon-download:before { content: '\e81c'; } /* '' */
 .icon-check:before { content: '\e81d'; } /* '' */
+.icon-dcgan:before { content: '\e81e'; } /* '' */
 .icon-hexagon:before { content: '\e81f'; } /* '' */
 .icon-dead:before { content: '\e820'; } /* '' */
 .icon-token:before { content: '\e821'; } /* '' */

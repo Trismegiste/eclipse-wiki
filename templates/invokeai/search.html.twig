@@ -1,0 +1,35 @@
+{# Search into InvokeAI images #}
+{% extends "base.html.twig" %}
+
+{% block header_title %}InvokeAI Search{% endblock %}
+
+{% block content %}
+    <section>
+        {{ form(form) }}
+    </section>
+    <section class="pure-g search">
+        {% for picture in gallery %}
+            <div class="pure-u-1-5">
+                <div class="thumbnail">
+                    <a href="{{ picture.full }}" target="_blank">
+                        <img src="{{ picture.thumb }}" class="pure-img"/>
+                    </a>
+                    <div class="legend">{{ picture.width }}</div>
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .search .thumbnail {
+            margin-bottom: 1em;
+            text-align: center;
+        }
+        .search img {
+            margin: auto;
+        }
+    </style>
+{% endblock %}
