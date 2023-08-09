@@ -44,8 +44,8 @@
             const remoteField = document.getElementById('{{form.picture_url.vars.id}}')
             const localField = document.getElementById('{{form.local_name.vars.id}}')
             const previewImg = document.getElementById('{{form.prompt_keywords.vars.id}}_preview')
-            promptField.focus()
 
+            // autocomplete
             new autoComplete({
                 selector: '#{{ form.prompt_keywords.vars.id }}',
                 minChars: 3,
@@ -70,9 +70,20 @@
                 }
             })
 
+            // filling default name for picture
             promptField.addEventListener('keyup', event => {
                 localField.value = '{{ form.vars.data.title }} - ' + promptField.value
             })
+
+            // focus on prompt query
+            promptField.focus()
+
+            // waiting upload...
+            const submitButton = document.getElementById('{{ form.append.vars.id}}')
+            submitButton.addEventListener('click', event => {
+                submitButton.innerHTML = '<i class="icon-spin3 animate-spin"></i>'
+            })
+
         })
     </script>
 {% endblock %}
