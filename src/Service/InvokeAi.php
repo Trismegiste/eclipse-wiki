@@ -95,7 +95,7 @@ class InvokeAi
     {
         return $this->invokeaiCache->get('metadata-' . $name, function (ItemInterface $item) use ($name): \stdClass {
                     $item->expiresAfter(DateInterval::createFromDateString('1 month'));
-                    $response = $this->client->request('GET', $this->baseUrl . "api/v1/images/$name/metadata");
+                    $response = $this->client->request('GET', $this->baseUrl . "api/v1/images/i/$name/metadata");
                     $metadata = json_decode($response->getContent());
 
                     return $metadata;
@@ -112,7 +112,7 @@ class InvokeAi
         $metadata = $this->getImageMetadata($name);
 
         // if there is metadata field, gets the positive prompt
-        if (!is_null($metadata->metadata)) {
+        if (isset($metadata->metadata)) {
             return $metadata->metadata->positive_prompt;
         }
 

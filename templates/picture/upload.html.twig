@@ -5,18 +5,17 @@
 {% block header_title %}{{ block('title') }}{% endblock %}
 
 {% block content %}
-    <div class="pure-g">
-        <section class="pure-u-4-5">
-            {{ form(form) }}
-        </section>
-        <section class="pure-u-1-5">
-            {% for picture in last|slice(0, 5) %}
-                <article>
-                    <img src="{{ path('get_picture', {title: picture.filename}) }}" class="pure-img" title="{{ picture.filename }}"/>
-                </article>
-            {% endfor %}
-        </section>
-    </div>
+    <section>
+        {{ form(form) }}
+    </section>
+    <section class="pure-g mosaic">
+        {% for picture in last|slice(0, 24) %}
+            <div class="pure-u-1-8">
+                <img src="{{ path('get_picture', {title: picture.filename}) }}" title="{{ picture.filename }}"/>
+                <figcaption>[[file:{{ picture.filename }}]]</figcaption>
+            </div>
+        {% endfor %}
+    </section>
 {% endblock %}
 
 {% block javascripts %}
@@ -27,7 +26,7 @@
             const fileInput = document.getElementById('{{ form['picture'].vars.id }}')
             fileInput.files = e.clipboardData.files
         })
-        
+
         // if filename is empty before selecting a vertex for appending the picture, pre-fill the filename with the vertex title
         window.addEventListener('load', () => {
             let filename = document.getElementById('{{ form.children['filename'].vars.id }}')
@@ -44,6 +43,19 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('pixabay/auto-complete.css') }}"/>
+    <style>
+        .mosaic img {
+            object-fit: contain;
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+        }
+        .mosaic figcaption {
+            text-align: center;
+            font-size: 60%;
+            padding: 0.3em 0 0.9em;
+        }
+    </style>
 {% endblock %}
 
 

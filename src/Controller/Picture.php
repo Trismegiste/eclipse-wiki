@@ -103,7 +103,7 @@ class Picture extends AbstractController
             }
         }
 
-        $listing = $this->storage->searchLastPicture();
+        $listing = $this->storage->searchLastPicture(10);
 
         return $this->render('picture/upload.html.twig', [
                     'form' => $form->createView(),

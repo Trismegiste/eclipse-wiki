@@ -150,6 +150,8 @@ class Storage
         $iter = new Finder();
 
         return $iter->in($this->getRootDir())
+                        ->name(['*.jpeg', '*.png', '*.jpg', '*.svg'])
+                        ->notName('#^token-#')
                         ->sortByModifiedTime()
                         ->reverseSorting()
                         ->getIterator();
