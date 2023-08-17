@@ -39,15 +39,7 @@ class AjaxCompleteTransfo implements DataTransformerInterface
 
     public function transform(mixed $value): mixed
     {
-        if (empty($value)) {
-            return null;
-        }
-
-        if (!$value instanceof Root) {
-            return null;
-        }
-
-        return $value->getPk();
+        return null;
     }
 
 }
