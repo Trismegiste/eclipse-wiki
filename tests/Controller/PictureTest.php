@@ -65,7 +65,7 @@ class PictureTest extends WebTestCase
         $form = $crawler->selectButton('picture_upload_upload')->form();
         $form->setValues(['picture_upload' => [
                 'filename' => 'uploaded',
-                'append_vertex' => 'target'
+                'append_vertex' => $target->getPk()
         ]]);
         try {
             $this->storage->delete('uploaded.jpg');

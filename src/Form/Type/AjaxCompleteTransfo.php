@@ -34,7 +34,7 @@ class AjaxCompleteTransfo implements DataTransformerInterface
         try {
             return $this->repository->load($value);
         } catch (RuntimeException $ex) {
-            throw new TransformationFailedException("Reference '$value' not found", 404, $ex);
+            throw new TransformationFailedException("Document '$value' not found", 404, $ex);
         }
     }
 
