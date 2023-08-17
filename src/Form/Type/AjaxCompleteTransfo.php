@@ -10,11 +10,10 @@ use RuntimeException;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Trismegiste\Strangelove\MongoDb\Repository;
+use Trismegiste\Strangelove\MongoDb\Root;
 
 /**
- * Description of AjaxCompleteTransfo
- *
- * @author trismegiste
+ * Tranformer primary key to document
  */
 class AjaxCompleteTransfo implements DataTransformerInterface
 {
@@ -40,7 +39,15 @@ class AjaxCompleteTransfo implements DataTransformerInterface
 
     public function transform(mixed $value): mixed
     {
-        return null;
+        if (empty($value)) {
+            return null;
+        }
+
+        if (!$value instanceof Root) {
+            return null;
+        }
+
+        return $value->getPk();
     }
 
 }
