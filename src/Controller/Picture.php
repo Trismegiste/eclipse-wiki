@@ -15,7 +15,6 @@ use App\Service\PlayerCastCache;
 use App\Service\Storage;
 use App\Voronoi\MapBuilder;
 use App\Voronoi\SvgDumper;
-use DateTime;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -82,7 +81,7 @@ class Picture extends AbstractController
     #[Route('/picture/upload', methods: ['GET', 'POST'])]
     public function upload(Request $request, VertexRepository $repository): Response
     {
-        $form = $this->createForm(PictureUpload::class);
+        $form = $this->createForm(PictureUpload::class, null, ['ajax_search' => $this->generateUrl('app_picture_vertexsearch')]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -91,10 +90,10 @@ class Picture extends AbstractController
                 $this->storage->storePicture($data['picture'], $data['filename']);
                 $this->addFlash('success', "Upload {$data['filename']} OK");
                 if (!empty($data['append_vertex'])) {
-                    $vertex = $repository->findByTitle($data['append_vertex']);
+                    $vertex = $data['append_vertex'];
                     $vertex->setContent($vertex->getContent() . "\n\n[[file:{$data['filename']}.jpg]]\n");
                     $repository->save($vertex);
-                    $this->addFlash('success', "Picture {$data['filename']} append to '{$data['append_vertex']}'");
+                    $this->addFlash('success', "Picture {$data['filename']} append to '" . $vertex->getTitle() . "'");
                 }
 
                 return $this->redirectToRoute('app_picture_upload');
@@ -198,6 +197,21 @@ YOLO
     {
         $title = $request->query->get('title');
         return new Response($provider->getSvg($title), 200, ['content-type' => 'image/svg+xml']);
+    }
+
+    /**
+     * Ajax for searching vertices by title
+     */
+    #[Route('/picture/vertex/search', methods: ['GET'])]
+    public function vertexSearch(Request $request, VertexRepository $repository): JsonResponse
+    {
+        $title = $request->query->get('q', '');
+        $choice = $repository->searchStartingWith($title);
+        array_walk($choice, function (&$v, $k) {
+            $v = ['pk' => (string) $v->_id, 'title' => $v->title];
+        });
+
+        return new JsonResponse($choice);
     }
 
 }

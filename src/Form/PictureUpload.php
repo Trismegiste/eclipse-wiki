@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Image;
 
 /**
@@ -36,19 +37,13 @@ class PictureUpload extends AbstractType
                     'constraints' => [new Image()],
                     'help' => 'COPY_PASTE_IMG'
                 ])
-                ->add('append_vertex', Type\AutocompleteType::class, ['required' => false, 'choices' => $this->getVertexTitle()])
+                ->add('append_vertex', Type\AjaxCompleteType::class, ['repository' => $this->repository, 'ajax' => $options['ajax_search']])
                 ->add('upload', SubmitType::class);
     }
 
-    protected function getVertexTitle(): array
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        // we need a flat array and not a generator since this widget could be embedded in collection
-        $choice = [];
-        foreach ($this->repository->findAll() as $vertex) {
-            $choice[] = $vertex->getTitle();
-        }
-
-        return $choice;
+        $resolver->setRequired('ajax_search');
     }
 
 }

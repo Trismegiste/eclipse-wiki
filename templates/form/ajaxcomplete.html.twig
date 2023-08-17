@@ -1,0 +1,32 @@
+{# Custom rendering for AjaxCompleteType #}
+{% block ajax_complete_widget %}
+    {{ form_widget(form, {attr:{hidden:true}}) }}
+    <input type="text" id="{{ form.vars.id }}_auto"/>
+    <script>
+        window.addEventListener('load', () => {
+            // autocomplete
+            new autoComplete({
+                selector: '#{{ form.vars.id }}_auto',
+                minChars: 3,
+                source: function (term, suggest) {
+                    fetch('{{ form.vars.ajax }}?q=' + term)
+                            .then(response => {
+                                return response.json()
+                            })
+                            .then(data => {
+                                suggest(data)
+                            })
+                },
+                renderItem: function (item, search) {
+                    return '<div class="autocomplete-suggestion" data-pk="' + item.pk +
+                            '">' + item.title + '</div>'
+                },
+                onSelect: function (e, term, item) {
+                    const pkField = document.getElementById('{{ form.vars.id }}')
+                    pkField.value = item.getAttribute('data-pk')
+                    console.log(item.innerHTML) // fire new CustomEvent(type)
+                }
+            })
+        })
+    </script>
+{% endblock %}
