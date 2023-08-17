@@ -13,6 +13,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Trismegiste\Strangelove\MongoDb\Repository;
+use Trismegiste\Strangelove\MongoDb\Root;
 
 /**
  * Description of AjaxCompleteType
@@ -31,6 +32,7 @@ class AjaxCompleteType extends AbstractType
     {
         $resolver->setRequired(['repository', 'ajax']);
         $resolver->setAllowedTypes('repository', Repository::class);
+        $resolver->setDefault('data_class', Root::class);
     }
 
     public function getParent(): ?string

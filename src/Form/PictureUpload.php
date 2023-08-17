@@ -37,7 +37,11 @@ class PictureUpload extends AbstractType
                     'constraints' => [new Image()],
                     'help' => 'COPY_PASTE_IMG'
                 ])
-                ->add('append_vertex', Type\AjaxCompleteType::class, ['repository' => $this->repository, 'ajax' => $options['ajax_search']])
+                ->add('append_vertex', Type\AjaxCompleteType::class, [
+                    'required' => false,
+                    'repository' => $this->repository,
+                    'ajax' => $options['ajax_search']
+                ])
                 ->add('upload', SubmitType::class);
     }
 

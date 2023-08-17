@@ -4,6 +4,7 @@
     <input type="text" id="{{ form.vars.id }}_auto"/>
     <script>
         window.addEventListener('load', () => {
+            const inputField = document.getElementById('{{ form.vars.id }}_auto')
             // autocomplete
             new autoComplete({
                 selector: '#{{ form.vars.id }}_auto',
@@ -24,7 +25,7 @@
                 onSelect: function (e, term, item) {
                     const pkField = document.getElementById('{{ form.vars.id }}')
                     pkField.value = item.getAttribute('data-pk')
-                    console.log(item.innerHTML) // fire new CustomEvent(type)
+                    inputField.value = item.innerHTML
                 }
             })
         })

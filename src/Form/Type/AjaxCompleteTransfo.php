@@ -6,7 +6,9 @@
 
 namespace App\Form\Type;
 
+use RuntimeException;
 use Symfony\Component\Form\DataTransformerInterface;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 use Trismegiste\Strangelove\MongoDb\Repository;
 
 /**
@@ -24,7 +26,16 @@ class AjaxCompleteTransfo implements DataTransformerInterface
 
     public function reverseTransform(mixed $value): mixed
     {
-        return $this->repository->load($value);
+        // no pk ?
+        if (empty($value)) {
+            return null;
+        }
+
+        try {
+            return $this->repository->load($value);
+        } catch (RuntimeException $ex) {
+            throw new TransformationFailedException("Reference '$value' not found", 404, $ex);
+        }
     }
 
     public function transform(mixed $value): mixed
