@@ -270,3 +270,13 @@ i.archived {
     margin-right: 2em;
     margin-bottom: 1em;
 }
+
+/* mini toolbar in form */
+form .minitoolbar {
+    text-align: right;
+    margin-top: 0.5em;
+    margin-right: 1em;
+}
+form .minitoolbar i {
+    font-size: 150%;
+}

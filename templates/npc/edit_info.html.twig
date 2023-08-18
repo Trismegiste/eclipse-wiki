@@ -1,4 +1,5 @@
 {% extends "form.html.twig" %}
+{% form_theme form _self %}
 
 {% block title %}{{ form.vars.data.title }}{% endblock %}
 
@@ -11,4 +12,9 @@
     <script>
         document.getElementById('npc_info_content').focus()
     </script>
+{% endblock %}
+
+{% block _npc_info_content_label %}
+    {{ form_label(form) }}
+    {% include 'fragment/form_minitoolbar.html.twig' %}
 {% endblock %}

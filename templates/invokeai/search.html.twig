@@ -1,7 +1,8 @@
 {# Search into InvokeAI images #}
 {% extends "base.html.twig" %}
 
-{% block header_title %}InvokeAI Search{% endblock %}
+{% block title %}InvokeAI Search{% endblock %}
+{% block header_title %}{{ block('title') }}{% endblock %}
 
 {% block content %}
     <section>

@@ -1,4 +1,5 @@
 {% extends "base.html.twig" %}
+{% form_theme form _self %}
 
 {% block title %}{{ form.vars.data.title }}{% endblock %}
 
@@ -19,4 +20,9 @@
 
 {% block content %}
     {{ form(form) }}
+{% endblock %}
+
+{% block _vertex_content_label %}
+    {{ form_label(form) }}
+    {% include 'fragment/form_minitoolbar.html.twig' %}
 {% endblock %}

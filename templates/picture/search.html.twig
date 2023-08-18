@@ -1,7 +1,8 @@
 {# Search into MediaWiki image #}
 {% extends "base.html.twig" %}
 
-{% block header_title %}Remote Search{% endblock %}
+{% block title %}Remote Search{% endblock %}
+{% block header_title %}{{ block('title') }}{% endblock %}
 
 {% block content %}
     <section>
