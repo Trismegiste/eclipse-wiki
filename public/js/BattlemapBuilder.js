@@ -67,8 +67,12 @@ class BattlemapBuilder
                 case BABYLON.KeyboardEventTypes.KEYUP:
                     switch (kbInfo.event.keyCode) {
                         case 32:
-                            if (this.scene.metadata.selectedOnTileIndex !== null) {
-                                this.postScreenshotFrom(this.scene.metadata.selectedOnTileIndex)
+                            if (kbInfo.event.shiftKey) {
+                                if (this.scene.metadata.selectedOnTileIndex !== null) {
+                                    this.postScreenshotFrom(this.scene.metadata.selectedOnTileIndex)
+                                }
+                            } else {
+                                this.postGmView()
                             }
                             break
                     }
@@ -128,6 +132,31 @@ class BattlemapBuilder
             groundSelector.isVisible = true
             itemSelector.isVisible = true
             this.scene.fogMode = currentFog
+        })
+    }
+
+    async postGmView() {
+        const camera = this.scene.getCameraByName('gm-camera')
+        const formElem = document.querySelector('form[name=gm_view_broadcast]')
+        const formData = new FormData(formElem)
+        let data = await BABYLON.ScreenshotTools.CreateScreenshotUsingRenderTargetAsync(this.scene.getEngine(), camera, {width: 1920, height: 1080}, "image/png", 1, true, null, true)
+        formData.append(`gm_view_broadcast[picture]`, new Blob([BABYLON.DecodeBase64UrlToBinary(data)], {type: 'image/png'}))
+
+        // save temporary state
+        const groundSelector = this.tileCursor
+        const itemSelector = this.tileSelector
+        groundSelector.isVisible = false
+        itemSelector.isVisible = false
+
+        // post the form
+        fetch(formElem.action, {
+            method: 'post',
+            body: formData,
+            redirect: 'manual'
+        }).finally(res => {
+            // restore original state
+            groundSelector.isVisible = true
+            itemSelector.isVisible = true
         })
     }
 

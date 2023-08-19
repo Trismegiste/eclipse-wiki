@@ -54,6 +54,9 @@ class FirstPerson extends AbstractController
         $broadcast = $this->createForm(CubemapBroadcast::class, null, [
             'action' => $this->generateUrl('app_firstperson_broadcast')
         ]);
+        $gmView = $this->createForm(\App\Form\Tool3d\GmViewBroadcast::class, null, [
+            'action' => $this->generateUrl('app_firstperson_pushgmview')
+        ]);
         $legend = $this->createForm(TileLegend::class);
         $writer = $this->createForm(Battlemap3dWrite::class, $place, [
             'action' => $this->generateUrl('app_firstperson_export', ['pk' => $place->getPk()])
@@ -65,6 +68,7 @@ class FirstPerson extends AbstractController
                     'legend' => $legend->createView(),
                     'writer' => $writer->createView(),
                     'broadcast' => $broadcast->createView(),
+                    'gm_view' => $gmView->createView(),
                     'url_feedback' => $this->pusher->getUrlFeedback()
         ]);
     }
@@ -176,6 +180,26 @@ class FirstPerson extends AbstractController
         }
 
         return $this->render('firstperson/delete.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * Broadcast the GM view 2d screenshot
+     */
+    #[Route('/fps/push/gmview', methods: ['POST'])]
+    public function pushGmView(Request $request, PlayerCastCache $cache): JsonResponse
+    {
+        $form = $this->createForm(\App\Form\Tool3d\GmViewBroadcast::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $screenshot */
+            $screenshot = $form['picture']->getData();
+            $target = $cache->slimPictureForPush($screenshot);
+
+            return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $target, 'imgType' => '2d']);
+        }
+
+        return new JsonResponse(['level' => 'error', 'message' => (string) $form->getErrors(true, true)], 400);
     }
 
 }
