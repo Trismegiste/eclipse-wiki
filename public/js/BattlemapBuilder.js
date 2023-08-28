@@ -493,6 +493,31 @@ class BattlemapBuilder
             sp.dispose()
             metadata.npc = null
         }
+
+        // prototyping for appending NPC
+        this.scene.injectNpcAt = (cellIndex, npcTitle) => {
+            const metadata = this.getTileInfo(cellIndex)
+            const selectedTile = this.getGroundTileByIndex(cellIndex)
+            if (metadata.npc === null) {
+                metadata.npc = {label: npcTitle}  // immediately update model to prevent double insertion
+                // does spritemanager exist ?
+                if (this.spriteManager[npcTitle] === undefined) {
+                    // append missing sprite manager
+                    fetch('/npc/show.json?title=' + npcTitle).then(resp => {
+                        return resp.json()
+                    }).then(npcInfo => {
+                        const sp = new BABYLON.SpriteManager('token-' + npcTitle, '/picture/get/' + npcInfo.tokenPic, 2000, 504)
+                        this.spriteManager[npcTitle] = sp
+                        this.getDoc().npcToken.push({label: npcTitle, picture: npcInfo.tokenPic})
+                        // append sprite
+                        this.appendNpcAt(metadata.npc, selectedTile.position.x, selectedTile.position.z)
+                    })
+                } else {
+                    // append sprite
+                    this.appendNpcAt(metadata.npc, selectedTile.position.x, selectedTile.position.z)
+                }
+            }
+        }
     }
 
     appendNpcAt(npcContent, x, y) {

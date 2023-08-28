@@ -36,6 +36,7 @@
                 <div x-html="characterCard"
                      x-init="$watch('characterCard', value => { $nextTick(()=> { Pushable_subscribe(document.querySelectorAll('.pushable a')) }) })"></div>
                 <button x-show="characterCard != null" x-on:click="deleteNpc">Delete</button>
+                {{ form(npc_tool) }}
             </article>
             <hr/>
             {{ include('fragment/flashes.html.twig') }}
@@ -82,6 +83,7 @@
             Alpine.data('displayCellInfo', () => ({
                     cellInfo: null,
                     characterCard: null,
+                    selectedNpc: null,
 
                     init() {
                         Mousetrap.bind('r', () => {
@@ -165,6 +167,11 @@
                     deleteNpc(event) {
                         scene.deleteNpcAt(this.cellInfo.cellIndex)
                         this.characterCard = null
+                    },
+
+                    appendNpc(event) {
+                        event.preventDefault()
+                        scene.injectNpcAt(this.cellInfo.cellIndex, this.selectedNpc)
                     }
 
                 }))
