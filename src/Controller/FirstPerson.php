@@ -50,7 +50,6 @@ class FirstPerson extends AbstractController
     public function edit(Place $place): Response
     {
         // Toolbar with forms :
-        $tools = $this->createForm(RunningMap3dGui::class);
         $npcTool = $this->createForm(\App\Form\Tool3d\TileNpc::class);
         $broadcast = $this->createForm(CubemapBroadcast::class, null, [
             'action' => $this->generateUrl('app_firstperson_broadcast')
@@ -65,7 +64,6 @@ class FirstPerson extends AbstractController
 
         return $this->render('firstperson/edit.html.twig', [
                     'place' => $place,
-                    'tools' => $tools->createView(),
                     'npc_tool' => $npcTool->createView(),
                     'legend' => $legend->createView(),
                     'writer' => $writer->createView(),
