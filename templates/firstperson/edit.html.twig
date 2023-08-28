@@ -102,14 +102,6 @@
 
                     changeMode(event) {
                         scene.metadata.viewMode = event.target.value
-                        if (event.target.value !== 'populate') {
-                            this.$refs.populateWithNpc.value = scene.metadata.populateWithNpc = null
-                        }
-                    },
-
-                    changeNpc(event) {
-                        this.$refs.viewMode.value = scene.metadata.viewMode = 'populate'
-                        scene.metadata.populateWithNpc = event.target.value
                     },
 
                     display(event) {

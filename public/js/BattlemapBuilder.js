@@ -265,8 +265,6 @@ class BattlemapBuilder
                             itemSelector.position.x = groundSelector.position.x
                             itemSelector.position.z = groundSelector.position.z
                             break
-                        case 'populate':
-                            return
                     }
 
                     const target = e.meshUnderPointer.position.clone()
@@ -304,28 +302,6 @@ class BattlemapBuilder
                             detail.cellIndex = groundSelector.metadata
                             document.querySelector('canvas').dispatchEvent(new CustomEvent('selectcell', {"bubbles": true, detail}))
                             break;
-                        case 'populate':
-                            if ((metadata.npc === null) && (this.scene.metadata.populateWithNpc !== null)) {
-                                const npcTitle = this.scene.metadata.populateWithNpc
-                                metadata.npc = {label: npcTitle}  // immediately update model to prevent double insertion
-                                // does spritemanager exist ?
-                                if (this.spriteManager[npcTitle] === undefined) {
-                                    // append missing sprite manager
-                                    fetch('/npc/show.json?title=' + npcTitle).then(resp => {
-                                        return resp.json()
-                                    }).then(npcInfo => {
-                                        const sp = new BABYLON.SpriteManager('token-' + npcTitle, '/picture/get/' + npcInfo.tokenPic, 2000, 504)
-                                        this.spriteManager[npcTitle] = sp
-                                        this.getDoc().npcToken.push({label: npcTitle, picture: npcInfo.tokenPic})
-                                        // append sprite
-                                        this.appendNpcAt(metadata.npc, groundSelector.position.x, groundSelector.position.z)
-                                    })
-                                } else {
-                                    // append sprite
-                                    this.appendNpcAt(metadata.npc, groundSelector.position.x, groundSelector.position.z)
-                                }
-                            }
-                            break
                     }
                 })
                 )
