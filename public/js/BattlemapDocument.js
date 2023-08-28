@@ -16,7 +16,6 @@ class BattlemapDocument
     grid = []
 
     // current status
-    viewMode = 'fps'
     selectedOnTileIndex = null
     playerViewOnTileIndex = null
 }

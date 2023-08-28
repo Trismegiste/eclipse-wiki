@@ -231,43 +231,43 @@ class BattlemapBuilder
 
         // right click behavior
         groundSelector.actionManager.registerAction(
-                new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnRightPickTrigger, e => {
-                    let objToAnimate;
-                    switch (this.scene.metadata.viewMode) {
-                        // move camera
-                        case 'fps':
-                            objToAnimate = this.scene.getCameraByName('gm-camera')
-                            break
-                        case 'rts':
-                            if (this.scene.metadata.selectedOnTileIndex === null) {
-                                return;
-                            }
+                new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnRightPickTrigger, event => {
+                    let objToAnimate
 
-                            // a NPC must be present at the selected tile :
-                            const sourceTileInfo = this.getTileInfo(this.scene.metadata.selectedOnTileIndex)
-                            if (sourceTileInfo.npc === null) {
-                                return;
-                            }
+                    if (event.sourceEvent.ctrlKey) {
+                        // move the camera
+                        objToAnimate = this.scene.getCameraByName('gm-camera')
+                    } else {
+                        // move the npc from selected tile
+                        if (this.scene.metadata.selectedOnTileIndex === null) {
+                            return;
+                        }
 
-                            // no NPC must be present at the selected tile :
-                            const targetTileInfo = this.getTileInfo(groundSelector.metadata)
-                            if (targetTileInfo.npc !== null) {
-                                return;
-                            }
+                        // a NPC must be present at the selected tile :
+                        const sourceTileInfo = this.getTileInfo(this.scene.metadata.selectedOnTileIndex)
+                        if (sourceTileInfo.npc === null) {
+                            return;
+                        }
 
-                            objToAnimate = sourceTileInfo.npc.npcSpritePtr
-                            // move NPC in model :
-                            targetTileInfo.npc = sourceTileInfo.npc
-                            sourceTileInfo.npc = null
-                            // move item selector :
-                            this.scene.metadata.selectedOnTileIndex = groundSelector.metadata
-                            const itemSelector = this.tileSelector
-                            itemSelector.position.x = groundSelector.position.x
-                            itemSelector.position.z = groundSelector.position.z
-                            break
+                        // no NPC must be present at the selected tile :
+                        const targetTileInfo = this.getTileInfo(groundSelector.metadata)
+                        if (targetTileInfo.npc !== null) {
+                            return;
+                        }
+
+                        objToAnimate = sourceTileInfo.npc.npcSpritePtr
+                        // move NPC in model :
+                        targetTileInfo.npc = sourceTileInfo.npc
+                        sourceTileInfo.npc = null
+                        // move item selector : 
+                        // @todo this is buggy since we don't fire an event, not all state are updated : BAD
+                        this.scene.metadata.selectedOnTileIndex = groundSelector.metadata
+                        const itemSelector = this.tileSelector
+                        itemSelector.position.x = groundSelector.position.x
+                        itemSelector.position.z = groundSelector.position.z
                     }
 
-                    const target = e.meshUnderPointer.position.clone()
+                    const target = event.meshUnderPointer.position.clone()
                     target.y = objToAnimate.position.y
 
                     const frameRate = 10
@@ -287,22 +287,17 @@ class BattlemapBuilder
                     const selector = this.tileSelector
                     let metadata = this.getTileInfo(groundSelector.metadata)
 
-                    switch (this.scene.metadata.viewMode) {
-                        case 'fps':
-                        case 'rts':
-                            selector.isVisible = true
-                            selector.position.x = groundSelector.position.x
-                            selector.position.z = groundSelector.position.z
-                            this.scene.metadata.selectedOnTileIndex = groundSelector.metadata
+                    selector.isVisible = true
+                    selector.position.x = groundSelector.position.x
+                    selector.position.z = groundSelector.position.z
+                    this.scene.metadata.selectedOnTileIndex = groundSelector.metadata
 
-                            // fire an event for alpinejs :
-                            const detail = {...metadata}
-                            detail.x = e.meshUnderPointer.position.x
-                            detail.y = e.meshUnderPointer.position.z
-                            detail.cellIndex = groundSelector.metadata
-                            document.querySelector('canvas').dispatchEvent(new CustomEvent('selectcell', {"bubbles": true, detail}))
-                            break;
-                    }
+                    // fire an event for alpinejs :
+                    const detail = {...metadata}
+                    detail.x = e.meshUnderPointer.position.x
+                    detail.y = e.meshUnderPointer.position.z
+                    detail.cellIndex = groundSelector.metadata
+                    document.querySelector('canvas').dispatchEvent(new CustomEvent('selectcell', {"bubbles": true, detail}))
                 })
                 )
     }
