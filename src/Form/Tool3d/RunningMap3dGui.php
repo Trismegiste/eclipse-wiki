@@ -23,8 +23,7 @@ class RunningMap3dGui extends AbstractType
                     'choices' => [
                         'FPS' => 'fps',
                         'RTS' => 'rts',
-                        'Personnage' => 'populate',
-                        'Suppression' => 'delete'
+                        'Personnage' => 'populate'
                     ],
                     'attr' => [
                         'x-ref' => 'viewMode',

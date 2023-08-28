@@ -33,7 +33,9 @@
                     </div>
                 </template>
                 <hr/>
-                <div x-ref="characterCard"></div>
+                <div x-html="characterCard"
+                     x-init="$watch('characterCard', value => { $nextTick(()=> { Pushable_subscribe(document.querySelectorAll('.pushable a')) }) })"></div>
+                <button x-show="characterCard != null" x-on:click="deleteNpc">Delete</button>
             </article>
             <hr/>
             {{ include('fragment/flashes.html.twig') }}
@@ -79,6 +81,7 @@
         document.addEventListener('alpine:init', () => {
             Alpine.data('displayCellInfo', () => ({
                     cellInfo: null,
+                    characterCard: null,
 
                     init() {
                         Mousetrap.bind('r', () => {
@@ -116,11 +119,10 @@
                                         return response.text()
                                     })
                                     .then(content => {
-                                        this.$refs.characterCard.innerHTML = content
-                                        Pushable_subscribe(document.querySelectorAll('.pushable a'))
+                                        this.characterCard = content
                                     })
                         } else {
-                            this.$refs.characterCard.innerHTML = ''
+                            this.characterCard = null
                         }
                     },
 
@@ -158,6 +160,11 @@
                             formColor = '#000000'
                         }
                         scene.setPictogramAtCell(this.cellInfo.cellIndex, this.cellInfo.pictogram, formColor)
+                    },
+
+                    deleteNpc(event) {
+                        scene.deleteNpcAt(this.cellInfo.cellIndex)
+                        this.characterCard = null
                     }
 
                 }))

@@ -265,7 +265,6 @@ class BattlemapBuilder
                             itemSelector.position.x = groundSelector.position.x
                             itemSelector.position.z = groundSelector.position.z
                             break
-                        case 'delete':
                         case 'populate':
                             return
                     }
@@ -327,13 +326,6 @@ class BattlemapBuilder
                                 }
                             }
                             break
-                        case 'delete':
-                            if (metadata.npc === null) {
-                                return;
-                            }
-                            const sp = metadata.npc.npcSpritePtr
-                            sp.dispose()
-                            metadata.npc = null
                     }
                 })
                 )
@@ -490,6 +482,17 @@ class BattlemapBuilder
             const sp = new BABYLON.SpriteManager('token-' + npc.label, '/picture/get/' + npc.picture, 2000, 504)
             this.spriteManager[npc.label] = sp
         })
+
+        // prototyping for delete NPC
+        this.scene.deleteNpcAt = (cellIndex) => {
+            const metadata = this.getTileInfo(cellIndex)
+            if (metadata.npc === null) {
+                return;
+            }
+            const sp = metadata.npc.npcSpritePtr
+            sp.dispose()
+            metadata.npc = null
+        }
     }
 
     appendNpcAt(npcContent, x, y) {
