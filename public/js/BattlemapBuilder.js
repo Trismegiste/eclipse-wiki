@@ -68,9 +68,7 @@ class BattlemapBuilder
                     switch (kbInfo.event.keyCode) {
                         case 32:
                             if (kbInfo.event.shiftKey) {
-                                if (this.scene.metadata.selectedOnTileIndex !== null) {
-                                    this.postScreenshotFrom(this.scene.metadata.selectedOnTileIndex)
-                                }
+                                this.postScreenshotFrom(this.getSelectedTileIndex())
                             } else {
                                 this.postGmView()
                             }
@@ -172,14 +170,10 @@ class BattlemapBuilder
         headlight.range = 8
 
         this.scene.registerBeforeRender(() => {
-            if (this.scene.metadata.selectedOnTileIndex !== null) {
-                const selector = this.tileSelector
-                headlight.position.x = selector.position.x
-                headlight.position.z = selector.position.z
-                headlight.setEnabled(true)
-            } else {
-                headlight.setEnabled(false)
-            }
+            const selector = this.tileSelector
+            headlight.position.x = selector.position.x
+            headlight.position.z = selector.position.z
+            headlight.setEnabled(true)
         })
     }
 
@@ -238,19 +232,14 @@ class BattlemapBuilder
                         // move the camera
                         objToAnimate = this.scene.getCameraByName('gm-camera')
                     } else {
-                        // move the npc from selected tile
-                        if (this.scene.metadata.selectedOnTileIndex === null) {
-                            return;
-                        }
-
                         // a NPC must be present at the selected tile :
-                        const sourceTileInfo = this.getTileInfo(this.scene.metadata.selectedOnTileIndex)
+                        const sourceTileInfo = this.getTileContent(this.getSelectedTileIndex())
                         if (sourceTileInfo.npc === null) {
                             return;
                         }
 
-                        // no NPC must be present at the selected tile :
-                        const targetTileInfo = this.getTileInfo(groundSelector.metadata)
+                        // no NPC must be present at the right-clicked target tile :
+                        const targetTileInfo = this.getTileContent(groundSelector.metadata)
                         if (targetTileInfo.npc !== null) {
                             return;
                         }
@@ -260,11 +249,7 @@ class BattlemapBuilder
                         targetTileInfo.npc = sourceTileInfo.npc
                         sourceTileInfo.npc = null
                         // move item selector : 
-                        // @todo this is buggy since we don't fire an event, not all state are updated : BAD
-                        this.scene.metadata.selectedOnTileIndex = groundSelector.metadata
-                        const itemSelector = this.tileSelector
-                        itemSelector.position.x = groundSelector.position.x
-                        itemSelector.position.z = groundSelector.position.z
+                        this.moveSelectorToIndex(groundSelector.metadata)
                     }
 
                     const target = event.meshUnderPointer.position.clone()
@@ -284,22 +269,24 @@ class BattlemapBuilder
         // left click behavior
         groundSelector.actionManager.registerAction(
                 new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, e => {
-                    const selector = this.tileSelector
-                    let metadata = this.getTileInfo(groundSelector.metadata)
-
-                    selector.isVisible = true
-                    selector.position.x = groundSelector.position.x
-                    selector.position.z = groundSelector.position.z
-                    this.scene.metadata.selectedOnTileIndex = groundSelector.metadata
-
-                    // fire an event for alpinejs :
-                    const detail = {...metadata}
-                    detail.x = e.meshUnderPointer.position.x
-                    detail.y = e.meshUnderPointer.position.z
-                    detail.cellIndex = groundSelector.metadata
-                    document.querySelector('canvas').dispatchEvent(new CustomEvent('selectcell', {"bubbles": true, detail}))
+                    this.moveSelectorToIndex(groundSelector.metadata)
                 })
                 )
+    }
+
+    moveSelectorToIndex(idx) {
+        const cell = this.scene.metadata.grid[idx]
+        this.tileSelector.position.x = cell.x
+        this.tileSelector.position.z = -cell.y
+        this.tileSelector.metadata = idx
+
+        let metadata = cell.content
+        // fire an event for alpinejs :
+        const detail = {...metadata}
+        detail.x = cell.x
+        detail.y = -cell.y
+        detail.cellIndex = idx
+        document.querySelector('canvas').dispatchEvent(new CustomEvent('selectcell', {"bubbles": true, detail}))
     }
 
     declareSelector() {
@@ -315,7 +302,12 @@ class BattlemapBuilder
         selectorMat.disableLighting = true
         itemSelector.material = selectorMat
         itemSelector.isPickable = false
+        itemSelector.metadata = 0 // default index
         this.tileSelector = itemSelector
+    }
+
+    getSelectedTileIndex() {
+        return this.tileSelector.metadata
     }
 
     declarePlayerCursor() {
@@ -349,7 +341,7 @@ class BattlemapBuilder
         return this.scene.getMeshByName('ground-' + idx)
     }
 
-    getTileInfo(idx) {
+    getTileContent(idx) {
         return this.scene.metadata.grid[idx].content
     }
 
@@ -456,7 +448,7 @@ class BattlemapBuilder
 
         // prototyping for delete NPC
         this.scene.deleteNpcAt = (cellIndex) => {
-            const metadata = this.getTileInfo(cellIndex)
+            const metadata = this.getTileContent(cellIndex)
             if (metadata.npc === null) {
                 return;
             }
@@ -467,7 +459,7 @@ class BattlemapBuilder
 
         // prototyping for appending NPC
         this.scene.injectNpcAt = (cellIndex, npcTitle) => {
-            const metadata = this.getTileInfo(cellIndex)
+            const metadata = this.getTileContent(cellIndex)
             const selectedTile = this.getGroundTileByIndex(cellIndex)
             if (metadata.npc === null) {
                 metadata.npc = {label: npcTitle}  // immediately update model to prevent double insertion

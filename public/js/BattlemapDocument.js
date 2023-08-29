@@ -16,6 +16,5 @@ class BattlemapDocument
     grid = []
 
     // current status
-    selectedOnTileIndex = null
     playerViewOnTileIndex = null
 }
