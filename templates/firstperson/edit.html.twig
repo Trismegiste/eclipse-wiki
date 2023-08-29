@@ -35,6 +35,7 @@
                      x-init="$watch('characterCard', value => { $nextTick(()=> { Pushable_subscribe(document.querySelectorAll('.pushable a')) }) })"></div>
                 <button x-show="characterCard != null" x-on:click="deleteNpc">Delete</button>
                 {{ form(npc_tool) }}
+                <button x-on:click="paint">Paint</button>
             </article>
             <hr/>
             {{ include('fragment/flashes.html.twig') }}
@@ -99,7 +100,7 @@
                     },
 
                     cursorMoved(event) {
-                        // update distance since cursor has moved
+                        // update distance between cursor and selector since cursor has moved
                         this.distanceCursor = scene.getDistance(event.detail.cursor, this.cellInfo.cellIndex)
                     },
 
@@ -140,6 +141,11 @@
                     appendNpc(event) {
                         event.preventDefault()
                         scene.injectNpcAt(this.cellInfo.cellIndex, this.selectedNpc)
+                    },
+
+                    paint(event) {
+                        event.preventDefault()
+                        scene.paintRoomAt(this.cellInfo.cellIndex, 'cluster-park')
                     }
 
                 }))

@@ -593,6 +593,7 @@ class BattlemapBuilder
     }
 
     declareHelper() {
+        // calculate hexagonal distance between 2 tiles given by their indices
         this.scene.getDistance = function(idx1, idx2) {
             const cell1 = this.metadata.grid[idx1]
             const cell2 = this.metadata.grid[idx2]
@@ -600,6 +601,29 @@ class BattlemapBuilder
             let dy = cell1.y - cell2.y
 
             return Math.ceil(Math.sqrt(dx * dx + dy * dy) / (2 * Math.sqrt(3) / 3) - 0.05)
+        }
+
+        // paint a room with a new template by starting by a tile
+        this.scene.paintRoomAt = function(idx, template) {
+            const roomId = this.metadata.grid[idx].content.uid
+
+            this.metadata.grid.forEach((cell, k) => {
+                if (cell.content.uid === roomId) {
+                    let old = this.getMeshByName("ground-" + k)
+                    let x = old.position.x
+                    let z = old.position.z
+                    old.dispose()
+                    old = null
+                    const ground = this.getMeshByName('hexagon-' + template).createInstance("ground-" + k)
+                    ground.position.x = x
+                    ground.position.z = z
+                    ground.checkCollisions = true
+                    // keep track of index
+                    ground.metadata = k
+                    // update document
+                    cell.content.template = template
+                }
+            })
         }
     }
 
