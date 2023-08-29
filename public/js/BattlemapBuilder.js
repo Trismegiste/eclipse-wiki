@@ -388,6 +388,8 @@ class BattlemapBuilder
                         selector.position.z = current.position.z
                         // we store the cell index into the metadata of the selector
                         selector.metadata = current.metadata
+                        const detail = {cursor: current.metadata}
+                        document.querySelector('canvas').dispatchEvent(new CustomEvent('cursormove', {"bubbles": true, detail}))
                     })
                     )
 
@@ -590,6 +592,17 @@ class BattlemapBuilder
         }
     }
 
+    declareHelper() {
+        this.scene.getDistance = function(idx1, idx2) {
+            const cell1 = this.metadata.grid[idx1]
+            const cell2 = this.metadata.grid[idx2]
+            let dx = cell1.x - cell2.x
+            let dy = cell1.y - cell2.y
+
+            return Math.ceil(Math.sqrt(dx * dx + dy * dy) / (2 * Math.sqrt(3) / 3) - 0.05)
+        }
+    }
+
     create() {
         // build the scene from the model
         this.declareWriter()
@@ -605,5 +618,6 @@ class BattlemapBuilder
         this.declareNpcToken()
         this.buildGrid()
         this.drawCeiling()
+        this.declareHelper()
     }
 }

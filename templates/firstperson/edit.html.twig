@@ -25,7 +25,7 @@
                             <h2 x-text="'Room ' + cellInfo.uid + ' @' + cellInfo.cellIndex"></h2>
                             <h3 x-text="'Type ' + cellInfo.template"></h3>
                         </hgroup>
-                        <p>Distance = <span x-text="distanceFromCamera(cellInfo.x, cellInfo.y)"></span></p>
+                        <p>Distance = <span x-on:cursormove.window="cursorMoved($event)" x-text="distanceCursor"></span></p>
                         <hr/>
                         {{ form(legend) }}
                     </div>
@@ -80,6 +80,7 @@
                     cellInfo: null,
                     characterCard: null,
                     selectedNpc: null,
+                    distanceCursor: 0,
 
                     display(event) {
                         this.cellInfo = event.detail
@@ -97,11 +98,9 @@
                         }
                     },
 
-                    distanceFromCamera(x, y) {
-                        const dx = camera.position.x - x
-                        const dy = camera.position.z - y
-
-                        return Math.ceil(Math.sqrt(dx * dx + dy * dy) / (2 * Math.sqrt(3) / 3) - 0.05)
+                    cursorMoved(event) {
+                        // update distance since cursor has moved
+                        this.distanceCursor = scene.getDistance(event.detail.cursor, this.cellInfo.cellIndex)
                     },
 
                     write(event) {
