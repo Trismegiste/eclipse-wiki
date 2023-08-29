@@ -10,13 +10,17 @@ use App\Entity\BattlemapDocument;
 use App\Entity\Place;
 use App\Form\Tool3d\Battlemap3dWrite;
 use App\Form\Tool3d\CubemapBroadcast;
-use App\Form\Tool3d\RunningMap3dGui;
+use App\Form\Tool3d\GmViewBroadcast;
+use App\Form\Tool3d\RoomTexturing;
 use App\Form\Tool3d\TileLegend;
+use App\Form\Tool3d\TileNpc;
 use App\Repository\VertexRepository;
 use App\Service\PlayerCastCache;
 use App\Service\Storage;
 use App\Service\WebsocketPusher;
+use App\Voronoi\HexaMap;
 use App\Voronoi\MapBuilder;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -50,14 +54,15 @@ class FirstPerson extends AbstractController
     public function edit(Place $place): Response
     {
         // Toolbar with forms :
-        $npcTool = $this->createForm(\App\Form\Tool3d\TileNpc::class);
+        $npcTool = $this->createForm(TileNpc::class);
         $broadcast = $this->createForm(CubemapBroadcast::class, null, [
             'action' => $this->generateUrl('app_firstperson_broadcast')
         ]);
-        $gmView = $this->createForm(\App\Form\Tool3d\GmViewBroadcast::class, null, [
+        $gmView = $this->createForm(GmViewBroadcast::class, null, [
             'action' => $this->generateUrl('app_firstperson_pushgmview')
         ]);
         $legend = $this->createForm(TileLegend::class);
+        $texturing = $this->createForm(RoomTexturing::class);
         $writer = $this->createForm(Battlemap3dWrite::class, $place, [
             'action' => $this->generateUrl('app_firstperson_export', ['pk' => $place->getPk()])
         ]);
@@ -66,6 +71,7 @@ class FirstPerson extends AbstractController
                     'place' => $place,
                     'npc_tool' => $npcTool->createView(),
                     'legend' => $legend->createView(),
+                    'texturing' => $texturing->createView(),
                     'writer' => $writer->createView(),
                     'broadcast' => $broadcast->createView(),
                     'gm_view' => $gmView->createView(),
@@ -105,7 +111,7 @@ class FirstPerson extends AbstractController
             $map->dumpMap($doc);
 
             $resp = new JsonResponse($doc);
-            $resp->setLastModified(new \DateTime());
+            $resp->setLastModified(new DateTime());
 
             return $resp;
         } else {
@@ -150,7 +156,7 @@ class FirstPerson extends AbstractController
     public function player(): Response
     {
         $doc = new BattlemapDocument();
-        (new \App\Voronoi\HexaMap(25))->dumpMap($doc);
+        (new HexaMap(25))->dumpMap($doc);
 
         return $this->render('firstperson/player.html.twig', [
                     'doc' => $doc,
@@ -188,7 +194,7 @@ class FirstPerson extends AbstractController
     #[Route('/fps/push/gmview', methods: ['POST'])]
     public function pushGmView(Request $request, PlayerCastCache $cache): JsonResponse
     {
-        $form = $this->createForm(\App\Form\Tool3d\GmViewBroadcast::class);
+        $form = $this->createForm(GmViewBroadcast::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

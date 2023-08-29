@@ -25,7 +25,9 @@
                             <h2 x-text="'Room ' + cellInfo.uid + ' @' + cellInfo.cellIndex"></h2>
                             <h3 x-text="'Type ' + cellInfo.template"></h3>
                         </hgroup>
-                        <p>Distance = <span x-on:cursormove.window="cursorMoved($event)" x-text="distanceCursor"></span></p>
+                        {{ form(texturing) }}
+                        <p>Distance = <span x-on:cursormove.window="cursorMoved($event)" x-text="distanceCursor"></span>
+                        </p>
                         <hr/>
                         {{ form(legend) }}
                     </div>
@@ -35,7 +37,6 @@
                      x-init="$watch('characterCard', value => { $nextTick(()=> { Pushable_subscribe(document.querySelectorAll('.pushable a')) }) })"></div>
                 <button x-show="characterCard != null" x-on:click="deleteNpc">Delete</button>
                 {{ form(npc_tool) }}
-                <button x-on:click="paint">Paint</button>
             </article>
             <hr/>
             {{ include('fragment/flashes.html.twig') }}
@@ -143,9 +144,9 @@
                         scene.injectNpcAt(this.cellInfo.cellIndex, this.selectedNpc)
                     },
 
-                    paint(event) {
+                    texturing(event) {
                         event.preventDefault()
-                        scene.paintRoomAt(this.cellInfo.cellIndex, 'cluster-park')
+                        scene.paintRoomAt(this.cellInfo.cellIndex, this.cellInfo.template)
                     }
 
                 }))
