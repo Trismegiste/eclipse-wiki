@@ -11,9 +11,9 @@ use App\Entity\Vertex;
 use App\Form\TimelineCreate;
 use App\Form\TimelineType;
 use App\Service\DigraphExplore;
+use App\Service\GameSessionTracker;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -77,9 +77,9 @@ class TimelineCrud extends GenericCrud
      * Pin the current timeline in the user session
      */
     #[Route('/timeline/pin/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function pin(Timeline $timeline, SessionInterface $session): Response
+    public function pin(Timeline $timeline, GameSessionTracker $tracker): Response
     {
-        $session->get(GameSession::SESSION_KEY)->setTimeline($timeline);
+        $tracker->getDocument()->setTimeline($timeline);
         $this->addFlash('success', 'Scenario ' . $timeline->getTitle() . ' épinglé');
 
         return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $timeline->getPk()]);

@@ -8,7 +8,9 @@ namespace App\Controller;
 
 use App\Entity\Vertex;
 use App\Form\VertexType;
+use App\Repository\VertexRepository;
 use App\Service\DigraphExplore;
+use App\Service\GameSessionTracker;
 use App\Twig\SaWoExtension;
 use App\Validator\UniqueVertexTitle;
 use LogicException;
@@ -18,7 +20,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -26,6 +27,11 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class VertexCrud extends GenericCrud
 {
+
+    public function __construct(VertexRepository $repo, protected GameSessionTracker $tracker)
+    {
+        parent::__construct($repo);
+    }
 
     /**
      * Lists all vertex (and subclasses). The page calls the VertexCrud::filter controller with AJAX
@@ -40,10 +46,10 @@ class VertexCrud extends GenericCrud
      * Showing a vertex vertex by its primary key
      */
     #[Route('/vertex/show/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function show(string $pk, SessionInterface $session): Response
+    public function show(string $pk): Response
     {
         $vertex = $this->repository->findByPk($pk);
-        $session->get(GameSession::SESSION_KEY)->push($vertex);
+        $this->tracker->getDocument()->push($vertex);
         $backlinks = $this->repository->searchByBacklinks($vertex->getTitle());
         $template = SaWoExtension::showTemplate[get_class($vertex)];
 
@@ -54,14 +60,14 @@ class VertexCrud extends GenericCrud
      * Showing a vertex by its title. If it does not exist, redirect to creation
      */
     #[Route('/wiki/{title}', methods: ['GET'], name: 'app_wiki')]
-    public function wikiShow(string $title, SessionInterface $session): Response
+    public function wikiShow(string $title): Response
     {
         $vertex = $this->repository->findByTitle($title);
         if (is_null($vertex)) {
             return $this->redirectToRoute('app_vertexcrud_create', ['title' => $title]);
         }
 
-        return $this->show($vertex->getPk(), $session);
+        return $this->show($vertex->getPk());
     }
 
     /**

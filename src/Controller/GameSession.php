@@ -6,10 +6,9 @@
 
 namespace App\Controller;
 
-use App\Entity\GameSessionDoc;
+use App\Service\GameSessionTracker;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Tracking actions for the current Game Session
@@ -17,15 +16,9 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class GameSession extends AbstractController
 {
 
-    const SESSION_KEY = 'game_session';
-
-    public function history(SessionInterface $session): Response
+    public function history(GameSessionTracker $tracker): Response
     {
-        if (!$session->has(self::SESSION_KEY)) {
-            $session->set(self::SESSION_KEY, new GameSessionDoc());
-        }
-
-        return $this->render('gamesession/history.html.twig', ['document' => $session->get(self::SESSION_KEY)]);
+        return $this->render('gamesession/history.html.twig', ['document' => $tracker->getDocument()]);
     }
 
 }
