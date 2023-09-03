@@ -11,15 +11,7 @@
 {% endblock %}
 
 {% block info %}
-    {% if app.session.get('pinned_timeline') is not empty %}
-        {% set timeline = app.session.get('pinned_timeline') %}
-        <section class="timeline-toc">
-            <a href="{{ path('app_vertexcrud_show', {pk: timeline.pk}) }}"
-               <i class="icon-movie-roll"></i>
-                {{ timeline.title }}
-            </a>
-        </section>
-    {% endif %}
+    {{ render(controller('App\\Controller\\GameSession::history')) }}
 {% endblock %}
 
 {% block javascripts %}

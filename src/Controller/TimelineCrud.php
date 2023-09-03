@@ -63,15 +63,13 @@ class TimelineCrud extends GenericCrud
     /**
      * Fragment : explore the graph and render the tree from a Timeline vertex
      * @param Timeline $root
-     * @param string $mode the string 'tree' or 'toc'
      * @return Response
      */
-    public function tree(Timeline $root, DigraphExplore $explorer, string $mode = 'tree'): Response
+    public function tree(Timeline $root, DigraphExplore $explorer): Response
     {
-        $template = ['tree' => 'tree', 'toc' => 'scene_toc'];
         $dump = $explorer->graphToSortedCategory($root);
 
-        return $this->render('timeline/' . $template[$mode] . '.html.twig', ['network' => $dump]); // fail if template does not exist
+        return $this->render('timeline/tree.html.twig', ['network' => $dump]);
     }
 
     /**
@@ -80,7 +78,7 @@ class TimelineCrud extends GenericCrud
     #[Route('/timeline/pin/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function pin(Timeline $timeline, Request $request): Response
     {
-        $request->getSession()->set('pinned_timeline', $timeline);
+        $request->getSession()->get(GameSession::SESSION_KEY)->setTimeline($timeline);
         $this->addFlash('success', 'Scenario ' . $timeline->getTitle() . ' épinglé');
 
         return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $timeline->getPk()]);

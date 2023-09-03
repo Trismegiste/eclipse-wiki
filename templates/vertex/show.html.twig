@@ -36,7 +36,5 @@
 {% endblock %}
 
 {% block info %}
-    {% if app.session.get('pinned_timeline') is not empty %}
-        {{ render(controller('App\\Controller\\TimelineCrud::tree', {root: app.session.get('pinned_timeline'), mode: 'toc'})) }}
-    {% endif %}
+    {{ render(controller('App\\Controller\\GameSession::history')) }}
 {% endblock %}
