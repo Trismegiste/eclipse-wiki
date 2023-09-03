@@ -12,14 +12,14 @@
 
 <section class="timeline-toc">
     {% block table_of_content %}
-        {% if network.scene is defined %}
-            {{ _self.print_group('video', network.scene) }}
-        {% endif %}
         {% if network.transhuman is defined %}
             {{ _self.print_group('extra', network.transhuman) }}
         {% endif %}
         {% if network.place is defined %}
             {{ _self.print_group('place', network.place) }}
+        {% endif %}
+        {% if network.scene is defined %}
+            {{ _self.print_group('video', network.scene) }}
         {% endif %}
     {% endblock %}
 </section>

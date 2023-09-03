@@ -50,7 +50,7 @@ RUN apt-get install -y imagemagick
 RUN apt-get update && apt-get install -y chromium
 
 RUN apt-get update && apt-get install -y pip
-RUN pip install -U pdf.tocgen
+RUN pip install --break-system-packages -U pdf.tocgen
 
 RUN apt-get update && apt-get install -y unzip
 
