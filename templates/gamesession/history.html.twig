@@ -6,5 +6,15 @@
            <i class="icon-movie-roll"></i>
             {{ timeline.title }}
         </a>
+        <ul>
+            {% for vertex, ts in document.history %}
+                <li>
+                    <a href="{{ path('app_wiki', {title: vertex}) }}"
+                       <i class="icon-movie-roll"></i>
+                        {{ vertex }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
     </section>
 {% endif %}

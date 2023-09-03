@@ -8,15 +8,18 @@ namespace App\Controller;
 
 use App\Entity\Vertex;
 use App\Form\VertexType;
+use App\Service\DigraphExplore;
 use App\Twig\SaWoExtension;
+use App\Validator\UniqueVertexTitle;
+use LogicException;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Service\DigraphExplore;
 
 /**
  * CRUD for Vertex
@@ -37,9 +40,10 @@ class VertexCrud extends GenericCrud
      * Showing a vertex vertex by its primary key
      */
     #[Route('/vertex/show/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function show(string $pk): Response
+    public function show(string $pk, SessionInterface $session): Response
     {
         $vertex = $this->repository->findByPk($pk);
+        $session->get(GameSession::SESSION_KEY)->push($vertex);
         $backlinks = $this->repository->searchByBacklinks($vertex->getTitle());
         $template = SaWoExtension::showTemplate[get_class($vertex)];
 
@@ -50,14 +54,14 @@ class VertexCrud extends GenericCrud
      * Showing a vertex by its title. If it does not exist, redirect to creation
      */
     #[Route('/wiki/{title}', methods: ['GET'], name: 'app_wiki')]
-    public function wikiShow(string $title): Response
+    public function wikiShow(string $title, SessionInterface $session): Response
     {
         $vertex = $this->repository->findByTitle($title);
         if (is_null($vertex)) {
             return $this->redirectToRoute('app_vertexcrud_create', ['title' => $title]);
         }
 
-        return $this->show($vertex->getPk());
+        return $this->show($vertex->getPk(), $session);
     }
 
     /**
@@ -158,7 +162,7 @@ class VertexCrud extends GenericCrud
         $backlinks = $this->repository->searchByBacklinks($vertex->getTitle());
 
         $form = $this->createFormBuilder($vertex)
-                ->add('title', TextType::class, ['label' => 'Nouveau nom', 'constraints' => [new \App\Validator\UniqueVertexTitle()]])
+                ->add('title', TextType::class, ['label' => 'Nouveau nom', 'constraints' => [new UniqueVertexTitle()]])
                 ->add('rename', SubmitType::class)
                 ->setMethod('PUT')
                 ->getForm();
@@ -189,7 +193,7 @@ class VertexCrud extends GenericCrud
 
     protected function createEntity(string $title): Vertex
     {
-        throw new \LogicException('Cannot create abstract vertex ' . $title);
+        throw new LogicException('Cannot create abstract vertex ' . $title);
     }
 
     /**

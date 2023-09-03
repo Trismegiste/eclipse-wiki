@@ -8,11 +8,12 @@ namespace App\Controller;
 
 use App\Entity\Timeline;
 use App\Entity\Vertex;
+use App\Form\TimelineCreate;
 use App\Form\TimelineType;
-use App\Form\Type\WikiTreeType;
 use App\Service\DigraphExplore;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -33,7 +34,7 @@ class TimelineCrud extends GenericCrud
     #[Route('/timeline/create', methods: ['GET', 'POST'])]
     public function create(Request $request): Response
     {
-        return $this->handleCreate(\App\Form\TimelineCreate::class, 'timeline/create.html.twig', $request);
+        return $this->handleCreate(TimelineCreate::class, 'timeline/create.html.twig', $request);
     }
 
     /**
@@ -76,9 +77,9 @@ class TimelineCrud extends GenericCrud
      * Pin the current timeline in the user session
      */
     #[Route('/timeline/pin/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function pin(Timeline $timeline, Request $request): Response
+    public function pin(Timeline $timeline, SessionInterface $session): Response
     {
-        $request->getSession()->get(GameSession::SESSION_KEY)->setTimeline($timeline);
+        $session->get(GameSession::SESSION_KEY)->setTimeline($timeline);
         $this->addFlash('success', 'Scenario ' . $timeline->getTitle() . ' épinglé');
 
         return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $timeline->getPk()]);
