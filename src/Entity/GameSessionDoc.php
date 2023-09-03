@@ -38,16 +38,23 @@ class GameSessionDoc
 
     public function push(Vertex $vertex): void
     {
-        if (!$vertex instanceof Timeline) {
-            $title = $vertex->getTitle();
-            $this->history[$title] = time();
+        if (!in_array($vertex->getCategory(), ['place', 'transhuman', 'scene', 'handout'])) {
+            return;
         }
+
+        $this->history[(string) $vertex->getPk()] = [
+            'ts' => time(),
+            'category' => $vertex->getCategory(),
+            'title' => $vertex->getTitle()
+        ];
     }
 
     public function getHistory(): array
     {
         $dump = $this->history;
-        arsort($dump);
+        uasort($dump, function ($v1, $v2) {
+            return $v2['ts'] <=> $v1['ts'];
+        });
 
         return $dump;
     }

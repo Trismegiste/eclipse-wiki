@@ -1,17 +1,16 @@
 {# dump history #}
 {% if document.hasPinnedTimeline %}
     {% set timeline = document.timeline %}
-    <section class="timeline-toc">
+    <section class="game-tracking">
         <a href="{{ path('app_vertexcrud_show', {pk: timeline.pk}) }}"
            <i class="icon-movie-roll"></i>
             {{ timeline.title }}
         </a>
-        <ul>
-            {% for vertex, ts in document.history %}
-                <li>
-                    <a href="{{ path('app_wiki', {title: vertex}) }}"
-                       <i class="icon-movie-roll"></i>
-                        {{ vertex }}
+        <ul class="history">
+            {% for pk, vertex in document.history|slice(0, 12) %}
+                <li class="icon-vertex-{{ vertex.category }}">
+                    <a href="{{ path('app_vertexcrud_show', {pk: pk}) }}">
+                        {{ vertex.title }}
                     </a>
                 </li>
             {% endfor %}

@@ -256,8 +256,47 @@ i.archived {
     margin-top: 0;
 }
 
-.info .timeline-toc {
-    margin: 1em 0 0;
+/* game tracking document box */
+.game-tracking {
+    margin: 1em 0 1em;
+    padding: 1em 0.3em 0;
+    background-color: #eee;
+}
+
+.game-tracking ul.history {
+    font-size: 90%;
+    position: relative;
+    list-style: none;
+    margin-left: 0;
+    padding-left: 1.5em;
+}
+
+.game-tracking ul.history li {
+    padding-bottom: 0.7em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.game-tracking ul.history li:before {
+    position: absolute;
+    left: 0;
+}
+
+.icon-vertex-transhuman:before {
+    content: '\f2bd';
+}
+
+.icon-vertex-place:before {
+    content: '\e80d';
+}
+
+.icon-vertex-scene:before {
+    content: '\e80c'
+}
+
+.icon-vertex-handout:before {
+    content: '\e816'
 }
 
 /* backlinks nav */
