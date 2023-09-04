@@ -34,7 +34,8 @@ class TileLegend extends AbstractType
                 ])
                 ->add('markerColor', ColorType::class, [
                     'attr' => ['x-model' => 'cellInfo.markerColor'],
-                    'required' => false
+                    'required' => false,
+                    'label' => 'Color'
                 ])
                 ->add('set_legend', SubmitType::class)
         ;
