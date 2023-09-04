@@ -51,7 +51,8 @@ class InvokeAi
                 $found[] = (object) [
                             'full' => $this->baseUrl . $picture->image_url,
                             'thumb' => $this->baseUrl . $picture->thumbnail_url,
-                            'width' => $picture->width
+                            'width' => $picture->width,
+                            'name' => $picture->image_name
                 ];
             }
             $offset += self::BATCH_SIZE;
@@ -100,6 +101,11 @@ class InvokeAi
 
                     return $metadata;
                 });
+    }
+
+    public function getAbsoluteUrl(string $name): string
+    {
+        return $this->baseUrl . "api/v1/images/i/$name/full";
     }
 
     /**

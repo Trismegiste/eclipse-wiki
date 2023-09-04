@@ -30,17 +30,22 @@ class InvokeAiPicture extends AbstractController
         
     }
 
+    protected function createSearchForm(): \Symfony\Component\Form\FormInterface
+    {
+        return $this->createFormBuilder()
+                        ->add('query')
+                        ->add('search', SubmitType::class)
+                        ->setMethod('GET')
+                        ->getForm();
+    }
+
     /**
      * Image search against InvokeAI api
      */
     #[Route('/search', methods: ['GET'])]
     public function search(Request $request): Response
     {
-        $form = $this->createFormBuilder()
-                ->add('query')
-                ->add('search', SubmitType::class)
-                ->setMethod('GET')
-                ->getForm();
+        $form = $this->createSearchForm();
 
         $listing = [];
         $form->handleRequest($request);
@@ -57,12 +62,34 @@ class InvokeAiPicture extends AbstractController
         return $this->render('invokeai/search.html.twig', ['form' => $form->createView(), 'gallery' => $listing]);
     }
 
-    #[Route('/vertex/{pk}/append', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function appendVertex(string $pk, Request $request): Response
+    #[Route('/vertex/{pk}/search', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
+    public function vertexSearch(string $pk, Request $request): Response
     {
         $vertex = $this->repository->load($pk);
 
-        $form = $this->createForm(AppendRemotePicture::class, $vertex);
+        $form = $this->createSearchForm();
+
+        $listing = [];
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $listing = $this->remote->searchPicture($form['query']->getData());
+            } catch (UnexpectedValueException $e) {
+                $this->addFlash('error', $e->getMessage());
+            } catch (TransportException $e) {
+                $this->addFlash('error', $e->getMessage());
+            }
+        }
+
+        return $this->render('invokeai/vertex_search.html.twig', ['vertex' => $vertex, 'form' => $form->createView(), 'gallery' => $listing]);
+    }
+
+    #[Route('/vertex/{pk}/append/{pic}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
+    public function vertexAppend(string $pk, string $pic, Request $request): Response
+    {
+        $vertex = $this->repository->load($pk);
+        $url = $this->remote->getAbsoluteUrl($pic);
+        $form = $this->createForm(AppendRemotePicture::class, $vertex, ['picture_url' => $url]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -72,22 +99,7 @@ class InvokeAiPicture extends AbstractController
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $pk]);
         }
 
-        return $this->render('invokeai/append_vertex.html.twig', ['form' => $form->createView()]);
-    }
-
-    /**
-     * AJAX Image search against InvokeAI api
-     */
-    #[Route('/ajax/search', methods: ['GET'])]
-    public function ajaxSearch(Request $request): JsonResponse
-    {
-        $query = $request->query->get('q');
-        try {
-            $listing = $this->remote->searchPicture($query);
-            return $this->json($listing);
-        } catch (\Exception $e) {
-            return $this->json([], 500);
-        }
+        return $this->render('invokeai/vertex_append.html.twig', ['form' => $form->createView()]);
     }
 
 }

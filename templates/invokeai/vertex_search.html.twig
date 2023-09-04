@@ -1,0 +1,23 @@
+{# Search into InvokeAI images for appending to vertex #}
+{% extends "invokeai/search.html.twig" %}
+
+{% block title %}Append picture{% endblock %}
+{% block header_title %}{{ vertex.title }}{% endblock %}
+
+{% block content %}
+    <section>
+        {{ form(form) }}
+    </section>
+    <section class="pure-g search">
+        {% for picture in gallery %}
+            <div class="pure-u-1-5">
+                <div class="thumbnail">
+                    <a href="{{ path('app_invokeaipicture_vertexappend', {pk: vertex.pk, pic:picture.name}) }}">
+                        <img src="{{ picture.thumb }}" class="pure-img"/>
+                    </a>
+                    <div class="legend">{{ picture.width }}</div>
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+{% endblock %}

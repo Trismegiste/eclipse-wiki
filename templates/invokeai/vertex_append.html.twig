@@ -1,0 +1,31 @@
+{# Append InvokeAI picture to vertex #}
+{% extends "base.html.twig" %}
+{% form_theme form _self %}
+
+{% block title %}Append picture{% endblock %}
+{% block header_title %}{{ form.vars.data.title }}{% endblock %}
+
+{% block content %}
+    {{ form(form) }}
+{% endblock %}
+
+{% block _append_remote_picture_local_name_widget %}
+    {{ form_widget(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        window.addEventListener('load', () => {
+            const localField = document.getElementById('{{form.local_name.vars.id}}')
+            // focus on prompt query
+            localField.focus()
+
+            // waiting upload...
+            const submitButton = document.getElementById('{{ form.append.vars.id}}')
+            submitButton.addEventListener('click', event => {
+                submitButton.innerHTML = '<i class="icon-spin3 animate-spin"></i>'
+            })
+        })
+    </script>
+{% endblock %}
