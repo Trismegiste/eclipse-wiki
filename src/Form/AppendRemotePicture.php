@@ -11,7 +11,6 @@ use App\Service\Storage;
 use RuntimeException;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataMapperInterface;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -41,7 +40,7 @@ class AppendRemotePicture extends AbstractType implements DataMapperInterface
                     'data' => $options['default_name'],
                     'constraints' => [new NotBlank()]
                 ])
-                ->add('append', SubmitType::class)
+                ->add('append', Type\SubmitWaitType::class)
                 ->setMethod('PUT')
         ;
     }

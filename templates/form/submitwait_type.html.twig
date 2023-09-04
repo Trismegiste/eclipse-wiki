@@ -1,0 +1,12 @@
+{# Custom Submit button with waiting spinner #}
+{% block submit_wait_widget %}
+    {{ block('submit_widget') }}
+    <script>
+        // waiting upload...
+        const submitButton = document.getElementById('{{ form.vars.id}}')
+        submitButton.addEventListener('click', event => {
+            submitButton.disabled = true
+            submitButton.innerHTML = '<i class="icon-spin3 animate-spin"></i>'
+        })
+    </script>
+{% endblock %}

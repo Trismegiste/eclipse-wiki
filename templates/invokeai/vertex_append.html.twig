@@ -21,12 +21,6 @@
             const localField = document.getElementById('{{form.local_name.vars.id}}')
             // focus on prompt query
             localField.focus()
-
-            // waiting upload...
-            const submitButton = document.getElementById('{{ form.append.vars.id}}')
-            submitButton.addEventListener('click', event => {
-                submitButton.innerHTML = '<i class="icon-spin3 animate-spin"></i>'
-            })
         })
     </script>
 {% endblock %}

@@ -7,12 +7,12 @@
 namespace App\Controller;
 
 use App\Form\AppendRemotePicture;
+use App\Form\Type\SubmitWaitType;
 use App\Repository\VertexRepository;
 use App\Service\InvokeAi;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpClient\Exception\TransportException;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,11 +30,11 @@ class InvokeAiPicture extends AbstractController
         
     }
 
-    protected function createSearchForm(): \Symfony\Component\Form\FormInterface
+    protected function createSearchForm(): FormInterface
     {
         return $this->createFormBuilder()
                         ->add('query')
-                        ->add('search', SubmitType::class)
+                        ->add('search', SubmitWaitType::class)
                         ->setMethod('GET')
                         ->getForm();
     }
