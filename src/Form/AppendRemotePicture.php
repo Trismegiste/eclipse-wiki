@@ -16,6 +16,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -35,7 +37,10 @@ class AppendRemotePicture extends AbstractType implements DataMapperInterface
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->setDataMapper($this)
-                ->add('local_name', TextType::class, ['constraints' => [new NotBlank()]])
+                ->add('local_name', TextType::class, [
+                    'data' => $options['default_name'],
+                    'constraints' => [new NotBlank()]
+                ])
                 ->add('append', SubmitType::class)
                 ->setMethod('PUT')
         ;
@@ -44,7 +49,13 @@ class AppendRemotePicture extends AbstractType implements DataMapperInterface
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('data_class', Vertex::class);
-        $resolver->setRequired('picture_url');
+        $resolver->setDefault('default_name', null);
+        $resolver->setRequired(['picture_url', 'thumbnail_url']);
+    }
+
+    public function finishView(FormView $view, FormInterface $form, array $options): void
+    {
+        $view['local_name']->vars['thumb'] = $options['thumbnail_url'];
     }
 
     public function mapDataToForms(mixed $viewData, Traversable $forms): void

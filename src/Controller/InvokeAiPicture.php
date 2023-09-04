@@ -88,8 +88,11 @@ class InvokeAiPicture extends AbstractController
     public function vertexAppend(string $pk, string $pic, Request $request): Response
     {
         $vertex = $this->repository->load($pk);
-        $url = $this->remote->getAbsoluteUrl($pic);
-        $form = $this->createForm(AppendRemotePicture::class, $vertex, ['picture_url' => $url]);
+        $form = $this->createForm(AppendRemotePicture::class, $vertex, [
+            'picture_url' => $this->remote->getAbsoluteUrl($pic),
+            'thumbnail_url' => $this->remote->getThumbnailUrl($pic),
+            'default_name' => $vertex->getTitle() . ' - ' . $request->query->get('query')
+        ]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

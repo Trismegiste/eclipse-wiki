@@ -108,6 +108,11 @@ class InvokeAi
         return $this->baseUrl . "api/v1/images/i/$name/full";
     }
 
+    public function getThumbnailUrl(string $name): string
+    {
+        return $this->baseUrl . "api/v1/images/i/$name/thumbnail";
+    }
+
     /**
      * Try to reach a prompt for an image
      * @param string $name

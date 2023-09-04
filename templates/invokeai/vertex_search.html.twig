@@ -12,7 +12,7 @@
         {% for picture in gallery %}
             <div class="pure-u-1-5">
                 <div class="thumbnail">
-                    <a href="{{ path('app_invokeaipicture_vertexappend', {pk: vertex.pk, pic:picture.name}) }}">
+                    <a href="{{ path('app_invokeaipicture_vertexappend', {pk: vertex.pk, pic:picture.name, query: form.query.vars.data}) }}">
                         <img src="{{ picture.thumb }}" class="pure-img"/>
                     </a>
                     <div class="legend">{{ picture.width }}</div>

@@ -10,6 +10,7 @@
 {% endblock %}
 
 {% block _append_remote_picture_local_name_widget %}
+    <img src="{{ form.vars.thumb }}"/>
     {{ form_widget(form) }}
 {% endblock %}
 
