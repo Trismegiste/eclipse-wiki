@@ -63,7 +63,7 @@
                     </div>
                     <a x-bind:href="characterCard.sheet" class="pure-button" target="_blank">Feuille</a>
                     <a x-show="characterCard.instantiate" x-bind:href="characterCard.instantiate" class="pure-button" target="_blank">Instance</a>
-                    <button x-on:click="deleteNpc" class="pure-button">Delete</button>
+                    <button x-on:click="deleteNpc" class="pure-button button-delete">Delete</button>
                 </div>
             </template>
             {{ form(npc_tool) }}
