@@ -46,7 +46,7 @@ class PlayerCastCache implements CacheWarmerInterface, CacheClearerInterface
         return false;
     }
 
-    public function clear(string $cacheDir)
+    public function clear(string $cacheDir): void
     {
         $folder = join_paths($cacheDir, self::subDir);
         if (is_dir($folder)) {

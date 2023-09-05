@@ -6,17 +6,26 @@
 
 namespace App\Twig;
 
+use App\Service\Storage;
+use Mike42\Wikitext\HtmlRenderer;
+use Mike42\Wikitext\InterwikiRepository;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * LinkRender specialized for PDF rendering
  */
-class PdfLinkRender extends LinkRender
+class PdfLinkRender extends HtmlRenderer
 {
+
+    public function __construct(protected Storage $storage, ?InterwikiRepository $repo = null)
+    {
+        parent::__construct($repo);
+    }
 
     public function getImageInfo($info): array
     {
-        $info['thumb'] = $this->routing->generate('get_picture', ['title' => $info['url']], UrlGeneratorInterface::ABSOLUTE_URL);
+        $response = $this->storage->createResponse($info['url']);
+        $info['thumb'] = 'file://' . $response->getFile()->getPathname();
         $info['url'] = '';
         $info['thumbnail'] = true;
         $info['caption'] = false;
