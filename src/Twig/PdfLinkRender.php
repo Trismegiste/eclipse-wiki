@@ -8,8 +8,6 @@ namespace App\Twig;
 
 use App\Service\Storage;
 use Mike42\Wikitext\HtmlRenderer;
-use Mike42\Wikitext\InterwikiRepository;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * LinkRender specialized for PDF rendering
@@ -17,9 +15,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class PdfLinkRender extends HtmlRenderer
 {
 
-    public function __construct(protected Storage $storage, ?InterwikiRepository $repo = null)
+    public function __construct(protected Storage $storage)
     {
-        parent::__construct($repo);
+        parent::__construct();
     }
 
     public function getImageInfo($info): array
