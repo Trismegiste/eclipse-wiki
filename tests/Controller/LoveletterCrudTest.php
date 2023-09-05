@@ -7,7 +7,11 @@
 namespace App\Tests\Controller;
 
 use App\Repository\VertexRepository;
+use App\Service\Storage;
+use Exception;
+use SplFileInfo;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class LoveletterCrudTest extends WebTestCase
 {
@@ -24,6 +28,22 @@ class LoveletterCrudTest extends WebTestCase
         $repo = static::getContainer()->get(VertexRepository::class);
         $repo->delete(iterator_to_array($repo->search()));
         $this->assertCount(0, iterator_to_array($repo->search()));
+    }
+
+    public function testAppendPicture()
+    {
+        /** @var Storage $storage */
+        $storage = static::getContainer()->get(Storage::class);
+        $img = imagecreatetruecolor(50, 50);
+        $target = tmpfile();
+        $pathname = stream_get_meta_data($target)['uri'];
+        imagejpeg($img, $pathname);
+        try {
+            $storage->storePicture(new UploadedFile($pathname, 'luke.jpg'), 'luke');
+        } catch (Exception $e) {
+            
+        }
+        $this->assertInstanceOf(SplFileInfo::class, $storage->getFileInfo('luke.jpg'));
     }
 
     public function testCreate()
