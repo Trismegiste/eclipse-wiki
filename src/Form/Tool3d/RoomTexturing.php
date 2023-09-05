@@ -30,7 +30,10 @@ class RoomTexturing extends AbstractType
         $builder
                 ->add('texture', ChoiceType::class, [
                     'choices' => $this->provider->getTileSet('habitat'),
-                    'attr' => ['x-model' => 'cellInfo.template'],
+                    'attr' => [
+                        'x-model' => 'cellInfo.template',
+                        'x-on:focus' => "\$el.querySelectorAll('option').forEach(opt => { if (!scene.metadata.texture.includes(opt.value)) {opt.hidden=true} })"
+                    ],
                     'choice_value' => function (?TileSvg $obj) {
                         return $obj?->getKey();
                     },
