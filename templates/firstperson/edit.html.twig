@@ -43,9 +43,29 @@
             </template>
         </div>
         <div class="pure-u-1-5">
-            <div x-html="characterCard"
-                 x-init="$watch('characterCard', value => { $nextTick(()=> { Pushable_subscribe(document.querySelectorAll('.pushable a')) }) })"></div>
-            <button x-show="characterCard != null" x-on:click="deleteNpc">Delete</button>
+            <template x-if="characterCard !== null"
+                      x-init="$watch('characterCard', value => { $nextTick(()=> { Pushable_subscribe(document.querySelectorAll('.pushable a')) }) })">
+                <div class="npc-minicard">
+                    <p>
+                        <i x-bind:class="characterCard.icon"></i>
+                        <span x-text="characterCard.title"></span>
+                    </p>
+                    <div class="pure-g">
+                        <template x-for="pic in characterCard.picture">
+                            <div class="pure-u-1-6">
+                                <div class="pushable">
+                                    <a x-bind:href="pic.link">
+                                        <img x-bind:src="pic.thumb" class="pure-img"/>
+                                    </a>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                    <a x-bind:href="characterCard.sheet" class="pure-button" target="_blank">Feuille</a>
+                    <a x-show="characterCard.instantiate" x-bind:href="characterCard.instantiate" class="pure-button" target="_blank">Instance</a>
+                    <button x-on:click="deleteNpc" class="pure-button">Delete</button>
+                </div>
+            </template>
             {{ form(npc_tool) }}
         </div>
         <div class="pure-u-1-5">
@@ -100,7 +120,7 @@
                             const npc = this.cellInfo.npc
                             fetch('{{ path('app_npcgenerator_minicard') }}?title=' + npc.label)
                                     .then(response => {
-                                        return response.text()
+                                        return response.json()
                                     })
                                     .then(content => {
                                         this.characterCard = content
@@ -186,11 +206,19 @@
 
         .property .pure-u-1-3 label {
             text-align: right;
-            margin: 0.2em 1em 0.2em 0;
+            margin: 0.4em 1em 0.4em 0;
             display: block;
         }
         .property .pure-u-2-3 p {
-            margin: 0.2em 0;
+            margin: 0.4em 0;
+        }
+
+        .npc-minicard {
+            margin: 0 0.4em;
+        }
+        .npc-minicard p {
+            font-size: 120%;
+            margin: 0.4em 0;
         }
     </style>
 {% endblock %}

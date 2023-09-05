@@ -301,14 +301,33 @@ class NpcGenerator extends AbstractController
      * Ajax get character in json
      */
     #[Route('/npc/minicard', methods: ['GET'])]
-    public function minicard(Request $request): Response
+    public function minicard(Request $request, \Twig\Environment $twig): Response
     {
+        /** @var Character $npc */
         $npc = $this->repository->findByTitle($request->get('title'));
 
-        return $this->render('npc/minicard.html.twig', ['npc' => $npc]);
+        $dump = [
+            'title' => $npc->getTitle(),
+            'icon' => $twig->getFunction('char_icon')->getCallable()($npc),
+            'sheet' => $this->generateUrl('app_vertexcrud_show', ['pk' => $npc->getPk()]),
+            'instantiate' => null
+        ];
+        // link for instantiating new generic NPC
+        if ($npc->getCategory() === 'transhuman' && $npc->isNpcTemplate()) {
+            $dump['instantiate'] = $this->generateUrl('app_profilepicture_template', ['pk' => $npc->getPk()]);
+        }
+
+        foreach ($npc->extractPicture() as $pic) {
+            $dump['picture'][] = [
+                'link' => $this->generateUrl('app_picture_push', ['title' => $pic]),
+                'thumb' => $this->generateUrl('get_picture', ['title' => $pic])
+            ];
+        }
+
+        return $this->json($dump);
     }
 
-   /**
+    /**
      * Get NPC in json format
      */
     #[Route('/npc/show.{_format}', methods: ['GET'], requirements: ['_format' => 'json'])]

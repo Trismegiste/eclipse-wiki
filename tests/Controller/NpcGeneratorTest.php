@@ -249,6 +249,8 @@ class NpcGeneratorTest extends WebTestCase
         $iter->rewind();
         $this->client->request('GET', "/npc/minicard?title=" . $iter->current()->getTitle());
         $this->assertResponseIsSuccessful();
+        $dump = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertArrayHasKey('title', $dump);
     }
 
     public function testMinicardForCharacterTemplate()
@@ -262,6 +264,9 @@ class NpcGeneratorTest extends WebTestCase
 
         $this->client->request('GET', "/npc/minicard?title=" . $npc->getTitle());
         $this->assertResponseIsSuccessful();
+        $dump = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertArrayHasKey('instantiate', $dump);
+        $this->assertNotNull($dump['instantiate']);
     }
 
 }
