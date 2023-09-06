@@ -327,13 +327,22 @@ class BattlemapBuilder
             sphere.material.alpha = 0
 
             const frameRate = 10
+
             const blinking = new BABYLON.Animation("blinking", "material.alpha", frameRate, BABYLON.Animation.ANIMATIONTYPE_FLOAT)
             blinking.setKeys([
                 {frame: 0, value: 1},
-                {frame: 2 * frameRate, value: 0}
+                {frame: frameRate, value: 1},
+                {frame: 3 * frameRate, value: 0}
             ])
-            sphere.animations.push(blinking)
-            this.beginAnimation(sphere, 0, 2 * frameRate)
+
+            const growing = new BABYLON.Animation("growing", "scaling", frameRate, BABYLON.Animation.ANIMATIONTYPE_VECTOR3)
+            growing.setKeys([
+                {frame: 0, value: new BABYLON.Vector3(1, 1, 1)},
+                {frame: frameRate, value: new BABYLON.Vector3(1, 1, 1)},
+                {frame: 3 * frameRate, value: new BABYLON.Vector3(15, 15, 15)}
+            ])
+
+            this.beginDirectAnimation(sphere, [blinking, growing], 0, 3 * frameRate)
         }
     }
 
