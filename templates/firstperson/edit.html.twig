@@ -193,11 +193,21 @@
 
         const feedbackSocket = new WebSocket('{{ url_feedback }}')
         feedbackSocket.onmessage = function (msg) {
-            const relativ = JSON.parse(msg.data)
-            const idx = scene.metadata.playerViewOnTileIndex
-            if (idx !== null) {
-                const ground = scene.metadata.grid[idx]
-                scene.movePlayerCursor(ground.x + relativ.deltaX, relativ.deltaY - ground.y)
+            const position = JSON.parse(msg.data)
+
+            switch (position.mode) {
+                case 'relative':
+                    const idx = scene.metadata.playerViewOnTileIndex
+                    if (idx !== null) {
+                        const ground = scene.metadata.grid[idx]
+                        scene.movePlayerCursor(ground.x + position.deltaX, position.deltaY - ground.y)
+                    }
+                    break
+
+                case 'indexed':
+                    const ground = scene.metadata.grid[parseInt(position.cell)]
+                    scene.movePlayerCursor(ground.x, -ground.y)
+                    break
             }
         }
 

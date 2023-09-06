@@ -53,4 +53,13 @@ class LinkRender extends HtmlRenderer
         return (bool) $this->repository->findByTitle($title);
     }
 
+    public function getTemplateMarkup($template)
+    {
+        if ($template === 'legend') {
+            return '<h2 class="center-of-interest">{{{1}}}<a href="#"><i class="icon-view3d" data-cell-index="{{{2}}}"></i></a></h2>';
+        }
+
+        return parent::getTemplateMarkup($template);
+    }
+
 }

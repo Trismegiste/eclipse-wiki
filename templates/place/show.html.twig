@@ -85,3 +85,8 @@
         }
     </style>
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ render(controller('App\\Controller\\PlaceCrud::legendHighlight')) }}
+{% endblock %}

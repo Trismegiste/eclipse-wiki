@@ -103,4 +103,9 @@ class PlaceCrud extends GenericCrud
         return $this->render('fragment/place_connect.html.twig', ['connection' => $digraph->searchForConnectedPlace($place)]);
     }
 
+    public function legendHighlight(\App\Service\WebsocketPusher $pusher): Response
+    {
+        return $this->render('fragment/legend_highlight.html.twig', ['url_feedback' => $pusher->getUrlFeedback()]);
+    }
+
 }
