@@ -53,8 +53,9 @@ class Storage
         }
 
         $file = new BinaryFileResponse($path);
+        // struggling with cache
         clearstatcache(true, $path);
-        $file->setAutoLastModified();
+        $file->setEtag(sha1(filesize($path) . '-' . filemtime($path)));
 
         return $file;
     }
