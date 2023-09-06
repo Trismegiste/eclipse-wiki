@@ -114,17 +114,12 @@ class Picture extends AbstractController
      * Returns a pixelized thumbnail for the vector battlemap linked to the Place given by its pk
      */
     #[Route('/battlemap/thumbnail/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function battlemapThumbnail(Place $place, Request $request, MapBuilder $builder, SvgDumper $dumper): Response
+    public function battlemapThumbnail(Place $place, Request $request, SvgDumper $dumper): Response
     {
-        // plusieurs possibilités pour migrer la thumbnail :
-        // 1 - stocker le BattlemapDocument dans la Place plutôt que dans un fichier JSON dans Storage. Ça permet de récupérer un BattlemapDocument exploitale par SvgDumper
-        // ======>>>>>>>> 2 - renderiser seulement l'hexamap qui ne sera pas à jour par rapport au JSON - CHOIX ACTUEL
-        // 3 - renderiser côté client avec Babylon une version plus light du fichier (pas de texture)
-        // 4 - plutôt que de json_encoder, on peut utiliser toJSON et fromPHP sauf que le client envoie un json sans type dans l'export
-        // 5 - faire un SvgDumper qui travaille sur un BattlemapDocument dés-objectifié (sans HexaCell ni MapToken)
         if (is_null($place->battlemap3d)) {
             throw $this->createNotFoundException();
         }
+        $battlemap = new \SplFileInfo(join_paths($this->storage->getRootDir(), $place->battlemap3d));
 
         // folder for caching :
         $cacheDir = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir);
@@ -133,16 +128,15 @@ class Picture extends AbstractController
         // managing HTTP Cache
         if (file_exists("$targetName.jpg")) {
             $response = new BinaryFileResponse("$targetName.jpg");
-            $response->setEtag(md5(serialize($place->voronoiParam)));
+            $response->setLastModified(\DateTime::createFromFormat('U', $battlemap->getMTime()));
             if ($response->isNotModified($request)) {
                 return $response;
             }
         }
 
         $output = fopen("$targetName.html", 'w');
-        $map = $builder->create($place->voronoiParam);
         $doc = new BattlemapDocument();
-        $map->dumpFromJson(json_decode(file_get_contents(join_paths($this->storage->getRootDir(), $place->battlemap3d))), $doc);
+        $doc->unserializeFromJson(json_decode(file_get_contents($battlemap->getPathname())), $doc);
 
         $widthForMap = SvgDumper::defaultSizeForWeb;
         fwrite(
@@ -184,7 +178,7 @@ YOLO
         $convert->mustRun();
 
         $response = new BinaryFileResponse("$targetName.jpg");
-        $response->setEtag(md5(serialize($place->voronoiParam)));
+        $response->setLastModified(\DateTime::createFromFormat('U', $battlemap->getMTime()));
 
         return $response;
     }

@@ -86,7 +86,7 @@ class FirstPersonTest extends WebTestCase
         $form = $crawler->selectButton('battlemap3d_write_write')->form();
         $this->client->submit($form, [
             'battlemap3d_write' => [
-                'battlemap3d' => '{"a":1}'
+                'battlemap3d' => '{"theme":"habitat", "side":10, "npcToken":[], "grid":[]}'
             ]
         ]);
         $this->assertResponseIsSuccessful();

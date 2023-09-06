@@ -377,13 +377,4 @@ class HexaMap implements SquareGrid
         $visitor->texture = array_keys($texture);
     }
 
-    public function dumpFromJson(\stdClass $battlemap, \App\Entity\BattlemapDocument $visitor): void
-    {
-        $visitor->theme = $battlemap->theme;
-        $visitor->side = $battlemap->side;
-        $visitor->npcToken = $battlemap->npcToken;
-
-        $visitor->grid = $battlemap->grid;
-    }
-
 }

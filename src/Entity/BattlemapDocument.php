@@ -19,4 +19,13 @@ class BattlemapDocument
     public array $texture = [];
     public array $grid = [];
 
+    public function unserializeFromJson(\stdClass $battlemap): void
+    {
+        $this->theme = $battlemap->theme;
+        $this->side = $battlemap->side;
+        $this->npcToken = $battlemap->npcToken;
+
+        $this->grid = $battlemap->grid;
+    }
+
 }
