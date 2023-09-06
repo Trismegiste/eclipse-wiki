@@ -445,6 +445,7 @@ class BattlemapBuilder
         // map token
         this.getDoc().npcToken.forEach(npc => {
             const sp = new BABYLON.SpriteManager('token-' + npc.label, '/picture/get/' + npc.picture, 2000, 504)
+            sp.metadata = npc.picture
             this.spriteManager[npc.label] = sp
         })
 
@@ -472,6 +473,7 @@ class BattlemapBuilder
                         return resp.json()
                     }).then(npcInfo => {
                         const sp = new BABYLON.SpriteManager('token-' + npcTitle, '/picture/get/' + npcInfo.tokenPic, 2000, 504)
+                        sp.metadata = npcInfo.tokenPic
                         this.spriteManager[npcTitle] = sp
                         this.getDoc().npcToken.push({label: npcTitle, picture: npcInfo.tokenPic})
                         // append sprite
@@ -493,6 +495,7 @@ class BattlemapBuilder
         sprite.height = 0.6
         sprite.position = new BABYLON.Vector3(x, 0.7, y)
         npcContent.npcSpritePtr = sprite
+        npcContent.picture = manager.metadata
     }
 
     drawCeiling() {

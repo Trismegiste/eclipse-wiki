@@ -142,7 +142,7 @@ class Picture extends AbstractController
         $output = fopen("$targetName.html", 'w');
         $map = $builder->create($place->voronoiParam);
         $doc = new BattlemapDocument();
-        $map->dumpMap($doc);
+        $map->dumpFromJson(json_decode(file_get_contents(join_paths($this->storage->getRootDir(), $place->battlemap3d))), $doc);
 
         $widthForMap = SvgDumper::defaultSizeForWeb;
         fwrite(

@@ -362,10 +362,10 @@ class HexaMap implements SquareGrid
         foreach ($this->grid as $x => $column) {
             foreach ($column as $y => $cell) {
                 /** @var HexaCell $cell */
-                $visitor->grid[] = [
-                    'x' => $this->getAbscissa($x, $y),
-                    'y' => $y,
-                    'content' => $cell
+                $visitor->grid[] = (object) [
+                            'x' => $this->getAbscissa($x, $y),
+                            'y' => $y,
+                            'content' => $cell
                 ];
                 // compil all used textures
                 if (!is_null($cell)) {
@@ -375,6 +375,15 @@ class HexaMap implements SquareGrid
         }
 
         $visitor->texture = array_keys($texture);
+    }
+
+    public function dumpFromJson(\stdClass $battlemap, \App\Entity\BattlemapDocument $visitor): void
+    {
+        $visitor->theme = $battlemap->theme;
+        $visitor->side = $battlemap->side;
+        $visitor->npcToken = $battlemap->npcToken;
+
+        $visitor->grid = $battlemap->grid;
     }
 
 }

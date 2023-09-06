@@ -63,18 +63,18 @@ class SvgDumper
         // ground tiles
         echo '<g id="ground">' . PHP_EOL;
         foreach ($doc->grid as $cell) {
-            echo "<use xlink:href=\"#{$cell['content']->template}\" x=\"{$cell['x']}\" y=\"{$cell['y']}\"/>\n";
+            echo "<use xlink:href=\"#{$cell->content->template}\" x=\"{$cell->x}\" y=\"{$cell->y}\"/>\n";
         }
         echo '</g>' . PHP_EOL;
 
         // walls
         echo '<g id="wall">' . PHP_EOL;
         foreach ($doc->grid as $cell) {
-            $content = $cell['content'];
+            $content = $cell->content;
             for ($direction = HexaCell::EAST; $direction < HexaCell::WEST; $direction++) {
                 if ($content->wall[$direction]) {
                     $angle = -60 * $direction;
-                    echo "<use xlink:href=\"#eastwall\" transform=\"translate({$cell['x']} {$cell['y']}) rotate($angle)\"/>\n";
+                    echo "<use xlink:href=\"#eastwall\" transform=\"translate({$cell->x} {$cell->y}) rotate($angle)\"/>\n";
                 }
             }
         }
@@ -83,11 +83,11 @@ class SvgDumper
         // doors
         echo '<g id="door">' . PHP_EOL;
         foreach ($doc->grid as $cell) {
-            $content = $cell['content'];
+            $content = $cell->content;
             for ($direction = HexaCell::EAST; $direction <= HexaCell::WEST; $direction++) {
                 if ($content->door[$direction]) {
                     $angle = -60 * $direction;
-                    echo "<use xlink:href=\"#eastdoor\" transform=\"translate({$cell['x']} {$cell['y']}) rotate($angle)\"/>\n";
+                    echo "<use xlink:href=\"#eastdoor\" transform=\"translate({$cell->x} {$cell->y}) rotate($angle)\"/>\n";
                 }
             }
         }
@@ -96,11 +96,11 @@ class SvgDumper
         // npc
         echo '<g id="layer-npc">' . PHP_EOL;
         foreach ($doc->grid as $cell) {
-            $content = $cell['content'];
+            $content = $cell->content;
             if (!is_null($content->npc)) {
                 // "-0.4" is a bugfix for svg.draggable.js
                 printf('<use xlink:href="#%s" x="%f" y="%f" data-npc-title="%s"/>', basename($content->npc->picture, '.png'),
-                        $cell['x'] - 0.4, $cell['y'] - 0.4, $content->npc->label);
+                        $cell->x - 0.4, $cell->y - 0.4, $content->npc->label);
             }
         }
         echo '</g>' . PHP_EOL;
