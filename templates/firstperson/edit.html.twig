@@ -29,7 +29,9 @@
                         <div class="pure-u-1-3"><label>Pièce</label></div>
                         <div class="pure-u-2-3">
                             <p>
-                                <span x-text="cellInfo.uid"></span>@<span x-text="cellInfo.cellIndex"></span>
+                                n°<span x-text="cellInfo.uid"></span>
+                                index
+                                <span x-text="cellInfo.cellIndex"></span>
                             </p>
                         </div>
                     </div>
@@ -43,8 +45,7 @@
             </template>
         </div>
         <div class="pure-u-1-5">
-            <template x-if="characterCard !== null"
-                      x-init="$watch('characterCard', value => { $nextTick(()=> { Pushable_subscribe(document.querySelectorAll('.pushable a')) }) })">
+            <template x-if="characterCard !== null">
                 <div class="npc-minicard">
                     <p>
                         <i x-bind:class="characterCard.icon"></i>
@@ -54,17 +55,24 @@
                         <template x-for="pic in characterCard.picture">
                             <div class="pure-u-1-6">
                                 <div class="pushable">
-                                    <a x-bind:href="pic.link">
+                                    <a x-bind:href="pic.link" x-init="Pushable_subscribe([$el])">
                                         <img x-bind:src="pic.thumb" class="pure-img"/>
                                     </a>
                                 </div>
                             </div>
                         </template>
                     </div>
-                    <a x-bind:href="characterCard.sheet" class="pure-button" target="_blank">Feuille</a>
-                    <a x-show="characterCard.instantiate" x-bind:href="characterCard.instantiate" class="pure-button" target="_blank">Instance</a>
-                    <button x-on:click="deleteNpc" class="pure-button button-delete">Delete</button>
-                </div>
+                    <div class="pure-g actions">
+                        <div class="pure-u-1-3">
+                            <a x-bind:href="characterCard.sheet" class="pure-button pure-input-1" target="_blank">Feuille</a>
+                        </div>
+                        <div class="pure-u-1-3">
+                            <a x-show="characterCard.instantiate" x-bind:href="characterCard.instantiate" class="pure-button pure-input-1" target="_blank">Instance</a>
+                        </div>
+                        <div class="pure-u-1-3">
+                            <button x-on:click="deleteNpc" class="pure-button button-delete pure-input-1">Delete</button>
+                        </div>
+                    </div>
             </template>
             {{ form(npc_tool) }}
         </div>
@@ -219,6 +227,10 @@
         .npc-minicard p {
             font-size: 120%;
             margin: 0.4em 0;
+        }
+        .npc-minicard .actions {
+            margin-top: 0.2em;
+            text-align: center;
         }
     </style>
 {% endblock %}

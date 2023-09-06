@@ -4,8 +4,8 @@
 
 Pushable_subscribe = function (pictures) {
     pictures.forEach(function (picture) {
-        let url = picture.href
         picture.addEventListener('click', function (event) {
+            let url = event.target.parentElement.href
             // stop propagation
             event.preventDefault()
             // post image title for sending to external device
