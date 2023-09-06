@@ -444,9 +444,7 @@ class BattlemapBuilder
     declareNpcToken() {
         // map token
         this.getDoc().npcToken.forEach(npc => {
-            const sp = new BABYLON.SpriteManager('token-' + npc.label, '/picture/get/' + npc.picture, 2000, 504)
-            sp.metadata = npc.picture
-            this.spriteManager[npc.label] = sp
+            this.createSpriteManager(npc.label, npc.picture)
         })
 
         // prototyping for delete NPC
@@ -472,9 +470,7 @@ class BattlemapBuilder
                     fetch('/npc/show.json?title=' + npcTitle).then(resp => {
                         return resp.json()
                     }).then(npcInfo => {
-                        const sp = new BABYLON.SpriteManager('token-' + npcTitle, '/picture/get/' + npcInfo.tokenPic, 2000, 504)
-                        sp.metadata = npcInfo.tokenPic
-                        this.spriteManager[npcTitle] = sp
+                        this.createSpriteManager(npcTitle, npcInfo.tokenPic)
                         this.getDoc().npcToken.push({label: npcTitle, picture: npcInfo.tokenPic})
                         // append sprite
                         this.appendNpcAt(metadata.npc, selectedTile.position.x, selectedTile.position.z)
@@ -485,6 +481,12 @@ class BattlemapBuilder
                 }
             }
         }
+    }
+
+    createSpriteManager(label, picture) {
+        const sp = new BABYLON.SpriteManager('token-' + label, '/picture/get/' + picture, 2000, 504)
+        sp.metadata = picture
+        this.spriteManager[label] = sp
     }
 
     appendNpcAt(npcContent, x, y) {
@@ -597,7 +599,7 @@ class BattlemapBuilder
 
     declareHelper() {
         // calculate hexagonal distance between 2 tiles given by their indices
-        this.scene.getDistance = function(idx1, idx2) {
+        this.scene.getDistance = function (idx1, idx2) {
             const cell1 = this.metadata.grid[idx1]
             const cell2 = this.metadata.grid[idx2]
             let dx = cell1.x - cell2.x
@@ -607,7 +609,7 @@ class BattlemapBuilder
         }
 
         // paint a room with a new template by starting by a tile
-        this.scene.paintRoomAt = function(idx, template) {
+        this.scene.paintRoomAt = function (idx, template) {
             const roomId = this.metadata.grid[idx].content.uid
 
             this.metadata.grid.forEach((cell, k) => {

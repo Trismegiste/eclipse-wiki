@@ -98,9 +98,8 @@ class SvgDumper
         foreach ($doc->grid as $cell) {
             $content = $cell->content;
             if (!is_null($content->npc)) {
-                // "-0.4" is a bugfix for svg.draggable.js
                 printf('<use xlink:href="#%s" x="%f" y="%f" data-npc-title="%s"/>', basename($content->npc->picture, '.png'),
-                        $cell->x - 0.4, $cell->y - 0.4, $content->npc->label);
+                        $cell->x, $cell->y, $content->npc->label);
             }
         }
         echo '</g>' . PHP_EOL;
@@ -113,7 +112,7 @@ class SvgDumper
         $source = imagecreatefrompng($tokenPic->getPathname());
         $target = imagescale($source, self::resizeToken, self::resizeToken, IMG_BICUBIC_FIXED);
 
-        echo '<g transform="scale(0.008)">';   // translate(-50, -50) is missing because of bug in svg.draggable
+        echo '<g transform="scale(0.008) translate(-50, -50)">';
         echo '<image width="100" height="100" xlink:href="data:image/png;base64,';
         imagesavealpha($target, true);
         ob_start();
