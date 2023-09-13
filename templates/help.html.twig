@@ -6,7 +6,7 @@
     <h2>Raccourcis sur la page de listing des vertex</h2>
     <ul>
         <li><strong>Escape</strong> : Reset du filtre de recherche</li>
-        <li><strong>Entrée</strong> : Sélection du premier choix dans la liste</li>
+        <li><strong>Entrée</strong> : Ouvre la page du premier choix dans la liste</li>
     </ul>
     <h2>Raccourcis clavier dans une page 'Voir'</h2>
     <ul>
@@ -16,6 +16,35 @@
         <li><strong>E</strong> : Édition du contenu WikiText du vertex</li>
         <li><strong>S</strong> : Édition des Traits d'un PNJ</li>
         <li><strong>W</strong> : Édition des paramètres de combat d'un PNJ</li>
+    </ul>
+    <h2>Editeur de contenu Wikitext</h2>
+    <ul>
+        <li>Créer un lien vers un autre vertex avec « <strong>[[</strong> », l'autocomplétion fait le reste</li>
+        <li>Créer un lien vers une image avec « <strong>[[file:</strong> », l'autocomplétion fait le reste</li>
+        <li>Créer un lien externe vers une page du fandom avec « <strong>[[ep:</strong> »</li>
+        <li>Bouton <i class="icon-dcgan"></i> : permet de chercher une image à partir de mot-clefs dans son prompt sur le serveur de InvokeAI et de l'insérer à la fin du contenu wikitext</li>
+        <li>Bouton <i class="icon-album"></i> : transforme une sélection de 2N lignes constituées de N images suivies de N légendes en un tableau de 2 lignes</li>
+        <li>Template <strong>{{ "{{legend|HANGAR|123}}" }}</strong> : insère un titre de niveau 2 dénommé «HANGAR» associé à un lien clickable qui 
+            va illuminer la case dont l'<strong>index</strong> vaut 123 sur la Battlemap 3D (qui doit déjà être ouverte)</li>
+    </ul>
+    <h2>Battlemap 3D</h2>
+    <ul>
+        <li>Un <strong>&lt;click gauche&gt;</strong> sur une case sélectionne la case et affiche les info sur sa nature et son contenu. Indiquée par un hexagone vert</li>
+        <li>Un <strong>&lt;click droit&gt;</strong> sur une case déplace le personnage de la case sélectionnée, s'il y en a un. Pas de superposition possible</li>
+        <li>Un <strong>&lt;ctrl&gt;+&lt;click droit&gt;</strong> sur une case déplace la caméra au dessus de cette case (la hauteur de vol reste inchangée)</li>
+        <li>La <strong>&lt;roulette souris&gt;</strong> change la hauteur de vol. Au ras du sol, un brouillard de profondeur s'active</li>
+        <li>Un <strong>click</strong> sur une porte ouvre la porte</li>
+        <li>La <strong>distance</strong> est comptée en hexagones entre la case sélectionnée (hexagone vert) et la case du pointeur (hexagone rouge translucide)</li>
+        <li>L'<strong>index</strong> de la case est indiqué dans le panneau de description de la sélection : « Pièce n°10 index 1026 », l'index vaut 1026</li>
+        <li>La <strong>liste des tuiles</strong> est automatiquement limitée aux tuiles sélectionnées dans le Décor</li>
+        <li>Le bouton «<strong>Write</strong>» sauvegarde la battlemap modifiée dans l'éditeur</li>
+        <li>Le bouton «<strong>Regénérer la map</strong>» re-initialise la battlemap avec les paramètres stockés dans le Décor. 
+            Les modifications de tuiles, les légendes et les icones sont perdues</li>
+        <li>Le bouton «<strong>Feuille</strong>» ouvre la fiche d'un personnage</li>
+        <li>Le bouton «<strong>Instance</strong>» permet de génerer un nouveau profil réseau à partir de la fiche d'un personnage générique</li>
+        <li>La selectbox pour <strong>ajouter un personnage</strong> affiche seulement les personnages disposant d'une image de profil réseau</li>
+        <li><strong>&lt;space&gt;</strong> : Broadcaster le point de vue du MJ en un screenshot vers les clients des PJ (simple image 2D)</li>
+        <li><strong>&lt;shift&gt;+&lt;space&gt;</strong> : Broadcaster un panoramique de la case sélectionnée vers le viewer 3D des PJ</li>
     </ul>
     <h2>Page du tracker d'initiative</h2>
     <ul>
