@@ -153,6 +153,10 @@ a.new {
 }
 
 /* WIKI image */
+.parsed-wikitext > .thumb {
+    display: inline-block;
+}
+
 .thumb img {
     max-height: 200px;
     max-width: 200px;
