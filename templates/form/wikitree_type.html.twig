@@ -78,8 +78,8 @@
             })
 
             editArea.addEventListener('blur', event => {
-                currentlyEditedNode.data.title = editArea.value
-                currentlyEditedNode.label.querySelector('span').innerHTML = editArea.value
+                currentlyEditedNode.data.title = editArea.value.trim()
+                currentlyEditedNode.label.querySelector('span').innerHTML = editArea.value.trim()
                 hiddenTree.value = JSON.stringify(nodeData)
                 editArea.value = ''
                 editArea.hidden = true
