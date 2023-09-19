@@ -139,5 +139,9 @@ services:
         - '%kernel.project_dir%/database/pictogram'
 
     # InvokeAI
+    App\Service\InvokeAiClientFactory: ~
+
     App\Service\InvokeAi:
-        $baseUrl: '%env(resolve:STABLE_DIFFUSION_URL)%'
+        factory: ['@App\Service\InvokeAiClientFactory', 'createFromMac']
+        arguments:
+            - '%env(resolve:STABLE_DIFFUSION_MAC)%'
