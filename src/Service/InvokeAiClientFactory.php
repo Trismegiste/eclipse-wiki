@@ -31,7 +31,13 @@ class InvokeAiClientFactory
 
     public function createFromMac(string $mac): InvokeAi
     {
-	return $this->createFromHostname($this->findIpFromMac($mac));
+        try {
+            $ip = $this->findIpFromMac($mac);
+        } catch (\RuntimeException $e) {
+            $ip = '127.0.0.1';
+        }
+
+	return $this->createFromHostname($ip);
     }
 
     protected function findIpFromMac(string $mac): string
