@@ -1,7 +1,7 @@
 # TODO
 
 ## Other
-* Le show de Timeline ajoute une fonctionnalité AJAX qui permet de barrer un élement <LI> de la liste timeline
 * Artefact entity ?
-* templates de Timeline avec des Form différents d'une simple liste
-* Action Fork des Transhuman
+* templates de Timeline avec des Form scenaristiques différents d'une simple liste
+* Action Créer un Fork de Transhuman
+* Handout & Loveletter doit être dumpé dans le content wiki comme pour les Timeline, afin d'avoir les backlinks et la recherche textuelle
