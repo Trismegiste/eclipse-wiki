@@ -410,4 +410,15 @@ class VertexRepository extends DefaultRepository
         return $matrix;
     }
 
+    public function searchAllTitleOnly(): Cursor
+    {
+        return $this->manager->executeQuery($this->getNamespace(), new Query([], [
+                            'projection' => [
+                                '_id' => true,
+                                'title' => true,
+                                '__pclass' => true
+                            ]
+        ]));
+    }
+
 }

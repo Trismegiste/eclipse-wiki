@@ -149,4 +149,34 @@ class DigraphExplore
         return $this->repository->findByClass(Place::class, ['_id' => ['$in' => $edges]]);
     }
 
+    public function getNonDirectedGraphAdjacency(): array
+    {
+        $listing = [];
+        $cursor = $this->repository->searchAllTitleOnly();
+        $cursor->setTypeMap(['root' => 'array']);
+        foreach ($cursor as $vertex) {
+            $pk = (string) $vertex['_id'];
+            $listing[] = [
+                'id' => $pk,
+                'title' => $vertex['title'],
+                'class' => (string) $vertex['__pclass']
+            ];
+        }
+
+        $adjacency = $this->repository->getAdjacencyMatrix();
+        $matrix = [];
+        foreach ($listing as $rowIdx => $rowVertex) {
+            foreach ($listing as $colIdx => $colVertex) {
+                $rowPk = $rowVertex['id'];
+                $colPk = $colVertex['id'];
+                $matrix[$rowIdx][$colIdx] = $adjacency[$rowPk][$colPk] || $adjacency[$colPk][$rowPk];
+            }
+        }
+
+        return [
+            'vertex' => $listing,
+            'adjacency' => $matrix
+        ];
+    }
+
 }

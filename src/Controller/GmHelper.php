@@ -10,8 +10,10 @@ use App\Entity\Ali;
 use App\Entity\Freeform;
 use App\Entity\Transhuman;
 use App\Repository\VertexRepository;
+use App\Service\DigraphExplore;
 use App\Service\NetTools;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Trismegiste\NameGenerator\FileRepository;
@@ -103,6 +105,15 @@ class GmHelper extends AbstractController
     public function digraph(): Response
     {
         return $this->render('digraph/view3d.html.twig');
+    }
+
+    /**
+     * load the graph
+     */
+    #[Route("/digraph/load", methods: ["GET"])]
+    public function getGraph(DigraphExplore $repo): JsonResponse
+    {
+        return new JsonResponse($repo->getNonDirectedGraphAdjacency());
     }
 
 }
