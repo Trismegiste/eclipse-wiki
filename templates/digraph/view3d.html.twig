@@ -11,6 +11,23 @@
     <script src="https://cdn.babylonjs.com/havok/HavokPhysics_umd.js"></script>
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
     <script type="module">
+        const universe = {
+            coulomb: 100,
+            spring: 1,
+            sphereRadius: 1,
+            damping: 1
+        }
+
+        const adjacency = [
+            [0, 1, 0, 1, 0],
+            [0, 0, 1, 1, 1],
+            [0, 1, 0, 1, 1],
+            [0, 1, 0, 0, 0],
+            [0, 1, 0, 1, 0]
+        ]
+        const size = adjacency.length
+
+        // babylonjs
         const canvas = document.getElementById("renderCanvas") // Get the canvas element
         const engine = new BABYLON.Engine(canvas) // Generate the BABYLON 3D engine
 
@@ -18,7 +35,7 @@
         const scene = new BABYLON.Scene(engine)
 
         // Creates and positions a free camera for GM
-        const camera = new BABYLON.UniversalCamera("camera", new BABYLON.Vector3(0, 10, 0), scene)
+        const camera = new BABYLON.UniversalCamera("camera", new BABYLON.Vector3(20, 0, 0), scene)
         camera.setTarget(new BABYLON.Vector3(0, 0, 0))
         camera.attachControl(canvas, true)
 
@@ -37,45 +54,47 @@
         // Default intensity is 1. Let's dim the light a small amount
         light.intensity = 0.7;
 
-        // Our built-in 'sphere' shape.
-        var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 2, segments: 32}, scene);
-        var sphere2 = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 2, segments: 32}, scene);
-
-        // Move the sphere upward at 4 units
-        sphere.position.x = -4;
-        sphere2.position.x = 4;
-
         // enable physics in the scene with a gravity
         // initialize plugin
-        const havokInstance = await HavokPhysics();
+        const havokInstance = await
+        HavokPhysics();
         // pass the engine to the plugin
         const hk = new BABYLON.HavokPlugin(true, havokInstance);
         scene.enablePhysics(new BABYLON.Vector3(0, 0, 0), hk);
 
-        // Create a sphere shape and the associated body. Size will be determined automatically.
-        var sphereAggregate = new BABYLON.PhysicsAggregate(sphere, BABYLON.PhysicsShapeType.SPHERE, {mass: 1, restitution: 0.75}, scene);
-        var sphereAggregate2 = new BABYLON.PhysicsAggregate(sphere2, BABYLON.PhysicsShapeType.SPHERE, {mass: 1, restitution: 0.75}, scene);
-        sphereAggregate.body.setLinearDamping(1)
-        sphereAggregate2.body.setLinearDamping(1)
+        let sphere = []
+        let sphereAggregate = []
+        for (let idx of adjacency[0]) {
+            // Our built-in 'sphere' shape.
+            let mesh = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: universe.sphereRadius, segments: 16}, scene)
+            mesh.position = new BABYLON.Vector3(Math.random() * size, Math.random() * size, Math.random() * size)
+            let physic = new BABYLON.PhysicsAggregate(mesh, BABYLON.PhysicsShapeType.SPHERE, {mass: 1, restitution: 0.75}, scene);
+            physic.body.setLinearDamping(universe.damping)
+            sphere.push(mesh)
+            sphereAggregate.push(physic)
+        }
 
         scene.registerBeforeRender(function () {
-            //Your code here
-            let delta = sphere2.position.subtract(sphere.position)
-            let dist = delta.length()
-            let spring = dist
-            let coulomb = -100 / Math.pow(dist, 2)
-            let result = spring + coulomb
-            delta.normalize()
-            sphereAggregate.body.applyForce(
-                    delta.scale(result),
-                    sphere.absolutePosition
-                    );
-            sphereAggregate2.body.applyForce(
-                    delta.scale(-result),
-                    sphere.absolutePosition
-                    );
-        });
-
+            for (let source = 0; source < size - 1; source++) {
+                for (let target = source + 1; target < size; target++) {
+                    let delta = sphere[target].position.subtract(sphere[source].position)
+                    let dist = delta.length()
+                    let result = -universe.coulomb / Math.pow(dist, 2)
+                    if (adjacency[source][target]) {
+                        result += dist * universe.spring
+                    }
+                    delta.normalize()
+                    sphereAggregate[source].body.applyForce(
+                            delta.scale(result),
+                            sphere[source].absolutePosition
+                            )
+                    sphereAggregate[target].body.applyForce(
+                            delta.scale(-result),
+                            sphere[target].absolutePosition
+                            )
+                }
+            }
+        })
     </script>
 {% endblock %}
 
