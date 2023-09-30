@@ -1,0 +1,92 @@
+{% extends "base.html.twig" %}
+
+{% block title %}YOLO{% endblock %}
+
+{% block body %}
+    <canvas id="renderCanvas">
+    </canvas>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.babylonjs.com/havok/HavokPhysics_umd.js"></script>
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script type="module">
+        const canvas = document.getElementById("renderCanvas") // Get the canvas element
+        const engine = new BABYLON.Engine(canvas) // Generate the BABYLON 3D engine
+
+        // Creates Scene object
+        const scene = new BABYLON.Scene(engine)
+
+        // Creates and positions a free camera for GM
+        const camera = new BABYLON.UniversalCamera("camera", new BABYLON.Vector3(0, 10, 0), scene)
+        camera.setTarget(new BABYLON.Vector3(0, 0, 0))
+        camera.attachControl(canvas, true)
+
+        // Register a render loop to repeatedly render the scene
+        engine.runRenderLoop(function () {
+            scene.render()
+        })
+        // Watch for browser/canvas resize events
+        window.addEventListener("resize", function () {
+            engine.resize()
+        })
+
+        // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+        var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+
+        // Default intensity is 1. Let's dim the light a small amount
+        light.intensity = 0.7;
+
+        // Our built-in 'sphere' shape.
+        var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 2, segments: 32}, scene);
+        var sphere2 = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 2, segments: 32}, scene);
+
+        // Move the sphere upward at 4 units
+        sphere.position.x = -4;
+        sphere2.position.x = 4;
+
+        // enable physics in the scene with a gravity
+        // initialize plugin
+        const havokInstance = await HavokPhysics();
+        // pass the engine to the plugin
+        const hk = new BABYLON.HavokPlugin(true, havokInstance);
+        scene.enablePhysics(new BABYLON.Vector3(0, 0, 0), hk);
+
+        // Create a sphere shape and the associated body. Size will be determined automatically.
+        var sphereAggregate = new BABYLON.PhysicsAggregate(sphere, BABYLON.PhysicsShapeType.SPHERE, {mass: 1, restitution: 0.75}, scene);
+        var sphereAggregate2 = new BABYLON.PhysicsAggregate(sphere2, BABYLON.PhysicsShapeType.SPHERE, {mass: 1, restitution: 0.75}, scene);
+        sphereAggregate.body.setLinearDamping(1)
+        sphereAggregate2.body.setLinearDamping(1)
+
+        scene.registerBeforeRender(function () {
+            //Your code here
+            let delta = sphere2.position.subtract(sphere.position)
+            let dist = delta.length()
+            let spring = dist
+            let coulomb = -100 / Math.pow(dist, 2)
+            let result = spring + coulomb
+            delta.normalize()
+            sphereAggregate.body.applyForce(
+                    delta.scale(result),
+                    sphere.absolutePosition
+                    );
+            sphereAggregate2.body.applyForce(
+                    delta.scale(-result),
+                    sphere.absolutePosition
+                    );
+        });
+
+    </script>
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+    </style>
+{% endblock %}
