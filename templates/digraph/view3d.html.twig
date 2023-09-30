@@ -10,6 +10,7 @@
 {% block javascripts %}
     <script src="https://cdn.babylonjs.com/havok/HavokPhysics_umd.js"></script>
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/gui/babylon.gui.js"></script>
     <script type="module">
         const universe = {
             coulomb: 100,
@@ -59,6 +60,7 @@
         // pass the engine to the plugin
         const hk = new BABYLON.HavokPlugin(true, havokInstance);
         scene.enablePhysics(new BABYLON.Vector3(0, 0, 0), hk);
+        const advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
         let sphere = []
         let sphereAggregate = []
@@ -70,6 +72,15 @@
             physic.body.setLinearDamping(universe.damping)
             sphere.push(mesh)
             sphereAggregate.push(physic)
+
+            // label
+            let label = new BABYLON.GUI.TextBlock()
+            advancedTexture.addControl(label)
+            label.text = "Sphere"
+            label.color = "white"
+            label.shadowColor = "black"
+            label.shadowBlur = 4
+            label.linkWithMesh(mesh);
         }
 
         let lines = []
