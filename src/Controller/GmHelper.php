@@ -99,7 +99,7 @@ class GmHelper extends AbstractController
     /**
      * 3D View of digraph
      */
-    #[Route("/digraph", methods: ["GET"])]
+    #[Route("/digraph/view3d", methods: ["GET"])]
     public function digraph(): Response
     {
         return $this->render('digraph/view3d.html.twig');

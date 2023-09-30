@@ -19,11 +19,11 @@
         }
 
         const adjacency = [
-            [0, 1, 0, 1, 0],
-            [0, 0, 1, 1, 1],
-            [0, 1, 0, 1, 1],
             [0, 1, 0, 0, 0],
-            [0, 1, 0, 1, 0]
+            [0, 0, 1, 0, 0],
+            [0, 0, 0, 1, 0],
+            [0, 0, 0, 0, 1],
+            [0, 0, 0, 0, 0]
         ]
         const size = adjacency.length
 
@@ -35,8 +35,7 @@
         const scene = new BABYLON.Scene(engine)
 
         // Creates and positions a free camera for GM
-        const camera = new BABYLON.UniversalCamera("camera", new BABYLON.Vector3(20, 0, 0), scene)
-        camera.setTarget(new BABYLON.Vector3(0, 0, 0))
+        const camera = new BABYLON.ArcRotateCamera("camera", 0, 0, 20, new BABYLON.Vector3(0, 0, 0), scene);
         camera.attachControl(canvas, true)
 
         // Register a render loop to repeatedly render the scene
@@ -56,8 +55,7 @@
 
         // enable physics in the scene with a gravity
         // initialize plugin
-        const havokInstance = await
-        HavokPhysics();
+        const havokInstance = await HavokPhysics();
         // pass the engine to the plugin
         const hk = new BABYLON.HavokPlugin(true, havokInstance);
         scene.enablePhysics(new BABYLON.Vector3(0, 0, 0), hk);
@@ -74,8 +72,25 @@
             sphereAggregate.push(physic)
         }
 
+        let lines = []
+        for (let source = 0; source < size; source++) {
+            for (let target = source + 1; target < size; target++) {
+                if (adjacency[source][target]) {
+                    const options = {
+                        points: [sphere[source].position, sphere[target].position],
+                        updatable: true
+                    }
+                    if (lines[source] === undefined) {
+                        lines[source] = []
+                    }
+                    lines[source][target] = BABYLON.MeshBuilder.CreateLines("lines" + source + '-' + target, options, scene);
+                }
+            }
+        }
+
         scene.registerBeforeRender(function () {
-            for (let source = 0; source < size - 1; source++) {
+            // physics of Vertices
+            for (let source = 0; source < size; source++) {
                 for (let target = source + 1; target < size; target++) {
                     let delta = sphere[target].position.subtract(sphere[source].position)
                     let dist = delta.length()
@@ -92,6 +107,18 @@
                             delta.scale(-result),
                             sphere[target].absolutePosition
                             )
+                }
+            }
+            // updating Edges
+            for (let source = 0; source < size; source++) {
+                for (let target = source + 1; target < size; target++) {
+                    if (adjacency[source][target]) {
+                        const options = {
+                            points: [sphere[source].position, sphere[target].position],
+                            instance: lines[source][target]
+                        }
+                        lines[source][target] = BABYLON.MeshBuilder.CreateLines("lines" + source + '-' + target, options, scene);
+                    }
                 }
             }
         })
