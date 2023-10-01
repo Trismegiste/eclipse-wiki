@@ -8,14 +8,15 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Pour {{ vertex.target }}</h2>
     <div class="pure-g">
         <section class="pure-u-1 pure-u-xl-11-24">
-            {{ parent() }}  
+            <h2>À l'attention de : {{ vertex.target }}</h2>
+            {{ wiki(vertex.pcInfo) }}
         </section>
         <section class="pure-u-xl-1-24">
         </section>
         <section class="pure-u-1 pure-u-xl-11-24">
+            <h2>Secret</h2>
             {{ wiki(vertex.gmInfo) }}
         </section>
     </div>

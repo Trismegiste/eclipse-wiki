@@ -26,8 +26,10 @@ class LoveletterType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $builder->remove('content');
         $builder
                 ->add('player', TextType::class, ['attr' => ['class' => 'pure-input-1-3']])
+                ->add('context', Type\WikitextType::class, ['attr' => ['rows' => 3]])
                 ->add('drama', Type\WikitextType::class, ['attr' => ['rows' => 3]])
                 ->add('roll1', Type\RollType::class)
                 ->add('roll2', Type\RollType::class)
@@ -53,8 +55,6 @@ class LoveletterType extends AbstractType
 
     public function finishView(FormView $view, FormInterface $form, array $options): void
     {
-        $this->changeAttribute($view, 'content', 'rows', 3);
-        $this->changeLabel($view, 'content', 'Context');
         $this->moveChildAtBegin($view, 'player');
         $this->moveChildAtEnd($view, 'create');
     }
