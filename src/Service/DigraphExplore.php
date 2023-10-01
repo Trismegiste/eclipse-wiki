@@ -8,6 +8,7 @@ namespace App\Service;
 
 use App\Entity\Place;
 use App\Entity\Timeline;
+use App\Entity\Vertex;
 use App\Repository\VertexRepository;
 use Collator;
 use DateInterval;
@@ -159,7 +160,7 @@ class DigraphExplore
             $listing[] = [
                 'id' => $pk,
                 'title' => $vertex['title'],
-                'class' => (string) $vertex['__pclass']
+                'class' => Vertex::getCategoryForVertex($vertex['__pclass'])
             ];
         }
 

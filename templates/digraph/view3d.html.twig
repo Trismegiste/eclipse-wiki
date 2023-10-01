@@ -18,6 +18,12 @@
             sphereRadius: 1,
             damping: 1
         }
+        const colorScheme = new Map()
+        colorScheme.set('timeline', BABYLON.Color3.Red())
+        colorScheme.set('scene', BABYLON.Color3.Purple())
+        colorScheme.set('transhuman', BABYLON.Color3.Blue())
+        colorScheme.set('place', BABYLON.Color3.Green())
+        colorScheme.set('default', BABYLON.Color3.Gray())
 
         const response = await
         fetch('{{ path('app_gmhelper_getgraph') }}')
@@ -32,6 +38,7 @@
 
         // Creates Scene object
         const scene = new BABYLON.Scene(engine)
+        scene.clearColor = BABYLON.Color3.Black()
 
         // Creates and positions a free camera for GM
         const camera = new BABYLON.ArcRotateCamera("camera", 0, 0, 2 * size, new BABYLON.Vector3(0, 0, 0), scene);
@@ -46,12 +53,6 @@
             engine.resize()
         })
 
-        // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
-        var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
-
-        // Default intensity is 1. Let's dim the light a small amount
-        light.intensity = 0.7;
-
         // enable physics in the scene with a gravity
         // initialize plugin
         const havokInstance = await
@@ -61,16 +62,30 @@
         scene.enablePhysics(new BABYLON.Vector3(0, 0, 0), hk);
         const advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
+        // Material
+        const material = new Map()
+        for (const [key, color] of colorScheme) {
+            const matos = new BABYLON.StandardMaterial('mat-' + key)
+            matos.emissiveColor = color
+            matos.disableLighting = true
+            material.set(key, matos)
+        }
+
         let sphere = []
         let sphereAggregate = []
         for (let vertex of graph.vertex) {
             // Our built-in 'sphere' shape.
-            let mesh = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: universe.sphereRadius, segments: 16}, scene)
+            let mesh = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: universe.sphereRadius, segments: 12}, scene)
             mesh.position = new BABYLON.Vector3((Math.random() - 0.5) * size, (Math.random() - 0.5) * size, (Math.random() - 0.5) * size)
             let physic = new BABYLON.PhysicsAggregate(mesh, BABYLON.PhysicsShapeType.SPHERE, {mass: 1, restitution: 0.75}, scene);
             physic.body.setLinearDamping(universe.damping)
             sphere.push(mesh)
             sphereAggregate.push(physic)
+            let matos = 'default'
+            if (material.has(vertex.class)) {
+                matos = vertex.class
+            }
+            mesh.material = material.get(matos)
 
             // label
             let label = new BABYLON.GUI.TextBlock()
