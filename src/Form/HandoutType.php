@@ -34,11 +34,11 @@ class HandoutType extends AbstractType
         $builder
                 ->add('pcInfo', Type\WikitextType::class, [
                     'required' => true,
-                    'attr' => ['rows' => 10]
+                    'attr' => ['rows' => 16]
                 ])
                 ->add('gm_info', Type\WikitextType::class, [
                     'required' => false,
-                    'attr' => ['rows' => 10],
+                    'attr' => ['rows' => 16],
                     'property_path' => 'gmInfo'
                 ])
                 ->add('target', TextType::class);
