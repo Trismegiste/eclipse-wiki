@@ -31,6 +31,14 @@
         response.json()
         const adjacency = graph.adjacency
         const size = adjacency.length
+        graph.getOrder = function (idx) {
+            let sum = 0
+            for (let link of this.adjacency[idx]) {
+                sum += link
+            }
+
+            return sum
+        }
 
         // babylonjs
         const canvas = document.getElementById("renderCanvas") // Get the canvas element
@@ -73,9 +81,10 @@
 
         let sphere = []
         let sphereAggregate = []
-        for (let vertex of graph.vertex) {
+        for (const [idx, vertex] of graph.vertex.entries()) {
+            let order = Math.max(1, Math.log2(graph.getOrder(idx)))
             // Our built-in 'sphere' shape.
-            let mesh = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: universe.sphereRadius, segments: 12}, scene)
+            let mesh = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: order * universe.sphereRadius, segments: 12}, scene)
             mesh.position = new BABYLON.Vector3((Math.random() - 0.5) * size, (Math.random() - 0.5) * size, (Math.random() - 0.5) * size)
             let physic = new BABYLON.PhysicsAggregate(mesh, BABYLON.PhysicsShapeType.SPHERE, {mass: 1, restitution: 0.75}, scene);
             physic.body.setLinearDamping(universe.damping)
