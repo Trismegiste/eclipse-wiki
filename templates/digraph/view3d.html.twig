@@ -16,7 +16,8 @@
             coulomb: 100,
             spring: 1,
             sphereRadius: 1,
-            damping: 1
+            damping: 1,
+            titleMaxLength: 24
         }
         const colorScheme = new Map()
         colorScheme.set('timeline', BABYLON.Color3.Red())
@@ -99,10 +100,11 @@
             // label
             let label = new BABYLON.GUI.TextBlock()
             advancedTexture.addControl(label)
-            label.text = vertex.title
+            label.text = vertex.title.substring(0, universe.titleMaxLength)
             label.color = "white"
             label.shadowColor = "black"
             label.shadowBlur = 4
+            label.fontSizeInPixels = 16
             label.linkWithMesh(mesh);
             // clickable node to set camera target
             mesh.actionManager = new BABYLON.ActionManager(scene)
