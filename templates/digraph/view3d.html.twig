@@ -84,7 +84,7 @@
         for (const [idx, vertex] of graph.vertex.entries()) {
             let order = Math.max(1, Math.log2(graph.getOrder(idx)))
             // Our built-in 'sphere' shape.
-            let mesh = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: order * universe.sphereRadius, segments: 12}, scene)
+            let mesh = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: order * universe.sphereRadius, segments: 6}, scene)
             mesh.position = new BABYLON.Vector3((Math.random() - 0.5) * size, (Math.random() - 0.5) * size, (Math.random() - 0.5) * size)
             let physic = new BABYLON.PhysicsAggregate(mesh, BABYLON.PhysicsShapeType.SPHERE, {mass: 1, restitution: 0.75}, scene);
             physic.body.setLinearDamping(universe.damping)
@@ -107,7 +107,14 @@
             // clickable node to set camera target
             mesh.actionManager = new BABYLON.ActionManager(scene)
             mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, e => {
-                camera.target = e.meshUnderPointer.position
+                const frameRate = 10
+                const moving = new BABYLON.Animation("moving", "target", frameRate, BABYLON.Animation.ANIMATIONTYPE_VECTOR3)
+                moving.setKeys([
+                    {frame: 0, value: camera.target},
+                    {frame: frameRate, value: e.meshUnderPointer.position}
+                ])
+                camera.animations.push(moving)
+                scene.beginAnimation(camera, 0, frameRate)
             }))
 
         }
