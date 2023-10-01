@@ -90,12 +90,12 @@
             physic.body.setLinearDamping(universe.damping)
             sphere.push(mesh)
             sphereAggregate.push(physic)
+            // Material
             let matos = 'default'
             if (material.has(vertex.class)) {
                 matos = vertex.class
             }
             mesh.material = material.get(matos)
-
             // label
             let label = new BABYLON.GUI.TextBlock()
             advancedTexture.addControl(label)
@@ -104,6 +104,12 @@
             label.shadowColor = "black"
             label.shadowBlur = 4
             label.linkWithMesh(mesh);
+            // clickable node to set camera target
+            mesh.actionManager = new BABYLON.ActionManager(scene)
+            mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, e => {
+                camera.target = e.meshUnderPointer.position
+            }))
+
         }
 
         let lines = []
