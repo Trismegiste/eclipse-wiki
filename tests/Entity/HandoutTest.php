@@ -19,10 +19,12 @@ class HandoutTest extends TestCase
 
     public function testMongoEntity()
     {
-        $this->sut->setContent('valid');
+        $this->sut->pcInfo = 'valid';
         // no gminfo
         $dump = json_decode(MongoDB\BSON\toJSON(MongoDB\BSON\fromPHP($this->sut)), true);
         $this->assertArrayHasKey('gmInfo', $dump);
+        $this->assertArrayHasKey('pcInfo', $dump);
+        $this->assertNotNull($dump['pcInfo']);
         $this->assertNull($dump['gmInfo']);
         // some info here : gmInfo is an optional string, which defaults to null (a.k.a "?string $gmInfo = null" in the class)
         // If the "=null" part is missing, the field is not serialized by mongo driver since this property
@@ -32,4 +34,3 @@ class HandoutTest extends TestCase
     }
 
 }
-
