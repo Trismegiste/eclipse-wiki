@@ -26,6 +26,7 @@ class HandoutTest extends TestCase
         $this->assertArrayHasKey('pcInfo', $dump);
         $this->assertNotNull($dump['pcInfo']);
         $this->assertNull($dump['gmInfo']);
+        $this->assertStringContainsString('valid', $dump['content']);
         // some info here : gmInfo is an optional string, which defaults to null (a.k.a "?string $gmInfo = null" in the class)
         // If the "=null" part is missing, the field is not serialized by mongo driver since this property
         // is undefined (and undefined DOES NOT equal to NULL). The property is simply skipped.

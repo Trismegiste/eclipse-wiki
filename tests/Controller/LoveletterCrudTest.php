@@ -53,9 +53,9 @@ class LoveletterCrudTest extends WebTestCase
         $form = $crawler->selectButton('loveletter_create')->form();
         $form->setValues(['loveletter' => [
                 'title' => 'Love letter',
-                'content' => 'Some link to [[Luke]] and [[file:luke.jpg]]',
+                'context' => 'Some link to [[Luke]] and [[file:luke.jpg]]',
                 "player" => "ABCD",
-                "drama" => "789",
+                "drama" => "Doobeedoo",
                 "roll1" => ["trait" => "Agilité", "difficulty" => -1],
                 "roll2" => ["trait" => "Agilité", "difficulty" => -1],
                 "roll3" => ["trait" => "Agilité", "difficulty" => -1],
@@ -92,6 +92,8 @@ class LoveletterCrudTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', $show);
         $this->assertPageTitleContains('Love letter');
+        $this->assertSelectorExists('.loveletter');
+        $this->assertSelectorTextContains('.loveletter', 'Doobeedoo');
         $url = $crawler->filterXPath('//nav/a/i[@class="icon-edit"]/parent::a')->attr('href');
 
         return $url;
