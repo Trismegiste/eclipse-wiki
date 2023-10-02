@@ -33,7 +33,7 @@ class HandoutCrudTest extends WebTestCase
         $form = $crawler->selectButton('handout_create')->form();
         $form->setValues(['handout' => [
                 'title' => 'Handout1',
-                'content' => 'Info for PC',
+                'pcInfo' => 'Info for PC',
                 "target" => "ABCD",
                 "gm_info" => "Info for GM",
         ]]);
