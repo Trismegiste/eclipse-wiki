@@ -56,4 +56,20 @@ class GmHelperTest extends WebTestCase
         $this->assertStringContainsString('QRious', $this->client->getResponse()->getContent());
     }
 
+    public function testGraphView3D()
+    {
+        $this->client->request('GET', '/digraph/view3d');
+        $this->assertResponseIsSuccessful();
+        $this->assertStringContainsString('babylon', $this->client->getResponse()->getContent());
+    }
+
+    public function testGraphJsonLoad()
+    {
+        $this->client->request('GET', '/digraph/load');
+        $this->assertResponseIsSuccessful();
+        $doc = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertArrayHasKey('vertex', $doc);
+        $this->assertArrayHasKey('adjacency', $doc);
+    }
+
 }
