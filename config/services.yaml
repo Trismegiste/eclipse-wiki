@@ -142,6 +142,6 @@ services:
     App\Service\InvokeAiClientFactory: ~
 
     App\Service\InvokeAi:
-        factory: ['@App\Service\InvokeAiClientFactory', 'createFromMac']
+        factory: ['@App\Service\InvokeAiClientFactory', 'createFromHostname']
         arguments:
-            - '%env(resolve:STABLE_DIFFUSION_MAC)%'
+            - '%env(resolve:STABLE_DIFFUSION_HOSTNAME)%'
