@@ -9,7 +9,7 @@ namespace App\Controller;
 use App\Form\AppendRemotePicture;
 use App\Form\Type\SubmitWaitType;
 use App\Repository\VertexRepository;
-use App\Service\InvokeAi;
+use App\Service\StableDiffusion\InvokeAi;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpClient\Exception\TransportException;

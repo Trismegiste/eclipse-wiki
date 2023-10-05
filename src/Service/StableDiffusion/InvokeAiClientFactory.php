@@ -4,7 +4,7 @@
  * Eclipse Wiki
  */
 
-namespace App\Service;
+namespace App\Service\StableDiffusion;
 
 use DateInterval;
 use RuntimeException;
@@ -14,6 +14,9 @@ use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use function str_contains;
 
+/**
+ * Factory for stable diffusion client
+ */
 class InvokeAiClientFactory
 {
 

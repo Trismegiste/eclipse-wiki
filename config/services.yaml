@@ -141,7 +141,7 @@ services:
     # InvokeAI
     App\Service\InvokeAiClientFactory: ~
 
-    App\Service\InvokeAi:
-        factory: ['@App\Service\InvokeAiClientFactory', 'createFromHostname']
+    App\Service\StableDiffusion\InvokeAi:
+        factory: ['@App\Service\StableDiffusion\InvokeAiClientFactory', 'createFromHostname']
         arguments:
             - '%env(resolve:STABLE_DIFFUSION_HOSTNAME)%'

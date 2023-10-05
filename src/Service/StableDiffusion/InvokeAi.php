@@ -4,7 +4,7 @@
  * Eclipse Wiki
  */
 
-namespace App\Service;
+namespace App\Service\StableDiffusion;
 
 use DateInterval;
 use stdClass;
@@ -16,7 +16,7 @@ use UnexpectedValueException;
 /**
  * Client for InvokeAI Stable Diffusion
  */
-class InvokeAi
+class InvokeAi implements PictureRepository
 {
 
     const BATCH_SIZE = 100;
