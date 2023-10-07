@@ -26,7 +26,7 @@ use UnexpectedValueException;
 class InvokeAiPicture extends AbstractController
 {
 
-    public function __construct(protected \App\Service\StableDiffusion\LocalRepository $remote, protected VertexRepository $repository)
+    public function __construct(protected InvokeAi $remote, protected VertexRepository $repository)
     {
         
     }

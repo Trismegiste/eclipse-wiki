@@ -24,3 +24,12 @@
         })
     </script>
 {% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        form img {
+            max-height: 256px;
+        }
+    </style>
+{% endblock %}

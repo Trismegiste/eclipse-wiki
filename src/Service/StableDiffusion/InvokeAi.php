@@ -16,7 +16,7 @@ use UnexpectedValueException;
 /**
  * Client for InvokeAI Stable Diffusion
  */
-class InvokeAi implements PictureRepository
+class InvokeAi extends PictureRepository
 {
 
     const BATCH_SIZE = 100;
@@ -34,18 +34,16 @@ class InvokeAi implements PictureRepository
      */
     public function searchPicture(string $query, int $capFound = 10): array
     {
-        $keywords = $this->splittingPrompt(strtolower($query));
+        $keywords = $this->splittingPrompt($query);
         $found = [];
         $offset = 0;
 
         do {
             $resp = $this->getImagesList($offset, self::BATCH_SIZE);
             foreach ($resp->items as $picture) {
-                $prompt = strtolower($this->searchPromptFor($picture->image_name));
-                foreach ($keywords as $word) {
-                    if (!str_contains($prompt, $word)) {
-                        continue 2;
-                    }
+                $prompt = $this->searchPromptFor($picture->image_name);
+                if (!$this->matchKeywordAndPrompt($keywords, $prompt)) {
+                    continue;
                 }
 
                 $found[] = new PictureInfo(
@@ -134,11 +132,6 @@ class InvokeAi implements PictureRepository
         }
 
         return '';
-    }
-
-    private function splittingPrompt(string $subject): array
-    {
-        return preg_split("/[\s,]+/", $subject, 0, PREG_SPLIT_NO_EMPTY);
     }
 
 }

@@ -14,8 +14,14 @@ class InvokeAiReader extends PngReader
 
     const INVOKEAI_KEY = 'invokeai_metadata';
 
+    protected $metadata = null;
+
     public function getMetadata(): \stdClass
     {
+        if (!is_null($this->metadata)) {
+            return $this->metadata;
+        }
+
         $dump = $this->getTextChunk();
         if (!key_exists(self::INVOKEAI_KEY, $dump)) {
             return new \stdClass();
@@ -28,6 +34,12 @@ class InvokeAiReader extends PngReader
     {
         $meta = $this->getMetadata();
         return isset($meta->positive_prompt) ? $meta->positive_prompt : '';
+    }
+
+    public function getWidth(): string
+    {
+        $meta = $this->getMetadata();
+        return isset($meta->width) ? $meta->width : 0;
     }
 
 }

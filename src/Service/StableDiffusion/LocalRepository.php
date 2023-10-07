@@ -15,7 +15,7 @@ use function join_paths;
 /**
  * Local repository of InvokeAI pictures
  */
-class LocalRepository implements PictureRepository
+class LocalRepository extends PictureRepository
 {
 
     protected string $root;
@@ -58,30 +58,22 @@ class LocalRepository implements PictureRepository
         foreach ($iter as $picture) {
             /** @var SplFileInfo $picture */
             $reader = new InvokeAiReader($picture);
-            $prompt = $this->splittingPrompt($reader->getPositivePrompt());
-            $filter = array_intersect($keywords, $prompt);
-            if (count($filter) < count($keywords)) {
+            if (!$this->matchKeywordAndPrompt($keywords, $reader->getPositivePrompt())) {
                 continue;
             }
+            $width = $reader->getWidth();
             unset($reader);
 
             $keyImg = $picture->getBasename('.png');
             $found[] = new PictureInfo(
                     $this->getAbsoluteUrl($keyImg),
                     $this->getThumbnailUrl($keyImg),
-                    1024,
+                    $width,
                     $keyImg
             );
         }
 
         return $found;
-    }
-
-    private function splittingPrompt(string $subject): array
-    {
-        $filtered = preg_replace('#[^a-z\s]#', ' ', strtolower($subject));
-
-        return preg_split("/[\s]+/", $filtered, 0, PREG_SPLIT_NO_EMPTY);
     }
 
     public function getPictureResponse(string $name): BinaryFileResponse
