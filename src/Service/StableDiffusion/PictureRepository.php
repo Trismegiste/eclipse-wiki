@@ -7,8 +7,7 @@
 namespace App\Service\StableDiffusion;
 
 /**
- *
- * @author florent
+ * Generic picture repository
  */
 interface PictureRepository
 {

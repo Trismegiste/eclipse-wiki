@@ -145,3 +145,7 @@ services:
         factory: ['@App\Service\StableDiffusion\InvokeAiClientFactory', 'createFromHostname']
         arguments:
             - '%env(resolve:STABLE_DIFFUSION_HOSTNAME)%'
+
+    App\Service\StableDiffusion\LocalRepository:
+        arguments:
+            $projectDir: '%kernel.project_dir%'

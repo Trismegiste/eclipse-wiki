@@ -13,6 +13,7 @@ use App\Service\StableDiffusion\InvokeAi;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpClient\Exception\TransportException;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,7 +26,7 @@ use UnexpectedValueException;
 class InvokeAiPicture extends AbstractController
 {
 
-    public function __construct(protected InvokeAi $remote, protected VertexRepository $repository)
+    public function __construct(protected \App\Service\StableDiffusion\LocalRepository $remote, protected VertexRepository $repository)
     {
         
     }
@@ -103,6 +104,12 @@ class InvokeAiPicture extends AbstractController
         }
 
         return $this->render('invokeai/vertex_append.html.twig', ['form' => $form->createView()]);
+    }
+
+    #[Route('/local/{pic}', methods: ['GET'])]
+    public function getLocal(string $pic): BinaryFileResponse
+    {
+        return $this->remote->getPictureResponse($pic);
     }
 
 }

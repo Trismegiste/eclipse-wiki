@@ -48,12 +48,12 @@ class InvokeAi implements PictureRepository
                     }
                 }
 
-                $found[] = (object) [
-                            'full' => $this->baseUrl . $picture->image_url,
-                            'thumb' => $this->baseUrl . $picture->thumbnail_url,
-                            'width' => $picture->width,
-                            'name' => $picture->image_name
-                ];
+                $found[] = new PictureInfo(
+                        $this->baseUrl . $picture->image_url,
+                        $this->baseUrl . $picture->thumbnail_url,
+                        $picture->width,
+                        $picture->image_name
+                );
             }
             $offset += self::BATCH_SIZE;
         } while (count($resp->items) === $resp->limit);
