@@ -10,6 +10,7 @@ use App\Form\AppendRemotePicture;
 use App\Form\Type\SubmitWaitType;
 use App\Repository\VertexRepository;
 use App\Service\StableDiffusion\InvokeAi;
+use App\Service\StableDiffusion\LocalRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpClient\Exception\TransportException;
@@ -26,7 +27,7 @@ use UnexpectedValueException;
 class InvokeAiPicture extends AbstractController
 {
 
-    public function __construct(protected InvokeAi $remote, protected VertexRepository $repository)
+    public function __construct(protected LocalRepository $local, protected InvokeAi $remote, protected VertexRepository $repository)
     {
         
     }
@@ -40,6 +41,23 @@ class InvokeAiPicture extends AbstractController
                         ->getForm();
     }
 
+    protected function processSearchWithFailOver(string $query): array
+    {
+        $listing = ['remote' => [], 'local' => []];
+        //remote
+        try {
+            $listing['remote'] = $this->remote->searchPicture($query);
+        } catch (UnexpectedValueException $e) {
+            $this->addFlash('error', $e->getMessage());
+        } catch (TransportException $e) {
+            $this->addFlash('error', $e->getMessage());
+        }
+        // failover local
+        $listing['local'] = $this->local->searchPicture($query);
+
+        return $listing;
+    }
+
     /**
      * Image search against InvokeAI api
      */
@@ -51,13 +69,7 @@ class InvokeAiPicture extends AbstractController
         $listing = [];
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                $listing = $this->remote->searchPicture($form['query']->getData());
-            } catch (UnexpectedValueException $e) {
-                $this->addFlash('error', $e->getMessage());
-            } catch (TransportException $e) {
-                $this->addFlash('error', $e->getMessage());
-            }
+            $listing = $this->processSearchWithFailOver($form['query']->getData());
         }
 
         return $this->render('invokeai/search.html.twig', ['form' => $form->createView(), 'gallery' => $listing]);
@@ -73,25 +85,24 @@ class InvokeAiPicture extends AbstractController
         $listing = [];
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                $listing = $this->remote->searchPicture($form['query']->getData());
-            } catch (UnexpectedValueException $e) {
-                $this->addFlash('error', $e->getMessage());
-            } catch (TransportException $e) {
-                $this->addFlash('error', $e->getMessage());
-            }
+            $listing = $this->processSearchWithFailOver($form['query']->getData());
         }
 
         return $this->render('invokeai/vertex_search.html.twig', ['vertex' => $vertex, 'form' => $form->createView(), 'gallery' => $listing]);
     }
 
-    #[Route('/vertex/{pk}/append/{pic}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function vertexAppend(string $pk, string $pic, Request $request): Response
+    #[Route('/vertex/{pk}/append/{storage}/{pic}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
+    public function vertexAppend(string $pk, string $storage, string $pic, Request $request): Response
     {
+        $chain = [
+            'local' => $this->local,
+            'remote' => $this->remote
+        ];
+
         $vertex = $this->repository->load($pk);
         $form = $this->createForm(AppendRemotePicture::class, $vertex, [
-            'picture_url' => $this->remote->getAbsoluteUrl($pic),
-            'thumbnail_url' => $this->remote->getThumbnailUrl($pic),
+            'picture_url' => $chain[$storage]->getAbsoluteUrl($pic),
+            'thumbnail_url' => $chain[$storage]->getThumbnailUrl($pic),
             'default_name' => $vertex->getTitle() . ' - ' . $request->query->get('query')
         ]);
 
@@ -109,7 +120,7 @@ class InvokeAiPicture extends AbstractController
     #[Route('/local/{pic}', methods: ['GET'])]
     public function getLocal(string $pic): BinaryFileResponse
     {
-        return $this->remote->getPictureResponse($pic);
+        return $this->local->getPictureResponse($pic);
     }
 
 }

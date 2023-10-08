@@ -4,20 +4,11 @@
 {% block title %}Append picture{% endblock %}
 {% block header_title %}{{ vertex.title }}{% endblock %}
 
-{% block content %}
-    <section>
-        {{ form(form) }}
-    </section>
-    <section class="pure-g search">
-        {% for picture in gallery %}
-            <div class="pure-u-1-5">
-                <div class="thumbnail">
-                    <a href="{{ path('app_invokeaipicture_vertexappend', {pk: vertex.pk, pic:picture.name, query: form.query.vars.data}) }}">
-                        <img src="{{ picture.thumb }}" class="pure-img"/>
-                    </a>
-                    <div class="legend">{{ picture.width }}</div>
-                </div>
-            </div>
-        {% endfor %}
-    </section>
+{% block picture %}
+    <div class="thumbnail">
+        <a href="{{ path('app_invokeaipicture_vertexappend', {pk: vertex.pk, storage: title, pic:picture.name, query: form.query.vars.data}) }}">
+            <img src="{{ picture.thumb }}" class="pure-img"/>
+        </a>
+        <div class="legend">{{ picture.width }}</div>
+    </div>
 {% endblock %}

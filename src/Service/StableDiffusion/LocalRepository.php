@@ -41,7 +41,7 @@ class LocalRepository extends PictureRepository
 
     public function getThumbnailUrl(string $name): string
     {
-        return $this->routing->generate('app_invokeaipicture_getlocal', ['pic' => $name], UrlGeneratorInterface::ABSOLUTE_URL);
+        return $this->routing->generate('app_invokeaipicture_getlocal', ['pic' => $name]);
     }
 
     public function searchPicture(string $query, int $capFound = 10): array

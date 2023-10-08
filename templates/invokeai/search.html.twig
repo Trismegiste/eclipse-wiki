@@ -8,18 +8,23 @@
     <section>
         {{ form(form) }}
     </section>
-    <section class="pure-g search">
-        {% for picture in gallery %}
-            <div class="pure-u-1-5">
-                <div class="thumbnail">
-                    <a href="{{ picture.full }}" target="_blank">
-                        <img src="{{ picture.thumb }}" class="pure-img"/>
-                    </a>
-                    <div class="legend">{{ picture.width }}</div>
+    {% for title, storage in gallery %}
+        <h2>{{ title|capitalize }}</h2>
+        <section class="pure-g search">
+            {% for picture in storage %}
+                <div class="pure-u-1-5">
+                    {% block picture %}
+                    <div class="thumbnail">
+                        <a href="{{ picture.full }}" target="_blank">
+                            <img src="{{ picture.thumb }}" class="pure-img"/>
+                        </a>
+                        <div class="legend">{{ picture.width }}</div>
+                    </div>
+                    {% endblock %}
                 </div>
-            </div>
-        {% endfor %}
-    </section>
+            {% endfor %}
+        </section>
+    {% endfor %}
 {% endblock %}
 
 {% block stylesheets %}
@@ -31,6 +36,8 @@
         }
         .search img {
             margin: auto;
+            max-width: 256px;
+            max-height: 256px;
         }
     </style>
 {% endblock %}
