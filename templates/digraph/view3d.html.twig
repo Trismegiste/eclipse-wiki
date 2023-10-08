@@ -71,12 +71,16 @@
         scene.enablePhysics(new BABYLON.Vector3(0, 0, 0), hk);
         const advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
+        // light
+        var light = new BABYLON.HemisphericLight("hemiLight", new BABYLON.Vector3(0, 1, 0), scene)
+        light.specular = BABYLON.Color3.Black()
+        light.groundColor = new BABYLON.Color3(0.5, 0.5, 0.5)
+
         // Material
         const material = new Map()
         for (const [key, color] of colorScheme) {
             const matos = new BABYLON.StandardMaterial('mat-' + key)
-            matos.emissiveColor = color
-            matos.disableLighting = true
+            matos.diffuseColor = color
             material.set(key, matos)
         }
 
