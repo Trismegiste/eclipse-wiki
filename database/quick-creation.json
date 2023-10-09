@@ -1,0 +1,27 @@
+[
+    {
+        "__pclass": {
+            "$binary": "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTm9kZQ==",
+            "$type": "80"
+        },
+        "name": "root",
+        "bonus": {
+            "__pclass": {
+                "$binary": "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTW9kaWZpZXI=",
+                "$type": "80"
+            },
+            "attributes": {
+                "Vigueur": 1
+            },
+            "skills": {
+                "Combat": 1
+            },
+            "edges": [],
+            "networks": [],
+            "factions": [],
+            "backgrounds": [],
+            "morphs": []
+        },
+        "children": ["Malfrat"]
+    }
+]

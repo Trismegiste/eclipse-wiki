@@ -6,6 +6,9 @@
 
 namespace App\Entity\CreationTree;
 
+use MongoDB\BSON\Persistable;
+use Trismegiste\Strangelove\MongoDb\PersistableImpl;
+
 /**
  * Given bonus for a creation node
  */

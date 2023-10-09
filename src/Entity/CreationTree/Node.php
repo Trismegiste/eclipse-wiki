@@ -8,6 +8,7 @@ namespace App\Entity\CreationTree;
 
 use MongoDB\BSON\Persistable;
 use Trismegiste\Strangelove\MongoDb\PersistableImpl;
+use App\Entity\CreationTree\Modifier;
 
 /**
  * a creation node from the creation tree
@@ -20,5 +21,11 @@ class Node implements Persistable
     public string $name;
     public Modifier $bonus;
     public array $children;
+
+    public function __construct(string $name, Modifier $bonus)
+    {
+        $this->name = $name;
+        $this->bonus = $bonus;
+    }
 
 }
