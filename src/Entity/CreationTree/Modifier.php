@@ -33,10 +33,9 @@ class Modifier implements Persistable
         $this->networks = static::arrayValueSum($this->networks, $rh->networks);
         // cumulative bonus
         foreach ($rh->edges as $title) {
-            if (!array_search($title, $this->edges)) {
-                $this->edges[] = $title;
-            }
+            $this->edges[] = $title;
         }
+        $this->edges = array_unique($this->edges);
     }
 
     static public function arrayValueSum(array $lh, array $rh): array

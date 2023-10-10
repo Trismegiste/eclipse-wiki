@@ -14,7 +14,7 @@
                 "Vigueur": 1
             },
             "skills": {
-                "Combat": 1
+                "Athlétisme": 1
             },
             "edges": [],
             "networks": [],
@@ -22,6 +22,60 @@
             "backgrounds": [],
             "morphs": []
         },
-        "children": ["Malfrat"]
-    }
+        "children": ["inner","outer"]
+    },
+    {
+        "__pclass": {
+            "$binary": "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTm9kZQ==",
+            "$type": "80"
+        },
+        "name": "inner",
+        "bonus": {
+            "__pclass": {
+                "$binary": "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTW9kaWZpZXI=",
+                "$type": "80"
+            },
+            "attributes": {
+                "Intellect": 1
+            },
+            "skills": {
+                "Culture": 1
+            },
+            "edges": [],
+            "networks": {
+                "c-rep": 3
+            },
+            "factions": [],
+            "backgrounds": [],
+            "morphs": []
+        },
+        "children": []
+    },
+    {
+        "__pclass": {
+            "$binary": "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTm9kZQ==",
+            "$type": "80"
+        },
+        "name": "outer",
+        "bonus": {
+            "__pclass": {
+                "$binary": "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTW9kaWZpZXI=",
+                "$type": "80"
+            },
+            "attributes": {
+                "Force": 1
+            },
+            "skills": {
+                "Combat": 1
+            },
+            "edges": [],
+            "networks": {
+                "a-rep": 3
+            },
+            "factions": [],
+            "backgrounds": [],
+            "morphs": []
+        },
+        "children": []
+    }    
 ]
