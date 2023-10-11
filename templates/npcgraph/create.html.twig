@@ -19,7 +19,9 @@
             </template>
         </div>
         <div class="pure-g">
-
+            <div class="pure-u-1-6" x-data="{trait: getAttributes()}">
+                <div x-text="trait.AGI"></div>
+            </div>
         </div>
     </div>
 {% endblock %}
@@ -44,6 +46,26 @@
                     setChoiceAt: function (i, key) {
                         this.choices.splice(i)
                         this.choices[i] = key
+                    },
+                    getAttributes: function () {
+                        let cumulative = {}
+                        for (let choice of this.choices) {
+                            let bonus = this.seekNode(choice).bonus
+                            if (bonus.hasOwnProperty('attributes')) {
+                                for (const [key, value] of Object.entries(bonus.attributes)) {
+                                    if (!cumulative.hasOwnProperty(key)) {
+                                        cumulative[key] = 0
+                                    }
+                                    cumulative[key] += value
+                                }
+                            }
+                        }
+
+                        for (const [key, value] of Object.entries(cumulative)) {
+                            cumulative[key] = 4 + 2 * value
+                        }
+                        console.log(cumulative)
+                        return cumulative
                     }
                 }))
         })
