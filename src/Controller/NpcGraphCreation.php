@@ -23,10 +23,12 @@ class NpcGraphCreation extends AbstractController
         
     }
 
-    #[Route('/npc/quick/create', methods: ['GET', 'POST'])]
+    #[Route('/npc/graph/create', methods: ['GET', 'POST'])]
     public function create(Request $request): Response
     {
-        return $this->render('npcgraph/create.html.twig');
+        $fullGraph = $this->provider->load();
+
+        return $this->render('npcgraph/create.html.twig', ['graph' => json_encode($fullGraph)]);
     }
 
 }

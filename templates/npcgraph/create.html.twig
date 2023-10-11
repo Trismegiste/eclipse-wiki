@@ -4,5 +4,47 @@
 {% block header_title %}{{ block('title') }}{% endblock %}
 
 {% block content %}
-    YOLO
+    <div x-data="quickCreation">
+        <div class="pure-g">
+            <template x-for="(key, idx) in choices" :key="key">
+                <div class="pure-u-1-6" x-data="{selected: searchNode(key)}">
+                    <h2 x-text="selected.name"></h2>
+                    <template x-for="child in selected.children">
+                        <label x-data="{choice: searchNode(child)}">
+                            <input type="radio" x-bind:name="selected.name + '_child'" x-on:click="setChoiceAt(idx + 1, choice.name)">
+                            <span x-text="choice.name"></span>
+                        </label>
+                    </template>
+                </div>
+            </template>
+        </div>
+        <div class="pure-g">
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('quickCreation', () => ({
+                    graph: {{ graph|raw }},
+                    choices: ['root'],
+                    searchNode: function (key) {
+                        for (let node of this.graph) {
+                            if (node.name === key) {
+                                return node
+                            }
+                        }
+                        return null
+                    },
+                    setChoiceAt: function (i, key) {
+                        console.log(i, key)
+                        this.choices[i] = key
+                        console.log(this.choices)
+                    }
+                }))
+        })
+    </script>
 {% endblock %}
