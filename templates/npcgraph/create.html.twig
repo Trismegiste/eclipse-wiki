@@ -41,6 +41,7 @@
                     },
                     setChoiceAt: function (i, key) {
                         console.log(i, key)
+                        this.choices.splice(i)
                         this.choices[i] = key
                         console.log(this.choices)
                     }
