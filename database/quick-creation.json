@@ -11,16 +11,20 @@
                 "$type": "80"
             },
             "attributes": {
-                "Vigueur": 1
+                "VIG": 1,
+                "AGI": 1,
+                "FOR": 1,
+                "INT": 1,
+                "ÂME": 1
             },
             "skills": {
-                "Athlétisme": 1
-            },
-            "edges": [],
-            "networks": [],
-            "factions": [],
-            "backgrounds": [],
-            "morphs": []
+                "Athlétisme": 1,
+                "Perception": 1,
+                "Kinésique": 1,
+                "Culture": 1,
+                "Persuasion": 1,
+                "Discrétion": 1
+            }
         },
         "children": ["inner", "outer"]
     },
