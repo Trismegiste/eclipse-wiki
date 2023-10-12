@@ -20,6 +20,7 @@ class Node implements Persistable
 
     public string $name;
     public Modifier $bonus;
+    public array $keywords = [];
     public array $children;
 
     public function __construct(string $name, Modifier $bonus)

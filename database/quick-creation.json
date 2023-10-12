@@ -26,8 +26,38 @@
                 "Discrétion": 1
             }
         },
-        "children": ["inner", "outer"]
+        "children": ["femme", "homme"]
     },
+    {
+        "__pclass": {
+            "$binary": "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTm9kZQ==",
+            "$type": "80"
+        },
+        "name": "femme",
+        "bonus": {
+            "__pclass": {
+                "$binary": "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTW9kaWZpZXI=",
+                "$type": "80"
+            }
+        },
+        "children": ["inner", "outer"],
+        "keywords": ["female"]
+    },
+    {
+        "__pclass": {
+            "$binary": "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTm9kZQ==",
+            "$type": "80"
+        },
+        "name": "homme",
+        "bonus": {
+            "__pclass": {
+                "$binary": "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTW9kaWZpZXI=",
+                "$type": "80"
+            }
+        },
+        "children": ["inner", "outer"],
+        "keywords": ["male"]
+    },    
     {
         "__pclass": {
             "$binary": "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTm9kZQ==",

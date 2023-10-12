@@ -24,7 +24,6 @@ class Modifier implements Persistable
     public array $factions = [];
     public array $backgrounds = [];
     public array $morphs = [];
-    public array $keywords = [];
 
     public function increaseBy(Modifier $rh): Modifier
     {
