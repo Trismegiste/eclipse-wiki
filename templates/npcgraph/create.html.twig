@@ -20,6 +20,28 @@
         </div>
         <div class="pure-g">
             <div class="pure-u-1-6">
+                <h2>Background</h2>
+                <ul>
+                    <template x-for="value in getBackgrounds()">
+                        <li>
+                            <input type="radio" checked="true"/>
+                            <label x-text="value"></label>
+                        </li>
+                    </template>
+                </ul>
+            </div>
+            <div class="pure-u-1-6">
+                <h2>Faction</h2>
+                <ul>
+                    <template x-for="value in getFactions()">
+                        <li>
+                            <input type="radio" checked="true"/>
+                            <label x-text="value"></label>
+                        </li>
+                    </template>
+                </ul>
+            </div>
+            <div class="pure-u-1-6">
                 <h2>Attributs</h2>
                 <table class="pure-table">
                     <template x-for="(value, attr) in getAttributes()">
@@ -40,9 +62,9 @@
                         </tr>
                     </template>
                 </table>
-            </div>  
+            </div>
             <div class="pure-u-1-6">
-                <h2>Réseaux sociaux</h2>
+                <h2>Réseaux</h2>
                 <table class="pure-table">
                     <template x-for="(value, attr) in getNetworks()">
                         <tr>
@@ -51,7 +73,18 @@
                         </tr>
                     </template>
                 </table>
-            </div>  
+            </div>
+            <div class="pure-u-1-6">
+                <h2>Atouts</h2>
+                <ul>
+                    <template x-for="value in getEdges()">
+                        <li>
+                            <input type="checkbox" checked="true"/>
+                            <label x-text="value"></label>
+                        </li>
+                    </template>
+                </ul>
+            </div>
         </div>
     </div>
 {% endblock %}
@@ -79,22 +112,31 @@
                     },
                     getAttributes: function () {
                         let cumulative = {}
-                        for (const [key, value] of Object.entries(this.flattenWithSum('attributes'))) {
+                        for (const [key, value] of Object.entries(this.flattenObjectWithSum('attributes'))) {
                             cumulative[key] = 4 + 2 * value
                         }
                         return cumulative
                     },
                     getSkills: function () {
                         let cumulative = {}
-                        for (const [key, value] of Object.entries(this.flattenWithSum('skills'))) {
+                        for (const [key, value] of Object.entries(this.flattenObjectWithSum('skills'))) {
                             cumulative[key] = 2 + 2 * value
                         }
                         return cumulative
                     },
                     getNetworks: function () {
-                        return this.flattenWithSum('networks')
+                        return this.flattenObjectWithSum('networks')
                     },
-                    flattenWithSum: function (propertyKey) {
+                    getEdges: function () {
+                        return this.flattenArrayWithUnique('edges')
+                    },
+                    getBackgrounds: function () {
+                        return this.flattenArrayWithUnique('backgrounds')
+                    },
+                    getFactions: function () {
+                        return this.flattenArrayWithUnique('factions')
+                    },
+                    flattenObjectWithSum: function (propertyKey) {
                         let cumulative = {}
                         for (let choice of this.choices) {
                             let bonus = this.seekNode(choice).bonus
@@ -107,8 +149,19 @@
                                 }
                             }
                         }
-                        console.log(cumulative)
                         return cumulative
+                    },
+                    flattenArrayWithUnique: function (propertyKey) {
+                        let cumulative = new Set()
+                        for (let choice of this.choices) {
+                            let bonus = this.seekNode(choice).bonus
+                            if (bonus.hasOwnProperty(propertyKey)) {
+                                for (const value of bonus[propertyKey]) {
+                                    cumulative.add(value)
+                                }
+                            }
+                        }
+                        return Array.from(cumulative.values())
                     }
                 }))
         })

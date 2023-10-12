@@ -45,12 +45,14 @@
             "skills": {
                 "Culture": 1
             },
-            "edges": [],
+            "edges": [
+                "Vif"
+            ],
             "networks": {
                 "c-rep": 3
             },
-            "factions": [],
-            "backgrounds": [],
+            "factions": ["Hypercorp"],
+            "backgrounds": ["Évacué"],
             "morphs": []
         },
         "children": ["station", "planète"]
@@ -76,8 +78,8 @@
             "networks": {
                 "a-rep": 3
             },
-            "factions": [],
-            "backgrounds": [],
+            "factions": ["Malfrat"],
+            "backgrounds": ["Réfugié"],
             "morphs": []
         },
         "children": ["station", "flotte"]
@@ -97,7 +99,7 @@
             "skills": {},
             "edges": [],
             "networks": {},
-            "factions": [],
+            "factions": ["Ultimiste"],
             "backgrounds": [],
             "morphs": []
         },
@@ -117,10 +119,14 @@
             "attributes": {  
                 "VIG": 1
             },
-            "skills": {},
-            "edges": [],
+            "skills": {
+                "Conduite": 1
+            },
+            "edges": [
+                "Costaud"
+            ],
             "networks": {},
-            "factions": [],
+            "factions": ["Barsoomien"],
             "backgrounds": [],
             "morphs": []
         },
@@ -138,7 +144,9 @@
                 "$type": "80"
             },
             "attributes": {},
-            "skills": {},
+            "skills": {
+                "Pilotage": 1
+            },
             "edges": [],
             "networks": {},
             "factions": [],
