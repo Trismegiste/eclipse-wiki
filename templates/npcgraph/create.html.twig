@@ -22,10 +22,10 @@
             <div class="pure-u-1-6">
                 <h2>Background</h2>
                 <ul>
-                    <template x-for="value in getBackgrounds()">
-                        <li>
-                            <input type="radio" checked="true"/>
-                            <label x-text="value"></label>
+                    <template x-for="(value, idx) in getBackgrounds()">
+                        <li x-id="['bg']">
+                            <input type="radio" checked="true" name="background" x-bind:value="value" x-bind:id="$id('bg')"/>
+                            <label x-text="value" x-bind:for="$id('bg')"></label>
                         </li>
                     </template>
                 </ul>
@@ -34,9 +34,9 @@
                 <h2>Faction</h2>
                 <ul>
                     <template x-for="value in getFactions()">
-                        <li>
-                            <input type="radio" checked="true"/>
-                            <label x-text="value"></label>
+                        <li x-id="['fac']">
+                            <input type="radio" checked="true" name="faction" x-bind:value="value" x-bind:id="$id('fac')"/>
+                            <label x-text="value" x-bind:for="$id('fac')"></label>
                         </li>
                     </template>
                 </ul>
@@ -78,15 +78,24 @@
                 <h2>Atouts</h2>
                 <ul>
                     <template x-for="value in getEdges()">
-                        <li>
-                            <input type="checkbox" checked="true"/>
-                            <label x-text="value"></label>
+                        <li x-id="['edge']">
+                            <input type="checkbox" checked="true" name="edge" x-bind:value="value" x-bind:id="$id('edge')"/>
+                            <label x-text="value" x-bind:for="$id('edge')"></label>
                         </li>
                     </template>
                 </ul>
             </div>
         </div>
+        <div class="pure-u-1-6">
+            <h2>Keywords</h2>
+            <ul>
+                <template x-for="value in getKeywords()">
+                    <li x-text='value'></li>
+                </template>
+            </ul>
+        </div>
     </div>
+</div>
 {% endblock %}
 
 {% block javascripts %}
@@ -135,6 +144,18 @@
                     },
                     getFactions: function () {
                         return this.flattenArrayWithUnique('factions')
+                    },
+                    getKeywords: function () {
+                        let cumulative = new Set()
+                        for (let choice of this.choices) {
+                            let node = this.seekNode(choice)
+                            if (node.hasOwnProperty('keywords')) {
+                                for (const value of node.keywords) {
+                                    cumulative.add(value)
+                                }
+                            }
+                        }
+                        return Array.from(cumulative.values())
                     },
                     flattenObjectWithSum: function (propertyKey) {
                         let cumulative = {}
