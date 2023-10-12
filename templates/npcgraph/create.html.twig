@@ -19,9 +19,39 @@
             </template>
         </div>
         <div class="pure-g">
-            <div class="pure-u-1-6" x-data="{trait: getAttributes()}">
-                <div x-text="trait.AGI"></div>
+            <div class="pure-u-1-6">
+                <h2>Attributs</h2>
+                <table class="pure-table">
+                    <template x-for="(value, attr) in getAttributes()">
+                        <tr>
+                            <th x-text="attr"></th>
+                            <td x-text="'d'+value"></td>
+                        </tr>
+                    </template>
+                </table>
             </div>
+            <div class="pure-u-1-6">
+                <h2>Compétences</h2>
+                <table class="pure-table">
+                    <template x-for="(value, attr) in getSkills()">
+                        <tr>
+                            <th x-text="attr"></th>
+                            <td x-text="'d'+value"></td>
+                        </tr>
+                    </template>
+                </table>
+            </div>  
+            <div class="pure-u-1-6">
+                <h2>Réseaux sociaux</h2>
+                <table class="pure-table">
+                    <template x-for="(value, attr) in getNetworks()">
+                        <tr>
+                            <th x-text="attr"></th>
+                            <td x-text="value"></td>
+                        </tr>
+                    </template>
+                </table>
+            </div>  
         </div>
     </div>
 {% endblock %}
@@ -49,20 +79,33 @@
                     },
                     getAttributes: function () {
                         let cumulative = {}
+                        for (const [key, value] of Object.entries(this.flattenWithSum('attributes'))) {
+                            cumulative[key] = 4 + 2 * value
+                        }
+                        return cumulative
+                    },
+                    getSkills: function () {
+                        let cumulative = {}
+                        for (const [key, value] of Object.entries(this.flattenWithSum('skills'))) {
+                            cumulative[key] = 2 + 2 * value
+                        }
+                        return cumulative
+                    },
+                    getNetworks: function () {
+                        return this.flattenWithSum('networks')
+                    },
+                    flattenWithSum: function (propertyKey) {
+                        let cumulative = {}
                         for (let choice of this.choices) {
                             let bonus = this.seekNode(choice).bonus
-                            if (bonus.hasOwnProperty('attributes')) {
-                                for (const [key, value] of Object.entries(bonus.attributes)) {
+                            if (bonus.hasOwnProperty(propertyKey)) {
+                                for (const [key, value] of Object.entries(bonus[propertyKey])) {
                                     if (!cumulative.hasOwnProperty(key)) {
                                         cumulative[key] = 0
                                     }
                                     cumulative[key] += value
                                 }
                             }
-                        }
-
-                        for (const [key, value] of Object.entries(cumulative)) {
-                            cumulative[key] = 4 + 2 * value
                         }
                         console.log(cumulative)
                         return cumulative

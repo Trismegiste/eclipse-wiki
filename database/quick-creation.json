@@ -40,7 +40,7 @@
                 "$type": "80"
             },
             "attributes": {
-                "Intellect": 1
+                "INT": 1
             },
             "skills": {
                 "Culture": 1
@@ -67,7 +67,7 @@
                 "$type": "80"
             },
             "attributes": {
-                "Force": 1
+                "FOR": 1
             },
             "skills": {
                 "Combat": 1
@@ -114,7 +114,9 @@
                 "$binary": "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTW9kaWZpZXI=",
                 "$type": "80"
             },
-            "attributes": {},
+            "attributes": {  
+                "VIG": 1
+            },
             "skills": {},
             "edges": [],
             "networks": {},
