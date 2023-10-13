@@ -25,13 +25,14 @@ class NodeType extends AbstractType
     {
         $builder
                 ->add('name', TextType::class)
-                ->add('children', ChoiceType::class, ['multiple' => true, 'expanded' => true])
+                ->add('children', NodeLinkType::class, ['multiple' => true, 'expanded' => false, 'graph' => $options['graph']])
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('data_class', Node::class);
+        $resolver->setRequired('graph');
     }
 
 }

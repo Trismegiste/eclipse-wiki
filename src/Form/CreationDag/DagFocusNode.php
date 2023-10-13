@@ -7,7 +7,6 @@
 namespace App\Form\CreationDag;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -35,8 +34,13 @@ class DagFocusNode extends AbstractType
         }
 
         $builder
-                ->add('parents', ChoiceType::class, ['multiple' => true, 'expanded' => true, 'mapped' => false])
-                ->add('node', NodeType::class, ['property_path' => "[$idx]"])
+                ->add('parents', NodeLinkType::class, [
+                    'multiple' => true,
+                    'expanded' => false,
+                    'mapped' => false,
+                    'graph' => $options['data']
+                ])
+                ->add('node', NodeType::class, ['property_path' => "[$idx]", 'graph' => $options['data']])
                 ->add('save', SubmitType::class)
         ;
     }

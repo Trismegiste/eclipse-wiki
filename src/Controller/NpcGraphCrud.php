@@ -6,10 +6,9 @@
 
 namespace App\Controller;
 
+use App\Form\CreationDag\DagFocusNode;
 use App\Repository\CreationGraphProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -47,7 +46,7 @@ class NpcGraphCrud extends AbstractController
     {
         $fullGraph = $this->provider->load();
 
-        $form = $this->createForm(\App\Form\CreationDag\DagFocusNode::class, $fullGraph, ['focus' => 0]);
+        $form = $this->createForm(DagFocusNode::class, $fullGraph, ['focus' => $title]);
 
         return $this->render('npcgraph/edit.html.twig', ['form' => $form->createView()]);
     }
