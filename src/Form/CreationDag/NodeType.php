@@ -13,9 +13,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Description of NodeType
- *
- * @author trismegiste
+ * Form for a Node
  */
 class NodeType extends AbstractType
 {

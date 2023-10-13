@@ -12,9 +12,7 @@ use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Description of NodeLinkType
- *
- * @author trismegiste
+ * Choicetype of links to nodes from a DAG
  */
 class NodeLinkType extends AbstractType
 {

@@ -10,9 +10,7 @@ use Symfony\Component\Form\DataMapperInterface;
 use Traversable;
 
 /**
- * Description of ParentNodeMapper
- *
- * @author trismegiste
+ * Mapping for parent nodes
  */
 class ParentNodeMapper implements DataMapperInterface
 {

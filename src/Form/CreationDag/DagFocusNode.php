@@ -12,9 +12,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Description of DagFocusNode
- *
- * @author trismegiste
+ * Focus on one node from a DAG
  */
 class DagFocusNode extends AbstractType
 {
