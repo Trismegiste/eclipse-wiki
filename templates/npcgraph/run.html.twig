@@ -89,7 +89,7 @@
         <div class="pure-u-1-6">
             <h2>Keywords</h2>
             <ul>
-                <template x-for="value in getKeywords()">
+                <template x-for="value in getText2img()">
                     <li x-text='value'></li>
                 </template>
             </ul>
@@ -145,12 +145,12 @@
                     getFactions: function () {
                         return this.flattenArrayWithUnique('factions')
                     },
-                    getKeywords: function () {
+                    getText2img: function () {
                         let cumulative = new Set()
                         for (let choice of this.choices) {
                             let node = this.seekNode(choice)
-                            if (node.hasOwnProperty('keywords')) {
-                                for (const value of node.keywords) {
+                            if (node.hasOwnProperty('text2img')) {
+                                for (const value of node.text2img) {
                                     cumulative.add(value)
                                 }
                             }

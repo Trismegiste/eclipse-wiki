@@ -1,7 +1,12 @@
 {% extends "base.html.twig" %}
 
 {% block title %}Édition du nœud de création &lt;{{ form.node.vars.data.name }}&gt;{% endblock %}
-{% block header_title %}{{ block('title') }}{% endblock %}
+{% block header_title %}
+    <div style="float: right">
+        <a href="{{ path('app_npcgraphcrud_list') }}">&lt; Retour</a>
+    </div>
+    {{ block('title') }}
+{% endblock %}
 
 {% block content %}
     {{ form_start(form) }}
