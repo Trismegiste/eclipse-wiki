@@ -36,13 +36,15 @@ class DagFocusNode extends AbstractType
         $builder
                 ->add('parents', NodeLinkType::class, [
                     'multiple' => true,
-                    'expanded' => false,
-                    'mapped' => false,
+                    'expanded' => true,
                     'graph' => $options['data']
                 ])
                 ->add('node', NodeType::class, ['property_path' => "[$idx]", 'graph' => $options['data']])
                 ->add('save', SubmitType::class)
+                ->setMethod('PUT')
         ;
+        // mapper for parents
+        $builder->get('parents')->setDataMapper(new ParentNodeMapper());
     }
 
 }

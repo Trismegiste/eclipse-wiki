@@ -8,7 +8,6 @@ namespace App\Form\CreationDag;
 
 use App\Entity\CreationTree\Node;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -25,7 +24,11 @@ class NodeType extends AbstractType
     {
         $builder
                 ->add('name', TextType::class)
-                ->add('children', NodeLinkType::class, ['multiple' => true, 'expanded' => false, 'graph' => $options['graph']])
+                ->add('children', NodeLinkType::class, [
+                    'multiple' => true,
+                    'expanded' => true,
+                    'graph' => $options['graph']
+                ])
         ;
     }
 

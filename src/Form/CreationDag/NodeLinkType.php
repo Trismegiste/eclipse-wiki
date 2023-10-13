@@ -26,6 +26,7 @@ class NodeLinkType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
+        $resolver->setDefault('required', false);
         $resolver->setRequired('graph');
         $resolver->setAllowedTypes('graph', 'array');
         $resolver->setDefault('choices', function (Options $options) {
