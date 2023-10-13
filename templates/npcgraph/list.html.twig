@@ -1,7 +1,14 @@
 {% extends "base.html.twig" %}
 
 {% block title %}Listing des nœuds du graphe de création{% endblock %}
-{% block header_title %}{{ block('title') }}{% endblock %}
+{% block header_title %}
+    <div style="float: right">
+        <a href="{{ path('app_npcgraphcrud_run') }}" title="Création rapide">
+            <i class="icon-user-plus"></i>
+        </a>
+    </div>
+    {{ block('title') }}
+{% endblock %}
 
 {% block content %}
     <div class="pure-g">

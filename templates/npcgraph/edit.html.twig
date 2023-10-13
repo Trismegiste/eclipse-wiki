@@ -3,7 +3,9 @@
 {% block title %}Édition du nœud de création &lt;{{ form.node.vars.data.name }}&gt;{% endblock %}
 {% block header_title %}
     <div style="float: right">
-        <a href="{{ path('app_npcgraphcrud_list') }}">&lt; Retour</a>
+        <a href="{{ path('app_npcgraphcrud_list') }}" title="Retour à la liste">
+            <i class="icon-list"></i>
+        </a>
     </div>
     {{ block('title') }}
 {% endblock %}
