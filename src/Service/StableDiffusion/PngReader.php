@@ -99,7 +99,11 @@ class PngReader
      */
     public function getTextChunk(): array
     {
-        $rawTextData = $this->getChunks('tEXt');
+        try {
+            $rawTextData = $this->getChunks('tEXt');
+        } catch (\InvalidArgumentException $e) {
+            return [];
+        }
 
         $metadata = [];
         foreach ($rawTextData as $data) {

@@ -70,7 +70,7 @@ class InvokeAi extends PictureRepository
     {
         return $this->invokeaiCache->get("picturelisting-$offset-$limit", function (ItemInterface $item) use ($limit, $offset): \stdClass {
                     $item->expiresAfter(DateInterval::createFromDateString('1 minute'));
-                    $response = $this->client->request('GET', $this->baseUrl . "api/v1/images/?limit=$limit&offset=$offset");
+                    $response = $this->client->request('GET', $this->baseUrl . "api/v1/images/?limit=$limit&offset=$offset", ['timeout' => 2]);
 
                     if ($response->getStatusCode() !== 200) {
                         throw new UnexpectedValueException('API returned ' . $response->getStatusCode() . ' status code');
