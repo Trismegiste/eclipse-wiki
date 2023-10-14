@@ -25,19 +25,27 @@ class DagFocusNode extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        foreach ($options['data'] as $idx => $node) {
+        $graph = $options['data'];
+        $found = false;
+        foreach ($graph as $idx => $node) {
             if ($node->name === $options['focus']) {
+                $found = true;
                 break;
             }
+        }
+
+        if (!$found) {
+            throw \InvalidArgumentException('focus is invalid');
         }
 
         $builder
                 ->add('parents', NodeLinkType::class, [
                     'multiple' => true,
                     'expanded' => true,
-                    'graph' => $options['data']
+                    'graph' => $graph,
+                    'mapped' => false
                 ])
-                ->add('node', NodeType::class, ['property_path' => "[$idx]", 'graph' => $options['data']])
+                ->add('node', NodeType::class, ['property_path' => "[$idx]", 'graph' => $graph])
                 ->add('save', SubmitType::class)
                 ->setMethod('PUT')
         ;

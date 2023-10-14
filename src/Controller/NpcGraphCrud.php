@@ -47,6 +47,29 @@ class NpcGraphCrud extends AbstractController
         $fullGraph = $this->provider->load();
 
         $form = $this->createForm(DagFocusNode::class, $fullGraph, ['focus' => $title]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->provider->save($form->getData());
+
+            return $this->redirectToRoute('app_npcgraphcrud_list');
+        }
+
+        return $this->render('npcgraph/edit.html.twig', ['form' => $form->createView()]);
+    }
+
+    #[Route('/append', methods: ['GET', "PUT"])]
+    public function append(Request $request): Response
+    {
+        $fullGraph = $this->provider->load();
+        $fullGraph[] = new \App\Entity\CreationTree\Node('new-node');
+
+        $form = $this->createForm(DagFocusNode::class, $fullGraph, ['focus' => 'new-node']);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->provider->save($form->getData());
+
+            return $this->redirectToRoute('app_npcgraphcrud_list');
+        }
 
         return $this->render('npcgraph/edit.html.twig', ['form' => $form->createView()]);
     }

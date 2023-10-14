@@ -17,14 +17,6 @@ class Modifier implements Persistable
 
     use PersistableImpl;
 
-    public array $attributes = [];
-    public array $skills = [];
-    public array $edges = [];
-    public array $networks = [];
-    public array $factions = [];
-    public array $backgrounds = [];
-    public array $morphs = [];
-
     public function increaseBy(Modifier $rh): Modifier
     {
         // suming traits
