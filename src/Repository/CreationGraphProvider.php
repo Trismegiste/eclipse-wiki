@@ -21,7 +21,7 @@ class CreationGraphProvider
 
     public function save(array $nodes): void
     {
-        file_put_contents(self::FILE, \MongoDB\BSON\toJSON(\MongoDB\BSON\fromPHP($nodes)));
+        file_put_contents(self::FILE, \MongoDB\BSON\toJSON(\MongoDB\BSON\fromPHP(array_values($nodes))));
     }
 
 }

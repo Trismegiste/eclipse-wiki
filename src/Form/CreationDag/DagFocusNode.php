@@ -35,7 +35,7 @@ class DagFocusNode extends AbstractType
         }
 
         if (!$found) {
-            throw \InvalidArgumentException('focus is invalid');
+            throw new \InvalidArgumentException('focus is invalid');
         }
 
         $builder
