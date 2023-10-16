@@ -55,12 +55,15 @@ class NodeType extends AbstractType
                     'expanded' => false,
                     'required' => false
                 ])
+                ->add('text2img', TextType::class)
                 ->add('children', NodeLinkType::class, [
                     'multiple' => true,
                     'expanded' => true,
                     'graph' => $options['graph']
                 ])
         ;
+
+        $builder->get('text2img')->addModelTransformer(new KeywordSplitter());
     }
 
     public function configureOptions(OptionsResolver $resolver): void
