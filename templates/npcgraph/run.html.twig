@@ -146,28 +146,17 @@
                         return this.flattenArrayWithUnique('factions')
                     },
                     getText2img: function () {
-                        let cumulative = new Set()
-                        for (let choice of this.choices) {
-                            let node = this.seekNode(choice)
-                            if (node.hasOwnProperty('text2img')) {
-                                for (const value of node.text2img) {
-                                    cumulative.add(value)
-                                }
-                            }
-                        }
-                        return Array.from(cumulative.values())
+                        return this.flattenArrayWithUnique('text2img')
                     },
                     flattenObjectWithSum: function (propertyKey) {
                         let cumulative = {}
                         for (let choice of this.choices) {
-                            let bonus = this.seekNode(choice).bonus
-                            if (bonus.hasOwnProperty(propertyKey)) {
-                                for (const [key, value] of Object.entries(bonus[propertyKey])) {
-                                    if (!cumulative.hasOwnProperty(key)) {
-                                        cumulative[key] = 0
-                                    }
-                                    cumulative[key] += value
+                            let bonus = this.seekNode(choice)
+                            for (const [key, value] of Object.entries(bonus[propertyKey])) {
+                                if (!cumulative.hasOwnProperty(key)) {
+                                    cumulative[key] = 0
                                 }
+                                cumulative[key] += value
                             }
                         }
                         return cumulative
@@ -175,11 +164,9 @@
                     flattenArrayWithUnique: function (propertyKey) {
                         let cumulative = new Set()
                         for (let choice of this.choices) {
-                            let bonus = this.seekNode(choice).bonus
-                            if (bonus.hasOwnProperty(propertyKey)) {
-                                for (const value of bonus[propertyKey]) {
-                                    cumulative.add(value)
-                                }
+                            let bonus = this.seekNode(choice)
+                            for (const value of bonus[propertyKey]) {
+                                cumulative.add(value)
                             }
                         }
                         return Array.from(cumulative.values())

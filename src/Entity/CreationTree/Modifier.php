@@ -11,6 +11,7 @@ use Trismegiste\Strangelove\MongoDb\PersistableImpl;
 
 /**
  * Given bonus for a creation node
+ * @todo remove this class
  */
 class Modifier implements Persistable
 {
