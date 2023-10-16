@@ -6,16 +6,19 @@
 
 namespace App\Form\CreationDag;
 
+use Symfony\Component\Form\DataTransformerInterface;
+
 /**
- * Description of KeywordSplitter
- *
- * @author trismegiste
+ * Prompt query splitter
  */
-class KeywordSplitter implements \Symfony\Component\Form\DataTransformerInterface
+class KeywordSplitter implements DataTransformerInterface
 {
 
     public function reverseTransform(mixed $value): mixed
     {
+        if (empty($value)) {
+            return [];
+        }
         return explode(' ', $value);
     }
 

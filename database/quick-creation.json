@@ -1,1 +1,107 @@
-{ "0" : { "__pclass" : { "$binary" : "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTm9kZQ==", "$type" : "80" }, "name" : "root", "attributes" : { "AGI" : 1, "FOR" : 1, "VIG" : 1, "INT" : 1, "ÂME" : 1 }, "skills" : [  ], "edges" : [  ], "networks" : [  ], "factions" : [  ], "backgrounds" : [  ], "morphs" : [  ], "text2img" : [  ], "children" : [ "homme", "femme", "anarcho" ] }, "1" : { "__pclass" : { "$binary" : "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTm9kZQ==", "$type" : "80" }, "name" : "homme", "attributes" : [  ], "skills" : [  ], "edges" : [ "Blocage", "Biosculpteur", "Balayage" ], "networks" : [  ], "factions" : [  ], "backgrounds" : [  ], "morphs" : [  ], "text2img" : [ "male" ], "children" : [ "anarcho" ] }, "2" : { "__pclass" : { "$binary" : "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTm9kZQ==", "$type" : "80" }, "name" : "femme", "attributes" : { "INT" : 1 }, "skills" : { "Discrétion" : 1, "Informatique" : 1 }, "edges" : [ "Esquive", "Expert", "Extraction", "Feinte" ], "networks" : [  ], "factions" : [  ], "backgrounds" : [  ], "morphs" : [  ], "text2img" : [  ], "children" : [ "homme" ] }, "3" : { "__pclass" : { "$binary" : "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTm9kZQ==", "$type" : "80" }, "name" : "robot", "attributes" : [  ], "skills" : [  ], "edges" : [  ], "networks" : [  ], "factions" : [  ], "backgrounds" : [  ], "morphs" : [  ], "text2img" : [  ], "children" : [  ] }, "4" : { "__pclass" : { "$binary" : "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTm9kZQ==", "$type" : "80" }, "name" : "delete", "attributes" : { "VIG" : 1 }, "skills" : [  ], "edges" : [  ], "networks" : [  ], "factions" : [  ], "backgrounds" : [  ], "morphs" : [  ], "text2img" : [  ], "children" : [  ] }, "5" : { "__pclass" : { "$binary" : "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTm9kZQ==", "$type" : "80" }, "name" : "transhp", "attributes" : { "FOR" : 1 }, "skills" : { "Conduite" : 1 }, "edges" : [ "Acrobate de combat" ], "networks" : [  ], "factions" : [  ], "backgrounds" : [  ], "morphs" : [  ], "text2img" : [  ], "children" : [  ] }, "6" : { "__pclass" : { "$binary" : "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTm9kZQ==", "$type" : "80" }, "name" : "anarcho", "attributes" : { "AGI" : 1 }, "skills" : [  ], "edges" : [  ], "networks" : [  ], "factions" : [  ], "backgrounds" : [  ], "morphs" : [ "Bondisseur", "Circlonaute" ], "text2img" : [ "cyborg" ], "children" : [  ] } }
+{
+    "0": {
+        "__pclass": {
+            "$binary": "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTm9kZQ==",
+            "$type": "80"
+        },
+        "name": "root",
+        "attributes": {
+            "AGI": 1,
+            "FOR": 1,
+            "VIG": 1,
+            "INT": 1,
+            "ÂME": 1
+        },
+        "skills": {
+            "Athlétisme": 1,
+            "Culture générale": 1,
+            "Discrétion": 1,
+            "Kinésique": 1,
+            "Perception": 1,
+            "Persuasion": 1
+        },
+        "edges": [],
+        "networks": [],
+        "factions": [],
+        "backgrounds": [],
+        "morphs": ["Basique"],
+        "text2img": [],
+        "children": ["homme", "femme"]
+    },
+    "1": {
+        "__pclass": {
+            "$binary": "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTm9kZQ==",
+            "$type": "80"
+        },
+        "name": "homme",
+        "attributes": {
+            "VIG": 1
+        },
+        "skills": [],
+        "edges": [],
+        "networks": [],
+        "factions": [],
+        "backgrounds": [],
+        "morphs": [],
+        "text2img": ["male"],
+        "children": ["inner", "outer"]
+    },
+    "2": {
+        "__pclass": {
+            "$binary": "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTm9kZQ==",
+            "$type": "80"
+        },
+        "name": "femme",
+        "attributes": {
+            "ÂME": 1
+        },
+        "skills": [],
+        "edges": [],
+        "networks": [],
+        "factions": [],
+        "backgrounds": [],
+        "morphs": [],
+        "text2img": ["female"],
+        "children": ["inner", "outer"]
+    },
+    "3": {
+        "__pclass": {
+            "$binary": "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTm9kZQ==",
+            "$type": "80"
+        },
+        "name": "inner",
+        "attributes": [],
+        "skills": {
+            "Culture générale": 1
+        },
+        "edges": [],
+        "networks": {
+            "CivicNet": 1
+        },
+        "factions": ["Hypercorp", "Orbiteur", "Sélènite"],
+        "backgrounds": ["Rescapé : Enclavé", "Réinstancié : Civil", "Réinstancié : Infomorphe"],
+        "morphs": ["Hibernoïde", "Néoténique", "Sylphe", "Épisseur"],
+        "text2img": [],
+        "children": []
+    },
+    "4": {
+        "__pclass": {
+            "$binary": "QXBwXEVudGl0eVxDcmVhdGlvblRyZWVcTm9kZQ==",
+            "$type": "80"
+        },
+        "name": "outer",
+        "attributes": [],
+        "skills": {
+            "Athlétisme": 1
+        },
+        "edges": [],
+        "networks": {
+            "Cercle-A": 1
+        },
+        "factions": ["Anarchiste", "Extropien", "Titanien"],
+        "backgrounds": ["Hilote", "Rescapé : Miséreux", "Réinstancié : Civil", "Réinstancié : Infomorphe"],
+        "morphs": ["Bondisseur", "Châssis", "Synthétique", "Digimorphe"],
+        "text2img": [],
+        "children": []
+    }
+}

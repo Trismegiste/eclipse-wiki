@@ -55,7 +55,7 @@ class NodeType extends AbstractType
                     'expanded' => false,
                     'required' => false
                 ])
-                ->add('text2img', TextType::class)
+                ->add('text2img', TextType::class, ['required' => false])
                 ->add('children', NodeLinkType::class, [
                     'multiple' => true,
                     'expanded' => true,
