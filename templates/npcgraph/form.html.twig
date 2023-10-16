@@ -35,9 +35,9 @@
 {% endblock %}
 
 {% block _dag_focus_node_node_skills_widget %}
-    <div x-data="{ choices: {{ form.vars.data|keys|json_encode() }} }" class="pure-g">
+    <div x-data="{ choices: {{ form.vars.data|default({})|keys|json_encode() }} }" class="pure-g">
         {{ form_widget(form, {attr:{'x-model':'choices', class:'pure-u-1'}}) }}
-        <div class="pure-u-1">
+        <div class="pure-u-1 preview-choices">
             <template x-for="item in choices">
                 <label x-text="item"></label>
             </template>
@@ -46,12 +46,28 @@
 {% endblock %}
 
 {% block _dag_focus_node_node_edges_widget %}
-    <div x-data="{ choices: {{ form.vars.data|json_encode() }} }" class="pure-g">
+    <div x-data="{ choices: {{ form.vars.data|default([])|json_encode() }} }" class="pure-g">
         {{ form_widget(form, {attr:{'x-model':'choices', class:'pure-u-1'}}) }}
-        <div class="pure-u-1">
+        <div class="pure-u-1 preview-choices">
             <template x-for="item in choices">
                 <label x-text="item"></label>
             </template>
         </div>
     </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style> 
+        .preview-choices {
+            margin-bottom: 0.6em;
+        }
+        form fieldset .form-widget .preview-choices label {
+            display: inline-block;
+            background-color: lightgreen;
+            padding: 0.3em;
+            border-radius: 0.6em;
+            margin: 0 0.3em 0.6em;
+        }
+    </style>
 {% endblock %}

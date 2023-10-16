@@ -8,7 +8,6 @@ namespace App\Form\CreationDag;
 
 use App\Repository\AttributeProvider;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,7 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Bonus for Attribute on a creation Node
  */
-class AttributeBonus extends AbstractType implements DataTransformerInterface
+class AttributeBonus extends AbstractType
 {
 
     public function __construct(protected AttributeProvider $provider)
@@ -45,27 +44,7 @@ class AttributeBonus extends AbstractType implements DataTransformerInterface
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->addModelTransformer($this);
-    }
-
-    public function reverseTransform(mixed $value): mixed
-    {
-        $bonusModel = [];
-        foreach ($value as $attr) {
-            $bonusModel[$attr] = 1;
-        }
-
-        return $bonusModel;
-    }
-
-    public function transform(mixed $value): mixed
-    {
-        $choiceView = [];
-        foreach ($value as $attr => $bonus) {
-            $choiceView[$attr] = $attr;
-        }
-
-        return $choiceView;
+        $builder->addModelTransformer(new KeyBonusTransfo());
     }
 
 }
