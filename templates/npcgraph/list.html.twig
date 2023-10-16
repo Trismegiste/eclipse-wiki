@@ -11,17 +11,20 @@
 {% endblock %}
 
 {% block content %}
+    {% set cell_style = 'pure-u-1 pure-u-md-1-2 pure-u-xl-1-6' %}
     <div class="pure-g">
         {% for node in graph %}
-            <div class="pure-u-1 pure-u-xl-1-6">
+            <div class="{{ cell_style }}">
                 <h2>
                     {{ node.name|capitalize }}
                     <a href="{{ path('app_npcgraphcrud_edit', {title: node.name}) }}">
                         <i class="icon-edit"></i>
                     </a>   
                 </h2>
-
             </div>
         {% endfor %}
+        <div class="{{ cell_style }}">
+            <a href="{{ path('app_npcgraphcrud_append') }}" class="pure-button">Nouveau +</a>
+        </div>
     </div>
 {% endblock %}
