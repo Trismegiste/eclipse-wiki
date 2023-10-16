@@ -19,23 +19,31 @@ class DagFocusNode extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setRequired('focus');
+        $resolver->setDefault('focus', null);
         $resolver->setDefault('data_class', null);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $graph = $options['data'];
-        $found = false;
-        foreach ($graph as $idx => $node) {
-            if ($node->name === $options['focus']) {
-                $found = true;
-                break;
+        // Managing the focus on specific node or a new node
+        if (is_string($options['focus'])) {
+            $found = false;
+            foreach ($graph as $idx => $node) {
+                if ($node->name === $options['focus']) {
+                    $found = true;
+                    break;
+                }
             }
-        }
 
-        if (!$found) {
-            throw new \InvalidArgumentException('focus is invalid');
+            if (!$found) {
+                throw new \InvalidArgumentException('Option "focus" is invalid, the node "' . $options['focus'] . '" does not exist');
+            }
+        } else {
+            if (!array_is_list($graph)) {
+                throw new \DomainException('The Graph is not a list');
+            }
+            $idx = count($graph);
         }
 
         $builder
