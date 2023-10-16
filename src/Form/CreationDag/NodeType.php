@@ -27,6 +27,7 @@ class NodeType extends AbstractType
                 ->add('attributes', AttributeBonus::class)
                 ->add('skills', SkillBonus::class, ['required' => false])
                 ->add('edges', EdgeSelection::class, ['required' => false])
+                ->add('networks', NetworkBonus::class, ['required' => false])
                 ->add('children', NodeLinkType::class, [
                     'multiple' => true,
                     'expanded' => true,
