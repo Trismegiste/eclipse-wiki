@@ -7,7 +7,11 @@
 namespace App\Form\CreationDag;
 
 use App\Entity\CreationTree\Node;
+use App\Repository\BackgroundProvider;
+use App\Repository\FactionProvider;
+use App\Repository\MorphProvider;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -20,7 +24,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class NodeType extends AbstractType
 {
 
-    public function __construct(protected \App\Repository\BackgroundProvider $background, protected \App\Repository\FactionProvider $faction)
+    public function __construct(protected BackgroundProvider $background, protected FactionProvider $faction, protected MorphProvider $morph)
     {
         
     }
@@ -33,15 +37,23 @@ class NodeType extends AbstractType
                 ->add('skills', SkillBonus::class, ['required' => false])
                 ->add('edges', EdgeSelection::class, ['required' => false])
                 ->add('networks', NetworkBonus::class, ['required' => false])
-                ->add('backgrounds', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+                ->add('backgrounds', ChoiceType::class, [
                     'choices' => $this->background->getListing(),
                     'multiple' => true,
-                    'expanded' => false
+                    'expanded' => false,
+                    'required' => false
                 ])
-                ->add('factions', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+                ->add('factions', ChoiceType::class, [
                     'choices' => $this->faction->getListing(),
                     'multiple' => true,
-                    'expanded' => false
+                    'expanded' => false,
+                    'required' => false
+                ])
+                ->add('morphs', ChoiceType::class, [
+                    'choices' => $this->morph->getListing(),
+                    'multiple' => true,
+                    'expanded' => false,
+                    'required' => false
                 ])
                 ->add('children', NodeLinkType::class, [
                     'multiple' => true,
