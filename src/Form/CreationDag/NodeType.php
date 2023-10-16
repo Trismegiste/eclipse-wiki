@@ -25,6 +25,7 @@ class NodeType extends AbstractType
         $builder
                 ->add('name', TextType::class, ['constraints' => [new NotBlank()]])
                 ->add('attributes', AttributeBonus::class)
+                ->add('skills', SkillBonus::class)
                 ->add('children', NodeLinkType::class, [
                     'multiple' => true,
                     'expanded' => true,
