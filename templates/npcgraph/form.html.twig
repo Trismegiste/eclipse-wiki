@@ -56,9 +56,17 @@
     </div>
 {% endblock %}
 
+{% block _dag_focus_node_node_backgrounds_widget %}
+    {{ block('_dag_focus_node_node_edges_widget') }}
+{% endblock %}
+
+{% block _dag_focus_node_node_factions_widget %}
+    {{ block('_dag_focus_node_node_edges_widget') }}
+{% endblock %}
+
 {% block stylesheets %}
     {{ parent() }}
-    <style> 
+    <style>
         .preview-choices {
             margin-bottom: 0.6em;
         }
