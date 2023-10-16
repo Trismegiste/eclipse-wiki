@@ -39,7 +39,7 @@ class SkillBonus extends AbstractType implements DataTransformerInterface
         $resolver->setDefaults([
             'choices' => $choices,
             'multiple' => true,
-            'expanded' => true
+            'expanded' => false
         ]);
     }
 

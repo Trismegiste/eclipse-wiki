@@ -1,4 +1,5 @@
 {% extends "base.html.twig" %}
+{% form_theme(form) _self %}
 
 {% block title %}{% endblock %}
 {% block header_title %}
@@ -31,4 +32,26 @@
         {{ form_rest(form) }}
     </fieldset>
     {{ form_end(form) }}
+{% endblock %}
+
+{% block _dag_focus_node_node_skills_widget %}
+    <div x-data="{ choices: {{ form.vars.data|keys|json_encode() }} }" class="pure-g">
+        {{ form_widget(form, {attr:{'x-model':'choices', class:'pure-u-1'}}) }}
+        <div class="pure-u-1">
+            <template x-for="item in choices">
+                <label x-text="item"></label>
+            </template>
+        </div>
+    </div>
+{% endblock %}
+
+{% block _dag_focus_node_node_edges_widget %}
+    <div x-data="{ choices: {{ form.vars.data|json_encode() }} }" class="pure-g">
+        {{ form_widget(form, {attr:{'x-model':'choices', class:'pure-u-1'}}) }}
+        <div class="pure-u-1">
+            <template x-for="item in choices">
+                <label x-text="item"></label>
+            </template>
+        </div>
+    </div>
 {% endblock %}
