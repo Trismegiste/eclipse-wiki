@@ -12,29 +12,75 @@
 {% endblock %}
 
 {% block content %}
-    {{ form_start(form) }}
-    <fieldset>
-        <div class="pure-g">
-            <div class="pure-u-1-3 form-widget">
-                <h2>Parents</h2>
-                {{ form_widget(form.parents) }}
-            </div>
-            {% set childrenWidget = form_widget(form.node.children) %}
-            <div class="pure-u-1-3">
-                <h2>Nœud</h2>
-                {{ form_widget(form.node) }}
-            </div>
-            <div class="pure-u-1-3 form-widget">
-                <h2>Enfants</h2>
-                {{ childrenWidget|raw }}
-            </div>   
-        </div>
-        {{ form_rest(form) }}
-    </fieldset>
-    {{ form_end(form) }}
+    {{ form(form) }}
 {% endblock %}
 
-{% block _dag_focus_node_node_skills_widget %}
+{% block sidebar %}
+    <nav class="pure-menu">
+        <ul class="pure-menu-list">
+            {% for item in form.node %}
+                <li class="pure-menu-item">
+                    <a href="#{{ item.name.vars.id }}" class="pure-menu-link">
+                        {{ item.name.vars.data|capitalize }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block _full_tree_node_row %}
+    {{ form_widget(form) }}
+{% endblock %}
+
+{% block _full_tree_node_entry_row %}
+    {{ form_widget(form) }}
+{% endblock %}
+
+{% block _full_tree_node_entry_widget %}
+    <h2 id="{{ form.name.vars.id }}">{{ form.name.vars.data|capitalize }}</h2>
+    {% set division = 'pure-u-1 pure-u-xl-1-4' %}
+    <div class="pure-g">
+        <div class="{{ division }} form-widget">
+            <h3>{{ form_label(form.attributes) }}</h3>
+            {{ form_widget(form.attributes) }}
+        </div>
+        <div class="{{ division }} form-widget">
+            <h3>{{ form_label(form.skills) }}</h3>
+            {{ form_widget(form.skills) }}
+        </div>
+        <div class="{{ division }} form-widget">
+            <h3>{{ form_label(form.edges) }}</h3>
+            {{ form_widget(form.edges) }}
+        </div>
+        <div class="{{ division }} form-widget">
+            <h3>{{ form_label(form.networks) }}</h3>
+            {{ form_widget(form.networks) }}
+        </div>
+        <div class="{{ division }} form-widget">
+            <h3>{{ form_label(form.backgrounds) }}</h3>
+            {{ form_widget(form.backgrounds) }}
+        </div>
+        <div class="{{ division }} form-widget">
+            <h3>{{ form_label(form.factions) }}</h3>
+            {{ form_widget(form.factions) }}
+        </div>
+        <div class="{{ division }} form-widget">
+            <h3>{{ form_label(form.morphs) }}</h3>
+            {{ form_widget(form.morphs) }}
+        </div>
+        <div class="{{ division }} form-widget">
+            <h3>{{ form_label(form.text2img) }}</h3>
+            {{ form_widget(form.text2img) }}
+        </div>
+        <div class="pure-u-1 form-widget">
+            <h3>{{ form_label(form.children) }}</h3>
+            {{ form_widget(form.children) }}
+        </div> 
+    </div>
+{% endblock %}
+
+{% block _full_tree_node_entry_skills_widget %}
     <div x-data="{ choices: {{ form.vars.data|default({})|keys|json_encode() }} }" class="pure-g">
         {{ form_widget(form, {attr:{'x-model':'choices', class:'pure-u-1'}}) }}
         <div class="pure-u-1 preview-choices">
@@ -45,7 +91,7 @@
     </div>
 {% endblock %}
 
-{% block _dag_focus_node_node_edges_widget %}
+{% block _full_tree_node_entry_edges_widget %}
     <div x-data="{ choices: {{ form.vars.data|default([])|json_encode() }} }" class="pure-g">
         {{ form_widget(form, {attr:{'x-model':'choices', class:'pure-u-1'}}) }}
         <div class="pure-u-1 preview-choices">
@@ -56,15 +102,15 @@
     </div>
 {% endblock %}
 
-{% block _dag_focus_node_node_backgrounds_widget %}
-    {{ block('_dag_focus_node_node_edges_widget') }}
+{% block _full_tree_node_entry_backgrounds_widget %}
+    {{ block('_full_tree_node_entry_edges_widget') }}
 {% endblock %}
 
-{% block _dag_focus_node_node_factions_widget %}
-    {{ block('_dag_focus_node_node_edges_widget') }}
+{% block _full_tree_node_entry_factions_widget %}
+    {{ block('_full_tree_node_entry_edges_widget') }}
 {% endblock %}
 
-{% block _dag_focus_node_node_morphs_widget %}
+{% block _full_tree_node_entry_morphs_widget %}
     <div x-data="{ choices: {{ form.vars.data|default([])|json_encode() }} }" class="pure-g">
         {{ form_widget(form, {attr:{'x-model':'choices', class:'pure-u-1'}}) }}
         <div class="pure-u-1 preview-choices">
@@ -87,6 +133,16 @@
             padding: 0.3em;
             border-radius: 0.6em;
             margin: 0 0.3em 0.6em;
+        }
+        fieldset h2 {
+            margin-bottom: 0;
+            background-color: orangered;
+            padding: 0.2em;
+            color: white;
+        }
+        fieldset h3 {
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
         }
     </style>
 {% endblock %}

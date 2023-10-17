@@ -34,7 +34,8 @@ class NetworkBonus extends AbstractType
         $resolver->setDefaults([
             'choices' => $listing,
             'multiple' => true,
-            'expanded' => true
+            'expanded' => false,
+            'attr' => ['size' => 7]
         ]);
     }
 

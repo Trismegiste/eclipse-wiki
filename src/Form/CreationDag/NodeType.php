@@ -41,19 +41,22 @@ class NodeType extends AbstractType
                     'choices' => $this->background->getListing(),
                     'multiple' => true,
                     'expanded' => false,
-                    'required' => false
+                    'required' => false,
+                    'attr' => ['size' => 6]
                 ])
                 ->add('factions', ChoiceType::class, [
                     'choices' => $this->faction->getListing(),
                     'multiple' => true,
                     'expanded' => false,
-                    'required' => false
+                    'required' => false,
+                    'attr' => ['size' => 6]
                 ])
                 ->add('morphs', ChoiceType::class, [
                     'choices' => $this->morph->getListing(),
                     'multiple' => true,
                     'expanded' => false,
-                    'required' => false
+                    'required' => false,
+                    'attr' => ['size' => 6]
                 ])
                 ->add('text2img', TextType::class, ['required' => false])
                 ->add('children', NodeLinkType::class, [

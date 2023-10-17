@@ -57,7 +57,7 @@ class NpcGraphCrud extends AbstractController
     {
         $fullGraph = $this->provider->load();
 
-        $form = $this->createForm(DagFocusNode::class, $fullGraph, ['focus' => $title]);
+        $form = $this->createForm(\App\Form\CreationDag\FullTree::class, ['node' => $fullGraph]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->provider->save($form->getData());

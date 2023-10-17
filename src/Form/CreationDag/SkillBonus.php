@@ -38,7 +38,8 @@ class SkillBonus extends AbstractType
         $resolver->setDefaults([
             'choices' => $choices,
             'multiple' => true,
-            'expanded' => false
+            'expanded' => false,
+            'attr' => ['size' => 6]
         ]);
     }
 

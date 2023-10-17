@@ -38,7 +38,8 @@ class AttributeBonus extends AbstractType
         $resolver->setDefaults([
             'choices' => $choices,
             'multiple' => true,
-            'expanded' => true
+            'expanded' => false,
+            'attr' => ['size' => 5]
         ]);
     }
 
