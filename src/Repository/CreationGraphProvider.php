@@ -12,16 +12,23 @@ namespace App\Repository;
 class CreationGraphProvider
 {
 
-    const FILE = "/www/database/quick-creation.json";
+    const FILENAME = "quick-creation.json";
+
+    protected string $pathname;
+
+    public function __construct(\App\Service\Storage $storage)
+    {
+        $this->pathname = join_paths($storage->getRootDir(), self::FILENAME);
+    }
 
     public function load(): array
     {
-        return \MongoDB\BSON\toPHP(\MongoDB\BSON\fromJSON(file_get_contents(self::FILE)), ['root' => 'array']);
+        return \MongoDB\BSON\toPHP(\MongoDB\BSON\fromJSON(file_get_contents($this->pathname)), ['root' => 'array']);
     }
 
     public function save(array $nodes): void
     {
-        file_put_contents(self::FILE, \MongoDB\BSON\toJSON(\MongoDB\BSON\fromPHP(array_values($nodes))));
+        file_put_contents($this->pathname, \MongoDB\BSON\toJSON(\MongoDB\BSON\fromPHP(array_values($nodes))));
     }
 
 }
