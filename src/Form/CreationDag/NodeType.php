@@ -32,8 +32,7 @@ class NodeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-                ->add('name', TextType::class, ['constraints' => [new NotBlank()]])
-                ->add('attributes', AttributeBonus::class)
+                ->add('attributes', AttributeBonus::class, ['required' => false])
                 ->add('skills', SkillBonus::class, ['required' => false])
                 ->add('edges', EdgeSelection::class, ['required' => false])
                 ->add('networks', NetworkBonus::class, ['required' => false])

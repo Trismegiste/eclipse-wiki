@@ -1,11 +1,11 @@
 {% extends "base.html.twig" %}
 {% form_theme(form) _self %}
 
-{% block title %}{% endblock %}
+{% block title %}Édition du graphe de création{% endblock %}
 {% block header_title %}
     <div style="float: right">
-        <a href="{{ path('app_npcgraphcrud_list') }}" title="Retour à la liste">
-            <i class="icon-list"></i>
+        <a href="{{ path('app_npcgraphcrud_run') }}" title="Création">
+            <i class="icon-user-plus"></i>
         </a>
     </div>
     {{ block('title') }}
@@ -20,8 +20,8 @@
         <ul class="pure-menu-list">
             {% for item in form.node %}
                 <li class="pure-menu-item">
-                    <a href="#{{ item.name.vars.id }}" class="pure-menu-link">
-                        {{ item.name.vars.data|capitalize }}
+                    <a href="#{{ item.vars.id }}" class="pure-menu-link">
+                        {{ item.vars.data.name|capitalize }}
                     </a>
                 </li>
             {% endfor %}
@@ -38,7 +38,7 @@
 {% endblock %}
 
 {% block _full_tree_node_entry_widget %}
-    <h2 id="{{ form.name.vars.id }}">{{ form.name.vars.data|capitalize }}</h2>
+    <h2 id="{{ form.vars.id }}">{{ form.vars.data.name|capitalize }}</h2>
     {% set division = 'pure-u-1 pure-u-xl-1-4' %}
     <div class="pure-g">
         <div class="{{ division }} form-widget">
@@ -139,6 +139,9 @@
             background-color: orangered;
             padding: 0.2em;
             color: white;
+        }
+        fieldset h2:first-of-type {
+            margin-top: 0;
         }
         fieldset h3 {
             margin-top: 0.5em;

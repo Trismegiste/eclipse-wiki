@@ -6,7 +6,7 @@
 
 namespace App\Controller;
 
-use App\Form\CreationDag\DagFocusNode;
+use App\Form\CreationDag\FullTree;
 use App\Repository\CreationGraphProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,39 +33,20 @@ class NpcGraphCrud extends AbstractController
         return $this->render('npcgraph/run.html.twig', ['graph' => json_encode($fullGraph)]);
     }
 
-    #[Route('/list', methods: ['GET'])]
-    public function list(): Response
+    #[Route('/edit', methods: ['GET', "PUT"])]
+    public function edit(Request $request): Response
     {
         $fullGraph = $this->provider->load();
 
-        return $this->render('npcgraph/list.html.twig', ['graph' => $fullGraph]);
-    }
-
-    #[Route('/edit/{title}', methods: ['GET', "PUT"])]
-    public function edit(string $title, Request $request): Response
-    {
-        return $this->processNodeForm($request, 'npcgraph/edit.html.twig', $title);
-    }
-
-    #[Route('/append', methods: ['GET', "PUT"])]
-    public function append(Request $request): Response
-    {
-        return $this->processNodeForm($request, 'npcgraph/append.html.twig');
-    }
-
-    protected function processNodeForm(Request $request, string $template, ?string $title = null): Response
-    {
-        $fullGraph = $this->provider->load();
-
-        $form = $this->createForm(\App\Form\CreationDag\FullTree::class, ['node' => $fullGraph]);
+        $form = $this->createForm(FullTree::class, ['node' => $fullGraph]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->provider->save($form->getData());
+            $this->provider->save($form['node']->getData());
 
-            return $this->redirectToRoute('app_npcgraphcrud_list');
+            return $this->redirectToRoute('app_npcgraphcrud_run');
         }
 
-        return $this->render($template, ['form' => $form->createView()]);
+        return $this->render('npcgraph/form.html.twig', ['form' => $form->createView()]);
     }
 
 }
