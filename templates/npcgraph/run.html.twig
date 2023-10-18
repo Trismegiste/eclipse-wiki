@@ -49,7 +49,7 @@
                 <ul>
                     <template x-for="(value, idx) in getBackgrounds()">
                         <li x-id="['bg']">
-                            <input type="radio" checked="true" name="background" x-bind:value="value" x-bind:id="$id('bg')"/>
+                            <input type="radio" name="background" x-bind:value="value" x-bind:id="$id('bg')"/>
                             <label x-text="value" x-bind:for="$id('bg')"></label>
                         </li>
                     </template>
@@ -60,7 +60,7 @@
                 <ul>
                     <template x-for="value in getFactions()">
                         <li x-id="['fac']">
-                            <input type="radio" checked="true" name="faction" x-bind:value="value" x-bind:id="$id('fac')"/>
+                            <input type="radio" name="faction" x-bind:value="value" x-bind:id="$id('fac')"/>
                             <label x-text="value" x-bind:for="$id('fac')"></label>
                         </li>
                     </template>
@@ -115,7 +115,7 @@
                 <ul>
                     <template x-for="value in getMorphs()">
                         <li x-id="['mrf']">
-                            <input type="radio" checked="true" name="morph" x-bind:value="value" x-bind:id="$id('mrf')"/>
+                            <input type="radio" name="morph" x-bind:value="value" x-bind:id="$id('mrf')"/>
                             <label x-text="value" x-bind:for="$id('mrf')"></label>
                         </li>
                     </template>
