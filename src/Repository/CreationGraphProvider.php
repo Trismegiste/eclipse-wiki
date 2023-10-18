@@ -23,6 +23,10 @@ class CreationGraphProvider
 
     public function load(): array
     {
+        if (!file_exists($this->pathname)) {
+            return [];
+        }
+
         return \MongoDB\BSON\toPHP(\MongoDB\BSON\fromJSON(file_get_contents($this->pathname)), ['root' => 'array']);
     }
 
