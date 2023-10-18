@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Form for a Node
@@ -30,6 +31,10 @@ class NodeType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        if ($options['mode'] === 'creation') {
+            $builder->add('name', TextType::class, ['constraints' => [new NotBlank()]]);
+        }
+
         $builder
                 ->add('attributes', AttributeBonus::class, ['required' => false])
                 ->add('skills', SkillBonus::class, ['required' => false])
@@ -77,6 +82,7 @@ class NodeType extends AbstractType
         $resolver->setDefault('empty_data', function (FormInterface $form) {
             return new Node($form['name']->getData());
         });
+        $resolver->setDefault('mode', 'edition');
     }
 
 }

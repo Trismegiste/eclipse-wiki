@@ -23,7 +23,9 @@ class FullTree extends AbstractType
     {
         $builder->add('node', CollectionType::class, [
                     'entry_type' => NodeType::class,
-                    'entry_options' => ['graph' => $options['data']['node']]
+                    'entry_options' => ['graph' => $options['data']['node']],
+                    'allow_add' => true,
+                    'prototype_options' => ['mode' => 'creation']
                 ])
                 ->add('save', SubmitType::class)
                 ->setMethod('PUT')

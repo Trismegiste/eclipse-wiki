@@ -31,6 +31,7 @@
 
 {% block _full_tree_node_row %}
     {{ form_widget(form) }}
+    <button type="button" data-addlink class="pure-button">Ajouter un nœud</button>
 {% endblock %}
 
 {% block _full_tree_node_entry_row %}
@@ -38,7 +39,7 @@
 {% endblock %}
 
 {% block _full_tree_node_entry_widget %}
-    <h2 id="{{ form.vars.id }}">{{ form.vars.data.name|capitalize }}</h2>
+    <h2 id="{{ form.vars.id }}">{{ form.vars.data.name|default('<Nouveau nœud>')|capitalize }}</h2>
     <div class="pure-g">
         {% for key, child in form %}
             <div class="{{ child.vars.row_attr.class|default('pure-u-1 pure-u-xl-1-4') }} form-widget">
@@ -86,5 +87,23 @@
             margin-top: 0.5em;
             margin-bottom: 0.5em;
         }
+        button[data-addlink] {
+            margin: 1em auto 2em;
+        }
     </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', notused => {
+            const collectionHolder = document.getElementById('full_tree_node')
+            document.querySelector('button[data-addlink]').addEventListener("click", notused => {
+                let node = document.createElement('div')
+                node.innerHTML = collectionHolder.dataset.prototype
+                        .replace(/__name__/g, collectionHolder.children.length)
+                collectionHolder.appendChild(node)
+            })
+        })
+    </script>
 {% endblock %}
