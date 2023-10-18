@@ -12,22 +12,38 @@
 
 {% block content %}
     <div x-data="quickCreation">
-        <div class="pure-g">
+        <section class="pure-g node-selection">
             {% set cell_style = 'pure-u-1 pure-u-md-1-2 pure-u-xl-1-6' %}
             <template x-for="(key, idx) in choices" :key="key">
                 <div class="{{ cell_style }}" x-data="{selected: seekNode(key)}">
-                    <h2 x-text="selected.name"></h2>
-                    <template x-for="child in selected.children">
-                        <label x-data="{choice: seekNode(child)}">
-                            <input type="radio" x-bind:name="selected.name + '_child'" x-on:click="setChoiceAt(idx + 1, choice.name)">
-                            <span x-text="choice.name"></span>
-                        </label>
-                    </template>
+                    <article>
+                        <header>
+                            <h2 x-text="selected.name"></h2>
+                        </header>
+                        <div class="stats">
+                            <ul>
+                                <template x-for="idx, title in selected.skills">
+                                    <li x-text="title" class="skill"></li>
+                                </template>
+                                <template x-for="idx, title in selected.networks">
+                                    <li x-text="title" class="network"></li>
+                                </template>
+                            </ul>
+                        </div>
+                        <footer>
+                            <template x-for="child in selected.children">
+                                <label x-data="{choice: seekNode(child)}">
+                                    <input type="radio" x-bind:name="selected.name + '_child'" x-on:click="setChoiceAt(idx + 1, choice.name)">
+                                    <span x-text="choice.name"></span>
+                                </label>
+                            </template>
+                        </footer>
+                    </article>
                 </div>
             </template>
-        </div>
+        </section>
         <hr/>
-        <div class="pure-g">
+        <section class="pure-g result-selection">
             <div class="{{ cell_style }}">
                 <h2>Background</h2>
                 <ul>
@@ -113,7 +129,7 @@
                     </template>
                 </ul>
             </div> 
-        </div>
+        </section>
     </div>
 {% endblock %}
 
@@ -196,4 +212,35 @@
                 }))
         })
     </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .node-selection article {
+            margin: 0 1em 1em 0;
+        }
+        .node-selection header h2 {
+            background-color: orangered;
+            color: white;
+            padding: 0.2em;
+        }
+        .node-selection .stats ul {
+            padding-left: 1em;
+        }
+        .stats li.skill {
+            background-color: lightblue;
+        }
+        .stats li.network {
+            background-color: orange;
+        }
+        .node-selection footer {
+            background-color: lightgray;
+        }
+        .node-selection footer label {
+            display: block;
+            margin-bottom: 0.5em;
+            padding: 0.2em 0;
+        }
+    </style>
 {% endblock %}
