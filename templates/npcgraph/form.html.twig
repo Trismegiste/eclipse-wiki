@@ -39,44 +39,13 @@
 
 {% block _full_tree_node_entry_widget %}
     <h2 id="{{ form.vars.id }}">{{ form.vars.data.name|capitalize }}</h2>
-    {% set division = 'pure-u-1 pure-u-xl-1-4' %}
     <div class="pure-g">
-        <div class="{{ division }} form-widget">
-            <h3>{{ form_label(form.attributes) }}</h3>
-            {{ form_widget(form.attributes) }}
-        </div>
-        <div class="{{ division }} form-widget">
-            <h3>{{ form_label(form.skills) }}</h3>
-            {{ form_widget(form.skills) }}
-        </div>
-        <div class="{{ division }} form-widget">
-            <h3>{{ form_label(form.edges) }}</h3>
-            {{ form_widget(form.edges) }}
-        </div>
-        <div class="{{ division }} form-widget">
-            <h3>{{ form_label(form.networks) }}</h3>
-            {{ form_widget(form.networks) }}
-        </div>
-        <div class="{{ division }} form-widget">
-            <h3>{{ form_label(form.backgrounds) }}</h3>
-            {{ form_widget(form.backgrounds) }}
-        </div>
-        <div class="{{ division }} form-widget">
-            <h3>{{ form_label(form.factions) }}</h3>
-            {{ form_widget(form.factions) }}
-        </div>
-        <div class="{{ division }} form-widget">
-            <h3>{{ form_label(form.morphs) }}</h3>
-            {{ form_widget(form.morphs) }}
-        </div>
-        <div class="{{ division }} form-widget">
-            <h3>{{ form_label(form.text2img) }}</h3>
-            {{ form_widget(form.text2img) }}
-        </div>
-        <div class="pure-u-1 form-widget">
-            <h3>{{ form_label(form.children) }}</h3>
-            {{ form_widget(form.children) }}
-        </div> 
+        {% for key, child in form %}
+            <div class="{{ child.vars.row_attr.class|default('pure-u-1 pure-u-xl-1-4') }} form-widget">
+                <h3>{{ form_label(child) }}</h3>
+                {{ form_widget(child) }}
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}
 

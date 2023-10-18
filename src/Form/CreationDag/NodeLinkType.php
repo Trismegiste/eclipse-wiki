@@ -35,6 +35,7 @@ class NodeLinkType extends AbstractType
 
             return $choices;
         });
+        $resolver->setDefault('row_attr', ['class' => 'pure-u-1']);
     }
 
 }
