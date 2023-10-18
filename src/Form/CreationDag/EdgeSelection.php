@@ -38,7 +38,8 @@ class EdgeSelection extends AbstractType
             'choices' => $choices,
             'multiple' => true,
             'expanded' => false,
-            'attr' => ['size' => 6]
+            'attr' => ['size' => 6],
+            'block_prefix' => 'multiselect_with_tags'
         ]);
     }
 

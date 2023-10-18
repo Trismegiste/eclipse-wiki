@@ -16,7 +16,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Form for a Node
@@ -41,21 +40,24 @@ class NodeType extends AbstractType
                     'multiple' => true,
                     'expanded' => false,
                     'required' => false,
-                    'attr' => ['size' => 6]
+                    'attr' => ['size' => 6],
+                    'block_prefix' => 'multiselect_with_tags'
                 ])
                 ->add('factions', ChoiceType::class, [
                     'choices' => $this->faction->getListing(),
                     'multiple' => true,
                     'expanded' => false,
                     'required' => false,
-                    'attr' => ['size' => 6]
+                    'attr' => ['size' => 6],
+                    'block_prefix' => 'multiselect_with_tags'
                 ])
                 ->add('morphs', ChoiceType::class, [
                     'choices' => $this->morph->getListing(),
                     'multiple' => true,
                     'expanded' => false,
                     'required' => false,
-                    'attr' => ['size' => 6]
+                    'attr' => ['size' => 6],
+                    'block_prefix' => 'multiselect_with_tags'
                 ])
                 ->add('text2img', TextType::class, ['required' => false])
                 ->add('children', NodeLinkType::class, [

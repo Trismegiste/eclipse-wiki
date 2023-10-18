@@ -35,7 +35,7 @@ class KeyBonusTransfo implements DataTransformerInterface
 
         if (is_array($value)) {
             foreach ($value as $trait => $bonus) {
-                $choiceView[$trait] = $trait;
+                $choiceView[] = $trait;
             }
         }
 
