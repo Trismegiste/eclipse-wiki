@@ -7,7 +7,9 @@
 namespace App\Controller;
 
 use App\Form\CreationDag\FullTree;
+use App\Form\NpcCreate;
 use App\Repository\CreationGraphProvider;
+use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class NpcGraphCrud extends AbstractController
 {
 
-    public function __construct(protected CreationGraphProvider $provider)
+    public function __construct(protected CreationGraphProvider $provider, protected VertexRepository $vertexRepo)
     {
         
     }
@@ -30,7 +32,19 @@ class NpcGraphCrud extends AbstractController
     {
         $fullGraph = $this->provider->load();
 
-        return $this->render('npcgraph/run.html.twig', ['graph' => json_encode($fullGraph)]);
+        $form = $this->createForm(NpcCreate::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->vertexRepo->save($form->getData());
+
+            return $this->redirectToRoute('app_npcgraphcrud_run');
+        }
+
+        return $this->render('npcgraph/run.html.twig', [
+                    'graph' => json_encode($fullGraph),
+                    'form' => $form->createView()
+        ]);
     }
 
     #[Route('/edit', methods: ['GET', "PUT"])]

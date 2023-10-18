@@ -1,4 +1,5 @@
 {% extends "base.html.twig" %}
+{% form_theme form _self %}
 
 {% block title %}Création rapide de Transhumain{% endblock %}
 {% block header_title %}
@@ -43,28 +44,14 @@
             </template>
         </section>
         <hr/>
+        {{ form_start(form) }}
+        {{ form_row(form.title) }}
         <section class="pure-g result-selection">
             <div class="{{ cell_style }}">
-                <h2>Background</h2>
-                <ul>
-                    <template x-for="(value, idx) in getBackgrounds()">
-                        <li x-id="['bg']">
-                            <input type="radio" name="background" x-bind:value="value" x-bind:id="$id('bg')"/>
-                            <label x-text="value" x-bind:for="$id('bg')"></label>
-                        </li>
-                    </template>
-                </ul>
+                {{ form_row(form.background) }}
             </div>
             <div class="{{ cell_style }}">
-                <h2>Faction</h2>
-                <ul>
-                    <template x-for="value in getFactions()">
-                        <li x-id="['fac']">
-                            <input type="radio" name="faction" x-bind:value="value" x-bind:id="$id('fac')"/>
-                            <label x-text="value" x-bind:for="$id('fac')"></label>
-                        </li>
-                    </template>
-                </ul>
+                {{ form_row(form.faction) }}
             </div>
             <div class="{{ cell_style }}">
                 <h2>Attributs</h2>
@@ -111,15 +98,7 @@
                 </ul>
             </div>
             <div class="{{ cell_style }}">
-                <h2>Morphs</h2>
-                <ul>
-                    <template x-for="value in getMorphs()">
-                        <li x-id="['mrf']">
-                            <input type="radio" name="morph" x-bind:value="value" x-bind:id="$id('mrf')"/>
-                            <label x-text="value" x-bind:for="$id('mrf')"></label>
-                        </li>
-                    </template>
-                </ul>
+                {{ form_row(form.morph) }}
             </div>  
             <div class="{{ cell_style }}">
                 <h2>Keywords</h2>
@@ -130,7 +109,44 @@
                 </ul>
             </div> 
         </section>
+        {{ form_end(form) }}
     </div>
+{% endblock %}
+
+{% block _npc_background_row %}
+    <h2>{{ form_label(form) }}</h2>
+    <ul>
+        <template x-for="(value, idx) in getBackgrounds()">
+            <li x-id="['bg']">
+                <input type="radio" name="{{ form.vars.full_name }}" x-bind:value="value" x-bind:id="$id('bg')" required/>
+                <label x-text="value" x-bind:for="$id('bg')"></label>
+            </li>
+        </template>
+    </ul>
+{% endblock %}
+
+{% block _npc_faction_row %}
+    <h2>{{ form_label(form) }}</h2>
+    <ul>
+        <template x-for="value in getFactions()">
+            <li x-id="['fac']">
+                <input type="radio" name="{{ form.vars.full_name }}" x-bind:value="value" x-bind:id="$id('fac')" required/>
+                <label x-text="value" x-bind:for="$id('fac')"></label>
+            </li>
+        </template>
+    </ul>
+{% endblock %}
+
+{% block _npc_morph_row %}
+    <h2>{{ form_label(form) }}</h2>
+    <ul>
+        <template x-for="value in getMorphs()">
+            <li x-id="['mrf']">
+                <input type="radio" name="{{ form.vars.full_name }}" x-bind:value="value" x-bind:id="$id('mrf')" required/>
+                <label x-text="value" x-bind:for="$id('mrf')"></label>
+            </li>
+        </template>
+    </ul>
 {% endblock %}
 
 {% block javascripts %}
