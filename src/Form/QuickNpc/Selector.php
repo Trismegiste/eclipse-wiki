@@ -37,7 +37,12 @@ class Selector extends AbstractType
                     'allow_add' => true,
                     'by_reference' => false
                 ])
-        ;
+                ->add('economy', CollectionType::class, [
+                    'entry_type' => SocNetHiddenStat::class,
+                    'allow_add' => true
+        ]);
+
+        $builder->get('economy')->setDataMapper(new SocNetMapper());
     }
 
 }

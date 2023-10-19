@@ -60,15 +60,7 @@
                 {{ form_row(form.skills) }}
             </div>
             <div class="{{ cell_style }}">
-                <h2>Réseaux</h2>
-                <table class="pure-table">
-                    <template x-for="(value, attr) in getNetworks()">
-                        <tr>
-                            <th x-text="attr"></th>
-                            <td x-text="value"></td>
-                        </tr>
-                    </template>
-                </table>
+                {{ form_row(form.economy) }}
             </div>
             <div class="{{ cell_style }}">
                 {{ form_row(form.edges) }}
@@ -160,6 +152,20 @@
                 <td x-text="'d'+getAttributes()[attr]"></td>
             <input type="hidden" x-bind:name="'selector[attributes][' + idx + '][name]'" x-bind:value="attr"/>
             <input type="hidden" x-bind:name="'selector[attributes][' + idx + '][roll]'" x-bind:value="getAttributes()[attr]"/>
+            </tr>
+        </template>
+    </table>
+{% endblock %}
+
+{% block _selector_economy_row %}
+    <h2>{{ form_label(form) }}</h2>
+    <table class="pure-table">
+        <template x-for="(attr, idx) in Object.keys(getNetworks())" :key="attr">
+            <tr>
+                <th x-text="attr"></th>
+                <td x-text="getNetworks()[attr]"></td>
+            <input type="hidden" x-bind:name="'selector[economy][' + idx + '][key]'" x-bind:value="attr"/>
+            <input type="hidden" x-bind:name="'selector[economy][' + idx + '][value]'" x-bind:value="getNetworks()[attr]"/>
             </tr>
         </template>
     </table>
