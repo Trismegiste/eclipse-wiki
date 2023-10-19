@@ -46,7 +46,7 @@
         <hr/>
         {{ form_start(form) }}
         {{ form_row(form.title) }}
-        <section class="pure-g result-selection">
+        <section class="pure-g result-selection" x-data="{ keywords: {}, avatar: [] }">
             <div class="{{ cell_style }}">
                 {{ form_row(form.background) }}
             </div>
@@ -71,10 +71,19 @@
             <div class="{{ cell_style }}">
                 <h2>Keywords</h2>
                 <ul>
-                    <template x-for="value in getText2img()">
-                        <li x-text='value'></li>
+                    <template x-for="(value, idx) in getText2img()" :key="value">
+                        <li x-id="[value]">
+                            <input type="checkbox" x-init="keywords[value]=true" x-model="keywords[value]" x-bind:id="$id(value)"/>
+                            <label x-text="value" x-bind:for="$id(value)"></label>
+                        </li>                
                     </template>
                 </ul>
+            </div> 
+            <div class="pure-u-1 pure-u-xl-2-3" 
+                 x-init="$watch('keywords', updateAvatar )">
+                <template x-for="(value, idx) in avatar" :key="idx">
+                    <img x-bind:src="value.thumbnailUrl"/>
+                </template>
             </div> 
         </section>
         {{ form_end(form) }}
@@ -246,6 +255,21 @@
                             }
                         }
                         return Array.from(cumulative.values())
+                    },
+                    updateAvatar(keywords) {
+                        let query = ''
+                        for (let key in keywords) {
+                            if (keywords[key]) {
+                                query += key + ' '
+                            }
+                        }
+                        fetch('{{ path('app_invokeaipicture_ajaxsearch')}}')
+                                .then(resp => {
+                                    return resp.json()
+                                })
+                                .then(result => {
+                                    this.avatar = result
+                                })
                     }
                 }))
         })
