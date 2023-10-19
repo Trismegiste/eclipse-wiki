@@ -8,6 +8,7 @@ namespace App\Form\QuickNpc;
 
 use App\Form\NpcCreate;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
@@ -25,7 +26,13 @@ class Selector extends AbstractType
     {
         $builder->remove('surnameLang')
                 ->remove('content');
-        $builder->add('edges', EdgeCheckType::class);
+        $builder->add('edges', EdgeCheckType::class)
+                ->add('skills', CollectionType::class, [
+                    'entry_type' => SkillHiddenStat::class,
+                    'allow_add' => true,
+                    'by_reference' => false
+                ])
+        ;
     }
 
 }

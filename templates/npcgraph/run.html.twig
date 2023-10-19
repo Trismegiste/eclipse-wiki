@@ -65,15 +65,7 @@
                 </table>
             </div>
             <div class="{{ cell_style }}">
-                <h2>Compétences</h2>
-                <table class="pure-table">
-                    <template x-for="(value, attr) in getSkills()">
-                        <tr>
-                            <th x-text="attr"></th>
-                            <td x-text="'d'+value"></td>
-                        </tr>
-                    </template>
-                </table>
+                {{ form_row(form.skills) }}
             </div>
             <div class="{{ cell_style }}">
                 <h2>Réseaux</h2>
@@ -151,6 +143,21 @@
             </li>
         </template>
     </ul>
+{% endblock %}
+
+{% block _selector_skills_row %}
+    <h2>{{ form_label(form) }}</h2>
+    {{ form_widget(form) }}
+    <table class="pure-table">
+        <template x-for="(attr, idx) in Object.keys(getSkills())" :key="attr">
+            <tr>
+                <th x-text="attr"></th>
+                <td x-text="'d'+getSkills()[attr]"></td>
+            <input type="hidden" x-bind:name="'selector[skills][' + idx + '][name]'" x-bind:value="attr"/>
+            <input type="hidden" x-bind:name="'selector[skills][' + idx + '][roll]'" x-bind:value="getSkills()[attr]"/>
+            </tr>
+        </template>
+    </table>
 {% endblock %}
 
 {% block javascripts %}

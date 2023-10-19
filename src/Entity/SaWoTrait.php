@@ -13,7 +13,7 @@ abstract class SaWoTrait implements Indexable
 {
 
     protected string $name;
-    public $dice;
+    public ?int $dice = null;
     public int $modifier = 0; // after d12
 
     public function __construct(string $str)
