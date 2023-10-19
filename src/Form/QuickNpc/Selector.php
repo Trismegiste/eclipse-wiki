@@ -27,6 +27,11 @@ class Selector extends AbstractType
         $builder->remove('surnameLang')
                 ->remove('content');
         $builder->add('edges', EdgeCheckType::class)
+                ->add('attributes', CollectionType::class, [
+                    'entry_type' => AttributeHiddenStat::class,
+                    'allow_add' => true,
+                    'by_reference' => false
+                ])
                 ->add('skills', CollectionType::class, [
                     'entry_type' => SkillHiddenStat::class,
                     'allow_add' => true,

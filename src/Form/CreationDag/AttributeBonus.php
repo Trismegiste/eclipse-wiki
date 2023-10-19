@@ -33,7 +33,7 @@ class AttributeBonus extends AbstractType
         $listing = $this->provider->getListing();
         $choices = [];
         foreach ($listing as $attr) {
-            $choices[$attr->getAbbrev()] = $attr->getAbbrev();
+            $choices[$attr->getName()] = $attr->getName();
         }
         $resolver->setDefaults([
             'choices' => $choices,
