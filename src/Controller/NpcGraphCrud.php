@@ -7,7 +7,7 @@
 namespace App\Controller;
 
 use App\Form\CreationDag\FullTree;
-use App\Form\NpcCreate;
+use App\Form\QuickNpc\Selector;
 use App\Repository\CreationGraphProvider;
 use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,13 +32,14 @@ class NpcGraphCrud extends AbstractController
     {
         $fullGraph = $this->provider->load();
 
-        $form = $this->createForm(NpcCreate::class);
+        $form = $this->createForm(Selector::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->vertexRepo->save($form->getData());
+            $npc = $form->getData();
+            $this->vertexRepo->save($npc);
 
-            return $this->redirectToRoute('app_npcgraphcrud_run');
+            return $this->redirectToRoute('app_npcgenerator_edit', ['pk' => $npc->getPk()]);
         }
 
         return $this->render('npcgraph/run.html.twig', [

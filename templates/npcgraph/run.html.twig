@@ -87,15 +87,7 @@
                 </table>
             </div>
             <div class="{{ cell_style }}">
-                <h2>Atouts</h2>
-                <ul>
-                    <template x-for="value in getEdges()">
-                        <li x-id="['edge']">
-                            <input type="checkbox" checked="true" name="edge" x-bind:value="value" x-bind:id="$id('edge')"/>
-                            <label x-text="value" x-bind:for="$id('edge')"></label>
-                        </li>
-                    </template>
-                </ul>
+                {{ form_row(form.edges) }}
             </div>
             <div class="{{ cell_style }}">
                 {{ form_row(form.morph) }}
@@ -113,37 +105,49 @@
     </div>
 {% endblock %}
 
-{% block _npc_background_row %}
+{% block _selector_background_row %}
     <h2>{{ form_label(form) }}</h2>
     <ul>
-        <template x-for="(value, idx) in getBackgrounds()">
-            <li x-id="['bg']">
-                <input type="radio" name="{{ form.vars.full_name }}" x-bind:value="value" x-bind:id="$id('bg')" required/>
-                <label x-text="value" x-bind:for="$id('bg')"></label>
+        <template x-for="(value, idx) in getBackgrounds()" :key="value">
+            <li x-id="[value]">
+                <input type="radio" name="{{ form.vars.full_name }}" x-bind:value="value" x-bind:id="$id(value)" required/>
+                <label x-text="value" x-bind:for="$id(value)"></label>
             </li>
         </template>
     </ul>
 {% endblock %}
 
-{% block _npc_faction_row %}
+{% block _selector_faction_row %}
     <h2>{{ form_label(form) }}</h2>
     <ul>
-        <template x-for="value in getFactions()">
-            <li x-id="['fac']">
-                <input type="radio" name="{{ form.vars.full_name }}" x-bind:value="value" x-bind:id="$id('fac')" required/>
-                <label x-text="value" x-bind:for="$id('fac')"></label>
+        <template x-for="value in getFactions()" :key="value">
+            <li x-id="[value]">
+                <input type="radio" name="{{ form.vars.full_name }}" x-bind:value="value" x-bind:id="$id(value)" required/>
+                <label x-text="value" x-bind:for="$id(value)"></label>
             </li>
         </template>
     </ul>
 {% endblock %}
 
-{% block _npc_morph_row %}
+{% block _selector_morph_row %}
     <h2>{{ form_label(form) }}</h2>
     <ul>
-        <template x-for="value in getMorphs()">
-            <li x-id="['mrf']">
-                <input type="radio" name="{{ form.vars.full_name }}" x-bind:value="value" x-bind:id="$id('mrf')" required/>
-                <label x-text="value" x-bind:for="$id('mrf')"></label>
+        <template x-for="value in getMorphs()" :key="value">
+            <li x-id="[value]">
+                <input type="radio" name="{{ form.vars.full_name }}" x-bind:value="value" x-bind:id="$id(value)" required/>
+                <label x-text="value" x-bind:for="$id(value)"></label>
+            </li>
+        </template>
+    </ul>
+{% endblock %}
+
+{% block _selector_edges_row %}
+    <h2>{{ form_label(form) }}</h2>
+    <ul>
+        <template x-for="value in getEdges()" :key="value">
+            <li x-id="[value]">
+                <input type="checkbox" checked="true" name="{{ form.vars.full_name }}[]" x-bind:value="value" x-bind:id="$id(value)"/>
+                <label x-text="value" x-bind:for="$id(value)"></label>
             </li>
         </template>
     </ul>
