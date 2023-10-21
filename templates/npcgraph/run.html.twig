@@ -47,27 +47,11 @@
         {{ form_start(form) }}
         {{ form_row(form.title) }}
         <section class="pure-g result-selection">
-            <div class="{{ cell_style }}">
-                {{ form_row(form.background) }}
-            </div>
-            <div class="{{ cell_style }}">
-                {{ form_row(form.faction) }}
-            </div>
-            <div class="{{ cell_style }}">
-                {{ form_row(form.attributes) }}
-            </div>
-            <div class="{{ cell_style }}">
-                {{ form_row(form.skills) }}
-            </div>
-            <div class="{{ cell_style }}">
-                {{ form_row(form.economy) }}
-            </div>
-            <div class="{{ cell_style }}">
-                {{ form_row(form.edges) }}
-            </div>
-            <div class="{{ cell_style }}">
-                {{ form_row(form.morph) }}
-            </div>  
+            {% for child in ['background', 'faction', 'attributes', 'skills', 'economy', 'edges', 'morph'] %}
+                <div class="{{ cell_style }}">
+                    {{ form_row(form[child]) }}
+                </div>
+            {% endfor %}
             <div class="{{ cell_style }}">
                 <h2>Keywords</h2>
                 <ul>

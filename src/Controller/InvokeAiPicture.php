@@ -124,12 +124,12 @@ class InvokeAiPicture extends AbstractController
     }
 
     /**
-     * Image search against InvokeAI api
+     * Image search against local storage of InvokeAI
      */
     #[Route('/ajax/search', methods: ['GET'])]
     public function ajaxSearch(Request $request): Response
     {
-        $listing = $this->processSearchWithFailOver($request->query->get('q'));
+        $listing['local'] = $this->local->searchPicture($request->query->get('q'));
 
         return new \Symfony\Component\HttpFoundation\JsonResponse($listing);
     }
