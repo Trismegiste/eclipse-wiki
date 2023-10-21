@@ -7,8 +7,11 @@
 namespace App\Form\QuickNpc;
 
 use App\Form\NpcCreate;
+use App\Service\StableDiffusion\LocalRepository;
+use App\Service\Storage;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
@@ -16,6 +19,11 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class Selector extends AbstractType
 {
+
+    public function __construct(protected LocalRepository $local, protected Storage $storage)
+    {
+        
+    }
 
     public function getParent()
     {
@@ -40,9 +48,14 @@ class Selector extends AbstractType
                 ->add('economy', CollectionType::class, [
                     'entry_type' => SocNetHiddenStat::class,
                     'allow_add' => true
-        ]);
+                ])
+                ->add('content', TextType::class, [
+                    'attr' => ['x-ref' => 'avatar_name']
+                ])
+        ;
 
         $builder->get('economy')->setDataMapper(new SocNetMapper());
+        $builder->addViewTransformer(new AppendPictureTranso($this->local, $this->storage));
     }
 
 }

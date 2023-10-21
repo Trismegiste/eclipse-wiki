@@ -67,7 +67,7 @@
                  x-init="$watch('keywords', v => { updateAvatar() })">
                 <template x-for="repo in avatar">
                     <template x-for="(value, idx) in repo" :key="idx">
-                        <img x-bind:src="value.thumb"/>
+                        <img x-bind:src="value.thumb" x-on:click="$refs.avatar_name.value = value.name"/>
                     </template>
                 </template>
             </div> 
