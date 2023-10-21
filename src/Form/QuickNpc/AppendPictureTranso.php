@@ -34,7 +34,9 @@ class AppendPictureTranso implements DataTransformerInterface
             throw new TransformationFailedException(get_class($value) . " is not Transhuman");
         }
 
-        $source = $this->local->getAbsoluteUrl($value->getContent());
+        // upload picture
+        $remoteName = $value->getContent();
+        $source = $this->local->getAbsoluteUrl($remoteName);
         $target = tmpfile();
         $pathname = stream_get_meta_data($target)['uri'];
         $success = @copy($source, $pathname);
@@ -43,10 +45,20 @@ class AppendPictureTranso implements DataTransformerInterface
             throw new TransformationFailedException("Unable to download the remote picture");
         }
 
-        $importedName = $value->getTitle() . '-quick';
+        // import into storage
+        $importedName = $value->getTitle() . '-' . sha1($remoteName);
         $this->storage->storePicture(new UploadedFile($pathname, 'tmp.png'), $importedName);
 
+        // managing avatar
+        $full = imagecreatefrompng($pathname);
+        $resized = imagescale($full, Storage::tokenSize, Storage::tokenSize);
+        $tokenName = 'token-' . sha1($remoteName) . '.png';
+        $tokenTarget = join_paths($this->storage->getRootDir(), $tokenName);
+        imagepng($resized, $tokenTarget);
+
+        // update content
         $value->setContent("[[file:$importedName.jpg]]");
+        $value->tokenPic = $tokenName;
 
         return $value;
     }
