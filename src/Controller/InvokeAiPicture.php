@@ -129,7 +129,7 @@ class InvokeAiPicture extends AbstractController
     #[Route('/ajax/search', methods: ['GET'])]
     public function ajaxSearch(Request $request): Response
     {
-        $listing = $this->processSearchWithFailOver('male');
+        $listing = $this->processSearchWithFailOver($request->query->get('q'));
 
         return new \Symfony\Component\HttpFoundation\JsonResponse($listing);
     }

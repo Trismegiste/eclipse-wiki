@@ -79,10 +79,12 @@
                     </template>
                 </ul>
             </div> 
-            <div class="pure-u-1 pure-u-xl-2-3" 
-                 x-init="$watch('keywords', updateAvatar )">
-                <template x-for="(value, idx) in avatar" :key="idx">
-                    <img x-bind:src="value.thumbnailUrl"/>
+            <div class="pure-u-1 pure-u-xl-2-3 avatar-suggest" 
+                 x-init="$watch('keywords', v => { updateAvatar() })">
+                <template x-for="repo in avatar">
+                    <template x-for="(value, idx) in repo" :key="idx">
+                        <img x-bind:src="value.thumb"/>
+                    </template>
                 </template>
             </div> 
         </section>
@@ -258,14 +260,15 @@
                         }
                         return Array.from(cumulative.values())
                     },
-                    updateAvatar: function (keywords) {
+                    updateAvatar: function () {
                         let query = ''
-                        for (let key in keywords) {
-                            if (keywords[key]) {
+                        for (let key of this.getText2img()) {
+                            if (this.keywords[key]) {
                                 query += key + ' '
                             }
                         }
-                        fetch('{{ path('app_invokeaipicture_ajaxsearch')}}')
+                        query.trim()
+                        fetch('{{ path('app_invokeaipicture_ajaxsearch')}}?q=' + query)
                                 .then(resp => {
                                     return resp.json()
                                 })
@@ -312,6 +315,10 @@
         .result-selection ul {
             padding: 0;
             list-style: none;
+        }
+        .avatar-suggest img {
+            max-height: 100px;
+            max-width: 100px;
         }
     </style>
 {% endblock %}
