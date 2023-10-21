@@ -46,7 +46,7 @@
         <hr/>
         {{ form_start(form) }}
         {{ form_row(form.title) }}
-        <section class="pure-g result-selection" x-data="{ keywords: {}, avatar: [] }">
+        <section class="pure-g result-selection">
             <div class="{{ cell_style }}">
                 {{ form_row(form.background) }}
             </div>
@@ -73,7 +73,7 @@
                 <ul>
                     <template x-for="(value, idx) in getText2img()" :key="value">
                         <li x-id="[value]">
-                            <input type="checkbox" x-init="keywords[value]=true" x-model="keywords[value]" x-bind:id="$id(value)"/>
+                            <input type="checkbox" x-init="if (!keywords.hasOwnProperty(value)) keywords[value] = true" x-model="keywords[value]" x-bind:id="$id(value)"/>
                             <label x-text="value" x-bind:for="$id(value)"></label>
                         </li>                
                     </template>
@@ -187,6 +187,8 @@
             Alpine.data('quickCreation', () => ({
                     graph: {{ graph|raw }},
                     choices: ['root'],
+                    keywords: {},
+                    avatar: [],
                     seekNode: function (key) {
                         const found = this.graph.find(node => {
                             return node.name === key
@@ -256,7 +258,7 @@
                         }
                         return Array.from(cumulative.values())
                     },
-                    updateAvatar(keywords) {
+                    updateAvatar: function (keywords) {
                         let query = ''
                         for (let key in keywords) {
                             if (keywords[key]) {
