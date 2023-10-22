@@ -47,7 +47,17 @@
         </section>
         <hr/>
         {{ form_start(form) }}
-        {{ form_row(form.title) }}
+        <section class="pure-g">
+            <div class="pure-u-1-3">
+                {{ form_widget(form.title, {attr:{'x-ref':'fullname'}}) }}
+            </div>
+            <div class="pure-u-1-3">
+                {{ form_widget(form.language, {attr:{'x-ref':'select_language'}}) }}
+            </div>
+            <div class="pure-u-1-3">
+                <a x-on:click="generateName" class="pure-button">Random name</a>
+            </div>
+        </section>
         <section class="pure-g result-selection">
             {% for child in ['background', 'faction', 'attributes', 'skills', 'economy', 'edges', 'morph'] %}
                 <div class="{{ cell_style }}">
@@ -260,6 +270,16 @@
                                 })
                                 .then(result => {
                                     this.avatar = result
+                                })
+                    },
+                    generateName: function () {
+                        let gender = (this.choices.includes('homme')) ? 'male' : 'female'
+                        fetch('{{ path('app_gmhelper_ajaxname')}}?gender='+ gender +'&language=' + this.$refs.select_language.value)
+                                .then(resp => {
+                                    return resp.json()
+                                })
+                                .then(result => {
+                                    this.$refs.fullname.value = result
                                 })
                     }
                 }))

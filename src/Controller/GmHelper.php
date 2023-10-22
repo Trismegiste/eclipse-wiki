@@ -116,4 +116,18 @@ class GmHelper extends AbstractController
         return new JsonResponse($repo->getNonDirectedGraphAdjacency());
     }
 
+    /**
+     * Ajax name generator
+     */
+    #[Route("/ajax/name", methods: ["GET"])]
+    public function ajaxName(\Symfony\Component\HttpFoundation\Request $request): JsonResponse
+    {
+        $repo = new RandomizerDecorator(new FileRepository());
+        $gender = $request->query->get('gender');
+        $language = $request->query->get('language');
+        $fullname = $repo->getRandomGivenNameFor($gender, $language) . ' ' . $repo->getRandomSurnameFor($language);
+
+        return new JsonResponse($fullname);
+    }
+
 }

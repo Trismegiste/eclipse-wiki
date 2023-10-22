@@ -35,6 +35,7 @@ class Selector extends AbstractType
     {
         $builder->remove('surnameLang')
                 ->remove('content');
+
         $builder->add('edges', EdgeCheckType::class)
                 ->add('attributes', CollectionType::class, [
                     'entry_type' => AttributeHiddenStat::class,
@@ -55,6 +56,10 @@ class Selector extends AbstractType
                 ])
                 ->add('node_selection', HiddenType::class, [
                     'attr' => ['x-bind:value' => 'JSON.stringify(choices)'],
+                    'mapped' => false
+                ])
+                ->add('language', \App\Form\Type\SurnameLanguageType::class, [
+                    'placeholder' => false,
                     'mapped' => false
                 ])
         ;
