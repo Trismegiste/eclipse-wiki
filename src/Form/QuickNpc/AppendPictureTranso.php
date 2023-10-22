@@ -56,6 +56,18 @@ class AppendPictureTranso implements DataTransformerInterface
         $tokenTarget = join_paths($this->storage->getRootDir(), $tokenName);
         imagepng($resized, $tokenTarget);
 
+        // circle cropping
+        $halfWidth = (int) (Storage::tokenSize / 2);
+        $cropping = new \Symfony\Component\Process\Process([
+            'convert',
+            '-size', Storage::tokenSize . 'x' . Storage::tokenSize,
+            'xc:none',
+            '-fill', $tokenTarget,
+            '-draw', "circle $halfWidth,$halfWidth $halfWidth,1",
+            $tokenTarget
+        ]);
+        $cropping->mustRun();
+
         // update content
         $value->setContent("[[file:$importedName.jpg]]");
         $value->tokenPic = $tokenName;
