@@ -34,7 +34,9 @@
                         <footer>
                             <template x-for="child in selected.children">
                                 <label x-data="{choice: seekNode(child)}">
-                                    <input type="radio" x-bind:name="selected.name + '_child'" x-on:click="setChoiceAt(idx + 1, choice.name)">
+                                    <input type="radio" x-bind:name="selected.name + '_child'"
+                                           x-on:click="setChoiceAt(idx + 1, choice.name)"
+                                           x-bind:checked="choices[idx+1]===choice.name">
                                     <span x-text="choice.name"></span>
                                 </label>
                             </template>
@@ -172,7 +174,7 @@
         document.addEventListener('alpine:init', () => {
             Alpine.data('quickCreation', () => ({
                     graph: {{ graph|raw }},
-                    choices: ['root'],
+                    choices: {{ form.node_selection.vars.data|default("['root']")|raw }}, // last selection already json encoded
                     keywords: {},
                     avatar: [],
                     seekNode: function (key) {

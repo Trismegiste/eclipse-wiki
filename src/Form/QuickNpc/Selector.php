@@ -11,6 +11,7 @@ use App\Service\StableDiffusion\LocalRepository;
 use App\Service\Storage;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -51,6 +52,10 @@ class Selector extends AbstractType
                 ])
                 ->add('content', TextType::class, [
                     'attr' => ['x-ref' => 'avatar_name']
+                ])
+                ->add('node_selection', HiddenType::class, [
+                    'attr' => ['x-bind:value' => 'JSON.stringify(choices)'],
+                    'mapped' => false
                 ])
         ;
 
