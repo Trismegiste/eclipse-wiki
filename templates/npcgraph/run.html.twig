@@ -47,43 +47,53 @@
         </section>
         <hr/>
         {{ form_start(form) }}
-        <section class="pure-g">
-            <div class="pure-u-1-3">
-                {{ form_widget(form.title, {attr:{'x-ref':'fullname'}}) }}
-            </div>
-            <div class="pure-u-1-3">
-                {{ form_widget(form.language, {attr:{'x-ref':'select_language'}}) }}
-            </div>
-            <div class="pure-u-1-3">
-                <a x-on:click="generateName" class="pure-button">Random name</a>
-            </div>
-        </section>
-        <section class="pure-g result-selection">
-            {% for child in ['background', 'faction', 'attributes', 'skills', 'economy', 'edges', 'morph'] %}
-                <div class="{{ cell_style }}">
-                    {{ form_row(form[child]) }}
+        <fieldset>
+            <section class="pure-g">
+                <div class="pure-u-1-4">
+                    {{ form_widget(form.wildCard) }}
+                    <label for="{{ form.wildCard.vars.id }}">
+                        Joker
+                        <i class="icon-wildcard"></i>
+                    </label>
                 </div>
-            {% endfor %}
-            <div class="{{ cell_style }}">
-                <h2>Keywords</h2>
-                <ul>
-                    <template x-for="(value, idx) in getText2img()" :key="value">
-                        <li x-id="[value]">
-                            <input type="checkbox" x-init="if (!keywords.hasOwnProperty(value)) keywords[value] = true" x-model="keywords[value]" x-bind:id="$id(value)"/>
-                            <label x-text="value" x-bind:for="$id(value)"></label>
-                        </li>                
+                <div class="pure-u-1-4">
+                    {{ form_widget(form.title, {attr:{'x-ref':'fullname'}}) }}
+                </div>
+                <div class="pure-u-1-4">
+                    {{ form_widget(form.language, {attr:{'x-ref':'select_language'}}) }}
+                </div>
+                <div class="pure-u-1-4">
+                    <a x-on:click="generateName" class="pure-button">Random name</a>
+                </div>
+            </section>
+            <section class="pure-g result-selection">
+                {% for child in ['background', 'faction', 'attributes', 'skills', 'economy', 'edges', 'morph'] %}
+                    <div class="{{ cell_style }}">
+                        {{ form_row(form[child]) }}
+                    </div>
+                {% endfor %}
+                <div class="{{ cell_style }}">
+                    <h2>Keywords</h2>
+                    <ul>
+                        <template x-for="(value, idx) in getText2img()" :key="value">
+                            <li x-id="[value]">
+                                <input type="checkbox" x-init="if (!keywords.hasOwnProperty(value)) keywords[value] = true" x-model="keywords[value]" x-bind:id="$id(value)"/>
+                                <label x-text="value" x-bind:for="$id(value)"></label>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+                <div class="pure-u-1 pure-u-xl-2-3 avatar-suggest"
+                     x-init="$watch('keywords', v => { updateAvatar() })">
+                    <template x-for="repo in avatar">
+                        <template x-for="(value, idx) in repo" :key="idx">
+                            <img x-bind:src="value.thumb" x-on:click="$refs.avatar_name.value = value.name"/>
+                        </template>
                     </template>
-                </ul>
-            </div> 
-            <div class="pure-u-1 pure-u-xl-2-3 avatar-suggest" 
-                 x-init="$watch('keywords', v => { updateAvatar() })">
-                <template x-for="repo in avatar">
-                    <template x-for="(value, idx) in repo" :key="idx">
-                        <img x-bind:src="value.thumb" x-on:click="$refs.avatar_name.value = value.name"/>
-                    </template>
-                </template>
-            </div> 
-        </section>
+                </div>
+            </section>
+            {{ form_rest(form) }}
+        </fieldset>
         {{ form_end(form) }}
     </div>
 {% endblock %}
@@ -274,7 +284,7 @@
                     },
                     generateName: function () {
                         let gender = (this.choices.includes('homme')) ? 'male' : 'female'
-                        fetch('{{ path('app_gmhelper_ajaxname')}}?gender='+ gender +'&language=' + this.$refs.select_language.value)
+                        fetch('{{ path('app_gmhelper_ajaxname')}}?gender=' + gender + '&language=' + this.$refs.select_language.value)
                                 .then(resp => {
                                     return resp.json()
                                 })
@@ -325,6 +335,12 @@
         .avatar-suggest img {
             max-height: 100px;
             max-width: 100px;
+        }
+
+        /** override spacing in form */
+        .pure-form .result-selection input[type="radio"],
+        .pure-form .result-selection input[type="checkbox"] {
+            margin-bottom: 0.4em;
         }
     </style>
 {% endblock %}
