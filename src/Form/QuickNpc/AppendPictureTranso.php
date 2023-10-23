@@ -82,7 +82,7 @@ class AppendPictureTranso implements DataTransformerInterface
 
     public function transform(mixed $value): mixed
     {
-        return null;
+        return $value;
     }
 
 }

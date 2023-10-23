@@ -57,6 +57,7 @@
                     </label>
                 </div>
                 <div class="pure-u-1-4">
+                    {{ form_errors(form.title) }}
                     {{ form_widget(form.title, {attr:{'x-ref':'fullname'}}) }}
                 </div>
                 <div class="pure-u-1-4">

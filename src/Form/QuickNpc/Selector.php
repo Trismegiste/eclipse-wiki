@@ -67,6 +67,7 @@ class Selector extends AbstractType
 
         $builder->get('economy')->setDataMapper(new SocNetMapper());
         $builder->addViewTransformer(new AppendPictureTranso($this->local, $this->storage));
+        $builder->addViewTransformer(new AppendHashtagTransfo());
     }
 
 }
