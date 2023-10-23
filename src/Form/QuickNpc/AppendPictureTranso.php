@@ -36,6 +36,11 @@ class AppendPictureTranso implements DataTransformerInterface
 
         // upload picture
         $remoteName = $value->getContent();
+        // if no picture, this transformer has no effect on the current Vertex
+        if (is_null($remoteName)) {
+            return $value;
+        }
+
         $source = $this->local->getAbsoluteUrl($remoteName);
         $target = tmpfile();
         $pathname = stream_get_meta_data($target)['uri'];

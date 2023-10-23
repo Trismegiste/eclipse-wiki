@@ -52,7 +52,8 @@ class Selector extends AbstractType
                     'allow_add' => true
                 ])
                 ->add('content', TextType::class, [
-                    'attr' => ['x-ref' => 'avatar_name']
+                    'attr' => ['x-ref' => 'avatar_name'],
+                    'required' => false
                 ])
                 ->add('node_selection', HiddenType::class, [
                     'attr' => ['x-bind:value' => 'JSON.stringify(choices)'],
