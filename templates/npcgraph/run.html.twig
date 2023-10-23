@@ -86,17 +86,24 @@
                 </div>
                 <div class="pure-u-1 pure-u-xl-2-3 avatar-suggest"
                      x-init="$watch('keywords', v => { updateAvatar() })">
-                    <template x-for="repo in avatar">
-                        <template x-for="(value, idx) in repo" :key="idx">
-                            <img x-bind:src="value.thumb" x-on:click="$refs.avatar_name.value = value.name"/>
-                        </template>
-                    </template>
+                    {{ form_row(form.content) }}
                 </div>
             </section>
             {{ form_rest(form) }}
         </fieldset>
         {{ form_end(form) }}
     </div>
+{% endblock %}
+
+{% block _selector_content_row %}
+    <template x-for="repo in avatar">
+        <template x-for="(value, idx) in repo" :key="idx">
+            <label>
+                <input type="radio" name="{{ form.vars.full_name }}" x-bind:value="value.name"/>
+                <img x-bind:src="value.thumb"/>
+            </label>
+        </template>
+    </template>
 {% endblock %}
 
 {% block _selector_background_row %}
@@ -333,6 +340,10 @@
             padding: 0;
             list-style: none;
         }
+        /* avatar */
+        .avatar-suggest input {
+            display: none;
+        }
         .avatar-suggest img {
             max-height: 100px;
             max-width: 100px;
@@ -342,7 +353,7 @@
             top: -80px;
             left: -80px;
         }
-        /** override spacing in form */
+        /* override spacing in form */
         .pure-form .result-selection input[type="radio"],
         .pure-form .result-selection input[type="checkbox"] {
             margin-bottom: 0.4em;
