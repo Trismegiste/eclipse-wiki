@@ -341,21 +341,25 @@
             list-style: none;
         }
         /* avatar */
+        .avatar-suggest {
+            --thumbnail-size: 100px;
+            --zoom-out: 2.8;
+        }
         .avatar-suggest input {
             display: none;
         }
         .avatar-suggest img {
-            max-height: 100px;
-            max-width: 100px;
+            max-height: var(--thumbnail-size);
+            max-width: var(--thumbnail-size);
         }
         .avatar-suggest img:hover {
-            transform: scale(2.6);
-            top: -80px;
-            left: -80px;
+            transform: scale(var(--zoom-out));
+            top: calc(-var(--thumbnail-size) * (var(--zoom-out) - 1) / 2);
+            left: calc(-var(--thumbnail-size) * (var(--zoom-out) - 1) / 2);
         }
         .avatar-suggest input:checked + img {
             filter: sepia(100%) brightness(80%) saturate(400%);
-            border-radius: 50px;
+            border-radius: calc(var(--thumbnail-size) / 2);
         }
         /* override spacing in form */
         .pure-form .result-selection input[type="radio"],
