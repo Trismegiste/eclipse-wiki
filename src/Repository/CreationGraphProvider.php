@@ -12,7 +12,7 @@ namespace App\Repository;
 class CreationGraphProvider
 {
 
-    const FILENAME = "quick-creation.json";
+    const FILENAME = "quick-creation.graph";
 
     protected string $pathname;
 

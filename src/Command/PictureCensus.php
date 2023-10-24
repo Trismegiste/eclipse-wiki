@@ -45,7 +45,7 @@ class PictureCensus extends Command
         $io->title('Search for unused pictures');
 
         $unused = 0;
-        foreach ($this->store->searchByName('(jpg|jpeg|png|webp|gif|svg|json)') as $pic) {
+        foreach ($this->store->searchByName('#\.(jpg|jpeg|png|webp|gif|svg|json)$#') as $pic) {
             /** @var \SplFileInfo $pic */
             // we can find picture :
             $found = $this->repo->searchOne(['$or' => [
