@@ -145,4 +145,22 @@ class FirstPersonTest extends WebTestCase
         $this->assertEmpty($place->battlemap3d);
     }
 
+    /** @depends testCreate */
+    public function testPushGmView(string $pk)
+    {
+        $crawler = $this->client->request('GET', "/fps/edit/$pk");
+        $this->assertSelectorExists('#gm_view_broadcast_send');
+        $form = $crawler->selectButton('gm_view_broadcast_send')->form();
+
+        $filename = join_paths(sys_get_temp_dir(), 'tmp.png');
+        $image = imagecreatetruecolor(50, 50);
+        imagepng($image, $filename);
+
+        $form["gm_view_broadcast[picture]"]->upload($filename);
+        $this->client->submit($form);
+        $this->assertResponseIsSuccessful();
+        $response = json_decode($this->client->getResponse()->getContent());
+        $this->assertEquals('success', $response->level);
+    }
+
 }
