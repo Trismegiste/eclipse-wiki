@@ -59,9 +59,9 @@ class NpcGraphCrudTest extends WebTestCase
         $this->assertEquals('Female', $elem->eq(2)->text());
 
         $form = $crawler->selectButton('full_tree_save')->form();
-        $values = $form->getPhpValues();
-        $values['full_tree']['node'][0]['children'] = ['male', 'female'];
-        $this->client->request($form->getMethod(), $form->getUri(), $values, $form->getPhpFiles());
+        $form['full_tree']['node'][0]['children'][1]->tick();
+        $form['full_tree']['node'][0]['children'][2]->tick();
+        $this->client->submit($form);
         $this->assertResponseRedirects();
         $this->client->followRedirect();
         $this->assertResponseIsSuccessful();
