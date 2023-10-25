@@ -72,4 +72,14 @@ class GmHelperTest extends WebTestCase
         $this->assertArrayHasKey('adjacency', $doc);
     }
 
+    public function testAjaxName()
+    {
+        $this->client->request('GET', '/ajax/name?gender=male&language=chinese');
+        $this->assertResponseIsSuccessful();
+        $name = json_decode($this->client->getResponse()->getContent());
+        $this->assertIsString($name);
+        $this->assertNotEmpty($name);
+        $this->assertStringContainsString(' ', $name);
+    }
+
 }
