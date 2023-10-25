@@ -104,15 +104,8 @@
     <div x-data class="pure-g profile">
         <div class="pure-u-1">
             <h2>Profils</h2>
+            {{ form(profile) }}
         </div>
-        {% for file in profile %}
-            <button class="pure-button pure-u-1" 
-                    data-profile="{{ file.contents|escape('html_attr') }}"
-                    x-on:click="$dispatch('profile', JSON.parse($el.dataset.profile))"
-                    x-text="JSON.parse($el.dataset.profile).name">
-                <i class="icon-spin3 animate-spin"></i>
-            </button>
-        {% endfor %}
     </div>
 {% endblock %}
 
@@ -183,12 +176,16 @@
                         return false
                     },
                     addProfile(model) {
+                        console.log(model)
                         let attribute = model.attributes
                         for (const label in attribute) {
-                            document.querySelector('input[value="' + label + '"]')
-                                    .parentElement
-                                    .querySelector('input[value="' + attribute[label] + '"]')
-                                    .checked = true
+                            let traitValue = 4
+                            let attributeRow = document.querySelector('input[value="' + label + '"]').parentElement
+                            let diceRadio = attributeRow.querySelector('input[type=radio]:checked')
+                            if (diceRadio !== null) {
+                                traitValue = parseInt(diceRadio.value) + 2
+                            }
+                            attributeRow.querySelector('input[type=radio][value="' + traitValue + '"]').checked = true
                         }
                         let skill = model.skills
                         for (const label in skill) {

@@ -75,6 +75,7 @@ class NpcGenerator extends AbstractController
     public function edit(Character $npc, Request $request): Response
     {
         $form = $this->createForm(NpcStats::class, $npc);
+        $profile = $this->createForm(\App\Form\QuickNpc\SingleNodeChoice::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -84,17 +85,7 @@ class NpcGenerator extends AbstractController
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $npc->getPk()]);
         }
 
-        return $this->render(SaWoExtension::editStatTemplate[get_class($npc)], ['profile' => $this->getProfileList(), 'form' => $form->createView()]);
-    }
-
-    private function getProfileList()
-    {
-        $profile = new Finder();
-        $profile->files()
-                ->in(join_paths($this->getParameter('kernel.project_dir'), 'database/profile'))
-                ->name('*.json');
-
-        return $profile;
+        return $this->render(SaWoExtension::editStatTemplate[get_class($npc)], ['profile' => $profile->createView(), 'form' => $form->createView()]);
     }
 
     /**
