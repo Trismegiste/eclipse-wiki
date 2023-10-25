@@ -70,7 +70,7 @@ class PictureTest extends WebTestCase
         try {
             $this->storage->delete('uploaded.jpg');
         } catch (\Exception $e) {
-	    // silent bug
+            // silent bug
         }
 
         $filename = 'tmp.png';
@@ -87,6 +87,13 @@ class PictureTest extends WebTestCase
     {
         $this->client->request('GET', '/picto/get?title=processor');
         $this->assertStringStartsWith('<?xml', $this->client->getResponse()->getContent());
+    }
+
+    public function testDyamicVertexList()
+    {
+        $this->client->request('GET', '/picture/vertex/search?q=targ');
+        $result = json_decode($this->client->getResponse()->getContent());
+        $this->assertEquals('target', $result[0]->title);
     }
 
 }
