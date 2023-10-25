@@ -4,7 +4,9 @@
  * eclipse-wiki
  */
 
+use App\Repository\CreationGraphProvider;
 use App\Repository\VertexRepository;
+use App\Service\Storage;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Trismegiste\Strangelove\MongoDb\Repository;
@@ -23,9 +25,11 @@ class NpcGraphCrudTest extends WebTestCase
 
     public function testReset()
     {
-        $storage = static::getContainer()->get(\App\Service\Storage::class);
-        /** @var \App\Service\Storage $storage */
-        $configFile = join_paths($storage->getRootDir(), App\Repository\CreationGraphProvider::FILENAME);
+        $this->repository->delete(iterator_to_array($this->repository->search()));
+        $this->assertCount(0, iterator_to_array($this->repository->search()));
+        $storage = static::getContainer()->get(Storage::class);
+        /** @var Storage $storage */
+        $configFile = join_paths($storage->getRootDir(), CreationGraphProvider::FILENAME);
         @unlink($configFile);
         $this->assertFileDoesNotExist($configFile);
     }
@@ -72,6 +76,18 @@ class NpcGraphCrudTest extends WebTestCase
         $crawler = $this->client->request('GET', '/npc/graph/run');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('#selector_generate');
+        $form = $crawler->selectButton('selector_generate')->form();
+
+        $values = $form->getPhpValues();
+        $values['selector']['title'] = 'Quick NPC';
+        $values['selector']['background'] = 'Hilote';
+        $values['selector']['faction'] = 'Tamiseur';
+        $values['selector']['morph'] = 'Basique';
+
+        $this->client->request($form->getMethod(), $form->getUri(), $values, $form->getPhpFiles());
+        $this->assertResponseRedirects();
+        $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
     }
 
 }
