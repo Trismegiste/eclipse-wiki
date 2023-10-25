@@ -176,23 +176,29 @@
                         return false
                     },
                     addProfile(model) {
-                        console.log(model)
+                        // process attributes bonus
                         let attribute = model.attributes
                         for (const label in attribute) {
-                            let traitValue = 4
                             let attributeRow = document.querySelector('input[value="' + label + '"]').parentElement
+                            let traitValue = 4
                             let diceRadio = attributeRow.querySelector('input[type=radio]:checked')
                             if (diceRadio !== null) {
-                                traitValue = parseInt(diceRadio.value) + 2
+                                traitValue = parseInt(diceRadio.value)
                             }
+                            traitValue += 2
                             attributeRow.querySelector('input[type=radio][value="' + traitValue + '"]').checked = true
                         }
+                        // process skills bonus
                         let skill = model.skills
                         for (const label in skill) {
-                            if (!this.hasSkill(label)) {
-                                this.skills.push({name: label, dice: skill[label], modifier: 0})
+                            let idx = this.searchSkillIdxByName(label)
+                            if (false === idx) {
+                                this.skills.push({name: label, dice: 4, modifier: 0})
+                            } else {
+                                this.skills[idx].dice += 2
                             }
                         }
+                        // process edges array
                         let edge = model.edges
                         for (const label of edge) {
                             if (!this.hasEdge(label)) {
