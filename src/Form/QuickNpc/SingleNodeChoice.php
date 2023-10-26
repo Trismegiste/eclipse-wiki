@@ -27,15 +27,15 @@ class SingleNodeChoice extends AbstractType
     {
         $builder
                 ->add('node', ChoiceType::class, [
-                    'required' => true,
+                    'required' => false,
                     'choices' => $this->provider->load(),
                     'choice_label' => function ($choice, string $key, mixed $value): string {
                         return $choice->name;
                     },
                     'choice_value' => function (?\App\Entity\CreationTree\Node $node): string {
-                        return $node ? json_encode($node) : '{}';
+                        return $node ? json_encode($node) : 'null';
                     },
-                    'attr' => ['x-ref' => 'profile']
+                    'attr' => ['x-model' => 'profile', 'class' => 'pure-input-1']
                 ])
                 ->add('apply', SubmitType::class)
         ;
@@ -44,7 +44,7 @@ class SingleNodeChoice extends AbstractType
     public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver): void
     {
         $resolver->setDefault('attr', [
-            'x-on:submit.prevent' => '$dispatch("profile", JSON.parse($refs.profile.value))'
+            'x-on:submit.prevent' => '$dispatch("profile", JSON.parse(profile))'
         ]);
     }
 

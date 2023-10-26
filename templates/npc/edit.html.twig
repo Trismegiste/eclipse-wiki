@@ -1,5 +1,6 @@
 {% extends "base.html.twig" %}
 {% form_theme form _self %}
+{% form_theme profile _self %}
 
 {% block header_title %}
     {{ include('npc/menu.html.twig', {npc: form.vars.data}) }}
@@ -102,9 +103,27 @@
 
 {% block info %}
     <div x-data class="pure-g profile">
-        <div class="pure-u-1">
+        <div class="pure-u-1" x-data="{ profile: null }">
             <h2>Profils</h2>
             {{ form(profile) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block _single_node_choice_node_row %}
+    {{ form_widget(form) }}
+    <div>
+        <div class="stats">
+            <template x-if="JSON.parse(profile) !== null">
+                <ul>
+                    <template x-for="idx, title in JSON.parse(profile).skills">
+                        <li x-text="title" class="skill"></li>
+                    </template>
+                    <template x-for="idx, title in JSON.parse(profile).networks">
+                        <li x-text="title" class="network"></li>
+                    </template>
+                </ul>
+            </template>
         </div>
     </div>
 {% endblock %}
