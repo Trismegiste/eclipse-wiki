@@ -18,6 +18,9 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $projectDir: '%kernel.project_dir%'
+            $cacheDir: '%kernel.cache_dir%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -73,19 +76,6 @@ services:
     App\Twig\PdfWikiParserExtension:
         $wikiParser: '@app.wikiparser.pdf'
 
-    App\Service\DocumentBroadcaster:
-        $cacheDir: '%kernel.cache_dir%'
-
-    App\Service\Pdf\ChromiumPdfWriter:
-        $cacheDir: '%kernel.cache_dir%'
-
-    # CACHE    
-    App\Service\MwImageCache:
-        $cacheDir: '%kernel.cache_dir%'
-        
-    App\Service\PlayerCastCache:
-        $cacheDir: '%kernel.cache_dir%'
-
    # FLAT FILE
     app.choicetype.repository:
         class: App\Repository\YamlRepository
@@ -120,7 +110,6 @@ services:
     # Storage
     App\Service\Storage:
         arguments:
-            $projectDir: '%kernel.project_dir%'
             $env: '%kernel.environment%'
             
     # Secu
@@ -145,7 +134,3 @@ services:
         factory: ['@App\Service\StableDiffusion\InvokeAiClientFactory', 'createFromHostname']
         arguments:
             - '%env(resolve:STABLE_DIFFUSION_HOSTNAME)%'
-
-    App\Service\StableDiffusion\LocalRepository:
-        arguments:
-            $projectDir: '%kernel.project_dir%'
