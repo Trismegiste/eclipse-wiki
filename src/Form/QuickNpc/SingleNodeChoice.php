@@ -33,9 +33,9 @@ class SingleNodeChoice extends AbstractType
                         return $choice->name;
                     },
                     'choice_value' => function (?\App\Entity\CreationTree\Node $node): string {
-                        return $node ? json_encode($node) : 'null';
+                        return $node ? json_encode($node) : '';
                     },
-                    'attr' => ['x-model' => 'profile', 'class' => 'pure-input-1']
+                    'attr' => ['x-on:change' => 'profile = $event.target.value ? JSON.parse($event.target.value) : null', 'class' => 'pure-input-1']
                 ])
                 ->add('apply', SubmitType::class)
         ;
@@ -44,7 +44,7 @@ class SingleNodeChoice extends AbstractType
     public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver): void
     {
         $resolver->setDefault('attr', [
-            'x-on:submit.prevent' => '$dispatch("profile", JSON.parse(profile))'
+            'x-on:submit.prevent' => '$dispatch("profile", profile)'
         ]);
     }
 

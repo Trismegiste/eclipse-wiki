@@ -112,22 +112,20 @@
 
 {% block _single_node_choice_node_row %}
     {{ form_widget(form) }}
-    <div>
-        <div class="stats">
-            <template x-if="JSON.parse(profile) !== null">
-                <ul>
-                    <template x-for="idx, title in JSON.parse(profile).attributes">
-                        <li x-text="title" class="skill"></li>
-                    </template>
-                    <template x-for="idx, title in JSON.parse(profile).skills">
-                        <li x-text="title" class="skill"></li>
-                    </template>
-                    <template x-for="idx, title in JSON.parse(profile).networks">
-                        <li x-text="title" class="network"></li>
-                    </template>
-                </ul>
-            </template>
-        </div>
+    <div class="stats">
+        <template x-if="profile !== null">
+            <ul>
+                <template x-for="idx, title in profile.attributes">
+                    <li x-text="title" class="skill"></li>
+                </template>
+                <template x-for="idx, title in profile.skills">
+                    <li x-text="title" class="skill"></li>
+                </template>
+                <template x-for="idx, title in profile.networks">
+                    <li x-text="title" class="network"></li>
+                </template>
+            </ul>
+        </template>
     </div>
 {% endblock %}
 
