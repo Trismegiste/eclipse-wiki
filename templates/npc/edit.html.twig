@@ -116,6 +116,9 @@
         <div class="stats">
             <template x-if="JSON.parse(profile) !== null">
                 <ul>
+                    <template x-for="idx, title in JSON.parse(profile).attributes">
+                        <li x-text="title" class="skill"></li>
+                    </template>
                     <template x-for="idx, title in JSON.parse(profile).skills">
                         <li x-text="title" class="skill"></li>
                     </template>
