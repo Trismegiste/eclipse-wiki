@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class AppendPictureTranso implements DataTransformerInterface
 {
 
-    public function __construct(protected LocalRepository $local, protected Storage $storage)
+    public function __construct(protected LocalRepository $local, protected Storage $storage, protected bool $deleteAfterUsing = false)
     {
         
     }
@@ -76,6 +76,10 @@ class AppendPictureTranso implements DataTransformerInterface
         // update content
         $value->setContent("[[file:$importedName.jpg]]");
         $value->tokenPic = $tokenName;
+
+        if (file_exists($tokenTarget) && $this->deleteAfterUsing) {
+            unlink($source);
+        }
 
         return $value;
     }

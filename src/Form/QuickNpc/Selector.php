@@ -21,7 +21,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 class Selector extends AbstractType
 {
 
-    public function __construct(protected LocalRepository $local, protected Storage $storage)
+    public function __construct(protected LocalRepository $local, protected Storage $storage, protected bool $debugModeEnabled)
     {
         
     }
@@ -65,7 +65,7 @@ class Selector extends AbstractType
         ;
 
         $builder->get('economy')->setDataMapper(new SocNetMapper());
-        $builder->addViewTransformer(new AppendPictureTranso($this->local, $this->storage));
+        $builder->addViewTransformer(new AppendPictureTranso($this->local, $this->storage, ! $this->debugModeEnabled));
         $builder->addViewTransformer(new AppendHashtagTransfo());
     }
 
