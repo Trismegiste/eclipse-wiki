@@ -225,6 +225,14 @@
                                 this.edges.push(JSON.parse(document.querySelector('option[data-key="' + label + '"]').value))
                             }
                         }
+                        // process economy bonus
+                        for (const label in model.networks) {
+                            let economyWidget = document.querySelector('input[data-economy="' + label + '"]')
+                            if (!economyWidget.value) {
+                                economyWidget.value = 0
+                            }
+                            economyWidget.value++
+                        }
                     }
                 }))
         })

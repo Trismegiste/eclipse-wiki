@@ -38,7 +38,7 @@ class EconomyType extends AbstractType implements DataMapperInterface
             $builder->add($field, IntegerType::class, [
                 'required' => false,
                 'label' => $label,
-                'attr' => ['class' => 'input-1-4']
+                'attr' => ['class' => 'input-1-4', 'data-economy' => $label]
             ]);
         }
         $builder->setDataMapper($this);
