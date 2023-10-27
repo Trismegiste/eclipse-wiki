@@ -1,5 +1,25 @@
 {% extends "base.html.twig" %}
+{% form_theme(form) _self %}
+
+{% block title %}Supprimer le nœud "{{ form.vars.selected.name }}"{% endblock %}
+{% block header_title %}
+    <div style="float: right">
+        <a href="{{ path('app_npcgraphcrud_edit') }}" title="Éditer le graphe">
+            <i class="icon-edit"></i>
+        </a>
+    </div>
+    {{ block('title') }}
+{% endblock %}
 
 {% block content %}
+    <div>
+        <p>Ce nœud a pour parents :</p>
+        <ul>
+            {% for parent_node in form.vars.data.getParentNode(form.vars.selected) %}
+                <li>{{ parent_node.name }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div> 
     {{ form(form) }}
 {% endblock %}

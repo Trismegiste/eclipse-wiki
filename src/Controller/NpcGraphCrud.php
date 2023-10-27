@@ -70,15 +70,11 @@ class NpcGraphCrud extends AbstractController
         $fullGraph = $this->provider->load();
 
         $node2delete = $fullGraph->getNodeByName($node);
-        $form = $this->createFormBuilder($fullGraph)
-                ->add('delete', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
-                ->setMethod('delete')
-                ->getForm();
+        $form = $this->createForm(\App\Form\CreationDag\DeleteNode::class, $fullGraph, ['selected' => $node2delete]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $fullGraph->deleteNodeAndLinks($node2delete);
-            $this->provider->save($fullGraph);
+            $this->provider->save($form->getData());
 
             return $this->redirectToRoute('app_npcgraphcrud_edit');
         }
