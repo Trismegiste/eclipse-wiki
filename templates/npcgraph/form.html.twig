@@ -44,7 +44,14 @@
 {% endblock %}
 
 {% block _full_tree_node_entry_widget %}
-    <h2 id="{{ form.vars.id }}">{{ form.vars.data.name|default('<Nouveau nœud>')|capitalize }}</h2>
+    <h2 id="{{ form.vars.id }}">
+        {{ form.vars.data.name|default('<Nouveau nœud>')|capitalize }}
+        {% if form.vars.data is not empty %}
+            <a href="{{ path('app_npcgraphcrud_delete', {node: form.vars.data.name}) }}">
+                <i class="icon-trash-empty"></i>
+            </a>
+        {% endif %}
+    </h2>
     <div class="pure-g">
         {% for key, child in form %}
             <div class="{{ child.vars.row_attr.class|default('pure-u-1 pure-u-xl-1-4') }} form-widget">
