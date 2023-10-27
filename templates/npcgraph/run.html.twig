@@ -97,7 +97,7 @@
 
 {% block _selector_content_row %}
     <template x-for="repo in avatar">
-        <template x-for="(value, idx) in repo" :key="idx">
+        <template x-for="(value, idx) in repo" :key="value.name">
             <label>
                 <input type="radio" name="{{ form.vars.full_name }}" x-bind:value="value.name"/>
                 <img x-bind:src="value.thumb"/>
