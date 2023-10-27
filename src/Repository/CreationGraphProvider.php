@@ -6,6 +6,10 @@
 
 namespace App\Repository;
 
+use App\Entity\CreationTree\Graph;
+use App\Service\Storage;
+use function join_paths;
+
 /**
  * Provider for the creation graph
  */
@@ -16,23 +20,28 @@ class CreationGraphProvider
 
     protected string $pathname;
 
-    public function __construct(\App\Service\Storage $storage)
+    public function __construct(Storage $storage)
     {
         $this->pathname = join_paths($storage->getRootDir(), self::FILENAME);
     }
 
-    public function load(): array
+    public function load(): Graph
     {
+        $graph = new Graph();
+
         if (!file_exists($this->pathname)) {
-            return [];
+            return $graph;
         }
 
-        return \MongoDB\BSON\toPHP(\MongoDB\BSON\fromJSON(file_get_contents($this->pathname)), ['root' => 'array']);
+        $content = \MongoDB\BSON\toPHP(\MongoDB\BSON\fromJSON(file_get_contents($this->pathname)), ['root' => 'array']);
+        $graph->node = $content;
+
+        return $graph;
     }
 
-    public function save(array $nodes): void
+    public function save(Graph $graph): void
     {
-        file_put_contents($this->pathname, \MongoDB\BSON\toJSON(\MongoDB\BSON\fromPHP(array_values($nodes))));
+        file_put_contents($this->pathname, \MongoDB\BSON\toJSON(\MongoDB\BSON\fromPHP(array_values($graph->node))));
     }
 
 }

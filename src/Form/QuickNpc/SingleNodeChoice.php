@@ -28,7 +28,7 @@ class SingleNodeChoice extends AbstractType
         $builder
                 ->add('node', ChoiceType::class, [
                     'required' => false,
-                    'choices' => $this->provider->load(),
+                    'choices' => $this->provider->load()->node,
                     'choice_label' => function ($choice, string $key, mixed $value): string {
                         return $choice->name;
                     },

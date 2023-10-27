@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * NPC creation with the help of creation graph
  */
-#[Route('/npc/graph')]
+#[Route('/npc-graph')]
 class NpcGraphCrud extends AbstractController
 {
 
@@ -43,7 +43,7 @@ class NpcGraphCrud extends AbstractController
         }
 
         return $this->render('npcgraph/run.html.twig', [
-                    'graph' => json_encode($fullGraph),
+                    'graph' => json_encode($fullGraph->node),
                     'form' => $form->createView()
         ]);
     }
@@ -53,15 +53,21 @@ class NpcGraphCrud extends AbstractController
     {
         $fullGraph = $this->provider->load();
 
-        $form = $this->createForm(FullTree::class, ['node' => $fullGraph]);
+        $form = $this->createForm(FullTree::class, $fullGraph);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->provider->save($form['node']->getData());
+            $this->provider->save($form->getData());
 
             return $this->redirectToRoute('app_npcgraphcrud_run');
         }
 
         return $this->render('npcgraph/form.html.twig', ['form' => $form->createView()]);
+    }
+
+    #[Route('/delete/{node}', methods: ['GET', "DELETE"])]
+    public function delete(string $node, Request $request): Response
+    {
+        $fullGraph = $this->provider->load();
     }
 
 }

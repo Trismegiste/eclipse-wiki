@@ -36,7 +36,7 @@ class NpcGraphCrudTest extends WebTestCase
 
     public function testAddingNewNodes()
     {
-        $crawler = $this->client->request('GET', '/npc/graph/edit');
+        $crawler = $this->client->request('GET', '/npc-graph/edit');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('#full_tree_save');
         $form = $crawler->selectButton('full_tree_save')->form();
@@ -54,7 +54,7 @@ class NpcGraphCrudTest extends WebTestCase
 
     public function testLinkingNodes()
     {
-        $crawler = $this->client->request('GET', '/npc/graph/edit');
+        $crawler = $this->client->request('GET', '/npc-graph/edit');
         $this->assertResponseIsSuccessful();
         $elem = $crawler->filter('form.pure-form h2');
         $this->assertCount(3, $elem);
@@ -73,7 +73,7 @@ class NpcGraphCrudTest extends WebTestCase
 
     public function testRun()
     {
-        $crawler = $this->client->request('GET', '/npc/graph/run');
+        $crawler = $this->client->request('GET', '/npc-graph/run');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('#selector_generate');
         $form = $crawler->selectButton('selector_generate')->form();
