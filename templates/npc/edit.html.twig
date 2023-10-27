@@ -14,13 +14,9 @@
                 <div class="pure-u-5-8 pure-u-xl-7-24">
                     <input x-bind:name="'npc_stats[edges][' + idx + '][name]'" type="hidden" required="required" x-model="edge.name"/>
                     <select x-bind:name="'npc_stats[edges][' + idx + '][origin]'" required="required" x-model="edge.origin">
-                        <option value="Progression">Progression</option>
-                        <option value="Background">Background</option>
-                        <option value="Faction">Faction</option>
-                        <option value="Création">Création</option>
-                        <option value="Morphe">Morphe</option>
-                        <option value="Slot">Slot</option>
-                        <option value="Cadeau">Cadeau</option>
+                        {% for entry in form.vars.prototype.origin.vars.choices %}
+                            <option value="{{ entry.value }}">{{ entry.label }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <nav class="pure-u-1-8">
@@ -51,18 +47,18 @@
                     </template>
                     <template x-if="3 == hindrance.choices">
                         <select x-bind:name="'npc_stats[hindrances][' + idx + '][level]'" required="required" x-model="hindrance.level">
-                            <option value="1">Mineur</option>
-                            <option value="2">Majeur</option>
+                            {% for entry in form.vars.prototype.level.vars.choices %}
+                                <option value="{{ entry.value }}">{{ entry.label }}</option>
+                            {% endfor %}
                         </select>
                     </template>
                 </div>                
                 <div class="pure-u-1-2 pure-u-xl-1-4">
                     <input x-bind:name="'npc_stats[hindrances][' + idx + '][name]'" type="hidden" required="required" x-model="hindrance.name"/>
                     <select x-bind:name="'npc_stats[hindrances][' + idx + '][origin]'" required="required" x-model="hindrance.origin">
-                        <option value="Background">Background</option>
-                        <option value="Création">Création</option>
-                        <option value="Morphe">Morphe</option>
-                        <option value="Donné par le MJ">Donné par le MJ</option>
+                        {% for entry in form.vars.prototype.origin.vars.choices %}
+                            <option value="{{ entry.value }}">{{ entry.label }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <nav class="pure-u-1-6">
