@@ -9,15 +9,19 @@ namespace App\Form\Type;
 use App\Entity\Edge;
 use App\Repository\EdgeProvider;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\DataMapperInterface;
+use Symfony\Component\Form\Exception\UnexpectedTypeException;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Traversable;
 
 /**
  * Choice for an Edge
  */
-class EdgeType extends AbstractType implements \Symfony\Component\Form\DataMapperInterface
+class EdgeType extends AbstractType implements DataMapperInterface
 {
 
     protected $repository;
@@ -41,7 +45,7 @@ class EdgeType extends AbstractType implements \Symfony\Component\Form\DataMappe
     {
         $builder
                 ->add('name', HiddenType::class, ['mapped' => 0])
-                ->add('origin', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+                ->add('origin', ChoiceType::class, [
                     'choices' => $this->getOrigin(),
                     'preferred_choices' => $options['preferred_choices'],
                     'expanded' => $options['expanded']
@@ -53,10 +57,10 @@ class EdgeType extends AbstractType implements \Symfony\Component\Form\DataMappe
     protected function getOrigin(): array
     {
         $src = [
+            'Progression',
             'Background',
             'Faction',
             'Création',
-            'Progression',
             'Cadeau',
             'Morphe',
             'Slot'
@@ -65,7 +69,7 @@ class EdgeType extends AbstractType implements \Symfony\Component\Form\DataMappe
         return array_combine($src, $src);
     }
 
-    public function mapDataToForms($viewData, \Traversable $forms)
+    public function mapDataToForms($viewData, Traversable $forms)
     {
         // there is no data yet, so nothing to prepopulate
         if (null === $viewData) {
@@ -74,7 +78,7 @@ class EdgeType extends AbstractType implements \Symfony\Component\Form\DataMappe
 
         // invalid data type
         if (!$viewData instanceof Edge) {
-            throw new \Symfony\Component\Form\Exception\UnexpectedTypeException($viewData, Edge::class);
+            throw new UnexpectedTypeException($viewData, Edge::class);
         }
 
         /** @var FormInterface[] $forms */
@@ -85,7 +89,7 @@ class EdgeType extends AbstractType implements \Symfony\Component\Form\DataMappe
         $forms['origin']->setData($viewData->origin);
     }
 
-    public function mapFormsToData(\Traversable $forms, &$edge)
+    public function mapFormsToData(Traversable $forms, &$edge)
     {
         /** @var FormInterface[] $forms */
         $forms = iterator_to_array($forms);
