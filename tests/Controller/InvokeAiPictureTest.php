@@ -1,9 +1,10 @@
 <?php
 
+use App\Entity\Place;
+use App\Repository\VertexRepository;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Trismegiste\Strangelove\MongoDb\Repository;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use App\Repository\VertexRepository;
 
 class InvokeAiPictureTest extends WebTestCase
 {
@@ -23,11 +24,11 @@ class InvokeAiPictureTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
-    public function appendPictureToPlace()
+    public function testAppendPictureToPlace()
     {
-        $place = new Place('noimage');
+        $place = new Place('noimage' . rand());
         $this->repository->save($place);
-        $crawler = $this->client->request('GET', '/invokeai/vertex/' . $place->getPk() . '/append');
+        $crawler = $this->client->request('GET', '/invokeai/vertex/' . $place->getPk() . '/search');
         $this->assertResponseIsSuccessful();
     }
 
