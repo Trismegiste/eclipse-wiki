@@ -11,7 +11,7 @@ use InvalidArgumentException;
 /**
  * Creation graph
  */
-class Graph
+class Graph implements \JsonSerializable
 {
 
     /** @var Node[] the graph */
@@ -53,6 +53,11 @@ class Graph
         }
 
         return $parents;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return $this->node;
     }
 
 }

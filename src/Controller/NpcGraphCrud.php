@@ -43,7 +43,7 @@ class NpcGraphCrud extends AbstractController
         }
 
         return $this->render('npcgraph/run.html.twig', [
-                    'graph' => json_encode($fullGraph->node),
+                    'graph' => $fullGraph,
                     'form' => $form->createView()
         ]);
     }

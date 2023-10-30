@@ -197,12 +197,22 @@
 {% endblock %}
 
 {% block javascripts %}
+    <script>
+        // the full content of the creation graph
+        function dumpCreationGraph() {
+            return{{ graph|json_encode()|raw }}
+        }
+        // last sent selection already json encoded
+        function dumpDefaultChoices() {
+            return{{ form.node_selection.vars.data|default("['root']")|raw }}
+        }
+    </script>
     {{ parent() }}
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('quickCreation', () => ({
-                    graph: {{ graph|raw }},
-                    choices: {{ form.node_selection.vars.data|default("['root']")|raw }}, // last selection already json encoded
+                    graph: dumpCreationGraph(),
+                    choices: dumpDefaultChoices(),
                     keywords: {},
                     avatar: [],
                     seekNode: function (key) {
