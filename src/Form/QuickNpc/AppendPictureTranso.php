@@ -7,11 +7,13 @@
 namespace App\Form\QuickNpc;
 
 use App\Entity\Transhuman;
-use App\Service\StableDiffusion\LocalRepository;
+use App\Service\StableDiffusion\PictureRepository;
 use App\Service\Storage;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Process\Process;
+use function join_paths;
 
 /**
  * Inject picture
@@ -19,7 +21,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class AppendPictureTranso implements DataTransformerInterface
 {
 
-    public function __construct(protected LocalRepository $local, protected Storage $storage, protected bool $deleteAfterUsing = false)
+    public function __construct(protected PictureRepository $local, protected Storage $storage, protected bool $deleteAfterUsing = false)
     {
         
     }
@@ -63,7 +65,7 @@ class AppendPictureTranso implements DataTransformerInterface
 
         // circle cropping
         $halfWidth = (int) (Storage::tokenSize / 2);
-        $cropping = new \Symfony\Component\Process\Process([
+        $cropping = new Process([
             'convert',
             '-size', Storage::tokenSize . 'x' . Storage::tokenSize,
             'xc:none',
