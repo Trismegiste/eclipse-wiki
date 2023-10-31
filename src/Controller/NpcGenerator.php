@@ -278,8 +278,8 @@ class NpcGenerator extends AbstractController
     public function createExtra(string $title, string $template, CharacterFactory $fac): Response
     {
         $npc = $this->repository->findByPk($template);
-        if (is_null($npc) || (!$npc instanceof Transhuman)) {
-            throw new NotFoundHttpException("$template does not exist");
+        if (!$npc instanceof Transhuman) {
+            throw new NotFoundHttpException("$template is not a Transhuman");
         }
         $extra = $fac->createExtraFromTemplate($npc, $title);
         $this->repository->save($extra);

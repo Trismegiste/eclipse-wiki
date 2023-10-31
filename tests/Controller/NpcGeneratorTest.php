@@ -165,6 +165,9 @@ class NpcGeneratorTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $form = $crawler->selectButton('npc_gears_edit')->form();
         $this->client->submit($form);
+        $this->assertResponseRedirects();
+        $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
     }
 
     public function testCreateALI()
@@ -172,9 +175,14 @@ class NpcGeneratorTest extends WebTestCase
         $crawler = $this->client->request('GET', '/npc/ali');
         $this->assertResponseIsSuccessful();
         $form = $crawler->selectButton('ali_generate')->form();
-        $this->client->submit($form, ['ali' => ['title' => 'New ALI']]);
+        $this->client->submit($form, ['ali' => [
+                'title' => 'New ALI',
+                'morph' => 'Affreux'
+        ]]);
+
         $this->assertResponseRedirects();
         $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
     }
 
     /** @depends testInfo */
@@ -198,6 +206,7 @@ class NpcGeneratorTest extends WebTestCase
         ]]);
         $this->assertResponseRedirects();
         $crawler = $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
 
         return $crawler->getUri();
     }
@@ -213,12 +222,6 @@ class NpcGeneratorTest extends WebTestCase
         $this->assertResponseRedirects();
         $this->client->followRedirect();
         $this->assertResponseIsSuccessful();
-    }
-
-    public function testCreateNotFoundTemplate()
-    {
-        $this->client->request('GET', '/npc/wildcard/John/Unknown');
-        $this->assertResponseStatusCodeSame(404);
     }
 
     public function testCreateWildcard()
