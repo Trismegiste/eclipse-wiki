@@ -58,7 +58,7 @@ class NpcGraphCrud extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->provider->save($form->getData());
 
-            return $this->redirectToRoute('app_npcgraphcrud_run');
+            return $this->redirectToRoute('app_npcgraphcrud_edit');
         }
 
         return $this->render('npcgraph/form.html.twig', ['form' => $form->createView()]);
