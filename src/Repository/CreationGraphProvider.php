@@ -41,6 +41,8 @@ class CreationGraphProvider
 
     public function save(Graph $graph): void
     {
+        $root = $graph->getNodeByName('root');
+        $graph->sortByLevelFromRoot($root);
         file_put_contents($this->pathname, \MongoDB\BSON\toJSON(\MongoDB\BSON\fromPHP(array_values($graph->node))));
     }
 

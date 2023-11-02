@@ -60,4 +60,25 @@ class Graph implements \JsonSerializable
         return $this->node;
     }
 
+    public function getShortestDistanceFromAncestor(Node $childSource, Node $ancestorTarget): int
+    {
+        if ($childSource === $ancestorTarget) {
+            return 0;
+        }
+
+        $parents = $this->getParentNode($childSource);
+        $dist = array_map(function (Node $node) use ($ancestorTarget) {
+            return 1 + $this->getShortestDistanceFromAncestor($node, $ancestorTarget);
+        }, $parents);
+
+        return ($parents !== []) ? min($dist) : 0;
+    }
+
+    public function sortByLevelFromRoot(Node $root): void
+    {
+        usort($this->node, function (Node $a, Node $b) use ($root) {
+            return $this->getShortestDistanceFromAncestor($a, $root) <=> $this->getShortestDistanceFromAncestor($b, $root);
+        });
+    }
+
 }
