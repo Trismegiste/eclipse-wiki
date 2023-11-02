@@ -26,7 +26,7 @@ class Node implements Persistable
     public array $backgrounds = [];
     public array $morphs = [];
     public array $text2img = [];
-    public array $children;
+    public array $children = [];
 
     public function __construct(string $name)
     {

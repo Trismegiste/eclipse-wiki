@@ -42,7 +42,7 @@ class Graph implements \JsonSerializable
         array_splice($this->node, $idx, 1);
     }
 
-    public function getParentNode(Node $node)
+    public function getParentNode(Node $node): array
     {
         $parents = [];
         foreach ($this->node as $entry) {

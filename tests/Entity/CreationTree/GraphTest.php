@@ -25,7 +25,28 @@ class GraphTest extends TestCase
         $whatJsWillSee = json_decode(json_encode($this->sut), true);
         $this->assertCount(1, $whatJsWillSee);
         $this->assertArrayHasKey('name', $whatJsWillSee[0]);
+        $this->assertArrayHasKey('children', $whatJsWillSee[0]);
         $this->assertEquals('root', $whatJsWillSee[0]['name']);
+        $this->assertCount(0, $whatJsWillSee[0]['children']);
+    }
+
+    public function testGetParent()
+    {
+        $p1 = new Node('Anakin');
+        $p1->children[] = 'Luke';
+        $p2 = new Node('Padme');
+        $p2->children[] = 'Luke';
+
+        $child = new Node('Luke');
+
+        $this->sut->node[] = $p1;
+        $this->sut->node[] = $p2;
+        $this->sut->node[] = $child;
+
+        $found = $this->sut->getParentNode($child);
+        $this->assertCount(2, $found);
+        $this->assertInstanceOf(Node::class, $found[0]);
+        $this->assertInstanceOf(Node::class, $found[1]);
     }
 
 }
