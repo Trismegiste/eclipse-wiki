@@ -32,14 +32,17 @@ class EdgeSelection extends AbstractType
         $listing = $this->provider->getListing();
         $choices = [];
         foreach ($listing as $item) {
-            $choices[$item->getName()] = $item->getName();
+            if (!in_array($item->getCategory(), ['leg', 'etr']) && in_array($item->getRank(), ['n', 'a'])) {
+                $choices[$item->getCategory()][$item->getName() . ' (' . strtoupper($item->getRank()) . ')'] = $item->getName();
+            }
         }
         $resolver->setDefaults([
             'choices' => $choices,
             'multiple' => true,
             'expanded' => false,
             'attr' => ['size' => 6],
-            'block_prefix' => 'multiselect_with_tags'
+            'block_prefix' => 'multiselect_with_tags',
+            'choice_translation_domain' => 'sawo'
         ]);
     }
 
