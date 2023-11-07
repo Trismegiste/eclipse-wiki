@@ -81,4 +81,19 @@ class Graph implements \JsonSerializable
         });
     }
 
+    public function accumulatePromptKeywordPerDistance(Node $root): array
+    {
+        $dump = [];
+        foreach ($this->node as $node) {
+            $position = $this->getShortestDistanceFromAncestor($node, $root);
+            if (!key_exists($position, $dump)) {
+                $dump[$position] = [];
+            }
+
+            $dump[$position] = array_unique(array_merge($dump[$position], $node->text2img));
+        }
+
+        return $dump;
+    }
+
 }

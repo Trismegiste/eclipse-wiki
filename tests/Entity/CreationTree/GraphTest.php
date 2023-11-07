@@ -70,19 +70,56 @@ class GraphTest extends TestCase
 
     public function testShortestDistance()
     {
-        $this->sut->node[] = $root = new Node('root');
-        $this->sut->node[] = new Node('trunk');
-        $this->sut->node[] = new Node('branch');
-        $this->sut->node[] = $leaf = new Node('leaf');
-        $this->sut->node[0]->children[] = 'trunk';
-        $this->sut->node[1]->children[] = 'branch';
-        $this->sut->node[2]->children[] = 'leaf';
+        $this->fillGraphWithLinearTree();
+        $root = $this->sut->node[0];
+        $leaf = $this->sut->node[3];
 
         $this->assertEquals(3, $this->sut->getShortestDistanceFromAncestor($leaf, $root));
 
         $this->sut->node[1]->children[] = 'leaf';  // a leaf could spawn from the trunk
         $this->assertNotEquals(3, $this->sut->getShortestDistanceFromAncestor($leaf, $root));
         $this->assertEquals(2, $this->sut->getShortestDistanceFromAncestor($leaf, $root));
+    }
+
+    protected function fillGraphWithLinearTree()
+    {
+        $this->sut->node[0] = $root = new Node('root');
+        $this->sut->node[1] = new Node('trunk');
+        $this->sut->node[2] = new Node('branch');
+        $this->sut->node[3] = $leaf = new Node('leaf');
+        $this->sut->node[0]->children[] = 'trunk';
+        $this->sut->node[1]->children[] = 'branch';
+        $this->sut->node[2]->children[] = 'leaf';
+    }
+
+    public function testAccumulateKeywordsWithDepth()
+    {
+        $this->fillGraphWithLinearTree();
+        $root = $this->sut->node[0];
+        $this->sut->node[0]->text2img = ['cyberpunk'];
+        $this->sut->node[1]->text2img = ['male'];
+        $this->sut->node[2]->text2img = ['fashion'];
+        $this->sut->node[3]->text2img = ['model'];
+
+        $this->assertEquals([['cyberpunk'], ['male'], ['fashion'], ['model']], $this->sut->accumulatePromptKeywordPerDistance($root));
+    }
+
+    public function testAccumulateKeywordsMerge()
+    {
+        $this->sut->node[0] = $root = new Node('root');
+        $root->children = ['child1', 'child2'];
+
+        $this->sut->node[1] = new Node('child1');
+        $this->sut->node[2] = new Node('child2');
+        $this->sut->node[1]->text2img = ['male', 'model'];
+        $this->sut->node[2]->text2img = ['model', 'fashion'];
+
+        $dump = $this->sut->accumulatePromptKeywordPerDistance($root);
+        $this->assertCount(0, $dump[0]);
+        $this->assertCount(3, $dump[1]);
+        $this->assertContains('male', $dump[1]);
+        $this->assertContains('fashion', $dump[1]);
+        $this->assertContains('model', $dump[1]);
     }
 
 }
