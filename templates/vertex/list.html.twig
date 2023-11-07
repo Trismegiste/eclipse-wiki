@@ -16,9 +16,8 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('searchEngine', () => ({
+    <script type="module">
+        Alpine.data('searchEngine', () => ({
                     keyword: '',
                     init() {
                         Mousetrap.bind('escape', () => {
@@ -46,7 +45,8 @@
                                 })
                     }
                 }))
-        })
+
+	Alpine.start()
     </script>
 {% endblock %}
 

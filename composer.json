@@ -15,6 +15,7 @@
         "knplabs/knp-snappy-bundle": "^1.8",
         "paragi/php-websocket-client": "^1.0",
         "symfony/asset": "^6.3",
+        "symfony/asset-mapper": "^6.3",
         "symfony/console": "^6.3",
         "symfony/dotenv": "^6.3",
         "symfony/expression-language": "^6.3",

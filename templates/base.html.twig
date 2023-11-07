@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="{{ asset('fontello/css/animation.css') }}"/>
         <link rel="stylesheet" href="{{ asset('yuku/autocomplete.css') }}"/>
         {% block stylesheets %}{% endblock %}
+            <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
     </head>
     <body>
         {% set navigation = [
@@ -59,11 +60,11 @@
                 </div>
             </div>
         {% endblock %}
-        <script defer src="{{ asset('alpine/cdn.min.js') }}"></script>
         <script src="{{ asset('js/DicePool.js') }}"></script>
         <script src="{{ asset('yuku/textcomplete.min.js') }}"></script>
         <script src="{{ asset('ccampbell/mousetrap.min.js') }}"></script>
         {% block javascripts %}
+            {{ importmap() }}
             <script>
                 {% for item in navigation %}
                     Mousetrap.bind('{{ item.key }}', function () {

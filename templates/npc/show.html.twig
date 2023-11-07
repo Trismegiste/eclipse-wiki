@@ -183,9 +183,10 @@
             location.assign('{{ path('app_npcgenerator_battle', {pk: npc.pk}) }}')
             return false
         });
+    </script>
 
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('traitroller', () => ({
+    <script type="module">
+        Alpine.data('traitroller', () => ({
                     dice: null,
                     wildcard: {{ npc.wildCard ? 'true' : 'false' }},
                     modifier: 0,
@@ -265,7 +266,7 @@
                     }
                 }))
 
-        })
+        Alpine.start()
     </script>
 {% endblock %}
 

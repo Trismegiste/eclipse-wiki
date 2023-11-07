@@ -23,6 +23,6 @@
 /doc/api
 /public/upload
 
-### JS
-/node_modules
-/package-lock.json
+###> symfony/asset-mapper ###
+/public/assets/
+###< symfony/asset-mapper ###
