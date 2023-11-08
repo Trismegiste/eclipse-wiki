@@ -83,6 +83,7 @@ class NodeType extends AbstractType
             return new Node($form['name']->getData());
         });
         $resolver->setDefault('mode', 'edition');
+        $resolver->setAllowedValues('mode', ['edition', 'creation']);
     }
 
 }

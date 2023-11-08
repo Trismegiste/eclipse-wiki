@@ -17,10 +17,10 @@
 
 {% block sidebar %}
     {% set graph = form.vars.data %}
-    {% set root = graph.getNodeByName('root') %}
     <nav class="pure-menu">
         <ul class="pure-menu-list">
             {% for item in form.node %}
+                {% set root = graph.getNodeByName('root') %}
                 <li class="pure-menu-item">
                     <a href="#{{ item.vars.id }}" class="pure-menu-link">
                         {{ graph.getShortestDistanceFromAncestor(item.vars.data, root) }}.
