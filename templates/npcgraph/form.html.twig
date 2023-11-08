@@ -16,18 +16,22 @@
 {% endblock %}
 
 {% block sidebar %}
+    {% set graph = form.vars.data %}
+    {% set root = graph.getNodeByName('root') %}
     <nav class="pure-menu">
         <ul class="pure-menu-list">
             {% for item in form.node %}
                 <li class="pure-menu-item">
                     <a href="#{{ item.vars.id }}" class="pure-menu-link">
+                        {{ graph.getShortestDistanceFromAncestor(item.vars.data, root) }}.
                         {{ item.vars.data.name|capitalize }}
                     </a>
                 </li>
             {% endfor %}
             <li class="pure-menu-item">
                 <a href="#{{ form.save.vars.id }}" class="pure-menu-link">
-                    &gt; Save
+                    <i class="icon-edit"></i>
+                    Save
                 </a>
             </li>
         </ul>
@@ -51,7 +55,6 @@
             </a>
         {% endif %}
         {{ form.vars.data.name|default('<Nouveau nœud>')|capitalize }}
-
     </h2>
     <div class="pure-g">
         {% for key, child in form %}
