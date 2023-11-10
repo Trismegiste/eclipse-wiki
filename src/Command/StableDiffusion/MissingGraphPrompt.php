@@ -6,6 +6,7 @@
 
 namespace App\Command\StableDiffusion;
 
+use App\Entity\CreationTree\Graph;
 use App\Repository\CreationGraphProvider;
 use App\Service\StableDiffusion\LocalRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -37,53 +38,60 @@ class MissingGraphPrompt extends Command
         $io->title("Iterates on keywords in the Creation Graph and search for missing keywords combinations");
 
         $graph = $this->loader->load();
-        $root = $graph->getNodeByName($input->getArgument('root-name'));
-        $dump = array_filter($graph->accumulatePromptKeywordPerDistance($root), function(array $keywords):bool {return count($keywords);});
 
         $io->section("Prompts that cannot match with local repository");
-	$combi = $this->recurBuildPrompt('', $dump);
-	$filtered = array_filter($this->recurBuildPrompt('', $dump), function(string $prompt):bool {
-                    return !count($this->repository->searchPicture($prompt));
-		});
 
-	$io->text($filtered);
-
-        $io->section("Stats on most common keywords in unmatched prompts");
-	$stats = [];
-	foreach($filtered as $prompt) {
-	    $keywords = explode(' ', $prompt);
-	    foreach($keywords as $word) {
-		if (!key_exists($word, $stats)) {
-		     $stats[$word] = 0;
-                }
-		$stats[$word]++;
-            }
-	}
-
-	uasort($stats, function(int $a, int $b):int { return $b <=> $a; });
-
-	foreach($stats as $word => $nb) {
-	    $io->writeln("$word : $nb");
-	}
-
-	return 0;
-    }
-
-    protected function recurBuildPrompt(string $prefix, array $lastDigit): array {
-	$result = [$prefix];
-        $current = array_shift($lastDigit);
-
-	if (is_null($current)) {
-	    return $result;
- 	}
-
-        foreach($current as $keyword) {
-            $children = $this->recurBuildPrompt((strlen($prefix) ? $prefix . ' ' : '') . $keyword, $lastDigit);
-            foreach($children as $child) {
-		$result[] = $child;
-	    }
+        $listing = $this->recurBuildPrompt($graph, [], $input->getArgument('root-name'));
+        foreach ($listing as $prompt) {
+            $io->text(implode(' ', $prompt));
         }
 
-        return $result;
+        $filtered = array_filter($listing, function (array $prompt): bool {
+            return !count($this->repository->searchPicture(implode(' ', $prompt)));
+        });
+
+        $io->section("Stats on most common keywords in unmatched prompts");
+        $stats = [];
+        foreach ($filtered as $keywords) {
+            foreach ($keywords as $word) {
+                if (!key_exists($word, $stats)) {
+                    $stats[$word] = 0;
+                }
+                $stats[$word]++;
+            }
+        }
+
+        uasort($stats, function (int $a, int $b): int {
+            return $b <=> $a;
+        });
+
+        foreach ($stats as $word => $nb) {
+            $io->writeln("$word : $nb");
+        }
+
+        return 0;
     }
+
+    protected function recurBuildPrompt(Graph $graph, array $prefix, string $parentName): array
+    {
+        $parent = $graph->getNodeByName($parentName);
+        $combi = [$prefix];
+        foreach ($parent->text2img as $word) {
+            $tmp = $prefix;
+            $tmp[] = $word;
+            $combi[] = $tmp;
+        }
+
+        foreach ($combi as $newPrefix) {
+            foreach ($parent->children as $child) {
+                $prompts = $this->recurBuildPrompt($graph, $newPrefix, $child);
+                foreach ($prompts as $prompt) {
+                    $combi[] = $prompt;
+                }
+            }
+        }
+
+        return $combi;
+    }
+
 }
