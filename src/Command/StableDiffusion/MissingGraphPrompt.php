@@ -47,6 +47,7 @@ class MissingGraphPrompt extends Command
         }
 
         $filtered = array_filter($listing, function (array $prompt): bool {
+            array_unique($prompt);
             return !count($this->repository->searchPicture(implode(' ', $prompt)));
         });
 
