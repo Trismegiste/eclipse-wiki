@@ -16,7 +16,8 @@ class PictureInfo
             public string $full,
             public string $thumb,
             public string $width,
-            public string $name)
+            public string $name,
+            public string $prompt = '')
     {
         
     }

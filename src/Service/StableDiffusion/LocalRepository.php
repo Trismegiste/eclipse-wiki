@@ -61,15 +61,14 @@ class LocalRepository extends PictureRepository
             if (!$this->matchKeywordAndPrompt($keywords, $reader->getPositivePrompt())) {
                 continue;
             }
-            $width = $reader->getWidth();
-            unset($reader);
 
             $keyImg = $picture->getBasename('.png');
             $found[] = new PictureInfo(
                     $this->getAbsoluteUrl($keyImg),
                     $this->getThumbnailUrl($keyImg),
-                    $width,
-                    $keyImg
+                    $reader->getWidth(),
+                    $keyImg,
+                    $reader->getPositivePrompt()
             );
         }
 

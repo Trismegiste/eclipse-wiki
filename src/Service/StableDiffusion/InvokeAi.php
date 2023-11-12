@@ -50,7 +50,8 @@ class InvokeAi extends PictureRepository
                         $this->baseUrl . $picture->image_url,
                         $this->baseUrl . $picture->thumbnail_url,
                         $picture->width,
-                        $picture->image_name
+                        $picture->image_name,
+                        $prompt
                 );
             }
             $offset += self::BATCH_SIZE;
