@@ -15,7 +15,7 @@
                 <div class="pure-u-1-5">
                     {% block picture %}
                     <div class="thumbnail">
-                        <a href="{{ picture.full }}" target="_blank">
+                        <a href="{{ picture.full }}" target="_blank" title="{{ picture.prompt }}">
                             <img src="{{ picture.thumb }}" class="pure-img"/>
                         </a>
                         <div class="legend">{{ picture.width }}</div>

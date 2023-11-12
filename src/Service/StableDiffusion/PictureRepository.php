@@ -28,9 +28,7 @@ abstract class PictureRepository
 
     protected function splittingPrompt(string $subject): array
     {
-        $filtered = preg_replace('#[^a-z\s]#', ' ', strtolower($subject));
-
-        return preg_split("/[\s]+/", $filtered, 0, PREG_SPLIT_NO_EMPTY);
+        return PictureInfo::extractCleanKeywords($subject);
     }
 
 }
