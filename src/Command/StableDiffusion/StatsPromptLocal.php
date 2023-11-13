@@ -6,7 +6,9 @@
 
 namespace App\Command\StableDiffusion;
 
+use App\Repository\CreationGraphProvider;
 use App\Service\StableDiffusion\LocalRepository;
+use App\Service\StableDiffusion\PictureInfo;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,7 +22,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class StatsPromptLocal extends Command
 {
 
-    public function __construct(protected LocalRepository $repository)
+    const ignoredWord = ['a', 'with', 'in', 'the', 'of', 'to', 'and'];
+
+    public function __construct(protected LocalRepository $repository, protected CreationGraphProvider $loader)
     {
         parent::__construct();
     }
@@ -31,9 +35,10 @@ class StatsPromptLocal extends Command
         $io->title("Stats on local repository of InvokeAI pictures");
         $iter = $this->repository->searchPicture('');
         $stats = [];
+        $graphKeyword = $this->getAllKeywordFromGraph();
         $io->progressStart(count($iter));
         foreach ($iter as $picture) {
-            $keywords = \App\Service\StableDiffusion\PictureInfo::extractCleanKeywords($picture->prompt);
+            $keywords = PictureInfo::extractCleanKeywords($picture->prompt);
             foreach ($keywords as $word) {
                 if (!key_exists($word, $stats)) {
                     $stats[$word] = 0;
@@ -49,10 +54,22 @@ class StatsPromptLocal extends Command
         });
 
         foreach ($stats as $word => $counter) {
-            $io->text("$word : $counter");
+            if (!in_array($word, self::ignoredWord)) {
+                $color = in_array($word, $graphKeyword) ? 'green' : 'white';
+                $io->text("<fg=$color>$word : $counter</>");
+            }
         }
 
         return self::SUCCESS;
+    }
+
+    protected function getAllKeywordFromGraph(): array
+    {
+        $graph = $this->loader->load();
+        $root = $graph->getNodeByName('root');
+        $keywordPerLevel = $graph->accumulatePromptKeywordPerDistance($root);
+
+        return array_merge(...$keywordPerLevel);
     }
 
 }
