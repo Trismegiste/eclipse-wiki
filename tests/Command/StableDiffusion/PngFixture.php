@@ -28,4 +28,9 @@ trait PngFixture
         @unlink($dst);
     }
 
+    protected function getFixturePictureName(): string
+    {
+        return basename(PngReaderTest::fixture, '.png');
+    }
+
 }

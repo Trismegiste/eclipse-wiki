@@ -13,6 +13,7 @@ use Trismegiste\Strangelove\MongoDb\Repository;
 
 class NpcGraphCrudTest extends WebTestCase
 {
+use \App\Tests\Command\StableDiffusion\PngFixture;
 
     protected KernelBrowser $client;
     protected Repository $repository;
@@ -73,21 +74,32 @@ class NpcGraphCrudTest extends WebTestCase
 
     public function testRun()
     {
+        // fixtures
+        $storage = static::getContainer()->get(\App\Service\StableDiffusion\LocalRepository::class);
+        $this->insertFixturesInto($storage->getRootDir());
+        // quick select
         $crawler = $this->client->request('GET', '/npc-graph/run');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('#selector_generate');
         $form = $crawler->selectButton('selector_generate')->form();
 
         $values = $form->getPhpValues();
-        $values['selector']['title'] = 'Quick NPC';
+        $values['selector']['title'] = 'Quick NPC '.rand();
         $values['selector']['background'] = 'Hilote';
         $values['selector']['faction'] = 'Tamiseur';
         $values['selector']['morph'] = 'Basique';
+        $values['selector']['content'] = $this->getFixturePictureName();
 
         $this->client->request($form->getMethod(), $form->getUri(), $values, $form->getPhpFiles());
         $this->assertResponseRedirects();
         $this->client->followRedirect();
         $this->assertResponseIsSuccessful();
+
+        $pk = $this->client->getRequest()->attributes->get('pk');
+        $newNpc = $this->repository->load($pk);
+        $this->assertNotEmpty($newNpc->tokenPic);
+        $this->assertStringStartsWith('[[file:', $newNpc->getContent());
+        $this->deleteFixturesInto($storage->getRootDir());
     }
 
     public function testDeleteNode()
