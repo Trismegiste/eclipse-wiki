@@ -5,6 +5,7 @@
  */
 
 use App\Service\StableDiffusion\InvokeAiReader;
+use App\Tests\Service\StableDiffusion\PngReaderTest;
 use PHPUnit\Framework\TestCase;
 
 class InvokeAiReaderTest extends TestCase

@@ -4,8 +4,12 @@
  * Eclipse Wiki
  */
 
+namespace App\Tests\Service\StableDiffusion;
+
 use App\Service\StableDiffusion\PngReader;
 use PHPUnit\Framework\TestCase;
+use SplFileInfo;
+use function join_paths;
 
 class PngReaderTest extends TestCase
 {

@@ -6,6 +6,7 @@
 
 use App\Service\StableDiffusion\LocalRepository;
 use App\Service\StableDiffusion\PictureInfo;
+use App\Tests\Service\StableDiffusion\PngReaderTest;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class LocalRepositoryTest extends KernelTestCase
