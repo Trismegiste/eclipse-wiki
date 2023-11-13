@@ -67,16 +67,44 @@ class InvokeAiPictureTest extends WebTestCase
 
         $name = $this->client->getRequest()->get('pic');
         $this->assertEquals(PngReaderTest::fixture, $name . '.png');
-        $dst = join_paths($this->storage->getRootDir(), PngReaderTest::fixture);
-        @unlink($dst);
     }
 
-    public function testAppendPictureToPlace()
+    /** @depends testGetLocalPicture */
+    public function testSearchPictureForPlace()
     {
         $place = new Place('noimage' . rand());
         $this->repository->save($place);
         $crawler = $this->client->request('GET', '/invokeai/vertex/' . $place->getPk() . '/search');
         $this->assertResponseIsSuccessful();
+
+        $this->assertSelectorExists('#form_search');
+        $form = $crawler->selectButton('form_search')->form();
+        $form->setValues(['form' => ['query' => 'strawberry']]);
+        $crawler = $this->client->submit($form);
+
+        $result = $crawler->filter('.search .thumbnail img');
+        $this->assertCount(1, $result);
+
+        return $result->ancestors()->first()->link();
+    }
+
+    /** @depends testSearchPictureForPlace */
+    public function testAppendPictureToPlace($link)
+    {
+        $crawler = $this->client->click($link);
+        $this->assertResponseIsSuccessful();
+        $form = $crawler->selectButton('append_remote_picture_append')->form();
+        $crawler = $this->client->submit($form);
+        $this->assertResponseRedirects();
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
+
+        $img = $crawler->filter('.parsed-wikitext .pushable img');
+        $this->assertCount(1, $img);
+        $this->assertStringContainsString('strawberry', $img->attr('src'));
+
+        $dst = join_paths($this->storage->getRootDir(), PngReaderTest::fixture);
+        @unlink($dst);
     }
 
 }
