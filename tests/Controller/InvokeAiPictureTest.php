@@ -13,19 +13,20 @@ class InvokeAiPictureTest extends WebTestCase
 
     protected KernelBrowser $client;
     protected Repository $repository;
+    protected LocalRepository $storage;
 
     protected function setUp(): void
     {
         $this->client = static::createClient();
         $this->repository = static::getContainer()->get(VertexRepository::class);
+        $this->storage = static::getContainer()->get(LocalRepository::class);
     }
 
     public function testSearch()
     {     // inbsert
-        $storage = self::getContainer()->get(LocalRepository::class);
         $folder = __DIR__ . '/../fixtures';
         $src = join_paths($folder, PngReaderTest::fixture);
-        $dst = join_paths($storage->getRootDir(), PngReaderTest::fixture);
+        $dst = join_paths($this->storage->getRootDir(), PngReaderTest::fixture);
         copy($src, $dst);
 
         $crawler = $this->client->request('GET', '/invokeai/search');
@@ -33,8 +34,32 @@ class InvokeAiPictureTest extends WebTestCase
         $this->assertSelectorExists('#form_search');
         $form = $crawler->selectButton('form_search')->form();
         $form->setValues(['form' => ['query' => 'strawberry']]);
-        $this->client->submit($form);
-        $this->assertSelectorCount(1, '.search .thumbnail img');
+        $crawler = $this->client->submit($form);
+        $result = $crawler->filter('.search .thumbnail img');
+        $this->assertCount(1, $result);
+        $thumb = $result->attr('src');
+        $link = $result->ancestors()->first();
+        $this->assertEquals('strawberry', $link->attr('title'));
+        $this->assertStringStartsWith('file://', $link->attr('href'));
+
+        return $thumb;
+    }
+
+    /** @depends testSearch */
+    public function testGetLocalPicture(string $thumbUri)
+    {
+        $this->client->request('GET', $thumbUri);
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals('image/png', $this->client->getResponse()->headers->get('Content-Type'));
+        ob_start();
+        $this->client->getResponse()->sendContent();
+        $content = ob_get_clean();
+        $image = imagecreatefromstring($content);
+        $this->assertEquals(128, imagesx($image));
+
+        $name = $this->client->getRequest()->get('pic');
+        $this->assertEquals(PngReaderTest::fixture, $name . '.png');
+        $dst = join_paths($this->storage->getRootDir(), PngReaderTest::fixture);
         @unlink($dst);
     }
 
