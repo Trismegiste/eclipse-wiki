@@ -18,6 +18,18 @@ class GraphTest extends TestCase
         $this->sut = new Graph();
     }
 
+    public function testNodeAccess()
+    {
+        $this->sut->node[] = new Node('yolo');
+        $this->assertInstanceOf(Node::class, $this->sut->getNodeByName('yolo'));
+    }
+
+    public function testInvalidNodeName()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->sut->getNodeByName('fubar');
+    }
+
     public function testJson()
     {
         $this->sut->node[] = new Node('root');

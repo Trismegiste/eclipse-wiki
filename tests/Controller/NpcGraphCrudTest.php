@@ -90,4 +90,24 @@ class NpcGraphCrudTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    public function testDeleteNode()
+    {
+        $crawler = $this->client->request('GET', '/npc-graph/edit');
+        $this->assertResponseIsSuccessful();
+        $elem = $crawler->filter('form.pure-form h2')->eq(1);
+        $this->assertEquals('Male', $elem->text());
+        $link = $elem->filter('a')->link();
+        $crawler = $this->client->click($link);
+        // delete form
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('#delete_node_delete');
+        $form = $crawler->selectButton('delete_node_delete')->form();
+        $this->client->submit($form);
+        $this->assertResponseRedirects();
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
+        $elem = $crawler->filter('form.pure-form h2');
+        $this->assertCount(2, $elem);
+    }
+
 }
