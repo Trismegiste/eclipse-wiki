@@ -41,11 +41,19 @@ class InvokeAiPictureTest extends WebTestCase
         $link = $result->ancestors()->first();
         $this->assertEquals('strawberry', $link->attr('title'));
         $this->assertStringStartsWith('file://', $link->attr('href'));
-
-        return $thumb;
     }
 
     /** @depends testSearch */
+    public function testAjaxSearch()
+    {
+        $this->client->request('GET', '/invokeai/ajax/search?q=strawberry');
+        $result = json_decode($this->client->getResponse()->getContent());
+        $this->assertCount(1, $result->local);
+
+        return $result->local[0]->thumb;
+    }
+
+    /** @depends testAjaxSearch */
     public function testGetLocalPicture(string $thumbUri)
     {
         $this->client->request('GET', $thumbUri);
