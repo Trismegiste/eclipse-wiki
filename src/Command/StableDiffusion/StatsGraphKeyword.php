@@ -34,7 +34,7 @@ class StatsGraphKeyword extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $io->title("Stats on local repository of InvokeAI pictures matched against Création Graph keywords");
+        $io->title("Stats on local repository of InvokeAI pictures matched against Creation Graph keywords");
 
         $graph = $this->loader->load();
         $root = $graph->getNodeByName($input->getArgument('root-name'));
