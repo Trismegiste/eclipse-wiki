@@ -16,14 +16,28 @@ class PngReaderTest extends TestCase
 
     const fixture = '9963749d-7da3-4ac8-897b-9f4dcee60fcd.png';
 
-    public function testExtractMetadata()
+    protected $sut;
+
+    protected function setUp(): void
     {
         $folder = __DIR__ . '/../../fixtures';
         $img = join_paths($folder, self::fixture);
-        $sut = new PngReader(new SplFileInfo($img));
+        $this->sut = new PngReader(new SplFileInfo($img));
+    }
 
-        $this->assertTrue($sut->hasChunk('tEXt'));
-        $this->assertNotEmpty($sut->getTextChunk());
+    public function testImageHasChunk()
+    {
+        $this->assertTrue($this->sut->hasChunk('tEXt'));
+    }
+
+    public function testListChunks()
+    {
+        $this->assertContains('tEXt', $this->sut->getChunkTypes());
+    }
+
+    public function testTextChunk()
+    {
+        $this->assertNotEmpty($this->sut->getTextChunk());
     }
 
 }
