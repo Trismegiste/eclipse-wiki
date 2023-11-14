@@ -53,7 +53,8 @@ class MeleeWeaponProvider implements GenericProvider
                 $w = new MeleeWeapon(
                         trim($cells[1]),
                         trim($cells[2]),
-                        (int) trim($cells[3])
+                        (int) trim($cells[3]),
+                        (int) trim($cells[7])
                 );
                 $w->minStr = substr(trim($cells[4]), 1);
                 $listing[] = $w;

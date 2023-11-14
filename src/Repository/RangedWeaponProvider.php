@@ -55,7 +55,8 @@ class RangedWeaponProvider implements GenericProvider
                         trim($cells[4]),
                         (int) trim($cells[5]),
                         (int) trim($cells[6]),
-                        trim($cells[3])
+                        trim($cells[3]),
+                        (int) trim($cells[11])
                 );
                 $w->minStr = substr(trim($cells[8]), 1);
                 $listing[] = $w;

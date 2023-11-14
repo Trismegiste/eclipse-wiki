@@ -53,7 +53,7 @@ class NpcAttacks extends AbstractType
                         return json_encode($weap);
                     },
                     'choice_label' => function ($weap) {
-                        return "{$weap->name} : {$weap->damage} (PA {$weap->ap}) minFOR=d{$weap->minStr}";
+                        return "{$weap->name} ({$weap->hand}m) : {$weap->damage} (PA {$weap->ap}) minFOR=d{$weap->minStr}";
                     },
                     'attr' => ['x-on:change' => 'addMeleeWeapon']
                 ])
@@ -65,7 +65,7 @@ class NpcAttacks extends AbstractType
                         return json_encode($weap);
                     },
                     'choice_label' => function ($weap) {
-                        return "{$weap->name} : CdT×{$weap->rof} {$weap->damage} (PA {$weap->ap}) minFOR=d{$weap->minStr}";
+                        return "{$weap->name} ({$weap->hand}m) : CdT×{$weap->rof} {$weap->damage} (PA {$weap->ap}) minFOR=d{$weap->minStr}";
                     },
                     'attr' => ['x-on:change' => 'addRangedWeapon']
                 ])
@@ -122,7 +122,7 @@ class NpcAttacks extends AbstractType
     protected function getMelee(): array
     {
         $listing = $this->melee->getListing();
-        $generic = new \App\Entity\MeleeWeapon('Attaque contact générique', 'FOR+d4', 0);
+        $generic = new \App\Entity\MeleeWeapon('Attaque contact générique', 'FOR+d4', 0, 1);
         array_unshift($listing, $generic);
 
         return $listing;
@@ -131,7 +131,7 @@ class NpcAttacks extends AbstractType
     protected function getRanged(): array
     {
         $listing = $this->ranged->getListing();
-        $generic = new \App\Entity\RangedWeapon('Attaque distance générique', '2d6', 0, 1, '12/24/48');
+        $generic = new \App\Entity\RangedWeapon('Attaque distance générique', '2d6', 0, 1, '12/24/48', 1);
         array_unshift($listing, $generic);
 
         return $listing;

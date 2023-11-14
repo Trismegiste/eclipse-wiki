@@ -16,7 +16,7 @@ class Weapon implements \JsonSerializable, Indexable
     public string $damage;
     public int $ap;
 
-    public function __construct(string $n, string $d, int $a)
+    public function __construct(string $n, string $d, int $a, public int $hand)
     {
         $this->name = $n;
         $this->damage = $d;

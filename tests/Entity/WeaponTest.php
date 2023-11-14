@@ -21,7 +21,7 @@ class WeaponTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->sut = new Weapon('club', 'FOR+d6', 2);
+        $this->sut = new Weapon('club', 'FOR+d6', 2, 1);
     }
 
     public function testJson()

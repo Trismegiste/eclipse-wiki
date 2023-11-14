@@ -10,6 +10,7 @@
             <th>CdT</th>
             <th>Portée</th>
             <th>FOR min.</th>
+            <th>Mains</th>
         </tr>
         {% for row in listing %}
             <tr>
@@ -19,6 +20,7 @@
                 <td>{{ row.rof }}</td>
                 <td>{{ row.reach }}</td>
                 <td>d{{ row.minStr }}</td>
+                <td>{{ row.hand }}</td>
             </tr>
         {% endfor %}
     </table>

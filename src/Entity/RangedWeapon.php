@@ -16,9 +16,9 @@ class RangedWeapon extends Weapon
     public int $rof;
     public int $minStr = 4;
 
-    public function __construct(string $n, string $d, int $a, int $rof, string $reach)
+    public function __construct(string $n, string $d, int $a, int $rof, string $reach, int $hand)
     {
-        parent::__construct($n, $d, $a);
+        parent::__construct($n, $d, $a, $hand);
         $this->reach = $reach;
         $this->rof = $rof;
     }

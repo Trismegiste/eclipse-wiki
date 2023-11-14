@@ -12,7 +12,7 @@ class MeleeWeaponTest extends WeaponTest
 
     protected function setUp(): void
     {
-        $this->sut = new MeleeWeapon('club', 'FOR+d6', 2);
+        $this->sut = new MeleeWeapon('club', 'FOR+d6', 2, 1);
     }
 
     public function testRoF()
