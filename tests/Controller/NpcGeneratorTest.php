@@ -272,4 +272,18 @@ class NpcGeneratorTest extends WebTestCase
         $this->assertNotNull($dump['instantiate']);
     }
 
+    public function testGetUnknownNpcJson()
+    {
+        $this->client->request('GET', "/npc/show.json?title=sjfhsqlfdh");
+        $this->assertResponseStatusCodeSame(404);
+    }
+
+    public function testGetNpcJson()
+    {
+        $this->client->request('GET', "/npc/show.json?title=Luke");
+        $this->assertResponseIsSuccessful();
+        $npc = json_decode($this->client->getResponse()->getContent());
+        $this->assertEquals('Luke', $npc->title);
+    }
+
 }

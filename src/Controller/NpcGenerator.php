@@ -325,6 +325,9 @@ class NpcGenerator extends AbstractController
     public function show(Request $request): Response
     {
         $npc = $this->repository->findByTitle($request->get('title'));
+        if (is_null($npc)) {
+            throw new NotFoundHttpException("NPC not found");
+        }
 
         return new \Symfony\Component\HttpFoundation\JsonResponse($npc);
     }
