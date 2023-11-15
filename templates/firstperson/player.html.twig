@@ -10,11 +10,13 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script>const doc ={{ doc|json_encode()|raw }}</script>
-    <script src="https://cdn.babylonjs.com/babylon.js"></script>
-    <script src="https://cdn.babylonjs.com/gui/babylon.gui.js"></script>
-    <script>
-        const centerCell = doc.grid[(doc.side + 1) * (doc.side - 1) / 2]
+    <script type="module">
+        import BABYLON from 'babylonjs';
+        import PluginGUI from 'babylonjs-gui';
+        BABYLON.GUI = PluginGUI
+
+        const doc ={{ doc|json_encode()|raw }}
+                const centerCell = doc.grid[(doc.side + 1) * (doc.side - 1) / 2]
 
         const canvas = document.getElementById("renderCanvas") // Get the canvas element
         const engine = new BABYLON.Engine(canvas) // Generate the BABYLON 3D engine

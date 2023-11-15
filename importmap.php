@@ -33,10 +33,14 @@ return [
     ],
     'babylonjs' => [
         'downloaded_to' => 'vendor/babylonjs.js',
-        'url' => 'https://cdn.jsdelivr.net/npm/babylonjs@6.29.1/+esm',
+        'url' => 'https://cdn.jsdelivr.net/npm/babylonjs@6.29.2/+esm',
     ],
     'meshwriter' => [
         'downloaded_to' => 'vendor/meshwriter.js',
         'url' => 'https://cdn.jsdelivr.net/npm/meshwriter@1.3.2/+esm',
+    ],
+    'babylonjs-gui' => [
+        'downloaded_to' => 'vendor/babylonjs-gui.js',
+        'url' => 'https://cdn.jsdelivr.net/npm/babylonjs-gui@6.29.2/+esm',
     ],
 ];
