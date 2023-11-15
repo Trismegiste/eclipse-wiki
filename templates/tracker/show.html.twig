@@ -43,32 +43,32 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('model', () => ({
-                    encounter: [],
-                    init() {
-                        let param = new URLSearchParams(location.search)
-                        let names = param.getAll('name')
-                        for (let idx = 0; idx < names.length; idx++) {
-                            let npc = {name: names[idx]}
-                            npc.wc = param.getAll('w')[idx] == 'true'
-                            npc.parry = param.getAll('p')[idx]
-                            npc.rangedMalus = param.getAll('r')[idx]
-                            npc.toughness = param.getAll('t')[idx]
-                            npc.armor = param.getAll('a')[idx]
-                            npc.wound = 0
-                            this.encounter.push(npc)
-                        }
-                    },
-                    killIt(idx) {
-                        let npc = this.encounter[idx]
-                        if (npc.wound == 4) {
-                            this.encounter.splice(idx, 1)
-                        }
+    <script type="module">
+        Alpine.data('model', () => ({
+                encounter: [],
+                init() {
+                    let param = new URLSearchParams(location.search)
+                    let names = param.getAll('name')
+                    for (let idx = 0; idx < names.length; idx++) {
+                        let npc = {name: names[idx]}
+                        npc.wc = param.getAll('w')[idx] == 'true'
+                        npc.parry = param.getAll('p')[idx]
+                        npc.rangedMalus = param.getAll('r')[idx]
+                        npc.toughness = param.getAll('t')[idx]
+                        npc.armor = param.getAll('a')[idx]
+                        npc.wound = 0
+                        this.encounter.push(npc)
                     }
-                }))
-        })
+                },
+                killIt(idx) {
+                    let npc = this.encounter[idx]
+                    if (npc.wound == 4) {
+                        this.encounter.splice(idx, 1)
+                    }
+                }
+            }))
+
+        Alpine.start()
     </script>
 {% endblock %}
 

@@ -137,101 +137,101 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('behavior', () => ({
-                    edgeFilter: {cbt: true, soc: true, pro: true},
-                    removeHindrance(k) {
-                        this.hindrances.splice(k, 1)
-                    },
-                    removeEdge(k) {
-                        this.edges.splice(k, 1)
-                    },
-                    moveEdgeUp(idx) {
-                        if (idx > 0) {
-                            let tmp = this.edges[idx - 1];
-                            this.edges[idx - 1] = this.edges[idx];
-                            this.edges[idx] = tmp;
-                        }
-                    },
-                    moveEdgeDown(idx) {
-                        if (idx < (this.edges.length - 1)) {
-                            let tmp = this.edges[idx + 1];
-                            this.edges[idx + 1] = this.edges[idx];
-                            this.edges[idx] = tmp;
-                        }
-                    },
-                    checkingSkill(target) {
-                        if (target.checked) {
-                            this.skills.push({name: target.value, dice: 4, modifier: 0})
-                        } else {
-                            let idx = this.searchSkillIdxByName(target.value)
-                            if (false !== idx) {
-                                this.skills.splice(idx, 1)
-                            }
-                        }
-                    },
-                    searchSkillIdxByName(name) {
-                        for (let idx = 0; idx < this.skills.length; idx++) {
-                            if (this.skills[idx].name === name) {
-                                return idx
-                            }
-                        }
-
-                        return false
-                    },
-                    hasSkill(name) {
-                        return false !== this.searchSkillIdxByName(name)
-                    },
-                    hasEdge(name) {
-                        for (const edge of this.edges) {
-                            if (name === edge.name) {
-                                return true
-                            }
-                        }
-                        return false
-                    },
-                    addProfile(model) {
-                        // process attributes bonus
-                        let attribute = model.attributes
-                        for (const label in attribute) {
-                            let attributeRow = document.querySelector('input[value="' + label + '"]').parentElement
-                            let traitValue = 4
-                            let diceRadio = attributeRow.querySelector('input[type=radio]:checked')
-                            if (diceRadio !== null) {
-                                traitValue = parseInt(diceRadio.value)
-                            }
-                            traitValue += 2
-                            attributeRow.querySelector('input[type=radio][value="' + traitValue + '"]').checked = true
-                        }
-                        // process skills bonus
-                        let skill = model.skills
-                        for (const label in skill) {
-                            let idx = this.searchSkillIdxByName(label)
-                            if (false === idx) {
-                                this.skills.push({name: label, dice: 4, modifier: 0})
-                            } else {
-                                this.skills[idx].dice += 2
-                            }
-                        }
-                        // process edges array
-                        let edge = model.edges
-                        for (const label of edge) {
-                            if (!this.hasEdge(label)) {
-                                this.edges.push(JSON.parse(document.querySelector('option[data-key="' + label + '"]').value))
-                            }
-                        }
-                        // process economy bonus
-                        for (const label in model.networks) {
-                            let economyWidget = document.querySelector('input[data-economy="' + label + '"]')
-                            if (!economyWidget.value) {
-                                economyWidget.value = 0
-                            }
-                            economyWidget.value++
+    <script type="module">
+        Alpine.data('behavior', () => ({
+                edgeFilter: {cbt: true, soc: true, pro: true},
+                removeHindrance(k) {
+                    this.hindrances.splice(k, 1)
+                },
+                removeEdge(k) {
+                    this.edges.splice(k, 1)
+                },
+                moveEdgeUp(idx) {
+                    if (idx > 0) {
+                        let tmp = this.edges[idx - 1];
+                        this.edges[idx - 1] = this.edges[idx];
+                        this.edges[idx] = tmp;
+                    }
+                },
+                moveEdgeDown(idx) {
+                    if (idx < (this.edges.length - 1)) {
+                        let tmp = this.edges[idx + 1];
+                        this.edges[idx + 1] = this.edges[idx];
+                        this.edges[idx] = tmp;
+                    }
+                },
+                checkingSkill(target) {
+                    if (target.checked) {
+                        this.skills.push({name: target.value, dice: 4, modifier: 0})
+                    } else {
+                        let idx = this.searchSkillIdxByName(target.value)
+                        if (false !== idx) {
+                            this.skills.splice(idx, 1)
                         }
                     }
-                }))
-        })
+                },
+                searchSkillIdxByName(name) {
+                    for (let idx = 0; idx < this.skills.length; idx++) {
+                        if (this.skills[idx].name === name) {
+                            return idx
+                        }
+                    }
+
+                    return false
+                },
+                hasSkill(name) {
+                    return false !== this.searchSkillIdxByName(name)
+                },
+                hasEdge(name) {
+                    for (const edge of this.edges) {
+                        if (name === edge.name) {
+                            return true
+                        }
+                    }
+                    return false
+                },
+                addProfile(model) {
+                    // process attributes bonus
+                    let attribute = model.attributes
+                    for (const label in attribute) {
+                        let attributeRow = document.querySelector('input[value="' + label + '"]').parentElement
+                        let traitValue = 4
+                        let diceRadio = attributeRow.querySelector('input[type=radio]:checked')
+                        if (diceRadio !== null) {
+                            traitValue = parseInt(diceRadio.value)
+                        }
+                        traitValue += 2
+                        attributeRow.querySelector('input[type=radio][value="' + traitValue + '"]').checked = true
+                    }
+                    // process skills bonus
+                    let skill = model.skills
+                    for (const label in skill) {
+                        let idx = this.searchSkillIdxByName(label)
+                        if (false === idx) {
+                            this.skills.push({name: label, dice: 4, modifier: 0})
+                        } else {
+                            this.skills[idx].dice += 2
+                        }
+                    }
+                    // process edges array
+                    let edge = model.edges
+                    for (const label of edge) {
+                        if (!this.hasEdge(label)) {
+                            this.edges.push(JSON.parse(document.querySelector('option[data-key="' + label + '"]').value))
+                        }
+                    }
+                    // process economy bonus
+                    for (const label in model.networks) {
+                        let economyWidget = document.querySelector('input[data-economy="' + label + '"]')
+                        if (!economyWidget.value) {
+                            economyWidget.value = 0
+                        }
+                        economyWidget.value++
+                    }
+                }
+            }))
+
+        Alpine.start()
     </script>
 {% endblock %}
 

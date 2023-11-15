@@ -38,41 +38,41 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('neocotic/qrious.min.js') }}"></script>
-    <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('behavior', () => ({
-                    staticUrl: '{{ url_tracker }}?',
-                    encounter: [],
-                    qrCode: null,
-                    init() {
-                        this.qrCode = new QRious({
-                            element: this.$refs.qrious,
-                            size: Math.min(innerWidth, innerHeight),
-                            level: 'M',
-                            value: '-Vide-'
-                        })
-                    },
-                    push(name, wc, par, rgm, tough, arm) {
-                        this.encounter.push({name: name, w: wc, p: par, r: rgm, t: tough, a: arm})
-                    },
-                    getParameters() {
-                        let param = new URLSearchParams()
-                        for (const npc of this.encounter) {
-                            param.append('name', npc.name)
-                            param.append('w', npc.w)
-                            param.append('p', npc.p)
-                            param.append('r', npc.r)
-                            param.append('t', npc.t)
-                            param.append('a', npc.a)
-                        }
-
-                        return param.toString()
-                    },
-                    remove(idx) {
-                        this.encounter.splice(idx, 1)
+    <script type="module">
+        Alpine.data('behavior', () => ({
+                staticUrl: '{{ url_tracker }}?',
+                encounter: [],
+                qrCode: null,
+                init() {
+                    this.qrCode = new QRious({
+                        element: this.$refs.qrious,
+                        size: Math.min(innerWidth, innerHeight),
+                        level: 'M',
+                        value: '-Vide-'
+                    })
+                },
+                push(name, wc, par, rgm, tough, arm) {
+                    this.encounter.push({name: name, w: wc, p: par, r: rgm, t: tough, a: arm})
+                },
+                getParameters() {
+                    let param = new URLSearchParams()
+                    for (const npc of this.encounter) {
+                        param.append('name', npc.name)
+                        param.append('w', npc.w)
+                        param.append('p', npc.p)
+                        param.append('r', npc.r)
+                        param.append('t', npc.t)
+                        param.append('a', npc.a)
                     }
-                }))
-        })
+
+                    return param.toString()
+                },
+                remove(idx) {
+                    this.encounter.splice(idx, 1)
+                }
+            }))
+
+        Alpine.start()
     </script>
 {% endblock %}
 

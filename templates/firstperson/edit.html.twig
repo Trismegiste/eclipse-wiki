@@ -92,7 +92,9 @@
     <script src="{{ asset('js/battlemap-loader.js') }}"></script>
     <script src="{{ asset('js/picture-pusher.js') }}"></script>
     <script src="{{ asset('babylon/meshwriter.min.js') }}"></script>
-    <script>
+    <script type="module">
+        import Alpine from 'alpinejs';
+
         BABYLON.SceneLoader.RegisterPlugin(battlemapLoader)
         const canvas = document.getElementById("renderCanvas") // Get the canvas element
         const engine = new BABYLON.Engine(canvas) // Generate the BABYLON 3D engine
@@ -105,7 +107,9 @@
         camera.setTarget(new BABYLON.Vector3(0, 0, -1))
         camera.attachControl(canvas)
 
-        BABYLON.SceneLoader.Append("/fps/scene/", "{{ place.pk }}.battlemap", scene, function (scene) {})
+        BABYLON.SceneLoader.Append("/fps/scene/", "{{ place.pk }}.battlemap", scene, function (scene) {
+            Alpine.start()
+        })
 
         // Register a render loop to repeatedly render the scene
         engine.runRenderLoop(function () {
@@ -116,80 +120,78 @@
             engine.resize()
         })
 
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('displayCellInfo', () => ({
-                    cellInfo: null,
-                    characterCard: null,
-                    selectedNpc: null,
-                    distanceCursor: 0,
+        Alpine.data('displayCellInfo', () => ({
+                cellInfo: null,
+                characterCard: null,
+                selectedNpc: null,
+                distanceCursor: 0,
 
-                    display(event) {
-                        this.cellInfo = event.detail
-                        if (this.cellInfo.npc !== null) {
-                            const npc = this.cellInfo.npc
-                            fetch('{{ path('app_npcgenerator_minicard') }}?title=' + npc.label)
-                                    .then(response => {
-                                        return response.json()
-                                    })
-                                    .then(content => {
-                                        this.characterCard = content
-                                    })
-                        } else {
-                            this.characterCard = null
-                        }
-                    },
-
-                    cursorMoved(event) {
-                        // update distance between cursor and selector since cursor has moved
-                        this.distanceCursor = scene.getDistance(event.detail.cursor, this.cellInfo.cellIndex)
-                    },
-
-                    write(event) {
-                        event.preventDefault()
-                        const form = new FormData(event.target)
-                        const excluded = ['npcSpritePtr', 'legendPtr']
-                        form.set('battlemap3d_write[battlemap3d]', JSON.stringify(scene.metadata, (key, value) => {
-                            return (-1 === excluded.indexOf(key)) ? value : undefined
-                        }))
-                        fetch(event.target.action, {
-                            method: 'post',
-                            body: form,
-                            redirect: 'manual'
-                        }).then(function (response) {
-                            return response.json()
-                        }).then(function (status) {
-                            pushFlash(event.target, status.level, status.message)
-                        })
-                    },
-
-                    setLegend(event) {
-                        event.preventDefault()
-                        scene.setLegendAtCell(this.cellInfo.cellIndex, this.cellInfo.legend)
-
-                        let formColor = this.cellInfo.markerColor
-                        if (formColor === null) {
-                            formColor = '#000000'
-                        }
-                        scene.setPictogramAtCell(this.cellInfo.cellIndex, this.cellInfo.pictogram, formColor)
-                    },
-
-                    deleteNpc(event) {
-                        scene.deleteNpcAt(this.cellInfo.cellIndex)
+                display(event) {
+                    this.cellInfo = event.detail
+                    if (this.cellInfo.npc !== null) {
+                        const npc = this.cellInfo.npc
+                        fetch('{{ path('app_npcgenerator_minicard') }}?title=' + npc.label)
+                                .then(response => {
+                                    return response.json()
+                                })
+                                .then(content => {
+                                    this.characterCard = content
+                                })
+                    } else {
                         this.characterCard = null
-                    },
-
-                    appendNpc(event) {
-                        event.preventDefault()
-                        scene.injectNpcAt(this.cellInfo.cellIndex, this.selectedNpc)
-                    },
-
-                    texturing(event) {
-                        event.preventDefault()
-                        scene.paintRoomAt(this.cellInfo.cellIndex, this.cellInfo.template)
                     }
+                },
 
-                }))
-        })
+                cursorMoved(event) {
+                    // update distance between cursor and selector since cursor has moved
+                    this.distanceCursor = scene.getDistance(event.detail.cursor, this.cellInfo.cellIndex)
+                },
+
+                write(event) {
+                    event.preventDefault()
+                    const form = new FormData(event.target)
+                    const excluded = ['npcSpritePtr', 'legendPtr']
+                    form.set('battlemap3d_write[battlemap3d]', JSON.stringify(scene.metadata, (key, value) => {
+                        return (-1 === excluded.indexOf(key)) ? value : undefined
+                    }))
+                    fetch(event.target.action, {
+                        method: 'post',
+                        body: form,
+                        redirect: 'manual'
+                    }).then(function (response) {
+                        return response.json()
+                    }).then(function (status) {
+                        pushFlash(event.target, status.level, status.message)
+                    })
+                },
+
+                setLegend(event) {
+                    event.preventDefault()
+                    scene.setLegendAtCell(this.cellInfo.cellIndex, this.cellInfo.legend)
+
+                    let formColor = this.cellInfo.markerColor
+                    if (formColor === null) {
+                        formColor = '#000000'
+                    }
+                    scene.setPictogramAtCell(this.cellInfo.cellIndex, this.cellInfo.pictogram, formColor)
+                },
+
+                deleteNpc(event) {
+                    scene.deleteNpcAt(this.cellInfo.cellIndex)
+                    this.characterCard = null
+                },
+
+                appendNpc(event) {
+                    event.preventDefault()
+                    scene.injectNpcAt(this.cellInfo.cellIndex, this.selectedNpc)
+                },
+
+                texturing(event) {
+                    event.preventDefault()
+                    scene.paintRoomAt(this.cellInfo.cellIndex, this.cellInfo.template)
+                }
+
+            }))
 
         const feedbackSocket = new WebSocket('{{ url_feedback }}')
         feedbackSocket.onmessage = function (msg) {
@@ -210,7 +212,6 @@
                     break
             }
         }
-
     </script>
 {% endblock %}
 

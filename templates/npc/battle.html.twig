@@ -140,98 +140,98 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('behavior', () => ({
-                    getSkill(name) {
-                        for (let idx = 0; idx < this.skills.length; idx++) {
-                            let skill = this.skills[idx]
-                            if (skill.name === name) {
-                                return skill
-                            }
+    <script type="module">
+        Alpine.data('behavior', () => ({
+                getSkill(name) {
+                    for (let idx = 0; idx < this.skills.length; idx++) {
+                        let skill = this.skills[idx]
+                        if (skill.name === name) {
+                            return skill
                         }
-
-                        return {dice: 4, modifier: -2}
-                    },
-                    getSaWoAttribute(name) {
-                        for (let idx = 0; idx < this.attributes.length; idx++) {
-                            let attr = this.attributes[idx]
-                            if (attr.name === name) {
-                                return attr
-                            }
-                        }
-                    },
-                    damageToString(damage) {
-                        let str = []
-                        Object.keys(damage.diceCount).forEach(function (key, index) {
-                            let val = damage.diceCount[key]
-                            if (val > 0) {
-                                str.push(val + 'd' + key)
-                            }
-                        })
-                        if (damage.bonus > 0) {
-                            str.push(damage.bonus)
-                        }
-
-                        return str.join('+')
-                    },
-                    addMeleeWeapon(ev) {
-                        let weapon = JSON.parse(ev.target.value)
-                        let dmg = weapon.damage
-                        let strength = this.getSaWoAttribute('Force')
-                        dmg.diceCount[strength.dice]++
-                        let fighting = this.getSkill("Combat")
-
-                        this.attacks.push({
-                            title: weapon.name,
-                            roll: {
-                                name: "Combat",
-                                dice: fighting.dice,
-                                modifier: fighting.modifier
-                            },
-                            armorPiercing: weapon.ap,
-                            reach: 'Mêlée',
-                            rollBonus: 0,
-                            rateOfFire: 1,
-                            damage: dmg
-                        })
-
-                        ev.target.value = ""
-
-                    },
-                    addRangedWeapon(ev) {
-                        let weapon = JSON.parse(ev.target.value)
-                        let shooting = this.getSkill("Tir")
-
-                        this.attacks.push({
-                            title: weapon.name,
-                            roll: {
-                                name: "Tir",
-                                dice: shooting.dice,
-                                modifier: shooting.modifier
-                            },
-                            armorPiercing: weapon.ap,
-                            reach: weapon.reach,
-                            rollBonus: 0,
-                            rateOfFire: weapon.rof,
-                            damage: weapon.damage
-                        })
-
-                        ev.target.value = ""
-
-                    },
-                    removeAttack(k) {
-                        this.attacks.splice(k, 1)
-                    },
-                    addArmor(ev) {
-                        let armor = JSON.parse(ev.target.value)
-                        this.armors.push(armor)
-                        ev.target.value = ""
-                    },
-                    removeArmor(k) {
-                        this.armors.splice(k, 1)
                     }
-                }))
-        })
+
+                    return {dice: 4, modifier: -2}
+                },
+                getSaWoAttribute(name) {
+                    for (let idx = 0; idx < this.attributes.length; idx++) {
+                        let attr = this.attributes[idx]
+                        if (attr.name === name) {
+                            return attr
+                        }
+                    }
+                },
+                damageToString(damage) {
+                    let str = []
+                    Object.keys(damage.diceCount).forEach(function (key, index) {
+                        let val = damage.diceCount[key]
+                        if (val > 0) {
+                            str.push(val + 'd' + key)
+                        }
+                    })
+                    if (damage.bonus > 0) {
+                        str.push(damage.bonus)
+                    }
+
+                    return str.join('+')
+                },
+                addMeleeWeapon(ev) {
+                    let weapon = JSON.parse(ev.target.value)
+                    let dmg = weapon.damage
+                    let strength = this.getSaWoAttribute('Force')
+                    dmg.diceCount[strength.dice]++
+                    let fighting = this.getSkill("Combat")
+
+                    this.attacks.push({
+                        title: weapon.name,
+                        roll: {
+                            name: "Combat",
+                            dice: fighting.dice,
+                            modifier: fighting.modifier
+                        },
+                        armorPiercing: weapon.ap,
+                        reach: 'Mêlée',
+                        rollBonus: 0,
+                        rateOfFire: 1,
+                        damage: dmg
+                    })
+
+                    ev.target.value = ""
+
+                },
+                addRangedWeapon(ev) {
+                    let weapon = JSON.parse(ev.target.value)
+                    let shooting = this.getSkill("Tir")
+
+                    this.attacks.push({
+                        title: weapon.name,
+                        roll: {
+                            name: "Tir",
+                            dice: shooting.dice,
+                            modifier: shooting.modifier
+                        },
+                        armorPiercing: weapon.ap,
+                        reach: weapon.reach,
+                        rollBonus: 0,
+                        rateOfFire: weapon.rof,
+                        damage: weapon.damage
+                    })
+
+                    ev.target.value = ""
+
+                },
+                removeAttack(k) {
+                    this.attacks.splice(k, 1)
+                },
+                addArmor(ev) {
+                    let armor = JSON.parse(ev.target.value)
+                    this.armors.push(armor)
+                    ev.target.value = ""
+                },
+                removeArmor(k) {
+                    this.armors.splice(k, 1)
+                }
+            }))
+
+        Alpine.start()
     </script>
 {% endblock %}

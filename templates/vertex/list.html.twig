@@ -18,35 +18,35 @@
     {{ parent() }}
     <script type="module">
         Alpine.data('searchEngine', () => ({
-                    keyword: '',
-                    init() {
-                        Mousetrap.bind('escape', () => {
-                            this.keyword = ''
-                            return false
-                        })
-                        this.$refs.search.focus()
-                    },
-                    goToFirst(e) {
-                        e.preventDefault()
-                        let elem = document.querySelector('.entity-listing a')
-                        if (elem) {
-                            location.href = elem.href
-                        }
-                    },
-                    filteredList() {
-                        return fetch('{{ path('app_vertexcrud_filter') }}?query=' + this.keyword)
-                                .then(response => {
-                                    if (response.ok) {
-                                        return response.text()
-                                    } else {
-                                        pushFlash(this.$root, 'error', 'Error in text search')
-                                        return ''
-                                    }
-                                })
+                keyword: '',
+                init() {
+                    Mousetrap.bind('escape', () => {
+                        this.keyword = ''
+                        return false
+                    })
+                    this.$refs.search.focus()
+                },
+                goToFirst(e) {
+                    e.preventDefault()
+                    let elem = document.querySelector('.entity-listing a')
+                    if (elem) {
+                        location.href = elem.href
                     }
-                }))
+                },
+                filteredList() {
+                    return fetch('{{ path('app_vertexcrud_filter') }}?query=' + this.keyword)
+                            .then(response => {
+                                if (response.ok) {
+                                    return response.text()
+                                } else {
+                                    pushFlash(this.$root, 'error', 'Error in text search')
+                                    return ''
+                                }
+                            })
+                }
+            }))
 
-	Alpine.start()
+        Alpine.start()
     </script>
 {% endblock %}
 

@@ -16,56 +16,56 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script>
+    <script type="module">
         var urlCreator = window.URL || window.webkitURL
 
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('spa', () => ({
-                    host: '{{ url_picture }}',
-                    onAir: false,
-                    socket: null,
-                    init() {
-                        this.resize()
-                        this.connect()
-                        // Watch for browser/canvas resize events
-                        window.addEventListener("resize", () => {
-                            this.resize();
-                        })
-                        // check if lost websocket connection when focus
-                        document.addEventListener('visibilitychange', () => {
-                            if (document.visibilityState === 'visible') {
-                                if (this.socket.readyState === 3) {
-                                    this.connect()
-                                }
-                            }
-                        })
-                    },
-                    connect() {
-                        this.socket = new WebSocket(this.host)
-                        this.socket.onopen = (msg) => {
-                            console.log('Connecting to ' + this.host)
-                            this.onAir = true
-                        }
-
-                        this.socket.onmessage = (msg) => {
-                            console.log('New picture')
-                            this.$refs.tv.src = urlCreator.createObjectURL(msg.data)
-                            this.$refs.tv.onload = function () {
-                                urlCreator.revokeObjectURL(this.src)
+        Alpine.data('spa', () => ({
+                host: '{{ url_picture }}',
+                onAir: false,
+                socket: null,
+                init() {
+                    this.resize()
+                    this.connect()
+                    // Watch for browser/canvas resize events
+                    window.addEventListener("resize", () => {
+                        this.resize();
+                    })
+                    // check if lost websocket connection when focus
+                    document.addEventListener('visibilitychange', () => {
+                        if (document.visibilityState === 'visible') {
+                            if (this.socket.readyState === 3) {
+                                this.connect()
                             }
                         }
-
-                        this.socket.onclose = () => {
-                            console.log('Disconnected')
-                            this.onAir = false
-                        }
-                    },
-                    resize() {
-                        this.$refs.tv.height = document.documentElement.clientHeight
-                        this.$refs.tv.width = document.documentElement.clientWidth
+                    })
+                },
+                connect() {
+                    this.socket = new WebSocket(this.host)
+                    this.socket.onopen = (msg) => {
+                        console.log('Connecting to ' + this.host)
+                        this.onAir = true
                     }
-                }))
-        })
+
+                    this.socket.onmessage = (msg) => {
+                        console.log('New picture')
+                        this.$refs.tv.src = urlCreator.createObjectURL(msg.data)
+                        this.$refs.tv.onload = function () {
+                            urlCreator.revokeObjectURL(this.src)
+                        }
+                    }
+
+                    this.socket.onclose = () => {
+                        console.log('Disconnected')
+                        this.onAir = false
+                    }
+                },
+                resize() {
+                    this.$refs.tv.height = document.documentElement.clientHeight
+                    this.$refs.tv.width = document.documentElement.clientWidth
+                }
+            }))
+
+        Alpine.start()
     </script>
 {% endblock %}
 

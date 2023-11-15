@@ -187,84 +187,84 @@
 
     <script type="module">
         Alpine.data('traitroller', () => ({
-                    dice: null,
-                    wildcard: {{ npc.wildCard ? 'true' : 'false' }},
-                    modifier: 0,
-                    result: null,
-                    rateOfFire: 1,
-                    rolling(ev) {
-                        this.dice = ev.detail.dice;
-                        this.modifier = ev.detail.modifier;
-                        this.rateOfFire = ev.detail.rof
-                        this.result = null;
-                        var data = this
+                dice: null,
+                wildcard: {{ npc.wildCard ? 'true' : 'false' }},
+                modifier: 0,
+                result: null,
+                rateOfFire: 1,
+                rolling(ev) {
+                    this.dice = ev.detail.dice;
+                    this.modifier = ev.detail.modifier;
+                    this.rateOfFire = ev.detail.rof
+                    this.result = null;
+                    var data = this
 
-                        let pool = Array(this.rateOfFire).fill(this.dice)
-                        pool.push(6) // wild die
-                        this.diceService.rollPool(pool).then(function (rolled) {
-                            console.log(rolled)
-                            setTimeout(function () {
+                    let pool = Array(this.rateOfFire).fill(this.dice)
+                    pool.push(6) // wild die
+                    this.diceService.rollPool(pool).then(function (rolled) {
+                        console.log(rolled)
+                        setTimeout(function () {
 
-                                let wildDie = 0
-                                if (data.wildcard) {
-                                    wildDie = rolled[rolled.length - 1] // keep the wild die
-                                    rolled.sort(function (a, b) {
-                                        return b - a
-                                    })
-                                    rolled.pop() // remove the weakest value
-                                } else {
-                                    wildDie = rolled.pop() // remove the wild die
-                                    rolled.sort(function (a, b) {
-                                        return b - a
-                                    })
-                                }
-                                let maxi = rolled[0]
-
-                                // sound
-                                if ((maxi == 1) && (wildDie == 1)) {
-                                    inceptionSound.play();
-                                } else {
-                                    rollSound.play()
-                                }
-
-                                data.result = rolled.map(function (val) {
-                                    return val + data.modifier
+                            let wildDie = 0
+                            if (data.wildcard) {
+                                wildDie = rolled[rolled.length - 1] // keep the wild die
+                                rolled.sort(function (a, b) {
+                                    return b - a
                                 })
-                            }, 300)
-                        })
-                    }
-                }))
-
-            Alpine.data('damageroller', () => ({
-                    dice: null,
-                    modifier: 0,
-                    result: null,
-                    rollDamage(ev) {
-                        let damage = ev.detail
-                        this.dice = damage.diceCount;
-                        this.modifier = damage.bonus;
-                        this.result = null;
-                        var data = this
-
-                        let pool = []
-                        Object.keys(damage.diceCount).forEach(function (key, index) {
-                            let val = damage.diceCount[key]
-                            for (let k = 0; k < val; k++) {
-                                pool.push(key)
+                                rolled.pop() // remove the weakest value
+                            } else {
+                                wildDie = rolled.pop() // remove the wild die
+                                rolled.sort(function (a, b) {
+                                    return b - a
+                                })
                             }
-                        })
-                        this.diceService.rollPool(pool).then(function (rolled) {
-                            setTimeout(function () {
-                                console.log(rolled)
-                                const sum = rolled.reduce((a, b) => a + b, 0)
+                            let maxi = rolled[0]
 
-                                // sound
+                            // sound
+                            if ((maxi == 1) && (wildDie == 1)) {
+                                inceptionSound.play();
+                            } else {
                                 rollSound.play()
-                                data.result = sum + data.modifier
-                            }, 300)
-                        })
-                    }
-                }))
+                            }
+
+                            data.result = rolled.map(function (val) {
+                                return val + data.modifier
+                            })
+                        }, 300)
+                    })
+                }
+            }))
+
+        Alpine.data('damageroller', () => ({
+                dice: null,
+                modifier: 0,
+                result: null,
+                rollDamage(ev) {
+                    let damage = ev.detail
+                    this.dice = damage.diceCount;
+                    this.modifier = damage.bonus;
+                    this.result = null;
+                    var data = this
+
+                    let pool = []
+                    Object.keys(damage.diceCount).forEach(function (key, index) {
+                        let val = damage.diceCount[key]
+                        for (let k = 0; k < val; k++) {
+                            pool.push(key)
+                        }
+                    })
+                    this.diceService.rollPool(pool).then(function (rolled) {
+                        setTimeout(function () {
+                            console.log(rolled)
+                            const sum = rolled.reduce((a, b) => a + b, 0)
+
+                            // sound
+                            rollSound.play()
+                            data.result = sum + data.modifier
+                        }, 300)
+                    })
+                }
+            }))
 
         Alpine.start()
     </script>
