@@ -28,8 +28,10 @@
 
         const response = await
         fetch('{{ path('app_gmhelper_getgraph') }}')
+
         const graph = await
         response.json()
+
         const adjacency = graph.adjacency
         const size = adjacency.length
         graph.getOrder = function (idx) {
@@ -65,7 +67,8 @@
         // enable physics in the scene with a gravity
         // initialize plugin
         const havokInstance = await
-        HavokPhysics();
+        HavokPhysics()
+
         // pass the engine to the plugin
         const hk = new BABYLON.HavokPlugin(true, havokInstance);
         scene.enablePhysics(new BABYLON.Vector3(0, 0, 0), hk);
@@ -177,7 +180,6 @@
         })
     </script>
 {% endblock %}
-
 
 {% block stylesheets %}
     {{ parent() }}
