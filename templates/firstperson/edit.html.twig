@@ -55,7 +55,7 @@
                         <template x-for="pic in characterCard.picture">
                             <div class="pure-u-1-6">
                                 <div class="pushable">
-                                    <a x-bind:href="pic.link" x-init="Pushable_subscribe([$el])">
+                                    <a x-bind:href="pic.link" x-init="subscribePicture([$el])">
                                         <img x-bind:src="pic.thumb" class="pure-img"/>
                                     </a>
                                 </div>
@@ -86,11 +86,11 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('js/picture-pusher.js') }}"></script>
     <script type="module">
         import Alpine from 'alpinejs';
         import BABYLON from 'babylonjs';
         import battlemapLoader from 'battlemap-loader';
+        import subscribePicture from 'picture-broadcasting';
 
         BABYLON.SceneLoader.RegisterPlugin(battlemapLoader)
         const canvas = document.getElementById("renderCanvas") // Get the canvas element
@@ -184,6 +184,10 @@
                 texturing(event) {
                     event.preventDefault()
                     scene.paintRoomAt(this.cellInfo.cellIndex, this.cellInfo.template)
+                },
+
+                subscribePicture(img) {
+                    subscribePicture(img)
                 }
 
             }))

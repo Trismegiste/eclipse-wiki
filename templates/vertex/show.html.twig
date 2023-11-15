@@ -16,7 +16,10 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/picture-pusher.js') }}"></script>
+    <script type="module">
+        import subscribePicture from 'picture-broadcasting';
+        subscribePicture(document.querySelectorAll('.pushable a'))
+    </script>  
     <script type="module">
         import Mousetrap from 'mousetrap';
 

@@ -1,8 +1,7 @@
 /*
- * Scan all pushable picture and add an event listener for the click
+ * Add an event listener on on click to broadcast pushable pictures
  */
-
-Pushable_subscribe = function (pictures) {
+export default function(pictures) {
     pictures.forEach(function (picture) {
         picture.addEventListener('click', function (event) {
             let url = event.target.parentElement.href
@@ -36,5 +35,3 @@ Pushable_subscribe = function (pictures) {
         })
     })
 }
-
-Pushable_subscribe(document.querySelectorAll('.pushable a'))
