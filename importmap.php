@@ -43,4 +43,8 @@ return [
         'downloaded_to' => 'vendor/babylonjs-gui.js',
         'url' => 'https://cdn.jsdelivr.net/npm/babylonjs-gui@6.29.2/+esm',
     ],
+    'mousetrap' => [
+        'downloaded_to' => 'vendor/mousetrap.js',
+        'url' => 'https://cdn.jsdelivr.net/npm/mousetrap@1.6.5/+esm',
+    ],
 ];

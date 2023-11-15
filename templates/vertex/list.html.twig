@@ -17,6 +17,8 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="module">
+        import Mousetrap from 'mousetrap';
+
         Alpine.data('searchEngine', () => ({
                 keyword: '',
                 init() {

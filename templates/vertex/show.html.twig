@@ -17,7 +17,9 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('js/picture-pusher.js') }}"></script>
-    <script>
+    <script type="module">
+        import Mousetrap from 'mousetrap';
+
         Mousetrap.bind('left', function () {
             location.assign('{{ path('app_vertexcrud_seekprevious', {pk: vertex.pk}) }}')
             return false

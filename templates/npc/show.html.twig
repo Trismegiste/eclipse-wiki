@@ -166,7 +166,9 @@
 {% block javascripts %}
     {{ parent() }} 
     <script src="{{ asset('js/howler.core.min.js') }}"></script>    
-    <script>
+    <script type="module">
+        import Mousetrap from 'mousetrap';
+
         const inceptionSound = new Howl({
             src: ['{{ asset('sound/foghorn.webm')}}', '{{ asset('sound/foghorn.ogg') }}']
         })
