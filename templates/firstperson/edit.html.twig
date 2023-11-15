@@ -86,14 +86,11 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="https://cdn.babylonjs.com/babylon.js"></script>
-    <script src="{{ asset('js/BattlemapBuilder.js') }}?{{ random() }}"></script>
-    <script src="{{ asset('js/BattlemapDocument.js') }}?{{ random() }}"></script>
-    <script src="{{ asset('js/battlemap-loader.js') }}"></script>
     <script src="{{ asset('js/picture-pusher.js') }}"></script>
-    <script src="{{ asset('babylon/meshwriter.min.js') }}"></script>
     <script type="module">
         import Alpine from 'alpinejs';
+        import BABYLON from 'babylonjs';
+        import battlemapLoader from 'battlemap-loader';
 
         BABYLON.SceneLoader.RegisterPlugin(battlemapLoader)
         const canvas = document.getElementById("renderCanvas") // Get the canvas element
@@ -107,9 +104,7 @@
         camera.setTarget(new BABYLON.Vector3(0, 0, -1))
         camera.attachControl(canvas)
 
-        BABYLON.SceneLoader.Append("/fps/scene/", "{{ place.pk }}.battlemap", scene, function (scene) {
-            Alpine.start()
-        })
+        BABYLON.SceneLoader.Append("/fps/scene/", "{{ place.pk }}.battlemap", scene, function (scene) { })
 
         // Register a render loop to repeatedly render the scene
         engine.runRenderLoop(function () {
@@ -212,6 +207,8 @@
                     break
             }
         }
+
+        Alpine.start()
     </script>
 {% endblock %}
 

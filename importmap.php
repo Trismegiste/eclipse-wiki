@@ -18,7 +18,25 @@ return [
         'path' => 'app.js',
         'preload' => true,
     ],
+    'battlemap-loader' => [
+        'path' => 'battlemap-loader.js',
+    ],
+    'battlemap-builder' => [
+        'path' => 'BattlemapBuilder.js',
+    ],
+    'battlemap-document' => [
+        'path' => 'BattlemapDocument.js',
+    ],
     'alpinejs' => [
+        'downloaded_to' => 'vendor/alpinejs.js',
         'url' => 'https://cdn.jsdelivr.net/npm/alpinejs@3.13.2/+esm',
+    ],
+    'babylonjs' => [
+        'downloaded_to' => 'vendor/babylonjs.js',
+        'url' => 'https://cdn.jsdelivr.net/npm/babylonjs@6.29.1/+esm',
+    ],
+    'meshwriter' => [
+        'downloaded_to' => 'vendor/meshwriter.js',
+        'url' => 'https://cdn.jsdelivr.net/npm/meshwriter@1.3.2/+esm',
     ],
 ];
