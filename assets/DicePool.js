@@ -1,54 +1,44 @@
 // dice roler library
 
-var DicePool = function () {
-    this.container = [] // FIFO
-    this.diceCount = 100
-}
+let diceCount = 100
+let container = [] // FIFO
 
-DicePool.prototype.rollOne = function (side) {
-    var self = this
-
-    if (this.container.length === 0) {
+function rollOne(side) {
+    if (container.length === 0) {
         return new Promise(function (fulfill, reject) {
             fetch('https://www.random.org/integers/?num='
-                    + self.diceCount
+                    + diceCount
                     + '&min=1&max=120&col='
-                    + self.diceCount
+                    + diceCount
                     + '&base=10&format=plain&rnd=new').then(function (response) {
                 return response.text()
             }).then(function (content) {
-                //console.log("load")
-
                 var extracted = content.split("\t");
-                for (var k = 0; k < self.diceCount; k++) {
-                    self.container[k] = parseInt(extracted[k]);
+                for (var k = 0; k < diceCount; k++) {
+                    container[k] = parseInt(extracted[k]);
                 }
 
-                self.rollOne(side).then(function (r) {
+                rollOne(side).then(function (r) {
                     fulfill(r)
                 })
             })
         })
     } else {
         return new Promise(function (fulfill, reject) {
-            var r = self.container.shift()
+            let r = container.shift()
             fulfill(1 + r % side)
         })
 
     }
 }
 
-DicePool.prototype.recursiveRollOne = function (side) {
-    var self = this
-
+function recursiveRollOne(side) {
     return new Promise(function (fulfill, reject) {
-        self.rollOne(side).then(function (first) {
-            //console.log("during recurs " + first)
+        rollOne(side).then(function (first) {
             if (first < side) {
                 fulfill(first)
             } else {
-                //console.log('reroll')
-                self.recursiveRollOne(side).then(function (reroll) {
+                recursiveRollOne(side).then(function (reroll) {
                     fulfill(first + reroll)
                 })
             }
@@ -56,16 +46,14 @@ DicePool.prototype.recursiveRollOne = function (side) {
     })
 }
 
-DicePool.prototype.rollPool = function (pool) {  /// array of sides
-    var self = this
-
+export default function rollPool(pool) {  // array of sides
     return new Promise(function (fulfill, reject) {
         if (pool.length === 0) {
             fulfill([])
         } else {
-            var head = pool.shift()
-            self.recursiveRollOne(head).then(function (first) {
-                self.rollPool(pool).then(function (result) {
+            let head = pool.shift()
+            recursiveRollOne(head).then(function (first) {
+                rollPool(pool).then(function (result) {
                     result.unshift(first)
                     fulfill(result)
                 })

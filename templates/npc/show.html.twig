@@ -28,7 +28,7 @@
 {% endblock %}
 
 {% block info %}
-    <div x-data="{ diceService: new DicePool() }">
+    <div x-data="{}">
         <h2>Lancer de trait</h2>
         <div class="diceroller" 
              x-data="traitroller" 
@@ -169,13 +169,6 @@
     <script type="module">
         import Mousetrap from 'mousetrap';
 
-        const inceptionSound = new Howl({
-            src: ['{{ asset('sound/foghorn.webm')}}', '{{ asset('sound/foghorn.ogg') }}']
-        })
-        const rollSound = new Howl({
-            src: ['{{ asset('sound/roll.webm')}}', '{{ asset('sound/roll.ogg') }}']
-        })
-
         Mousetrap.bind('s', function () {
             location.assign('{{ path('app_npcgenerator_edit', {pk: npc.pk}) }}')
             return false
@@ -188,6 +181,15 @@
     </script>
 
     <script type="module">
+        import rollPool from 'dice-roller';
+
+        const inceptionSound = new Howl({
+            src: ['{{ asset('sound/foghorn.webm')}}', '{{ asset('sound/foghorn.ogg') }}']
+        })
+        const rollSound = new Howl({
+            src: ['{{ asset('sound/roll.webm')}}', '{{ asset('sound/roll.ogg') }}']
+        })
+
         Alpine.data('traitroller', () => ({
                 dice: null,
                 wildcard: {{ npc.wildCard ? 'true' : 'false' }},
@@ -203,7 +205,7 @@
 
                     let pool = Array(this.rateOfFire).fill(this.dice)
                     pool.push(6) // wild die
-                    this.diceService.rollPool(pool).then(function (rolled) {
+                    rollPool(pool).then(function (rolled) {
                         console.log(rolled)
                         setTimeout(function () {
 
@@ -255,7 +257,7 @@
                             pool.push(key)
                         }
                     })
-                    this.diceService.rollPool(pool).then(function (rolled) {
+                    rollPool(pool).then(function (rolled) {
                         setTimeout(function () {
                             console.log(rolled)
                             const sum = rolled.reduce((a, b) => a + b, 0)
