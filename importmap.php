@@ -53,4 +53,8 @@ return [
         'downloaded_to' => 'vendor/mousetrap.js',
         'url' => 'https://cdn.jsdelivr.net/npm/mousetrap@1.6.5/+esm',
     ],
+    'howler' => [
+        'downloaded_to' => 'vendor/howler.js',
+        'url' => 'https://cdn.jsdelivr.net/npm/howler@2.2.4/+esm',
+    ],
 ];
