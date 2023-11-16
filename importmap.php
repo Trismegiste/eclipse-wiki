@@ -65,4 +65,8 @@ return [
         'downloaded_to' => 'vendor/sortable-tree.js',
         'url' => 'https://cdn.jsdelivr.net/npm/sortable-tree@0.7.1/+esm',
     ],
+    'js-autocomplete' => [
+        'downloaded_to' => 'vendor/js-autocomplete.js',
+        'url' => 'https://cdn.jsdelivr.net/npm/js-autocomplete@1.0.4/+esm',
+    ],
 ];

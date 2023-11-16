@@ -20,7 +20,6 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('pixabay/auto-complete.min.js') }}"></script>
     <script>
         window.addEventListener('paste', e => {
             const fileInput = document.getElementById('{{ form['picture'].vars.id }}')
