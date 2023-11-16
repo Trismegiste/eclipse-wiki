@@ -37,8 +37,9 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('neocotic/qrious.min.js') }}"></script>
     <script type="module">
+        import QRious from 'qrious';
+
         Alpine.data('behavior', () => ({
                 staticUrl: '{{ url_tracker }}?',
                 encounter: [],

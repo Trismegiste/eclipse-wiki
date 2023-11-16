@@ -57,4 +57,8 @@ return [
         'downloaded_to' => 'vendor/howler.js',
         'url' => 'https://cdn.jsdelivr.net/npm/howler@2.2.4/+esm',
     ],
+    'qrious' => [
+        'downloaded_to' => 'vendor/qrious.js',
+        'url' => 'https://cdn.jsdelivr.net/npm/qrious@4.0.2/+esm',
+    ],
 ];

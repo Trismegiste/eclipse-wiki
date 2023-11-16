@@ -21,8 +21,9 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('neocotic/qrious.min.js') }}"></script>
-    <script>
+    <script type="module">
+        import QRious from 'qrious';
+
         new QRious({
             element: document.getElementById('qrious'),
             size: Math.min(innerWidth, innerHeight),
