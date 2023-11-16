@@ -19,13 +19,13 @@ return [
         'preload' => true,
     ],
     'battlemap-loader' => [
-        'path' => 'battlemap-loader.js',
+        'path' => 'place/battlemap-loader.js',
     ],
     'battlemap-builder' => [
-        'path' => 'BattlemapBuilder.js',
+        'path' => 'place/BattlemapBuilder.js',
     ],
     'battlemap-document' => [
-        'path' => 'BattlemapDocument.js',
+        'path' => 'place/BattlemapDocument.js',
     ],
     'dice-roller' => [
         'path' => 'DicePool.js',
