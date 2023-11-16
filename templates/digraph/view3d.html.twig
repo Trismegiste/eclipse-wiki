@@ -9,9 +9,11 @@
 
 {% block javascripts %}
     <script src="https://cdn.babylonjs.com/havok/HavokPhysics_umd.js"></script>
-    <script src="https://cdn.babylonjs.com/babylon.js"></script>
-    <script src="https://cdn.babylonjs.com/gui/babylon.gui.js"></script>
     <script type="module">
+        import BABYLON from 'babylonjs';
+        import PluginGUI from 'babylonjs-gui';
+        BABYLON.GUI = PluginGUI
+
         const universe = {
             coulomb: 100,
             spring: 1,
