@@ -3,24 +3,24 @@
     {{ form_widget(form) }}
     <div id="{{ form.vars.id }}_tree" class="tree_widget"></div>
     <textarea id="{{ form.vars.id }}_edit" class="pure-input-1" hidden="true"></textarea>
-    <script>
-        window.addEventListener('load', () => {
-            if (typeof SortableTree === "undefined") {
-                throw new Error('SortableTree is not included')
-            }
+    <script type="module">
+        import SortableTree from 'sortable-tree';
+        if (typeof SortableTree === "undefined") {
+            throw new Error('SortableTree is not included')
+        }
 
-            const hiddenTree = document.getElementById('{{ form.vars.id }}')
-            const editArea = document.getElementById('{{ form.vars.id }}_edit')
-            let nodeData = [{{ form.vars.data|raw }}][0]
-            let currentlyEditedNode = null
+        const hiddenTree = document.getElementById('{{ form.vars.id }}')
+        const editArea = document.getElementById('{{ form.vars.id }}_edit')
+        let nodeData = [{{ form.vars.data|raw }}][0]
+        let currentlyEditedNode = null
 
-            const tree = new SortableTree({
-                nodes: [nodeData],
-                element: document.getElementById('{{ form.vars.id }}_tree'),
-                initCollapseLevel: 4,
-                {% if form.vars.state_key is defined %}
-                    stateId: '{{ form.vars.state_key }}',
-                {% endif %}
+        const tree = new SortableTree({
+            nodes: [nodeData],
+            element: document.getElementById('{{ form.vars.id }}_tree'),
+            initCollapseLevel: 4,
+        {% if form.vars.state_key is defined %}
+                stateId: '{{ form.vars.state_key }}',
+        {% endif %}
                 renderLabel: (data) => {
                     let state = data.finished ? 'finished-node' : ''
                     return `<span class="${state}">${data.title}</span>
@@ -133,21 +133,20 @@
             let editor = new Textarea(editArea)
             let textcomplete = new Textcomplete(editor)
             textcomplete.register([{
-                // Link strategy for Vertex
-                match: /(.*)\[\[([^\]]+)$/,
-                search: function (term, callback) {
-                    fetch('{{ path('app_vertexcrud_search') }}' + '?q=' + term)
-                            .then((response) => {
-                                return response.json()
-                            })
-                            .then((data) => {
-                                callback(data)
-                            })
-                },
-                replace: function (value) {
-                    return '$1[[' + value + ']] '
-                }
-            }])
-        })
+                    // Link strategy for Vertex
+                    match: /(.*)\[\[([^\]]+)$/,
+                    search: function (term, callback) {
+                        fetch('{{ path('app_vertexcrud_search') }}' + '?q=' + term)
+                                .then((response) => {
+                                    return response.json()
+                                })
+                                .then((data) => {
+                                    callback(data)
+                                })
+                    },
+                    replace: function (value) {
+                        return '$1[[' + value + ']] '
+                    }
+                }])
     </script>
 {% endblock %}

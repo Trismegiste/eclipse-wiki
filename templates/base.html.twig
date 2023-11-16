@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="{{ asset('fontello/css/animation.css') }}"/>
         <link rel="stylesheet" href="{{ asset('yuku/autocomplete.css') }}"/>
         {% block stylesheets %}{% endblock %}
+        {{ importmap() }}
     </head>
     <body>
         {% set navigation = [
@@ -59,7 +60,6 @@
                 </div>
             </div>
         {% endblock %}
-        {{ importmap() }}
         <script src="{{ asset('yuku/textcomplete.min.js') }}"></script>
         {% block javascripts %}
             <script type="module">

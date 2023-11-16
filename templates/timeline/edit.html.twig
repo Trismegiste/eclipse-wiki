@@ -28,11 +28,6 @@
     {{ form(form) }}
 {% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('marcantondahmen/sortable-tree.js') }}"></script>
-{% endblock %}
-
 {% block stylesheets %}
     {{ parent() }}
     <link href="{{ asset('marcantondahmen/sortable-tree.css') }}" rel="stylesheet"/>

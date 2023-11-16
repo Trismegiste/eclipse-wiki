@@ -61,4 +61,8 @@ return [
         'downloaded_to' => 'vendor/qrious.js',
         'url' => 'https://cdn.jsdelivr.net/npm/qrious@4.0.2/+esm',
     ],
+    'sortable-tree' => [
+        'downloaded_to' => 'vendor/sortable-tree.js',
+        'url' => 'https://cdn.jsdelivr.net/npm/sortable-tree@0.7.1/+esm',
+    ],
 ];
