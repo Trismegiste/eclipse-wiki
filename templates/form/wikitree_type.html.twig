@@ -5,10 +5,6 @@
     <textarea id="{{ form.vars.id }}_edit" class="pure-input-1" hidden="true"></textarea>
     <script type="module">
         import SortableTree from 'sortable-tree';
-        if (typeof SortableTree === "undefined") {
-            throw new Error('SortableTree is not included')
-        }
-
         const hiddenTree = document.getElementById('{{ form.vars.id }}')
         const editArea = document.getElementById('{{ form.vars.id }}_edit')
         let nodeData = [{{ form.vars.data|raw }}][0]
