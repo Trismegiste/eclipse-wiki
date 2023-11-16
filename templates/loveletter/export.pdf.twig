@@ -1,21 +1,14 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{{ vertex.title }}</title>
-        <link rel="stylesheet" href="{{ absolute_url(asset('purecss/pure-min.css')) }}"/>
-        <link rel="stylesheet" href="{{ absolute_url(asset('css/main.css')) }}"/>
-        <style>
-            h1.bg-color {
-                font-size: 130%;
-            }
-        </style>
-    </head>
-    <body>
-        <h1 class="big-title bg-color">{{ vertex.title }}</h1>
-        <div class="loveletter">
-            {{ include('loveletter/content.html.twig') }}
-        </div>
-    </body>
-</html>
+{% extends "base.pdf.twig" %}
+
+{% block stylesheets %}
+    <style>
+        h1.bg-color {
+            font-size: 130%;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}    <div class="loveletter">
+        {{ include('loveletter/content.html.twig') }}
+    </div>
+{% endblock %}
