@@ -4,11 +4,13 @@
     <div x-data="autocomplete">
         <textarea x-model="content" x-on:keyup="keyUp">
         </textarea>
-        <ul x-ref="combo">
-            <template x-for="item in result" x-if="open">
-                <li x-text="item"></li>
-            </template>
-        </ul>
+        <template x-if="open">
+            <ul x-ref="combo">
+                <template x-for="item in result">
+                    <li x-text="item" x-on:click="choose(item)"></li>
+                </template>
+            </ul>
+        </template>
     </div>
 {% endblock %}
 
@@ -21,11 +23,24 @@
 
                 keyUp(event) {
                     const searchLink = /\[\[([^\]]+)$/
-                    const widget = this.$el
-                    let extract = searchLink.exec(this.content.substring(0, widget.selectionStart))
+                    let extract = searchLink.exec(this.content.substring(0, this.$el.selectionStart))
                     if (null !== extract) {
-                        console.log(extract)
+                        this.open = true
+                        fetch('{{ path('app_vertexcrud_search') }}' + '?q=' + extract[1])
+                                .then((response) => {
+                                    return response.json()
+                                })
+                                .then((data) => {
+                                    this.result = data
+                                })
+                    } else {
+                        this.open = false
                     }
+                },
+
+                choose(value) {
+                    console.log(value)
+                    this.open = false
                 }
             }))
         Alpine.start()
