@@ -1,0 +1,33 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+    <div x-data="autocomplete">
+        <textarea x-model="content" x-on:keyup="keyUp">
+        </textarea>
+        <ul x-ref="combo">
+            <template x-for="item in result" x-if="open">
+                <li x-text="item"></li>
+            </template>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="module">
+        Alpine.data('autocomplete', () => ({
+                content: '',
+                open: false,
+                result: [],
+
+                keyUp(event) {
+                    const searchLink = /\[\[([^\]]+)$/
+                    const widget = this.$el
+                    let extract = searchLink.exec(this.content.substring(0, widget.selectionStart))
+                    if (null !== extract) {
+                        console.log(extract)
+                    }
+                }
+            }))
+        Alpine.start()
+    </script>
+{% endblock %}
