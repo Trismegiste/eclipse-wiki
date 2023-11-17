@@ -23,7 +23,7 @@
 
                 keyUp(event) {
                     const searchLink = /\[\[([^\]]+)$/
-                    let extract = searchLink.exec(this.content.substring(0, this.$el.selectionStart))
+                    let extract = searchLink.exec(this.content.substring(0, this.$el.selectionEnd))
                     if (null !== extract) {
                         this.open = true
                         fetch('{{ path('app_vertexcrud_search') }}' + '?q=' + extract[1])
