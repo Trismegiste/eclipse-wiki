@@ -5,11 +5,15 @@
         <textarea x-model="content" x-on:keyup="keyUp" x-ref="editor" style="width: 600px; height: 200px;">
         </textarea>
         <template x-if="open">
-            <ul id="combo" x-bind:style="caretPos">
-                <template x-for="item in result">
-                    <li x-text="item" x-on:click="choose(item)"></li>
+            <select id="combo" x-bind:style="caretPos" size="10"
+                    x-ref="combobox"
+                    x-model="selected"
+                    x-on:click="choose"
+                    x-on:keyup="if ($event.key==='Enter') choose($event)">
+                <template x-for="item in result" :key="item">
+                    <option x-text="item" x-bind:value="item"></option>
                 </template>
-            </ul>
+            </select>
         </template>
     </div>
 {% endblock %}
@@ -29,37 +33,36 @@
                         url: '{{ path('app_vertexcrud_search') }}?q='
                     }
                 ],
-
-                init() {
-                    this.$refs.editor.focus()
-                },
+                selected: null,
 
                 keyUp(event) {
-
                     let strategy = this.strategy[0]
                     let extract = strategy.pattern.exec(this.content.substring(0, this.getCaretPosition()))
                     if (null !== extract) {
+                        // position the combobox only at opening
                         if (!this.open) {
                             let caretPosition = getCaretCoordinates(this.$refs.editor, this.$refs.editor.selectionEnd);
                             let rect = this.$refs.editor.getBoundingClientRect()
-                            this.caretPos.top = (rect.top + caretPosition.top + caretPosition.height / 2) + 'px'
+                            this.caretPos.top = (rect.top + caretPosition.top + caretPosition.height) + 'px'
                             this.caretPos.left = (rect.left + caretPosition.left) + 'px'
                         }
-
+                        // showing the combobox
                         this.open = true
+                        //fetching ajax
                         fetch(strategy.url + extract[1])
                                 .then((response) => {
                                     return response.json()
                                 })
                                 .then((data) => {
                                     this.result = data
+                                    this.open = (data.length > 0)
                                 })
                     } else {
                         this.open = false
                     }
                 },
 
-                choose(value) {
+                choose(event) {
                     let pattern = this.strategy[0].pattern
                     let caret = this.getCaretPosition()
                     let before = this.content.substring(0, caret)
@@ -67,7 +70,7 @@
 
                     let extract = pattern.exec(before)
                     if (null !== extract) {
-                        let newValue = `[[${value}]] `
+                        let newValue = `[[${this.selected}]] `
                         caret += newValue.length - extract[0].length
                         this.content = pattern[Symbol.replace](before, newValue) + after
                         this.$nextTick(() => {
@@ -92,7 +95,7 @@
     <style>
         #combo {
             position: absolute;
-            background-color: gray;
+            background-color: #eee;
         }
     </style>
 {% endblock %}
