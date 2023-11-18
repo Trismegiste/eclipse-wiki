@@ -2,7 +2,7 @@
 
 {% block content %}
     <div x-data="autocomplete">
-        <textarea x-model="content" x-on:keyup="keyUp" x-ref="editor" style="width: 600px; height: 200px;">
+        <textarea x-model="content" x-on:keyup="keyUp" x-on:click="open=false" x-ref="editor" style="width: 600px; height: 200px;">
         </textarea>
         <template x-if="open">
             <select id="combo" x-bind:style="caretPos" size="10"
@@ -23,6 +23,7 @@
         import getCaretCoordinates from 'textarea-caret';
 
         Alpine.data('autocomplete', () => ({
+                caretChangingKey: ['Escape', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'PageUp', 'PageDown'],
                 content: '',
                 open: false,
                 caretPos: {top: 0, left: 0},
@@ -36,18 +37,21 @@
                 selected: null,
 
                 keyUp(event) {
+                    // if the caret is changing position : stop the autocomplete
+                    if (this.caretChangingKey.includes(event.key)) {
+                        this.open = false
+                        return;
+                    }
                     let strategy = this.strategy[0]
                     let extract = strategy.pattern.exec(this.content.substring(0, this.getCaretPosition()))
                     if (null !== extract) {
-                        // position the combobox only at opening
+                        // position the combobox if we match
                         if (!this.open) {
                             let caretPosition = getCaretCoordinates(this.$refs.editor, this.$refs.editor.selectionEnd);
                             let rect = this.$refs.editor.getBoundingClientRect()
                             this.caretPos.top = (rect.top + caretPosition.top + caretPosition.height) + 'px'
                             this.caretPos.left = (rect.left + caretPosition.left) + 'px'
                         }
-                        // showing the combobox
-                        this.open = true
                         //fetching ajax
                         fetch(strategy.url + extract[1])
                                 .then((response) => {
@@ -55,6 +59,7 @@
                                 })
                                 .then((data) => {
                                     this.result = data
+                                    // showing the combobox only if there are results
                                     this.open = (data.length > 0)
                                 })
                     } else {
