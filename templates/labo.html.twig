@@ -32,10 +32,11 @@
                 },
 
                 keyUp(event) {
-                    let extract = this.strategy[0].pattern.exec(this.content.substring(0, this.getCaretPosition()))
+                    let strategy = this.strategy[0]
+                    let extract = strategy.pattern.exec(this.content.substring(0, this.getCaretPosition()))
                     if (null !== extract) {
                         this.open = true
-                        fetch(this.strategy[0].url + extract[1])
+                        fetch(strategy.url + extract[1])
                                 .then((response) => {
                                     return response.json()
                                 })
@@ -53,10 +54,16 @@
                     let before = this.content.substring(0, caret)
                     let after = this.content.substring(caret)
 
-                    let valid = pattern.test(before)
-                    if (valid) {
-                        this.content = pattern[Symbol.replace](before, `[[${value}]] `) + after
-                        this.$refs.editor.focus()
+                    let extract = pattern.exec(before)
+                    if (null !== extract) {
+                        let newValue = `[[${value}]] `
+                        caret += newValue.length - extract[0].length
+                        this.content = pattern[Symbol.replace](before, newValue) + after
+                        this.$nextTick(() => {
+                            this.$refs.editor.focus()
+                            this.$refs.editor.setSelectionRange(caret, caret)
+                        })
+
                     }
                     this.open = false
                 },
