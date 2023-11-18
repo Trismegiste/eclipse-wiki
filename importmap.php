@@ -69,4 +69,8 @@ return [
         'downloaded_to' => 'vendor/js-autocomplete.js',
         'url' => 'https://cdn.jsdelivr.net/npm/js-autocomplete@1.0.4/+esm',
     ],
+    'textarea-caret' => [
+        'downloaded_to' => 'vendor/textarea-caret.js',
+        'url' => 'https://cdn.jsdelivr.net/npm/textarea-caret@3.1.0/+esm',
+    ],
 ];
