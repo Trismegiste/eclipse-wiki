@@ -6,12 +6,12 @@
         </textarea>
         <template x-if="open">
             <select id="combo" x-bind:style="caretPos" size="10"
-                    x-ref="combobox"
                     x-model="selected"
                     x-on:click="choose"
+                    x-on:blur="open=false"
                     x-on:keyup="if ($event.key==='Enter') choose($event)">
                 <template x-for="item in result" :key="item">
-                    <option x-text="item" x-bind:value="item"></option>
+                    <option x-text="item" x-bind:value="item" style="background-image:url(/img/cubemap.png);"></option>
                 </template>
             </select>
         </template>
@@ -101,6 +101,11 @@
         #combo {
             position: absolute;
             background-color: #eee;
+        }
+        #combo option {
+            background-repeat: no-repeat;
+            height: 3em;
+            padding-left: 3em;
         }
     </style>
 {% endblock %}
