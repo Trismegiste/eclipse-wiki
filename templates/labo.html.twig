@@ -2,7 +2,7 @@
 
 {% block content %}
     <div x-data="autocomplete">
-        <textarea x-model="content" x-on:keyup="keyUp">
+        <textarea x-model="content" x-on:keyup="keyUp" x-ref="editor" style="width: 600px; height: 200px;">
         </textarea>
         <template x-if="open">
             <ul x-ref="combo">
@@ -20,13 +20,22 @@
                 content: '',
                 open: false,
                 result: [],
+                strategy: [
+                    {
+                        pattern: /\[\[([^\]]+)$/,
+                        url: '{{ path('app_vertexcrud_search') }}?q='
+                    }
+                ],
+
+                init() {
+                    this.$refs.editor.focus()
+                },
 
                 keyUp(event) {
-                    const searchLink = /\[\[([^\]]+)$/
-                    let extract = searchLink.exec(this.content.substring(0, this.$el.selectionEnd))
+                    let extract = this.strategy[0].pattern.exec(this.content.substring(0, this.getCaretPosition()))
                     if (null !== extract) {
                         this.open = true
-                        fetch('{{ path('app_vertexcrud_search') }}' + '?q=' + extract[1])
+                        fetch(this.strategy[0].url + extract[1])
                                 .then((response) => {
                                     return response.json()
                                 })
@@ -39,8 +48,21 @@
                 },
 
                 choose(value) {
-                    console.log(value)
+                    let pattern = this.strategy[0].pattern
+                    let caret = this.getCaretPosition()
+                    let before = this.content.substring(0, caret)
+                    let after = this.content.substring(caret)
+
+                    let valid = pattern.test(before)
+                    if (valid) {
+                        this.content = pattern[Symbol.replace](before, `[[${value}]] `) + after
+                        this.$refs.editor.focus()
+                    }
                     this.open = false
+                },
+
+                getCaretPosition() {
+                    return this.$refs.editor.selectionEnd
                 }
             }))
         Alpine.start()
