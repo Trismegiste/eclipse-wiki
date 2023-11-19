@@ -1,50 +1,49 @@
 {# Custom rendering for Wikitext with autocompleted wikitext links #}
 {% block wikitext_widget %}
-    {{ form_widget(form) }}
-    <script>
-        window.addEventListener('load', () => {
-            if (typeof Textcomplete === "undefined") {
-                throw new Error('Yuku TextComplete is required')
+    <div x-data="{{ form.vars.id }}_autocomplete">
+        <textarea  id="{{ form.vars.id }}" name="{{ full_name }}"
+                   x-model="content" x-on:keyup="editKeyUp" x-on:click="open=false" x-ref="editor" style="width: 600px; height: 200px;">
+            {{ form.vars.data }}
+        </textarea>
+        <template x-if="open">
+            <select class="autocomplete-combobox" x-bind:style="caretPos" size="10"
+                    x-model="selected"
+                    x-on:click="choose"
+                    x-on:blur="open=false"
+                    x-on:keyup="comboKeyUp">
+                <template x-for="item in result" :key="item['value']">
+                    <option x-bind="item"></option>
+                </template>
+            </select>
+        </template>
+    </div>
+    <script type="module">
+        import buildWikitextClosure from 'wikitext';
+        let strategy = [
+            {
+                pattern: /\[\[file:([^\]]+)$/,
+                url: '{{ path('app_picture_search') }}?q=',
+                boundAttr: (entry) => ({
+                        ['class']: 'img-option',
+                        ['style']: `background-image:url(\\"/picture/get/${entry}\\")`
+                    }),
+                replace: (found) => {
+                    return `[[file:${found}]]`
+                }
+            },
+            {
+                pattern: /\[\[([^\]]+)$/,
+                url: '{{ path('app_vertexcrud_search') }}?q=',
+                boundAttr: (entry) => ({
+                        ['x-text'] () {
+                            return entry
+                        }
+                    }),
+                replace: (found) => {
+                    return `[[${found}]]`
+                }
             }
-
-            let Textarea = Textcomplete.editors.Textarea
-            let editor = new Textarea(document.getElementById('{{ form.vars.id }}'))
-            let textcomplete = new Textcomplete(editor)
-            textcomplete.register([{
-                    // Link strategy for image
-                    match: /(.*)\[\[file\:([^\]]+)$/,
-                    search: function (term, callback) {
-                        fetch('{{ path('app_picture_search') }}' + '?q=' + term)
-                                .then((response) => {
-                                    return response.json()
-                                })
-                                .then((data) => {
-                                    callback(data)
-                                })
-                    },
-                    replace: function (value) {
-                        return '$1[[file:' + value + ']] '
-                    },
-                    template: function (key, value) {
-                        return '<img src="/picture/get/' + key + '"/>'
-                    }
-                },
-                {
-                    // Link strategy for Vertex
-                    match: /(.*)\[\[([^\]]+)$/,
-                    search: function (term, callback) {
-                        fetch('{{ path('app_vertexcrud_search') }}' + '?q=' + term)
-                                .then((response) => {
-                                    return response.json()
-                                })
-                                .then((data) => {
-                                    callback(data)
-                                })
-                    },
-                    replace: function (value) {
-                        return '$1[[' + value + ']] '
-                    }
-                }])
-        })
+        ]
+        Alpine.data('{{ form.vars.id }}_autocomplete', buildWikitextClosure(strategy))
     </script>
 {% endblock %}

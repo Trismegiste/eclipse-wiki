@@ -323,3 +323,16 @@ form .minitoolbar {
 form .minitoolbar i {
     font-size: 150%;
 }
+
+/* autocomplete in wikitext */
+.pure-form .autocomplete-combobox {
+    position: absolute;
+    background-color: #eee;
+    height: auto;
+}
+.autocomplete-combobox .img-option {
+    background-repeat: no-repeat;
+    height: 5em;
+    background-size: auto 5em;
+    width: 10em;
+}
