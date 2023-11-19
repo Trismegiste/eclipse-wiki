@@ -33,11 +33,8 @@
                         pattern: /\[\[file:([^\]]+)$/,
                         url: '{{ path('app_picture_search') }}?q=',
                         boundAttr: (entry) => ({
-                                ['x-text'] () {
-                                    return entry
-                                },
                                 ['class']: 'img-option',
-                                ['style']: `background-image:url('/picture/get/${entry}')`
+                                ['style']: `background-image:url(\\"/picture/get/${entry}\\")`
                             }),
                         replace: (found) => {
                             return `[[file:${found}]]`
@@ -139,8 +136,9 @@
         }
         .autocomplete-combobox .img-option {
             background-repeat: no-repeat;
-            height: 3em;
-            padding-left: 3em;
+            height: 5em;
+            background-size: auto 5em;
+            width: 10em;
         }
     </style>
 {% endblock %}
