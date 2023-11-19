@@ -327,8 +327,10 @@ form .minitoolbar i {
 /* autocomplete in wikitext */
 .pure-form .autocomplete-combobox {
     position: absolute;
-    background-color: #eee;
     height: auto;
+}
+.autocomplete-combobox:focus {
+    background-color: #eee;
 }
 .autocomplete-combobox .img-option {
     background-repeat: no-repeat;
