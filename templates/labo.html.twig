@@ -29,6 +29,17 @@
                 result: [],
                 strategy: [
                     {
+                        pattern: /\[\[file:([^\]]+)$/,
+                        url: '{{ path('app_picture_search') }}?q=',
+                        boundAttr: (entry) => ({
+                                ['x-text'] () {
+                                    return entry
+                                },
+                                ['class']: 'img-option',
+                                ['style']: `background-image:url('/picture/get/${entry}')`
+                            })
+                    },
+                    {
                         pattern: /\[\[([^\]]+)$/,
                         url: '{{ path('app_vertexcrud_search') }}?q=',
                         boundAttr: (entry) => ({
@@ -46,32 +57,39 @@
                         this.open = false
                         return;
                     }
-                    let strategy = this.strategy[0]
-                    let extract = strategy.pattern.exec(this.content.substring(0, this.getCaretPosition()))
-                    if (null !== extract) {
-                        // position the combobox if we match
-                        if (!this.open) {
-                            let caretPosition = getCaretCoordinates(this.$refs.editor, this.$refs.editor.selectionEnd);
-                            let rect = this.$refs.editor.getBoundingClientRect()
-                            this.caretPos.top = (rect.top + caretPosition.top + caretPosition.height) + 'px'
-                            this.caretPos.left = (rect.left + caretPosition.left) + 'px'
+
+                    // iterator over strategies
+                    let found = false
+                    for (let strategy of this.strategy) {
+                        let extract = strategy.pattern.exec(this.content.substring(0, this.getCaretPosition()))
+                        if (null !== extract) {
+                            found = true
+                            // position the combobox if we match
+                            if (!this.open) {
+                                let caretPosition = getCaretCoordinates(this.$refs.editor, this.$refs.editor.selectionEnd);
+                                let rect = this.$refs.editor.getBoundingClientRect()
+                                this.caretPos.top = (rect.top + caretPosition.top + caretPosition.height) + 'px'
+                                this.caretPos.left = (rect.left + caretPosition.left) + 'px'
+                            }
+                            //fetching ajax
+                            fetch(strategy.url + extract[1])
+                                    .then((response) => {
+                                        return response.json()
+                                    })
+                                    .then((data) => {
+                                        this.result = []
+                                        for (let entry of data) {
+                                            let attr = strategy.boundAttr(entry)
+                                            attr['value'] = entry
+                                            this.result.push(attr)
+                                        }
+                                        // showing the combobox only if there are results
+                                        this.open = (data.length > 0)
+                                    })
+                            break
                         }
-                        //fetching ajax
-                        fetch(strategy.url + extract[1])
-                                .then((response) => {
-                                    return response.json()
-                                })
-                                .then((data) => {
-                                    this.result = []
-                                    for (let entry of data) {
-                                        let attr = strategy.boundAttr(entry)
-                                        attr['value'] = entry
-                                        this.result.push(attr)
-                                    }
-                                    // showing the combobox only if there are results
-                                    this.open = (data.length > 0)
-                                })
-                    } else {
+                    }
+                    if (!found) {
                         this.open = false
                     }
                 },
@@ -111,7 +129,7 @@
             position: absolute;
             background-color: #eee;
         }
-        .autocomplete-combobox option {
+        .autocomplete-combobox .img-option {
             background-repeat: no-repeat;
             height: 3em;
             padding-left: 3em;
