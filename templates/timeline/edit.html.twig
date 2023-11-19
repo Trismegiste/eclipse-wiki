@@ -31,6 +31,7 @@
 {% block stylesheets %}
     {{ parent() }}
     <link href="{{ asset('marcantondahmen/sortable-tree.css') }}" rel="stylesheet"/>
+    <link href="{{ asset('yuku/autocomplete.css') }}" rel="stylesheet"/>
 
     <style>
         .tree_widget {
@@ -115,9 +116,14 @@
         .button-continue {
             background-color: #b4ffc7;
         }
-        
+
         .icon-check {
             color: green;
         }
     </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('yuku/textcomplete.min.js') }}"></script>
 {% endblock %}
