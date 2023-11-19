@@ -1,10 +1,7 @@
 {# Custom rendering for Wikitext with autocompleted wikitext links #}
 {% block wikitext_widget %}
     <div x-data="{{ form.vars.id }}_autocomplete">
-        <textarea  id="{{ form.vars.id }}" name="{{ full_name }}"
-                   x-model="content" x-on:keyup="editKeyUp" x-on:click="open=false" x-ref="editor" style="width: 600px; height: 200px;">
-            {{ form.vars.data }}
-        </textarea>
+        {{ form_widget(form) }}
         <template x-if="open">
             <select class="autocomplete-combobox" x-bind:style="caretPos" size="10"
                     x-model="selected"
