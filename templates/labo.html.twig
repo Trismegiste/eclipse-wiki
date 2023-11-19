@@ -3,6 +3,7 @@
 {% block content %}
     <div x-data="autocomplete">
         <textarea x-model="content" x-on:keyup="editKeyUp" x-on:click="open=false" x-ref="editor" style="width: 600px; height: 200px;">
+tototo
         </textarea>
         <template x-if="open">
             <select class="autocomplete-combobox" x-bind:style="caretPos" size="10"
@@ -20,8 +21,8 @@
 
 {% block javascripts %}
     <script type="module">
-        import wikitextCfg from 'wikitext';
-        wikitextCfg.strategy = [
+        import buildWikitextClosure from 'wikitext';
+        let strategy = [
             {
                 pattern: /\[\[file:([^\]]+)$/,
                 url: '{{ path('app_picture_search') }}?q=',
@@ -46,7 +47,7 @@
                 }
             }
         ]
-        Alpine.data('autocomplete', () => (wikitextCfg))
+        Alpine.data('autocomplete', buildWikitextClosure(strategy))
         Alpine.start()
     </script>
 {% endblock %}
