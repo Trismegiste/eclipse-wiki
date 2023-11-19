@@ -23,6 +23,11 @@ export default (strategy) => {
                     return;
                 }
 
+                if (this.open && (event.key === 'Enter')) {
+                    this.choose()
+                    return;
+                }
+
                 // iterator over strategies
                 let found = false
                 for (let strategy of this.strategy) {
@@ -49,7 +54,13 @@ export default (strategy) => {
                                         this.result.push(attr)
                                     }
                                     // showing the combobox only if there are results
-                                    this.open = (data.length > 0)
+                                    if (data.length > 0) {
+                                        this.selected = data[0]
+                                        this.open = true
+                                    } else {
+                                        this.selected = null
+                                        this.open = false
+                                    }
                                 })
                         break
                     }
