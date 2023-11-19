@@ -71,6 +71,23 @@ class Storage
         return $this->searchByName("/$title/" . ($caseInsensitive ? 'i' : ''));
     }
 
+    /**
+     * Searches pictures by its filename (case insensitive or not)
+     * Excludes token pictures and map pictures
+     * @param string $title
+     * @return Iterator
+     */
+    public function searchPictureByTitleContains(string $title): Iterator
+    {
+        $scan = new Finder();
+        $scan->in($this->root)
+                ->files()
+                ->name("/$title.*\\.(jpg|jpeg|png|webp)$/i")
+                ->notName('#^token-#');
+
+        return $scan->getIterator();
+    }
+
     public function searchByName(string $glob): \Iterator
     {
         $scan = new Finder();

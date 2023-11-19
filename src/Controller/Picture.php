@@ -45,11 +45,17 @@ class Picture extends AbstractController
     public function search(Request $request): JsonResponse
     {
         $title = $request->query->get('q', '');
-        $it = $this->storage->searchByTitleContains($title);
+        $limit = $request->query->get('limit', 10);
+        $it = $this->storage->searchPictureByTitleContains($title);
 
         $choice = [];
+        $counter = 0;
         foreach ($it as $fch) {
             $choice[] = $fch->getBasename();
+            if ($counter > $limit) {
+                break;
+            }
+            $counter++;
         }
 
         return new JsonResponse($choice);
