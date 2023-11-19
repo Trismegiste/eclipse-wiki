@@ -5,13 +5,13 @@
         <textarea x-model="content" x-on:keyup="keyUp" x-on:click="open=false" x-ref="editor" style="width: 600px; height: 200px;">
         </textarea>
         <template x-if="open">
-            <select id="combo" x-bind:style="caretPos" size="10"
+            <select class="autocomplete-combobox" x-bind:style="caretPos" size="10"
                     x-model="selected"
                     x-on:click="choose"
                     x-on:blur="open=false"
                     x-on:keyup="if ($event.key==='Enter') choose($event)">
-                <template x-for="item in result" :key="item">
-                    <option x-text="item" x-bind:value="item" style="background-image:url(/img/cubemap.png);"></option>
+                <template x-for="item in result" :key="item['value']">
+                    <option x-bind="item"></option>
                 </template>
             </select>
         </template>
@@ -21,7 +21,6 @@
 {% block javascripts %}
     <script type="module">
         import getCaretCoordinates from 'textarea-caret';
-
         Alpine.data('autocomplete', () => ({
                 caretChangingKey: ['Escape', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'PageUp', 'PageDown'],
                 content: '',
@@ -31,7 +30,12 @@
                 strategy: [
                     {
                         pattern: /\[\[([^\]]+)$/,
-                        url: '{{ path('app_vertexcrud_search') }}?q='
+                        url: '{{ path('app_vertexcrud_search') }}?q=',
+                        boundAttr: (entry) => ({
+                                ['x-text'] () {
+                                    return entry
+                                }
+                            })
                     }
                 ],
                 selected: null,
@@ -58,7 +62,12 @@
                                     return response.json()
                                 })
                                 .then((data) => {
-                                    this.result = data
+                                    this.result = []
+                                    for (let entry of data) {
+                                        let attr = strategy.boundAttr(entry)
+                                        attr['value'] = entry
+                                        this.result.push(attr)
+                                    }
                                     // showing the combobox only if there are results
                                     this.open = (data.length > 0)
                                 })
@@ -98,11 +107,11 @@
 {% block stylesheets %}
     {{ parent() }}
     <style>
-        #combo {
+        .autocomplete-combobox {
             position: absolute;
             background-color: #eee;
         }
-        #combo option {
+        .autocomplete-combobox option {
             background-repeat: no-repeat;
             height: 3em;
             padding-left: 3em;
