@@ -27,6 +27,7 @@
                 open: false,
                 caretPos: {top: 0, left: 0},
                 result: [],
+                selected: null,
                 strategy: [
                     {
                         pattern: /\[\[file:([^\]]+)$/,
@@ -37,7 +38,10 @@
                                 },
                                 ['class']: 'img-option',
                                 ['style']: `background-image:url('/picture/get/${entry}')`
-                            })
+                            }),
+                        replace: (found) => {
+                            return `[[file:${found}]]`
+                        }
                     },
                     {
                         pattern: /\[\[([^\]]+)$/,
@@ -46,10 +50,12 @@
                                 ['x-text'] () {
                                     return entry
                                 }
-                            })
+                            }),
+                        replace: (found) => {
+                            return `[[${found}]]`
+                        }
                     }
                 ],
-                selected: null,
 
                 keyUp(event) {
                     // if the caret is changing position : stop the autocomplete
@@ -95,21 +101,23 @@
                 },
 
                 choose(event) {
-                    let pattern = this.strategy[0].pattern
                     let caret = this.getCaretPosition()
                     let before = this.content.substring(0, caret)
                     let after = this.content.substring(caret)
 
-                    let extract = pattern.exec(before)
-                    if (null !== extract) {
-                        let newValue = `[[${this.selected}]] `
-                        caret += newValue.length - extract[0].length
-                        this.content = pattern[Symbol.replace](before, newValue) + after
-                        this.$nextTick(() => {
-                            this.$refs.editor.focus()
-                            this.$refs.editor.setSelectionRange(caret, caret)
-                        })
-
+                    for (let strategy of this.strategy) {
+                        let pattern = strategy.pattern
+                        let extract = pattern.exec(before)
+                        if (null !== extract) {
+                            let newValue = strategy.replace(this.selected) + ' '
+                            caret += newValue.length - extract[0].length
+                            this.content = pattern[Symbol.replace](before, newValue) + after
+                            this.$nextTick(() => {
+                                this.$refs.editor.focus()
+                                this.$refs.editor.setSelectionRange(caret, caret)
+                            })
+                            break
+                        }
                     }
                     this.open = false
                 },
