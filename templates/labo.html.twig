@@ -2,14 +2,14 @@
 
 {% block content %}
     <div x-data="autocomplete">
-        <textarea x-model="content" x-on:keyup="keyUp" x-on:click="open=false" x-ref="editor" style="width: 600px; height: 200px;">
+        <textarea x-model="content" x-on:keyup="editKeyUp" x-on:click="open=false" x-ref="editor" style="width: 600px; height: 200px;">
         </textarea>
         <template x-if="open">
             <select class="autocomplete-combobox" x-bind:style="caretPos" size="10"
                     x-model="selected"
                     x-on:click="choose"
                     x-on:blur="open=false"
-                    x-on:keyup="if ($event.key==='Enter') choose($event)">
+                    x-on:keyup="comboKeyUp">
                 <template x-for="item in result" :key="item['value']">
                     <option x-bind="item"></option>
                 </template>
@@ -20,109 +20,33 @@
 
 {% block javascripts %}
     <script type="module">
-        import getCaretCoordinates from 'textarea-caret';
-        Alpine.data('autocomplete', () => ({
-                caretChangingKey: ['Escape', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'PageUp', 'PageDown'],
-                content: '',
-                open: false,
-                caretPos: {top: 0, left: 0},
-                result: [],
-                selected: null,
-                strategy: [
-                    {
-                        pattern: /\[\[file:([^\]]+)$/,
-                        url: '{{ path('app_picture_search') }}?q=',
-                        boundAttr: (entry) => ({
-                                ['class']: 'img-option',
-                                ['style']: `background-image:url(\\"/picture/get/${entry}\\")`
-                            }),
-                        replace: (found) => {
-                            return `[[file:${found}]]`
-                        }
-                    },
-                    {
-                        pattern: /\[\[([^\]]+)$/,
-                        url: '{{ path('app_vertexcrud_search') }}?q=',
-                        boundAttr: (entry) => ({
-                                ['x-text'] () {
-                                    return entry
-                                }
-                            }),
-                        replace: (found) => {
-                            return `[[${found}]]`
-                        }
-                    }
-                ],
-
-                keyUp(event) {
-                    // if the caret is changing position : stop the autocomplete
-                    if (this.caretChangingKey.includes(event.key)) {
-                        this.open = false
-                        return;
-                    }
-
-                    // iterator over strategies
-                    let found = false
-                    for (let strategy of this.strategy) {
-                        let extract = strategy.pattern.exec(this.content.substring(0, this.getCaretPosition()))
-                        if (null !== extract) {
-                            found = true
-                            // position the combobox if we match
-                            if (!this.open) {
-                                let caretPosition = getCaretCoordinates(this.$refs.editor, this.$refs.editor.selectionEnd);
-                                let rect = this.$refs.editor.getBoundingClientRect()
-                                this.caretPos.top = (rect.top + caretPosition.top + caretPosition.height) + 'px'
-                                this.caretPos.left = (rect.left + caretPosition.left) + 'px'
-                            }
-                            //fetching ajax
-                            fetch(strategy.url + extract[1])
-                                    .then((response) => {
-                                        return response.json()
-                                    })
-                                    .then((data) => {
-                                        this.result = []
-                                        for (let entry of data) {
-                                            let attr = strategy.boundAttr(entry)
-                                            attr['value'] = entry
-                                            this.result.push(attr)
-                                        }
-                                        // showing the combobox only if there are results
-                                        this.open = (data.length > 0)
-                                    })
-                            break
-                        }
-                    }
-                    if (!found) {
-                        this.open = false
-                    }
-                },
-
-                choose(event) {
-                    let caret = this.getCaretPosition()
-                    let before = this.content.substring(0, caret)
-                    let after = this.content.substring(caret)
-
-                    for (let strategy of this.strategy) {
-                        let pattern = strategy.pattern
-                        let extract = pattern.exec(before)
-                        if (null !== extract) {
-                            let newValue = strategy.replace(this.selected) + ' '
-                            caret += newValue.length - extract[0].length
-                            this.content = pattern[Symbol.replace](before, newValue) + after
-                            this.$nextTick(() => {
-                                this.$refs.editor.focus()
-                                this.$refs.editor.setSelectionRange(caret, caret)
-                            })
-                            break
-                        }
-                    }
-                    this.open = false
-                },
-
-                getCaretPosition() {
-                    return this.$refs.editor.selectionEnd
+        import wikitextCfg from 'wikitext';
+        wikitextCfg.strategy = [
+            {
+                pattern: /\[\[file:([^\]]+)$/,
+                url: '{{ path('app_picture_search') }}?q=',
+                boundAttr: (entry) => ({
+                        ['class']: 'img-option',
+                        ['style']: `background-image:url(\\"/picture/get/${entry}\\")`
+                    }),
+                replace: (found) => {
+                    return `[[file:${found}]]`
                 }
-            }))
+            },
+            {
+                pattern: /\[\[([^\]]+)$/,
+                url: '{{ path('app_vertexcrud_search') }}?q=',
+                boundAttr: (entry) => ({
+                        ['x-text'] () {
+                            return entry
+                        }
+                    }),
+                replace: (found) => {
+                    return `[[${found}]]`
+                }
+            }
+        ]
+        Alpine.data('autocomplete', () => (wikitextCfg))
         Alpine.start()
     </script>
 {% endblock %}
