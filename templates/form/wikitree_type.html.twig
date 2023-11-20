@@ -9,13 +9,43 @@
                     <div class="pure-u-1-24"></div>
                 </template>    
                 <div class="pure-u">
-                    <div style="background-color:red; height:5px; width:100%"></div>
-                    <div x-text="node.title"></div>
-                    <div style="background-color:red; height:5px; width:100%"></div>
+                    <div class="dropzone"
+                         x-on:dragenter="dropZoneEnter"
+                         x-on:dragleave="dropZoneLeave"
+                         x-on:dragover="dropZoneOver">
+                    </div>
+                    <div class="node-content" draggable="true"
+                         x-on:dragstart="nodeDragStart"
+                         x-on:dragend="nodeDragEnd">
+                        <span x-text="node.title"></span>
+                    </div>
+                    <div class="dropzone"
+                         x-on:dragenter="dropZoneEnter"
+                         x-on:dragleave="dropZoneLeave"
+                         x-on:dragover="dropZoneOver">
+                    </div>
                 </div>
             </div>
         </template>
     </div>
+
+    <style>
+        .dropzone {
+            height: 4px;
+        }
+        .dropzone-hilite {
+            background-color: green;
+            height: 1em;
+        }
+        .node-content {
+            border: 2px solid #333;
+            padding: 0.3em;
+            border-radius: 0.3em;
+        }
+        .dragging {
+            background-color: lightgreen;
+        }
+    </style>
 
     <div id="{{ form.vars.id }}_tree" class="tree_widget"></div>
     <textarea id="{{ form.vars.id }}_edit" class="pure-input-1" hidden="true"></textarea>
@@ -24,7 +54,31 @@
         const newTree = Object.assign(new TimelineTree(), {{ form.vars.data|raw }})
 
         Alpine.data('arbre', () => ({
-                tree: newTree
+                tree: newTree,
+
+                nodeDragStart(event) {
+                    event.dataTransfer.setData("text/plain", "This text may be dragged")
+                    event.dataTransfer.effectAllowed = "move";
+                    event.target.classList.add("dragging")
+                },
+
+                nodeDragEnd(event) {
+                    event.target.classList.remove("dragging")
+                },
+
+                dropZoneEnter(event) {
+                    event.preventDefault()
+                    event.target.classList.add("dropzone-hilite")
+                },
+
+                dropZoneOver(event) {
+                    event.preventDefault()
+                },
+
+                dropZoneLeave(event) {
+                    event.preventDefault()
+                    event.target.classList.remove("dropzone-hilite")
+                }
             }))
 
         import SortableTree from 'sortable-tree';
