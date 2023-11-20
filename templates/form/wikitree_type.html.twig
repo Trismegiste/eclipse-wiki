@@ -1,9 +1,28 @@
 {# Custom rendering for tree with autocompleted wikitext links #}
 {% block wiki_tree_widget %}
     {{ form_widget(form) }}
+
+    <div x-data="arbre">
+        <template x-for="node in tree.getFlatList()" :key="node.title">
+            <div class="pure-g">
+                <template x-for="i in node.level">
+                    <div class="pure-u-1-24"></div>
+                </template>
+                <div class="pure-u" x-text="node.title"></div>
+            </div>
+        </template>
+    </div>
+
     <div id="{{ form.vars.id }}_tree" class="tree_widget"></div>
     <textarea id="{{ form.vars.id }}_edit" class="pure-input-1" hidden="true"></textarea>
     <script type="module">
+        import { TimelineTree } from 'timeline-tree';
+        const newTree = Object.assign(new TimelineTree(), {{ form.vars.data|raw }})
+
+        Alpine.data('arbre', () => ({
+                tree: newTree
+            }))
+
         import SortableTree from 'sortable-tree';
         const hiddenTree = document.getElementById('{{ form.vars.id }}')
         const editArea = document.getElementById('{{ form.vars.id }}_edit')

@@ -36,6 +36,9 @@ return [
     'wikitext' => [
         'path' => 'wikitext-autocomplete.js',
     ],
+    'timeline-tree' => [
+        'path' => 'timeline/tree.js',
+    ],
     'alpinejs' => [
         'downloaded_to' => 'vendor/alpinejs.js',
         'url' => 'https://cdn.jsdelivr.net/npm/alpinejs@3.13.2/+esm',
