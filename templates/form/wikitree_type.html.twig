@@ -7,8 +7,12 @@
             <div class="pure-g">
                 <template x-for="i in node.level">
                     <div class="pure-u-1-24"></div>
-                </template>
-                <div class="pure-u" x-text="node.title"></div>
+                </template>    
+                <div class="pure-u">
+                    <div style="background-color:red; height:5px; width:100%"></div>
+                    <div x-text="node.title"></div>
+                    <div style="background-color:red; height:5px; width:100%"></div>
+                </div>
             </div>
         </template>
     </div>
