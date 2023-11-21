@@ -80,6 +80,10 @@
         .dragging {
             background-color: lightblue;
         }
+
+        .timeline-tree button[data-alive=true] {
+            background-color: #ffb4b4;
+        }
     </style>
 
     <div id="{{ form.vars.id }}_tree" class="tree_widget"></div>
@@ -160,8 +164,12 @@
                 },
 
                 deleteNode(event) {
-                    let source = this.$el.dataset.index
-                    this.tree.deleteNode(parseInt(source))
+                    let state = this.$el.dataset
+                    if (state.alive === 'true') {
+                        this.tree.deleteNode(parseInt(state.index))
+                    } else {
+                        state.alive = 'true'
+                    }
                 }
 
             }))
