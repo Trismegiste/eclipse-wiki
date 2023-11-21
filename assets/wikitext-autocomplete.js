@@ -37,7 +37,7 @@ export default (strategy) => {
                         // position the combobox if we match
                         if (!this.open) {
                             let caretPosition = offset(this.$refs.editor)
-                            this.caretPos.top = (caretPosition.top + caretPosition.height) + 'px'
+                            this.caretPos.top = (caretPosition.top + caretPosition.height - this.$refs.editor.scrollTop) + 'px'
                             this.caretPos.left = caretPosition.left + 'px'
                         }
                         //fetching ajax
