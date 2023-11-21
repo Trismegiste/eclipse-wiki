@@ -7,15 +7,15 @@ export class TimelineTree {
 
     getFlatList() {
         let listing = []
-        this.recursiveFlat(0, this, listing, null, null)
+        this.recursiveFlat(0, this, listing, null)
 
         return listing
     }
 
-    recursiveFlat(level, node, listing, parent, childIdx) {
-        listing.push({level, title: node.data.title, finished: node.data.finished, parent, childIdx})
+    recursiveFlat(level, node, listing, parent) {
+        listing.push({level, title: node.data.title, finished: node.data.finished, parent, node})
         for (const [idx, child] of node.nodes.entries()) {
-            this.recursiveFlat(level + 1, child, listing, node, idx)
+            this.recursiveFlat(level + 1, child, listing, node)
         }
     }
 
@@ -27,10 +27,11 @@ export class TimelineTree {
         // go back to internal model
         let sourceParent = source.parent
         let targetParent = target.parent
-        let sourceNode = sourceParent.nodes[source.childIdx]
-        let targetNode = targetParent.nodes[target.childIdx]
+        let sourceNode = source.node
+        let targetNode = target.node
         // remove source
-        let removed = sourceParent.nodes.splice(source.childIdx, 1)
+        let childIdx = sourceParent.nodes.indexOf(sourceNode)
+        let removed = sourceParent.nodes.splice(childIdx, 1)
         // find the new index of target since it could change
         let newTargetIdx = targetParent.nodes.indexOf(targetNode) + delta
         targetParent.nodes.splice(newTargetIdx, 0, removed[0])
@@ -56,10 +57,11 @@ export class TimelineTree {
         // go back to internal model
         let sourceParent = source.parent
         let targetParent = target.parent
-        let sourceNode = sourceParent.nodes[source.childIdx]
-        let targetNode = targetParent.nodes[target.childIdx]
+        let sourceNode = source.node
+        let targetNode = target.node
         // remove source
-        let removed = source.parent.nodes.splice(source.childIdx, 1)
+        let childIdx = sourceParent.nodes.indexOf(sourceNode)
+        let removed = sourceParent.nodes.splice(childIdx, 1)
         targetNode.nodes.push(removed[0])
     }
 }
