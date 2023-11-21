@@ -93,4 +93,12 @@ export class TimelineTree {
         let source = flatten[idx].node
         source.nodes.push({data: {title: content, finished: false}, nodes: []})
     }
+
+    deleteNode(idx) {
+        let flatten = this.getFlatList()
+        let node = flatten[idx].node
+        let parent = flatten[idx].parent
+        let childIdx = parent.nodes.indexOf(node)
+        let removed = parent.nodes.splice(childIdx, 1)
+    }
 }
