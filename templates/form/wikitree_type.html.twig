@@ -16,16 +16,20 @@
                              x-bind:data-index="index">
                         </div>
                     </template>
-                    <div class="node-content"
-                         x-bind:draggable="node.parent !== null"
-                         x-on:dragstart="nodeDragStart"
-                         x-on:dragend="nodeDragEnd"
-                         x-on:dragenter="nodeEnter"
-                         x-on:dragleave="nodeLeave"
-                         x-on:dragover="dropZoneOver"
-                         x-on:drop="appendNode"
-                         x-bind:data-index="index">
-                        <span x-text="node.title"></span>
+                    <div class="node-content">
+                        <span x-text="node.title"
+                              x-bind:draggable="node.parent !== null"
+                              x-on:dragstart="nodeDragStart"
+                              x-on:dragend="nodeDragEnd"
+                              x-on:dragenter="nodeEnter"
+                              x-on:dragleave="nodeLeave"
+                              x-on:dragover="dropZoneOver"
+                              x-on:drop="appendNode"
+                              x-bind:data-index="index"></span>
+                        <button class="pure-button"><i class="icon-edit"></i></button>
+                        <button class="pure-button"><i class="icon-newchild"></i></button>
+                        <button class="pure-button"><i class="icon-trash-empty"></i></button>
+                        <button class="pure-button"><i class="icon-check"></i></button>
                     </div>
                     <template x-if="node.parent !== null">
                         <div class="dropzone"
@@ -54,9 +58,14 @@
             color:white;
         }
         .node-content {
+            display: flex;
+        }
+        .node-content > span {
+            display: flex;
             border: 2px solid #333;
             padding: 0.3em;
             border-radius: 0.3em;
+            width: 100%;
         }
         .dragging {
             background-color: lightblue;
