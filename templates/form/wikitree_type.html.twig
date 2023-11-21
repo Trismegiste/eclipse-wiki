@@ -168,6 +168,9 @@
                     if (state.alive === 'true') {
                         this.tree.deleteNode(parseInt(state.index))
                     } else {
+                        document.querySelectorAll('button[data-alive=true]').forEach(elem => {
+                            elem.dataset.alive = 'false'
+                        })
                         state.alive = 'true'
                     }
                 }
