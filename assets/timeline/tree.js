@@ -81,4 +81,10 @@ export class TimelineTree {
 
         return false
     }
+
+    flipNode(idx) {
+        let flatten = this.getFlatList()
+        let source = flatten[idx].node
+        source.data.finished = !source.data.finished
+    }
 }
