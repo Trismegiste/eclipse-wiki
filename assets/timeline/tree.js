@@ -19,19 +19,43 @@ export class TimelineTree {
         }
     }
 
-    moveNodeAfter(sourceIdx, targetIdx) {
+    moveNodeDelta(sourceIdx, targetIdx, delta) {
         let flatten = this.getFlatList()
+        // get model on list
         let source = flatten[sourceIdx]
         let target = flatten[targetIdx]
-        let removed = source.parent.nodes.splice(source.childIdx, 1)
-        target.parent.nodes.splice(target.childIdx, 0, removed[0])
+        // go back to internal model
+        let sourceParent = source.parent
+        let targetParent = target.parent
+        let sourceNode = sourceParent.nodes[source.childIdx]
+        let targetNode = targetParent.nodes[target.childIdx]
+        // remove source
+        let removed = sourceParent.nodes.splice(source.childIdx, 1)
+        // find the new index of target since it could change
+        let newTargetIdx = targetParent.nodes.indexOf(targetNode) + delta
+        targetParent.nodes.splice(newTargetIdx, 0, removed[0])
+    }
+
+    moveNodeBefore(sourceIdx, targetIdx) {
+        this.moveNodeDelta(sourceIdx, targetIdx, 0)
+    }
+
+    moveNodeAfter(sourceIdx, targetIdx) {
+        this.moveNodeDelta(sourceIdx, targetIdx, 1)
     }
 
     appendNode(sourceIdx, targetIdx) {
         let flatten = this.getFlatList()
+        // get model on list
         let source = flatten[sourceIdx]
         let target = flatten[targetIdx]
+        // go back to internal model
+        let sourceParent = source.parent
+        let targetParent = target.parent
+        let sourceNode = sourceParent.nodes[source.childIdx]
+        let targetNode = targetParent.nodes[target.childIdx]
+        // remove source
         let removed = source.parent.nodes.splice(source.childIdx, 1)
-        target.parent.nodes[target.childIdx].nodes.push(removed[0])
+        targetNode.nodes.push(removed[0])
     }
 }

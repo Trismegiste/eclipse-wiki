@@ -11,7 +11,7 @@
                          x-on:dragenter="dropZoneEnter"
                          x-on:dragleave="dropZoneLeave"
                          x-on:dragover="dropZoneOver"
-                         x-on:drop="dropNode"
+                         x-on:drop="moveNodeBefore"
                          x-bind:data-index="index">
                     </div>
                     <div class="node-content" draggable="true"
@@ -28,7 +28,7 @@
                          x-on:dragenter="dropZoneEnter"
                          x-on:dragleave="dropZoneLeave"
                          x-on:dragover="dropZoneOver"
-                         x-on:drop="dropNode"
+                         x-on:drop="moveNodeAfter"
                          x-bind:data-index="index">
                     </div>
                 </div>
@@ -74,7 +74,6 @@
                 },
 
                 nodeDragEnd(event) {
-                    this.draggedNode = null
                     event.target.classList.remove("dragging")
                 },
 
@@ -102,11 +101,20 @@
                     event.preventDefault()
                 },
 
-                dropNode(event) {
+                moveNodeBefore(event) {
+                    event.preventDefault()
+                    let source = event.dataTransfer.getData("text")
+                    let target = this.$el.dataset.index
+                    this.tree.moveNodeBefore(parseInt(source), parseInt(target))
+                    event.target.classList.remove("dropzone-hilite")
+                },
+
+                moveNodeAfter(event) {
                     event.preventDefault()
                     let source = event.dataTransfer.getData("text")
                     let target = this.$el.dataset.index
                     this.tree.moveNodeAfter(parseInt(source), parseInt(target))
+                    event.target.classList.remove("dropzone-hilite")
                 },
 
                 appendNode(event) {
@@ -114,6 +122,7 @@
                     let source = event.dataTransfer.getData("text")
                     let target = this.$el.dataset.index
                     this.tree.appendNode(parseInt(source), parseInt(target))
+                    event.target.classList.remove("parent-hilite")
                 }
 
             }))
