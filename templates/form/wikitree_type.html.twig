@@ -43,7 +43,14 @@
                                 </template>
                             </select>
                         </template>
+                        <button class="pure-button button-write"
+                                x-show="editingNode === index"
+                                x-on:click.prevent="confirmEditNode"><i class="icon-edit"></i></button>
+                        <button class="pure-button button-delete"
+                                x-show="editingNode === index"
+                                x-on:click.prevent="cancelEditNode"><i class="icon-edit"></i></button>
                         <button class="pure-button"
+                                x-show="editingNode !== index"
                                 x-on:click.prevent="editNode"
                                 x-bind:data-index="index"
                                 x-bind:disabled="node.parent === null"><i class="icon-edit"></i></button>
@@ -224,6 +231,16 @@
                     this.editingNode = parseInt(source)
                     let flatten = this.tree.getFlatList()
                     this.content = flatten[this.editingNode].node.data.title
+                },
+
+                confirmEditNode(event) {
+                    let flatten = this.tree.getFlatList()
+                    flatten[this.editingNode].node.data.title = this.content
+                    this.editingNode = null
+                },
+
+                cancelEditNode(event) {
+                    this.editingNode = null
                 }
 
             }))
