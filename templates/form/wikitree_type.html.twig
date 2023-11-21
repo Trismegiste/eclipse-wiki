@@ -17,6 +17,8 @@
                     <div class="node-content" draggable="true"
                          x-on:dragstart="nodeDragStart"
                          x-on:dragend="nodeDragEnd"
+                         x-on:dragenter="nodeEnter"
+                         x-on:dragleave="nodeLeave"
                          x-on:dragover="dropZoneOver"
                          x-on:drop="appendNode"
                          x-bind:data-index="index">
@@ -41,6 +43,10 @@
         .dropzone-hilite {
             background-color: green;
             height: 1em;
+        }
+        .parent-hilite {
+            background-color: green;
+            color:white;
         }
         .node-content {
             border: 2px solid #333;
@@ -77,13 +83,23 @@
                     event.target.classList.add("dropzone-hilite")
                 },
 
-                dropZoneOver(event) {
-                    event.preventDefault()
-                },
-
                 dropZoneLeave(event) {
                     event.preventDefault()
                     event.target.classList.remove("dropzone-hilite")
+                },
+
+                nodeEnter(event) {
+                    event.preventDefault()
+                    event.target.classList.add("parent-hilite")
+                },
+
+                nodeLeave(event) {
+                    event.preventDefault()
+                    event.target.classList.remove("parent-hilite")
+                },
+
+                dropZoneOver(event) {
+                    event.preventDefault()
                 },
 
                 dropNode(event) {
