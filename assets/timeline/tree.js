@@ -58,9 +58,27 @@ export class TimelineTree {
         let sourceParent = source.parent
         let sourceNode = source.node
         let targetNode = target.node
+        // Check if the target node is not among the descendants of the source node
+        if (this.hasDescendant(sourceNode, targetNode)) {
+            return;
+        }
+
         // remove source
         let childIdx = sourceParent.nodes.indexOf(sourceNode)
         let removed = sourceParent.nodes.splice(childIdx, 1)
         targetNode.nodes.push(removed[0])
+    }
+
+    hasDescendant(ancestor, offspring) {
+        if (offspring === ancestor) {
+            return true
+        }
+        for (let child of ancestor.nodes) {
+            if (this.hasDescendant(child, offspring)) {
+                return true
+            }
+        }
+
+        return false
     }
 }

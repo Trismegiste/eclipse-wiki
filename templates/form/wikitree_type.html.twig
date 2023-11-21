@@ -16,7 +16,8 @@
                              x-bind:data-index="index">
                         </div>
                     </template>
-                    <div class="node-content" draggable="true"
+                    <div class="node-content"
+                         x-bind:draggable="node.parent !== null"
                          x-on:dragstart="nodeDragStart"
                          x-on:dragend="nodeDragEnd"
                          x-on:dragenter="nodeEnter"
