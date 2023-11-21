@@ -37,11 +37,15 @@ export class TimelineTree {
     }
 
     moveNodeBefore(sourceIdx, targetIdx) {
-        this.moveNodeDelta(sourceIdx, targetIdx, 0)
+        if (sourceIdx !== targetIdx) {
+            this.moveNodeDelta(sourceIdx, targetIdx, 0)
+        }
     }
 
     moveNodeAfter(sourceIdx, targetIdx) {
-        this.moveNodeDelta(sourceIdx, targetIdx, 1)
+        if (sourceIdx !== targetIdx) {
+            this.moveNodeDelta(sourceIdx, targetIdx, 1)
+        }
     }
 
     appendNode(sourceIdx, targetIdx) {
