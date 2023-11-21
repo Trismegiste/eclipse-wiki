@@ -31,6 +31,7 @@
                         <textarea x-show="editingNode === index"
                                   x-ref="editor"
                                   x-model="content"
+                                  x-on:blur="open=false"
                                   x-on:keyup="editKeyUp"></textarea>
                         <template x-if="open">
                             <select class="autocomplete-combobox" x-bind:style="caretPos" size="10"
@@ -231,6 +232,9 @@
                     this.editingNode = parseInt(source)
                     let flatten = this.tree.getFlatList()
                     this.content = flatten[this.editingNode].node.data.title
+                    this.$nextTick(() => {
+                        this.$refs.editor.focus()
+                    })
                 },
 
                 confirmEditNode(event) {

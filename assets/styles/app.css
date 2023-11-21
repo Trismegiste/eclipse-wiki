@@ -328,6 +328,7 @@ form .minitoolbar i {
 .pure-form .autocomplete-combobox {
     position: absolute;
     height: auto;
+    z-index: 1;
 }
 .autocomplete-combobox:focus {
     background-color: #eee;
