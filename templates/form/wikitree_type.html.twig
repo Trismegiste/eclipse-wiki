@@ -3,7 +3,7 @@
     {{ form_widget(form) }}
 
     <div x-data="arbre" class="timeline-tree">
-        <template x-for="(node, index) in tree.getFlatList()" :key="node.title">
+        <template x-for="(node, index) in tree.getFlatList()" :key="index + node.title">
             <div class="pure-g">
                 <div class="pure-u" x-bind:style="{width: node.level*5 + '%'}"></div>
                 <div class="pure-u" x-bind:style="{width: (100-node.level*5) + '%'}">
@@ -28,7 +28,7 @@
                               x-on:drop="appendNode"
                               x-bind:data-index="index"></span>
                         <button class="pure-button" x-bind:disabled="node.parent === null"><i class="icon-edit"></i></button>
-                        <button class="pure-button"><i class="icon-newchild"></i></button>
+                        <button class="pure-button" x-on:click.prevent="appendNewChild" x-bind:data-index="index"><i class="icon-newchild"></i></button>
                         <button class="pure-button" x-bind:disabled="node.parent === null"><i class="icon-trash-empty"></i></button>
                         <button class="pure-button" x-on:click.prevent="checkNode" x-bind:data-index="index"><i class="icon-check"></i></button>
                     </div>
@@ -147,6 +147,11 @@
                 checkNode(event) {
                     let source = this.$el.dataset.index
                     this.tree.flipNode(parseInt(source))
+                },
+
+                appendNewChild(event) {
+                    let source = this.$el.dataset.index
+                    this.tree.appendNewChild(parseInt(source), 'New child')
                 }
 
             }))

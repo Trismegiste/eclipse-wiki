@@ -87,4 +87,10 @@ export class TimelineTree {
         let source = flatten[idx].node
         source.data.finished = !source.data.finished
     }
+
+    appendNewChild(idx, content) {
+        let flatten = this.getFlatList()
+        let source = flatten[idx].node
+        source.nodes.push({data: {title: content, finished: false}, nodes: []})
+    }
 }
