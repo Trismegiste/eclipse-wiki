@@ -10,17 +10,22 @@
                     <div class="dropzone"
                          x-on:dragenter="dropZoneEnter"
                          x-on:dragleave="dropZoneLeave"
-                         x-on:dragover="dropZoneOver">
+                         x-on:dragover="dropZoneOver"
+                         x-on:drop="dropNode"
+                         x-model="node">
                     </div>
                     <div class="node-content" draggable="true"
                          x-on:dragstart="nodeDragStart"
-                         x-on:dragend="nodeDragEnd">
+                         x-on:dragend="nodeDragEnd"
+                         x-model="node">
                         <span x-text="node.title"></span>
                     </div>
                     <div class="dropzone"
                          x-on:dragenter="dropZoneEnter"
                          x-on:dragleave="dropZoneLeave"
-                         x-on:dragover="dropZoneOver">
+                         x-on:dragover="dropZoneOver"
+                         x-on:drop="dropNode"
+                         x-model="node">
                     </div>
                 </div>
             </div>
@@ -53,14 +58,17 @@
 
         Alpine.data('arbre', () => ({
                 tree: newTree,
+                draggedNode: null,
 
                 nodeDragStart(event) {
-                    event.dataTransfer.setData("text/plain", "This text may be dragged")
+                    this.draggedNode = this.$el._x_model.get()
+                    event.dataTransfer.setData("text/plain", this.$el._x_model.get().title)
                     event.dataTransfer.effectAllowed = "move";
                     event.target.classList.add("dragging")
                 },
 
                 nodeDragEnd(event) {
+                    this.draggedNode = null
                     event.target.classList.remove("dragging")
                 },
 
@@ -76,7 +84,15 @@
                 dropZoneLeave(event) {
                     event.preventDefault()
                     event.target.classList.remove("dropzone-hilite")
+                },
+
+                dropNode(event) {
+                    event.preventDefault()
+                    let target = this.$el._x_model.get()
+                    target.parent.nodes.splice(target.childIdx, 0, this.draggedNode)
+                    this.draggedNode.parent.nodes.splice(this.draggedNode.childIdx, 1)
                 }
+
             }))
 
         import SortableTree from 'sortable-tree';
