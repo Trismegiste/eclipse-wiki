@@ -26,4 +26,12 @@ export class TimelineTree {
         let removed = source.parent.nodes.splice(source.childIdx, 1)
         target.parent.nodes.splice(target.childIdx, 0, removed[0])
     }
+
+    appendNode(sourceIdx, targetIdx) {
+        let flatten = this.getFlatList()
+        let source = flatten[sourceIdx]
+        let target = flatten[targetIdx]
+        let removed = source.parent.nodes.splice(source.childIdx, 1)
+        target.parent.nodes[target.childIdx].nodes.push(removed[0])
+    }
 }

@@ -17,6 +17,8 @@
                     <div class="node-content" draggable="true"
                          x-on:dragstart="nodeDragStart"
                          x-on:dragend="nodeDragEnd"
+                         x-on:dragover="dropZoneOver"
+                         x-on:drop="appendNode"
                          x-bind:data-index="index">
                         <span x-text="node.title"></span>
                     </div>
@@ -46,7 +48,7 @@
             border-radius: 0.3em;
         }
         .dragging {
-            background-color: lightgreen;
+            background-color: lightblue;
         }
     </style>
 
@@ -89,6 +91,13 @@
                     let source = event.dataTransfer.getData("text")
                     let target = this.$el.dataset.index
                     this.tree.moveNodeAfter(parseInt(source), parseInt(target))
+                },
+
+                appendNode(event) {
+                    event.preventDefault()
+                    let source = event.dataTransfer.getData("text")
+                    let target = this.$el.dataset.index
+                    this.tree.appendNode(parseInt(source), parseInt(target))
                 }
 
             }))
