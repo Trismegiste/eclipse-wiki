@@ -1,7 +1,7 @@
 /*
  * Eclipse Wiki
  */
-import getCaretCoordinates from 'textarea-caret';
+import {position, offset} from 'caret-pos';
 export default (strategy) => {
     return () => ({
             caretChangingKey: ['Escape', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'PageUp', 'PageDown'],
@@ -36,10 +36,9 @@ export default (strategy) => {
                         found = true
                         // position the combobox if we match
                         if (!this.open) {
-                            let caretPosition = getCaretCoordinates(this.$refs.editor, this.$refs.editor.selectionEnd);
-                            let rect = this.$refs.editor.getBoundingClientRect()
-                            this.caretPos.top = (rect.top + caretPosition.top + caretPosition.height) + 'px'
-                            this.caretPos.left = (rect.left + caretPosition.left) + 'px'
+                            let caretPosition = offset(this.$refs.editor)
+                            this.caretPos.top = (caretPosition.top + caretPosition.height) + 'px'
+                            this.caretPos.left = caretPosition.left + 'px'
                         }
                         //fetching ajax
                         fetch(strategy.url + extract[1])
