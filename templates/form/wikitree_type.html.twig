@@ -18,6 +18,7 @@
                     </template>
                     <div class="node-content">
                         <span x-text="node.title"
+                              x-show="editingNode !== index"
                               x-bind:class="{'finished-node': node.finished}"
                               x-bind:draggable="node.parent !== null"
                               x-on:dragstart="nodeDragStart"
@@ -27,6 +28,7 @@
                               x-on:dragover="dropZoneOver"
                               x-on:drop="appendNode"
                               x-bind:data-index="index"></span>
+                        <textarea x-show="editingNode === index" x-on:blur="editingNode=null"></textarea>
                         <button class="pure-button"
                                 x-on:click.prevent="editNode"
                                 x-bind:data-index="index"
@@ -89,6 +91,12 @@
         .timeline-tree button[data-alive=true] {
             background-color: #ffb4b4;
         }
+        .timeline-tree .node-content textarea {
+            display: flex;
+            width: 100%;
+            margin-bottom: 0;
+        }
+
     </style>
 
     <div id="{{ form.vars.id }}_tree" class="tree_widget"></div>
@@ -99,6 +107,7 @@
 
         Alpine.data('arbre', () => ({
                 tree: newTree,
+                editingNode: null,
 
                 nodeDragStart(event) {
                     event.dataTransfer.setData("text/plain", this.$el.dataset.index)
@@ -182,6 +191,7 @@
 
                 editNode(event) {
                     let source = this.$el.dataset.index
+                    this.editingNode = parseInt(source)
                     console.log(`Edit node ${source}`)
                 }
 
