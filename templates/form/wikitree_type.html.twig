@@ -16,7 +16,7 @@
                              x-bind:data-index="index">
                         </div>
                     </template>
-                    <div class="node-content">
+                    <div class="node-content" x-data="nodeAutocomplete">
                         <span x-text="node.title"
                               x-show="editingNode !== index"
                               x-bind:class="{'finished-node': node.finished}"
@@ -28,7 +28,21 @@
                               x-on:dragover="dropZoneOver"
                               x-on:drop="appendNode"
                               x-bind:data-index="index"></span>
-                        <textarea x-show="editingNode === index" x-on:blur="editingNode=null"></textarea>
+                        <textarea x-show="editingNode === index"
+                                  x-ref="editor"
+                                  x-model="content"
+                                  x-on:keyup="editKeyUp"></textarea>
+                        <template x-if="open">
+                            <select class="autocomplete-combobox" x-bind:style="caretPos" size="10"
+                                    x-model="selected"
+                                    x-on:click="choose"
+                                    x-on:blur="open=false"
+                                    x-on:keyup="comboKeyUp">
+                                <template x-for="item in result" :key="item['value']">
+                                    <option x-bind="item"></option>
+                                </template>
+                            </select>
+                        </template>
                         <button class="pure-button"
                                 x-on:click.prevent="editNode"
                                 x-bind:data-index="index"
@@ -103,8 +117,24 @@
     <textarea id="{{ form.vars.id }}_edit" class="pure-input-1" hidden="true"></textarea>
     <script type="module">
         import { TimelineTree } from 'timeline-tree';
-        const newTree = Object.assign(new TimelineTree(), {{ form.vars.data|raw }})
+        import buildWikitextClosure from 'wikitext';
 
+        let strategy = [
+            {
+                pattern: /\[\[([^\]]+)$/,
+                url: '{{ path('app_vertexcrud_search') }}?q=',
+                boundAttr: (entry) => ({
+                        ['x-text'] () {
+                            return entry
+                        }
+                    }),
+                replace: (found) => {
+                    return `[[${found}]]`
+                }
+            }
+        ]
+
+        const newTree = Object.assign(new TimelineTree(), {{ form.vars.data|raw }})
         Alpine.data('arbre', () => ({
                 tree: newTree,
                 editingNode: null,
@@ -192,10 +222,13 @@
                 editNode(event) {
                     let source = this.$el.dataset.index
                     this.editingNode = parseInt(source)
-                    console.log(`Edit node ${source}`)
+                    let flatten = this.tree.getFlatList()
+                    this.content = flatten[this.editingNode].node.data.title
                 }
 
             }))
+
+        Alpine.data('nodeAutocomplete', buildWikitextClosure(strategy))
 
         import SortableTree from 'sortable-tree';
         const hiddenTree = document.getElementById('{{ form.vars.id }}')
