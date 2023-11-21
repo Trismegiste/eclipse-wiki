@@ -7,13 +7,15 @@
             <div class="pure-g">
                 <div class="pure-u" x-bind:style="{width: node.level*5 + '%'}"></div>
                 <div class="pure-u" x-bind:style="{width: (100-node.level*5) + '%'}">
-                    <div class="dropzone"
-                         x-on:dragenter="dropZoneEnter"
-                         x-on:dragleave="dropZoneLeave"
-                         x-on:dragover="dropZoneOver"
-                         x-on:drop="moveNodeBefore"
-                         x-bind:data-index="index">
-                    </div>
+                    <template x-if="node.parent !== null">
+                        <div class="dropzone"
+                             x-on:dragenter="dropZoneEnter"
+                             x-on:dragleave="dropZoneLeave"
+                             x-on:dragover="dropZoneOver"
+                             x-on:drop="moveNodeBefore"
+                             x-bind:data-index="index">
+                        </div>
+                    </template>
                     <div class="node-content" draggable="true"
                          x-on:dragstart="nodeDragStart"
                          x-on:dragend="nodeDragEnd"
@@ -24,13 +26,15 @@
                          x-bind:data-index="index">
                         <span x-text="node.title"></span>
                     </div>
-                    <div class="dropzone"
-                         x-on:dragenter="dropZoneEnter"
-                         x-on:dragleave="dropZoneLeave"
-                         x-on:dragover="dropZoneOver"
-                         x-on:drop="moveNodeAfter"
-                         x-bind:data-index="index">
-                    </div>
+                    <template x-if="node.parent !== null">
+                        <div class="dropzone"
+                             x-on:dragenter="dropZoneEnter"
+                             x-on:dragleave="dropZoneLeave"
+                             x-on:dragover="dropZoneOver"
+                             x-on:drop="moveNodeAfter"
+                             x-bind:data-index="index">
+                        </div>
+                    </template>
                 </div>
             </div>
         </template>
@@ -42,7 +46,7 @@
         }
         .dropzone-hilite {
             background-color: green;
-            height: 1em;
+            height: 2em;
         }
         .parent-hilite {
             background-color: green;

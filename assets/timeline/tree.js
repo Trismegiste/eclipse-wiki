@@ -56,7 +56,6 @@ export class TimelineTree {
         let target = flatten[targetIdx]
         // go back to internal model
         let sourceParent = source.parent
-        let targetParent = target.parent
         let sourceNode = source.node
         let targetNode = target.node
         // remove source
