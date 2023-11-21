@@ -3,7 +3,7 @@
     {{ form_widget(form) }}
 
     <div x-data="arbre">
-        <template x-for="node in tree.getFlatList()" :key="node.title">
+        <template x-for="(node, index) in tree.getFlatList()" :key="node.title">
             <div class="pure-g">
                 <div class="pure-u" x-bind:style="{width: node.level*5 + '%'}"></div>
                 <div class="pure-u" x-bind:style="{width: (100-node.level*5) + '%'}">
@@ -12,12 +12,12 @@
                          x-on:dragleave="dropZoneLeave"
                          x-on:dragover="dropZoneOver"
                          x-on:drop="dropNode"
-                         x-model="node">
+                         x-bind:data-index="index">
                     </div>
                     <div class="node-content" draggable="true"
                          x-on:dragstart="nodeDragStart"
                          x-on:dragend="nodeDragEnd"
-                         x-model="node">
+                         x-bind:data-index="index">
                         <span x-text="node.title"></span>
                     </div>
                     <div class="dropzone"
@@ -25,7 +25,7 @@
                          x-on:dragleave="dropZoneLeave"
                          x-on:dragover="dropZoneOver"
                          x-on:drop="dropNode"
-                         x-model="node">
+                         x-bind:data-index="index">
                     </div>
                 </div>
             </div>
@@ -58,11 +58,9 @@
 
         Alpine.data('arbre', () => ({
                 tree: newTree,
-                draggedNode: null,
 
                 nodeDragStart(event) {
-                    this.draggedNode = this.$el._x_model.get()
-                    event.dataTransfer.setData("text/plain", this.$el._x_model.get().title)
+                    event.dataTransfer.setData("text/plain", this.$el.dataset.index)
                     event.dataTransfer.effectAllowed = "move";
                     event.target.classList.add("dragging")
                 },
@@ -88,9 +86,9 @@
 
                 dropNode(event) {
                     event.preventDefault()
-                    let target = this.$el._x_model.get()
-                    target.parent.nodes.splice(target.childIdx, 0, this.draggedNode)
-                    this.draggedNode.parent.nodes.splice(this.draggedNode.childIdx, 1)
+                    let source = event.dataTransfer.getData("text")
+                    let target = this.$el.dataset.index
+                    this.tree.moveNodeAfter(parseInt(source), parseInt(target))
                 }
 
             }))
