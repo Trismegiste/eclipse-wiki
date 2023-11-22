@@ -6,16 +6,17 @@
 
 {% block content %}
     {{ form_start(form) }}
-    <div class="pure-g character">
+    <div class="pure-g character"
+         x-data="configurator"
+         x-init="detail='{{ include('fragment/morph_detail.html.twig', {morph: form.vars.data.morph})|e('js')|e('html_attr') }}'">
         <div class="pure-u-1-2">
             <h2>Changement de morphe</h2>
             {{ form_widget(form['morph'],  {attr: {
                                                     'data-url': path('app_npcgenerator_getmorph'), 
-                                                    'data-detail': 'morph_detail'
+                                                    'x-on:change': 'selectUpdate'
                                                 }}) }}
         </div>
-        <section class="pure-u-1-2" id="morph_detail">
-            {{ include('fragment/morph_detail.html.twig', {morph: form.vars.data.morph}) }}
+        <section class="pure-u-1-2" x-html="detail">
         </section>
     </div>
     {{ form_end(form) }}
@@ -23,22 +24,8 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-
-            function selectUpdate(event) {
-                let param = event.target.dataset
-                document.getElementById(param.detail).innerHTML = '<i class="icon-spin3 animate-spin"></i>'
-                fetch(param.url + '?key=' + event.target.value)
-                        .then(function (resp) {
-                            return resp.text()
-                        })
-                        .then(function (data) {
-                            document.getElementById(param.detail).innerHTML = data
-                        })
-            }
-
-            document.getElementById('form_morph').addEventListener('change', selectUpdate)
-        })
+    <script type="module">
+        import configurator from 'selector-detailed';
+        Alpine.data('configurator', configurator)
     </script>
 {% endblock %}
