@@ -1,8 +1,7 @@
 {# Custom rendering for tree with autocompleted wikitext links #}
 {% block wiki_tree_widget %}
-    {{ form_widget(form) }}
-
     <div x-data="arbre" class="timeline-tree">
+        {{ form_widget(form) }}
         <template x-for="(node, index) in tree.getFlatList()" :key="index + node.title">
             <div class="pure-g">
                 <div class="pure-u" x-bind:style="{width: node.level*5 + '%'}"></div>
@@ -79,49 +78,6 @@
         </template>
     </div>
 
-    <style>
-        .timeline-tree .finished-node {
-            opacity: 50%;
-        }
-
-        .dropzone {
-            height: 4px;
-        }
-        .dropzone-hilite {
-            background-color: green;
-            height: 2em;
-        }
-        .parent-hilite {
-            background-color: green;
-            color:white;
-        }
-        .node-content {
-            display: flex;
-        }
-        .node-content > span {
-            display: flex;
-            border: 2px solid #333;
-            padding: 0.3em 0.6em;
-            border-radius: 0.3em;
-            width: 100%;
-        }
-        .dragging {
-            background-color: lightblue;
-        }
-
-        .timeline-tree button[data-alive=true] {
-            background-color: #ffb4b4;
-        }
-        .timeline-tree .node-content textarea {
-            display: flex;
-            width: 100%;
-            margin-bottom: 0;
-        }
-
-    </style>
-
-    <div id="{{ form.vars.id }}_tree" class="tree_widget"></div>
-    <textarea id="{{ form.vars.id }}_edit" class="pure-input-1" hidden="true"></textarea>
     <script type="module">
         import { TimelineTree } from 'timeline-tree';
         import buildWikitextClosure from 'wikitext';
@@ -141,10 +97,13 @@
             }
         ]
 
-        const newTree = Object.assign(new TimelineTree(), {{ form.vars.data|raw }})
         Alpine.data('arbre', () => ({
-                tree: newTree,
+                tree: null,
                 editingNode: null,
+
+                init() {
+                    this.tree = Object.assign(new TimelineTree(), JSON.parse(this.$refs.wikitree.value))
+                },
 
                 nodeDragStart(event) {
                     event.dataTransfer.setData("text/plain", this.$el.dataset.index)
@@ -244,151 +203,14 @@
 
                 cancelEditNode(event) {
                     this.editingNode = null
+                },
+                
+                dumpTree(event) {
+                    this.$refs.wikitree.value = JSON.stringify(this.tree)
                 }
 
             }))
 
         Alpine.data('nodeAutocomplete', buildWikitextClosure(strategy))
-
-        import SortableTree from 'sortable-tree';
-        const hiddenTree = document.getElementById('{{ form.vars.id }}')
-        const editArea = document.getElementById('{{ form.vars.id }}_edit')
-        let nodeData = [{{ form.vars.data|raw }}][0]
-        let currentlyEditedNode = null
-
-        const tree = new SortableTree({
-            nodes: [nodeData],
-            element: document.getElementById('{{ form.vars.id }}_tree'),
-            initCollapseLevel: 4,
-        {% if form.vars.state_key is defined %}
-                stateId: '{{ form.vars.state_key }}',
-        {% endif %}
-                renderLabel: (data) => {
-                    let state = data.finished ? 'finished-node' : ''
-                    return `<span class="${state}">${data.title}</span>
-                                <button class="pure-button"><i class="icon-edit"></i></button>
-                                <button class="pure-button"><i class="icon-newchild"></i></button>
-                                <button class="pure-button"><i class="icon-trash-empty"></i></button>
-                                <button class="pure-button"><i class="icon-check"></i></button>`
-                },
-                onChange: ({ nodes, movedNode, srcParentNode, targetParentNode }) => {
-                    nodeData = dumpTree(nodes[0])
-                    hiddenTree.value = JSON.stringify(nodeData)
-                }
-            })
-
-            document.querySelectorAll('#{{ form.vars.id }}_tree i.icon-newchild').forEach(elem => {
-                let button = elem.parentElement
-                button.addEventListener('click', event => {
-                    let node = button.parentElement.parentElement
-                    let newChild = {data: {title: 'New child', finished: false}, nodes: []}
-                    let originalNode = backtrackOriginalNodeWithData(nodeData, node.data)
-                    originalNode.nodes.push(newChild)
-                    hiddenTree.value = JSON.stringify(nodeData)
-                })
-            })
-
-            document.querySelectorAll('#{{ form.vars.id }}_tree i.icon-trash-empty').forEach(elem => {
-                let button = elem.parentElement
-                button.addEventListener('click', event => {
-                    if (button.dataset.alive === 'true') {
-                        let node = button.parentElement.parentElement
-                        let parentNode = node.parentElement.parentElement
-                        let originalNode = backtrackOriginalNodeWithData(nodeData, node.data)
-                        let originalParentNode = backtrackOriginalNodeWithData(nodeData, parentNode.data)
-                        let idx = originalParentNode.nodes.indexOf(originalNode)
-                        originalParentNode.nodes.splice(idx, 1)
-                        hiddenTree.value = JSON.stringify(nodeData)
-                    } else {
-                        button.dataset.alive = 'true'
-                        event.preventDefault()
-                    }
-                })
-            })
-
-            document.querySelectorAll('#{{ form.vars.id }}_tree i.icon-edit').forEach(elem => {
-                let button = elem.parentElement
-                button.addEventListener('click', event => {
-                    event.preventDefault()
-                    let node = button.parentElement.parentElement
-                    node.append(editArea)
-                    editArea.hidden = false
-                    editArea.focus()
-                    editArea.value = node.data.title
-                    currentlyEditedNode = node
-                })
-            })
-
-            editArea.addEventListener('blur', event => {
-                currentlyEditedNode.data.title = editArea.value.trim()
-                currentlyEditedNode.label.querySelector('span').innerHTML = editArea.value.trim()
-                hiddenTree.value = JSON.stringify(nodeData)
-                editArea.value = ''
-                editArea.hidden = true
-                currentlyEditedNode.label.querySelector('button').focus()
-                currentlyEditedNode = null
-            })
-
-            document.querySelectorAll('#{{ form.vars.id }}_tree i.icon-check').forEach(elem => {
-                let button = elem.parentElement
-                button.addEventListener('click', event => {
-                    let node = button.parentElement.parentElement
-                    let originalNode = backtrackOriginalNodeWithData(nodeData, node.data)
-                    originalNode.data.finished = !originalNode.data.finished
-                    hiddenTree.value = JSON.stringify(nodeData)
-                })
-            })
-
-            function dumpTree(elem) {
-                let dump = {data: tree.getNode(elem.id).data, nodes: []}
-                for (let child of elem.subnodes) {
-                    dump.nodes.push(dumpTree(child))
-                }
-
-                return dump
-            }
-
-            function backtrackOriginalNodeWithData(node, data) {
-                if (node.data === data) {
-                    return node
-                }
-
-                for (let child of node.nodes) {
-                    let found = backtrackOriginalNodeWithData(child, data)
-                    if (found !== null) {
-                        return found
-                    }
-                }
-
-                return null
-            }
-
-            // copy-pasted from wikitext.html.twig but it's far more simple than create a compound form.
-            // And furthemore, I don't need the same behavior since images are not allowed in node title.
-            // The other way is to create a global javascript variable to store the link strategy but the route is generated with twig
-            // "Not great, not terrible"
-            if (typeof Textcomplete === "undefined") {
-                throw new Error('Yuku TextComplete is required')
-            }
-
-            let Textarea = Textcomplete.editors.Textarea
-            let editor = new Textarea(editArea)
-            let textcomplete = new Textcomplete(editor)
-            textcomplete.register([{
-                    // Link strategy for Vertex
-                    match: /(.*)\[\[([^\]]+)$/,
-                    search: function (term, callback) {
-                        fetch('{{ path('app_vertexcrud_search') }}' + '?q=' + term)
-                                .then((response) => {
-                                    return response.json()
-                                })
-                                .then((data) => {
-                                    callback(data)
-                                })
-                    },
-                    replace: function (value) {
-                        return '$1[[' + value + ']] '
-                    }
-                }])
     </script>
 {% endblock %}

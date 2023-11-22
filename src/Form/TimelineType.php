@@ -33,7 +33,7 @@ class TimelineType extends AbstractType
         $builder->remove('content');
         $builder
                 ->add('elevatorPitch', WikitextType::class, ['attr' => ['rows' => 4]])
-                ->add('tree', Type\WikiTreeType::class, empty($options['data']) ? [] : ['state_key' => (string) $options['data']->getPk()])
+                ->add('tree', Type\WikiTreeType::class)
                 ->add('debriefing', WikitextType::class, ['required' => false, 'attr' => ['rows' => 6]])
                 ->add('update_stay', SubmitType::class)
         ;
@@ -44,6 +44,7 @@ class TimelineType extends AbstractType
         $resolver->setDefault('empty_data', function (FormInterface $form) {
             return new Timeline($form->get('title')->getData());
         });
+        $resolver->setDefault('attr', ['x-data' => null, 'x-on:submit' => "\$el.dispatchEvent(new CustomEvent('update', {'bubbles': true}))"]);
     }
 
     public function finishView(FormView $view, FormInterface $form, array $options): void
