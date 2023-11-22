@@ -31,13 +31,14 @@ class VertexType extends AbstractType
                             new Regex(Vertex::FORBIDDEN_REGEX_TITLE, match: false),
                             new NotBlank(),
                             new UniqueVertexTitle()
-                        ]
+                        ],
+                        'attr' => ['data-autofocus' => null]
                     ])
-                    ->add('content', Type\WikitextType::class, ['attr' => ['rows' => 30]])
+                    ->add('content', Type\WikitextType::class, ['attr' => ['rows' => 30, 'data-autofocus' => null]])
                     ->add('create', SubmitType::class);
         } else {
             $builder
-                    ->add('content', Type\WikitextType::class, ['attr' => ['rows' => 30]])
+                    ->add('content', Type\WikitextType::class, ['attr' => ['rows' => 30, 'data-autofocus' => null]])
                     ->add('create', SubmitType::class, ['label' => 'Edit'])
                     ->setMethod('PUT');
         }

@@ -10,13 +10,6 @@
     </section>
 {% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        document.getElementById('scene_create_title').focus()
-    </script>
-{% endblock %}
-
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('pixabay/auto-complete.css') }}"/>

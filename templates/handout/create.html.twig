@@ -7,10 +7,3 @@
 {% block content %}
     {{ form(form) }}
 {% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        document.getElementById('handout_target').focus()
-    </script>
-{% endblock %}

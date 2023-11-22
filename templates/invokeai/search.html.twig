@@ -41,14 +41,3 @@
         }
     </style>
 {% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        window.addEventListener('load', () => {
-            const queryField = document.getElementById('{{form.query.vars.id}}')
-            // focus on prompt query
-            queryField.focus()
-        })
-    </script>
-{% endblock %}

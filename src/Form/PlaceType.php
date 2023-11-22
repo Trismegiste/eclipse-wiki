@@ -32,7 +32,7 @@ class PlaceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         if (!$options['edit']) {
-            $builder->add('title', Type\RandomNameType::class);
+            $builder->add('title', Type\RandomNameType::class, ['attr' => ['data-autofocus' => null]]);
         }
 
         $builder

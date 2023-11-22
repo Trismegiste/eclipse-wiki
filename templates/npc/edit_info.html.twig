@@ -7,13 +7,6 @@
     {{ include('npc/menu.html.twig', {npc: form.vars.data}) }}
 {% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        document.getElementById('npc_info_content').focus()
-    </script>
-{% endblock %}
-
 {% block _npc_info_content_label %}
     {{ form_label(form) }}
     {% include 'fragment/form_minitoolbar.html.twig' %}

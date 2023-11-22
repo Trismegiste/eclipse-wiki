@@ -11,13 +11,6 @@
     {% block header_big_title %}{{ form.vars.data.title }}{% endblock %}
 {% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        document.getElementById('vertex_content').focus()
-    </script>
-{% endblock %}
-
 {% block content %}
     {{ form(form) }}
 {% endblock %}
