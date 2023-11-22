@@ -42,6 +42,9 @@ return [
     'wikitree' => [
         'path' => 'timeline/wikitree-editable.js',
     ],
+    'selector-detailed' => [
+        'path' => 'selector-with-detail.js',
+    ],
     'alpinejs' => [
         'downloaded_to' => 'vendor/alpinejs.js',
         'url' => 'https://cdn.jsdelivr.net/npm/alpinejs@3.13.2/+esm',
