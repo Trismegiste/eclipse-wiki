@@ -70,7 +70,8 @@
                     })
                 {% endfor %}
             </script>
-        {% endblock %}    
+        {% endblock %}
+        {# This javascript module is intentionaly OUTSIDE of "javascripts" block because it's initialising Alpine AFTER ALL Alpine.data() #}
         <script type="module">
             // default focus
             const found = document.querySelector('main form.pure-form [data-autofocus]')
@@ -84,6 +85,7 @@
                 }
             }
 
+            // Initialising Alpine
             Alpine.start()
         </script>
     </body>
