@@ -125,7 +125,7 @@ class GmHelper extends AbstractController
         $repo = new RandomizerDecorator(new FileRepository());
         $gender = $request->query->get('gender');
         $language = $request->query->get('language');
-        $fullname = $repo->getRandomGivenNameFor($gender, $language) . ' ' . $repo->getRandomSurnameFor($language);
+        $fullname = $repo->getRandomGivenNameFor($gender, 'random') . ' ' . $repo->getRandomSurnameFor($language);
 
         return new JsonResponse($fullname);
     }
