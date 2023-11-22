@@ -1,6 +1,6 @@
 {# Custom rendering for HashtagType #}
 {% block hashtag_widget %}
-    <div class="pure-g" x-data="{ hashtag: null }">
+    <div class="pure-g" x-data="{ hashtag: '{{ form.vars.data }}' }">
         <div class="pure-u-2-3">{{ form_widget(form, {attr: {class: 'pure-input-1', 'x-model':'hashtag'}}) }}</div>
         <div class="pure-u-1-3">
             <a class="pure-button pure-input-1"
