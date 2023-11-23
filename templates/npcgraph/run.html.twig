@@ -12,7 +12,12 @@
 {% endblock %}
 
 {% block content %}
-    <div x-data="quickCreation">
+    <div x-data="quickCreation"
+         x-init="graph={{ graph|json_encode()|e('html_attr') }};
+         choices={{ form.node_selection.vars.data|default("['root']")|e('html_attr') }};
+         baseUrl.picture='{{ path('app_invokeaipicture_ajaxsearch')}}';
+         baseUrl.name='{{ path('app_gmhelper_ajaxname')}}';
+         ">
         <section class="pure-g node-selection">
             {% set cell_style = 'pure-u-1 pure-u-md-1-2 pure-u-xl-1-6' %}
             <template x-for="(key, idx) in choices" :key="key">
@@ -197,119 +202,10 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script>
-        // the full content of the creation graph
-        function dumpCreationGraph() {
-            return{{ graph|json_encode()|raw }}
-        }
-        // last sent selection already json encoded
-        function dumpDefaultChoices() {
-            return{{ form.node_selection.vars.data|default("['root']")|raw }}
-        }
-    </script>
     {{ parent() }}
     <script type="module">
-        Alpine.data('quickCreation', () => ({
-                graph: dumpCreationGraph(),
-                choices: dumpDefaultChoices(),
-                keywords: {},
-                avatar: [],
-                seekNode: function (key) {
-                    const found = this.graph.find(node => {
-                        return node.name === key
-                    })
-                    if (typeof found === 'undefined') {
-                        throw new Error('The node named "' + key + '" is unknown')
-                    } else {
-                        return found
-                    }
-                },
-                setChoiceAt: function (i, key) {
-                    this.choices.splice(i)
-                    this.choices[i] = key
-                },
-                getAttributes: function () {
-                    let cumulative = {}
-                    for (const [key, value] of Object.entries(this.flattenObjectWithSum('attributes'))) {
-                        cumulative[key] = 4 + 2 * value
-                    }
-                    return cumulative
-                },
-                getSkills: function () {
-                    let cumulative = {}
-                    for (const [key, value] of Object.entries(this.flattenObjectWithSum('skills'))) {
-                        cumulative[key] = 2 + 2 * value
-                    }
-                    return cumulative
-                },
-                getNetworks: function () {
-                    return this.flattenObjectWithSum('networks')
-                },
-                getEdges: function () {
-                    return this.flattenArrayWithUnique('edges')
-                },
-                getBackgrounds: function () {
-                    return this.flattenArrayWithUnique('backgrounds')
-                },
-                getFactions: function () {
-                    return this.flattenArrayWithUnique('factions')
-                },
-                getMorphs: function () {
-                    return this.flattenArrayWithUnique('morphs')
-                },
-                getText2img: function () {
-                    return this.flattenArrayWithUnique('text2img')
-                },
-                flattenObjectWithSum: function (propertyKey) {
-                    let cumulative = {}
-                    for (let choice of this.choices) {
-                        let bonus = this.seekNode(choice)
-                        for (const [key, value] of Object.entries(bonus[propertyKey])) {
-                            if (!cumulative.hasOwnProperty(key)) {
-                                cumulative[key] = 0
-                            }
-                            cumulative[key] += value
-                        }
-                    }
-                    return cumulative
-                },
-                flattenArrayWithUnique: function (propertyKey) {
-                    let cumulative = new Set()
-                    for (let choice of this.choices) {
-                        let bonus = this.seekNode(choice)
-                        for (const value of bonus[propertyKey]) {
-                            cumulative.add(value)
-                        }
-                    }
-                    return Array.from(cumulative.values())
-                },
-                updateAvatar: function () {
-                    let query = ''
-                    for (let key of this.getText2img()) {
-                        if (this.keywords[key]) {
-                            query += key + ' '
-                        }
-                    }
-                    query.trim()
-                    fetch('{{ path('app_invokeaipicture_ajaxsearch')}}?q=' + query)
-                            .then(resp => {
-                                return resp.json()
-                            })
-                            .then(result => {
-                                this.avatar = result
-                            })
-                },
-                generateName: function () {
-                    let gender = (this.choices.includes('homme')) ? 'male' : 'female'
-                    fetch('{{ path('app_gmhelper_ajaxname')}}?gender=' + gender + '&language=' + this.$refs.select_language.value)
-                            .then(resp => {
-                                return resp.json()
-                            })
-                            .then(result => {
-                                this.$refs.fullname.value = result
-                            })
-                }
-            }))
+        import quickCreation from 'quick-npc';
+        Alpine.data('quickCreation', quickCreation)
     </script>
 {% endblock %}
 

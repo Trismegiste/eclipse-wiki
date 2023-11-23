@@ -45,6 +45,9 @@ return [
     'selector-detailed' => [
         'path' => 'selector-with-detail.js',
     ],
+    'quick-npc' => [
+        'path' => 'npc-graph-creation.js',
+    ],
     'alpinejs' => [
         'downloaded_to' => 'vendor/alpinejs.js',
         'url' => 'https://cdn.jsdelivr.net/npm/alpinejs@3.13.2/+esm',
