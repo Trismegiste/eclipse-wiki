@@ -6,7 +6,10 @@
 
 namespace App\Tests\Controller;
 
+use App\Entity\Vertex;
+use App\Repository\VertexRepository;
 use App\Service\Storage;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use function join_paths;
@@ -18,16 +21,24 @@ class PictureTest extends WebTestCase
 
     protected KernelBrowser $client;
     protected Storage $storage;
+    protected VertexRepository $repository;
 
     protected function setUp(): void
     {
         $this->client = static::createClient();
         $this->storage = static::getContainer()->get(Storage::class);
+        $this->repository = static::getContainer()->get(VertexRepository::class);
+    }
+
+    public function testClean()
+    {
+        $this->repository->delete(iterator_to_array($this->repository->search()));
+        $this->assertCount(0, iterator_to_array($this->repository->search()));
     }
 
     public function testPictureResponse()
     {
-        $filename = join_paths(static::getContainer()->get(Storage::class)->getRootDir(), 'yolo.png');
+        $filename = join_paths($this->storage->getRootDir(), 'yolo.png');
         $image = $this->createTestChart(1024);
         imagepng($image, $filename);
 
@@ -54,11 +65,22 @@ class PictureTest extends WebTestCase
         $this->assertStringContainsString('complete', $ret->message);
     }
 
-    public function testUpload()
+    public function getVertices(): array
     {
-        $repo = static::getContainer()->get(\App\Repository\VertexRepository::class);
-        $target = new \App\Entity\Scene('target');
-        $repo->save($target);
+        return [
+            [$this->createRandomScene()],
+            [$this->createRandomPlace()],
+            [$this->createRandomHandout()],
+            [$this->createRandomLoveletter()],
+            [$this->createRandomTranshuman()]
+        ];
+    }
+
+    /** @dataProvider getVertices */
+    public function testUpload(Vertex $target)
+    {
+        $target->setContent('information');
+        $this->repository->save($target);
 
         $crawler = $this->client->request('GET', '/picture/upload');
         $this->assertResponseIsSuccessful();
@@ -69,7 +91,7 @@ class PictureTest extends WebTestCase
         ]]);
         try {
             $this->storage->delete('uploaded.jpg');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // silent bug
         }
 
@@ -81,6 +103,10 @@ class PictureTest extends WebTestCase
         $this->client->submit($form);
         $this->assertResponseRedirects();
         unlink($filename);
+
+        $updated = $this->repository->load($target->getPk());
+        $this->assertStringContainsString('information', $updated->getContent());
+        $this->assertStringContainsString('[[file:uploaded.jpg]]', $updated->getContent());
     }
 
     public function testPictogram()
@@ -91,9 +117,10 @@ class PictureTest extends WebTestCase
 
     public function testDyamicVertexList()
     {
-        $this->client->request('GET', '/picture/vertex/search?q=targ');
+        $this->client->request('GET', '/picture/vertex/search?q=tak');
         $result = json_decode($this->client->getResponse()->getContent());
-        $this->assertEquals('target', $result[0]->title);
+        $this->assertCount(1, $result);
+        $this->assertStringStartsWith('takeshi', $result[0]->title);
     }
 
 }

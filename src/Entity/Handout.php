@@ -28,4 +28,9 @@ class Handout extends Vertex
 WIKITEXT;
     }
 
+    public function attachPicture(string $filenameInStorage): void
+    {
+        $this->gmInfo .= "\n\n[[file:$filenameInStorage]]\n";
+    }
+
 }

@@ -33,4 +33,9 @@ class Loveletter extends Vertex
 WIKITEXT;
     }
 
+    public function attachPicture(string $filenameInStorage): void
+    {
+        $this->drama .= "\n\n[[file:$filenameInStorage]]\n";
+    }
+
 }

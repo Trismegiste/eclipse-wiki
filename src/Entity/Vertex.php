@@ -142,4 +142,15 @@ abstract class Vertex implements Root, Archivable
         });
     }
 
+    /**
+     * Appends a link to a picture in the wikitext content of the Vertex.
+     * This could be the content or anywhere else property that can be rendered with wikitext show
+     * @param string $filenameInStorage
+     * @return void
+     */
+    public function attachPicture(string $filenameInStorage): void
+    {
+        $this->content .= "\n\n[[file:$filenameInStorage]]\n";
+    }
+
 }

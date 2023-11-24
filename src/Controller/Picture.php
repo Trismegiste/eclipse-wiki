@@ -97,7 +97,7 @@ class Picture extends AbstractController
                 $this->addFlash('success', "Upload {$data['filename']} OK");
                 if (!empty($data['append_vertex'])) {
                     $vertex = $data['append_vertex'];
-                    $vertex->setContent($vertex->getContent() . "\n\n[[file:{$data['filename']}.jpg]]\n");
+                    $vertex->attachPicture($data['filename'] . '.jpg');
                     $repository->save($vertex);
                     $this->addFlash('success', "Picture {$data['filename']} append to '" . $vertex->getTitle() . "'");
                 }
