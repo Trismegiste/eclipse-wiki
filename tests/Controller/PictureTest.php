@@ -68,6 +68,7 @@ class PictureTest extends WebTestCase
     public function getVertices(): array
     {
         return [
+            [$this->createRandomTimeline()],
             [$this->createRandomScene()],
             [$this->createRandomPlace()],
             [$this->createRandomHandout()],

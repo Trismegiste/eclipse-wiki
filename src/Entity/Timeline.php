@@ -54,4 +54,10 @@ WIKITEXT;
         }
     }
 
+    public function attachPicture(string $filenameInStorage): void
+    {
+        // we attach the picture to elevatorPitch, it's convenient when you have pictures and just a draft for timeline
+        $this->elevatorPitch .= "\n\n[[file:$filenameInStorage]]\n";
+    }
+
 }

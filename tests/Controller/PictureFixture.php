@@ -11,7 +11,9 @@ use App\Entity\Faction;
 use App\Entity\Handout;
 use App\Entity\Loveletter;
 use App\Entity\Place;
+use App\Entity\PlotNode;
 use App\Entity\Scene;
+use App\Entity\Timeline;
 use App\Entity\Transhuman;
 
 /**
@@ -66,6 +68,14 @@ trait PictureFixture
         $obj = new Handout('handout' . rand());
         $obj->pcInfo = 'information';
         $obj->gmInfo = 'secret';
+        return $obj;
+    }
+
+    protected function createRandomTimeline()
+    {
+        $obj = new Timeline('time' . rand());
+        $obj->elevatorPitch = 'information';
+        $obj->setTree(new PlotNode('root'));
         return $obj;
     }
 
