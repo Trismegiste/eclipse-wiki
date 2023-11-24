@@ -103,7 +103,7 @@ export default () => ({
 
         confirmEditNode(event) {
             let flatten = this.tree.getFlatList()
-            flatten[this.editingNode].node.data.title = this.content
+            flatten[this.editingNode].node.data.title = this.content.replaceAll(/\n|\r|\s{2,}/g, ' ').trim()
             this.editingNode = null
         },
 
