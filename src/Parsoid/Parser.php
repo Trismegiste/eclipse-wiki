@@ -28,6 +28,7 @@ class Parser
         $parserOpts = [
             'body_only' => true,
             'wrapSections' => false,
+            'discardDataParsoid' => true
         ];
 
         $siteConfig = new InternalSiteConfig($opts);

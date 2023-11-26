@@ -63,6 +63,10 @@ class VertexCrud extends GenericCrud
     public function wikiShow(string $title): Response
     {
         $title = str_replace('_', ' ', $title);
+        if (preg_match('#^file:(.+)$#', $title, $matches)) {
+            return $this->redirectToRoute('get_picture', ['title' => $matches[1]]);
+        }
+
         $vertex = $this->repository->findByTitle($title);
         if (is_null($vertex)) {
             return $this->redirectToRoute('app_vertexcrud_create', ['title' => $title]);

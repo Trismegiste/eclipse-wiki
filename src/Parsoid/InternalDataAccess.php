@@ -43,7 +43,7 @@ class InternalDataAccess extends DataAccess
 
     public function fetchTemplateSource(PageConfig $pageConfig, string $title): ?PageContent
     {
-        $normTitle = $this->normTitle($title);
+        return null;
     }
 
     public function getFileInfo(PageConfig $pageConfig, array $files): array

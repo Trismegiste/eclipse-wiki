@@ -181,7 +181,7 @@ class InternalSiteConfig extends SiteConfig
 
     public function namespaceCase(int $ns): string
     {
-        return 'first-letter';
+        return 'case-sensitive';
     }
 
     public function namespaceHasSubpages(int $ns): bool
@@ -204,7 +204,7 @@ class InternalSiteConfig extends SiteConfig
         if (!isset($map[$ns])) {
             return null;
         }
-        return ucwords(strtr($map[$ns], '_', ' '));
+        return strtr($map[$ns], '_', ' ');
     }
 
     public function redirectRegexp(): string
