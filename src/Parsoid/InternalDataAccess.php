@@ -8,6 +8,7 @@ namespace App\Parsoid;
 
 use App\Repository\VertexRepository;
 use App\Service\Storage;
+use MongoDB\BSON\Regex;
 use Wikimedia\Parsoid\Config\DataAccess;
 use Wikimedia\Parsoid\Config\PageConfig;
 use Wikimedia\Parsoid\Config\PageContent;
@@ -78,23 +79,18 @@ class InternalDataAccess extends DataAccess
     public function getPageInfo(PageConfig $pageConfig, array $titles): array
     {
         $ret = [];
-
-        // database
-        $iterator = $this->repositoy->search(['title' => ['$in' => $titles]], ['content']);
-        foreach ($iterator as $vertex) {
-            $ret[$vertex->getTitle()] = [
-                'pageId' => $vertex->getPk(),
-                'revId' => 1,
-                'missing' => false,
-                'known' => true,
-                'redirect' => false,
-                'linkclasses' => []
-            ];
-        }
-
-        // fill the missing
         foreach ($titles as $title) {
-            if (!key_exists($title, $ret)) {
+            $found = $this->repositoy->findByTitle($title);
+            if ($found) {
+                $ret[$title] = [
+                    'pageId' => $found->getPk(),
+                    'revId' => 1,
+                    'missing' => false,
+                    'known' => true,
+                    'redirect' => false,
+                    'linkclasses' => []
+                ];
+            } else {
                 $ret[$title] = [
                     'pageId' => null,
                     'revId' => null,
