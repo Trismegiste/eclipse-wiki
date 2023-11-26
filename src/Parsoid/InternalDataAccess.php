@@ -8,7 +8,6 @@ namespace App\Parsoid;
 
 use App\Repository\VertexRepository;
 use App\Service\Storage;
-use MongoDB\BSON\Regex;
 use Wikimedia\Parsoid\Config\DataAccess;
 use Wikimedia\Parsoid\Config\PageConfig;
 use Wikimedia\Parsoid\Config\PageContent;
@@ -64,10 +63,9 @@ class InternalDataAccess extends DataAccess
                 'height' => $pictureInfo[1],
                 'width' => $pictureInfo[0],
                 'url' => "/picture/get/" . $filename,
-                'descriptionurl' => '/',
                 'mediatype' => 'BITMAP',
                 'mime' => $pictureInfo['mime'],
-                'badFile' => false,
+                'badFile' => false
             ];
 
             $ret[] = $info;
