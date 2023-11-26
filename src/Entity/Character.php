@@ -15,6 +15,8 @@ abstract class Character extends Vertex implements \JsonSerializable
 {
 
     const TOUGHNESS_ATTR = 'Vigueur';
+    const PARRY_SKILL = 'Combat';
+    const SECURITY_SKILL = 'Recherche';
 
     use RootImpl;
     use EdgeContainer;
@@ -29,6 +31,7 @@ abstract class Character extends Vertex implements \JsonSerializable
     public int $rangedMalus = 0;
     public int $toughnessBonus = 0;
     public int $parryBonus = 0;
+    public int $securityBonus = 0;
     public array $economy = [];
     public ?string $tokenPic = null;
 
@@ -144,13 +147,25 @@ abstract class Character extends Vertex implements \JsonSerializable
     public function getParry(): int
     {
         $parry = 2;
-        $fighting = $this->searchSkillByName('Combat');
+        $fighting = $this->searchSkillByName(self::PARRY_SKILL);
         if (!is_null($fighting)) {
             /** @var Skill $fighting */
             $parry = 2 + $fighting->dice / 2 + (int) floor($fighting->modifier / 2);
         }
 
         return $parry + $this->parryBonus;
+    }
+
+    public function getSecurity(): int
+    {
+        $security = 2;
+        $skill = $this->searchSkillByName(self::SECURITY_SKILL);
+        if (!is_null($skill)) {
+            /** @var Skill $skill */
+            $security = 2 + $skill->dice / 2 + (int) floor($skill->modifier / 2);
+        }
+
+        return $security + $this->securityBonus;
     }
 
     public function searchSkillByName(string $name): ?Skill

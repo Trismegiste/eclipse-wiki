@@ -75,6 +75,15 @@ abstract class CharacterTest extends TestCase
         $this->assertEquals(9, $this->sut->getParry());
     }
 
+    public function testSecurity()
+    {
+        $fight = new Skill('Recherche', 'DUM');
+        $fight->dice = 12;
+        $fight->modifier = 2;
+        $this->sut->addSkill($fight);
+        $this->assertEquals(9, $this->sut->getSecurity());
+    }
+
     public function testToughness()
     {
         $attr = new Attribute('Vigueur');
@@ -201,4 +210,5 @@ abstract class CharacterTest extends TestCase
 
         $this->assertEquals(12, $this->sut->getToughness());
     }
+
 }
