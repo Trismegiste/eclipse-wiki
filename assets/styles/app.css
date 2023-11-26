@@ -157,16 +157,12 @@ a.new {
     display: inline-block;
 }
 
-.thumb img {
+img.mw-file-element {
     max-height: 200px;
     max-width: 200px;
     margin-bottom: 0.5em;
     margin-top: 0.5em;
-}
-
-li.textcomplete-item img {
-    max-height: 100px;
-    max-width: 100px;
+    object-fit: contain;
 }
 
 /* LOVELETTER */

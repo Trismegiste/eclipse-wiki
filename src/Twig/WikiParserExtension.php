@@ -6,7 +6,7 @@
 
 namespace App\Twig;
 
-use Mike42\Wikitext\WikitextParser;
+use App\Parsoid\Parser;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -16,11 +16,9 @@ use Twig\TwigFunction;
 class WikiParserExtension extends AbstractExtension
 {
 
-    protected $parser;
-
-    public function __construct(WikitextParser $wikiParser)
+    public function __construct(protected Parser $parser)
     {
-        $this->parser = $wikiParser;
+        
     }
 
     public function getFunctions(): array
@@ -34,4 +32,5 @@ class WikiParserExtension extends AbstractExtension
     {
         return empty($wikitext) ? '' : '<div class="parsed-wikitext">' . $this->parser->parse($wikitext) . '</div>';
     }
+
 }
