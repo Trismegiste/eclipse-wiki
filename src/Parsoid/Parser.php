@@ -32,6 +32,7 @@ class Parser
         ];
 
         $siteConfig = new InternalSiteConfig($opts);
+        $siteConfig->registerExtensionModule(AlpineModule::class);
         $parsoid = new Parsoid($siteConfig, $this->access);
 
         $pageContent = new MockPageContent(['main' => $page]);
