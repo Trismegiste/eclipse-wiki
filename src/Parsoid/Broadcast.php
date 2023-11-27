@@ -36,11 +36,15 @@ class Broadcast extends DOMProcessor
 
     protected function processFile(Element $node)
     {
-        $img = $node?->firstChild?->firstChild;
-        if ($img && ($img->nodeName === 'img')) {
-            $data = DOMDataUtils::getDataParsoid($img);
-            if (preg_match('#^file:(.+)#', $data->sa['resource'], $matches)) {
-                $node->setAttribute('data-broadcast-filename', $matches[1]);
+        $link = $node->firstChild;
+        if ($link && ($link->nodeName === 'a')) {
+            $img = $link->firstChild;
+            if ($img && ($img->nodeName === 'img')) {
+                $data = DOMDataUtils::getDataParsoid($img);
+                if (preg_match('#^file:(.+)#', $data->sa['resource'], $matches)) {
+                    $node->setAttribute('x-data', json_encode(['filename' => $matches[1]]));
+                    $link->setAttribute('x-on:click.prevent', 'alert(filename)');
+                }
             }
         }
     }
