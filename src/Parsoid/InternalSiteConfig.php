@@ -19,7 +19,15 @@ class InternalSiteConfig extends SiteConfig
 {
 
     private $linkPrefixRegex = null;
-    protected array $interwikiMap = [];
+    
+    // @todo use the service
+    protected array $interwikiMap = [
+        'ep' => [
+            'prefix' => 'ep',
+            'url' => 'https://eclipse-savage.fandom.com/fr/wiki/$1'
+        ]
+    ];
+    
     protected $linkTrailRegex = '/^([a-z]+)/sD'; // enwiki default
     protected $namespaceMap = [
         'media' => -2,
@@ -74,6 +82,7 @@ class InternalSiteConfig extends SiteConfig
         return [];
     }
 
+    // @todo use the Router
     public function baseURI(): string
     {
         return '//127.0.0.1:8000/wiki';
@@ -225,16 +234,19 @@ class InternalSiteConfig extends SiteConfig
         return false;
     }
 
+    // @todo Wat ?
     public function script(): string
     {
         return '/wiki/index.php';
     }
 
+    // @todo useless but should fallback or fail ?
     public function scriptpath(): string
     {
         return '/wiki';
     }
 
+    // @todo redundant
     public function server(): string
     {
         return '//127.0.0.1:8000';
@@ -260,6 +272,7 @@ class InternalSiteConfig extends SiteConfig
         return 220;
     }
 
+    // @todo useless since parsoid modules overrides - should be extracted from router
     public function relativeLinkPrefix(): string
     {
         return '/wiki/';
