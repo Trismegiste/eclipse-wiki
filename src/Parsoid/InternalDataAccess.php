@@ -43,7 +43,7 @@ class InternalDataAccess extends DataAccess
 
     public function fetchTemplateSource(PageConfig $pageConfig, string $title): ?PageContent
     {
-        return null;
+        return ($title==='template:legend') ? new \Wikimedia\Parsoid\Mocks\MockPageContent(['main'=>'<h2>{{{1}}}</h2>']):null;
     }
 
     public function getFileInfo(PageConfig $pageConfig, array $files): array
