@@ -19,7 +19,6 @@ class InternalSiteConfig extends SiteConfig
 {
 
     private $linkPrefixRegex = null;
-    
     // @todo use the service
     protected array $interwikiMap = [
         'ep' => [
@@ -27,7 +26,6 @@ class InternalSiteConfig extends SiteConfig
             'url' => 'https://eclipse-savage.fandom.com/fr/wiki/$1'
         ]
     ];
-    
     protected $linkTrailRegex = '/^([a-z]+)/sD'; // enwiki default
     protected $namespaceMap = [
         'media' => -2,
@@ -35,6 +33,7 @@ class InternalSiteConfig extends SiteConfig
         '' => 0,
         'file' => 6,
         'category' => 14,
+        'template' => 7
     ];
 
     protected function getMagicWords(): array

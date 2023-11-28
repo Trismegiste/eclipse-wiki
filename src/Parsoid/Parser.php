@@ -28,7 +28,8 @@ class Parser
         $parserOpts = [
             'body_only' => true,
             'wrapSections' => false,
-            'discardDataParsoid' => true
+            'discardDataParsoid' => true,
+            'nativeTemplateExpansion' => true
         ];
 
         $siteConfig = new InternalSiteConfig($opts);
