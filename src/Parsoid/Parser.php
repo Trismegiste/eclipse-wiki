@@ -17,33 +17,31 @@ use Wikimedia\Parsoid\Parsoid;
 class Parser
 {
 
+    const parserOpts = [
+        'body_only' => true,
+        'wrapSections' => false,
+        'discardDataParsoid' => true,
+        'nativeTemplateExpansion' => true
+    ];
+
+    protected $parsoid;
+
     public function __construct(protected InternalDataAccess $access, protected UrlGeneratorInterface $router)
     {
-        
-    }
-
-    public function parse(string $page): string
-    {
-        $opts = [];
-
-        $parserOpts = [
-            'body_only' => true,
-            'wrapSections' => false,
-            'discardDataParsoid' => true,
-            'nativeTemplateExpansion' => true
-        ];
-
-        $siteConfig = new InternalSiteConfig($opts);
+        $siteConfig = new InternalSiteConfig([]);
         $siteConfig->registerExtensionModule([
             'class' => SymfonyBridge::class,
             'args' => [$this->router]
         ]);
-        $parsoid = new Parsoid($siteConfig, $this->access);
+        $this->parsoid = new Parsoid($siteConfig, $this->access);
+    }
 
+    public function parse(string $page): string
+    {
         $pageContent = new MockPageContent(['main' => $page]);
-        $pageConfig = new MockPageConfig($opts, $pageContent);
+        $pageConfig = new MockPageConfig([], $pageContent);
 
-        return $parsoid->wikitext2html($pageConfig, $parserOpts);
+        return $this->parsoid->wikitext2html($pageConfig, self::parserOpts);
     }
 
 }
