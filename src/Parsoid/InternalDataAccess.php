@@ -14,9 +14,7 @@ use Wikimedia\Parsoid\Config\PageContent;
 use Wikimedia\Parsoid\Core\ContentMetadataCollector;
 
 /**
- * Description of InternalDataAccess
- *
- * @author flo
+ * Repository for MediaWiki bridging with Vertex repository and Storage service
  */
 class InternalDataAccess extends DataAccess
 {

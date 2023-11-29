@@ -13,7 +13,7 @@ use Wikimedia\Parsoid\DOM\Document;
 use Wikimedia\Parsoid\Utils\Utils;
 
 /**
- * 
+ * Configuration of the internal wiki site for Parsoid
  */
 class InternalSiteConfig extends SiteConfig
 {

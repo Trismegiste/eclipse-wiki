@@ -15,7 +15,7 @@ use Wikimedia\Parsoid\Ext\ParsoidExtensionAPI;
 use Wikimedia\Parsoid\Utils\DOMDataUtils;
 
 /**
- * a DOMProcessor that append data attributes to DOMElement for brocasting pictures in the wikitext
+ * a DOMProcessor that replaces all wikilinks to internal pages and to internal images to symfony controllers with the help of the symfony router
  */
 class LinkOverride extends DOMProcessor
 {
