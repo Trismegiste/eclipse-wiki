@@ -23,7 +23,7 @@ class RemotePictureTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $this->assertSelectorExists('#form_search');
         $crawler = $this->client->submitForm('form_search', ['form[query]' => 'mars'], 'GET');
         $this->assertResponseIsSuccessful();
-        $result = $crawler->filter('.pushable a');
+        $result = $crawler->filter('[x-data=broadcast] a');
         $this->assertGreaterThanOrEqual(1, count($result)); // at least there is one
 
         return $result->first();
