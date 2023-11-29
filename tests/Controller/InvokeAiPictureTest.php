@@ -99,7 +99,7 @@ class InvokeAiPictureTest extends WebTestCase
         $crawler = $this->client->followRedirect();
         $this->assertResponseIsSuccessful();
 
-        $img = $crawler->filter('.parsed-wikitext .pushable img');
+        $img = $crawler->filter('.parsed-wikitext [x-data=broadcast] img');
         $this->assertCount(1, $img);
         $this->assertStringContainsString('strawberry', $img->attr('src'));
 
