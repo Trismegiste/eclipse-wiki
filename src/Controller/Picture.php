@@ -71,15 +71,6 @@ class Picture extends AbstractController
     }
 
     /**
-     * Showing a picture by its wikilink
-     */
-    #[Route('/wiki/file:{title}', methods: ['GET'], name: 'app_wiki_picture', requirements: ['title' => '[^:]+'])]
-    public function wikiShow(string $title): Response
-    {
-        return $this->read(str_replace('_', ' ', $title));
-    }
-
-    /**
      * Pushes a picture (from the Storage) to player screen
      */
     #[Route('/picture/push/{title}', methods: ['POST'])]

@@ -59,11 +59,9 @@ class VertexCrud extends GenericCrud
     /**
      * Showing a vertex by its title. If it does not exist, redirect to creation
      */
-    #[Route('/wiki/{title}', methods: ['GET'], name: 'app_wiki', requirements: ['title' => '[^:]+'])]
+    #[Route('/wiki/{title}', methods: ['GET'], name: 'app_wiki')]
     public function wikiShow(string $title): Response
     {
-        $title = str_replace('_', ' ', $title);
-
         $vertex = $this->repository->findByTitle($title);
         if (is_null($vertex)) {
             return $this->redirectToRoute('app_vertexcrud_create', ['title' => $title]);

@@ -6,6 +6,7 @@
 
 namespace App\Parsoid;
 
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Wikimedia\Parsoid\Mocks\MockPageConfig;
 use Wikimedia\Parsoid\Mocks\MockPageContent;
 use Wikimedia\Parsoid\Parsoid;
@@ -16,7 +17,7 @@ use Wikimedia\Parsoid\Parsoid;
 class Parser
 {
 
-    public function __construct(protected InternalDataAccess $access)
+    public function __construct(protected InternalDataAccess $access, protected UrlGeneratorInterface $router)
     {
         
     }
@@ -33,7 +34,10 @@ class Parser
         ];
 
         $siteConfig = new InternalSiteConfig($opts);
-        $siteConfig->registerExtensionModule(AlpineModule::class);
+        $siteConfig->registerExtensionModule([
+            'class' => SymfonyBridge::class,
+            'args' => [$this->router]
+        ]);
         $parsoid = new Parsoid($siteConfig, $this->access);
 
         $pageContent = new MockPageContent(['main' => $page]);

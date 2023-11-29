@@ -153,7 +153,7 @@ a.new {
 }
 
 /* WIKI image */
-img.mw-file-element {
+.parsed-wikitext img.mw-file-element {
     max-height: 200px;
     max-width: 200px;
     object-fit: cover;
