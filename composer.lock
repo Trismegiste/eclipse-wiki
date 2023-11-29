@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fba825c258cb6acac554aa664b7e8412",
+    "content-hash": "e6396879927a43d2940b27e153a088bf",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -7053,16 +7053,16 @@
         },
         {
             "name": "wikimedia/parsoid",
-            "version": "dev-master",
+            "version": "dev-feature-native-template-option-for-parsoid",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Trismegiste/mediawiki-services-parsoid.git",
-                "reference": "d62b189d5023e769853b13ff62b182d431786465"
+                "reference": "38dc41b0655d8445834149b8251b0bb5cb230e0f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Trismegiste/mediawiki-services-parsoid/zipball/d62b189d5023e769853b13ff62b182d431786465",
-                "reference": "d62b189d5023e769853b13ff62b182d431786465",
+                "url": "https://api.github.com/repos/Trismegiste/mediawiki-services-parsoid/zipball/38dc41b0655d8445834149b8251b0bb5cb230e0f",
+                "reference": "38dc41b0655d8445834149b8251b0bb5cb230e0f",
                 "shasum": ""
             },
             "require": {
@@ -7107,7 +7107,6 @@
             "suggest": {
                 "wikimedia/langconv": "Provides script conversion support"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -7195,9 +7194,9 @@
             "support": {
                 "irc": "irc://irc.libera.chat/mediawiki-parsoid",
                 "wiki": "https://www.mediawiki.org/wiki/Parsoid",
-                "source": "https://github.com/Trismegiste/mediawiki-services-parsoid/tree/master"
+                "source": "https://github.com/Trismegiste/mediawiki-services-parsoid/tree/feature-native-template-option-for-parsoid"
             },
-            "time": "2023-11-28T13:55:31+00:00"
+            "time": "2023-11-29T08:45:12+00:00"
         },
         {
             "name": "wikimedia/remex-html",
