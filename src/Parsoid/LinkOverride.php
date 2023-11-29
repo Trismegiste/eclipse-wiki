@@ -51,6 +51,7 @@ class LinkOverride extends DOMProcessor
                 $data = DOMDataUtils::getDataParsoid($img);
                 if (preg_match('#^file:(.+)#', $data->sa['resource'], $matches)) {
                     $node->setAttribute('x-data', '{}');
+                    $node->setAttribute('class', 'pushable');
                     $link->setAttribute('href', $this->router->generate('app_picture_push', ['title' => $matches[1]]));
                     $img->setAttribute('src', $this->router->generate('get_picture', ['title' => $matches[1]]));
                 }
