@@ -1,37 +1,33 @@
 /*
- * Add an event listener on on click to broadcast pushable pictures
+ * Behavior for broadcasting picture
  */
-export default function(pictures) {
-    pictures.forEach(function (picture) {
-        picture.addEventListener('click', function (event) {
-            let url = event.target.parentElement.href
-            // stop propagation
-            event.preventDefault()
-            // post image title for sending to external device
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json'
-                }
-            }).then(function (response) {
-                if (!response.ok) {
-                    return Promise.reject(response)
-                }
-                return response.json()
-            }).then(function (json) {
-                pushFlash(picture, 'success', json.message)
-            }).catch(function (error) {
-                if (typeof error.json === "function") {
-                    error.json().then(function (jsonError) {
-                        pushFlash(picture, 'error', jsonError.message)
-                    }).catch(function (genericError) {
-                        pushFlash(picture, 'error', genericError.statusText);
-                    })
-                } else {
-                    pushFlash(picture, 'error', error)
-                }
-            })
-        })
+export default () => ({
+        trigger: {
+            ['x-on:click.prevent'] () {
+                let url = this.$el.href
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json'
+                    }
+                }).then((response) => {
+                    if (!response.ok) {
+                        return Promise.reject(response)
+                    }
+                    return response.json()
+                }).then((json) => {
+                    pushFlash(this.$el, 'success', json.message)
+                }).catch((error) => {
+                    if (typeof error.json === "function") {
+                        error.json().then((jsonError) => {
+                            pushFlash(this.$el, 'error', jsonError.message)
+                        }).catch((genericError) => {
+                            pushFlash(this.$el, 'error', genericError.statusText);
+                        })
+                    } else {
+                        pushFlash(this.$el, 'error', error)
+                    }
+                })
+            }}
     })
-}

@@ -8,11 +8,11 @@
     <section>
         {{ form(form) }}
     </section>
-    <section class="pure-g">
+    <section class="pure-g gallery">
         {% for picture in gallery %}
             <div class="pure-u-1-5">
-                <div class="pushable">
-                    <a href="{{ path('app_remotepicture_push', {url: picture.original|url_encode}) }}">
+                <div x-data="broadcast">
+                    <a href="{{ path('app_remotepicture_push', {url: picture.original|url_encode}) }}" x-bind="trigger">
                         <img src="{{ path('app_remotepicture_read', {url: picture.thumbnail|url_encode}) }}" class="pure-img"/>
                     </a>
                 </div>
@@ -25,15 +25,15 @@
 {% block javascripts %}
     {{ parent() }} 
     <script type="module">
-        import subscribePicture from 'picture-broadcasting';
-        subscribePicture(document.querySelectorAll('.pushable a'))
+        import broadcastPicture from 'picture-broadcasting';
+        Alpine.data('broadcast', broadcastPicture)
     </script>  
 {% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
     <style>
-        .pushable img {
+        .gallery img {
             max-height: 200px;
             margin: auto;
         }

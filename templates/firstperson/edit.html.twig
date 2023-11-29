@@ -54,8 +54,8 @@
                     <div class="pure-g">
                         <template x-for="pic in characterCard.picture">
                             <div class="pure-u-1-6">
-                                <div class="pushable">
-                                    <a x-bind:href="pic.link" x-init="subscribePicture([$el])">
+                                <div x-data="broadcast">
+                                    <a x-bind:href="pic.link" x-bind="trigger">
                                         <img x-bind:src="pic.thumb" class="pure-img"/>
                                     </a>
                                 </div>
@@ -90,7 +90,8 @@
         import Alpine from 'alpinejs';
         import BABYLON from 'babylonjs';
         import battlemapLoader from 'battlemap-loader';
-        import subscribePicture from 'picture-broadcasting';
+        import broadcastPicture from 'picture-broadcasting';
+        Alpine.data('broadcast', broadcastPicture)
 
         BABYLON.SceneLoader.RegisterPlugin(battlemapLoader)
         const canvas = document.getElementById("renderCanvas") // Get the canvas element

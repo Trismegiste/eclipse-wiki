@@ -66,8 +66,8 @@
         </div>
         <div class="pure-u-1 pure-u-xl-1-6">
             {% if npc.tokenPic is not empty %}
-                <div class="pushable">
-                    <a href="{{ path('app_profilepicture_pushunique', {pk: npc.pk}) }}">
+                <div x-data="broadcast">
+                    <a href="{{ path('app_profilepicture_pushunique', {pk: npc.pk}) }}" x-bind="trigger">
                         <img src="{{ path('app_profilepicture_unique', {pk: npc.pk}) }}" class="pure-img"/>
                     </a>
                 </div>

@@ -17,9 +17,9 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="module">
-        import subscribePicture from 'picture-broadcasting';
-        subscribePicture(document.querySelectorAll('.pushable a'))
-    </script>  
+        import broadcastPicture from 'picture-broadcasting';
+        Alpine.data('broadcast', broadcastPicture)
+    </script>
     <script type="module">
         import Mousetrap from 'mousetrap';
 
