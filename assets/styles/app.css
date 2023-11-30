@@ -97,6 +97,7 @@ h2 {
     margin: 1em;
 }
 
+/* WIKITEXT */
 .parsed-wikitext p, .parsed-wikitext li {
     line-height: 150%;
 }
@@ -109,6 +110,19 @@ h2 {
     padding: 0.3em 0.6em;
 }
 
+.parsed-wikitext a.external::after {
+    font-family: "fontello";
+    content: ' \e843';
+}
+
+/* WIKI image */
+.parsed-wikitext img.mw-file-element {
+    max-height: 200px;
+    max-width: 200px;
+    object-fit: cover;
+}
+
+/* ROLL */
 .diceroller {
     font-size: 200%;
     text-align: center;
@@ -150,13 +164,6 @@ input[type=text].highlight {
 
 a.new {
     color: red;
-}
-
-/* WIKI image */
-.parsed-wikitext img.mw-file-element {
-    max-height: 200px;
-    max-width: 200px;
-    object-fit: cover;
 }
 
 /* LOVELETTER */
