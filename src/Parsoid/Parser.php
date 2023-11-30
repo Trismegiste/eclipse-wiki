@@ -37,7 +37,7 @@ class Parser
         return $parser->wikitext2html($pageConfig, self::parserOpts);
     }
 
-    // work in progress
+    // work in progress, just a random thought
     protected function parseVertex(Vertex $vertex): string
     {
         $parser = $this->factory->create('browser');
