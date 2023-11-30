@@ -11,6 +11,7 @@ use Wikimedia\Parsoid\DOM\Node;
 use Wikimedia\Parsoid\Ext\DOMProcessor;
 use Wikimedia\Parsoid\Ext\DOMUtils;
 use Wikimedia\Parsoid\Ext\ParsoidExtensionAPI;
+use Wikimedia\Parsoid\Utils\DOMDataUtils;
 
 /**
  * a Generic DOMProcessor that replaces all wikilinks to internal pages and to internal pictures
@@ -35,7 +36,21 @@ abstract class LinkOverride extends DOMProcessor
         }
     }
 
-    abstract protected function processFile(Element $node): void;
+    protected function processFile(Element $node): void
+    {
+        $link = $node->firstChild;
+        if ($link && ($link->nodeName === 'a')) {
+            $img = $link->firstChild;
+            if ($img && ($img->nodeName === 'img')) {
+                $data = DOMDataUtils::getDataParsoid($img);
+                if (preg_match('#^file:(.+)#', $data->sa['resource'], $matches)) {
+                    $this->transformFileDom($node, $link, $img, $matches[1]);
+                }
+            }
+        }
+    }
 
     abstract protected function processLink(Element $link): void;
+
+    abstract protected function transformFileDom(Element $container, Element $link, Element $img, string $wikiFilename);
 }
