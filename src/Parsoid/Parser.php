@@ -6,10 +6,9 @@
 
 namespace App\Parsoid;
 
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use App\Entity\Vertex;
 use Wikimedia\Parsoid\Mocks\MockPageConfig;
 use Wikimedia\Parsoid\Mocks\MockPageContent;
-use Wikimedia\Parsoid\Parsoid;
 
 /**
  * Facade for Parsoid
@@ -24,24 +23,27 @@ class Parser
         'nativeTemplateExpansion' => true
     ];
 
-    protected $parsoid;
-
-    public function __construct(protected InternalDataAccess $access, protected UrlGeneratorInterface $router)
+    public function __construct(protected ParserFactory $factory)
     {
-        $siteConfig = new InternalSiteConfig([]);
-        $siteConfig->registerExtensionModule([
-            'class' => SymfonyBridge::class,
-            'args' => [$this->router]
-        ]);
-        $this->parsoid = new Parsoid($siteConfig, $this->access);
+        
     }
 
     public function parse(string $page): string
     {
+        $parser = $this->factory->create('browser');
         $pageContent = new MockPageContent(['main' => $page]);
         $pageConfig = new MockPageConfig([], $pageContent);
 
-        return $this->parsoid->wikitext2html($pageConfig, self::parserOpts);
+        return $parser->wikitext2html($pageConfig, self::parserOpts);
+    }
+
+    public function parseVertex(Vertex $vertex): string
+    {
+        $parser = $this->factory->create('browser');
+        $pageContent = new MockPageContent(['main' => $vertex->getContent()]);
+        $pageConfig = new MockPageConfig(['title' => $vertex->getTitle()], $pageContent);
+
+        return $parser->wikitext2html($pageConfig, self::parserOpts);
     }
 
 }
