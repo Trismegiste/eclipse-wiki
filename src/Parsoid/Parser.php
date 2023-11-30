@@ -37,7 +37,8 @@ class Parser
         return $parser->wikitext2html($pageConfig, self::parserOpts);
     }
 
-    public function parseVertex(Vertex $vertex): string
+    // work in progress
+    protected function parseVertex(Vertex $vertex): string
     {
         $parser = $this->factory->create('browser');
         $pageContent = new MockPageContent(['main' => $vertex->getContent()]);

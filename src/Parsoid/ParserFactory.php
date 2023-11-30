@@ -16,28 +16,35 @@ use Wikimedia\Parsoid\Parsoid;
 class ParserFactory
 {
 
-    protected $instance = null;
+    protected array $instance = [];
+    protected array $extension;
 
-    public function __construct(protected InternalDataAccess $access, protected UrlGeneratorInterface $router)
+    public function __construct(protected InternalDataAccess $access, UrlGeneratorInterface $router)
     {
-        
+        $this->extension = [
+            'browser' => [
+                'class' => SymfonyBridge::class,
+                'args' => [$router]
+            ]
+        ];
     }
 
     public function create(string $target): Parsoid
     {
-        if (!is_null($this->instance)) {
-            return $this->instance;
+        if (key_exists($target, $this->instance)) {
+            return $this->instance[$target];
+        }
+        if (!key_exists($target, $this->extension)) {
+            throw new \InvalidArgumentException("'$target' is not a valid target for wikitext rendering. "
+                            . "Current configurations avaliable are: [" . implode(', ', array_keys($this->extension)) . ']');
         }
 
         $siteConfig = new InternalSiteConfig();
-        $siteConfig->registerExtensionModule([
-            'class' => SymfonyBridge::class,
-            'args' => [$this->router]
-        ]);
+        $siteConfig->registerExtensionModule($this->extension[$target]);
 
-        $this->instance = new Parsoid($siteConfig, $this->access);
+        $this->instance[$target] = new Parsoid($siteConfig, $this->access);
 
-        return $this->instance;
+        return $this->instance[$target];
     }
 
 }
