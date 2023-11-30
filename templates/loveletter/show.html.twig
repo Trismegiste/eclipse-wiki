@@ -11,7 +11,7 @@
 
 {% block content %}
     <div class="loveletter">
-        {{ include('loveletter/content.html.twig') }}
+        {{ include('loveletter/content.html.twig', {mode:'browser'}) }}
     </div>
     <h2>Backlinks</h2>
     {{ include('fragment/wiki_backlinks.html.twig') }}

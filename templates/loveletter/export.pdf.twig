@@ -8,7 +8,8 @@
     </style>
 {% endblock %}
 
-{% block content %}    <div class="loveletter">
-        {{ include('loveletter/content.html.twig') }}
+{% block content %}
+    <div class="loveletter">
+        {{ include('loveletter/content.html.twig', {mode: 'pdf'}) }}
     </div>
 {% endblock %}
