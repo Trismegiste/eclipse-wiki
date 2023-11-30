@@ -6,6 +6,7 @@
 
 namespace App\Parsoid;
 
+use App\Parsoid\Link\BrowserOverride;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Wikimedia\Parsoid\Ext\ExtensionModule;
 
@@ -23,9 +24,9 @@ class SymfonyBridge implements ExtensionModule
     public function getConfig(): array
     {
         return [
-            'name' => 'symfony',
+            'name' => 'symfony-bridge',
             'domProcessors' => [
-                ['class' => LinkOverride::class, 'args' => [$this->router]]
+                ['class' => BrowserOverride::class, 'args' => [$this->router]]
             ]
         ];
     }

@@ -76,6 +76,7 @@ class InternalDataAccess extends DataAccess
     {
         $ret = [];
         foreach ($titles as $title) {
+            // @todo shortcut for template
             $found = $this->repositoy->findByTitle($title);
             if ($found) {
                 $ret[$title] = [

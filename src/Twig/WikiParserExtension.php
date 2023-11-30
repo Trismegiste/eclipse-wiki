@@ -28,9 +28,9 @@ class WikiParserExtension extends AbstractExtension
         ];
     }
 
-    public function printWikiText(?string $wikitext): string
+    public function printWikiText(?string $wikitext, string $target = 'browser'): string
     {
-        return empty($wikitext) ? '' : '<div class="parsed-wikitext">' . $this->parser->parse($wikitext) . '</div>';
+        return empty($wikitext) ? '' : '<div class="parsed-wikitext">' . $this->parser->parse($wikitext, $target) . '</div>';
     }
 
 }

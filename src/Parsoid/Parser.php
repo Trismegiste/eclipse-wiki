@@ -28,9 +28,9 @@ class Parser
         
     }
 
-    public function parse(string $page): string
+    public function parse(string $page, string $target): string
     {
-        $parser = $this->factory->create('browser');
+        $parser = $this->factory->create($target);
         $pageContent = new MockPageContent(['main' => $page]);
         $pageConfig = new MockPageConfig([], $pageContent);
 

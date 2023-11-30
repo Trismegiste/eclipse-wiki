@@ -6,24 +6,17 @@
 
 namespace App\Parsoid;
 
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Wikimedia\Parsoid\DOM\Element;
 use Wikimedia\Parsoid\DOM\Node;
 use Wikimedia\Parsoid\Ext\DOMProcessor;
 use Wikimedia\Parsoid\Ext\DOMUtils;
 use Wikimedia\Parsoid\Ext\ParsoidExtensionAPI;
-use Wikimedia\Parsoid\Utils\DOMDataUtils;
 
 /**
- * a DOMProcessor that replaces all wikilinks to internal pages and to internal images to symfony controllers with the help of the symfony router
+ * a Generic DOMProcessor that replaces all wikilinks to internal pages and to internal pictures
  */
-class LinkOverride extends DOMProcessor
+abstract class LinkOverride extends DOMProcessor
 {
-
-    public function __construct(protected UrlGeneratorInterface $router)
-    {
-        
-    }
 
     public function wtPostprocess(ParsoidExtensionAPI $extApi, Node $node, array $options): void
     {
@@ -42,27 +35,7 @@ class LinkOverride extends DOMProcessor
         }
     }
 
-    protected function processFile(Element $node): void
-    {
-        $link = $node->firstChild;
-        if ($link && ($link->nodeName === 'a')) {
-            $img = $link->firstChild;
-            if ($img && ($img->nodeName === 'img')) {
-                $data = DOMDataUtils::getDataParsoid($img);
-                if (preg_match('#^file:(.+)#', $data->sa['resource'], $matches)) {
-                    $node->setAttribute('x-data', 'broadcast');
-                    $link->setAttribute('href', $this->router->generate('app_picture_push', ['title' => $matches[1]]));
-                    $link->setAttribute('x-bind', 'trigger');
-                    $img->setAttribute('src', $this->router->generate('get_picture', ['title' => $matches[1]]));
-                }
-            }
-        }
-    }
+    abstract protected function processFile(Element $node): void;
 
-    protected function processLink(Element $link): void
-    {
-        $data = DOMDataUtils::getDataParsoid($link);
-        $link->setAttribute('href', $this->router->generate('app_wiki', ['title' => $data->sa['href']]));
-    }
-
+    abstract protected function processLink(Element $link): void;
 }
