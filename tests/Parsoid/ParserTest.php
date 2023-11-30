@@ -5,9 +5,10 @@
  */
 
 use App\Parsoid\Parser;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Crawler;
 
-class ParserTest extends KernelTestCase
+class ParserTest extends WebTestCase
 {
 
     protected Parser $sut;
@@ -21,6 +22,9 @@ class ParserTest extends KernelTestCase
     public function testOverridenLinksForBrowser()
     {
         $html = $this->sut->parse('[[YOLO with space]]', 'browser');
+        $crawler = new Crawler($html);
+
+        echo $crawler->filter('a')->attr('href');
     }
 
 }
