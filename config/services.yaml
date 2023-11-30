@@ -55,27 +55,10 @@ services:
     App\Service\MediaWiki:
         arguments:
             $host: '%env(resolve:WIKISOURCE)%'
-
-    App\Service\LocalInterwiki:
-        arguments:
-            $host: '%env(resolve:WIKISOURCE)%'            
                         
     App\Twig\MediaWikiExtension:
         arguments:
             $src: '%env(resolve:WIKISOURCE)%'
-            
-    Mike42\Wikitext\WikitextParser:
-        arguments:
-            - '@App\Twig\LinkRender'
-            
-    # PDF
-    app.wikiparser.pdf:
-        class: Mike42\Wikitext\WikitextParser
-        arguments:
-            - '@App\Twig\PdfLinkRender'
-            
-    App\Twig\PdfWikiParserExtension:
-        $wikiParser: '@app.wikiparser.pdf'
 
    # FLAT FILE
     app.choicetype.repository:

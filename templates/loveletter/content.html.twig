@@ -1,8 +1,8 @@
 {# PDF content #}
 <p>Cher {{ vertex.player }},</p>
 <section class="intro">
-    {{ wiki_for_pdf("'''Contexte''' : " ~ vertex.context) }}
-    {{ wiki_for_pdf("'''Drame''' : " ~ vertex.drama) }}
+    {{ wiki("'''Contexte''' : " ~ vertex.context, 'pdf') }}
+    {{ wiki("'''Drame''' : " ~ vertex.drama, 'pdf') }}
 </section>
 
 {% macro difficulty_roll(roll) %}

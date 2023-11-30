@@ -486,9 +486,6 @@
     "trismegiste/strangelove-bundle": {
         "version": "dev-bundle"
     },
-    "trismegiste/wikitext": {
-        "version": "1.0.0"
-    },
     "twig/extra-bundle": {
         "version": "v3.3.8"
     },

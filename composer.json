@@ -36,7 +36,6 @@
         "symfony/yaml": "^6.3",
         "trismegiste/rpg-name-generator": "^1",
         "trismegiste/strangelove-bundle": "^2",
-        "trismegiste/wikitext": "^1.0",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0",
         "wikimedia/parsoid": "dev-feature-native-template-option-for-parsoid"
