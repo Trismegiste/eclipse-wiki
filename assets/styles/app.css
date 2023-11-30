@@ -234,6 +234,12 @@ i.archived {
     color: #ccc;
 }
 
+.dashboard .mediawiki img {
+    height: 8em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
 /* timeline TOC */
 .timeline-toc {
     margin: 1em;

@@ -99,6 +99,15 @@ class GmHelper extends AbstractController
     }
 
     /**
+     * Help page for Wikitext language
+     */
+    #[Route("/helpwiki", methods: ["GET"])]
+    public function helpWikitext(): Response
+    {
+        return $this->render('helpwiki.html.twig');
+    }
+
+    /**
      * 3D View of digraph
      */
     #[Route("/digraph/view3d", methods: ["GET"])]

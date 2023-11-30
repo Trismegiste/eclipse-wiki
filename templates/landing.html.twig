@@ -31,6 +31,12 @@
         {{ _self.dashboard_item('app_gmhelper_qrcode', 'qrcode', 'QR Code Images') }}
         {{ _self.dashboard_item('app_gmhelper_qrcode3d', 'view3d', 'QR Code FPS') }}
         {{ _self.dashboard_item('app_gmhelper_help', 'help-circled', 'Aide') }}
+        <div class="pure-u-1-2 pure-u-xl-1-6 mediawiki">
+            <a href="{{ path('app_gmhelper_helpwikitext') }}">
+                <img src="{{ asset('img/mediawikiwiki.svg') }}"/>
+                <h2>Aide Wikitext</h2>
+            </a>
+        </div>
     </div>
     <h2>Informations sur le digraphe</h2>
     <ul>

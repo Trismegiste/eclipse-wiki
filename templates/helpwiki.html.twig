@@ -1,0 +1,55 @@
+{% extends "base.html.twig" %}
+
+{% block header_title %}Aide Wikitext{% endblock %}
+
+{% block content %}
+    <h2>Liens</h2>
+    <ul>
+        <li><strong>Lien interne avec texte par défaut</strong> : <pre>[[Nom du Vertex]]</pre></li>
+        <li><strong>Lien interne avec texte de remplacement</strong> : <pre>[[Nom du Vertex|Texte affiché]]</pre></li>
+        <li><strong>Lien externe</strong> : <pre>[https://meta.wikimedia.org/wiki/Help:Wikitext_examples Exemples de Wikitext]</pre></li>
+        <li><strong>Insérer une image</strong> : <pre>[[file:Ma Jolie Image.jpg]]</pre></li>
+    </ul>
+    <h2>Formattage</h2>
+    <ul>
+        <li><strong>Gras</strong> : <pre>'''Texte en gras'''</pre></li>
+        <li><strong>Italique</strong> : <pre>''Texte en italique''</pre></li>
+        <li><strong>Séparateur</strong> : <pre>----</pre></li>
+    </ul>
+    <h2>Listes</h2>
+    <ul>
+        <li><strong>Sans numéro</strong> :
+            <pre>
+* Farine
+* Œuf</pre>
+        </li>
+        <li><strong>Avec numérotation</strong> :
+            <pre>
+# Président
+# Directeur</pre>
+        </li>
+    </ul>
+    <h2>Tables</h2>
+    <ul>
+        <li><strong>Sans style</strong> :
+            <pre>
+{|
+! Entête 1
+! Entête 2
+|- 
+| Ligne 1
+| Ligne 2
+|}</pre>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        main ul pre {
+            background-color: #eee;
+            padding: 0.3em;
+        }
+    </style>
+{% endblock %}
