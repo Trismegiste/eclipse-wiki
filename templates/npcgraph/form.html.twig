@@ -119,15 +119,13 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script>
-        document.addEventListener('DOMContentLoaded', notused => {
-            const collectionHolder = document.getElementById('full_tree_node')
-            document.querySelector('button[data-addlink]').addEventListener("click", notused => {
-                let node = document.createElement('div')
-                node.innerHTML = collectionHolder.dataset.prototype
-                        .replace(/__name__/g, collectionHolder.children.length)
-                collectionHolder.appendChild(node)
-            })
+    <script type="module">
+        const collectionHolder = document.getElementById('{{ form.node.vars.id }}')
+        document.querySelector('button[data-addlink]').addEventListener("click", notused => {
+            let node = document.createElement('div')
+            node.innerHTML = collectionHolder.dataset.prototype
+                    .replace(/__name__/g, collectionHolder.children.length)
+            collectionHolder.appendChild(node)
         })
     </script>
 {% endblock %}
