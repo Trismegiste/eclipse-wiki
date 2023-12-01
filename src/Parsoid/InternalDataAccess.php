@@ -19,6 +19,12 @@ use Wikimedia\Parsoid\Core\ContentMetadataCollector;
 class InternalDataAccess extends DataAccess
 {
 
+    const template = [
+        'legend' => '{{{1}}}<i class="icon-view3d"></i>',
+        'roll' => '',
+        'invokeai' => ''
+    ];
+
     public function __construct(protected VertexRepository $repositoy, protected Storage $storage)
     {
         
@@ -41,7 +47,13 @@ class InternalDataAccess extends DataAccess
 
     public function fetchTemplateSource(PageConfig $pageConfig, string $title): ?PageContent
     {
-        return ($title==='template:legend') ? new \Wikimedia\Parsoid\Mocks\MockPageContent(['main'=>'<h2>{{{1}}}</h2>']):null;
+        if (preg_match('#^template:(.+)$#', $title, $matches)) {
+            if (key_exists($matches[1], self::template)) {
+                return new \Wikimedia\Parsoid\Mocks\MockPageContent(['main' => self::template[$matches[1]]]);
+            }
+        }
+
+        return null;
     }
 
     public function getFileInfo(PageConfig $pageConfig, array $files): array
