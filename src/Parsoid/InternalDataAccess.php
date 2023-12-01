@@ -20,7 +20,7 @@ class InternalDataAccess extends DataAccess
 {
 
     const template = [
-        'legend' => '{{{1}}}<i class="icon-view3d"></i>',
+        'legend' => '{{{1}}}<i class="icon-view3d" data-cell-index="{{{2}}}"></i>',
         'roll' => '',
         'invokeai' => ''
     ];
