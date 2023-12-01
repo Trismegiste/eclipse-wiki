@@ -20,7 +20,8 @@ class Parser
         'body_only' => true,
         'wrapSections' => false,
         'discardDataParsoid' => true,
-        'nativeTemplateExpansion' => true
+        'nativeTemplateExpansion' => true,
+        'skipLanguageConversionPass' => true
     ];
 
     public function __construct(protected ParserFactory $factory)

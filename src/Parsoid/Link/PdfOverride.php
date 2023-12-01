@@ -21,15 +21,15 @@ class PdfOverride extends LinkOverride
         
     }
 
-    protected function processLink(Element $link): void
-    {
-        $link->removeAttribute('href');
-    }
-
     protected function transformFileDom(Element $container, Element $link, Element $img, string $wikiFilename)
     {
         $response = $this->storage->createResponse($wikiFilename);
         $img->setAttribute('src', 'file://' . $response->getFile()->getPathname());
+    }
+
+    protected function transformLinkDom(Element $link, string $wikilink)
+    {
+        $link->removeAttribute('href');
     }
 
 }

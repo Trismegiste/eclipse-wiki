@@ -24,18 +24,17 @@ class BrowserOverride extends LinkOverride
         
     }
 
-    protected function processLink(Element $link): void
-    {
-        $data = DOMDataUtils::getDataParsoid($link);
-        $link->setAttribute('href', $this->router->generate('app_wiki', ['title' => $data->sa['href']]));
-    }
-
     protected function transformFileDom(Element $container, Element $link, Element $img, string $wikiFilename)
     {
         $container->setAttribute('x-data', 'broadcast');
         $link->setAttribute('href', $this->router->generate('app_picture_push', ['title' => $wikiFilename]));
         $link->setAttribute('x-bind', 'trigger');
         $img->setAttribute('src', $this->router->generate('get_picture', ['title' => $wikiFilename]));
+    }
+
+    protected function transformLinkDom(Element $link, string $wikilink)
+    {
+        $link->setAttribute('href', $this->router->generate('app_wiki', ['title' => $wikilink]));
     }
 
 }

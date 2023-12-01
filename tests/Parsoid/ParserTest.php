@@ -45,6 +45,8 @@ class ParserTest extends WebTestCase
     {
         $html = $this->sut->parse('[[YOLO with space]]', 'browser');
         $this->crawler->addHtmlContent($html);
+        // Why assertStringStartsWith and not assertEquals ?
+        // Because, somewhere in Parsoid, a "?action=edit&redlink" is appended after the link
         $this->assertStringStartsWith($this->routing->generate('app_wiki', ['title' => 'YOLO with space']), $this->crawler->filter('a')->attr('href'));
     }
 

@@ -36,6 +36,12 @@ abstract class LinkOverride extends DOMProcessor
         }
     }
 
+    protected function processLink(Element $link): void
+    {
+        $data = DOMDataUtils::getDataParsoid($link);
+        $this->transformLinkDom($link, $data->sa['href']);
+    }
+
     protected function processFile(Element $node): void
     {
         $link = $node->firstChild;
@@ -50,7 +56,7 @@ abstract class LinkOverride extends DOMProcessor
         }
     }
 
-    abstract protected function processLink(Element $link): void;
+    abstract protected function transformLinkDom(Element $link, string $wikilink);
 
     abstract protected function transformFileDom(Element $container, Element $link, Element $img, string $wikiFilename);
 }
