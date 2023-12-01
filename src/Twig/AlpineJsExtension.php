@@ -32,7 +32,7 @@ class AlpineJsExtension extends AbstractExtension
             }
         }
 
-        return ['flashes' => $flat];
+        return $flat;
     }
 
 }

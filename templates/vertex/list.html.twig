@@ -40,7 +40,7 @@
                                 if (response.ok) {
                                     return response.text()
                                 } else {
-                                    pushFlash(this.$root, 'error', 'Error in text search')
+                                    Alpine.store('notif').push('error', 'Error in text search')
                                     return ''
                                 }
                             })

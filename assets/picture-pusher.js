@@ -1,6 +1,8 @@
 /*
  * Behavior for broadcasting picture
  */
+import Alpine from 'alpinejs'
+
 export default () => ({
         trigger: {
             ['x-on:click.prevent'] () {
@@ -17,16 +19,16 @@ export default () => ({
                     }
                     return response.json()
                 }).then((json) => {
-                    pushFlash(this.$el, 'success', json.message)
+                    Alpine.store('notif').push('success', json.message)
                 }).catch((error) => {
                     if (typeof error.json === "function") {
                         error.json().then((jsonError) => {
-                            pushFlash(this.$el, 'error', jsonError.message)
+                            Alpine.store('notif').push('error', jsonError.message)
                         }).catch((genericError) => {
-                            pushFlash(this.$el, 'error', genericError.statusText);
+                            Alpine.store('notif').push('error', genericError.statusText);
                         })
                     } else {
-                        pushFlash(this.$el, 'error', error)
+                        Alpine.store('notif').push('error', error)
                     }
                 })
             }}

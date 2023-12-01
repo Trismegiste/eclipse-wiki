@@ -6,7 +6,7 @@
     {{ parent() }}
     <script>
         document.addEventListener("DOMContentLoaded", function (event) {
-            pushFlash(document, 'error', 'This page need authentication')
+            Alpine.store('notif').push('error', 'This page need authentication')
         })
     </script>
 {% endblock %}

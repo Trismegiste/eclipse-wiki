@@ -89,7 +89,7 @@
 
         const fileInput = document.getElementById('{{ form.vars.id }}')
         fileInput.addEventListener('invalid', (event) => {
-            pushFlash(event.target, 'error', 'Choose a picture')
+            Alpine.store('notif').push('error', 'Choose a picture')
         })
     </script>        
 {% endblock %}

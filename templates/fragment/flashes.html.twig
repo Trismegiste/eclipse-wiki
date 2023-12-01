@@ -1,15 +1,27 @@
-<section class="notif" 
-         x-data="{{ alpinejs_flashes(app.flashes)|json_encode()|e('html_attr') }}"
-         x-on:flash.window="flashes.unshift($event.detail)">
-    <template x-for="flash in flashes">
+<section class="notif" x-data>
+    <template x-for="(flash, idx) in $store.notif.flashes" :key="idx">
         <div x-bind:class="'flash-' + flash.level"
-             x-on:click="$el.hidden=true"
+             x-bind:data-index="idx"
+             x-on:click="$store.notif.hide(idx)"
              x-text="flash.message">
         </div>
     </template>
 </section>
-<script>
-    function pushFlash(elem, level, msg) {
-        elem.dispatchEvent(new CustomEvent('flash', {"bubbles": true, detail: {level: level, message: msg}}))
-    }
+<script type="module">
+    Alpine.store('notif', {
+        flashes: [],
+
+        init() {
+            this.flashes
+            ={{ alpinejs_flashes(app.flashes)|json_encode()|raw }}
+        },
+
+        push(level, msg) {
+            this.flashes.unshift({level, message: msg})
+        },
+
+        hide(idx) {
+            this.flashes.splice(idx, 1)
+        }
+    })
 </script>
