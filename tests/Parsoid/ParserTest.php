@@ -4,6 +4,7 @@
  * eclipse-wiki
  */
 
+use App\Entity\Handout;
 use App\Entity\Scene;
 use App\Parsoid\Parser;
 use App\Repository\VertexRepository;
@@ -58,6 +59,17 @@ class ParserTest extends WebTestCase
         $html = $this->sut->parse('[[scene with space]]', 'browser');
         $this->crawler->addHtmlContent($html);
         $this->assertEquals($this->routing->generate('app_wiki', ['title' => 'scene with space']), $this->crawler->filter('a')->attr('href'));
+    }
+
+    public function testOverridenLinksForPdf()
+    {
+        $v = new Handout('handout with àççéèêëàôöts');
+        $v->pcInfo = 'something';
+        $this->repo->save($v);
+
+        $html = $this->sut->parse('[[handout with àççéèêëàôöts]]', 'pdf');
+        $this->crawler->addHtmlContent($html);
+        $this->assertEquals('', $this->crawler->filter('a')->attr('href'));
     }
 
     public function testPictureForBrowser()
