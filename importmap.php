@@ -51,6 +51,9 @@ return [
     'quick-npc' => [
         'path' => 'npc-graph-creation.js',
     ],
+    'autofocus' => [
+        'path' => 'autofocus.js',
+    ],    
     'alpinejs' => [
         'downloaded_to' => 'vendor/alpinejs.js',
         'url' => 'https://cdn.jsdelivr.net/npm/alpinejs@3.13.2/+esm',

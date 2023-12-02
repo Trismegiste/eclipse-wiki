@@ -61,6 +61,7 @@
         {% endblock %}
         {% block javascripts %}
             <script type="module">
+                import 'autofocus';
                 import Mousetrap from 'mousetrap';
 
                 {% for item in navigation %}
@@ -73,18 +74,6 @@
         {% endblock %}
         {# This javascript module is intentionaly OUTSIDE of "javascripts" block because it's initialising Alpine AFTER ALL Alpine.data() #}
         <script type="module">
-            // default focus
-            const found = document.querySelector('main form.pure-form [data-autofocus]')
-            if (found) {
-                found.focus()
-            } else {
-                // fallback
-                const found = document.querySelector('main form.pure-form input[type=text]')
-                if (found) {
-                    found.focus()
-                }
-            }
-
             // Initialising Alpine
             Alpine.start()
         </script>
