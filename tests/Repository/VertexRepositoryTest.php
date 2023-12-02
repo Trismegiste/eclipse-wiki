@@ -197,4 +197,14 @@ class VertexRepositoryTest extends KernelTestCase
         $this->assertEquals(4, $edgeCount);
     }
 
+    public function testFirstLetterCaseInsensitive()
+    {
+        $vertex = new Freeform('kArEn');
+        $this->sut->save($vertex);
+        $this->assertNotNull($this->sut->findByTitle('kArEn'));
+        $this->assertNull($this->sut->findByTitle('karen'));
+        $this->assertNotNull($this->sut->findByTitle('KArEn'));
+        $this->assertNull($this->sut->findByTitle('KAREN'));
+    }
+
 }

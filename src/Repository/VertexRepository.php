@@ -31,6 +31,14 @@ use Trismegiste\Strangelove\MongoDb\DefaultRepository;
 class VertexRepository extends DefaultRepository
 {
 
+    protected function getFirstLetterCaseInsensitiveRegexPart(string $title): string
+    {
+        $tmp = preg_split('//u', $title, -1, PREG_SPLIT_NO_EMPTY);
+        $firstLetter = array_shift($tmp);
+
+        return "(?i:$firstLetter)" . preg_quote(implode('', $tmp));
+    }
+
     /**
      * Find the first vertex by its title. First letter is case-insensitive
      * @param string $title
@@ -38,10 +46,7 @@ class VertexRepository extends DefaultRepository
      */
     public function findByTitle(string $title): ?Vertex
     {
-        $tmp = preg_split('//u', $title, -1, PREG_SPLIT_NO_EMPTY);
-        $firstLetter = array_shift($tmp);
-
-        return $this->searchOne(['title' => new Regex("^(?i:$firstLetter)" . preg_quote(implode('', $tmp)) . '$')]);
+        return $this->searchOne(['title' => new Regex('^' . $this->getFirstLetterCaseInsensitiveRegexPart($title) . '$')]);
     }
 
     /**
@@ -70,11 +75,8 @@ class VertexRepository extends DefaultRepository
 
     public function searchByBacklinks(string $title): array
     {
-        $tmp = preg_split('//u', $title, -1, PREG_SPLIT_NO_EMPTY);
-        $firstLetter = array_shift($tmp);
-
         $it = $this->search([
-            'content' => new Regex("\[\[(?i:$firstLetter)" . preg_quote(implode('', $tmp)) . "(\]\]|\|)")
+            'content' => new Regex("\[\[" . $this->getFirstLetterCaseInsensitiveRegexPart($title) . "(\]\]|\|)")
         ]);
 
         $linked = [];
@@ -125,9 +127,7 @@ class VertexRepository extends DefaultRepository
     {
         $vertex = $this->findByTitle($oldTitle);
         // build the regex with insensitive case on the first letter
-        $tmp = preg_split('//u', $vertex->getTitle(), -1, PREG_SPLIT_NO_EMPTY);
-        $firstLetter = array_shift($tmp);
-        $regex = "\[\[(?i:$firstLetter)" . preg_quote(implode('', $tmp)) . "(\]\]|\|)";
+        $regex = "\[\[" . $this->getFirstLetterCaseInsensitiveRegexPart($vertex->getTitle()) . "(\]\]|\|)";
 
         // search for vertex with links to $vertex
         $iter = $this->search(['content' => new Regex($regex)]);

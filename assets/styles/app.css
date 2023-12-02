@@ -122,6 +122,12 @@ h2 {
     object-fit: cover;
 }
 
+/* WIKI templates */
+.parsed-wikitext i.icon-view3d[data-cell-index] {
+    color: darkorange;
+    cursor: pointer;
+}
+
 /* ROLL */
 .diceroller {
     font-size: 200%;
