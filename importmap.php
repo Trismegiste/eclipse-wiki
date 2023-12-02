@@ -27,6 +27,9 @@ return [
     'battlemap-document' => [
         'path' => 'place/BattlemapDocument.js',
     ],
+    'legend-highlight-subscriber' => [
+        'path' => 'place/legend-highlight-subscriber.js',
+    ],
     'dice-roller' => [
         'path' => 'DicePool.js',
     ],

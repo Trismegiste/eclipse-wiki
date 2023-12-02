@@ -123,9 +123,27 @@ h2 {
 }
 
 /* WIKI templates */
-.parsed-wikitext i.icon-view3d[data-cell-index] {
+.legend-highlighting {
     color: darkorange;
     cursor: pointer;
+}
+
+.highlighting-action {
+    animation-duration: 3s;
+    animation-name: hiliteActionSequence;
+}
+
+@keyframes hiliteActionSequence {
+    from {
+        color: black;
+        background-color: darkorange;
+    }
+
+    to {
+        color: darkorange;
+        background-color: none;
+
+    }
 }
 
 /* ROLL */

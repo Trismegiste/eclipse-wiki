@@ -1,15 +1,5 @@
 {# socket for highlighting center of interest (legend) on battlemap3d #}
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('[typeof="mw:Transclusion"] + i.icon-view3d[data-cell-index]').forEach(item => {
-            item.addEventListener('click', event => {
-                event.preventDefault()
-                const feedbackSocket = new WebSocket('{{ url_feedback }}')
-                feedbackSocket.onopen = () => {
-                    feedbackSocket.send(JSON.stringify({mode: 'indexed', cell: event.target.dataset.cellIndex}))
-                    feedbackSocket.close()
-                }
-            })
-        })
-    })
+<script type="module">
+    import legendHighlightSubscriber from 'legend-highlight-subscriber';
+    legendHighlightSubscriber('{{ url_feedback }}')
 </script>
