@@ -189,6 +189,12 @@
 
                 subscribePicture(img) {
                     subscribePicture(img)
+                },
+
+                filterTexture(event) {
+                    this.$el.querySelectorAll('option').forEach(opt => {
+                        opt.hidden = !scene.metadata.texture.includes(opt.value)
+                    })
                 }
 
             }))

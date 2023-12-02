@@ -32,7 +32,7 @@ class RoomTexturing extends AbstractType
                     'choices' => $this->provider->getTileSet('habitat'),
                     'attr' => [
                         'x-model' => 'cellInfo.template',
-                        'x-on:focus' => "\$el.querySelectorAll('option').forEach(opt => { opt.hidden = !scene.metadata.texture.includes(opt.value) })"
+                        'x-init' => "filterTexture"
                     ],
                     'choice_value' => function (?TileSvg $obj) {
                         return $obj?->getKey();
