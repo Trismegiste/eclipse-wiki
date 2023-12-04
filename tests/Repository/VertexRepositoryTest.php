@@ -214,7 +214,7 @@ class VertexRepositoryTest extends KernelTestCase
         $handout->pcInfo = 'Link to [[Starkiller|Luke]]';
         $handout->gmInfo = 'Link to [[Starkiller|starkiller family]]';
         $loveletter = new App\Entity\Loveletter('Buy some droids');
-        $loveletter->context = '[[Starkiller|Luke]] live in a farm';
+        $loveletter->context = '[[Starkiller|Luke]] lived in a farm';
         $loveletter->drama = '[[Starkiller|Luke]] must purchase some droids';
         $timeline = new Timeline('A new hope');
         $timeline->elevatorPitch = 'Space opera';
@@ -225,6 +225,7 @@ class VertexRepositoryTest extends KernelTestCase
         $modif = $this->sut->renameTitle('starkiller', 'Skywalker');
         $this->assertEquals(4, $modif);
 
+	// just to be sure we lost original objects, sending only the primary keys
         return array_map(function (Vertex $obj) {
             return $obj->getPk();
         }, $bunch);
@@ -243,7 +244,7 @@ class VertexRepositoryTest extends KernelTestCase
         $this->assertEquals('Link to [[Skywalker|Luke]]', $handout->pcInfo);
         $this->assertEquals('Link to [[Skywalker|starkiller family]]', $handout->gmInfo);
         // loveletter
-        $this->assertEquals('[[Skywalker|Luke]] live in a farm', $loveletter->context);
+        $this->assertEquals('[[Skywalker|Luke]] lived in a farm', $loveletter->context);
         $this->assertEquals('[[Skywalker|Luke]] must purchase some droids', $loveletter->drama);
         /** @var App\Entity\Timeline $timeline */
         $this->assertEquals('Starting with [[Skywalker|Luke]]', $timeline->getTree()[0]->title);

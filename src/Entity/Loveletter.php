@@ -38,4 +38,12 @@ WIKITEXT;
         $this->drama .= "\n\n[[file:$filenameInStorage]]\n";
     }
 
+    public function renameInternalLink(string $oldTitle, string $newTitle): void
+    {
+        $regex = "#\[\[" . static::getFirstLetterCaseInsensitiveRegexPart($oldTitle) . "(\]\]|\|)#";
+        $this->context = preg_replace($regex, "[[$newTitle" . '$1', $this->context);
+        $this->drama = preg_replace($regex, "[[$newTitle" . '$1', $this->drama);
+    }
+
+
 }

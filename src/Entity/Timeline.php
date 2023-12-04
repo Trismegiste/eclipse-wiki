@@ -60,4 +60,18 @@ WIKITEXT;
         $this->elevatorPitch .= "\n\n[[file:$filenameInStorage]]\n";
     }
 
+    public function renameInternalLink(string $oldTitle, string $newTitle): void
+    {
+        $this->recursivRenameInternalLink($this->tree, $oldTitle, $newTitle);
+    }
+
+    protected function recursivRenameInternalLink(PlotNode $node, string $oldTitle, string $newTitle): void
+    {
+        $regex = "#\[\[" . static::getFirstLetterCaseInsensitiveRegexPart($oldTitle) . "(\]\]|\|)#";
+        $node->title = preg_replace($regex, "[[$newTitle" . '$1', $node->title);
+        foreach ($node->nodes as $child) {
+            $this->recursivRenameInternalLink($child, $oldTitle, $newTitle);
+        }
+    }
+
 }
