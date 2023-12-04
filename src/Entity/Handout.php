@@ -33,4 +33,11 @@ WIKITEXT;
         $this->gmInfo .= "\n\n[[file:$filenameInStorage]]\n";
     }
 
+    public function renameInternalLink(string $oldTitle, string $newTitle): void
+    {
+        $regex = "#\[\[" . static::getFirstLetterCaseInsensitiveRegexPart($oldTitle) . "(\]\]|\|)#";
+        $this->pcInfo = preg_replace($regex, "[[$newTitle" . '$1', $this->pcInfo);
+        $this->gmInfo = preg_replace($regex, "[[$newTitle" . '$1', $this->gmInfo);
+    }
+
 }

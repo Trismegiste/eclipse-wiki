@@ -133,9 +133,7 @@ class VertexRepository extends DefaultRepository
         $iter = $this->search(['content' => new Regex($regex)]);
         $updated = [];
         foreach ($iter as $inbound) {
-            $content = $inbound->getContent();
-            $replacing = preg_replace('#' . $regex . '#', "[[$newTitle" . '$1', $content);
-            $inbound->setContent($replacing);
+            $inbound->renameInternalLink($vertex->getTitle(), $newTitle);
             $updated[] = $inbound;
         }
         $vertex->setTitle($newTitle);
