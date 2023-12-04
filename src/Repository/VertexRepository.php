@@ -33,10 +33,7 @@ class VertexRepository extends DefaultRepository
 
     protected function getFirstLetterCaseInsensitiveRegexPart(string $title): string
     {
-        $tmp = preg_split('//u', $title, -1, PREG_SPLIT_NO_EMPTY);
-        $firstLetter = array_shift($tmp);
-
-        return "(?i:$firstLetter)" . preg_quote(implode('', $tmp));
+        return Vertex::getFirstLetterCaseInsensitiveRegexPart($title);
     }
 
     /**
