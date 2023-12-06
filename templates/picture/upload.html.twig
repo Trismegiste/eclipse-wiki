@@ -20,21 +20,14 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script>
-        window.addEventListener('paste', e => {
-            const fileInput = document.getElementById('{{ form['picture'].vars.id }}')
-            fileInput.files = e.clipboardData.files
-        })
-
+    <script type="module">
         // if filename is empty before selecting a vertex for appending the picture, pre-fill the filename with the vertex title
-        window.addEventListener('load', () => {
-            let filename = document.getElementById('{{ form.children['filename'].vars.id }}')
-            let vertex = document.getElementById('{{ form.children['append_vertex'].vars.id }}_auto')
-            vertex.addEventListener('blur', e => {
-                if (filename.value.length === 0) {
-                    filename.value = vertex.value
-                }
-            })
+        let filename = document.getElementById('{{ form.children['filename'].vars.id }}')
+        let vertex = document.getElementById('{{ form.children['append_vertex'].vars.id }}_auto')
+        vertex.addEventListener('blur', e => {
+            if (filename.value.length === 0) {
+                filename.value = vertex.value
+            }
         })
     </script>
 {% endblock %}

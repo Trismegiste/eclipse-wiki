@@ -35,7 +35,8 @@ class PictureUpload extends AbstractType
                 ])
                 ->add('picture', FileType::class, [
                     'constraints' => [new Image()],
-                    'help' => 'COPY_PASTE_IMG'
+                    'help' => 'COPY_PASTE_IMG',
+                    'block_prefix' => 'pasted_file'
                 ])
                 ->add('append_vertex', Type\AjaxCompleteType::class, [
                     'required' => false,
