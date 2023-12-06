@@ -115,11 +115,21 @@ h2 {
     content: ' \e843';
 }
 
+.parsed-wikitext a.new {
+    color: red;
+}
+
 /* WIKI image */
 .parsed-wikitext img.mw-file-element {
     max-height: 200px;
     max-width: 200px;
     object-fit: cover;
+}
+
+.parsed-wikitext .mw-broken-media.mw-file-element {
+    background-color: #ffdce2;
+    color: red;
+    padding:0.5em;
 }
 
 /* WIKI templates */
@@ -184,10 +194,6 @@ td.centered {
 
 input[type=text].highlight {
     color: #c60000;
-}
-
-a.new {
-    color: red;
 }
 
 /* LOVELETTER */
