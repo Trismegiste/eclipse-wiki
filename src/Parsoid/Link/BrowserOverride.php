@@ -38,8 +38,10 @@ class BrowserOverride extends LinkOverride
 
     protected function transformMissingFileDom(Element $container, Element $link, Element $info, string $wikiFilename)
     {
-        $link->setAttribute('href', $this->router->generate('app_picture_uploadmissing', ['title' => $wikiFilename]));
-        $link->setAttribute('target', '_blank');
+        $link->setAttribute('href', $this->router->generate('app_picture_uploadmissing', [
+                    'title' => $wikiFilename,
+                    'redirect' => $this->router->getContext()->getPathInfo()
+        ]));
     }
 
 }

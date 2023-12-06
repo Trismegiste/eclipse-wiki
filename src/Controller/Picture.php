@@ -122,6 +122,8 @@ class Picture extends AbstractController
     #[Route('/picture/missing/{title}/upload', methods: ['GET', 'POST'])]
     public function uploadMissing(Request $request, string $title): Response
     {
+        $successRedirect = $request->query->get('redirect', '/');
+
         $form = $this->createFormBuilder()
                 ->add('picture', \Symfony\Component\Form\Extension\Core\Type\FileType::class, [
                     'constraints' => [new \Symfony\Component\Validator\Constraints\Image()],
@@ -138,7 +140,7 @@ class Picture extends AbstractController
                 $this->storage->storePicture($data['picture'], $filename);
                 $this->addFlash('success', "Upload $title OK");
 
-                return $this->redirectToRoute('app_picture_upload');
+                return $this->redirect($successRedirect);
             } catch (RuntimeException $e) {
                 $this->addFlash('error', $e->getMessage());
             }
