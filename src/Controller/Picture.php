@@ -127,7 +127,8 @@ class Picture extends AbstractController
         $form = $this->createFormBuilder()
                 ->add('picture', \Symfony\Component\Form\Extension\Core\Type\FileType::class, [
                     'constraints' => [new \Symfony\Component\Validator\Constraints\Image()],
-                    'help' => 'COPY_PASTE_IMG'
+                    'help' => 'COPY_PASTE_IMG',
+                    'block_prefix' => 'pasted_file'
                 ])
                 ->add('upload', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
                 ->getForm();

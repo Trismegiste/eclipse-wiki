@@ -1,0 +1,10 @@
+{# Add Paste feature to a FileType #}
+{%  block pasted_file_help %}
+    {{ form_help(form) }}
+    <script type="module">
+        window.addEventListener('paste', e => {
+            const fileInput = document.getElementById('{{ form.vars.id }}')
+            fileInput.files = e.clipboardData.files
+        })
+    </script>
+{% endblock %}
