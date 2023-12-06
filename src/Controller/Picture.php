@@ -138,7 +138,7 @@ class Picture extends AbstractController
                 $this->storage->storePicture($data['picture'], $filename);
                 $this->addFlash('success', "Upload $title OK");
 
-                return $this->redirectToRoute('app_picture_uploadmissing', ['title' => $title]);
+                return $this->redirectToRoute('app_picture_upload');
             } catch (RuntimeException $e) {
                 $this->addFlash('error', $e->getMessage());
             }
