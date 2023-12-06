@@ -117,6 +117,40 @@ class Picture extends AbstractController
     }
 
     /**
+     * Upload a missing picture
+     */
+    #[Route('/picture/missing/{title}/upload', methods: ['GET', 'POST'])]
+    public function uploadMissing(Request $request, string $title): Response
+    {
+        $form = $this->createFormBuilder()
+                ->add('picture', \Symfony\Component\Form\Extension\Core\Type\FileType::class, [
+                    'constraints' => [new \Symfony\Component\Validator\Constraints\Image()],
+                    'help' => 'COPY_PASTE_IMG'
+                ])
+                ->add('upload', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+                ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            try {
+                $filename = pathinfo($title, PATHINFO_FILENAME);
+                $this->storage->storePicture($data['picture'], $filename);
+                $this->addFlash('success', "Upload $title OK");
+
+                return $this->redirectToRoute('app_picture_uploadmissing', ['title' => $title]);
+            } catch (RuntimeException $e) {
+                $this->addFlash('error', $e->getMessage());
+            }
+        }
+
+        return $this->render('form.html.twig', [
+                    'form' => $form->createView(),
+                    'title' => 'Upload ' . $title
+        ]);
+    }
+
+    /**
      * Returns a pixelized thumbnail for the vector battlemap linked to the Place given by its pk
      */
     #[Route('/battlemap/thumbnail/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]

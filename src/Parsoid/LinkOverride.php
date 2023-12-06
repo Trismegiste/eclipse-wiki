@@ -46,11 +46,21 @@ abstract class LinkOverride extends DOMProcessor
     {
         $link = $node->firstChild;
         if ($link && ($link->nodeName === 'a')) {
-            $img = $link->firstChild;
-            if ($img && ($img->nodeName === 'img')) {
-                $data = DOMDataUtils::getDataParsoid($img);
-                if (preg_match('#^file:(.+)#', $data->sa['resource'], $matches)) {
-                    $this->transformFileDom($node, $link, $img, $matches[1]);
+            if (!DOMUtils::hasTypeOf($node, 'mw:Error')) {
+                $img = $link->firstChild;
+                if ($img && ($img->nodeName === 'img')) {
+                    $data = DOMDataUtils::getDataParsoid($img);
+                    if (preg_match('#^file:(.+)#', $data->sa['resource'], $matches)) {
+                        $this->transformFileDom($node, $link, $img, $matches[1]);
+                    }
+                }
+            } else {
+                $info = $link->firstChild;
+                if ($info && ($info->nodeName === 'span')) {
+                    $data = DOMDataUtils::getDataParsoid($info);
+                    if (preg_match('#^file:(.+)#', $data->sa['resource'], $matches)) {
+                        $this->transformMissingFileDom($node, $link, $info, $matches[1]);
+                    }
                 }
             }
         }
@@ -59,4 +69,6 @@ abstract class LinkOverride extends DOMProcessor
     abstract protected function transformLinkDom(Element $link, string $wikilink);
 
     abstract protected function transformFileDom(Element $container, Element $link, Element $img, string $wikiFilename);
+
+    abstract protected function transformMissingFileDom(Element $container, Element $link, Element $info, string $wikiFilename);
 }

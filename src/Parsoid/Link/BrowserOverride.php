@@ -9,7 +9,6 @@ namespace App\Parsoid\Link;
 use App\Parsoid\LinkOverride;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Wikimedia\Parsoid\DOM\Element;
-use Wikimedia\Parsoid\Utils\DOMDataUtils;
 
 /**
  * A DOMProcessor that replaces all wikilinks to internal pages and 
@@ -35,6 +34,11 @@ class BrowserOverride extends LinkOverride
     protected function transformLinkDom(Element $link, string $wikilink)
     {
         $link->setAttribute('href', $this->router->generate('app_wiki', ['title' => $wikilink]));
+    }
+
+    protected function transformMissingFileDom(Element $container, Element $link, Element $info, string $wikiFilename)
+    {
+        $link->setAttribute('href', $this->router->generate('app_picture_uploadmissing', ['title' => $wikiFilename]));
     }
 
 }

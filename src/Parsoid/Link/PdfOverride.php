@@ -32,4 +32,9 @@ class PdfOverride extends LinkOverride
         $link->removeAttribute('href');
     }
 
+    protected function transformMissingFileDom(Element $container, Element $link, Element $info, string $wikiFilename)
+    {
+        $container->removeChild($link);
+    }
+
 }
