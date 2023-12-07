@@ -11,9 +11,8 @@
     </div>
 {% endmacro %}
 
-
 {% block content %}
-    <div class="pure-g dashboard">
+    <section class="pure-g dashboard">
         {{ _self.dashboard_item('app_timelinecrud_create', 'movie-roll', 'Créer Scénario') }}
         {{ _self.dashboard_item('app_scenecrud_create', 'video', 'Créer Scène') }}
         {{ _self.dashboard_item('app_npcgenerator_create', 'user-plus', 'Créer Transhumain') }}
@@ -37,16 +36,8 @@
                 <h2>Aide Wikitext</h2>
             </a>
         </div>
-    </div>
-    <h2>Informations sur le digraphe</h2>
+    </section>
     {{ render(controller('App\\Controller\\GmHelper::summary')) }}
-    <ul>
-        <li><a href="{{ path('app_vertexcrud_showorphan') }}">Voir les vertex orphelins</a></li>
-        <li><a href="{{ path('app_vertexcrud_showbroken') }}">Voir les liens cassés</a></li>
-        <li><a href="{{ path('app_picture_showbroken') }}">Voir les images manquantes</a></li>
-        <li><a href="{{ path('app_vertexcrud_showstats') }}">Voir les statistiques</a></li>
-        <li><a href="{{ path('app_gmhelper_digraph') }}">Voir le graphe en 3D</a></li>
-    </ul> 
     <h2>Exporter la Collection 'mwpage'</h2>
     <ul>
         <li>

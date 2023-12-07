@@ -1,3 +1,17 @@
 {# Summary on this app #}
+{% macro summary_item(route, icon, label) %}
+    <div class="pure-u-1-2 pure-u-xl-1-5">
+        <a href="{{ path(route) }}">
+            <i class="icon-{{ icon }}"></i>
+            <h2>{{ label }}</h2>
+        </a>
+    </div>
+{% endmacro %}
 
-{{ stats.vertexCount }}
+<section class="pure-g dashboard">
+    {{ _self.summary_item('app_vertexcrud_showstats','link', stats.vertexCount ~ ' vertex') }}
+    {{ _self.summary_item('app_vertexcrud_showbroken','link', stats.brokenLinkCount ~ ' liens cassés') }}
+    {{ _self.summary_item('app_picture_showbroken', 'link', stats.brokenPictureCount~' images manquantes') }}
+    {{ _self.summary_item('app_vertexcrud_showorphan', 'link', stats.orphanCount~ ' orphelins') }}
+    {{ _self.summary_item('app_gmhelper_digraph', 'link', 'Graphe 3D') }}
+</section>
