@@ -16,9 +16,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Image;
 
 /**
- * Form for uploading new picture
+ * Form for uploading new picture and appends to the vertex content
  */
-class PictureUpload extends AbstractType
+class AppendPictureUpload extends AbstractType
 {
 
     protected VertexRepository $repository;

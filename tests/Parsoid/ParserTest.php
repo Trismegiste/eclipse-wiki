@@ -93,4 +93,11 @@ class ParserTest extends WebTestCase
         unlink($src);
     }
 
+    public function testMissingPictureForBrowser()
+    {
+        $html = $this->sut->parse('[[file:cthulhu.jpg]]', 'browser');
+        $this->crawler->addHtmlContent($html);
+        $this->assertEquals($this->routing->generate('app_picture_uploadmissing', ['title' => 'cthulhu.jpg', 'redirect' => '/']), $this->crawler->filter('a')->attr('href'));
+    }
+
 }

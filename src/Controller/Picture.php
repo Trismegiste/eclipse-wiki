@@ -8,14 +8,16 @@ namespace App\Controller;
 
 use App\Entity\BattlemapDocument;
 use App\Entity\Place;
-use App\Form\PictureUpload;
+use App\Form\AppendPictureUpload;
+use App\Form\MissingPictureUpload;
 use App\Repository\VertexRepository;
 use App\Service\PictoProvider;
 use App\Service\PlayerCastCache;
 use App\Service\Storage;
-use App\Voronoi\MapBuilder;
 use App\Voronoi\SvgDumper;
+use DateTime;
 use RuntimeException;
+use SplFileInfo;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -87,7 +89,7 @@ class Picture extends AbstractController
     #[Route('/picture/upload', methods: ['GET', 'POST'])]
     public function upload(Request $request, VertexRepository $repository): Response
     {
-        $form = $this->createForm(PictureUpload::class, null, ['ajax_search' => $this->generateUrl('app_picture_vertexsearch')]);
+        $form = $this->createForm(AppendPictureUpload::class, null, ['ajax_search' => $this->generateUrl('app_picture_vertexsearch')]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -122,16 +124,9 @@ class Picture extends AbstractController
     #[Route('/picture/missing/{title}/upload', methods: ['GET', 'POST'])]
     public function uploadMissing(Request $request, string $title): Response
     {
-        $successRedirect = $request->query->get('redirect', '/');
+        $successRedirect = $request->query->get('redirect', $this->generateUrl('app_vertexcrud_list'));
 
-        $form = $this->createFormBuilder()
-                ->add('picture', \Symfony\Component\Form\Extension\Core\Type\FileType::class, [
-                    'constraints' => [new \Symfony\Component\Validator\Constraints\Image()],
-                    'help' => 'COPY_PASTE_IMG',
-                    'block_prefix' => 'pasted_file'
-                ])
-                ->add('upload', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
-                ->getForm();
+        $form = $this->createForm(MissingPictureUpload::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -162,7 +157,7 @@ class Picture extends AbstractController
         if (is_null($place->battlemap3d)) {
             throw $this->createNotFoundException();
         }
-        $battlemap = new \SplFileInfo(join_paths($this->storage->getRootDir(), $place->battlemap3d));
+        $battlemap = new SplFileInfo(join_paths($this->storage->getRootDir(), $place->battlemap3d));
 
         // folder for caching :
         $cacheDir = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir);
@@ -171,7 +166,7 @@ class Picture extends AbstractController
         // managing HTTP Cache
         if (file_exists("$targetName.jpg")) {
             $response = new BinaryFileResponse("$targetName.jpg");
-            $response->setLastModified(\DateTime::createFromFormat('U', $battlemap->getMTime()));
+            $response->setLastModified(DateTime::createFromFormat('U', $battlemap->getMTime()));
             if ($response->isNotModified($request)) {
                 return $response;
             }
@@ -221,7 +216,7 @@ YOLO
         $convert->mustRun();
 
         $response = new BinaryFileResponse("$targetName.jpg");
-        $response->setLastModified(\DateTime::createFromFormat('U', $battlemap->getMTime()));
+        $response->setLastModified(DateTime::createFromFormat('U', $battlemap->getMTime()));
 
         return $response;
     }

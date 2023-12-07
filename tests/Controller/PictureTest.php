@@ -85,8 +85,8 @@ class PictureTest extends WebTestCase
 
         $crawler = $this->client->request('GET', '/picture/upload');
         $this->assertResponseIsSuccessful();
-        $form = $crawler->selectButton('picture_upload_upload')->form();
-        $form->setValues(['picture_upload' => [
+        $form = $crawler->selectButton('append_picture_upload_upload')->form();
+        $form->setValues(['append_picture_upload' => [
                 'filename' => 'uploaded',
                 'append_vertex' => $target->getPk()
         ]]);
@@ -100,7 +100,7 @@ class PictureTest extends WebTestCase
         $image = $this->createTestChart(2000); // to force resizing
         imagepng($image, $filename);
 
-        $form['picture_upload[picture]']->upload($filename);
+        $form['append_picture_upload[picture]']->upload($filename);
         $this->client->submit($form);
         $this->assertResponseRedirects();
         unlink($filename);
