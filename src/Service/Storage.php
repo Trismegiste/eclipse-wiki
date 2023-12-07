@@ -195,4 +195,26 @@ class Storage
         $picture->move($this->getRootDir(), $filename);
     }
 
+    /**
+     * Search for broken picture in vertex content
+     */
+    public function searchForBrokenPicture(\Iterator $iter): array
+    {
+        $keep = [];
+        // absolutely NOT optimized algorithm
+        foreach ($iter as $vertex) {
+            $scan = $vertex->extractPicture();
+            foreach ($scan as $target) {
+                $pic = $this->getFileInfo($target);
+                if (!$pic->isReadable()) {
+                    $keep[$target][$vertex->getTitle()] = true;
+                }
+            }
+        }
+
+        ksort($keep);
+
+        return $keep;
+    }
+
 }

@@ -124,4 +124,10 @@ class PictureTest extends WebTestCase
         $this->assertStringStartsWith('takeshi', $result[0]->title);
     }
 
+    public function testBrokenPicture()
+    {
+        $this->client->request('GET', '/picture/broken');
+        $this->assertResponseIsSuccessful();
+    }
+
 }

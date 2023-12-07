@@ -33,11 +33,9 @@ use function join_paths;
 class Picture extends AbstractController
 {
 
-    protected Storage $storage;
-
-    public function __construct(Storage $store)
+    public function __construct(protected Storage $storage)
     {
-        $this->storage = $store;
+        
     }
 
     /**
@@ -244,6 +242,15 @@ YOLO
         });
 
         return new JsonResponse($choice);
+    }
+
+    /**
+     * Show the list of missing pictures
+     */
+    #[Route('/picture/broken', methods: ['GET'])]
+    public function showBroken(VertexRepository $repository): Response
+    {
+        return $this->render('picture/broken.html.twig', ['broken' => $this->storage->searchForBrokenPicture($repository->search())]);
     }
 
 }

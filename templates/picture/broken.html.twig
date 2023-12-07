@@ -1,0 +1,28 @@
+{# show broken/missing links #}
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Images manquantes
+{% endblock %}
+
+{% block header_title %}{{ block('title') }}{% endblock %}
+
+{% block content %}
+    <div class="parsed-wikitext">
+        <ul>
+            {% for link, vertices in broken %}
+                <li>
+                    Lien manquant vers <a href="{{ path('app_picture_uploadmissing', {title:link}) }}" class="new">{{ link }}</a> dans :
+                    <ul>
+                        {% for title, dummy in vertices %}
+                            <li>
+                                <a href="{{ path('app_wiki', {title:title}) }}">{{ title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
+
