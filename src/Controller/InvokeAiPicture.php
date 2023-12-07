@@ -10,6 +10,7 @@ use App\Form\AppendRemotePicture;
 use App\Form\Type\SubmitWaitType;
 use App\Repository\VertexRepository;
 use App\Service\StableDiffusion\InvokeAiClient;
+use App\Service\StableDiffusion\RepositoryChoice;
 use App\Service\StableDiffusion\LocalRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
@@ -27,9 +28,14 @@ use UnexpectedValueException;
 class InvokeAiPicture extends AbstractController
 {
 
+    protected $source = [];
+
     public function __construct(protected LocalRepository $local, protected InvokeAiClient $remote, protected VertexRepository $repository)
     {
-        
+        $this->source = [
+            RepositoryChoice::remote->value => $remote,
+            RepositoryChoice::local->value => $local
+        ];
     }
 
     protected function createSearchForm(): FormInterface
@@ -91,18 +97,13 @@ class InvokeAiPicture extends AbstractController
         return $this->render('invokeai/vertex_search.html.twig', ['vertex' => $vertex, 'form' => $form->createView(), 'gallery' => $listing]);
     }
 
-    #[Route('/vertex/{pk}/append/{storage}/{pic}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function vertexAppend(string $pk, string $storage, string $pic, Request $request): Response
+    #[Route('/{storage}/vertex/{pk}/append/{pic}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
+    public function vertexAppend(string $pk, RepositoryChoice $storage, string $pic, Request $request): Response
     {
-        $chain = [
-            'local' => $this->local,
-            'remote' => $this->remote
-        ];
-
         $vertex = $this->repository->load($pk);
         $form = $this->createForm(AppendRemotePicture::class, $vertex, [
-            'picture_url' => $chain[$storage]->getAbsoluteUrl($pic),
-            'thumbnail_url' => $chain[$storage]->getThumbnailUrl($pic),
+            'picture_url' => $this->source[$storage->value]->getAbsoluteUrl($pic),
+            'thumbnail_url' => $this->source[$storage->value]->getThumbnailUrl($pic),
             'default_name' => $vertex->getTitle() . ' - ' . $request->query->get('query')
         ]);
 

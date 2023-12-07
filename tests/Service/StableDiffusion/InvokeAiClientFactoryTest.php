@@ -4,7 +4,7 @@
  * eclipse-wiki
  */
 
-use App\Service\StableDiffusion\InvokeAi;
+use App\Service\StableDiffusion\InvokeAiClient;
 use App\Service\StableDiffusion\InvokeAiClientFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -25,13 +25,13 @@ class InvokeAiClientFactoryTest extends TestCase
     public function testFromHostname()
     {
         $api = $this->sut->createFromHostname('yolo.mars');
-        $this->assertInstanceOf(InvokeAi::class, $api);
+        $this->assertInstanceOf(InvokeAiClient::class, $api);
     }
 
     public function testFromMac()
     {
         $api = $this->sut->createFromMac('01:02:03:04');
-        $this->assertInstanceOf(InvokeAi::class, $api);
+        $this->assertInstanceOf(InvokeAiClient::class, $api);
     }
 
 }
