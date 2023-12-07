@@ -4,9 +4,13 @@
  * eclipse-wiki
  */
 
+use App\Entity\Scene;
 use App\Repository\VertexRepository;
+use App\Service\DigraphExplore;
 use App\Service\InfoDashboard;
+use App\Service\Storage;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 
 class InfoDashboardTest extends KernelTestCase
 {
@@ -16,8 +20,13 @@ class InfoDashboardTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        $this->sut = static::getContainer()->get(InfoDashboard::class);
         $this->repository = static::getContainer()->get(VertexRepository::class);
+        $this->sut = new InfoDashboard(
+                new NullAdapter(),
+                $this->repository,
+                static::getContainer()->get(DigraphExplore::class),
+                static::getContainer()->get(Storage::class)
+        );
     }
 
     public function testClean()
@@ -28,7 +37,7 @@ class InfoDashboardTest extends KernelTestCase
 
     public function testVertexCount()
     {
-        $vertex = new App\Entity\Scene('scene1');
+        $vertex = new Scene('scene1');
         $vertex->setContent('[[missing]] [[file:missing.jpg]]');
         $this->repository->save($vertex);
 
