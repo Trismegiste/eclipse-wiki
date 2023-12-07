@@ -39,6 +39,7 @@
         </div>
     </div>
     <h2>Informations sur le digraphe</h2>
+    {{ render(controller('App\\Controller\\GmHelper::summary')) }}
     <ul>
         <li><a href="{{ path('app_vertexcrud_showorphan') }}">Voir les vertex orphelins</a></li>
         <li><a href="{{ path('app_vertexcrud_showbroken') }}">Voir les liens cassés</a></li>

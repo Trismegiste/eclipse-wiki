@@ -112,4 +112,9 @@ class GmHelper extends AbstractController
         return new JsonResponse($fullname);
     }
 
+    public function summary(\App\Service\InfoDashboard $info): Response
+    {
+        return $this->render('summary.html.twig', ['stats' => $info]);
+    }
+
 }
