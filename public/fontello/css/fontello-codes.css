@@ -36,6 +36,7 @@
 .icon-dead:before { content: '\e820'; } /* '' */
 .icon-token:before { content: '\e821'; } /* '' */
 .icon-stopwatch:before { content: '\e822'; } /* '' */
+.icon-graph:before { content: '\e823'; } /* '' */
 .icon-loveletter:before { content: '\e828'; } /* '' */
 .icon-extra:before { content: '\e829'; } /* '' */
 .icon-namebook:before { content: '\e82a'; } /* '' */
@@ -52,11 +53,15 @@
 .icon-export:before { content: '\e843'; } /* '' */
 .icon-image-upload:before { content: '\e844'; } /* '' */
 .icon-npcgraph:before { content: '\e847'; } /* '' */
+.icon-broken-picture:before { content: '\e84a'; } /* '' */
+.icon-orphan:before { content: '\e84b'; } /* '' */
+.icon-abacus:before { content: '\e84c'; } /* '' */
 .icon-randomize:before { content: '\e859'; } /* '' */
 .icon-album:before { content: '\e860'; } /* '' */
 .icon-duplicate:before { content: '\f0c5'; } /* '' */
 .icon-menu:before { content: '\f0c9'; } /* '' */
 .icon-screen:before { content: '\f108'; } /* '' */
+.icon-unlink:before { content: '\f127'; } /* '' */
 .icon-angle-circled-up:before { content: '\f139'; } /* '' */
 .icon-angle-circled-down:before { content: '\f13a'; } /* '' */
 .icon-male:before { content: '\f183'; } /* '' */

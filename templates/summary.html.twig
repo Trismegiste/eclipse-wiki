@@ -9,9 +9,9 @@
 {% endmacro %}
 
 <section class="pure-g dashboard">
-    {{ _self.summary_item('app_vertexcrud_showstats','link', stats.vertexCount ~ ' vertex') }}
-    {{ _self.summary_item('app_vertexcrud_showbroken','link', stats.brokenLinkCount ~ ' liens cassés') }}
-    {{ _self.summary_item('app_picture_showbroken', 'link', stats.brokenPictureCount~' images manquantes') }}
-    {{ _self.summary_item('app_vertexcrud_showorphan', 'link', stats.orphanCount~ ' orphelins') }}
-    {{ _self.summary_item('app_gmhelper_digraph', 'link', 'Graphe 3D') }}
+    {{ _self.summary_item('app_vertexcrud_showstats','abacus', stats.vertexCount ~ ' vertex') }}
+    {{ _self.summary_item('app_vertexcrud_showbroken','unlink', stats.brokenLinkCount ~ ' liens cassés') }}
+    {{ _self.summary_item('app_picture_showbroken', 'broken-picture', stats.brokenPictureCount~' images manquantes') }}
+    {{ _self.summary_item('app_vertexcrud_showorphan', 'orphan', stats.orphanCount~ ' orphelins') }}
+    {{ _self.summary_item('app_gmhelper_digraph', 'graph', 'Graphe 3D') }}
 </section>
