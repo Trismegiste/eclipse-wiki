@@ -20,19 +20,10 @@ use Trismegiste\NameGenerator\FileRepository;
 use Trismegiste\NameGenerator\RandomizerDecorator;
 
 /**
- * Description of GmHelper
+ * Quick generator and helper for the GM
  */
 class GmHelper extends AbstractController
 {
-
-    /**
-     * Landing page
-     */
-    #[Route("/", methods: ["GET"])]
-    public function index(): Response
-    {
-        return $this->render('landing.html.twig');
-    }
 
     /**
      * Names generator
@@ -87,24 +78,6 @@ class GmHelper extends AbstractController
         $lan = $ntools->generateUrlForExternalAccess('app_firstperson_player');
 
         return $this->render('player/qrcode_fps.html.twig', ['url_cast' => $lan]);
-    }
-
-    /**
-     * Help page
-     */
-    #[Route("/help", methods: ["GET"])]
-    public function help(): Response
-    {
-        return $this->render('help.html.twig');
-    }
-
-    /**
-     * Help page for Wikitext language
-     */
-    #[Route("/helpwiki", methods: ["GET"])]
-    public function helpWikitext(): Response
-    {
-        return $this->render('helpwiki.html.twig');
     }
 
     /**
