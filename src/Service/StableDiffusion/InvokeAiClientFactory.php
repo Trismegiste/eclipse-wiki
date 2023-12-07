@@ -28,14 +28,14 @@ class InvokeAiClientFactory
         
     }
 
-    public function createFromHostname(string $hostname): InvokeAi
+    public function createFromHostname(string $hostname): InvokeAiClient
     {
         $baseUrl = $this->protocol . '://' . $hostname . ':' . $this->port . '/';
 
-        return new InvokeAi($this->client, $baseUrl, $this->invokeaiCache);
+        return new InvokeAiClient($this->client, $baseUrl, $this->invokeaiCache);
     }
 
-    public function createFromMac(string $mac): InvokeAi
+    public function createFromMac(string $mac): InvokeAiClient
     {
         try {
             $ip = $this->findIpFromMac($mac);

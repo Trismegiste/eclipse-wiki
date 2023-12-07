@@ -9,7 +9,7 @@ namespace App\Controller;
 use App\Form\AppendRemotePicture;
 use App\Form\Type\SubmitWaitType;
 use App\Repository\VertexRepository;
-use App\Service\StableDiffusion\InvokeAi;
+use App\Service\StableDiffusion\InvokeAiClient;
 use App\Service\StableDiffusion\LocalRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
@@ -27,7 +27,7 @@ use UnexpectedValueException;
 class InvokeAiPicture extends AbstractController
 {
 
-    public function __construct(protected LocalRepository $local, protected InvokeAi $remote, protected VertexRepository $repository)
+    public function __construct(protected LocalRepository $local, protected InvokeAiClient $remote, protected VertexRepository $repository)
     {
         
     }

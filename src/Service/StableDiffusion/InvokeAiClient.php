@@ -16,7 +16,7 @@ use UnexpectedValueException;
 /**
  * Client for InvokeAI Stable Diffusion
  */
-class InvokeAi extends PictureRepository
+class InvokeAiClient extends PictureRepository
 {
 
     const BATCH_SIZE = 100;
