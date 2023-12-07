@@ -41,7 +41,7 @@ class InvokeAiPicture extends AbstractController
     protected function createSearchForm(): FormInterface
     {
         return $this->createFormBuilder()
-                        ->add('query')
+                        ->add('query', \Symfony\Component\Form\Extension\Core\Type\TextType::class, ['attr' => ['x-model.fill' => 'query']])
                         ->add('search', SubmitWaitType::class)
                         ->setMethod('GET')
                         ->getForm();
@@ -130,9 +130,6 @@ class InvokeAiPicture extends AbstractController
     #[Route('/ajax/search', methods: ['GET'])]
     public function ajaxSearch(Request $request): Response
     {
-        $listing['local'] = $this->local->searchPicture($request->query->get('q'));
-
-        return new \Symfony\Component\HttpFoundation\JsonResponse($listing);
+        return new \Symfony\Component\HttpFoundation\JsonResponse($this->local->searchPicture($request->query->get('q')));
     }
-
 }

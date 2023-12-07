@@ -5,26 +5,24 @@
 {% block header_title %}{{ block('title') }}{% endblock %}
 
 {% block content %}
-    <section>
-        {{ form(form) }}
-    </section>
-    {% for title, storage in gallery %}
-        <h2>{{ title|capitalize }}</h2>
-        <section class="pure-g search">
-            {% for picture in storage %}
-                <div class="pure-u-1-5">
-                    {% block picture %}
-                    <div class="thumbnail">
-                        <a href="{{ picture.full }}" target="_blank" title="{{ picture.prompt }}">
-                            <img src="{{ picture.thumb }}" class="pure-img"/>
-                        </a>
-                        <div class="legend">{{ picture.width }}</div>
-                    </div>
-                    {% endblock %}
-                </div>
-            {% endfor %}
+    <div x-data="stableDiffusion">
+        <section>
+            {{ form(form, {attr:{'x-on:submit.prevent': 'search'}}) }}
         </section>
-    {% endfor %}
+        <h2>Local</h2>
+        <section class="pure-g search">
+            <template x-for="picture in gallery">
+                <div class="pure-u-1-5">
+                    <div class="thumbnail">
+                        <a href="picture.full" target="_blank" title="picture.prompt">
+                            <img src="picture.thumb" class="pure-img"/>
+                        </a>
+                        <div class="legend" x-text="picture.width"></div>
+                    </div>
+                </div>
+            </template>
+        </section>
+    </div>
 {% endblock %}
 
 {% block stylesheets %}
@@ -40,4 +38,22 @@
             max-height: 256px;
         }
     </style>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="module">
+        Alpine.data('stableDiffusion', () => ({
+                query: null,
+                gallery: [],
+                search(event) {
+                    fetch('/invokeai/ajax/search?q=' + this.query)
+                            .then(resp => {
+                                return resp.json()
+                            })
+                            .then(data => {
+                                this.gallery = data
+                            })
+                }
+            }))
+    </script>
 {% endblock %}
