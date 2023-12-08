@@ -6,7 +6,7 @@ export default () => ({
 
         selectUpdate(event) {
             const param = event.currentTarget.dataset
-            this.detail = '<i class="icon-spin3 animate-spin"></i>'
+            this.detail = '<i class="icon-spin3 animate-spin big-waiting"></i>'
             fetch(param.url + '?key=' + event.target.value)
                     .then(resp => {
                         return resp.text()

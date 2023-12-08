@@ -42,7 +42,7 @@ class InvokeAiPicture extends AbstractController
     {
         return $this->createFormBuilder()
                         ->add('query', \Symfony\Component\Form\Extension\Core\Type\TextType::class, ['attr' => ['x-model.fill' => 'query']])
-                        ->add('search', SubmitWaitType::class)
+                        ->add('search', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
                         ->setMethod('GET')
                         ->getForm();
     }

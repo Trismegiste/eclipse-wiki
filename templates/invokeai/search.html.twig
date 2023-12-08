@@ -11,11 +11,12 @@
         </section>
         <h2>Local</h2>
         <section class="pure-g search">
+            <div class="pure-u-1" x-show="waiting"><i class="icon-spin3 animate-spin big-waiting"></i></div>
             <template x-for="picture in gallery">
                 <div class="pure-u-1-5">
                     <div class="thumbnail">
-                        <a href="picture.full" target="_blank" title="picture.prompt">
-                            <img src="picture.thumb" class="pure-img"/>
+                        <a x-bind:href="picture.full" target="_blank" x-bind:title="picture.prompt">
+                            <img x-bind:src="picture.thumb" class="pure-img"/>
                         </a>
                         <div class="legend" x-text="picture.width"></div>
                     </div>
@@ -44,13 +45,16 @@
     <script type="module">
         Alpine.data('stableDiffusion', () => ({
                 query: null,
+                waiting: false,
                 gallery: [],
-                search(event) {
+                async search(event) {
+                    this.waiting = true
                     fetch('/invokeai/ajax/search?q=' + this.query)
                             .then(resp => {
                                 return resp.json()
                             })
                             .then(data => {
+                                this.waiting = false
                                 this.gallery = data
                             })
                 }

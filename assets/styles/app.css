@@ -27,7 +27,7 @@ article {
     }
 }
 
-.character section i {
+i.big-waiting {
     font-size: 800%;
     opacity: 15%;
     margin: 0.2em;
