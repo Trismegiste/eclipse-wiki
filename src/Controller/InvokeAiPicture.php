@@ -126,6 +126,12 @@ class InvokeAiPicture extends AbstractController
     #[Route('/ajax/{source}/search', methods: ['GET'])]
     public function ajaxSearch(RepositoryChoice $source, Request $request): Response
     {
-        return new JsonResponse($this->source[$source->value]->searchPicture($request->query->get('q')));
+        try {
+            return new JsonResponse($this->source[$source->value]->searchPicture($request->query->get('q')));
+        } catch (UnexpectedValueException $e) {
+            return new JsonResponse(['level' => 'error', 'message' => $e->getMessage()], 400);
+        } catch (TransportException $e) {
+            return new JsonResponse(['level' => 'error', 'message' => $e->getMessage()], 500);
+        }
     }
 }
