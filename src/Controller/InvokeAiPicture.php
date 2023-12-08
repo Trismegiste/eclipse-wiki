@@ -35,14 +35,19 @@ class InvokeAiPicture extends AbstractController
     public function __construct(LocalRepository $local, InvokeAiClient $remote, protected VertexRepository $repository)
     {
         $this->source = [
-            RepositoryChoice::remote->value => $remote,
-            RepositoryChoice::local->value => $local
+            RepositoryChoice::local->value => $local,
+            RepositoryChoice::remote->value => $remote
         ];
     }
 
     protected function createSearchForm(): FormInterface
     {
-        return $this->createFormBuilder()
+        $export = [];
+        foreach ($this->source as $key => $notUsed) {
+            $export[$key] = $this->generateUrl('app_invokeaipicture_ajaxsearch', ['source' => $key]);
+        }
+
+        return $this->createFormBuilder(null, ['attr' => ['x-init' => 'sourceList=' . json_encode($export)]])
                         ->add('query', TextType::class, ['attr' => ['x-model.fill' => 'query']])
                         ->add('search', SubmitType::class)
                         ->setMethod('GET')

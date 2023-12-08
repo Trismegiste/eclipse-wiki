@@ -9,8 +9,8 @@
         <section>
             {{ form(form, {attr:{'x-on:submit.prevent': 'launch'}}) }}
         </section>
-        <template x-for="source in sourceList" :key="source">
-            <section class="search" x-data="stableDiffusion(source)" x-on:search.window="search">
+        <template x-for="(url, source) in sourceList" :key="source">
+            <section class="search" x-data="stableDiffusion(source, url)" x-on:search.window="search">
                 <h2 x-text="source"></h2>
                 <div class="pure-g">
                     <div class="pure-u-1" x-show="waiting"><i class="icon-spin3 animate-spin big-waiting"></i></div>
@@ -42,6 +42,9 @@
             max-width: 256px;
             max-height: 256px;
         }
+        .search h2 {
+            text-transform: capitalize;
+        }
     </style>
 {% endblock %}
 
@@ -49,16 +52,16 @@
     <script type="module">
         Alpine.data('aggregator', () => ({
                 query: null,
-                sourceList: ['local', 'remote'],
+                sourceList: {},
 
                 async launch(event) {
-                    console.log('launch')
                     this.$el.dispatchEvent(new CustomEvent('search', {bubbles: true, detail: {query: this.query}}))
                 }
             }))
 
-        Alpine.data('stableDiffusion', (source) => ({
+        Alpine.data('stableDiffusion', (source, url) => ({
                 source: source,
+                url: url,
                 waiting: false,
                 gallery: [],
 
@@ -66,7 +69,7 @@
                     this.gallery = []
                     this.waiting = true
                     try {
-                        const resp = await fetch(`/invokeai/ajax/${this.source}/search?q=` + event.detail.query)
+                        const resp = await fetch(this.url + '?q=' + event.detail.query)
                         if (!resp.ok) {
                             throw new Error(this.source, {cause: await resp.json()})
                         }
