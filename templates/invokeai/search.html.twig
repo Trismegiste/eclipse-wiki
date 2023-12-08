@@ -50,7 +50,7 @@
                 async search(event) {
                     this.gallery = []
                     this.waiting = true
-                    fetch('/invokeai/ajax/remote/search?q=' + this.query)
+                    fetch('/invokeai/ajax/local/search?q=' + this.query)
                             .then(resp => {
                                 if (!resp.ok) {
                                     return Promise.reject(resp.json())
@@ -58,14 +58,15 @@
                                 return resp.json()
                             })
                             .then(data => {
-                                this.waiting = false
                                 this.gallery = data
                             })
                             .catch(failure => {
-                                this.waiting = false
                                 failure.then(flash => {
                                     Alpine.store('notif').push(flash.level, flash.message)
                                 })
+                            })
+                            .finally(() => {
+                                this.waiting = false
                             })
                 }
             }))
