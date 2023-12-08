@@ -48,8 +48,9 @@
                 waiting: false,
                 gallery: [],
                 async search(event) {
+                    this.gallery = []
                     this.waiting = true
-                    fetch('/invokeai/ajax/search?q=' + this.query)
+                    fetch('/invokeai/ajax/local/search?q=' + this.query)
                             .then(resp => {
                                 return resp.json()
                             })

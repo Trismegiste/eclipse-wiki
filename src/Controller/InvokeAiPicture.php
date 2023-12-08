@@ -7,15 +7,17 @@
 namespace App\Controller;
 
 use App\Form\AppendRemotePicture;
-use App\Form\Type\SubmitWaitType;
 use App\Repository\VertexRepository;
 use App\Service\StableDiffusion\InvokeAiClient;
-use App\Service\StableDiffusion\RepositoryChoice;
 use App\Service\StableDiffusion\LocalRepository;
+use App\Service\StableDiffusion\RepositoryChoice;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,7 +32,7 @@ class InvokeAiPicture extends AbstractController
 
     protected $source = [];
 
-    public function __construct(protected LocalRepository $local, protected InvokeAiClient $remote, protected VertexRepository $repository)
+    public function __construct(LocalRepository $local, InvokeAiClient $remote, protected VertexRepository $repository)
     {
         $this->source = [
             RepositoryChoice::remote->value => $remote,
@@ -41,8 +43,8 @@ class InvokeAiPicture extends AbstractController
     protected function createSearchForm(): FormInterface
     {
         return $this->createFormBuilder()
-                        ->add('query', \Symfony\Component\Form\Extension\Core\Type\TextType::class, ['attr' => ['x-model.fill' => 'query']])
-                        ->add('search', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+                        ->add('query', TextType::class, ['attr' => ['x-model.fill' => 'query']])
+                        ->add('search', SubmitType::class)
                         ->setMethod('GET')
                         ->getForm();
     }
@@ -72,13 +74,7 @@ class InvokeAiPicture extends AbstractController
     {
         $form = $this->createSearchForm();
 
-        $listing = [];
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $listing = $this->processSearchWithFailOver($form['query']->getData());
-        }
-
-        return $this->render('invokeai/search.html.twig', ['form' => $form->createView(), 'gallery' => $listing]);
+        return $this->render('invokeai/search.html.twig', ['form' => $form->createView()]);
     }
 
     #[Route('/vertex/{pk}/search', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
@@ -121,15 +117,15 @@ class InvokeAiPicture extends AbstractController
     #[Route('/local/{pic}', methods: ['GET'])]
     public function getLocal(string $pic): BinaryFileResponse
     {
-        return $this->local->getPictureResponse($pic);
+        return $this->source[RepositoryChoice::local->value]->getPictureResponse($pic);
     }
 
     /**
      * Image search against local storage of InvokeAI
      */
-    #[Route('/ajax/search', methods: ['GET'])]
-    public function ajaxSearch(Request $request): Response
+    #[Route('/ajax/{source}/search', methods: ['GET'])]
+    public function ajaxSearch(RepositoryChoice $source, Request $request): Response
     {
-        return new \Symfony\Component\HttpFoundation\JsonResponse($this->local->searchPicture($request->query->get('q')));
+        return new JsonResponse($this->source[$source->value]->searchPicture($request->query->get('q')));
     }
 }
