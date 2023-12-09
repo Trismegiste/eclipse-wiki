@@ -15,7 +15,7 @@
     <div x-data="quickCreation"
          x-init="graph={{ graph|json_encode()|e('html_attr') }};
          choices={{ form.node_selection.vars.data|default("['root']")|e('html_attr') }};
-         baseUrl.picture='{{ path('app_invokeaipicture_ajaxsearch')}}';
+         baseUrl.picture='{{ path('app_invokeaipicture_ajaxsearch', {source:'local'})}}';
          baseUrl.name='{{ path('app_gmhelper_ajaxname')}}';
          ">
         <section class="pure-g node-selection">
@@ -101,13 +101,11 @@
 {% endblock %}
 
 {% block _selector_content_row %}
-    <template x-for="repo in avatar">
-        <template x-for="(value, idx) in repo" :key="value.name">
-            <label>
-                <input type="radio" name="{{ form.vars.full_name }}" x-bind:value="value.name"/>
-                <img x-bind:src="value.thumb"/>
-            </label>
-        </template>
+    <template x-for="(value, idx) in avatar" :key="value.name">
+        <label>
+            <input type="radio" name="{{ form.vars.full_name }}" x-bind:value="value.name"/>
+            <img x-bind:src="value.thumb"/>
+        </label>
     </template>
 {% endblock %}
 
