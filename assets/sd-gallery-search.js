@@ -1,7 +1,6 @@
 /*
- * Eclipse Wiki
+ * Factory for a Template Method Design Pattern
  */
-
 export default (source, url) => ({
         source: source,
         url: url,
@@ -25,11 +24,9 @@ export default (source, url) => ({
             }
         },
 
-        linkParameter(picture) {
-            return {
-                ['href']: picture.full,
-                ['title']: picture.prompt,
-                ['target']: '_blank'
-            }
-        }
+        /*
+         * abstract method that must be overriden
+         * linkParameter(picture) { return { href:'/show/yolo.png' } }
+         */
+        linkParameter: null
     })

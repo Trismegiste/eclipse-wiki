@@ -11,7 +11,6 @@
 
         Alpine.data('stableDiffusion', (source, url) => {
             let obj = stableDiffusion(source, url)
-            obj.appendUrl = '{{ path('app_invokeaipicture_vertexappend', {pk: vertex.pk}) }}'
 
             obj.linkParameter = function (picture) {
                 const param = new URLSearchParams({
@@ -19,7 +18,7 @@
                     pic: picture.name,
                     query: this.query
                 })
-                const href = this.appendUrl + '?' + param
+                const href = '{{ path('app_invokeaipicture_vertexappend', {pk: vertex.pk}) }}?' + param
                 return {
                     ['href']: href,
                     ['title']: picture.prompt

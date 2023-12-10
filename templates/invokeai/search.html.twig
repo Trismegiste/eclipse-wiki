@@ -77,6 +77,18 @@
                 }
             }))
 
-        Alpine.data('stableDiffusion', stableDiffusion)
+        Alpine.data('stableDiffusion', (source, url) => {
+            let obj = stableDiffusion(source, url)
+
+            obj.linkParameter = function (picture) {  // note: this is a method, not an arrow function
+                return {
+                    ['href']: picture.full,
+                    ['title']: picture.prompt,
+                    ['target']: '_blank'
+                }
+            }
+
+            return obj
+        })
     </script>
 {% endblock %}
