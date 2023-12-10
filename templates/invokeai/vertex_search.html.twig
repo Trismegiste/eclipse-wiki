@@ -4,14 +4,6 @@
 {% block title %}Append picture{% endblock %}
 {% block header_title %}{{ vertex.title }}{% endblock %}
 
-{% block picture %}
-    <a x-bind="linkParameter(picture)">
-        <img x-bind:src="picture.thumb" class="pure-img"/>
-    </a>
-    <div class="legend" x-text="picture.width"></div>
-{% endblock %}
-
-
 {% block javascripts %}
     {{ parent() }}
     <script type="module">

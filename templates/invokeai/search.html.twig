@@ -17,12 +17,10 @@
                     <template x-for="picture in gallery" :key="picture.thumb">
                         <div class="pure-u-1-5">
                             <div class="thumbnail">
-                                {% block picture %}
-                                    <a x-bind:href="picture.full" target="_blank" x-bind:title="picture.prompt">
-                                        <img x-bind:src="picture.thumb" class="pure-img"/>
-                                    </a>
-                                    <div class="legend" x-text="picture.width"></div>
-                                {% endblock %}
+                                <a x-bind="linkParameter(picture)">
+                                    <img x-bind:src="picture.thumb" class="pure-img"/>
+                                </a>
+                                <div class="legend" x-text="picture.width"></div>
                             </div>
                         </div>
                     </template>

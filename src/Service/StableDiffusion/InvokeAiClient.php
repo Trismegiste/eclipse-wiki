@@ -20,7 +20,7 @@ class InvokeAiClient extends PictureRepository
 {
 
     const BATCH_SIZE = 100;
-    const TIMEOUT = 1;
+    const TIMEOUT = 2;
 
     public function __construct(protected HttpClientInterface $client, protected string $baseUrl, protected CacheInterface $invokeaiCache)
     {

@@ -23,5 +23,13 @@ export default (source, url) => ({
             } finally {
                 this.waiting = false
             }
+        },
+
+        linkParameter(picture) {
+            return {
+                ['href']: picture.full,
+                ['title']: picture.prompt,
+                ['target']: '_blank'
+            }
         }
     })
