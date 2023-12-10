@@ -11,7 +11,7 @@
         </section>
         <template x-for="(url, source) in sourceList" :key="source">
             <section class="search" x-data="stableDiffusion(source, url)" x-on:search.window="search">
-                <h2 x-text="source"></h2>
+                <h2 x-text="source" x-bind:id="'gallery-' + source"></h2>
                 <div class="pure-g">
                     <div class="pure-u-1" x-show="waiting"><i class="icon-spin3 animate-spin big-waiting"></i></div>
                     <template x-for="picture in gallery" :key="picture.thumb">
@@ -32,6 +32,17 @@
     </div>
 {% endblock %}
 
+{% block info %}
+    <nav class="pure-menu">
+        <ul class="pure-menu-list">
+            <li class="pure-menu-item">
+                <a class="pure-menu-link" href="#gallery-local">Local</a>
+                <a class="pure-menu-link" href="#gallery-remote">Remote</a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+
 {% block stylesheets %}
     {{ parent() }}
     <style>
@@ -46,6 +57,10 @@
         }
         .search h2 {
             text-transform: capitalize;
+        }
+        .info {
+            position: sticky;
+            top: 0.5em;
         }
     </style>
 {% endblock %}

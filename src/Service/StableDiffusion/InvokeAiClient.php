@@ -20,6 +20,7 @@ class InvokeAiClient extends PictureRepository
 {
 
     const BATCH_SIZE = 100;
+    const TIMEOUT = 1;
 
     public function __construct(protected HttpClientInterface $client, protected string $baseUrl, protected CacheInterface $invokeaiCache)
     {
@@ -71,7 +72,7 @@ class InvokeAiClient extends PictureRepository
     {
         return $this->invokeaiCache->get("picturelisting-$offset-$limit", function (ItemInterface $item) use ($limit, $offset): \stdClass {
                     $item->expiresAfter(DateInterval::createFromDateString('1 minute'));
-                    $response = $this->client->request('GET', $this->baseUrl . "api/v1/images/?limit=$limit&offset=$offset", ['timeout' => 2]);
+                    $response = $this->client->request('GET', $this->baseUrl . "api/v1/images/?limit=$limit&offset=$offset", ['timeout' => self::TIMEOUT]);
 
                     if ($response->getStatusCode() !== 200) {
                         throw new UnexpectedValueException('API returned ' . $response->getStatusCode() . ' status code');
