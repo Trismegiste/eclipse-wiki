@@ -5,7 +5,7 @@
 {% block header_title %}{{ vertex.title }}{% endblock %}
 
 {% block picture %}
-    <a x-bind:href="makeLink(picture.name)" x-bind:title="picture.prompt">
+    <a x-bind="linkParameter(picture)">
         <img x-bind:src="picture.thumb" class="pure-img"/>
     </a>
     <div class="legend" x-text="picture.width"></div>
@@ -20,14 +20,18 @@
         Alpine.data('stableDiffusion', (source, url) => {
             let obj = stableDiffusion(source, url)
             obj.appendUrl = '{{ path('app_invokeaipicture_vertexappend', {pk: vertex.pk}) }}'
-            obj.makeLink = function (pictureName) {
+
+            obj.linkParameter = function (picture) {
                 const param = new URLSearchParams({
                     storage: this.source,
-                    pic: pictureName,
+                    pic: picture.name,
                     query: this.query
                 })
-
-                return this.appendUrl + '?' + param
+                const href = this.appendUrl + '?' + param
+                return {
+                    ['href']: href,
+                    ['title']: picture.prompt
+                }
             }
 
             return obj
