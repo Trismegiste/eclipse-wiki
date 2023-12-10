@@ -35,8 +35,8 @@ class InvokeAiPicture extends AbstractController
     public function __construct(LocalRepository $local, InvokeAiClient $remote, protected VertexRepository $repository)
     {
         $this->source = [
-            RepositoryChoice::local->value => $local,
-            RepositoryChoice::remote->value => $remote
+        RepositoryChoice::local->value => $local,
+        RepositoryChoice::remote->value => $remote
         ];
     }
 
@@ -98,10 +98,13 @@ class InvokeAiPicture extends AbstractController
         return $this->render('invokeai/vertex_search.html.twig', ['vertex' => $vertex, 'form' => $form->createView(), 'gallery' => $listing]);
     }
 
-    #[Route('/{storage}/vertex/{pk}/append/{pic}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function vertexAppend(string $pk, RepositoryChoice $storage, string $pic, Request $request): Response
+    #[Route('/vertex/{pk}/append', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
+    public function vertexAppend(string $pk, Request $request): Response
     {
         $vertex = $this->repository->load($pk);
+        $storage = RepositoryChoice::from($request->query->get('storage'));
+        $pic = $request->query->get('pic');
+
         $form = $this->createForm(AppendRemotePicture::class, $vertex, [
             'picture_url' => $this->source[$storage->value]->getAbsoluteUrl($pic),
             'thumbnail_url' => $this->source[$storage->value]->getThumbnailUrl($pic),
@@ -139,4 +142,5 @@ class InvokeAiPicture extends AbstractController
             return new JsonResponse(['level' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
+
 }

@@ -5,10 +5,9 @@
 {% block header_title %}{{ vertex.title }}{% endblock %}
 
 {% block picture %}
-    <div class="thumbnail">
-        <a href="{{ path('app_invokeaipicture_vertexappend', {pk: vertex.pk, storage: title, pic:picture.name, query: form.query.vars.data}) }}">
-            <img src="{{ picture.thumb }}" class="pure-img"/>
-        </a>
-        <div class="legend">{{ picture.width }}</div>
-    </div>
+    <a x-bind:href="'{{ path('app_invokeaipicture_vertexappend', {pk: vertex.pk}) }}?storage=' + source + '&pic=' + picture.name + '&query=' + query"
+       x-bind:title="picture.prompt">
+        <img x-bind:src="picture.thumb" class="pure-img"/>
+    </a>
+    <div class="legend" x-text="picture.width"></div>
 {% endblock %}
