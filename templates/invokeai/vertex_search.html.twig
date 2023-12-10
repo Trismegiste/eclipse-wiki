@@ -5,9 +5,32 @@
 {% block header_title %}{{ vertex.title }}{% endblock %}
 
 {% block picture %}
-    <a x-bind:href="'{{ path('app_invokeaipicture_vertexappend', {pk: vertex.pk}) }}?storage=' + source + '&pic=' + picture.name + '&query=' + query"
-       x-bind:title="picture.prompt">
+    <a x-bind:href="makeLink(picture.name)" x-bind:title="picture.prompt">
         <img x-bind:src="picture.thumb" class="pure-img"/>
     </a>
     <div class="legend" x-text="picture.width"></div>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="module">
+        import stableDiffusion from 'sd-gallery-search';
+
+        Alpine.data('stableDiffusion', (source, url) => {
+            let obj = stableDiffusion(source, url)
+            obj.appendUrl = '{{ path('app_invokeaipicture_vertexappend', {pk: vertex.pk}) }}'
+            obj.makeLink = function (pictureName) {
+                const param = new URLSearchParams({
+                    storage: this.source,
+                    pic: pictureName,
+                    query: this.query
+                })
+
+                return this.appendUrl + '?' + param
+            }
+
+            return obj
+        })
+    </script>
 {% endblock %}
