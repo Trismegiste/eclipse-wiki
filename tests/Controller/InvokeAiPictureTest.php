@@ -32,25 +32,25 @@ class InvokeAiPictureTest extends WebTestCase
         $crawler = $this->client->request('GET', '/invokeai/search');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('#form_search');
-        $form = $crawler->selectButton('form_search')->form();
-        $form->setValues(['form' => ['query' => 'strawberry']]);
-        $crawler = $this->client->submit($form);
-        $result = $crawler->filter('.search .thumbnail img');
-        $this->assertCount(1, $result);
-        $thumb = $result->attr('src');
-        $link = $result->ancestors()->first();
-        $this->assertEquals('strawberry', $link->attr('title'));
-        $this->assertStringStartsWith('file://', $link->attr('href'));
+        /*   $form = $crawler->selectButton('form_search')->form();
+          $form->setValues(['form' => ['query' => 'strawberry']]);
+          $crawler = $this->client->submit($form);
+          $result = $crawler->filter('.search .thumbnail img');
+          $this->assertCount(1, $result);
+          $thumb = $result->attr('src');
+          $link = $result->ancestors()->first();
+          $this->assertEquals('strawberry', $link->attr('title'));
+          $this->assertStringStartsWith('file://', $link->attr('href')); */
     }
 
     /** @depends testSearch */
     public function testAjaxSearch()
     {
-        $this->client->request('GET', '/invokeai/ajax/search?q=strawberry');
+        $this->client->request('GET', '/invokeai/ajax/local/search?q=strawberry');
         $result = json_decode($this->client->getResponse()->getContent());
-        $this->assertCount(1, $result->local);
+        $this->assertCount(1, $result);
 
-        return $result->local[0]->thumb;
+        return $result[0]->thumb;
     }
 
     /** @depends testAjaxSearch */
@@ -78,20 +78,20 @@ class InvokeAiPictureTest extends WebTestCase
         $this->assertResponseIsSuccessful();
 
         $this->assertSelectorExists('#form_search');
-        $form = $crawler->selectButton('form_search')->form();
-        $form->setValues(['form' => ['query' => 'strawberry']]);
-        $crawler = $this->client->submit($form);
 
-        $result = $crawler->filter('.search .thumbnail img');
+        $this->client->request('GET', '/invokeai/ajax/local/search?q=strawberry');
+        $result = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(1, $result);
 
-        return $result->ancestors()->first()->link();
+        $link = "/invokeai/vertex/" . $place->getPk() . '/append?storage=local&pic=' . $result[0]->name . '&query=strawberry';
+
+        return $link;
     }
 
     /** @depends testSearchPictureForPlace */
     public function testAppendPictureToPlace($link)
     {
-        $crawler = $this->client->click($link);
+        $crawler = $this->client->request('GET', $link);
         $this->assertResponseIsSuccessful();
         $form = $crawler->selectButton('append_remote_picture_append')->form();
         $crawler = $this->client->submit($form);

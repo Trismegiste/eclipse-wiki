@@ -54,23 +54,6 @@ class InvokeAiPicture extends AbstractController
                         ->getForm();
     }
 
-    protected function processSearchWithFailOver(string $query): array
-    {
-        $listing = ['remote' => [], 'local' => []];
-        //remote
-        try {
-            $listing['remote'] = $this->remote->searchPicture($query);
-        } catch (UnexpectedValueException $e) {
-            $this->addFlash('error', $e->getMessage());
-        } catch (TransportException $e) {
-            $this->addFlash('error', $e->getMessage());
-        }
-        // failover local
-        $listing['local'] = $this->local->searchPicture($query);
-
-        return $listing;
-    }
-
     /**
      * Image search against InvokeAI api
      */
@@ -86,16 +69,9 @@ class InvokeAiPicture extends AbstractController
     public function vertexSearch(string $pk, Request $request): Response
     {
         $vertex = $this->repository->load($pk);
-
         $form = $this->createSearchForm();
 
-        $listing = [];
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $listing = $this->processSearchWithFailOver($form['query']->getData());
-        }
-
-        return $this->render('invokeai/vertex_search.html.twig', ['vertex' => $vertex, 'form' => $form->createView(), 'gallery' => $listing]);
+        return $this->render('invokeai/vertex_search.html.twig', ['vertex' => $vertex, 'form' => $form->createView()]);
     }
 
     #[Route('/vertex/{pk}/append', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
