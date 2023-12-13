@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Returns the import map for this application.
+ * Returns the importmap for this application.
  *
  * - "path" is a path inside the asset mapper system. Use the
  *     "debug:asset-map" command to see the full list of paths.
  *
- * - "preload" set to true for any modules that are loaded on the initial
- *     page load to help the browser download them earlier.
+ * - "entrypoint" (JavaScript only) set to true for any module that will
+ *     be used as an "entrypoint" (and passed to the importmap() Twig function).
  *
  * The "importmap:require" command can be used to add new entries to this file.
  *
@@ -55,42 +55,33 @@ return [
         'path' => 'autofocus.js',
     ],
     'sd-gallery-search' => [
-        'path' => 'sd-gallery-search.js'
-    ],
-    'alpinejs' => [
-        'downloaded_to' => 'vendor/alpinejs.js',
-        'url' => 'https://cdn.jsdelivr.net/npm/alpinejs@3.13.2/+esm',
+        'path' => 'sd-gallery-search.js',
     ],
     'babylonjs' => [
-        'downloaded_to' => 'vendor/babylonjs.js',
-        'url' => 'https://cdn.jsdelivr.net/npm/babylonjs@6.29.2/+esm',
+        'version' => '6.29.2',
     ],
     'meshwriter' => [
-        'downloaded_to' => 'vendor/meshwriter.js',
-        'url' => 'https://cdn.jsdelivr.net/npm/meshwriter@1.3.2/+esm',
+        'version' => '1.3.2',
     ],
     'babylonjs-gui' => [
-        'downloaded_to' => 'vendor/babylonjs-gui.js',
-        'url' => 'https://cdn.jsdelivr.net/npm/babylonjs-gui@6.29.2/+esm',
+        'version' => '6.29.2',
     ],
     'mousetrap' => [
-        'downloaded_to' => 'vendor/mousetrap.js',
-        'url' => 'https://cdn.jsdelivr.net/npm/mousetrap@1.6.5/+esm',
+        'version' => '1.6.5',
     ],
     'howler' => [
-        'downloaded_to' => 'vendor/howler.js',
-        'url' => 'https://cdn.jsdelivr.net/npm/howler@2.2.4/+esm',
+        'version' => '2.2.4',
     ],
     'qrious' => [
-        'downloaded_to' => 'vendor/qrious.js',
-        'url' => 'https://cdn.jsdelivr.net/npm/qrious@4.0.2/+esm',
+        'version' => '4.0.2',
     ],
     'js-autocomplete' => [
-        'downloaded_to' => 'vendor/js-autocomplete.js',
-        'url' => 'https://cdn.jsdelivr.net/npm/js-autocomplete@1.0.4/+esm',
+        'version' => '1.0.4',
     ],
     'caret-pos' => [
-        'downloaded_to' => 'vendor/caret-pos.js',
-        'url' => 'https://cdn.jsdelivr.net/npm/caret-pos@2.0.0/+esm',
+        'version' => '2.0.0',
+    ],
+    'alpinejs' => [
+        'version' => '3.13.3',
     ],
 ];

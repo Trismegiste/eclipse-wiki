@@ -1,14 +1,4 @@
 <?php return array (
-  'alpinejs' => 
-  array (
-    'version' => '3.13.2',
-    'dependencies' => 
-    array (
-    ),
-    'extraFiles' => 
-    array (
-    ),
-  ),
   'babylonjs' => 
   array (
     'version' => '6.29.2',
@@ -83,6 +73,16 @@
   'caret-pos' => 
   array (
     'version' => '2.0.0',
+    'dependencies' => 
+    array (
+    ),
+    'extraFiles' => 
+    array (
+    ),
+  ),
+  'alpinejs' => 
+  array (
+    'version' => '3.13.3',
     'dependencies' => 
     array (
     ),
