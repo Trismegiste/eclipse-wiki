@@ -157,7 +157,12 @@ class VertexRepository extends DefaultRepository
                         ],
                         'sort' => [
                             'score' => ['$meta' => "textScore"]
-                        ]
+                        ],
+                        // we don't need to inject the score property in objects.
+                        // Besides, it's deprecated to create dynamic property
+                        'projection' => [
+                            'score' => false
+                        ],
                             ])
             );
         } else {
@@ -415,5 +420,4 @@ class VertexRepository extends DefaultRepository
                             ]
         ]));
     }
-
 }
