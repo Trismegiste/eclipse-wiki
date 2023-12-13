@@ -16,7 +16,7 @@
 return [
     'app' => [
         'path' => 'app.js',
-        'preload' => true,
+        'entrypoint' => true,
     ],
     'battlemap-loader' => [
         'path' => 'place/battlemap-loader.js',

@@ -1,0 +1,93 @@
+<?php return array (
+  'alpinejs' => 
+  array (
+    'version' => '3.13.2',
+    'dependencies' => 
+    array (
+    ),
+    'extraFiles' => 
+    array (
+    ),
+  ),
+  'babylonjs' => 
+  array (
+    'version' => '6.29.2',
+    'dependencies' => 
+    array (
+    ),
+    'extraFiles' => 
+    array (
+    ),
+  ),
+  'meshwriter' => 
+  array (
+    'version' => '1.3.2',
+    'dependencies' => 
+    array (
+    ),
+    'extraFiles' => 
+    array (
+    ),
+  ),
+  'babylonjs-gui' => 
+  array (
+    'version' => '6.29.2',
+    'dependencies' => 
+    array (
+      0 => 'babylonjs',
+    ),
+    'extraFiles' => 
+    array (
+    ),
+  ),
+  'mousetrap' => 
+  array (
+    'version' => '1.6.5',
+    'dependencies' => 
+    array (
+    ),
+    'extraFiles' => 
+    array (
+    ),
+  ),
+  'howler' => 
+  array (
+    'version' => '2.2.4',
+    'dependencies' => 
+    array (
+    ),
+    'extraFiles' => 
+    array (
+    ),
+  ),
+  'qrious' => 
+  array (
+    'version' => '4.0.2',
+    'dependencies' => 
+    array (
+    ),
+    'extraFiles' => 
+    array (
+    ),
+  ),
+  'js-autocomplete' => 
+  array (
+    'version' => '1.0.4',
+    'dependencies' => 
+    array (
+    ),
+    'extraFiles' => 
+    array (
+    ),
+  ),
+  'caret-pos' => 
+  array (
+    'version' => '2.0.0',
+    'dependencies' => 
+    array (
+    ),
+    'extraFiles' => 
+    array (
+    ),
+  ),
+);
