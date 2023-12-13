@@ -18,7 +18,7 @@ class TileSvg extends \DOMDocument
 
     protected $key;
 
-    public function load($filename, $options = 0)
+    public function load($filename, $options = 0): bool
     {
         $this->key = pathinfo($filename, PATHINFO_FILENAME);
 
@@ -37,5 +37,4 @@ class TileSvg extends \DOMDocument
     {
         return $this->key;
     }
-
 }

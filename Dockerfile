@@ -1,4 +1,4 @@
-FROM php:8.1-cli
+FROM dunglas/frankenphp
 
 # Ext MongoDb for PHP
 RUN pecl install mongodb && docker-php-ext-enable mongodb
@@ -57,10 +57,11 @@ RUN apt-get update && apt-get install -y unzip
 RUN apt-get install -y net-tools
 
 COPY ./docker/php.ini /usr/local/etc/php
+COPY ./docker/Caddyfile /etc/caddy/
 
-EXPOSE 8000
+EXPOSE 443
 EXPOSE 9000
 
-WORKDIR /www
+WORKDIR /app
 
 CMD echo "bin/launch.sh" | bash

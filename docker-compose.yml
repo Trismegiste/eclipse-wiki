@@ -4,10 +4,10 @@ services:
         build: .
         image: symfony:dev
         ports:
-            - "8000:8000"
+            - "443:443"
             - "9000:9000"
         volumes:
-            - .:/www
+            - .:/app
         depends_on:
             - "mongo"
         network_mode: host
