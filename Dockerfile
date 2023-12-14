@@ -57,11 +57,9 @@ RUN apt-get update && apt-get install -y unzip
 RUN apt-get install -y net-tools
 
 COPY ./docker/php.ini /usr/local/etc/php
-COPY ./docker/Caddyfile /etc/caddy/
 
-EXPOSE 443
 EXPOSE 9000
 
 WORKDIR /app
 
-CMD echo "bin/launch.sh" | bash
+CMD bash -c "bin/launch.sh"
