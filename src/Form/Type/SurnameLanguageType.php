@@ -23,7 +23,7 @@ class SurnameLanguageType extends AbstractType
         $this->generator = new FileRepository();
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $tmpList = $this->generator->getSurnameLanguage();
         sort($tmpList);

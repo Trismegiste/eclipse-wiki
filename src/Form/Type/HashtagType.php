@@ -23,12 +23,12 @@ class HashtagType extends AbstractType
         return TextareaType::class;
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['hashtag'] = $options['default_hashtag'];
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired('default_hashtag');
     }

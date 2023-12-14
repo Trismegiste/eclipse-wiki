@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints\NotNull;
 class CubemapBroadcast extends AbstractType
 {
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
                 ->add('picture', CollectionType::class,
@@ -37,7 +37,7 @@ class CubemapBroadcast extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('csrf_protection', false);
     }

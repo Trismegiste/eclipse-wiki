@@ -41,7 +41,7 @@ class EdgeType extends AbstractType implements DataMapperInterface
         });
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
                 ->add('name', HiddenType::class, ['mapped' => 0])
@@ -69,7 +69,7 @@ class EdgeType extends AbstractType implements DataMapperInterface
         return array_combine($src, $src);
     }
 
-    public function mapDataToForms($viewData, Traversable $forms)
+    public function mapDataToForms($viewData, Traversable $forms): void
     {
         // there is no data yet, so nothing to prepopulate
         if (null === $viewData) {
@@ -89,7 +89,7 @@ class EdgeType extends AbstractType implements DataMapperInterface
         $forms['origin']->setData($viewData->origin);
     }
 
-    public function mapFormsToData(Traversable $forms, &$edge)
+    public function mapFormsToData(Traversable $forms, &$edge): void
     {
         /** @var FormInterface[] $forms */
         $forms = iterator_to_array($forms);

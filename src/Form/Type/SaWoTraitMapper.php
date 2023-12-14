@@ -25,7 +25,7 @@ class SaWoTraitMapper implements DataMapperInterface
         $this->provider = $pro;
     }
 
-    public function mapDataToForms($viewData, Traversable $forms)
+    public function mapDataToForms($viewData, Traversable $forms): void
     {
         if (is_null($viewData)) {
             return;
@@ -41,7 +41,7 @@ class SaWoTraitMapper implements DataMapperInterface
         $fields['roll']->setData($viewData->dice + $viewData->modifier);
     }
 
-    public function mapFormsToData(Traversable $forms, &$attr)
+    public function mapFormsToData(Traversable $forms, &$attr): void
     {
         $fields = iterator_to_array($forms);
         $attr = $this->provider->findOne($fields['name']->getData());

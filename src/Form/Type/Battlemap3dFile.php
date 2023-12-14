@@ -30,12 +30,12 @@ class Battlemap3dFile extends AbstractType
         return HiddenType::class;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired('unique_id');
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->addModelTransformer(new Battlemap3dTransfo($this->storage, $options['unique_id']));
     }

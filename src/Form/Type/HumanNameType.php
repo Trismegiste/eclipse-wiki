@@ -32,13 +32,13 @@ class HumanNameType extends AbstractType
         return TextType::class;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired('language');
         $resolver->setDefault('name_number', 24);
     }
 
-    public function finishView(FormView $view, FormInterface $form, array $options)
+    public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         $listing = [];
         foreach (['female', 'male'] as $gender) {

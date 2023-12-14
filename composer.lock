@@ -6450,16 +6450,16 @@
         },
         {
             "name": "trismegiste/strangelove-bundle",
-            "version": "2.0.8",
+            "version": "2.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Trismegiste/strangelove-bundle.git",
-                "reference": "8a27fac95fefd0ba36f1e8f00c77b2835b2c480a"
+                "reference": "6f8031674e99ec789ba63141f6bfc819e6e07c9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Trismegiste/strangelove-bundle/zipball/8a27fac95fefd0ba36f1e8f00c77b2835b2c480a",
-                "reference": "8a27fac95fefd0ba36f1e8f00c77b2835b2c480a",
+                "url": "https://api.github.com/repos/Trismegiste/strangelove-bundle/zipball/6f8031674e99ec789ba63141f6bfc819e6e07c9f",
+                "reference": "6f8031674e99ec789ba63141f6bfc819e6e07c9f",
                 "shasum": ""
             },
             "require": {
@@ -6503,9 +6503,9 @@
             "description": "How I Learned to Stop Worrying about ORM and Love MongoDb BSON",
             "support": {
                 "issues": "https://github.com/Trismegiste/strangelove-bundle/issues",
-                "source": "https://github.com/Trismegiste/strangelove-bundle/tree/2.0.8"
+                "source": "https://github.com/Trismegiste/strangelove-bundle/tree/2.0.9"
             },
-            "time": "2023-03-27T14:36:51+00:00"
+            "time": "2023-12-14T10:08:30+00:00"
         },
         {
             "name": "twig/extra-bundle",

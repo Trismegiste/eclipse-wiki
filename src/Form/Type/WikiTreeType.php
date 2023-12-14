@@ -24,7 +24,7 @@ class WikiTreeType extends AbstractType implements DataTransformerInterface
         return HiddenType::class;
     }
 
-    public function reverseTransform(mixed $content)
+    public function reverseTransform(mixed $content): mixed
     {
         if (empty($content)) {
             $failure = new TransformationFailedException("Content is empty");
@@ -52,7 +52,7 @@ class WikiTreeType extends AbstractType implements DataTransformerInterface
         return $tree;
     }
 
-    public function transform(mixed $value)
+    public function transform(mixed $value): mixed
     {
         if (empty($value)) {
             $value = new PlotNode('Root');

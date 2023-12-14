@@ -32,7 +32,7 @@ class EconomyType extends AbstractType implements DataMapperInterface
         }
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         foreach ($this->economyLabel as $field => $label) {
             $builder->add($field, IntegerType::class, [
@@ -44,7 +44,7 @@ class EconomyType extends AbstractType implements DataMapperInterface
         $builder->setDataMapper($this);
     }
 
-    public function mapDataToForms($viewData, Traversable $forms)
+    public function mapDataToForms($viewData, Traversable $forms): void
     {
         // there is no data yet, so nothing to prepopulate
         if (null === $viewData) {
@@ -65,7 +65,7 @@ class EconomyType extends AbstractType implements DataMapperInterface
         }
     }
 
-    public function mapFormsToData(Traversable $forms, &$viewData)
+    public function mapFormsToData(Traversable $forms, &$viewData): void
     {
         /** @var FormInterface $field */
         foreach ($forms as $field) {

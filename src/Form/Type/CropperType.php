@@ -20,7 +20,7 @@ class CropperType extends AbstractType
         return FileType::class;
     }
 
-    public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
+    public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'mapped' => false,

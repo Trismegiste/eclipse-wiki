@@ -24,7 +24,7 @@ class DamageRollType extends AbstractType implements DataTransformerInterface
         return TextType::class;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->addModelTransformer($this);
     }
@@ -51,7 +51,7 @@ class DamageRollType extends AbstractType implements DataTransformerInterface
         return DamageRoll::createFromString($value);
     }
 
-    public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
+    public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver): void
     {
         // not sure why but it works 
         // Since it's a TextType, internal data is string typed. So far so good.

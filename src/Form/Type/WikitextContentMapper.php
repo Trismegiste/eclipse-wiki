@@ -27,7 +27,7 @@ class WikitextContentMapper implements DataMapperInterface
         $this->twig = $twig;
     }
 
-    public function mapDataToForms($viewData, Traversable $forms)
+    public function mapDataToForms($viewData, Traversable $forms): void
     {
         // there is no data yet, so nothing to prepopulate
         if (null === $viewData) {
@@ -42,7 +42,7 @@ class WikitextContentMapper implements DataMapperInterface
         $forms['title']->setData($viewData->getTitle());
     }
 
-    public function mapFormsToData(Traversable $forms, &$viewData)
+    public function mapFormsToData(Traversable $forms, &$viewData): void
     {
         // there is no data yet, so nothing to prepopulate
         if (null === $viewData) {

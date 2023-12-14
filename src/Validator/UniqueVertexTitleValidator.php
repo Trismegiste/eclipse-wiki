@@ -24,7 +24,7 @@ class UniqueVertexTitleValidator extends ConstraintValidator
         $this->repository = $repo;
     }
 
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         if (!$constraint instanceof UniqueVertexTitle) {
             throw new UnexpectedTypeException($constraint, UniqueVertexTitle::class);

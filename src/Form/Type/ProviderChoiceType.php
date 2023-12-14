@@ -25,7 +25,7 @@ class ProviderChoiceType extends AbstractType
         return ChoiceType::class;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->addModelTransformer(new ProviderTransformer($options['provider']));
     }

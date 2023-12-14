@@ -19,7 +19,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class Battlemap3dWrite extends AbstractType
 {
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
                 ->add('battlemap3d', Battlemap3dFile::class, ['unique_id' => $options['data']->getPk()])
@@ -28,7 +28,7 @@ class Battlemap3dWrite extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('attr', ['x-on:submit' => "write"]);
         $resolver->setDefault('csrf_protection', false);

@@ -18,7 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class AutocompleteType extends AbstractType
 {
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired('choices');
         $resolver->setAllowedTypes('choices', 'array');
@@ -29,7 +29,7 @@ class AutocompleteType extends AbstractType
         return TextType::class;
     }
 
-    public function finishView(FormView $view, FormInterface $form, array $options)
+    public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['choices'] = array_values($options['choices']); // a flat array for javascript
     }

@@ -30,7 +30,7 @@ class RandomNameType extends AbstractType
         return TextType::class;
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['category'] = $this->category;
     }

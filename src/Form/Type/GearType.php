@@ -23,7 +23,7 @@ class GearType extends AbstractType
         $resolver->setDefault('data_class', Gear::class);
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
                 ->add('name', TextType::class);

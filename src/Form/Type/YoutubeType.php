@@ -18,7 +18,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 class YoutubeType extends AbstractType implements DataTransformerInterface
 {
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->addViewTransformer($this);
     }

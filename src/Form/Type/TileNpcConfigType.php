@@ -21,7 +21,7 @@ use Traversable;
 class TileNpcConfigType extends AbstractType implements DataMapperInterface
 {
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('npc', NpcChoiceType::class, [
                     'placeholder' => '-----------',
@@ -35,12 +35,12 @@ class TileNpcConfigType extends AbstractType implements DataMapperInterface
         $builder->setDataMapper($this);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['data_class' => TileNpcConfig::class]);
     }
 
-    public function mapDataToForms($viewData, Traversable $forms)
+    public function mapDataToForms($viewData, Traversable $forms): void
     {
         if (is_null($viewData)) {
             return;
@@ -51,7 +51,7 @@ class TileNpcConfigType extends AbstractType implements DataMapperInterface
         $forms['tilePerNpc']->setData($viewData->tilePerNpc);
     }
 
-    public function mapFormsToData(Traversable $forms, &$viewData)
+    public function mapFormsToData(Traversable $forms, &$viewData): void
     {
         $forms = iterator_to_array($forms);
         if (!empty($forms['tilePerNpc']->getData()) && !empty($forms['npc']->getData())) {

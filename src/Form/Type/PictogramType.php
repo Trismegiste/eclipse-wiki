@@ -24,7 +24,7 @@ class PictogramType extends AbstractType
         $this->repository = $provider;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'choices' => $this->repository->findAll(),

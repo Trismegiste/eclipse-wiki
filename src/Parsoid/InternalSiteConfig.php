@@ -122,7 +122,7 @@ class InternalSiteConfig extends SiteConfig
         );
     }
 
-    public function getExternalLinkTarget()
+    public function getExternalLinkTarget(): string|false
     {
         return '_blank';
     }
