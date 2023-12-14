@@ -282,7 +282,7 @@ class InternalSiteConfig extends SiteConfig
         
     }
 
-    public function getMWConfigValue(string $key)
+    public function getMWConfigValue(string $key): mixed
     {
         
     }

@@ -35,7 +35,7 @@ class MwImageCache implements CacheWarmerInterface, CacheClearerInterface
         $this->cacheDir = join_paths($cacheDir, self::subDir);
     }
 
-    public function warmUp(string $cacheDir): array
+    public function warmUp(string $cacheDir, ?string $buildDir = null): array
     {
         $this->fs->mkdir(join_paths($cacheDir, self::subDir));
 
@@ -47,7 +47,7 @@ class MwImageCache implements CacheWarmerInterface, CacheClearerInterface
         return false;
     }
 
-    public function clear(string $cacheDir)
+    public function clear(string $cacheDir): void
     {
         $folder = join_paths($cacheDir, self::subDir);
         if (is_dir($folder)) {
