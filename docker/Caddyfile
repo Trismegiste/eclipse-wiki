@@ -1,0 +1,10 @@
+{
+	frankenphp
+	order mercure after encode
+	order php_server before file_server
+}
+
+http://192.168.*.*:80 {
+	root * /app/public
+	php_server
+}

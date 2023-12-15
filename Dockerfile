@@ -57,6 +57,7 @@ RUN apt-get update && apt-get install -y unzip
 RUN apt-get install -y net-tools
 
 COPY ./docker/php.ini /usr/local/etc/php
+COPY ./docker/Caddyfile /etc/caddy/
 
 EXPOSE 9000
 
