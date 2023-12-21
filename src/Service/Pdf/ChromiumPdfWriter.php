@@ -25,7 +25,7 @@ class ChromiumPdfWriter implements Writer
     protected $cacheDir;
     protected $routing;
 
-    public function __construct(Environment $twig, string $cacheDir, UrlGeneratorInterface $routing)
+    public function __construct(Environment $twig, string $cacheDir, UrlGeneratorInterface $routing, protected \App\Service\MwImageCache $remoteImage)
     {
         $this->twig = $twig;
         $this->cacheDir = $cacheDir;
@@ -61,8 +61,10 @@ class ChromiumPdfWriter implements Writer
             /** @var DOMElement $img */
             $src = $img->getAttribute('src');
             if (str_starts_with($src, 'http')) {
-                $img->setAttribute('src', $this->routing->generate('app_remotepicture_read', ['url' => urlencode($src)], UrlGeneratorInterface::ABSOLUTE_URL));
+                $localImg = $this->remoteImage->download($src);
+                $img->setAttribute('src', 'file://' . $localImg->getPathname());
                 $img->removeAttribute('srcset');
+                usleep(100000);
             }
         }
 
