@@ -63,10 +63,10 @@ class PlaceCrud extends GenericCrud
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $npc->getPk()]);
         }
 
-        if (!empty($npc->surnameLang)) {
+        if ($npc->isNpcTemplate()) {
             return $this->redirectToRoute('app_profilepicture_template', ['pk' => $npc->getPk()]);
         } else {
-            $this->addFlash('error', "Cannot generate a profile from '$title' since its surname language is not defined");
+            $this->addFlash('error', "Cannot generate a profile from '$title' since it's not a NPC template");
 
             return $this->redirectToRoute('app_npcgenerator_info', ['pk' => $npc->getPk()]);
         }
