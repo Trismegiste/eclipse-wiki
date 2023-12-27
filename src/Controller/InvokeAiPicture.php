@@ -35,8 +35,8 @@ class InvokeAiPicture extends AbstractController
     public function __construct(LocalRepository $local, InvokeAiClient $remote, protected VertexRepository $repository)
     {
         $this->source = [
-        RepositoryChoice::local->value => $local,
-        RepositoryChoice::remote->value => $remote
+            RepositoryChoice::local->value => $local,
+            RepositoryChoice::remote->value => $remote
         ];
     }
 

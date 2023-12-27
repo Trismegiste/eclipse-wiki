@@ -7,8 +7,10 @@
 namespace App\Form\QuickNpc;
 
 use App\Entity\Transhuman;
+use App\Service\StableDiffusion\InvokeAiReader;
 use App\Service\StableDiffusion\PictureRepository;
 use App\Service\Storage;
+use SplFileInfo;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -78,6 +80,7 @@ class AppendPictureTranso implements DataTransformerInterface
         // update content
         $value->setContent("[[file:$importedName.jpg]]");
         $value->tokenPic = $tokenName;
+        $value->tokenPicPrompt = $this->getPrompt($source);
 
         if (file_exists($tokenTarget) && $this->deleteAfterUsing) {
             unlink($source);
@@ -89,6 +92,13 @@ class AppendPictureTranso implements DataTransformerInterface
     public function transform(mixed $value): mixed
     {
         return $value;
+    }
+
+    // getting positive prompt from original picture
+    protected function getPrompt(string $pathname): string
+    {
+        $reader = new InvokeAiReader(new SplFileInfo($pathname));
+        return $reader->getPositivePrompt();
     }
 
 }
