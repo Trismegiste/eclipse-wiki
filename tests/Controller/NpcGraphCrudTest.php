@@ -99,6 +99,7 @@ use \App\Tests\Command\StableDiffusion\PngFixture;
         $newNpc = $this->repository->load($pk);
         $this->assertNotEmpty($newNpc->tokenPic);
         $this->assertStringStartsWith('[[file:', $newNpc->getContent());
+        $this->assertEquals('strawberry', $newNpc->tokenPicPrompt);
         $this->deleteFixturesInto($storage->getRootDir());
     }
 
