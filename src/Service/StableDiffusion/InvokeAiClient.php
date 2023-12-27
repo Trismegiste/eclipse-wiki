@@ -72,7 +72,7 @@ class InvokeAiClient extends PictureRepository
     {
         return $this->invokeaiCache->get("picturelisting-$offset-$limit", function (ItemInterface $item) use ($limit, $offset): \stdClass {
                     $item->expiresAfter(DateInterval::createFromDateString('1 minute'));
-                    $response = $this->client->request('GET', $this->baseUrl . "api/v1/images/?limit=$limit&offset=$offset", ['timeout' => self::TIMEOUT]);
+                    $response = $this->client->request('GET', $this->baseUrl . "api/v1/images/?is_intermediate=false&categories=general&board_id=none&limit=$limit&offset=$offset", ['timeout' => self::TIMEOUT]);
 
                     if ($response->getStatusCode() !== 200) {
                         throw new UnexpectedValueException('API returned ' . $response->getStatusCode() . ' status code');
@@ -123,8 +123,8 @@ class InvokeAiClient extends PictureRepository
         $metadata = $this->getImageMetadata($name);
 
         // if there is metadata field, gets the positive prompt
-        if (isset($metadata->metadata)) {
-            return $metadata->metadata->positive_prompt;
+        if (!is_null($metadata)) {
+            return $metadata->positive_prompt;
         }
 
         // else, check if this is an embiggen image ?
