@@ -100,4 +100,12 @@ class ParserTest extends WebTestCase
         $this->assertEquals($this->routing->generate('app_picture_uploadmissing', ['title' => 'cthulhu.jpg', 'redirect' => '/']), $this->crawler->filter('a')->attr('href'));
     }
 
+    public function testTemplateEngine()
+    {
+        $html = $this->sut->parse('{{legend|dynamic|123}}', 'browser');
+        $this->assertStringContainsString('dynamic', $html);
+        $this->crawler->addHtmlContent($html);
+        $this->assertCount(1, $this->crawler->filter('i[data-cell-index=123]'));
+    }
+
 }
