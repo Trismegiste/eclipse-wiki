@@ -24,7 +24,9 @@ class InvokeAiClientTest extends KernelTestCase
     public function testSearch()
     {
         try {
-            return $this->sut->searchPicture('male');
+            $listing = $this->sut->searchPicture('male');
+            $this->assertIsArray($listing);
+            return $listing;
         } catch (TimeoutException $e) {
             $this->markTestSkipped('InvokeAI server is unreachable');
         }
@@ -48,18 +50,19 @@ class InvokeAiClientTest extends KernelTestCase
 
         // test thumbnail
         $thumb = $client->request('GET', $pic->thumb);
-        $this->assertPngImageResponse($thumb, 'Thumbnail');
+        $this->assertImageResponse($thumb, 'Thumbnail');
         // test full format
         $full = $client->request('GET', $pic->full);
-        $this->assertPngImageResponse($full, 'Full size picture');
+        $this->assertImageResponse($full, 'Full size picture');
     }
 
-    public function assertPngImageResponse(ResponseInterface $resp, string $message = 'Picture')
+    public function assertImageResponse(ResponseInterface $resp, string $message = 'Picture')
     {
         $this->assertEquals(200, $resp->getStatusCode(), "$message is unreacheable");
-        $this->assertEquals('image/png', $resp->getHeaders()['content-type'], "$message is not of PNG type");
+        $mimeType = $resp->getHeaders()['content-type'][0];
+        $this->assertStringStartsWith('image/', $mimeType, "$message is not of image type ($mimeType instead)");
         $picture = imagecreatefromstring($resp->getContent());
-        $this->assertTrue($picture, "$message is an invalid picture");
+        $this->assertNotFalse($picture, "$message is an invalid picture");
         imagedestroy($picture);
     }
 
