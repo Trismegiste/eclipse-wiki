@@ -1,2 +1,5 @@
+# pecl install xdebug && docker-php-ext-enable xdebug
+export XDEBUG_MODE=coverage
 bin/console --env=test --no-warmup ca:cl
-phpdbg -qrr bin/phpunit --debug --verbose
+bin/phpunit --debug --verbose
+export XDEBUG_MODE=off

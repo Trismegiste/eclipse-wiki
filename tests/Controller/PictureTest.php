@@ -130,4 +130,10 @@ class PictureTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    public function testMissingPictureUpload()
+    {
+        $this->client->request('GET', '/picture/missing/The Shrike.jpg/upload');
+        $this->assertResponseIsSuccessful();
+    }
+
 }
