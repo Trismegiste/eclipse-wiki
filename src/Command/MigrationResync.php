@@ -50,7 +50,7 @@ class MigrationResync extends Command
             
         }
 
-        $this->logging = array_unique($this->logging);
+        $this->logging = array_unique($this->logging, SORT_REGULAR);
         $io->table(['class', 'property'], $this->logging);
 
         foreach ($this->logging as $entry) {
