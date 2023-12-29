@@ -6,11 +6,11 @@
 
 namespace App\Service\Pdf;
 
+use App\Service\MwImageCache;
 use DOMDocument;
 use DOMElement;
 use SplFileInfo;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 use function join_paths;
 use function str_starts_with;
@@ -21,15 +21,9 @@ use function str_starts_with;
 class ChromiumPdfWriter implements Writer
 {
 
-    protected Environment $twig;
-    protected $cacheDir;
-    protected $routing;
-
-    public function __construct(Environment $twig, string $cacheDir, UrlGeneratorInterface $routing, protected \App\Service\MwImageCache $remoteImage)
+    public function __construct(protected Environment $twig, protected string $cacheDir, protected MwImageCache $remoteImage)
     {
-        $this->twig = $twig;
-        $this->cacheDir = $cacheDir;
-        $this->routing = $routing;
+        
     }
 
     public function write(SplFileInfo $source, SplFileInfo $target): void

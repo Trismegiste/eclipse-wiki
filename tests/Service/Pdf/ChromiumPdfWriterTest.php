@@ -13,10 +13,9 @@ class ChromiumPdfWriterTest extends PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->twig = $this->createMock(Twig\Environment::class);
-        $routing = $this->createMock(\Symfony\Component\Routing\Generator\UrlGeneratorInterface::class);
         $remoteImg = $this->createMock(App\Service\MwImageCache::class);
 
-        $this->sut = new \App\Service\Pdf\ChromiumPdfWriter($this->twig, __DIR__ . '/../../../var/cache/test', $routing, $remoteImg);
+        $this->sut = new \App\Service\Pdf\ChromiumPdfWriter($this->twig, __DIR__ . '/../../../var/cache/test', $remoteImg);
     }
 
     public function testWrite()
