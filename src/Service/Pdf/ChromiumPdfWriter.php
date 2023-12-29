@@ -61,10 +61,11 @@ class ChromiumPdfWriter implements Writer
             /** @var DOMElement $img */
             $src = $img->getAttribute('src');
             if (str_starts_with($src, 'http')) {
-                $localImg = $this->remoteImage->download($src);
-                $img->setAttribute('src', 'file://' . $localImg->getPathname());
+                $img->setAttribute('src', $this->remoteImage->getDataUri($src));
                 $img->removeAttribute('srcset');
-                usleep(100000);
+                $img->removeAttribute('loading');
+                $img->removeAttribute('decoding');
+                usleep(5e5);
             }
         }
 

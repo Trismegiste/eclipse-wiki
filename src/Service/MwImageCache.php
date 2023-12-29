@@ -78,4 +78,15 @@ class MwImageCache implements CacheWarmerInterface, CacheClearerInterface
         return new SplFileInfo($filename);
     }
 
+    public function getDataUri(string $url): string
+    {
+        if (0 !== strpos($url, 'http')) {
+            throw new InvalidArgumentException("$url is not a valid URL to a picture");
+        }
+        $resp = $this->client->request('GET', $url);
+        $mimetype = $resp->getHeaders()['content-type'][0];
+
+        return "data:$mimetype;base64," . base64_encode($resp->getContent());
+    }
+
 }
