@@ -80,7 +80,7 @@ class ProfilePicture extends AbstractController
             $this->repository->save($npc);
             $this->addFlash('success', 'Token généré');
 
-            return new JsonResponse('', Response::HTTP_NO_CONTENT);
+            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $npc->getPk()]);
         }
 
         return $this->render('picture/profile.html.twig', ['form' => $form->createView()]);

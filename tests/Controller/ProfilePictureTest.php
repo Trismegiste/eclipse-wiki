@@ -49,6 +49,8 @@ class ProfilePictureTest extends WebTestCase
 
         $form['profile_pic[avatar]']->upload($filename);
         $this->client->submit($form);
+        $this->assertResponseRedirects('/vertex/show/' . $npc->getPk());
+        $this->client->followRedirect();
         $this->assertResponseIsSuccessful();
         unlink($filename);
 

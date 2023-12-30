@@ -9,6 +9,7 @@
         var uploadCrop;
         const avatarSize = JSON.parse(document.getElementById("avatar-size").textContent);
         const cropperWidget = document.getElementById('cropper-{{ form.vars.id }}')
+        const fileWidget = document.getElementById('{{ form.vars.id }}')
 
         window.addEventListener('load', (event) => {
             uploadCrop = new Croppie(cropperWidget, {
@@ -38,6 +39,15 @@
                 console.log("Sorry - you're browser doesn't support the FileReader API");
             }
         }
+
+        cropperWidget.addEventListener('update', event => {
+            uploadCrop.result('blob').then(blob => {
+                let file = new File([blob], 'avatar.png', {type: "image/png", lastModified: new Date().getTime()}, 'utf-8')
+                let container = new DataTransfer()
+                container.items.add(file)
+                fileWidget.files = container.files
+            })
+        })
 
         // Copy-Paste
         window.addEventListener('paste', e => {

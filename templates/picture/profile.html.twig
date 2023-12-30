@@ -49,28 +49,6 @@
     <script src="{{ asset('js/crop-helper.js') }}"></script>
     <script src="{{ asset('multiavatar/multiavatar.min.js') }}"></script>
     <script>
-        // sending form in ajax
-        document.getElementById('profile_pic_generate').addEventListener('click', function (e) {
-            e.preventDefault()
-            let uploadForm = document.querySelector('article form')
-            let data = new FormData(uploadForm)
-
-            uploadCrop.result('base64').then(function (dataUrl) {
-                data.set('profile_pic[avatar]', dataURLtoFile(dataUrl, 'avatar.png'))
-                fetch(uploadForm.action, {
-                    method: 'post',
-                    body: data,
-                    redirect: 'manual'
-                }).then(function (response) {
-                    location.href = '{{ path('app_vertexcrud_show', {pk: form.vars.data.pk}) }}'
-                }).catch((error) => {
-                    console.error(error);
-                })
-            })
-        }) // fin du form
-    </script>
-
-    <script>
         window.addEventListener("load", function () {
             var avatarSample = document.querySelectorAll('.avatar-sample')
 
