@@ -1,18 +1,23 @@
 {# Custom rendering for CropperType #}
 {% block cropper_row %}
-    {{ block('form_row') }}
+    {{ form_row(form) }}
     <div id="cropper-{{ form.vars.id }}"></div>
+    <script type="application/json" id="avatar-size">
+        {{ form.vars.avatar_size }}
+    </script>
     <script>
-        var uploadCrop
+        var uploadCrop;
+        const avatarSize = JSON.parse(document.getElementById("avatar-size").textContent);
+        const cropperWidget = document.getElementById('cropper-{{ form.vars.id }}')
 
         window.addEventListener('load', (event) => {
-            uploadCrop = new Croppie(document.getElementById('cropper-{{ form.vars.id }}'), {
+            uploadCrop = new Croppie(cropperWidget, {
                 viewport: {
-                    width: 500,
-                    height: 500,
+                    width: avatarSize,
+                    height: avatarSize,
                     type: 'circle'
                 },
-                boundary: {width: 500, height: 500},
+                boundary: {width: avatarSize, height: avatarSize},
                 enableExif: true
             })
         })

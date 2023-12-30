@@ -8,6 +8,9 @@ namespace App\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * A File upload with cropping widget
@@ -20,13 +23,19 @@ class CropperType extends AbstractType
         return FileType::class;
     }
 
-    public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'mapped' => false,
             'attr' => ['x-on:change' => 'readFile($el)'],
-            'help' => '(ou Ctrl-V)'
+            'help' => '(ou Ctrl-V)',
+            'avatar_size' => 500
         ]);
+    }
+
+    public function finishView(FormView $view, FormInterface $form, array $options): void
+    {
+        $view->vars['avatar_size'] = $options['avatar_size'];
     }
 
 }
