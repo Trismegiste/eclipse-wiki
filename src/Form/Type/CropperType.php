@@ -27,7 +27,7 @@ class CropperType extends AbstractType
     {
         $resolver->setDefaults([
             'mapped' => false,
-            'attr' => ['x-on:change' => 'readFile($el)'],
+            'attr' => ['x-on:change' => 'readFile($el)', 'x-ref' => 'fileWidget'],
             'help' => '(ou Ctrl-V)',
             'avatar_size' => 500,
             'default_picture' => null
