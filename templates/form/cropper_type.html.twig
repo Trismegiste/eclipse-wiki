@@ -1,6 +1,6 @@
 {# Custom rendering for CropperType #}
 {% block cropper_row %}
-    <div x-data="pictureCropper({{ form.vars.avatar_size }})">
+    <div x-data="pictureCropper({{ form.vars.avatar_size }})" x-on:picture.window="bindPicture($event.detail)">
         {{ form_row(form) }}
         <div x-ref="cropperWidget" x-on:update="update" data-default-picture="{{ form.vars.default_picture }}"></div>
     </div>
@@ -49,6 +49,10 @@
                         container.items.add(file)
                         this.$refs.fileWidget.files = container.files
                     })
+                },
+
+                bindPicture(detail) {
+                    this.uploadCrop.bind({url: detail.dataUrl})
                 }
 
             }))

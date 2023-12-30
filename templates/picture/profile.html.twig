@@ -69,7 +69,10 @@
 
                 // event for choosing avatar
                 button.addEventListener("click", function (e) {
-                    uploadCrop.bind({url: e.target.parentNode.querySelector('canvas').toDataURL()})
+                    window.dispatchEvent(new CustomEvent('picture', {
+                        bubbles: true,
+                        detail: {dataUrl: e.target.parentNode.querySelector('canvas').toDataURL()}
+                    }))
                 })
             }
         })
