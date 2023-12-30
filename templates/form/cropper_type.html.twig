@@ -39,11 +39,18 @@
             }
         }
 
-
+        // Copy-Paste
         window.addEventListener('paste', e => {
             if (e.clipboardData.files.length > 0) {
                 uploadCrop.bind(URL.createObjectURL(e.clipboardData.files[0]))
             }
         })
+
+        // default picture
+        {% if form.vars.default_picture is not empty %}
+            window.addEventListener('load', (event) => {
+                uploadCrop.bind({url: '{{ form.vars.default_picture }}'})
+            })
+        {% endif %}
     </script>
 {% endblock %}

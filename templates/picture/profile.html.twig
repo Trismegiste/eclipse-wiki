@@ -68,12 +68,6 @@
                 })
             })
         }) // fin du form
-
-        {% if form.vars.data.extractFirstPicture is not empty %}
-            window.addEventListener('load', (event) => {
-                uploadCrop.bind({url: '{{ path('get_picture', {title: form.vars.data.extractFirstPicture}) }}'})
-            })
-        {% endif %}
     </script>
 
     <script>

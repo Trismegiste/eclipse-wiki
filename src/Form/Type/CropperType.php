@@ -29,13 +29,15 @@ class CropperType extends AbstractType
             'mapped' => false,
             'attr' => ['x-on:change' => 'readFile($el)'],
             'help' => '(ou Ctrl-V)',
-            'avatar_size' => 500
+            'avatar_size' => 500,
+            'default_picture' => null
         ]);
     }
 
     public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['avatar_size'] = $options['avatar_size'];
+        $view->vars['default_picture'] = $options['default_picture'];
     }
 
 }
