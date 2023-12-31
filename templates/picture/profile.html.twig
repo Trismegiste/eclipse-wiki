@@ -2,30 +2,18 @@
 {% extends "base.html.twig" %}
 {% form_theme form _self %}
 
-{% set avatarSize = 500 %}
-
-{% macro avatar_listing(size) %}
-    <div class="pure-u-1-5">
-        {% for k in 1..5 %}
-            <div  class="avatar-sample">
-                <img width="100" height="100"/>
-                <canvas height="{{ size }}" width="{{ size }}" style="display:none"></canvas>
-            </div>
-        {% endfor %}
-    </div>
-{% endmacro %}
-
 {% block header_title %}
     {{ include('npc/menu.html.twig', {npc: form.vars.data}) }}
 {% endblock %}
 
 {% block content %}
+    {{ form(form) }}
+{% endblock %}
+
+{% block _profile_pic_widget %}
     <div class="pure-g">
-        {{ _self.avatar_listing(avatarSize) }}
-        <div class="pure-u-3-5" x-data>
-            {{ form(form) }}
-        </div>
-        {{ _self.avatar_listing(avatarSize) }}
+        <div class="pure-u-3-5">{{ form_row(form.avatar) }}</div>
+        <div class="pure-u-2-5">{{ form_row(form.multicultural) }}</div>
     </div>
 {% endblock %}
 
@@ -47,34 +35,5 @@
     {{ parent() }}
     <script src="{{ asset('js/crop-helper.js') }}"></script>
     <script src="{{ asset('multiavatar/multiavatar.min.js') }}"></script>
-    <script>
-        window.addEventListener("load", function () {
-            var avatarSample = document.querySelectorAll('.avatar-sample')
-
-            for (const [idx, sample] of avatarSample.entries()) {
-                let hiddenCanvas = sample.querySelector('canvas')
-                let button = sample.querySelector('img')
-                let ctx = hiddenCanvas.getContext('2d')
-                let imgTmp = new Image()
-                imgTmp.onload = function () {
-                    ctx.drawImage(this, 0, 0)
-                }
-                let avatarId = '{{ form.vars.data.title }}' + (idx === 0 ? '' : Math.random())
-                let svgCode = multiavatar(avatarId)
-
-                // updating image
-                imgTmp.src = svgContentToDataUrl(fixSvgDimension(svgCode, {{ avatarSize }}))
-                button.src = imgTmp.src
-
-                // event for choosing avatar
-                button.addEventListener("click", function (e) {
-                    window.dispatchEvent(new CustomEvent('picture', {
-                        bubbles: true,
-                        detail: {dataUrl: e.target.parentNode.querySelector('canvas').toDataURL()}
-                    }))
-                })
-            }
-        })
-    </script>    
 {% endblock %}
 

@@ -9,3 +9,46 @@
         Alpine.data('pictureCropper', avatarType)
     </script>
 {% endblock %}
+
+{% block multicultural_avatar_row %}
+    {% set avatarSize = 500 %}
+
+    <div class="pure-g">
+        {% for avatar_name in choices %}
+            <div data-seed="{{ avatar_name.value }}" class="avatar-sample pure-u-1-3">
+                <img width="100" height="100"/>
+                <canvas height="{{ avatarSize }}" width="{{ avatarSize }}" style="display:none"></canvas>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        window.addEventListener("load", function () {
+            var avatarSample = document.querySelectorAll('.avatar-sample')
+
+            for (const [idx, sample] of avatarSample.entries()) {
+                let hiddenCanvas = sample.querySelector('canvas')
+                let button = sample.querySelector('img')
+                let ctx = hiddenCanvas.getContext('2d')
+                let imgTmp = new Image()
+                imgTmp.onload = function () {
+                    ctx.drawImage(this, 0, 0)
+                }
+                let avatarId = sample.dataset.seed
+                let svgCode = multiavatar(avatarId)
+
+                // updating image
+                imgTmp.src = svgContentToDataUrl(fixSvgDimension(svgCode, {{ avatarSize }}))
+                button.src = imgTmp.src
+
+                // event for choosing avatar
+                button.addEventListener("click", function (e) {
+                    window.dispatchEvent(new CustomEvent('picture', {
+                        bubbles: true,
+                        detail: {dataUrl: e.target.parentNode.querySelector('canvas').toDataURL()}
+                    }))
+                })
+            }
+        })
+    </script>
+{% endblock %}

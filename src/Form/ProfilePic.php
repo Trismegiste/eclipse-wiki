@@ -27,13 +27,28 @@ class ProfilePic extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $defaultPic = $options['data']->tokenPic;
+        /** @var Character $npc */
+        $npc = $options['data'];
+        $defaultPic = $npc->tokenPic;
         if (!is_null($defaultPic)) {
             $defaultPic = $this->router->generate('get_picture', ['title' => $defaultPic]);
         }
 
+        // for multiavatar
+        $multiavatar = [$npc->getTitle() => $npc->getTitle()];
+        for ($k = 1; $k < 15; $k++) {
+            $val = $npc->getTitle() . rand();
+            $multiavatar[$val] = $val;
+        }
+
         $builder
                 ->add('avatar', AvatarType::class, ['default_picture' => $defaultPic])
+                ->add('multicultural', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+                    'mapped' => false,
+                    'required' => false,
+                    'choices' => $multiavatar,
+                    'block_prefix' => 'multicultural_avatar'
+                ])
                 ->add('generate', SubmitType::class)
         ;
     }
