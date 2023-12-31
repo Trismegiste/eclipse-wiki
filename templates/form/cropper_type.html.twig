@@ -5,6 +5,8 @@
         <div x-ref="cropperWidget" x-on:update="update" data-default-picture="{{ form.vars.default_picture }}"></div>
     </div>
     <script type="module">
+        import Croppie from 'croppie';
+
         Alpine.data('pictureCropper', (avatarSize) => ({
                 size: avatarSize,
                 uploadCrop: null,

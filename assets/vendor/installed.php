@@ -90,4 +90,14 @@
     array (
     ),
   ),
+  'croppie' => 
+  array (
+    'version' => '2.6.5',
+    'dependencies' => 
+    array (
+    ),
+    'extraFiles' => 
+    array (
+    ),
+  ),
 );
