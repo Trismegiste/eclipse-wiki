@@ -54,7 +54,9 @@ class ProfilePic extends AbstractType
                 ->add('invokeai', TextType::class, [
                     'mapped' => false,
                     'required' => false,
-                    'block_prefix' => 'invokeai_avatar'
+                    'block_prefix' => 'invokeai_avatar',
+                    'data' => ($npc->getCategory() === 'transhuman') ? $npc->tokenPicPrompt : null,
+                    'attr' => ['x-model.fill' => 'query']
                 ])
                 ->add('multicultural', ChoiceType::class, [
                     'mapped' => false,
