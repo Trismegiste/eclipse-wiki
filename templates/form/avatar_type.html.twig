@@ -54,3 +54,27 @@
             }))
     </script>
 {% endblock %}
+
+{% block internal_avatar_row %}
+    <div class="pure-g">
+        {% for picture in choices %}
+            <div class="avatar-sample pure-u-1-3" x-data="selfContent">
+                <img class="pure-img" src="{{ path('get_picture', {title: picture.value}) }}" x-on:click="select"/>
+            </div>
+        {% endfor %}
+    </div>
+    <script type="module">
+        Alpine.data('selfContent', () => ({
+                select(event) {
+                    window.dispatchEvent(new CustomEvent('picture', {
+                        bubbles: true,
+                        detail: {dataUrl: event.target.src}
+                    }))
+                }
+            }))
+    </script>
+{% endblock %}
+
+{% block invokeai_avatar_row %}
+    {{ form_widget(form) }}
+{% endblock %}

@@ -9,7 +9,9 @@ namespace App\Form;
 use App\Entity\Character;
 use App\Form\Type\AvatarType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -43,7 +45,18 @@ class ProfilePic extends AbstractType
 
         $builder
                 ->add('avatar', AvatarType::class, ['default_picture' => $defaultPic])
-                ->add('multicultural', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+                ->add('internal', ChoiceType::class, [
+                    'mapped' => false,
+                    'required' => false,
+                    'choices' => $npc->extractPicture(),
+                    'block_prefix' => 'internal_avatar'
+                ])
+                ->add('invokeai', TextType::class, [
+                    'mapped' => false,
+                    'required' => false,
+                    'block_prefix' => 'invokeai_avatar'
+                ])
+                ->add('multicultural', ChoiceType::class, [
                     'mapped' => false,
                     'required' => false,
                     'choices' => $multiavatar,
