@@ -40,7 +40,7 @@
                     let svgCode = multiavatar(this.avatarId)
 
                     // updating image
-                    imgTmp.src = svgContentToDataUrl(fixSvgDimension(svgCode, {{ avatarSize }}))
+                    imgTmp.src = svgContentToDataUrl(fixSvgDimension(svgCode, this.avatarSize))
                     button.src = imgTmp.src
                 },
 
