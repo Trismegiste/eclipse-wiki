@@ -25,6 +25,9 @@
                     <li class="pure-menu-item">
                         <a href="#" class="pure-menu-link" x-on:click="panel=2">Multicultural</a>
                     </li>
+                    <li class="pure-menu-item">
+                        <a href="#" class="pure-menu-link" x-on:click="panel=3">Abstract</a>
+                    </li>
                 </ul>
             </div>
             <div x-show="panel===0">
@@ -35,6 +38,9 @@
             </div>
             <div x-show="panel===2">
                 {{ form_row(form.multicultural) }}
+            </div>
+            <div x-show="panel===3">
+                {{ form_row(form.bauhaus) }}
             </div>
         </div>
     </div>
@@ -48,7 +54,7 @@
             text-align: center;
         }
 
-        .avatar-sample img {
+        .avatar-sample img, .avatar-sample svg {
             cursor: zoom-in;
         }
     </style>

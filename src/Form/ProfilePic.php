@@ -8,6 +8,7 @@ namespace App\Form;
 
 use App\Entity\Character;
 use App\Form\Type\AvatarType;
+use App\Service\BoringAvatar;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -22,7 +23,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class ProfilePic extends AbstractType
 {
 
-    public function __construct(protected UrlGeneratorInterface $router)
+    public function __construct(protected UrlGeneratorInterface $router, protected BoringAvatar $boringAvatar)
     {
         
     }
@@ -41,6 +42,13 @@ class ProfilePic extends AbstractType
         for ($k = 1; $k < 15; $k++) {
             $val = $npc->getTitle() . rand();
             $multiavatar[$val] = $val;
+        }
+
+        // for abstract avatar
+        $abstractAvatar = [];
+        for ($k = 0; $k < 15; $k++) {
+            $val = $npc->getTitle() . rand();
+            $abstractAvatar[$val] = $this->boringAvatar->createBauhaus($val);
         }
 
         $builder
@@ -63,6 +71,12 @@ class ProfilePic extends AbstractType
                     'required' => false,
                     'choices' => $multiavatar,
                     'block_prefix' => 'multicultural_avatar'
+                ])
+                ->add('bauhaus', ChoiceType::class, [
+                    'mapped' => false,
+                    'required' => false,
+                    'choices' => $abstractAvatar,
+                    'block_prefix' => 'bauhaus_avatar'
                 ])
                 ->add('generate', SubmitType::class)
         ;

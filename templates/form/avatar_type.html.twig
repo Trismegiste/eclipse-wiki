@@ -12,7 +12,6 @@
 
 {% block multicultural_avatar_row %}
     {% set avatarSize = 500 %}
-
     <div class="pure-g">
         {% for avatar_name in choices %}
             <div x-data="multicultural('{{ avatar_name.value }}', {{ avatarSize }})" class="avatar-sample pure-u-1-3">
@@ -21,7 +20,6 @@
             </div>
         {% endfor %}
     </div>
-
     <script type="module">
         import multiavatar from '@multiavatar/multiavatar';
 
@@ -106,6 +104,26 @@
                     window.dispatchEvent(new CustomEvent('picture', {
                         bubbles: true,
                         detail: {dataUrl: event.target.src}
+                    }))
+                }
+            }))
+    </script>
+{% endblock %}
+
+{% block bauhaus_avatar_row %}
+    <div class="pure-g" x-data="boringAvatar">
+        {% for avatar in choices %}
+            <div class="pure-u-1-3 avatar-sample" x-on:click="select">
+                {{ avatar.value|raw }}
+            </div>
+        {% endfor %}
+    </div>
+    <script type="module">
+        Alpine.data('boringAvatar', () => ({
+                select(event) {
+                    window.dispatchEvent(new CustomEvent('picture', {
+                        bubbles: true,
+                        detail: {dataUrl: svgContentToDataUrl(fixSvgDimension(event.currentTarget.innerHTML, 128))}
                     }))
                 }
             }))
