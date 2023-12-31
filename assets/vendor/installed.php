@@ -100,4 +100,14 @@
     array (
     ),
   ),
+  '@multiavatar/multiavatar' => 
+  array (
+    'version' => '1.0.7',
+    'dependencies' => 
+    array (
+    ),
+    'extraFiles' => 
+    array (
+    ),
+  ),
 );

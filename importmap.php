@@ -90,4 +90,7 @@ return [
     'croppie' => [
         'version' => '2.6.5',
     ],
+    '@multiavatar/multiavatar' => [
+        'version' => '1.0.7',
+    ],
 ];
