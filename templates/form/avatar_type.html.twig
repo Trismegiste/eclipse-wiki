@@ -1,11 +1,11 @@
-{# Custom rendering for CropperType #}
-{% block cropper_row %}
+{# Custom rendering for AvatarType #}
+{% block avatar_row %}
     <div x-data="pictureCropper({{ form.vars.avatar_size }})" x-on:picture.window="bindPicture($event.detail)">
         {{ form_row(form) }}
         <div x-ref="cropperWidget" x-on:update="update" data-default-picture="{{ form.vars.default_picture }}"></div>
     </div>
     <script type="module">
-        import cropperType from 'cropper-type';
-        Alpine.data('pictureCropper', cropperType)
+        import avatarType from 'avatar-type';
+        Alpine.data('pictureCropper', avatarType)
     </script>
 {% endblock %}

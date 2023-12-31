@@ -15,7 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * A File upload with cropping widget
  */
-class CropperType extends AbstractType
+class AvatarType extends AbstractType
 {
 
     public function getParent(): ?string

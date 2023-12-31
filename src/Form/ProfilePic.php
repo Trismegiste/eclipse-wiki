@@ -7,7 +7,7 @@
 namespace App\Form;
 
 use App\Entity\Character;
-use App\Form\Type\CropperType;
+use App\Form\Type\AvatarType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -27,13 +27,13 @@ class ProfilePic extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $defaultPic = $options['data']->extractFirstPicture();
+        $defaultPic = $options['data']->tokenPic;
         if (!is_null($defaultPic)) {
             $defaultPic = $this->router->generate('get_picture', ['title' => $defaultPic]);
         }
 
         $builder
-                ->add('avatar', CropperType::class, ['default_picture' => $defaultPic])
+                ->add('avatar', AvatarType::class, ['default_picture' => $defaultPic])
                 ->add('generate', SubmitType::class)
         ;
     }

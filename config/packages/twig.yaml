@@ -5,7 +5,7 @@ twig:
         - 'form/rolltype.html.twig'
         - 'form/trait_type.html.twig'
         - 'form/random_type.html.twig'
-        - 'form/cropper_type.html.twig'
+        - 'form/avatar_type.html.twig'
         - 'form/autocomplete.html.twig'
         - 'form/ajaxcomplete.html.twig'
         - 'form/hashtag.html.twig'

@@ -57,8 +57,8 @@ return [
     'sd-gallery-search' => [
         'path' => 'sd-gallery-search.js',
     ],
-    'cropper-type' => [
-        'path' => 'cropper-type.js',
+    'avatar-type' => [
+        'path' => 'avatar-type.js',
     ],
     'babylonjs' => [
         'version' => '6.29.2',
