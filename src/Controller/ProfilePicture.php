@@ -92,16 +92,17 @@ class ProfilePicture extends AbstractController
     #[Route('/profile/template/{pk}', methods: ['GET', 'POST'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function template(Transhuman $vertex, Request $request, AvatarMaker $maker, WebsocketPusher $pusher, PlayerCastCache $cache, CharacterFactory $fac): Response
     {
-        $npc = clone $vertex;
-        $form = $this->createForm(ProfileOnTheFly::class, $npc);
+        $form = $this->createForm(ProfileOnTheFly::class, null, ['transhuman' => $vertex]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $extra = $form->getData();
             $avatar = $form['avatar']->getData();
             // which button : push profile or create new NPC ?
+            //
             // Pushes the profile created on the fly
             if ($form->get('push_profile')->isClicked()) {
-                $profile = $maker->generate($npc, $avatar);
+                $profile = $maker->generate($extra, $avatar);
                 $cached = $cache->slimPictureForPush($profile);
 
                 try {
@@ -119,7 +120,6 @@ class ProfilePicture extends AbstractController
 
             // Creates a new NPC from the template
             if ($form->get('instantiate_npc')->isClicked()) {
-                $extra = $fac->createExtraFromTemplate($vertex, $npc->getTitle());
                 $this->repository->save($extra);
 
                 $filename = 'token-' . $extra->getPk() . '.png';

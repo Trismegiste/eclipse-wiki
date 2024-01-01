@@ -11,87 +11,13 @@
     {% block header_big_title %}{{ block('title') }}{% endblock %}
 {% endblock %}
 
-{% block _profile_on_the_fly_avatar_row %}
-    {% set avatarSize = form.vars.avatar_size %}
-    <canvas height="{{ avatarSize }}" width="{{ avatarSize }}" id="avatar-tmp" style="display:none">
-    </canvas>
-    {{ form_widget(form,{attr: {hidden:true}}) }}
-    <div class="pure-g avatar-choice">
-        {% set counter=0 %}
-        {% if form.vars.default_bitmap is not empty %}
-            <div class="pure-u-1-12">
-                <input type="radio" name="choice_{{ form.vars.id }}" id="choice_{{ form.vars.id }}_{{ counter }}"/>
-                <label class="pixel-avatar" for="choice_{{ form.vars.id }}_{{ counter }}">
-                    <img src="{{ path('get_picture', {title: form.vars.default_bitmap}) }}" class="pure-img"/>
-                </label>
-            </div>
-            {% set counter=counter+1 %}
-        {% endif %}
-        {% for k in 1..form.vars.human_number %}
-            <div class="pure-u-1-12">
-                <input type="radio" name="choice_{{ form.vars.id }}" id="choice_{{ form.vars.id }}_{{ counter }}"/>
-                <label class="vector-avatar human-avatar" for="choice_{{ form.vars.id }}_{{ counter }}">
-                </label>
-            </div>
-            {% set counter=counter+1 %}
-        {% endfor %}
-        {% for avatar in form.vars.bauhaus %}
-            <div class="pure-u-1-12">
-                <input type="radio" name="choice_{{ form.vars.id }}" id="choice_{{ form.vars.id }}_{{ counter }}"/>
-                <label class="vector-avatar abstract-avatar" for="choice_{{ form.vars.id }}_{{ counter }}">
-                    {{ avatar|raw }}
-                </label>
-            </div>
-            {% set counter=counter+1 %}
-        {% endfor %}
+{% block _profile_on_the_fly_widget %}
+    <div class="pure-g">
+        <div class="pure-u-3-5">{{ form_row(form.avatar) }}</div>
+        <div class="pure-u-2-5">
+            {{ form_row(form.multisource) }}
+        </div>
     </div>
-
-    <script>
-        function putCanvasIntoFileInput() {
-            const fileInput = document.getElementById('{{ form.vars.id }}')
-            let hiddenCanvas = document.getElementById('avatar-tmp')
-            let ctx = hiddenCanvas.getContext('2d')
-            ctx.drawImage(this, 0, 0)
-            // convert to Blob (async)
-            hiddenCanvas.toBlob((blob) => {
-                const file = new File([blob], "avatar.png")
-                const dT = new DataTransfer()
-                dT.items.add(file)
-                fileInput.files = dT.files
-            })
-        }
-
-        window.addEventListener('load', () => {
-            // All pixel image click
-            for (const sample of document.querySelectorAll('.pixel-avatar')) {
-                sample.addEventListener("click", function (e) {
-                    let imgTmp = new Image()
-                    imgTmp.onload = putCanvasIntoFileInput
-                    imgTmp.src = this.querySelector('img').src
-                })
-            }
-
-            // Multiavatar
-            for (const sample of document.querySelectorAll('.human-avatar')) {
-                sample.innerHTML = multiavatar('yolo' + Math.random())
-            }
-
-            // All SVG click
-            var avatarSample = document.querySelectorAll('.vector-avatar')
-            for (const sample of avatarSample) {
-                sample.addEventListener("click", function (e) {
-                    let imgTmp = new Image()
-                    imgTmp.onload = putCanvasIntoFileInput
-                    imgTmp.src = svgContentToDataUrl(fixSvgDimension(this.innerHTML, {{ avatarSize }}))
-                })
-            }
-        })
-
-        const fileInput = document.getElementById('{{ form.vars.id }}')
-        fileInput.addEventListener('invalid', (event) => {
-            Alpine.store('notif').push('error', 'Choose a picture')
-        })
-    </script>        
 {% endblock %}
 
 {% block _profile_on_the_fly_title_row %}
@@ -127,18 +53,8 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('foliotek/croppie.css') }}" />
     <style>
-        .avatar-choice input {
-            display: none;
-        }
-        .avatar-choice label {
-            padding: 0.3em;
-            display: block;
-        }
-        .avatar-choice input:checked + label {
-            background-image: url(/img/select.svg);
-            background-repeat: no-repeat;
-        }
         .pure-form button {
             margin-top: 1em;
         }
@@ -151,10 +67,4 @@
             pointer-events: none;
         }
     </style>
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('multiavatar/multiavatar.min.js') }}"></script>
-    <script src="{{ asset('js/crop-helper.js') }}"></script>
 {% endblock %}
