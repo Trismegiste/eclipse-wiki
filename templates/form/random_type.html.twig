@@ -45,28 +45,24 @@
 {% endblock %}
 
 {% block human_name_row %}
-    {{ form_widget(form,{attr: {hidden:true}}) }}
-    <div class="pure-g human-name">
-        {% for label, gender in form.vars.choices %}
-            {% for name in gender %}
-                <div class="pure-u-1-6 form-widget">
-                    <label>
-                        <input type="radio" name="choice_{{ form.vars.id }}" value="{{ name }}" required="required"/>
-                        {{ name }}
-                    </label>
-                </div>
+    <div x-data="humanNameChoice">
+        {{ form_widget(form) }}
+        <div class="pure-g human-name">
+            {% for label, gender in form.vars.choices %}
+                {% for name in gender %}
+                    <div class="pure-u-1-6 form-widget">
+                        <label>
+                            <input x-model="chosenName" type="radio" name="choice_{{ form.vars.id }}" value="{{ name }}" required="required"/>
+                            {{ name }}
+                        </label>
+                    </div>
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
-    </div>   
-
-    <script>
-        window.addEventListener('load', () => {
-            for (const sample of document.querySelectorAll('.human-name input')) {
-                sample.addEventListener("click", function (e) {
-                    const widget = document.getElementById('{{ form.vars.id }}')
-                    widget.value = e.target.value
-                })
-            }
-        })
+        </div>
+    </div>
+    <script type="module">
+        Alpine.data('humanNameChoice', () => ({
+                chosenName: null
+            }))
     </script>        
 {% endblock %}

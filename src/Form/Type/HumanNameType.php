@@ -36,6 +36,10 @@ class HumanNameType extends AbstractType
     {
         $resolver->setRequired('language');
         $resolver->setDefault('name_number', 24);
+        $resolver->setDefault('attr', [
+            'x-model' => 'chosenName',
+            'hidden' => true
+        ]);
     }
 
     public function finishView(FormView $view, FormInterface $form, array $options): void
