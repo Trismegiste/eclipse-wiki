@@ -75,7 +75,7 @@
 {% endblock %}
 
 {% block invokeai_avatar_row %}
-    <div class="pure-g" x-data="invokeAi">
+    <div class="pure-g" x-data="invokeAi('{{ path('app_invokeaipicture_ajaxsearch', {source:'local'}) }}')">
         <div class="pure-u-1">
             {{ form_widget(form, {attr:{class:'pure-input-1'}}) }}
         </div>
@@ -86,15 +86,16 @@
         </template>
     </div>
     <script type="module">
-        Alpine.data('invokeAi', () => ({
+        Alpine.data('invokeAi', (searchUrl) => ({
                 query: null,
+                searchUrl: searchUrl,
 
                 async getListing() {
                     if ((this.query === null) || (this.query.length === 0)) {
                         return []
                     }
 
-                    const resp = await fetch('/invokeai/ajax/local/search?q=' + this.query)
+                    const resp = await fetch(searchUrl + '?q=' + this.query)
                     if (!resp.ok) {
                         throw new Error(this.source, {cause: await resp.json()})
                     }
