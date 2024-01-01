@@ -39,7 +39,7 @@ class VertexRepository extends DefaultRepository
     /**
      * Find the first vertex by its title. First letter is case-insensitive
      * @param string $title
-     * @return type
+     * @return Vertex
      */
     public function findByTitle(string $title): ?Vertex
     {

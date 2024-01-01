@@ -14,7 +14,9 @@ use App\Form\NpcAttacks;
 use App\Form\NpcCreate;
 use App\Form\NpcGears;
 use App\Form\NpcInfo;
+use App\Form\NpcResync;
 use App\Form\NpcStats;
+use App\Form\QuickNpc\SingleNodeChoice;
 use App\Form\Type\ProviderChoiceType;
 use App\Repository\BackgroundProvider;
 use App\Repository\CharacterFactory;
@@ -23,16 +25,16 @@ use App\Repository\MorphProvider;
 use App\Repository\VertexRepository;
 use App\Twig\SaWoExtension;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Environment;
 use const MB_CASE_TITLE;
-use function join_paths;
 use function mb_convert_case;
 
 /**
@@ -75,7 +77,7 @@ class NpcGenerator extends AbstractController
     public function edit(Character $npc, Request $request): Response
     {
         $form = $this->createForm(NpcStats::class, $npc);
-        $profile = $this->createForm(\App\Form\QuickNpc\SingleNodeChoice::class);
+        $profile = $this->createForm(SingleNodeChoice::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -268,6 +270,7 @@ class NpcGenerator extends AbstractController
 
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $npc->getPk()]);
         }
+
         return $this->render('npc/edit_info.html.twig', ['form' => $form->createView()]);
     }
 
@@ -292,7 +295,7 @@ class NpcGenerator extends AbstractController
      * Ajax get character in json
      */
     #[Route('/npc/minicard', methods: ['GET'])]
-    public function minicard(Request $request, \Twig\Environment $twig): Response
+    public function minicard(Request $request, Environment $twig): Response
     {
         /** @var Character $npc */
         $npc = $this->repository->findByTitle($request->get('title'));
@@ -329,7 +332,39 @@ class NpcGenerator extends AbstractController
             throw new NotFoundHttpException("NPC not found");
         }
 
-        return new \Symfony\Component\HttpFoundation\JsonResponse($npc);
+        return new JsonResponse($npc);
+    }
+
+    /**
+     * Resynchronize the NPC with its parent template
+     */
+    #[Route('/npc/resync/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
+    public function resync(Transhuman $npc, Request $request): Response
+    {
+        // check has a template parent
+        if (is_null($npc->instantiatedFrom)) {
+            throw $this->createNotFoundException($npc->getTitle() . ' has no parent template');
+        }
+
+        // check if the template parent exists
+        $templateNpc = $this->repository->findByTitle($npc->instantiatedFrom);
+        if (is_null($templateNpc)) {
+            $this->addFlash('error', 'Le template NPC "' . $npc->instantiatedFrom . '" n\'existe pas.');
+
+            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $npc->getPk()]);
+        }
+
+        $form = $this->createForm(NpcResync::class, $npc, ['template' => $templateNpc]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $npc = $form->getData();
+            $this->repository->save($npc);
+            $this->addFlash('success', $npc->getTitle() . ' a été synchronisé avec ' . $npc->instantiatedFrom);
+
+            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $npc->getPk()]);
+        }
+
+        return $this->render('form.html.twig', ['title' => 'Resync', 'form' => $form->createView()]);
     }
 
 }
