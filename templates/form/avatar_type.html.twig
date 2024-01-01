@@ -136,39 +136,29 @@
     </style>
 {% endblock %}
 
-
 {% block avatar_multisource_row %}
-    <div x-data="{ panel: 0 }">
+    {% set sources = ['internal','invokeai','multicultural','bauhaus'] %}
+    <div x-data="{ panel: 0 }" class="multisource-widget">
         <div class="pure-menu pure-menu-horizontal">
             <ul class="pure-menu-list">
-                <li class="pure-menu-item">
-                    <a href="#" class="pure-menu-link" x-on:click="panel=0">Interne</a>
-                </li>
-                <li class="pure-menu-item">
-                    <a href="#" class="pure-menu-link" x-on:click="panel=1">Stable diffusion</a>
-                </li>
-                <li class="pure-menu-item">
-                    <a href="#" class="pure-menu-link" x-on:click="panel=2">Multicultural</a>
-                </li>
-                <li class="pure-menu-item">
-                    <a href="#" class="pure-menu-link" x-on:click="panel=3">Abstract</a>
-                </li>
+                {% for idx, source in sources %}
+                    <li class="pure-menu-item">
+                        <a href="#" class="pure-menu-link" x-on:click="panel={{ idx }}">{{ (source ~ '_avatar_panel') |trans }}</a>
+                    </li>
+                {% endfor %}
             </ul>
         </div>
-        <div x-show="panel===0">
-            {{ form_row(form.internal) }}
-        </div>
-        <div x-show="panel===1">
-            {{ form_row(form.invokeai) }}
-        </div>
-        <div x-show="panel===2">
-            {{ form_row(form.multicultural) }}
-        </div>
-        <div x-show="panel===3">
-            {{ form_row(form.bauhaus) }}
-        </div>
+        {% for idx, source in sources %}
+            <div x-show="panel==={{ idx }}">
+                {{ form_row(form[source]) }}
+            </div>
+        {% endfor %}
     </div>
     <style>
+        .multisource-widget .pure-menu-horizontal {
+            margin-bottom: 1em;
+        }
+
         .avatar-sample {
             text-align: center;
         }
