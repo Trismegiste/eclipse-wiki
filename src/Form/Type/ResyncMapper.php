@@ -47,6 +47,26 @@ class ResyncMapper implements DataMapperInterface
                 $viewData->addSkill($skill);
             }
         }
+
+        // Edges
+        if ($widget['edges']->getData()) {
+            $viewData->setEdges($this->template->getEdges());
+        }
+
+        // Economy
+        if ($widget['economy']->getData()) {
+            $viewData->economy = $this->template->economy;
+        }
+
+        // Attacks
+        if ($widget['attacks']->getData()) {
+            $viewData->setAttacks($this->template->getAttacks());
+        }
+
+        // Armors
+        if ($widget['armors']->getData()) {
+            $viewData->setArmors($this->template->getArmors());
+        }
     }
 
 }
