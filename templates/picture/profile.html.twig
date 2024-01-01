@@ -13,35 +13,8 @@
 {% block _profile_pic_widget %}
     <div class="pure-g">
         <div class="pure-u-3-5">{{ form_row(form.avatar) }}</div>
-        <div class="pure-u-2-5" x-data="{ panel: 0 }">
-            <div class="pure-menu pure-menu-horizontal">
-                <ul class="pure-menu-list">
-                    <li class="pure-menu-item">
-                        <a href="#" class="pure-menu-link" x-on:click="panel=0">Interne</a>
-                    </li>
-                    <li class="pure-menu-item">
-                        <a href="#" class="pure-menu-link" x-on:click="panel=1">Stable diffusion</a>
-                    </li>
-                    <li class="pure-menu-item">
-                        <a href="#" class="pure-menu-link" x-on:click="panel=2">Multicultural</a>
-                    </li>
-                    <li class="pure-menu-item">
-                        <a href="#" class="pure-menu-link" x-on:click="panel=3">Abstract</a>
-                    </li>
-                </ul>
-            </div>
-            <div x-show="panel===0">
-                {{ form_row(form.internal) }}
-            </div>
-            <div x-show="panel===1">
-                {{ form_row(form.invokeai) }}
-            </div>
-            <div x-show="panel===2">
-                {{ form_row(form.multicultural) }}
-            </div>
-            <div x-show="panel===3">
-                {{ form_row(form.bauhaus) }}
-            </div>
+        <div class="pure-u-2-5">
+            {{ form_row(form.multisource) }}
         </div>
     </div>
 {% endblock %}
@@ -49,15 +22,6 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('foliotek/croppie.css') }}" />
-    <style>
-        .avatar-sample {
-            text-align: center;
-        }
-
-        .avatar-sample img, .avatar-sample svg {
-            cursor: zoom-in;
-        }
-    </style>
 {% endblock %}
 
 {% block javascripts %}
