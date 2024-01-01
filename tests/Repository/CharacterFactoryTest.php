@@ -4,6 +4,9 @@
  * Eclipse Wiki
  */
 
+use App\Entity\Background;
+use App\Entity\Faction;
+use App\Entity\Transhuman;
 use App\Repository\CharacterFactory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -19,11 +22,23 @@ class CharacterFactoryTest extends KernelTestCase
 
     public function testTranshuman()
     {
-        $bg = $this->createStub(\App\Entity\Background::class);
-        $fac = $this->createStub(\App\Entity\Faction::class);
-        $npc = $this->sut->create('Takeshi', $bg, $fac);
-        $this->assertInstanceOf(\App\Entity\Transhuman::class, $npc);
+        $bg = $this->createStub(Background::class);
+        $fac = $this->createStub(Faction::class);
+        $npc = $this->sut->create('Diplo', $bg, $fac);
+        $this->assertInstanceOf(Transhuman::class, $npc);
         $this->assertCount(5, $npc->attributes);
+
+        return $npc;
+    }
+
+    /** @depends testTranshuman */
+    public function testCreateFromTemplate(Transhuman $template)
+    {
+        $template->setContent('yolo');
+        $created = $this->sut->createExtraFromTemplate($template, 'Takeshi');
+        $this->assertInstanceOf(Transhuman::class, $created);
+        $this->assertEquals('Diplo', $created->instantiatedFrom);
+        $this->assertStringContainsString('[[Diplo]]', $created->getContent());
     }
 
 }

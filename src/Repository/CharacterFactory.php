@@ -109,6 +109,7 @@ class CharacterFactory
         $npc->surnameLang = null;
         $npc->wildCard = false;
         $content = "C'est un [[$name]]. ";
+        $npc->instantiatedFrom = $name;
 
         $mood = $this->moodRepository->findAll('adjective');
         shuffle($mood);
