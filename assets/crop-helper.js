@@ -3,7 +3,7 @@
  */
 
 // convert a DataURL to File for sending to symfony Form
-function dataURLtoFile(dataurl, filename) {
+export function dataURLtoFile(dataurl, filename) {
     var arr = dataurl.split(','),
             mime = arr[0].match(/:(.*?);/)[1],
             bstr = atob(arr[1]),
@@ -18,7 +18,7 @@ function dataURLtoFile(dataurl, filename) {
 }
 
 // adding height and width attributes of SVG root element to fix a bug in Firefox
-function fixSvgDimension(svgCode, side) {
+export function fixSvgDimension(svgCode, side) {
     let parser = new DOMParser()
     let doc = parser.parseFromString(svgCode, "image/svg+xml")
     doc.rootElement.setAttribute('width', side)
@@ -28,7 +28,7 @@ function fixSvgDimension(svgCode, side) {
 }
 
 // convert a SVG DOMDocument to data url
-function svgContentToDataUrl(doc) {
+export function svgContentToDataUrl(doc) {
     let exporter = new XMLSerializer()
 
     return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(exporter.serializeToString(doc))

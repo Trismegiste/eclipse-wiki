@@ -60,6 +60,9 @@ return [
     'avatar-type' => [
         'path' => 'avatar-type.js',
     ],
+    'cropper-utils' => [
+        'path' => 'crop-helper.js',
+    ],
     'babylonjs' => [
         'version' => '6.29.2',
     ],

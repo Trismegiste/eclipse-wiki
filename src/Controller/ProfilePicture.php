@@ -43,7 +43,7 @@ class ProfilePicture extends AbstractController
      * Generate a socnet profile for a unique Transhuman
      */
     #[Route('/profile/unique/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function unique(Transhuman $npc, AvatarMaker $maker): Response
+    public function unique(Transhuman $npc, AvatarMaker $maker): BinaryFileResponse
     {
         $pathname = $this->storage->getFileInfo($npc->tokenPic);
         $profile = $maker->generate($npc, $pathname);
@@ -55,7 +55,7 @@ class ProfilePicture extends AbstractController
      * Push a socnet profile for a unique Transhuman
      */
     #[Route('/profile/unique/{pk}', methods: ['POST'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function pushUnique(Transhuman $npc, AvatarMaker $maker, PlayerCastCache $cache): Response
+    public function pushUnique(Transhuman $npc, AvatarMaker $maker, PlayerCastCache $cache): JsonResponse
     {
         $pathname = $this->storage->getFileInfo($npc->tokenPic);
         $profile = $maker->generate($npc, $pathname);
@@ -87,7 +87,7 @@ class ProfilePicture extends AbstractController
     }
 
     /**
-     * Show a list of NPC profiles from a template (a Transhuman with isNpcTemplate() method returns true)
+     * Show a list of NPC profiles from a template (a Transhuman with isNpcTemplate() method returning true)
      */
     #[Route('/profile/template/{pk}', methods: ['GET', 'POST'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function template(Transhuman $vertex, Request $request, AvatarMaker $maker, WebsocketPusher $pusher, PlayerCastCache $cache, CharacterFactory $fac): Response
@@ -117,7 +117,7 @@ class ProfilePicture extends AbstractController
                 return $this->redirectToRoute('app_profilepicture_template', ['pk' => $vertex->getPk()]);
             }
 
-            // Instantiate the NPC from the template
+            // Creates a new NPC from the template
             if ($form->get('instantiate_npc')->isClicked()) {
                 $extra = $fac->createExtraFromTemplate($vertex, $npc->getTitle());
                 $this->repository->save($extra);
