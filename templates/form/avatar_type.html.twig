@@ -88,7 +88,6 @@
     <script type="module">
         Alpine.data('invokeAi', (searchUrl) => ({
                 query: null,
-                searchUrl: searchUrl,
 
                 async getListing() {
                     if ((this.query === null) || (this.query.length === 0)) {
