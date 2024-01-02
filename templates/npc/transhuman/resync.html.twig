@@ -13,9 +13,12 @@
 {% block content %}
     <h2>Resynchronisation avec le template parent</h2>
     <p>Quelles sont les caractéristiques de
-        "<a href="{{ path('app_vertexcrud_show', {pk: form.vars.data.pk}) }}">{{ form.vars.data.title }}</a>"
+        <a href="{{ path('app_vertexcrud_show', {pk: form.vars.data.pk}) }}">{{ form.vars.data.title }}</a>
         que vous voulez écraser avec le template parent
-        "<a href="{{ path('app_wiki', {title: form.vars.data.instantiatedFrom}) }}">{{ form.vars.data.instantiatedFrom }}</a>"
+        <a href="{{ path('app_wiki', {title: form.vars.data.instantiatedFrom}) }}" target="_blank">
+            {{ form.vars.data.instantiatedFrom }}
+            <i class="icon-export"></i>
+        </a>
     </p>
     {{ form(form) }}
 {% endblock %}

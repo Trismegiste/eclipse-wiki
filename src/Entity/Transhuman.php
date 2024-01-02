@@ -38,7 +38,11 @@ class Transhuman extends Character
 
     public function getDescription(): string
     {
-        return $this->background->title . ' - ' . $this->faction->title;
+        if (is_null($this->instantiatedFrom)) {
+            return $this->background->title . ' - ' . $this->faction->title;
+        } else {
+            return 'Instance de ' . $this->instantiatedFrom;
+        }
     }
 
     public function getDefaultHashtag(): string
