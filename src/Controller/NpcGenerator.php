@@ -364,7 +364,7 @@ class NpcGenerator extends AbstractController
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $npc->getPk()]);
         }
 
-        return $this->render('form.html.twig', ['title' => 'Resync', 'form' => $form->createView()]);
+        return $this->render('npc/transhuman/resync.html.twig', ['form' => $form->createView()]);
     }
 
 }

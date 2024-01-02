@@ -1,0 +1,21 @@
+{% extends "base.html.twig" %}
+{% form_theme form _self %}
+
+{% block title %}Resync {{ form.vars.data.title }}{% endblock %}
+
+{% block header_title %}
+    <div style="float: right">
+        {{ include('npc/actions.html.twig', {npc: form.vars.data}) }}
+    </div>
+    {{ block('title') }}
+{% endblock %}
+
+{% block content %}
+    <h2>Resynchronisation avec le template parent</h2>
+    <p>Quelles sont les caractéristiques de
+        "<a href="{{ path('app_vertexcrud_show', {pk: form.vars.data.pk}) }}">{{ form.vars.data.title }}</a>"
+        que vous voulez écraser avec le template parent
+        "<a href="{{ path('app_wiki', {title: form.vars.data.instantiatedFrom}) }}">{{ form.vars.data.instantiatedFrom }}</a>"
+    </p>
+    {{ form(form) }}
+{% endblock %}

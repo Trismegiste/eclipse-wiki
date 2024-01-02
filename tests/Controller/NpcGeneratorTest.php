@@ -14,6 +14,8 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class NpcGeneratorTest extends WebTestCase
 {
 
+    use PictureFixture;
+
     protected $client;
 
     protected function setUp(): void
@@ -284,6 +286,45 @@ class NpcGeneratorTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $npc = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals('Luke', $npc->title);
+    }
+
+    public function testResync()
+    {
+        $fac = static::getContainer()->get(CharacterFactory::class);
+        $template = $fac->create('Generic', new Background('dummy'), new Faction('dummy'));
+        $template->setMorph(new \App\Entity\Morph('morph'));
+        $repo = static::getContainer()->get(VertexRepository::class);
+        $template->surnameLang = 'japanese';
+        $repo->save($template);
+
+        // instantiate from template
+        $crawler = $this->client->request('GET', '/profile/template/' . $template->getPk());
+        $this->assertSelectorExists('#profile_on_the_fly_instantiate_npc');
+        $form = $crawler->selectButton('profile_on_the_fly_instantiate_npc')->form();
+        $form['profile_on_the_fly[title]'] = 'Instance of Generic';
+        $filename = 'tmp.png';
+        $image = $this->createTestChart(256);
+        imagepng($image, $filename);
+        $form['profile_on_the_fly[avatar]']->upload($filename);
+        $this->client->submit($form);
+        unlink($filename);
+
+        // new NPC
+        $this->assertResponseRedirects();
+        $this->assertStringStartsWith('/vertex/show', $this->client->getResponse()->headers->get('location'));
+        $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
+
+        // Resync
+        $newPk = $this->client->getRequest()->attributes->get('pk');
+        $crawler = $this->client->request('GET', '/npc/resync/' . $newPk);
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('#npc_resync_synchronize');
+        $form = $crawler->selectButton('npc_resync_synchronize')->form();
+        $this->client->submit($form);
+        $this->assertResponseRedirects();
+        $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
     }
 
 }
