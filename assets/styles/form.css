@@ -1,7 +1,7 @@
 /*
  * Generic form
 */
-.pure-form fieldset input, 
+.pure-form fieldset input,
 .pure-form fieldset select,
 .pure-form fieldset textarea {
     margin-bottom: 0.5em;
@@ -28,7 +28,7 @@
         margin: 0 0 0.3em;
         color: #777;
     }
-    
+
     .form-widget {
         margin-bottom: 1em;
     }
@@ -52,7 +52,7 @@
 }
 
 .form-error li {
-    list-style-type: none; 
+    list-style-type: none;
     color: darkred;
 }
 
@@ -62,4 +62,8 @@
 
 .button-write {
     background-color: #bcffe9;
+}
+
+.button-continue {
+    background-color: #b4ffc7;
 }

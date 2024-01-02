@@ -12,10 +12,18 @@
 {% endblock %}
 
 {% block _profile_on_the_fly_widget %}
+    {{ form_row(form.title) }}
     <div class="pure-g">
-        <div class="pure-u-3-5">{{ form_row(form.avatar) }}</div>
-        <div class="pure-u-2-5">
-            {{ form_row(form.multisource) }}
+        <div class="pure-u-1-2">{{ form_row(form.avatar) }}</div>
+        <div class="pure-u-1-2">{{ form_row(form.multisource) }}</div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-11-24">
+            {{ form_widget(form.push_profile, {attr:{class:'button-continue'}}) }}
+        </div>
+        <div class="pure-u-1-12"></div>
+        <div class="pure-u-11-24">
+            {{ form_widget(form.instantiate_npc) }}
         </div>
     </div>
 {% endblock %}
@@ -30,6 +38,9 @@
     <style>
         .pure-form button {
             margin-top: 1em;
+        }
+        .pure-form .human-name {
+            margin-bottom: 2em;
         }
         .pure-form .human-name input[type=radio] {
             margin-bottom: 0.3em;
