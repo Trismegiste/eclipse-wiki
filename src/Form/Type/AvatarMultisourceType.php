@@ -70,7 +70,7 @@ class AvatarMultisourceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'max_sample' => 15,
+            'max_sample' => 16,
             'default_prompt' => null,
             'mapped' => false
         ]);

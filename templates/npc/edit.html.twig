@@ -6,6 +6,10 @@
     {{ include('npc/menu.html.twig', {npc: form.vars.data}) }}
 {% endblock %}
 
+{% block title %}
+    Traits de {{ form.vars.data.title }}
+{% endblock %}
+
 {% block _npc_stats_edges_widget %}
     <div id="npc_stats_edges" class="collection">
         <template x-for="(edge, idx) in edges">

@@ -14,8 +14,8 @@
     {% set avatarSize = 500 %}
     <div class="pure-g">
         {% for avatar_name in choices %}
-            <div x-data="multicultural('{{ avatar_name.value }}', {{ avatarSize }})" class="avatar-sample pure-u-1-3">
-                <img width="100" height="100" x-on:click="select"/>
+            <div x-data="multicultural('{{ avatar_name.value }}', {{ avatarSize }})" class="avatar-sample pure-u-1-4">
+                <img x-on:click="select"/>
                 <canvas height="{{ avatarSize }}" width="{{ avatarSize }}" style="display:none"></canvas>
             </div>
         {% endfor %}
@@ -57,8 +57,8 @@
 {% block internal_avatar_row %}
     <div class="pure-g">
         {% for picture in choices %}
-            <div class="avatar-sample pure-u-1-3" x-data="selfContent">
-                <img class="pure-img" src="{{ path('get_picture', {title: picture.value}) }}" x-on:click="select"/>
+            <div class="avatar-sample pure-u-1-4" x-data="selfContent">
+                <img src="{{ path('get_picture', {title: picture.value}) }}" x-on:click="select"/>
             </div>
         {% endfor %}
     </div>
@@ -80,8 +80,8 @@
             {{ form_widget(form, {attr:{class:'pure-input-1'}}) }}
         </div>
         <template x-for="pic in getListing()" :key="pic.name">
-            <div class="avatar-sample pure-u-1-3">
-                <img class="pure-img" x-bind:src="pic.thumb" x-on:click="select"/>
+            <div class="avatar-sample pure-u-1-4">
+                <img x-bind:src="pic.thumb" x-on:click="select"/>
             </div>
         </template>
     </div>
@@ -114,7 +114,7 @@
 {% block bauhaus_avatar_row %}
     <div class="pure-g" x-data="boringAvatar">
         {% for avatar in choices %}
-            <div class="pure-u-1-3 avatar-sample bauhaus" x-on:click="select">
+            <div class="pure-u-1-4 avatar-sample bauhaus" x-on:click="select">
                 {{ avatar.value|raw }}
             </div>
         {% endfor %}
@@ -131,12 +131,6 @@
                 }
             }))
     </script>
-    <style>
-        .bauhaus svg {
-            max-width: 100px;
-            max-height: 100px;
-        }
-    </style>
 {% endblock %}
 
 {% block avatar_multisource_row %}
@@ -168,6 +162,8 @@
 
         .avatar-sample img, .avatar-sample svg {
             cursor: zoom-in;
+            width: 80%;
+            margin: 0 auto 1em;
         }
     </style>
 {% endblock %}
