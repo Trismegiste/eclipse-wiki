@@ -30,6 +30,7 @@ class NpcGraphCrud extends AbstractController
     #[Route('/run', methods: ['GET', 'POST'])]
     public function run(Request $request): Response
     {
+        $title = $request->query->get('title', '');
         $fullGraph = $this->provider->load();
 
         $form = $this->createForm(Selector::class);
@@ -44,7 +45,8 @@ class NpcGraphCrud extends AbstractController
 
         return $this->render('npcgraph/run.html.twig', [
                     'graph' => $fullGraph,
-                    'form' => $form->createView()
+                    'form' => $form->createView(),
+                    'default_name' => mb_convert_case($title, MB_CASE_TITLE)
         ]);
     }
 

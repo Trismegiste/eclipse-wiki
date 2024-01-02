@@ -5,7 +5,7 @@
 {% block header_title %}{{ block('title') }}{% endblock %}
 
 {% macro category(icon, url, label) %}
-    <div class="pure-u-1 pure-u-lg-1-4">
+    <div class="pure-u-1 pure-u-lg-1-5">
         <a href="{{ url }}">
             <i class="icon-{{ icon }}"></i>
             <h2>{{ label }}</h2>
@@ -19,6 +19,7 @@
             <h2>Voulez-vous créer</h2>
             <div class="pure-g dashboard">
                 {{ _self.category('video', path('app_scenecrud_create', {title: from_link}), 'une Scène ?') }}
+                {{ _self.category('npcgraph', path('app_npcgraphcrud_run', {title: from_link}), 'un Auto-PNJ ?') }}
                 {{ _self.category('user-plus', path('app_npcgenerator_create', {title: from_link}), 'un Transhumain ?') }}
                 {{ _self.category('place', path('app_placecrud_create', {title: from_link}), 'un Décor ?') }}
                 {{ _self.category('handout', path('app_handoutcrud_create', {title: from_link}), 'une Aide de jeu ?') }}
