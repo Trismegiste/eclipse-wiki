@@ -6,9 +6,9 @@
 
 namespace App\Form\CreationDag;
 
+use App\Form\Type\MultiCheckboxType;
 use App\Repository\EdgeProvider;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -19,7 +19,7 @@ class EdgeSelection extends AbstractType
 
     public function getParent(): string
     {
-        return ChoiceType::class;
+        return MultiCheckboxType::class;
     }
 
     public function __construct(protected EdgeProvider $provider)
@@ -38,10 +38,6 @@ class EdgeSelection extends AbstractType
         }
         $resolver->setDefaults([
             'choices' => $choices,
-            'multiple' => true,
-            'expanded' => false,
-            'attr' => ['size' => 6],
-            'block_prefix' => 'multiselect_with_tags',
             'choice_translation_domain' => 'sawo'
         ]);
     }

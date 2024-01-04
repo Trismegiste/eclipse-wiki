@@ -1,6 +1,6 @@
 {# Custom render for MultiCheckboxType #}
 {% block multi_checkbox_widget %}
-    <div x-data="{ choices: {{ form.vars.data|default([])|json_encode() }} }">
+    <div x-data="{ choices: {{ form.vars.data|default([])|json_encode() }} }" id="{{ form.vars.id }}" style="--select-size: {{ attr.size }}">
         <div class="multicheckbox">
             {% set options = choices %}
             {{ block('multi_checkbox_options') }}
@@ -9,48 +9,11 @@
             <template x-for="item in choices" :key="item">
                 <label>
                     <span x-text="item"></span>
-                    <input type="checkbox" name="{{ form.vars.full_name }}[]" x-model="choices" x-bind:value="item"/>
+                    <input type="checkbox" name="preview_{{ form.vars.full_name }}[]" x-model="choices" x-bind:value="item"/>
                 </label>
             </template>
         </div>
     </div>
-
-    <style>
-        .multicheckbox {
-            border: 0.91px #ccc solid;
-            box-shadow: rgb(221, 221, 221) 0px 1px 3px 0px inset;
-            border-radius: 4px;
-            overflow-y: auto;
-            height: 200px;
-            padding: 0.5em;
-            margin: 0 0 1em;
-        }
-        .pure-form .multicheckbox > .entry {
-            display: block;
-            margin: 0;
-        }
-        .pure-form .multicheckbox > .entry input[type=checkbox] {
-            margin: 0 0.5em 0.5em 0;
-        }
-        .multicheckbox .entry.entry-title {
-            font-weight: bold;
-            padding-bottom: 0.3em;
-        }
-
-        .preview-choices {
-            margin-bottom: 0.5em;
-        }
-        form fieldset .form-widget .preview-choices label {
-            display: inline-block;
-            background-color: #ddd;
-            padding: 0.3em;
-            border-radius: 0.6em;
-            margin: 0 0.3em 0.6em;
-        }
-        .preview-choices label input[type=checkbox] {
-            margin: 0;
-        }
-    </style>
 {% endblock %}
 
 {% block multi_checkbox_options %}

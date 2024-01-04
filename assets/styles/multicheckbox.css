@@ -1,0 +1,40 @@
+/* 
+    For the AbstractType MultiCheckboxType
+*/
+
+/* The listing */
+.multicheckbox {
+    border: 0.91px #ccc solid;
+    box-shadow: rgb(221, 221, 221) 0px 1px 3px 0px inset;
+    border-radius: 4px;
+    overflow-y: auto;
+    max-height: calc(var(--select-size) * 1.5em);
+    padding: 0.5em;
+    margin: 0 0 1em;
+}
+.pure-form .multicheckbox > .entry {
+    display: block;
+    margin: 0;
+}
+.pure-form .multicheckbox > .entry input[type=checkbox] {
+    margin: 0 0.5em 0.5em 0;
+}
+.multicheckbox .entry.entry-title {
+    font-weight: bold;
+    padding-bottom: 0.3em;
+}
+
+/* the selection */
+.preview-choices {
+    margin-bottom: 0.5em;
+}
+form fieldset .form-widget .preview-choices label {
+    display: inline-block;
+    background-color: #ddd;
+    padding: 0.3em;
+    border-radius: 0.6em;
+    margin: 0 0.3em 0.6em;
+}
+.preview-choices label input[type=checkbox] {
+    margin: 0;
+}

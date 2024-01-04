@@ -79,17 +79,8 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/multicheckbox.css') }}"/>
     <style>
-        .preview-choices {
-            margin-bottom: 0.6em;
-        }
-        form fieldset .form-widget .preview-choices label {
-            display: inline-block;
-            background-color: lightgreen;
-            padding: 0.3em;
-            border-radius: 0.6em;
-            margin: 0 0.3em 0.6em;
-        }
         fieldset h2 {
             margin-bottom: 0;
             background-color: orangered;

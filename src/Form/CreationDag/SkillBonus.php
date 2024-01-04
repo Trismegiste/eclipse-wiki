@@ -6,9 +6,9 @@
 
 namespace App\Form\CreationDag;
 
+use App\Form\Type\MultiCheckboxType;
 use App\Repository\SkillProvider;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -25,7 +25,7 @@ class SkillBonus extends AbstractType
 
     public function getParent(): string
     {
-        return ChoiceType::class;
+        return MultiCheckboxType::class;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -35,13 +35,7 @@ class SkillBonus extends AbstractType
         foreach ($listing as $skill) {
             $choices[$skill->getName()] = $skill->getName();
         }
-        $resolver->setDefaults([
-            'choices' => $choices,
-            'multiple' => true,
-            'expanded' => false,
-            'attr' => ['size' => 6],
-            'block_prefix' => 'multiselect_with_tags'
-        ]);
+        $resolver->setDefaults(['choices' => $choices]);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
