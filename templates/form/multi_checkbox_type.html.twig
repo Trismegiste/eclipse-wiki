@@ -6,7 +6,7 @@
             {{ block('multi_checkbox_options') }}
         </div>
         <div class="preview-choices">
-            <template x-for="item in choices">
+            <template x-for="item in choices" :key="item">
                 <label>
                     <span x-text="item"></span>
                     <input type="checkbox" name="{{ form.vars.full_name }}[]" x-model="choices" x-bind:value="item"/>
