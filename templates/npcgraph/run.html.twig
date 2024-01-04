@@ -3,11 +3,7 @@
 
 {% block title %}Création rapide de Transhumain{% endblock %}
 {% block header_title %}
-    <div style="float: right">
-        <a href="{{ path('app_npcgraphcrud_edit') }}" title="Éditer le graphe">
-            <i class="icon-edit"></i>
-        </a>
-    </div>
+    {{ include('npcgraph/menu.html.twig') }}
     {{ block('title') }}
 {% endblock %}
 

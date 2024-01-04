@@ -3,11 +3,7 @@
 
 {% block title %}Édition du graphe de création{% endblock %}
 {% block header_title %}
-    <div style="float: right">
-        <a href="{{ path('app_npcgraphcrud_run') }}" title="Création">
-            <i class="icon-user-plus"></i>
-        </a>
-    </div>
+    {{ include('npcgraph/menu.html.twig') }}
     {{ block('title') }}
 {% endblock %}
 

@@ -3,11 +3,7 @@
 
 {% block title %}Editer {{ app.current_route_parameters.propertyName }} au niveau {{ app.current_route_parameters.level }}{% endblock %}
 {% block header_title %}
-    <div style="float: right">
-        <a href="{{ path('app_npcgraphcrud_edit') }}" title="Éditer le graphe">
-            <i class="icon-edit"></i>
-        </a>
-    </div>
+    {{ include('npcgraph/menu.html.twig') }}
     {{ block('title') }}
 {% endblock %}
 
