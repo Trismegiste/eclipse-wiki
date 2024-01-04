@@ -16,14 +16,19 @@
 {% endblock %}
 
 {% block _tree_level_edit_widget %}
+    {{ form_widget(form._token) }}
+    {% set buttonRender = form_row(form.save) %}
     <div class="pure-g">
         {% for child in form %}
-            <div class="pure-u-1-5 form-widget">
-                <h2>{{ form_label(child) }}</h2>
-                {{ form_widget(child) }}
-            </div>
+            {% if not child.rendered %}
+                <div class="pure-u-1-5 form-widget">
+                    <h2>{{ form_label(child) }}</h2>
+                    {{ form_widget(child) }}
+                </div>
+            {% endif %}
         {% endfor %}
     </div>
+    {{ buttonRender|raw }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -39,15 +44,7 @@
 {% block sidebar %}
     {% set current_level = app.current_route_parameters.level %}
     {% set current_prop = app.current_route_parameters.propertyName %}
-    {% set properties = [
-        'attributes',
-        'skills',
-        'edges',
-        'networks',
-        'backgrounds',
-        'factions',
-        'morphs'
-    ] %}
+    {% set properties = form.vars.property_names %}
     <nav class="pure-menu">
         <ul class="pure-menu-list">
             {% for item in properties %}

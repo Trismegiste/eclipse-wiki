@@ -7,12 +7,15 @@
 namespace App\Form\CreationDag;
 
 use App\Entity\CreationTree\Graph;
+use App\Form\Type\MultiCheckboxType;
 use App\Repository\BackgroundProvider;
 use App\Repository\FactionProvider;
 use App\Repository\MorphProvider;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -39,8 +42,7 @@ class TreeLevelEdit extends AbstractType
                 $childOptions = [
                     'required' => false,
                     'property_path' => "node[$idx]." . $options['property_name'],
-                    'label' => $node->name,
-                    'attr' => ['size' => 12]
+                    'label' => $node->name
                 ];
                 switch ($options['property_name']) {
                     case 'attributes':
@@ -51,21 +53,25 @@ class TreeLevelEdit extends AbstractType
                         break;
                     case 'edges':
                         $fqcn = EdgeSelection::class;
+                        $childOptions['attr'] = ['size' => 15];
                         break;
                     case 'networks':
                         $fqcn = NetworkBonus::class;
                         break;
                     case 'backgrounds':
-                        $fqcn = \App\Form\Type\MultiCheckboxType::class;
+                        $fqcn = MultiCheckboxType::class;
                         $childOptions['choices'] = $this->background->getListing();
+                        $childOptions['attr'] = ['size' => 12];
                         break;
                     case 'factions':
-                        $fqcn = \App\Form\Type\MultiCheckboxType::class;
+                        $fqcn = MultiCheckboxType::class;
                         $childOptions['choices'] = $this->faction->getListing();
+                        $childOptions['attr'] = ['size' => 12];
                         break;
                     case 'morphs':
-                        $fqcn = \App\Form\Type\MultiCheckboxType::class;
+                        $fqcn = MultiCheckboxType::class;
                         $childOptions['choices'] = $this->morph->getListing();
+                        $childOptions['attr'] = ['size' => 12];
                         break;
                 }
                 $builder->add("property_$idx", $fqcn, $childOptions);
@@ -73,8 +79,7 @@ class TreeLevelEdit extends AbstractType
         }
 
         $builder->add('save', SubmitType::class)
-                ->setMethod('PUT')
-        ;
+                ->setMethod('PUT');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -83,6 +88,19 @@ class TreeLevelEdit extends AbstractType
             'data_class' => Graph::class,
         ]);
         $resolver->setRequired(['level', 'property_name']);
+    }
+
+    public function finishView(FormView $view, FormInterface $form, array $options): void
+    {
+        $view->vars['property_names'] = [
+            'attributes',
+            'skills',
+            'edges',
+            'networks',
+            'backgrounds',
+            'factions',
+            'morphs'
+        ];
     }
 
 }
