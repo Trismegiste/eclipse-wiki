@@ -2,12 +2,8 @@
 {% block multi_checkbox_widget %}
     <div x-data="{ choices: {{ form.vars.data|default([])|json_encode() }} }">
         <div class="multicheckbox">
-            {% for group_label, choice in choices %}
-                <label class="entry">
-                    <input type="checkbox" name="{{ form.vars.full_name }}[]" x-model="choices" value="{{ choice.value }}"/>
-                    {{- choice.label -}}
-                </label>
-            {% endfor -%}
+            {% set options = choices %}
+            {{ block('multi_checkbox_options') }}
         </div>
         <div class="preview-choices">
             <template x-for="item in choices">
@@ -32,6 +28,10 @@
         .pure-form .multicheckbox > .entry input[type=checkbox] {
             margin: 0 0.5em 0.5em 0;
         }
+        .multicheckbox .entry.entry-title {
+            font-weight: bold;
+        }
+
         .preview-choices {
             margin-bottom: 0.6em;
         }
@@ -43,4 +43,19 @@
             margin: 0 0.3em 0.6em;
         }
     </style>
+{% endblock %}
+
+{% block multi_checkbox_options %}
+    {% for group_label, choice in options %}
+        {%- if choice is iterable -%}
+            <label class="entry entry-title">{{ group_label }}</label>
+            {% set options = choice %}
+            {{- block('multi_checkbox_options') -}}
+        {% else %}
+            <label class="entry">
+                <input type="checkbox" name="{{ form.vars.full_name }}[]" x-model="choices" value="{{ choice.value }}"/>
+                {{- choice.label -}}
+            </label>
+        {% endif %}
+    {% endfor -%}
 {% endblock %}

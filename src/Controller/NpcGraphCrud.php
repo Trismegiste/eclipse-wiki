@@ -84,14 +84,15 @@ class NpcGraphCrud extends AbstractController
         return $this->render('npcgraph/delete.html.twig', ['form' => $form->createView()]);
     }
 
-    #[Route('/essai', methods: ['GET','POST'])]
+    #[Route('/essai', methods: ['GET', 'POST'])]
     public function essai(Request $request): Response
     {
         $form = $this->createFormBuilder()
                 ->add('skills', \App\Form\Type\MultiCheckboxType::class, ['choices' => ['toto' => 3]])
+                ->add('edges', \App\Form\Type\MultiCheckboxType::class, ['choices' => ['group' => ['titi' => 4]]])
                 ->add('submit', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
                 ->getForm();
-        
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->addFlash('success', 'YOLO');
