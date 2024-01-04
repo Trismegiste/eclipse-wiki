@@ -7,16 +7,14 @@
 namespace App\Form;
 
 use App\Entity\Timeline;
-use App\Form\Type\WikitextContentMapper;
+use App\Form\Type\TreeBuilderMapper;
 use App\Form\Type\WikitextType;
-use App\Repository\VertexRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Twig\Environment;
 
 /**
  * Creation of timeline
@@ -42,7 +40,7 @@ class TimelineCreate extends AbstractType
                     'label' => '5 acts'
                 ])
         ;
-        $builder->get('tree')->setDataMapper(new Type\TreeBuilderMapper());
+        $builder->get('tree')->setDataMapper(new TreeBuilderMapper());
     }
 
     public function configureOptions(OptionsResolver $resolver): void
