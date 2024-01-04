@@ -66,17 +66,6 @@
     </div>
 {% endblock %}
 
-{% block multiselect_with_tags_widget %}
-    <div x-data="{ choices: {{ form.vars.data|default([])|json_encode() }} }" class="pure-g">
-        {{ form_widget(form, {attr:{'x-model':'choices', class:'pure-u-1'}}) }}
-        <div class="pure-u-1 preview-choices">
-            <template x-for="item in choices">
-                <label x-text="item"></label>
-            </template>
-        </div>
-    </div>
-{% endblock %}
-
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('styles/multicheckbox.css') }}"/>
