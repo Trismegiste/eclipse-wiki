@@ -33,4 +33,13 @@ class Node implements Persistable
         $this->name = $name;
     }
 
+    protected function beforeSave(): void
+    {
+        $this->edges = array_values($this->edges);
+        $this->backgrounds = array_values($this->backgrounds);
+        $this->factions = array_values($this->factions);
+        $this->morphs = array_values($this->morphs);
+        $this->children = array_values($this->children);
+    }
+
 }
