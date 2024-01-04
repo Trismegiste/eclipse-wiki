@@ -48,7 +48,7 @@
 {% block multi_checkbox_options %}
     {% for group_label, choice in options %}
         {%- if choice is iterable -%}
-            <label class="entry entry-title">{{ group_label }}</label>
+            <label class="entry entry-title">{{ choice_translation_domain is same as(false) ? group_label : group_label|trans({}, choice_translation_domain) }}</label>
             {% set options = choice %}
             {{- block('multi_checkbox_options') -}}
         {% else %}
