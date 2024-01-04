@@ -7,11 +7,11 @@
 namespace App\Form\CreationDag;
 
 use App\Entity\CreationTree\Node;
+use App\Form\Type\MultiCheckboxType;
 use App\Repository\BackgroundProvider;
 use App\Repository\FactionProvider;
 use App\Repository\MorphProvider;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -40,29 +40,14 @@ class NodeType extends AbstractType
                 ->add('skills', SkillBonus::class, ['required' => false])
                 ->add('edges', EdgeSelection::class, ['required' => false])
                 ->add('networks', NetworkBonus::class, ['required' => false])
-                ->add('backgrounds', ChoiceType::class, [
-                    'choices' => $this->background->getListing(),
-                    'multiple' => true,
-                    'expanded' => false,
-                    'required' => false,
-                    'attr' => ['size' => 6],
-                    'block_prefix' => 'multiselect_with_tags'
+                ->add('backgrounds', MultiCheckboxType::class, [
+                    'choices' => $this->background->getListing()
                 ])
-                ->add('factions', ChoiceType::class, [
-                    'choices' => $this->faction->getListing(),
-                    'multiple' => true,
-                    'expanded' => false,
-                    'required' => false,
-                    'attr' => ['size' => 6],
-                    'block_prefix' => 'multiselect_with_tags'
+                ->add('factions', MultiCheckboxType::class, [
+                    'choices' => $this->faction->getListing()
                 ])
-                ->add('morphs', ChoiceType::class, [
-                    'choices' => $this->morph->getListing(),
-                    'multiple' => true,
-                    'expanded' => false,
-                    'required' => false,
-                    'attr' => ['size' => 6],
-                    'block_prefix' => 'multiselect_with_tags'
+                ->add('morphs', MultiCheckboxType::class, [
+                    'choices' => $this->morph->getListing()
                 ])
                 ->add('text2img', TextType::class, ['required' => false])
                 ->add('children', NodeLinkType::class, [
