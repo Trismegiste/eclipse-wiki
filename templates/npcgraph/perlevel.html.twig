@@ -1,7 +1,7 @@
 {% extends "base.html.twig" %}
 {% form_theme(form) _self %}
 
-{% block title %}Editer {{ app.current_route_parameters.propertyName }} au niveau {{ app.current_route_parameters.level }}{% endblock %}
+{% block title %}Editer {{ app.current_route_parameters.propertyName|capitalize|trans }} au niveau {{ app.current_route_parameters.level }}{% endblock %}
 {% block header_title %}
     {{ include('npcgraph/menu.html.twig') }}
     {{ block('title') }}
@@ -46,7 +46,7 @@
             {% for item in properties %}
                 <li class="pure-menu-item">
                     <a href="{{ path(app.current_route, {propertyName: item, level: current_level}) }}" class="pure-menu-link">
-                        {{ item }}
+                        {{ item|capitalize|trans }}
                     </a>
                 </li>
             {% endfor %}
