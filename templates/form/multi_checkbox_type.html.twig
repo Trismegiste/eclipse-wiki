@@ -7,7 +7,10 @@
         </div>
         <div class="preview-choices">
             <template x-for="item in choices">
-                <label x-text="item"></label>
+                <label>
+                    <span x-text="item"></span>
+                    <input type="checkbox" name="{{ form.vars.full_name }}[]" x-model="choices" x-bind:value="item"/>
+                </label>
             </template>
         </div>
     </div>
@@ -33,14 +36,17 @@
         }
 
         .preview-choices {
-            margin-bottom: 0.6em;
+            margin-bottom: 0.5em;
         }
         form fieldset .form-widget .preview-choices label {
             display: inline-block;
-            background-color: lightgreen;
+            background-color: lightgrey;
             padding: 0.3em;
             border-radius: 0.6em;
             margin: 0 0.3em 0.6em;
+        }
+        .preview-choices label input[type=checkbox] {
+            margin: 0;
         }
     </style>
 {% endblock %}
