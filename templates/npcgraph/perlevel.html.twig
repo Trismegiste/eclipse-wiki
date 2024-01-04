@@ -1,0 +1,28 @@
+{% extends "base.html.twig" %}
+{% form_theme(form) _self %}
+
+{% block title %}Editer XXX au niveau YYY{% endblock %}
+{% block header_title %}
+    <div style="float: right">
+        <a href="{{ path('app_npcgraphcrud_edit') }}" title="Éditer le graphe">
+            <i class="icon-edit"></i>
+        </a>
+    </div>
+    {{ block('title') }}
+{% endblock %}
+
+{% block content %}
+    <p>{{ block('title') }}</p>
+    {{ form(form) }}
+{% endblock %}
+
+{% block _tree_level_edit_widget %}
+    <div class="pure-g">
+        {% for child in form %}
+            <div class="pure-u-1-5">
+                <h2>{{ form_label(child) }}</h2>
+                {{ form_widget(child) }}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

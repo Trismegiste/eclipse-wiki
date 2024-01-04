@@ -84,24 +84,23 @@ class NpcGraphCrud extends AbstractController
         return $this->render('npcgraph/delete.html.twig', ['form' => $form->createView()]);
     }
 
-    #[Route('/essai', methods: ['GET', 'POST'])]
-    public function essai(Request $request): Response
+    #[Route('/perlevel/{level}/{propertyName}', methods: ['GET', "PUT"])]
+    public function perlevel(int $level, string $propertyName, Request $request): Response
     {
-        $form = $this->createFormBuilder()
-                ->add('skills', \App\Form\Type\MultiCheckboxType::class, ['choices' => ['toto' => 3]])
-                ->add('edges', \App\Form\Type\MultiCheckboxType::class, [
-                    'choices' => ['cbt' => ['titi' => 4]],
-                    'choice_translation_domain' => 'sawo'
-                ])
-                ->add('submit', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
-                ->getForm();
+        $fullGraph = $this->provider->load();
 
+        $form = $this->createForm(\App\Form\CreationDag\TreeLevelEdit::class, $fullGraph, [
+            'property_name' => $propertyName,
+            'level' => $level
+        ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->addFlash('success', 'YOLO');
+            $this->provider->save($form->getData());
+
+            return $this->redirectToRoute('app_npcgraphcrud_edit');
         }
 
-        return $this->render('form.html.twig', ['form' => $form->createView(), 'title' => '']);
+        return $this->render('npcgraph/perlevel.html.twig', ['form' => $form->createView()]);
     }
 
 }
