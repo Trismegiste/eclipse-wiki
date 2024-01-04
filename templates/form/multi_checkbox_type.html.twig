@@ -2,8 +2,11 @@
 {% block multi_checkbox_widget %}
     <div x-data="{ choices: {{ form.vars.data|default([])|json_encode() }} }">
         <div class="multicheckbox">
-            {%- for child in form %}
-                <label class="entry">{{- form_widget(child) -}}{{- child.vars.label -}}</label>
+            {% for group_label, choice in choices %}
+                <label class="entry">
+                    <input type="checkbox" name="{{ form.vars.full_name }}[]" x-model="choices" value="{{ choice.value }}"/>
+                    {{- choice.label -}}
+                </label>
             {% endfor -%}
         </div>
         <div class="preview-choices">
