@@ -1,4 +1,33 @@
 {# Custom render for MultiCheckboxType #}
 {% block multi_checkbox_widget %}
-    YOLO
+    <div x-data="{ choices: {{ form.vars.data|default([])|json_encode() }} }">
+        <div class="multicheckbox">
+            {%- for child in form %}
+                <label class="entry">{{- form_widget(child) -}}{{- child.vars.label -}}</label>
+            {% endfor -%}
+        </div>
+        <div class="preview-choices">
+            <template x-for="item in choices">
+                <label x-text="item"></label>
+            </template>
+        </div>
+    </div>
+
+    <style>
+        .multicheckbox {
+            border: 1px #ccc solid;
+            border-radius: 4px;
+            overflow-y: auto;
+            height: 200px;
+            padding: 0.5em;
+            margin: 0 0 1em;
+        }
+        .pure-form .multicheckbox > .entry {
+            display: block;
+            margin: 0;
+        }
+        .pure-form .multicheckbox > .entry input[type=checkbox] {
+            margin: 0 0.5em 0.5em 0;
+        }
+    </style>
 {% endblock %}

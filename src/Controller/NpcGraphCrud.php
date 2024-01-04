@@ -88,7 +88,7 @@ class NpcGraphCrud extends AbstractController
     public function essai(): Response
     {
         $form = $this->createFormBuilder()
-                ->add('skills', \App\Form\Type\MultiCheckboxType::class)
+                ->add('skills', \App\Form\Type\MultiCheckboxType::class, ['choices' => ['toto' => 3]])
                 ->add('submit', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
                 ->getForm();
 

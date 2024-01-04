@@ -25,7 +25,8 @@ class MultiCheckboxType extends AbstractType
     {
         $resolver->setDefaults([
             'multiple' => true,
-            'expanded' => false
+            'expanded' => true,
+            'attr' => ['x-model' => 'choices']
         ]);
     }
 
