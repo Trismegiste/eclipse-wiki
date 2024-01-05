@@ -32,7 +32,7 @@ class EdgeSelection extends AbstractType
         $listing = $this->provider->getListing();
         $choices = [];
         foreach ($listing as $item) {
-            if (!in_array($item->getCategory(), ['leg', 'etr']) && in_array($item->getRank(), ['n', 'a'])) {
+            if (!in_array($item->getCategory(), ['leg', 'etr']) && $item->isEgo() && in_array($item->getRank(), ['n', 'a'])) {
                 $choices[$item->getCategory()][$item->getName() . ' (' . strtoupper($item->getRank()) . ')'] = $item->getName();
             }
         }
