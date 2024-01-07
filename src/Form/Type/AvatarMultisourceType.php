@@ -52,7 +52,7 @@ class AvatarMultisourceType extends AbstractType
                     'required' => false,
                     'block_prefix' => 'invokeai_avatar',
                     'data' => $options['default_prompt'],
-                    'attr' => ['x-model.fill' => 'query']
+                    'attr' => ['x-model.fill' => 'query', 'x-on:keydown' => 'preventSubmit']
                 ])
                 ->add('multicultural', ChoiceType::class, [
                     'required' => false,

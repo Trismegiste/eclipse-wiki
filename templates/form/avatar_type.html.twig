@@ -76,14 +76,18 @@
 
 {% block invokeai_avatar_row %}
     <div class="pure-g" x-data="invokeAi('{{ path('app_invokeaipicture_ajaxsearch', {source:'local'}) }}')">
-        <div class="pure-u-1">
+        <section class="pure-u-1">
             {{ form_widget(form, {attr:{class:'pure-input-1'}}) }}
-        </div>
-        <template x-for="pic in getListing()" :key="pic.name">
-            <div class="avatar-sample pure-u-1-4">
-                <img x-bind:src="pic.thumb" x-on:click="select"/>
+        </section>
+        <section class="pure-u-1">
+            <div class="pure-g invokeai-result">
+                <template x-for="pic in getListing()" :key="pic.name">
+                    <div class="avatar-sample pure-u-1-4">
+                        <img x-bind:src="pic.thumb" x-on:click="select"/>
+                    </div>
+                </template>
             </div>
-        </template>
+        </section>
     </div>
     <script type="module">
         Alpine.data('invokeAi', (searchUrl) => ({
@@ -106,6 +110,13 @@
                         bubbles: true,
                         detail: {dataUrl: event.target.src}
                     }))
+                },
+
+                preventSubmit(event) {
+                    if (event.keyCode === 13) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
                 }
             }))
     </script>
@@ -152,6 +163,11 @@
         {% endfor %}
     </div>
     <style>
+        .invokeai-result {
+            overflow-y: auto;
+            max-height: 700px;
+        }
+
         .multisource-widget .pure-menu-horizontal {
             margin-bottom: 1em;
         }
