@@ -1,18 +1,17 @@
 {# Custom rendering for RandomIntegerType #}
 {% block random_integer_widget %}
-    {% set idButton = id ~ '_randomize' %}
-    <div class="pure-g">
-        <div class="pure-u-1-2">{{ form_widget(form, {attr: {class: 'pure-input-1'}}) }}</div>
-        <div class="pure-u-1-2"><a class="pure-button pure-input-1" id="{{ idButton }}"><i class="icon-randomize"></i>Random</a></div>
-        <script>
-            document.getElementById('{{ idButton }}').addEventListener('click', function (e) {
-                let widget = document.getElementById('{{ id }}')
-                widget.value = Math.floor(100000 * Math.random())
-                const event = new Event('change', {bubbles: true})
-                widget.dispatchEvent(event)
-            })
-        </script>
+    <div class="pure-g" x-data="randomInteger">
+        <div class="pure-u-1-2">{{ form_widget(form, {attr: {class: 'pure-input-1', 'x-model.fill': 'result'}}) }}</div>
+        <div class="pure-u-1-2"><a class="pure-button pure-input-1" x-on:click.prevent="roll"><i class="icon-randomize"></i>Random</a></div>
     </div>
+    <script type="module">
+        Alpine.data('randomInteger', () => ({
+                result: null,
+                roll(e) {
+                    this.result = Math.floor(100000 * Math.random())
+                }
+            }))
+    </script>
 {% endblock %}
 
 {# Custom rendering for RandomNameType #}
