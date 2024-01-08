@@ -1,5 +1,7 @@
 {% extends "base.html.twig" %}
-{% block header_title %}Liste des Vertex{% endblock %}
+{% block title %}Liste des Vertex{% endblock %}
+{% block header_title %}{{ block('title') }}{% endblock %}
+
 {% block content %}
     <div x-data="searchEngine">
         <form class="pure-form" x-on:submit="goToFirst">
