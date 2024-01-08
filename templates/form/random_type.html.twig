@@ -1,7 +1,7 @@
 {# Custom rendering for RandomIntegerType #}
 {% block random_integer_widget %}
     <div class="pure-g" x-data="randomInteger">
-        <div class="pure-u-1-2">{{ form_widget(form, {attr: {class: 'pure-input-1', 'x-model.fill': 'result'}}) }}</div>
+        <div class="pure-u-1-2">{{ form_widget(form) }}</div>
         <div class="pure-u-1-2"><a class="pure-button pure-input-1" x-on:click.prevent="roll"><i class="icon-randomize"></i>Random</a></div>
     </div>
     <script type="module">
