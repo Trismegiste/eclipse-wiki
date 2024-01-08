@@ -6,14 +6,17 @@
 
 use App\Repository\CreationGraphProvider;
 use App\Repository\VertexRepository;
+use App\Service\StableDiffusion\LocalRepository;
 use App\Service\Storage;
+use App\Tests\Command\StableDiffusion\PngFixture;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Trismegiste\Strangelove\MongoDb\Repository;
 
 class NpcGraphCrudTest extends WebTestCase
 {
-use \App\Tests\Command\StableDiffusion\PngFixture;
+
+    use PngFixture;
 
     protected KernelBrowser $client;
     protected Repository $repository;
@@ -75,7 +78,7 @@ use \App\Tests\Command\StableDiffusion\PngFixture;
     public function testRun()
     {
         // fixtures
-        $storage = static::getContainer()->get(\App\Service\StableDiffusion\LocalRepository::class);
+        $storage = static::getContainer()->get(LocalRepository::class);
         $this->insertFixturesInto($storage->getRootDir());
         // quick select
         $crawler = $this->client->request('GET', '/npc-graph/run');
@@ -84,7 +87,7 @@ use \App\Tests\Command\StableDiffusion\PngFixture;
         $form = $crawler->selectButton('selector_generate')->form();
 
         $values = $form->getPhpValues();
-        $values['selector']['title'] = 'Quick NPC '.rand();
+        $values['selector']['title'] = 'Quick NPC ' . rand();
         $values['selector']['background'] = 'Hilote';
         $values['selector']['faction'] = 'Tamiseur';
         $values['selector']['morph'] = 'Basique';
@@ -121,6 +124,12 @@ use \App\Tests\Command\StableDiffusion\PngFixture;
         $this->assertResponseIsSuccessful();
         $elem = $crawler->filter('form.pure-form h2');
         $this->assertCount(2, $elem);
+    }
+
+    public function testEditPerLevel()
+    {
+        $this->client->request('GET', '/npc-graph/perlevel/1/attributes');
+        $this->assertResponseIsSuccessful();
     }
 
 }

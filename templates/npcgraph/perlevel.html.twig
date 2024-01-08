@@ -12,11 +12,9 @@
 {% endblock %}
 
 {% block _tree_level_edit_widget %}
-    {{ form_widget(form._token) }}
-    {% set buttonRender = form_row(form.save) %}
     <div class="pure-g">
         {% for child in form %}
-            {% if not child.rendered %}
+            {% if child.vars.name starts with 'property_' %}
                 <div class="pure-u-1-5 form-widget">
                     <h2>{{ form_label(child) }}</h2>
                     {{ form_widget(child) }}
@@ -24,7 +22,6 @@
             {% endif %}
         {% endfor %}
     </div>
-    {{ buttonRender|raw }}
 {% endblock %}
 
 {% block stylesheets %}
