@@ -19,6 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * CRUD for Timeline entity
  */
+#[Route('/timeline')]
 class TimelineCrud extends GenericCrud
 {
 
@@ -31,7 +32,7 @@ class TimelineCrud extends GenericCrud
      * @param Request $request
      * @return Response
      */
-    #[Route('/timeline/create', methods: ['GET', 'POST'])]
+    #[Route('/create', methods: ['GET', 'POST'])]
     public function create(Request $request): Response
     {
         return $this->handleCreate(TimelineCreate::class, 'timeline/create.html.twig', $request);
@@ -42,7 +43,7 @@ class TimelineCrud extends GenericCrud
      * @param Request $request
      * @return Response
      */
-    #[Route('/timeline/edit/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
+    #[Route('/edit/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function edit(string $pk, Request $request): Response
     {
         $vertex = $this->repository->findByPk($pk);
@@ -76,7 +77,7 @@ class TimelineCrud extends GenericCrud
     /**
      * Pin the current timeline in the user session
      */
-    #[Route('/timeline/pin/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
+    #[Route('/pin/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function pin(Timeline $timeline, GameSessionTracker $tracker): Response
     {
         $tracker->getDocument()->setTimeline($timeline);

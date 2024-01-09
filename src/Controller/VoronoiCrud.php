@@ -26,6 +26,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * CRUD controler for Hexagonal map
  */
+#[Route('/voronoi')]
 class VoronoiCrud extends AbstractController
 {
 
@@ -41,7 +42,7 @@ class VoronoiCrud extends AbstractController
     /**
      * Creates or Edits a voronoi Map in the current Place
      */
-    #[Route('/voronoi/edit/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
+    #[Route('/edit/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function edit(Place $place, Request $request): Response
     {
         $form = $this->createFormBuilder($place)
@@ -63,7 +64,7 @@ class VoronoiCrud extends AbstractController
 
     /**
      */
-    #[Route('/voronoi/generate/{pk}/{fog}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
+    #[Route('/generate/{pk}/{fog}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function generate(SvgDumper $dumper, Place $place, bool $fog = true): Response
     {
         $config = $place->voronoiParam;
@@ -85,7 +86,7 @@ class VoronoiCrud extends AbstractController
      * Edits tiles texturing of a map with direct view (loop)
      * {tileset} is here for future tileset one day
      */
-    #[Route('/voronoi/texture/{pk}/{tileset}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
+    #[Route('/texture/{pk}/{tileset}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function texture(Place $place, Request $request, $tileset = 'habitat'): Response
     {
         $form = $this->createFormBuilder($place)
@@ -106,7 +107,7 @@ class VoronoiCrud extends AbstractController
 
     /**
      */
-    #[Route('/voronoi/statistics/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
+    #[Route('/statistics/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function statistics(Place $place): Response
     {
         $config = $place->voronoiParam;
@@ -118,7 +119,7 @@ class VoronoiCrud extends AbstractController
     /**
      * Edits tiles populations of a map
      */
-    #[Route('/voronoi/populate/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
+    #[Route('/populate/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function populate(Place $place, Request $request): Response
     {
         $form = $this->createFormBuilder($place)
