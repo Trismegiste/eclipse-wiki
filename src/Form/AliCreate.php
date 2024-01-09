@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 
 /**
- * Description of AliCreate
+ * Creation of an A.L.I
  */
 class AliCreate extends AbstractType
 {

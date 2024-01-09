@@ -18,9 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Traversable;
 
 /**
- * Description of DeleteNode
- *
- * @author trismegiste
+ * For deleting a node in the quick NPC graph
  */
 class DeleteNode extends AbstractType implements DataMapperInterface
 {

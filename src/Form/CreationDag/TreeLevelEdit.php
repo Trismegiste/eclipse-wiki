@@ -19,9 +19,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Description of TreeLevelEdit
- *
- * @author florent
+ * For editing ONE property of all nodes at a given level in the npc quickgraph tree
  */
 class TreeLevelEdit extends AbstractType
 {

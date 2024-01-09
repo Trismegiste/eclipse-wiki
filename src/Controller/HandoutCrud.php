@@ -10,7 +10,7 @@ use App\Entity\Handout;
 use App\Entity\Vertex;
 use App\Form\HandoutType;
 use App\Repository\VertexRepository;
-use App\Service\ObjectPushFactory;
+use App\Service\DocumentBroadcaster;
 use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * CRUD for Handout
  */
+#[Route('/handout')]
 class HandoutCrud extends GenericCrud
 {
 
@@ -40,7 +41,7 @@ class HandoutCrud extends GenericCrud
     /**
      * Creates a Handout
      */
-    #[Route('/handout/create', methods: ['GET', 'POST'])]
+    #[Route('/create', methods: ['GET', 'POST'])]
     public function create(Request $request): Response
     {
         return $this->handleCreate(HandoutType::class, 'handout/create.html.twig', $request);
@@ -49,7 +50,7 @@ class HandoutCrud extends GenericCrud
     /**
      * Edits a Handout
      */
-    #[Route('/handout/edit/{pk}', methods: ['GET', 'PUT'])]
+    #[Route('/edit/{pk}', methods: ['GET', 'PUT'])]
     public function edit(string $pk, Request $request): Response
     {
         return $this->handleEdit(HandoutType::class, 'handout/edit.html.twig', $pk, $request);
@@ -58,8 +59,8 @@ class HandoutCrud extends GenericCrud
     /**
      * Generates the Handout PDF and prints a QR Code for player
      */
-    #[Route('/handout/qrcode/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function qrcode(Handout $vertex, \App\Service\DocumentBroadcaster $broadcast): Response
+    #[Route('/qrcode/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
+    public function qrcode(Handout $vertex, DocumentBroadcaster $broadcast): Response
     {
         $title = sprintf("Handout-%s.pdf", $vertex->getTitle());
         $html = $this->renderView('handout/pc_export.pdf.twig', ['vertex' => $vertex]);

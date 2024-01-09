@@ -16,9 +16,7 @@ use Trismegiste\Strangelove\MongoDb\Repository;
 use Trismegiste\Strangelove\MongoDb\Root;
 
 /**
- * Description of AjaxCompleteType
- *
- * @author trismegiste
+ * Autocomplete with ajax calls
  */
 class AjaxCompleteType extends AbstractType
 {
