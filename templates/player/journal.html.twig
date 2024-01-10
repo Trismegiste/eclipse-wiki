@@ -4,7 +4,9 @@
 {% block title %}Player{% endblock %}
 
 {% block body %}
-    <div class="swiper" x-data="playerLog" x-on:dblclick="toggleFullScreen">
+    <div class="swiper"
+         x-data="playerLog('{{ mercure('player-channel') }}')"
+         x-on:dblclick="toggleFullScreen">
         <div class="swiper-wrapper" x-ref="journal">
             <div class="swiper-slide">Slide 1</div>
             <div class="swiper-slide">Slide 2</div>
@@ -15,20 +17,16 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script type="application/json" id="mercure-url">
-        {{ mercure('player-channel')|json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
-    </script>
     <script type="module">
         import Swiper from 'swiper/swiper-bundle';
         import Manipulation from 'swiper/modules/manipulation';
 
-        Alpine.data('playerLog', () => ({
+        Alpine.data('playerLog', (host) => ({
                 socket: null,
                 swiper: null,
 
                 init() {
                     // Socket
-                    const host = JSON.parse(document.getElementById("mercure-url").textContent)
                     this.socket = new EventSource(host)
 
                     this.socket.onopen = (msg) => {
