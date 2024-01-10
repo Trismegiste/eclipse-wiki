@@ -7,4 +7,10 @@
 http://192.168.*.*:80 {
 	root * /app/public
 	php_server
+        mercure {
+            publisher_jwt coucoucoucoucoucdffddfdfdfdfuocoucccoucuocou HS256
+            anonymous true
+            transport_url local://local
+            subscriptions
+        }
 }

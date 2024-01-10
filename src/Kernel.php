@@ -35,4 +35,10 @@ class Kernel extends BaseKernel
             $routes->import('../config/{routes}.php');
         }
     }
+    
+    protected function build(\Symfony\Component\DependencyInjection\ContainerBuilder $container): void
+    {
+        $container->addCompilerPass(new DependencyInjection\NetworkPass());
+    }
+
 }

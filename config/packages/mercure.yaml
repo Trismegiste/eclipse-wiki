@@ -1,0 +1,8 @@
+mercure:
+    hubs:
+        default:
+            url: 'dummy'
+            public_url: 'dummy'
+            jwt:
+                secret: '%env(MERCURE_JWT_SECRET)%'
+                publish: '*'

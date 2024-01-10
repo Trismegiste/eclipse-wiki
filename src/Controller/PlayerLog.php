@@ -20,7 +20,7 @@ class PlayerLog extends AbstractController
     #[Route('/log')]
     public function index(): Response
     {
-        return $this->render('player/swiper.html.twig');
+        return $this->render('player/journal.html.twig');
     }
 
 }

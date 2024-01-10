@@ -24,6 +24,7 @@
         "symfony/framework-bundle": "^6.4",
         "symfony/http-client": "^6.4",
         "symfony/intl": "^6.4",
+        "symfony/mercure-bundle": "^0.3.8",
         "symfony/mime": "^6.4",
         "symfony/monolog-bundle": "^3.1",
         "symfony/process": "^6.4",
