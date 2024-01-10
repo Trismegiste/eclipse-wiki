@@ -4,7 +4,7 @@
 {% block title %}Player{% endblock %}
 
 {% block body %}
-    <div class="swiper" x-data="playerLog">
+    <div class="swiper" x-data="playerLog" x-on:dblclick="toggleFullScreen">
         <div class="swiper-wrapper" x-ref="journal">
             <div class="swiper-slide">Slide 1</div>
             <div class="swiper-slide">Slide 2</div>
@@ -53,7 +53,16 @@
                         direction: 'vertical',
                         modules: [Manipulation]
                     })
+                },
+
+                toggleFullScreen() {
+                    if (!document.fullscreenElement) {
+                        document.documentElement.requestFullscreen();
+                    } else if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    }
                 }
+
             }))
     </script>
 {% endblock %}

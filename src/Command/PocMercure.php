@@ -26,7 +26,7 @@ class PocMercure extends Command
     {
         $update = new Update(
                 'player-channel',
-                '<img class="pure-img" src="data:image/png;base64,' . base64_encode(file_get_contents('/app/public/img/mire.png')) . '"/>'
+                '<img src="data:image/png;base64,' . base64_encode(file_get_contents('/app/public/img/mire.png')) . '"/>'
         );
 
         $this->hub->publish($update);
