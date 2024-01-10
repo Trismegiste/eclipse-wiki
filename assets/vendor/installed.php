@@ -110,4 +110,14 @@
     array (
     ),
   ),
+  'swiper' => 
+  array (
+    'version' => '11.0.5',
+    'dependencies' => 
+    array (
+    ),
+    'extraFiles' => 
+    array (
+    ),
+  ),
 );

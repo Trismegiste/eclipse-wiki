@@ -96,4 +96,7 @@ return [
     '@multiavatar/multiavatar' => [
         'version' => '1.0.7',
     ],
+    'swiper' => [
+        'version' => '11.0.5',
+    ],
 ];
