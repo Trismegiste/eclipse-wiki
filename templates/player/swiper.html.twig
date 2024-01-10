@@ -1,14 +1,11 @@
-{# empty Twig template #}
+{# Player log view #}
 {% extends "base.html.twig" %}
 
-{% block header_title %}YOLO{% endblock %}
+{% block title %}Player{% endblock %}
 
 {% block body %}
-    <!-- Slider main container -->
     <div class="swiper" x-data="playerLog">
-        <!-- Additional required wrapper -->
         <div class="swiper-wrapper">
-            <!-- Slides -->
             <div class="swiper-slide">Slide 1</div>
             <div class="swiper-slide">Slide 2</div>
             <div class="swiper-slide">Slide 3</div>
@@ -33,10 +30,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
-        />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <style>
         .swiper {
             width: 100vw;
