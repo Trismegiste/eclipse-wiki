@@ -41,6 +41,7 @@
                         content.classList = ['swiper-slide']
                         content.innerHTML = msg.data
                         this.swiper.prependSlide(content)
+                        this.swiper.slideTo(0, 500)
                     }
 
                     this.socket.onerror = () => {
