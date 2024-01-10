@@ -110,7 +110,17 @@
     array (
     ),
   ),
-  'swiper' => 
+  'swiper/swiper-bundle' => 
+  array (
+    'version' => '11.0.5',
+    'dependencies' => 
+    array (
+    ),
+    'extraFiles' => 
+    array (
+    ),
+  ),
+  'swiper/modules/manipulation' => 
   array (
     'version' => '11.0.5',
     'dependencies' => 

@@ -96,7 +96,10 @@ return [
     '@multiavatar/multiavatar' => [
         'version' => '1.0.7',
     ],
-    'swiper' => [
+    'swiper/swiper-bundle' => [
+        'version' => '11.0.5',
+    ],
+    'swiper/modules/manipulation' => [
         'version' => '11.0.5',
     ],
 ];

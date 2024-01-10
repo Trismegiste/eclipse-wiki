@@ -19,10 +19,12 @@
         {{ mercure('player-channel')|json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_HEX_TAG'))|raw }}
     </script>
     <script type="module">
-        import Swiper from 'swiper';
+        import Swiper from 'swiper/swiper-bundle';
+        import Manipulation from 'swiper/modules/manipulation';
 
         Alpine.data('playerLog', () => ({
                 socket: null,
+                swiper: null,
 
                 init() {
                     // Socket
@@ -37,8 +39,8 @@
                         console.log('new content')
                         const content = document.createElement("div");
                         content.classList = ['swiper-slide']
-                        content.innerHTML = 'yolo'
-                        this.$refs.journal.prepend(content)
+                        content.innerHTML = msg.data
+                        this.swiper.prependSlide(content)
                     }
 
                     this.socket.onerror = () => {
@@ -46,8 +48,9 @@
                     }
 
                     // Swiper
-                    const swiper = new Swiper(this.$el, {
-                        direction: 'vertical'
+                    this.swiper = new Swiper(this.$el, {
+                        direction: 'vertical',
+                        modules: [Manipulation]
                     })
                 }
             }))
