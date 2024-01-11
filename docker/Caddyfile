@@ -10,7 +10,7 @@ http://192.168.*.*:80 {
         mercure {
             publisher_jwt coucoucoucoucoucdffddfdfdfdfuocoucccoucuocou HS256
             anonymous true
-            transport_url local://local
+            transport_url bolt://mercure.db
             subscriptions
         }
 }

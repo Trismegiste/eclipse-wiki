@@ -27,6 +27,12 @@
 
                 init() {
                     // Socket
+                    const lastId = localStorage.getItem('lastEventID')
+                    console.log(lastId)
+                    if (lastId) {
+                        host = host + '&lastEventID=' + lastId
+                    }
+                    console.log(host)
                     this.socket = new EventSource(host)
 
                     this.socket.onopen = (msg) => {
@@ -37,6 +43,7 @@
                         console.log('new content')
                         const content = document.createElement("div");
                         content.classList = ['swiper-slide']
+                        localStorage.setItem('lastEventID', msg.lastEventId)
                         content.innerHTML = msg.data
                         this.swiper.prependSlide(content)
                         this.swiper.slideTo(0, 500)
