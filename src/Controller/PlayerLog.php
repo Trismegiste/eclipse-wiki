@@ -28,6 +28,7 @@ class PlayerLog extends AbstractController
         return $this->render('player/journal.html.twig', ['topic' => $topic]);
     }
 
+    // for testing Sub API
     #[Route('/sub')]
     public function listing(SubscriptionClient $api): Response
     {
@@ -37,7 +38,9 @@ class PlayerLog extends AbstractController
     #[Route('/qrcode/{pk}')]
     public function qrcode(Transhuman $vertex): Response
     {
-        
+        // new absolute URL
+        // Perhaps channels are bad idea, instead using private with id ?
+        return $this->render('player/qrcode.html.twig', ['url_cast' => $this->generateUrl('app_playerlog_index', ['pk' => $vertex->getPk()])]);
     }
 
 }

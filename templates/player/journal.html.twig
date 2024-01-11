@@ -6,6 +6,7 @@
 {% block body %}
     <div class="swiper"
          x-data="playerLog('{{ mercure(topic) }}')"
+         x-on:contextmenu.prevent="saveContent"
          x-on:dblclick="toggleFullScreen">
         <div class="swiper-wrapper" x-ref="journal">
             <div class="swiper-slide">Slide 1</div>
@@ -62,6 +63,7 @@
                         console.log('New content')
                         const content = document.createElement("div");
                         content.classList = ['swiper-slide']
+                        content.dataset.contentId = msg.lastEventId
                         localStorage.setItem('lastEventID', msg.lastEventId)
                         content.innerHTML = msg.data
                         this.swiper.prependSlide(content)
@@ -78,6 +80,12 @@
                         document.documentElement.requestFullscreen();
                     } else if (document.exitFullscreen) {
                         document.exitFullscreen();
+                    }
+                },
+
+                saveContent() {
+                    if (window.confirm("Voulez-vous sauver cette page ?")) {
+                        // do something with localStorage and innerHTML, indexed with dataset.contentId
                     }
                 }
 
