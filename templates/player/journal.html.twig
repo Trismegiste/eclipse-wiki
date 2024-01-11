@@ -47,12 +47,12 @@
                 },
 
                 connect() {
-                    let host = this.host
+                    let url = new URL(this.host)
                     const lastId = localStorage.getItem('lastEventID')
                     if (lastId) {
-                        host = host + '&lastEventID=' + lastId
+                        url.searchParams.append('lastEventID', lastId)
                     }
-                    this.socket = new EventSource(host)
+                    this.socket = new EventSource(url)
 
                     this.socket.onopen = (msg) => {
                         console.log('Connected')
