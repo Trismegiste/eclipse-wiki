@@ -22,11 +22,32 @@
         import Manipulation from 'swiper/modules/manipulation';
 
         Alpine.data('playerLog', (host) => ({
+                host: host,
                 socket: null,
                 swiper: null,
 
                 init() {
                     // Socket
+                    this.connect()
+
+                    // Swiper
+                    this.swiper = new Swiper(this.$el, {
+                        direction: 'vertical',
+                        modules: [Manipulation]
+                    })
+
+                    // check if lost websocket connection when focus
+                    document.addEventListener('visibilitychange', () => {
+                        if (document.visibilityState === 'visible') {
+                            if (this.socket.readyState === 2) {
+                                this.connect()
+                            }
+                        }
+                    })
+                },
+
+                connect() {
+                    let host = this.host
                     const lastId = localStorage.getItem('lastEventID')
                     if (lastId) {
                         host = host + '&lastEventID=' + lastId
@@ -50,12 +71,6 @@
                     this.socket.onerror = () => {
                         console.log('Disconnected')
                     }
-
-                    // Swiper
-                    this.swiper = new Swiper(this.$el, {
-                        direction: 'vertical',
-                        modules: [Manipulation]
-                    })
                 },
 
                 toggleFullScreen() {
