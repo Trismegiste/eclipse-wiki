@@ -5,7 +5,7 @@
 
 {% block body %}
     <div class="swiper"
-         x-data="playerLog('{{ mercure('player-channel') }}')"
+         x-data="playerLog('{{ mercure(topic) }}')"
          x-on:dblclick="toggleFullScreen">
         <div class="swiper-wrapper" x-ref="journal">
             <div class="swiper-slide">Slide 1</div>
