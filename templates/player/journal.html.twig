@@ -4,24 +4,36 @@
 {% block title %}Player{% endblock %}
 
 {% block body %}
-    <nav class="pure-menu">
-        <ul class="pure-menu-list">
-            <li class="pure-menu-item">
-                <a href="{{ path(item.route) }}" class="pure-menu-link">
-                    <i class="icon-{{ item.icon }}"></i>
-                    {{ item.label }} ({{ item.key }})
-                </a>
-            </li>
-        </ul>
-    </nav>
-    <div class="swiper"
-         x-data="playerLog('{{ mercure(topic) }}')"
-         x-on:contextmenu.prevent="saveContent"
+    <div x-data="playerLog('{{ mercure(topic) }}')"
          x-on:dblclick="toggleFullScreen">
-        <div class="swiper-wrapper" x-ref="journal">
-            <div class="swiper-slide">Slide 1</div>
-            <div class="swiper-slide">Slide 2</div>
-            <div class="swiper-slide">Slide 3</div>
+        <nav class="pure-menu  pure-menu-horizontal">
+            <ul class="pure-menu-list">
+                {% set navigation = ['user-circle', 'picture', 'view3d'] %}
+                {% for idx, panel in navigation %}
+                    <li class="pure-menu-item">
+                        <a href="#" class="pure-menu-link">
+                            <i class="icon-{{ panel }}" x-on:click="panel={{ idx }}"></i>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </nav>
+        <div x-show="panel===0">
+            <div class="swiper"
+                 x-ref="gesture"
+                 x-on:contextmenu.prevent="saveContent">
+                <div class="swiper-wrapper" x-ref="journal">
+                    <div class="swiper-slide">Slide 1</div>
+                    <div class="swiper-slide">Slide 2</div>
+                    <div class="swiper-slide">Slide 3</div>
+                </div>
+            </div>
+        </div>
+        <div x-show="panel===1">
+            <img x-ref="picture"/>
+        </div>
+        <div x-show="panel===2">
+            BABYLON
         </div>
     </div>
 {% endblock %}
@@ -36,13 +48,14 @@
                 host: host,
                 socket: null,
                 swiper: null,
+                panel: 0,
 
                 init() {
                     // Socket
                     this.connect()
 
                     // Swiper
-                    this.swiper = new Swiper(this.$el, {
+                    this.swiper = new Swiper(this.$refs.gesture, {
                         direction: 'vertical',
                         modules: [Manipulation]
                     })
@@ -109,7 +122,7 @@
     <style>
         .swiper {
             width: 100vw;
-            height: 100vh;
+            height: calc(100vh - 2.2em);
         }
 
         .swiper img {
