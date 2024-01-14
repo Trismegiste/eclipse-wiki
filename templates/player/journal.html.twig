@@ -5,7 +5,7 @@
 
 {% block body %}
     <div x-data="playerLog('{{ mercure(topic) }}')"
-         x-on:dblclick="toggleFullScreen">
+         x-on:contextmenu.prevent="toggleFullScreen">
         <nav class="pure-menu  pure-menu-horizontal">
             <ul class="pure-menu-list">
                 {% set navigation = ['user-circle', 'picture', 'view3d'] %}
@@ -20,8 +20,7 @@
         </nav>
         <div x-show="panel===0">
             <div class="swiper"
-                 x-ref="gesture"
-                 x-on:contextmenu.prevent="saveContent">
+                 x-ref="gesture">
                 <div class="swiper-wrapper" x-ref="journal">
                     <div class="swiper-slide">Slide 1</div>
                     <div class="swiper-slide">Slide 2</div>
@@ -48,7 +47,7 @@
                 host: host,
                 socket: null,
                 swiper: null,
-                panel: 0,
+                panel: 1,
 
                 init() {
                     // Socket
@@ -63,7 +62,7 @@
                     // check if lost websocket connection when focus
                     document.addEventListener('visibilitychange', () => {
                         if (document.visibilityState === 'visible') {
-                            if (this.socket.readyState === 2) {
+                            if (this.socket.readyState === EventSource.CLOSED) {
                                 this.connect()
                             }
                         }
@@ -82,7 +81,7 @@
                         console.log('Connected')
                     }
 
-                    this.socket.onmessage = (msg) => {
+                    this.socket.addEventListener('profile', (msg) => {
                         console.log('New content')
                         const content = document.createElement("div");
                         content.classList = ['swiper-slide']
@@ -91,7 +90,7 @@
                         content.innerHTML = msg.data
                         this.swiper.prependSlide(content)
                         this.swiper.slideTo(0, 500)
-                    }
+                    })
 
                     this.socket.onerror = () => {
                         console.log('Disconnected')
@@ -128,7 +127,7 @@
         .swiper img {
             margin: 0 auto;
             max-width: 100vw;
-            max-height: 100vh;
+            max-height: calc(100vh - 2.2em);
             object-fit: contain;
             display: block;
             width: 100%;

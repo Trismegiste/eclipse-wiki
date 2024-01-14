@@ -27,7 +27,7 @@ class PocMercure extends Command
         $update = new Update(
                 'public',
                 '<img src="data:image/png;base64,' . base64_encode(file_get_contents('/app/public/img/mire.png')) . '"/>',
-                type: 'yolo'
+                type: 'profile'
         );
 
         $this->hub->publish($update);
