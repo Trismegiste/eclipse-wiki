@@ -19,11 +19,11 @@ use Symfony\Component\Routing\Attribute\Route;
 class PlayerLog extends AbstractController
 {
 
-    #[Route('/log/{pk}')]
-    public function index(Transhuman $vertex): Response
+    #[Route('/log')]
+    public function index(/* Transhuman $vertex */): Response
     {
         $topic = ['public'];
-        $topic[] = 'player-' . $vertex->getPk();
+        //   $topic[] = 'player-' . $vertex->getPk();
 
         return $this->render('player/journal.html.twig', ['topic' => $topic]);
     }

@@ -25,8 +25,9 @@ class PocMercure extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $update = new Update(
-                'player-64257ac3dabd0238b20f3e0c',
-                '<img src="data:image/png;base64,' . base64_encode(file_get_contents('/app/public/img/mire.png')) . '"/>'
+                'public',
+                '<img src="data:image/png;base64,' . base64_encode(file_get_contents('/app/public/img/mire.png')) . '"/>',
+                type: 'yolo'
         );
 
         $this->hub->publish($update);

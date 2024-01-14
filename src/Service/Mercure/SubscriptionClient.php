@@ -19,11 +19,11 @@ class SubscriptionClient
         
     }
 
-    public function getSubscriptions(): array
+    public function getSubscriptions(): \stdClass
     {
         $response = $this->client->request('GET', "http://{$this->mercureLocalIp}/.well-known/mercure/subscriptions");
 
-        return json_decode($response->getContent(), true);
+        return json_decode($response->getContent());
     }
 
 }

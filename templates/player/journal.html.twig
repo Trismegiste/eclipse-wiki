@@ -4,6 +4,16 @@
 {% block title %}Player{% endblock %}
 
 {% block body %}
+    <nav class="pure-menu">
+        <ul class="pure-menu-list">
+            <li class="pure-menu-item">
+                <a href="{{ path(item.route) }}" class="pure-menu-link">
+                    <i class="icon-{{ item.icon }}"></i>
+                    {{ item.label }} ({{ item.key }})
+                </a>
+            </li>
+        </ul>
+    </nav>
     <div class="swiper"
          x-data="playerLog('{{ mercure(topic) }}')"
          x-on:contextmenu.prevent="saveContent"
