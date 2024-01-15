@@ -8,7 +8,7 @@
          x-on:contextmenu.prevent="toggleFullScreen">
         <nav class="pure-menu  pure-menu-horizontal">
             <ul class="pure-menu-list">
-                {% set navigation = ['user-circle', 'picture', 'view3d'] %}
+                {% set navigation = ['picture', 'user-circle', 'hexagon', 'view3d'] %}
                 {% for idx, panel in navigation %}
                     <li class="pure-menu-item">
                         <a href="#" class="pure-menu-link">
@@ -18,7 +18,7 @@
                 {% endfor %}
             </ul>
         </nav>
-        <div x-show="panel===0">
+        <div x-show="panel===1">
             <div class="swiper"
                  x-ref="gesture">
                 <div class="swiper-wrapper" x-ref="journal">
@@ -28,10 +28,13 @@
                 </div>
             </div>
         </div>
-        <div x-show="panel===1">
-            <img x-ref="picture"/>
+        <div x-show="panel===0">
+            <img x-ref="picture" class="pure-img"/>
         </div>
         <div x-show="panel===2">
+            <img x-ref="battlemap" class="pure-img"/>
+        </div>
+        <div x-show="panel===3">
             BABYLON
         </div>
     </div>
@@ -82,7 +85,7 @@
                     }
 
                     this.socket.addEventListener('profile', (msg) => {
-                        console.log('New content')
+                        console.log('New profile')
                         const content = document.createElement("div");
                         content.classList = ['swiper-slide']
                         content.dataset.contentId = msg.lastEventId
@@ -90,6 +93,11 @@
                         content.innerHTML = msg.data
                         this.swiper.prependSlide(content)
                         this.swiper.slideTo(0, 500)
+                    })
+
+                    this.socket.addEventListener('picture', (msg) => {
+                        console.log('New picture')
+                        this.$refs.picture.src = msg.data
                     })
 
                     this.socket.onerror = () => {

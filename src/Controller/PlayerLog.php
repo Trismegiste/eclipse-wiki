@@ -39,7 +39,6 @@ class PlayerLog extends AbstractController
     public function qrcode(Transhuman $vertex): Response
     {
         // new absolute URL
-        // Perhaps channels are bad idea, instead using private with id ?
         return $this->render('player/qrcode.html.twig', ['url_cast' => $this->generateUrl('app_playerlog_index', ['pk' => $vertex->getPk()])]);
     }
 

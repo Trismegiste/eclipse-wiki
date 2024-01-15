@@ -20,11 +20,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class PlayerCast extends AbstractController
 {
 
-    protected $pusher;
-
-    public function __construct(WebsocketPusher $fac)
+    public function __construct(protected \App\Service\Mercure\Pusher $pusher)
     {
-        $this->pusher = $fac;
+        
     }
 
     /**
@@ -47,17 +45,13 @@ class PlayerCast extends AbstractController
 
     //  /!\ -- Big security breach : internally called ONLY -- /!\
     // DO NOT EXPOSE THIS CONTROLLER PUBLICLY
-    public function internalPushFile(string $pathname, string $imgType = '2d'): JsonResponse
+    public function internalPushFile(string $pathname, string $imgType = 'picture'): JsonResponse
     {
         try {
-            $ret = $this->pusher->push(json_encode([
-                'file' => $pathname,
-                'action' => 'pictureBroadcast'
-                    ]),
-                    $imgType);
-
-            return new JsonResponse(['level' => 'success', 'message' => $ret], Response::HTTP_OK);
-        } catch (ConnectionException $e) {
+            $pic = new \SplFileInfo($pathname);
+            $this->pusher->sendPictureAsDataUrl($pic, $imgType);
+            return new JsonResponse(['level' => 'success', 'message' => $pic->getBasename() . ' sent'], Response::HTTP_OK);
+        } catch (\Exception $e) {
             return new JsonResponse(['level' => 'error', 'message' => $e->getMessage()], Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
