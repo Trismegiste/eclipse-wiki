@@ -120,10 +120,13 @@
                 },
 
                 toggleFullScreen(event) {
+                    const panel = event.currentTarget
                     if (!document.fullscreenElement) {
-                        event.currentTarget.requestFullscreen();
+                        panel.requestFullscreen()
+                        panel.classList = ['panel-fullscreen']
                     } else if (document.exitFullscreen) {
                         document.exitFullscreen();
+                        panel.classList = []
                     }
                 },
 
@@ -153,6 +156,10 @@
             object-fit: contain;
             display: block;
             width: 100%;
+        }
+
+        .panel-fullscreen img {
+            max-height: 100vh;
         }
     </style>
 {% endblock %}
