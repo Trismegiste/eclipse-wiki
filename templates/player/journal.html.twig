@@ -10,8 +10,8 @@
                 {% set navigation = ['picture', 'user-circle', 'file-pdf', 'hexagon', 'view3d'] %}
                 {% for idx, panel in navigation %}
                     <li class="pure-menu-item">
-                        <a href="#" class="pure-menu-link">
-                            <i class="icon-{{ panel }}" x-on:click="panel={{ idx }}"></i>
+                        <a href="#{{ panel }}" class="pure-menu-link" x-on:click.prevent="panel={{ idx }}">
+                            <i class="icon-{{ panel }}"></i>
                         </a>
                     </li>
                 {% endfor %}
