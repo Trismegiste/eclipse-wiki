@@ -60,13 +60,15 @@ class HandoutCrud extends GenericCrud
      * Generates the Handout PDF and prints a QR Code for player
      */
     #[Route('/qrcode/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function qrcode(Handout $vertex, DocumentBroadcaster $broadcast): Response
+    public function qrcode(Handout $vertex, DocumentBroadcaster $broadcast, \App\Service\Mercure\Pusher $pusher): Response
     {
         $title = sprintf("Handout-%s.pdf", $vertex->getTitle());
         $html = $this->renderView('handout/pc_export.pdf.twig', ['vertex' => $vertex]);
         $lan = $broadcast->getExternalLinkForGeneratedPdf($title, $html, self::pdfOptions);
 
-        $this->addFlash('success', 'PDF généré');
+        $pusher->sendDocumentLink($lan, 'Aide de jeu : ' . $vertex->getTitle());
+
+        $this->addFlash('success', 'PDF Handout généré');
 
         return $this->render('player/getdocument.html.twig', ['url_cast' => $lan]);
     }

@@ -84,7 +84,7 @@ class LoveletterCrud extends GenericCrud
 
         $pusher->sendDocumentLink($lan, 'Loveletter : ' . $vertex->getTitle());
 
-        $this->addFlash('success', 'PDF généré');
+        $this->addFlash('success', 'PDF Loveletter généré');
 
         return $this->render('player/getdocument.html.twig', ['url_cast' => $lan]);
     }
