@@ -9,13 +9,18 @@ namespace App\Controller;
 use App\Entity\Ali;
 use App\Entity\Freeform;
 use App\Entity\Transhuman;
+use App\Form\PeeringConfirm;
 use App\Repository\VertexRepository;
 use App\Service\DigraphExplore;
+use App\Service\InfoDashboard;
+use App\Service\Mercure\Pusher;
 use App\Service\NetTools;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Trismegiste\NameGenerator\FileRepository;
 use Trismegiste\NameGenerator\RandomizerDecorator;
 
@@ -102,7 +107,7 @@ class GmHelper extends AbstractController
      * Ajax name generator
      */
     #[Route("/ajax/name", methods: ["GET"])]
-    public function ajaxName(\Symfony\Component\HttpFoundation\Request $request): JsonResponse
+    public function ajaxName(Request $request): JsonResponse
     {
         $repo = new RandomizerDecorator(new FileRepository());
         $gender = $request->query->get('gender');
@@ -112,7 +117,7 @@ class GmHelper extends AbstractController
         return new JsonResponse($fullname);
     }
 
-    public function summary(\App\Service\InfoDashboard $info): Response
+    public function summary(InfoDashboard $info): Response
     {
         return $this->render('summary.html.twig', ['stats' => $info]);
     }
@@ -121,18 +126,21 @@ class GmHelper extends AbstractController
      * Wait for peering with players
      */
     #[Route("/peering", methods: ["GET", "POST"])]
-    public function peering(\App\Service\Mercure\Pusher $pusher, \Symfony\Component\HttpFoundation\Request $request): Response
+    public function peering(Pusher $pusher, Request $request, \App\Service\Mercure\SubscriptionClient $mercure): Response
     {
-        $form = $this->createForm(\App\Form\PeeringConfirm::class);
+        $form = $this->createForm(PeeringConfirm::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $assoc = $form->getData();
             $pusher->validPeering($assoc['key'], $assoc['npc']->getTitle());
-            // @todo store npc in session
         }
 
-        return $this->render('peering.html.twig', ['form' => $form->createView()]);
+        return $this->render('peering.html.twig', [
+                    'form' => $form->createView(),
+                    'player_peering' => $this->generateUrl('app_playerlog_peering', [], UrlGeneratorInterface::ABSOLUTE_URL),
+                    'subscription' => $mercure->getSubscriptions()->subscriptions
+        ]);
     }
 
 }

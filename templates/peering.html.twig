@@ -5,26 +5,49 @@
 {% block header_title %}{{ block('title') }}{% endblock %}
 
 {% block content %}
-    <div x-data="peering('{{ mercure('peering') }}')">
-        <ul>
-            <template x-for="user in player">
-                <li><a href="#" x-text="user.identifier" x-on:click.prevent="selectedKey=user.identifier"></li>
-            </template>
-        </ul>
-        {{ form(form) }}
+    <div class="pure-g" x-data="peering('{{ mercure('peering') }}', '{{ player_peering }}')">
+        <div class="pure-u-1-2">
+            <ul>
+                <template x-for="user in player">
+                    <li><a href="#" x-text="user.identifier" x-on:click.prevent="selectedKey=user.identifier"></li>
+                </template>
+            </ul>
+            {{ form(form) }}
+            {{ dump(subscription) }}
+        </div>
+        <div class="pure-u-1-2">
+            <figure>
+                <canvas x-ref="qrious" class="pure-img"></canvas>
+            </figure>
+            <h2 class="big-link">
+                {{ player_peering }}
+                <a href="{{ player_peering }}" target="_blank"><i class="icon-export"></i></a>
+            </h2>
+        </div>
     </div>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     <script type="module">
-        Alpine.data('peering', (mercureHost) => ({
+        import QRious from 'qrious';
+
+        Alpine.data('peering', (mercureHost, playerPeeringUrl) => ({
                 host: mercureHost,
                 socket: null,
                 player: [],
                 selectedKey: null,
+                qrCodeUrl: playerPeeringUrl,
 
                 init() {
+                    // QR code
+                    new QRious({
+                        element: this.$refs.qrious,
+                        size: Math.min(innerWidth, innerHeight),
+                        level: 'M',
+                        value: playerPeeringUrl
+                    })
+
                     // Socket
                     this.socket = new EventSource(this.host)
                     // feedback from GM
@@ -35,4 +58,16 @@
                 }
             }))
     </script>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .big-link {
+            text-align: center;
+            font-size: 150%;
+        }
+        figure {
+            margin: 1em 2em;
+        }
+    </style>
 {% endblock %}

@@ -4,7 +4,7 @@
 {% block title %}Appairage Joueur{% endblock %}
 
 {% block body %}
-    <div x-data="peering('{{ mercure('peering') }}', '{{ path('app_playerlog_hello') }}')">
+    <div x-data="peering('{{ mercure('peering') }}', '{{ path('app_playerlog_hello') }}', '{{ path('app_playerlog_index') }}')">
         Ma clef est <span x-text="peeringKey"/>
     </div>
 {% endblock %}
@@ -12,18 +12,19 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="module">
-        // Before everything, check if the client was previously authenticated
-        if (localStorage.getItem('npcTitle')) {
-            window.location = '{{ path('app_playerlog_index') }}'
-        }
-
-        Alpine.data('peering', (mercureHost, helloUrl) => ({
+        Alpine.data('peering', (mercureHost, helloUrl, playerLogUrl) => ({
                 host: mercureHost,
                 socket: null,
                 helloUrl: helloUrl,
                 peeringKey: null,
 
                 init() {
+                    // Before everything, check if the client was previously authenticated
+                    if (localStorage.getItem('npcTitle')) {
+                        window.location = playerLogUrl
+                    }
+
+                    // peering
                     this.peeringKey = Math.floor(Math.random() * 10000);
                     // Socket
                     this.socket = new EventSource(this.host)
@@ -34,6 +35,7 @@
                         if (content.identifier === this.peeringKey) {
                             console.log('Client authentifié en tant que ' + content.npcTitle)
                             localStorage.setItem('npcTitle', content.npcTitle)
+                            window.location = playerLogUrl
                         }
                     })
 
