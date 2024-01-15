@@ -45,4 +45,26 @@ class Pusher
         $this->hub->publish($update);
     }
 
+    public function askPeering(int $identifier): void
+    {
+        $update = new Update(
+                'peering',
+                json_encode(['identifier' => $identifier]),
+                type: 'ask'
+        );
+
+        $this->hub->publish($update);
+    }
+
+    public function validPeering(int $identifier, string $npcTitle): void
+    {
+        $update = new Update(
+                'peering',
+                json_encode(['identifier' => $identifier, 'npcTitle' => $npcTitle]),
+                type: 'validation'
+        );
+
+        $this->hub->publish($update);
+    }
+
 }

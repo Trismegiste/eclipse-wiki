@@ -117,4 +117,30 @@ class GmHelper extends AbstractController
         return $this->render('summary.html.twig', ['stats' => $info]);
     }
 
+    /**
+     * Wait for peering with players
+     */
+    #[Route("/peering", methods: ["GET", "POST"])]
+    public function peering(\App\Service\Mercure\Pusher $pusher, VertexRepository $vertexRepo, \Symfony\Component\HttpFoundation\Request $request): Response
+    {
+        $form = $this->createFormBuilder()
+                ->add('key', \Symfony\Component\Form\Extension\Core\Type\TextType::class, ['attr' => ['x-model' => 'selectedKey']])
+                ->add('npc', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+                    'choices' => $vertexRepo->findByClass(Transhuman::class),
+                    'choice_label' => function ($choice, string $key, mixed $value): TranslatableMessage|string {
+                        return $choice->getTitle();
+                    }
+                ])
+                ->add('peering', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+                ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $assoc = $form->getData();
+            $pusher->validPeering($assoc['key'], $assoc['npc']->getTitle());
+        }
+
+        return $this->render('peering.html.twig', ['form' => $form->createView()]);
+    }
+
 }

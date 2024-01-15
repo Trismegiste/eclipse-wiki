@@ -6,9 +6,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Transhuman;
 use App\Service\Mercure\SubscriptionClient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -35,11 +36,19 @@ class PlayerLog extends AbstractController
         return new Response(json_encode($api->getSubscriptions()));
     }
 
-    #[Route('/qrcode/{pk}')]
-    public function qrcode(Transhuman $vertex): Response
+    #[Route('/peering')]
+    public function peering(): Response
     {
-        // new absolute URL
-        return $this->render('player/qrcode.html.twig', ['url_cast' => $this->generateUrl('app_playerlog_index', ['pk' => $vertex->getPk()])]);
+        return $this->render('player/peering.html.twig');
+    }
+
+    #[Route('/hello', methods: ["POST"])]
+    public function hello(Request $request, \App\Service\Mercure\Pusher $pusher): JsonResponse
+    {
+        $body = json_decode($request->getContent());
+        $pusher->askPeering($body->identifier);
+
+        return new JsonResponse(['status' => 'OK']);
     }
 
 }

@@ -1,0 +1,38 @@
+{# Player peering #}
+{% extends "base.html.twig" %}
+
+{% block title %}Validation appairage{% endblock %}
+{% block header_title %}{{ block('title') }}{% endblock %}
+
+{% block content %}
+    <div x-data="peering('{{ mercure('peering') }}')">
+        <ul>
+            <template x-for="user in player">
+                <li><a href="#" x-text="user.identifier" x-on:click.prevent="selectedKey=user.identifier"></li>
+            </template>
+        </ul>
+        {{ form(form) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="module">
+        Alpine.data('peering', (mercureHost) => ({
+                host: mercureHost,
+                socket: null,
+                player: [],
+                selectedKey: null,
+
+                init() {
+                    // Socket
+                    this.socket = new EventSource(this.host)
+                    // feedback from GM
+                    this.socket.addEventListener('ask', (msg) => {
+                        console.log('Request peering from player')
+                        this.player.push(JSON.parse(msg.data))
+                    })
+                }
+            }))
+    </script>
+{% endblock %}

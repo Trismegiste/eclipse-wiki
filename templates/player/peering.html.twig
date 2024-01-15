@@ -1,0 +1,45 @@
+{# Player peering #}
+{% extends "base.html.twig" %}
+
+{% block title %}Appairage Joueur{% endblock %}
+
+{% block body %}
+    <div x-data="peering('{{ mercure('peering') }}', '{{ path('app_playerlog_hello') }}')">
+        Ma clef est <span x-text="peeringKey"/>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="module">
+        Alpine.data('peering', (mercureHost, helloUrl) => ({
+                host: mercureHost,
+                socket: null,
+                helloUrl: helloUrl,
+                peeringKey: null,
+
+                init() {
+                    this.peeringKey = Math.floor(Math.random() * 10000);
+                    // Socket
+                    this.socket = new EventSource(this.host)
+                    // feeback from GM
+                    this.socket.addEventListener('validation', (msg) => {
+                        console.log('Validation from GM')
+                        console.log(msg.data)
+                        //    localStorage.setItem('npcName', msg.data)
+                    })
+
+                    fetch(helloUrl, {
+                        method: 'POST',
+                        body: JSON.stringify({identifier: this.peeringKey})
+                    })
+                            .then(resp => {
+                                return resp.json()
+                            })
+                            .then(data => {
+                                console.log(data)
+                            })
+                }
+            }))
+    </script>
+{% endblock %}

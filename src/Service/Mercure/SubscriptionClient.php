@@ -26,4 +26,11 @@ class SubscriptionClient
         return json_decode($response->getContent());
     }
 
+    public function getPeeringPending(): \stdClass
+    {
+        $response = $this->client->request('GET', "http://{$this->mercureLocalIp}/.well-known/mercure/subscriptions/peering");
+
+        return json_decode($response->getContent());
+    }
+
 }
