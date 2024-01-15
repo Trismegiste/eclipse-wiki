@@ -202,7 +202,7 @@ class FirstPerson extends AbstractController
             $screenshot = $form['picture']->getData();
             $target = $cache->slimPictureForPush($screenshot);
 
-            return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $target, 'imgType' => '2d']);
+            return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $target, 'imgType' => 'battlemap']);
         }
 
         return new JsonResponse(['level' => 'error', 'message' => (string) $form->getErrors(true, true)], 400);

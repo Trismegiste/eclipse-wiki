@@ -8,7 +8,7 @@
          x-on:contextmenu.prevent="toggleFullScreen">
         <nav class="pure-menu  pure-menu-horizontal">
             <ul class="pure-menu-list">
-                {% set navigation = ['picture', 'user-circle', 'hexagon', 'view3d'] %}
+                {% set navigation = ['picture', 'user-circle', 'file-pdf', 'hexagon', 'view3d'] %}
                 {% for idx, panel in navigation %}
                     <li class="pure-menu-item">
                         <a href="#" class="pure-menu-link">
@@ -29,13 +29,16 @@
             </div>
         </div>
         <div x-show="panel===0">
-            <img x-ref="picture" class="pure-img"/>
-        </div>
-        <div x-show="panel===2">
-            <img x-ref="battlemap" class="pure-img"/>
+            <img x-ref="picture"/>
         </div>
         <div x-show="panel===3">
+            <img x-ref="battlemap"/>
+        </div>
+        <div x-show="panel===4">
             BABYLON
+        </div>
+        <div x-show="panel===2">
+            PDF Links
         </div>
     </div>
 {% endblock %}
@@ -103,6 +106,12 @@
                         this.$refs.picture.src = msg.data
                     })
 
+                    this.socket.addEventListener('battlemap', (msg) => {
+                        console.log('New battlemap')
+                        localStorage.setItem('lastEventID', msg.lastEventId)
+                        this.$refs.battlemap.src = msg.data
+                    })
+
                     this.socket.onerror = () => {
                         console.log('Disconnected')
                     }
@@ -135,7 +144,7 @@
             height: calc(100vh - 2.2em);
         }
 
-        .swiper img {
+        img {
             margin: 0 auto;
             max-width: 100vw;
             max-height: calc(100vh - 2.2em);
