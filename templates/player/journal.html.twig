@@ -4,8 +4,7 @@
 {% block title %}Player{% endblock %}
 
 {% block body %}
-    <div x-data="playerLog('{{ mercure(topic) }}')"
-         x-on:contextmenu.prevent="toggleFullScreen">
+    <div x-data="playerLog('{{ mercure(topic) }}')">
         <nav class="pure-menu  pure-menu-horizontal">
             <ul class="pure-menu-list">
                 {% set navigation = ['picture', 'user-circle', 'file-pdf', 'hexagon', 'view3d'] %}
@@ -18,7 +17,8 @@
                 {% endfor %}
             </ul>
         </nav>
-        <div x-show="panel===1">
+        <div x-show="panel===1"
+             x-on:contextmenu.prevent="toggleFullScreen">
             <div class="swiper"
                  x-ref="gesture">
                 <div class="swiper-wrapper" x-ref="journal">
@@ -28,10 +28,12 @@
                 </div>
             </div>
         </div>
-        <div x-show="panel===0">
+        <div x-show="panel===0"
+             x-on:contextmenu.prevent="toggleFullScreen">
             <img x-ref="picture"/>
         </div>
-        <div x-show="panel===3">
+        <div x-show="panel===3"
+             x-on:contextmenu.prevent="toggleFullScreen">
             <img x-ref="battlemap"/>
         </div>
         <div x-show="panel===4">
@@ -117,9 +119,9 @@
                     }
                 },
 
-                toggleFullScreen() {
+                toggleFullScreen(event) {
                     if (!document.fullscreenElement) {
-                        document.documentElement.requestFullscreen();
+                        event.currentTarget.requestFullscreen();
                     } else if (document.exitFullscreen) {
                         document.exitFullscreen();
                     }
