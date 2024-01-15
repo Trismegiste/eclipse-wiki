@@ -40,7 +40,8 @@
             BABYLON
         </div>
         <div x-show="panel===2">
-            PDF Links
+            <ul class="document" x-ref="document">
+            </ul>
         </div>
     </div>
 {% endblock %}
@@ -112,6 +113,19 @@
                         console.log('New battlemap')
                         localStorage.setItem('lastEventID', msg.lastEventId)
                         this.$refs.battlemap.src = msg.data
+                    })
+
+                    this.socket.addEventListener('document', (msg) => {
+                        console.log('New document')
+                        localStorage.setItem('lastEventID', msg.lastEventId)
+                        const entry = document.createElement("li");
+                        const link = document.createElement("a");
+                        const data = JSON.parse(msg.data)
+                        link.href = data.link
+                        link.textContent = data.title
+                        link.target = '_blank'
+                        entry.append(link)
+                        this.$refs.document.append(entry)
                     })
 
                     this.socket.onerror = () => {

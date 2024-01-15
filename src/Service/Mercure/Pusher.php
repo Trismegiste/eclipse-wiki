@@ -34,4 +34,15 @@ class Pusher
         $this->hub->publish($update);
     }
 
+    public function sendDocumentLink(string $link, $title): void
+    {
+        $update = new Update(
+                'public',
+                json_encode(['link' => $link, 'title' => $title]),
+                type: 'document'
+        );
+
+        $this->hub->publish($update);
+    }
+
 }

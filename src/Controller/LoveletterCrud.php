@@ -76,11 +76,13 @@ class LoveletterCrud extends GenericCrud
      * Generates the Love letter PDF and prints a QR Code for player
      */
     #[Route('/qrcode/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function qrcode(Loveletter $vertex, \App\Service\DocumentBroadcaster $broadcast): Response
+    public function qrcode(Loveletter $vertex, \App\Service\DocumentBroadcaster $broadcast, \App\Service\Mercure\Pusher $pusher): Response
     {
         $title = sprintf("Loveletter-%s-%s.pdf", $vertex->player, $vertex->getTitle());
         $html = $this->renderView('loveletter/export.pdf.twig', ['vertex' => $vertex]);
         $lan = $broadcast->getExternalLinkForGeneratedPdf($title, $html, self::pdfOptions);
+
+        $pusher->sendDocumentLink($lan, $vertex->getTitle());
 
         $this->addFlash('success', 'PDF généré');
 
