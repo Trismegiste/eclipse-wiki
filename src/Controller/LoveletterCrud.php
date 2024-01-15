@@ -82,7 +82,7 @@ class LoveletterCrud extends GenericCrud
         $html = $this->renderView('loveletter/export.pdf.twig', ['vertex' => $vertex]);
         $lan = $broadcast->getExternalLinkForGeneratedPdf($title, $html, self::pdfOptions);
 
-        $pusher->sendDocumentLink($lan, $vertex->getTitle());
+        $pusher->sendDocumentLink($lan, 'Loveletter : ' . $vertex->getTitle());
 
         $this->addFlash('success', 'PDF généré');
 
