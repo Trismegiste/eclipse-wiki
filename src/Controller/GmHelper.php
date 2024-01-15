@@ -124,7 +124,7 @@ class GmHelper extends AbstractController
     public function peering(\App\Service\Mercure\Pusher $pusher, VertexRepository $vertexRepo, \Symfony\Component\HttpFoundation\Request $request): Response
     {
         $form = $this->createFormBuilder()
-                ->add('key', \Symfony\Component\Form\Extension\Core\Type\TextType::class, ['attr' => ['x-model' => 'selectedKey']])
+                ->add('key', \Symfony\Component\Form\Extension\Core\Type\IntegerType::class, ['attr' => ['x-model' => 'selectedKey']])
                 ->add('npc', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
                     'choices' => $vertexRepo->findByClass(Transhuman::class),
                     'choice_label' => function ($choice, string $key, mixed $value): TranslatableMessage|string {

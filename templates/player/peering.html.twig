@@ -25,8 +25,11 @@
                     // feeback from GM
                     this.socket.addEventListener('validation', (msg) => {
                         console.log('Validation from GM')
-                        console.log(msg.data)
-                        //    localStorage.setItem('npcName', msg.data)
+                        const content = JSON.parse(msg.data)
+                        if (content.identifier === this.peeringKey) {
+                            //    localStorage.setItem('npcName', msg.data)
+                            console.log(content.npcTitle)
+                        }
                     })
 
                     fetch(helloUrl, {
