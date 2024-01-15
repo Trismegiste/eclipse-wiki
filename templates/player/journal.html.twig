@@ -4,7 +4,7 @@
 {% block title %}Player{% endblock %}
 
 {% block body %}
-    <div x-data="playerLog('{{ mercure(topic) }}')">
+    <div x-data="playerLog('{{ mercure('public') }}')">
         <nav class="pure-menu  pure-menu-horizontal">
             <ul class="pure-menu-list">
                 {% set navigation = ['picture', 'user-circle', 'file-pdf', 'hexagon', 'view3d'] %}
@@ -84,10 +84,17 @@
 
                 connect() {
                     let url = new URL(this.host)
+                    // append last event id
                     const lastId = localStorage.getItem('lastEventID')
                     if (lastId) {
                         url.searchParams.append('lastEventID', lastId)
                     }
+                    // append npc channel
+                    if (localStorage.getItem('npcTitle')) {
+                        url.searchParams.append('topic', 'private-' + localStorage.getItem('npcTitle'))
+                    }
+
+                    // connection
                     this.socket = new EventSource(url)
 
                     this.socket.onopen = (msg) => {

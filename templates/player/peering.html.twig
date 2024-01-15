@@ -12,6 +12,11 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="module">
+        // Before everything, check if the client was previously authenticated
+        if (localStorage.getItem('npcTitle')) {
+            window.location = '{{ path('app_playerlog_index') }}'
+        }
+
         Alpine.data('peering', (mercureHost, helloUrl) => ({
                 host: mercureHost,
                 socket: null,
@@ -27,8 +32,8 @@
                         console.log('Validation from GM')
                         const content = JSON.parse(msg.data)
                         if (content.identifier === this.peeringKey) {
-                            //    localStorage.setItem('npcName', msg.data)
-                            console.log(content.npcTitle)
+                            console.log('Client authentifié en tant que ' + content.npcTitle)
+                            localStorage.setItem('npcTitle', content.npcTitle)
                         }
                     })
 

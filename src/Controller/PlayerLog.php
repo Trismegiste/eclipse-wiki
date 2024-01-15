@@ -23,10 +23,7 @@ class PlayerLog extends AbstractController
     #[Route('/log')]
     public function index(/* Transhuman $vertex */): Response
     {
-        $topic = ['public'];
-        //   $topic[] = 'player-' . $vertex->getPk();
-
-        return $this->render('player/journal.html.twig', ['topic' => $topic]);
+        return $this->render('player/journal.html.twig');
     }
 
     // for testing Sub API
