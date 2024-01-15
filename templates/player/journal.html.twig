@@ -90,13 +90,16 @@
                         content.classList = ['swiper-slide']
                         content.dataset.contentId = msg.lastEventId
                         localStorage.setItem('lastEventID', msg.lastEventId)
-                        content.innerHTML = msg.data
+                        const profile = document.createElement("img");
+                        profile.src = msg.data
+                        content.append(profile)
                         this.swiper.prependSlide(content)
                         this.swiper.slideTo(0, 500)
                     })
 
                     this.socket.addEventListener('picture', (msg) => {
                         console.log('New picture')
+                        localStorage.setItem('lastEventID', msg.lastEventId)
                         this.$refs.picture.src = msg.data
                     })
 

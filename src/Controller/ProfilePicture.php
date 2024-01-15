@@ -61,7 +61,7 @@ class ProfilePicture extends AbstractController
         $profile = $maker->generate($npc, $pathname);
         $cached = $cache->slimPictureForPush($profile);
 
-        return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $cached->getPathname()]);
+        return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $cached->getPathname(), 'imgType' => 'profile']);
     }
 
     /**
@@ -90,7 +90,7 @@ class ProfilePicture extends AbstractController
      * Show a list of NPC profiles from a template (a Transhuman with isNpcTemplate() method returning true)
      */
     #[Route('/profile/template/{pk}', methods: ['GET', 'POST'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function template(Transhuman $vertex, Request $request, AvatarMaker $maker, WebsocketPusher $pusher, PlayerCastCache $cache, CharacterFactory $fac): Response
+    public function template(Transhuman $vertex, Request $request, AvatarMaker $maker, \App\Service\Mercure\Pusher $pusher, PlayerCastCache $cache, CharacterFactory $fac): Response
     {
         $form = $this->createForm(ProfileOnTheFly::class, null, ['transhuman' => $vertex]);
 
@@ -106,12 +106,9 @@ class ProfilePicture extends AbstractController
                 $cached = $cache->slimPictureForPush($profile);
 
                 try {
-                    $ret = $pusher->push(json_encode([
-                        'file' => $cached->getPathname(),
-                        'action' => 'pictureBroadcast'
-                            ]), '2d');
-                    $this->addFlash('success', $ret);
-                } catch (ConnectionException $e) {
+                    $pusher->sendPictureAsDataUrl($cached, 'profile');
+                    $this->addFlash('success', 'Profile for ' . $extra->getTitle() . ' sent');
+                } catch (\Exception $e) {
                     $this->addFlash('error', $e->getMessage());
                 }
 
