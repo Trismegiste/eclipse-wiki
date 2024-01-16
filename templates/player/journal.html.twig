@@ -9,8 +9,8 @@
             <ul class="pure-menu-list">
                 {% set navigation = ['picture', 'user-circle', 'file-pdf', 'hexagon', 'view3d'] %}
                 {% for idx, panel in navigation %}
-                    <li class="pure-menu-item">
-                        <a href="#{{ panel }}" class="pure-menu-link" x-on:click.prevent="panel={{ idx }}">
+                    <li class="pure-menu-item" x-bind:class="newContent[{{ idx }}] && 'new-content'">
+                        <a href="#{{ panel }}" class="pure-menu-link" x-on:click.prevent="showPanel({{ idx }})">
                             <i class="icon-{{ panel }}"></i>
                         </a>
                     </li>
@@ -61,6 +61,7 @@
                 swiper: null,
                 panel: 1,
                 document: [],
+                newContent: [false, false, false, false, false],
 
                 init() {
                     // Socket
@@ -112,29 +113,34 @@
                         content.append(profile)
                         this.swiper.prependSlide(content)
                         this.swiper.slideTo(0, 500)
+                        this.notifPanel(1)
                     })
 
                     this.socket.addEventListener('picture', (msg) => {
                         console.log('New picture')
                         localStorage.setItem('lastEventID', msg.lastEventId)
                         this.$refs.picture.src = msg.data
+                        this.notifPanel(0)
                     })
 
                     this.socket.addEventListener('battlemap', (msg) => {
                         console.log('New battlemap')
                         localStorage.setItem('lastEventID', msg.lastEventId)
                         this.$refs.battlemap.src = msg.data
+                        this.notifPanel(3)
                     })
 
                     this.socket.addEventListener('cubemap', (msg) => {
                         console.log('New cubemap')
                         localStorage.setItem('lastEventID', msg.lastEventId)
+                        this.notifPanel(4)
                     })
 
                     this.socket.addEventListener('document', (msg) => {
                         console.log('New document')
                         localStorage.setItem('lastEventID', msg.lastEventId)
                         this.document.push(JSON.parse(msg.data))
+                        this.notifPanel(2)
                     })
 
                     this.socket.onerror = () => {
@@ -150,6 +156,17 @@
                     } else if (document.exitFullscreen) {
                         document.exitFullscreen();
                         panel.classList = []
+                    }
+                },
+
+                showPanel(idx) {
+                    this.panel = idx
+                    this.newContent[idx] = false
+                },
+
+                notifPanel(idx) {
+                    if (this.panel !== idx) {
+                        this.newContent[idx] = true
                     }
                 },
 
@@ -187,7 +204,11 @@
 
         .document {
             line-height: 200%;
-            font-size: 140%;
+            font-size: 130%;
+        }
+
+        .new-content i {
+            color: darkred;
         }
     </style>
 {% endblock %}
