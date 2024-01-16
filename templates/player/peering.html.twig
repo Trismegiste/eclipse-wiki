@@ -4,13 +4,17 @@
 {% block title %}Appairage Joueur{% endblock %}
 
 {% block body %}
-    <div x-data="peering('{{ mercure('peering') }}', '{{ path('app_playerlog_hello') }}', '{{ path('app_playerlog_index') }}')">
-        Ma clef est <span x-text="peeringKey"/>
+    <h1 class="big-title">{{ block('title') }}</h1>
+    <div x-data="peering('{{ mercure('peering') }}', '{{ path('app_playerlog_hello') }}', '{{ path('app_playerlog_index') }}')" class="peering">
+        <h2>Bienvenue sur Eclipse-Wiki</h2>
+        <h2>la webapp de VTTRPG</h2>
+        <p>Ma clef d'appairage est</p>
+        <p x-text="peeringKey" class="big"/>
     </div>
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
+    {# parent() #}
     <script type="module">
         Alpine.data('peering', (mercureHost, helloUrl, playerLogUrl) => ({
                 host: mercureHost,
@@ -25,7 +29,7 @@
                     }
 
                     // peering key
-                    this.peeringKey = Math.floor(Math.random() * 10000);
+                    this.peeringKey = 1000 + Math.floor(Math.random() * 9000);
                     // SSE Socket
                     this.socket = new EventSource(this.host)
                     // listen to feeback from the GM
@@ -53,4 +57,16 @@
                 }
             }))
     </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .peering {
+            text-align: center;
+        }
+        .peering .big {
+            font-size: 400%;
+        }
+    </style>
 {% endblock %}
