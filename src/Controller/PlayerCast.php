@@ -59,20 +59,21 @@ class PlayerCast extends AbstractController
         }
     }
 
-    public function internalPushDynamicDocument(Vertex $vertex, string $filename, string $linkLabel)
+    public function internalPushDynamicDocument(\Symfony\Component\HttpFoundation\Request $request, Vertex $vertex, string $filename, string $linkLabel)
     {
         $form = $this->createFormBuilder()
+                ->add('channel', \App\Form\Type\TopicSelectorType::class)
                 ->add('push', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
                 ->getForm();
+
+        $url = $this->generateUrl('app_playercast_getdocument', ['filename' => $filename], UrlGeneratorInterface::ABSOLUTE_URL);
 
         return $this->render('player/push_document.html.twig', [
                     'vertex' => $vertex,
                     'title' => $vertex->getTitle(),
                     'form' => $form->createView(),
                     'document' => [
-                        'url' => $this->generateUrl('app_playercast_getdocument',
-                                ['filename' => $filename],
-                                UrlGeneratorInterface::ABSOLUTE_URL),
+                        'url' => $url,
                         'label' => $linkLabel
                     ]
         ]);

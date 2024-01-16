@@ -43,7 +43,14 @@ class SubscriptionClient
             }
         }
 
-        return $topic;
+        return array_unique($topic);
+    }
+
+    public function getPrivateTopic(): array
+    {
+        return array_filter($this->getAllTopic(), function ($val) {
+            return preg_match('#^private-#', $val);
+        });
     }
 
 }
