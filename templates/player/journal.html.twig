@@ -37,7 +37,7 @@
             <img x-ref="battlemap"/>
         </div>
         <div x-show="panel===4">
-            BABYLON
+            <img x-ref="cubemap"/>
         </div>
         <div x-show="panel===2">
             <ul class="document">
@@ -133,6 +133,7 @@
                     this.socket.addEventListener('cubemap', (msg) => {
                         console.log('New cubemap')
                         localStorage.setItem('lastEventID', msg.lastEventId)
+                        this.$refs.cubemap.src = msg.data
                         this.notifPanel(4)
                     })
 

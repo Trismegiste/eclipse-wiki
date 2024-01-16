@@ -143,7 +143,7 @@ class FirstPerson extends AbstractController
             imagejpeg($cubemap, $target, 50);
             imagedestroy($cubemap);
 
-            return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $target, 'imgType' => '3d']);
+            return $this->forward(GmPusher::class . '::internalPushPicture', ['pathname' => $target, 'imgType' => 'cubemap']);
         }
 
         return new JsonResponse(['level' => 'error', 'message' => (string) $form->getErrors(true, true)], 400);
