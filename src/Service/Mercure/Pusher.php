@@ -34,7 +34,7 @@ class Pusher
         $this->hub->publish($update);
     }
 
-    public function sendDocumentLink(string $link, $title): void
+    public function sendDocumentLink(string $link, string $title): void
     {
         $update = new Update(
                 'public',

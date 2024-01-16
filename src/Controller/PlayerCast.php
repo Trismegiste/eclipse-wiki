@@ -6,13 +6,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Vertex;
 use App\Service\DocumentBroadcaster;
-use App\Service\WebsocketPusher;
-use Paragi\PhpWebsocket\ConnectionException;
+use App\Service\Mercure\Pusher;
+use Exception;
+use SplFileInfo;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Ctrl for WebSocket-controled Player Screen
@@ -20,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class PlayerCast extends AbstractController
 {
 
-    public function __construct(protected \App\Service\Mercure\Pusher $pusher)
+    public function __construct(protected Pusher $pusher)
     {
         
     }
@@ -48,12 +51,31 @@ class PlayerCast extends AbstractController
     public function internalPushFile(string $pathname, string $imgType = 'picture'): JsonResponse
     {
         try {
-            $pic = new \SplFileInfo($pathname);
+            $pic = new SplFileInfo($pathname);
             $this->pusher->sendPictureAsDataUrl($pic, $imgType);
             return new JsonResponse(['level' => 'success', 'message' => $pic->getBasename() . ' sent'], Response::HTTP_OK);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return new JsonResponse(['level' => 'error', 'message' => $e->getMessage()], Response::HTTP_SERVICE_UNAVAILABLE);
         }
+    }
+
+    public function internalPushDynamicDocument(Vertex $vertex, string $filename, string $linkLabel)
+    {
+        $form = $this->createFormBuilder()
+                ->add('push', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+                ->getForm();
+
+        return $this->render('player/push_document.html.twig', [
+                    'vertex' => $vertex,
+                    'title' => $vertex->getTitle(),
+                    'form' => $form->createView(),
+                    'document' => [
+                        'url' => $this->generateUrl('app_playercast_getdocument',
+                                ['filename' => $filename],
+                                UrlGeneratorInterface::ABSOLUTE_URL),
+                        'label' => $linkLabel
+                    ]
+        ]);
     }
 
 }

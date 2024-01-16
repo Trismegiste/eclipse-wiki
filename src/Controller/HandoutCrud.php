@@ -66,6 +66,12 @@ class HandoutCrud extends GenericCrud
         $html = $this->renderView('handout/pc_export.pdf.twig', ['vertex' => $vertex]);
         $lan = $broadcast->getExternalLinkForGeneratedPdf($title, $html, self::pdfOptions);
 
+        return $this->forward(PlayerCast::class . '::internalPushDynamicDocument', [
+                    'vertex' => $vertex,
+                    'filename' => $title,
+                    'linkLabel' => 'Aide de jeu - ' . $vertex->getTitle()
+        ]);
+
         $pusher->sendDocumentLink($lan, 'Aide de jeu : ' . $vertex->getTitle());
 
         $this->addFlash('success', 'PDF Handout généré');

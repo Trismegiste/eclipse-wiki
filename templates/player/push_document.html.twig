@@ -1,0 +1,58 @@
+{# Pushing a dynamic document #}
+{% extends "base.html.twig" %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block header_title %}
+    <nav style="float: right">
+        <a href="{{ path('app_vertexcrud_show', {pk: vertex.pk}) }}" title="Voir"><i class="icon-eye"></i></a>
+    </nav>
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+    <div class="pure-g">
+        <div class="pure-u-1-2">
+            <h2>{{ document.label }}</h2>
+            {{ form(form) }}
+        </div>
+        <div class="pure-u-1-2">
+            <figure>
+                <canvas id="qrious" class="pure-img"></canvas>
+            </figure>
+        </div>
+        <div class="pure-u-1">
+            <h2 class="big-link">
+                {{ document.url }}
+                <a href="{{ document.url }}" target="_blank"><i class="icon-export"></i></a>
+            </h2>  
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="module">
+        import QRious from 'qrious';
+
+        // QR code
+        new QRious({
+            element: document.getElementById('qrious'),
+            size: Math.min(innerWidth, innerHeight),
+            level: 'M',
+            value: '{{ document.url }}'
+        })
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .big-link {
+            text-align: center;
+            font-size: 150%;
+        }
+        figure {
+            margin: 1em 2em;
+        }
+    </style>
+{% endblock %}
