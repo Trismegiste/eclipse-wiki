@@ -6,7 +6,7 @@
 
 namespace App\Controller;
 
-use App\Service\Mercure\SubscriptionClient;
+use App\Service\Mercure\Pusher;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,13 +26,6 @@ class PlayerLog extends AbstractController
         return $this->render('player/journal.html.twig');
     }
 
-    // for testing Sub API
-    #[Route('/sub')]
-    public function listing(SubscriptionClient $api): Response
-    {
-        return new Response(json_encode($api->getSubscriptions()));
-    }
-
     #[Route('/peering')]
     public function peering(): Response
     {
@@ -40,7 +33,7 @@ class PlayerLog extends AbstractController
     }
 
     #[Route('/hello', methods: ["POST"])]
-    public function hello(Request $request, \App\Service\Mercure\Pusher $pusher): JsonResponse
+    public function hello(Request $request, Pusher $pusher): JsonResponse
     {
         $body = json_decode($request->getContent());
         $pusher->askPeering($body->identifier);

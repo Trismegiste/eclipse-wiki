@@ -30,7 +30,7 @@ class PeeringConfirm extends AbstractType
         $builder
                 ->add('key', IntegerType::class, ['attr' => ['x-model' => 'selectedKey']])
                 ->add('npc', ChoiceType::class, [
-                    'choices' => $this->vertexRepo->findByClass(Transhuman::class),
+                    'choices' => $this->vertexRepo->findByClass(Transhuman::class, ['wildCard' => true]),
                     'choice_label' => function ($choice, string $key, mixed $value): string {
                         return $choice->getTitle();
                     }

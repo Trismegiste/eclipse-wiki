@@ -126,6 +126,11 @@
                         this.$refs.battlemap.src = msg.data
                     })
 
+                    this.socket.addEventListener('cubemap', (msg) => {
+                        console.log('New cubemap')
+                        localStorage.setItem('lastEventID', msg.lastEventId)
+                    })
+
                     this.socket.addEventListener('document', (msg) => {
                         console.log('New document')
                         localStorage.setItem('lastEventID', msg.lastEventId)
