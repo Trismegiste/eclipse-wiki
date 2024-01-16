@@ -70,7 +70,7 @@ class RemotePicture extends AbstractController
         $url = rawurldecode($request->query->get('url'));
         $picture = $cache->slimPictureForPush($this->remoteStorage->download($url));
 
-        return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $picture->getPathname()]);
+        return $this->forward(GmPusher::class . '::internalPushPicture', ['pathname' => $picture->getPathname()]);
     }
 
 }

@@ -63,17 +63,6 @@ class GmHelper extends AbstractController
     /**
      * Creates a QR Code for the link to player screen
      */
-    #[Route("/broadcast/qrcode", methods: ["GET"])]
-    public function qrCode(NetTools $ntools): Response
-    {
-        $lan = $ntools->generateUrlForExternalAccess('app_playercast_view');
-
-        return $this->render('player/qrcode_picture.html.twig', ['url_cast' => $lan]);
-    }
-
-    /**
-     * Creates a QR Code for the link to player screen
-     */
     #[Route("/broadcast/qrcode3d", methods: ["GET"])]
     public function qrCode3d(NetTools $ntools): Response
     {
