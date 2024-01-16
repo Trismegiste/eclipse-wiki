@@ -6,6 +6,7 @@
 
 namespace App\Controller;
 
+use App\Service\DocumentBroadcaster;
 use App\Service\Mercure\Pusher;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -39,6 +40,15 @@ class PlayerLog extends AbstractController
         $pusher->askPeering($body->identifier);
 
         return new JsonResponse(['status' => 'OK']);
+    }
+
+    /**
+     * Returns a generated document
+     */
+    #[Route('/getdoc/{filename}', methods: ['GET'])]
+    public function getDocument(string $filename, DocumentBroadcaster $broad): Response
+    {
+        return $broad->createResponseForFilename($filename);
     }
 
 }

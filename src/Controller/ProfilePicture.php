@@ -61,7 +61,7 @@ class ProfilePicture extends AbstractController
         $profile = $maker->generate($npc, $pathname);
         $cached = $cache->slimPictureForPush($profile);
 
-        return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $cached->getPathname(), 'imgType' => 'profile']);
+        return $this->forward(GmPusher::class . '::internalPushPicture', ['pathname' => $cached->getPathname(), 'imgType' => 'profile']);
     }
 
     /**

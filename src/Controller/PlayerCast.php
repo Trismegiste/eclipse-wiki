@@ -37,46 +37,4 @@ class PlayerCast extends AbstractController
         return $this->render('player/view.html.twig', ['url_picture' => $this->pusher->getUrlPicture()]);
     }
 
-    /**
-     * Returns a generated document
-     */
-    #[Route('/player/getdoc/{filename}', methods: ['GET'])]
-    public function getDocument(string $filename, DocumentBroadcaster $broad): Response
-    {
-        return $broad->createResponseForFilename($filename);
-    }
-
-    //  /!\ -- Big security breach : internally called ONLY -- /!\
-    // DO NOT EXPOSE THIS CONTROLLER PUBLICLY
-    public function internalPushFile(string $pathname, string $imgType = 'picture'): JsonResponse
-    {
-        try {
-            $pic = new SplFileInfo($pathname);
-            $this->pusher->sendPictureAsDataUrl($pic, $imgType);
-            return new JsonResponse(['level' => 'success', 'message' => $pic->getBasename() . ' sent'], Response::HTTP_OK);
-        } catch (Exception $e) {
-            return new JsonResponse(['level' => 'error', 'message' => $e->getMessage()], Response::HTTP_SERVICE_UNAVAILABLE);
-        }
-    }
-
-    public function internalPushDynamicDocument(\Symfony\Component\HttpFoundation\Request $request, Vertex $vertex, string $filename, string $linkLabel)
-    {
-        $form = $this->createFormBuilder()
-                ->add('channel', \App\Form\Type\TopicSelectorType::class)
-                ->add('push', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
-                ->getForm();
-
-        $url = $this->generateUrl('app_playercast_getdocument', ['filename' => $filename], UrlGeneratorInterface::ABSOLUTE_URL);
-
-        return $this->render('player/push_document.html.twig', [
-                    'vertex' => $vertex,
-                    'title' => $vertex->getTitle(),
-                    'form' => $form->createView(),
-                    'document' => [
-                        'url' => $url,
-                        'label' => $linkLabel
-                    ]
-        ]);
-    }
-
 }

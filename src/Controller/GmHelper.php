@@ -9,18 +9,15 @@ namespace App\Controller;
 use App\Entity\Ali;
 use App\Entity\Freeform;
 use App\Entity\Transhuman;
-use App\Form\PeeringConfirm;
 use App\Repository\VertexRepository;
 use App\Service\DigraphExplore;
 use App\Service\InfoDashboard;
-use App\Service\Mercure\Pusher;
 use App\Service\NetTools;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Trismegiste\NameGenerator\FileRepository;
 use Trismegiste\NameGenerator\RandomizerDecorator;
 
@@ -120,27 +117,6 @@ class GmHelper extends AbstractController
     public function summary(InfoDashboard $info): Response
     {
         return $this->render('summary.html.twig', ['stats' => $info]);
-    }
-
-    /**
-     * Wait for peering with players
-     */
-    #[Route("/peering", methods: ["GET", "POST"])]
-    public function peering(Pusher $pusher, Request $request, \App\Service\Mercure\SubscriptionClient $mercure): Response
-    {
-        $form = $this->createForm(PeeringConfirm::class);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $assoc = $form->getData();
-            $pusher->validPeering($assoc['key'], $assoc['npc']->getTitle());
-        }
-
-        return $this->render('peering.html.twig', [
-                    'form' => $form->createView(),
-                    'player_peering' => $this->generateUrl('app_playerlog_peering', [], UrlGeneratorInterface::ABSOLUTE_URL),
-                    'subscription' => $mercure->getSubscriptions()->subscriptions
-        ]);
     }
 
 }

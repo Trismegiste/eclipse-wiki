@@ -78,7 +78,7 @@ class Picture extends AbstractController
     {
         $picture = $cache->slimPictureForPush($this->storage->getFileInfo($title));
 
-        return $this->forward(PlayerCast::class . '::internalPushFile', ['pathname' => $picture->getPathname()]);
+        return $this->forward(GmPusher::class . '::internalPushPicture', ['pathname' => $picture->getPathname()]);
     }
 
     /**
