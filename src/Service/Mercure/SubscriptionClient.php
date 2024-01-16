@@ -33,4 +33,17 @@ class SubscriptionClient
         return json_decode($response->getContent());
     }
 
+    public function getAllTopic(): array
+    {
+        $all = $this->getSubscriptions()->subscriptions;
+        $topic = [];
+        foreach ($all as $sub) {
+            if ($sub->active && ($sub->type === 'Subscription')) {
+                $topic[] = $sub->topic;
+            }
+        }
+
+        return $topic;
+    }
+
 }

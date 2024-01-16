@@ -24,11 +24,11 @@
                         window.location = playerLogUrl
                     }
 
-                    // peering
+                    // peering key
                     this.peeringKey = Math.floor(Math.random() * 10000);
-                    // Socket
+                    // SSE Socket
                     this.socket = new EventSource(this.host)
-                    // feeback from GM
+                    // listen to feeback from the GM
                     this.socket.addEventListener('validation', (msg) => {
                         console.log('Validation from GM')
                         const content = JSON.parse(msg.data)
@@ -39,6 +39,7 @@
                         }
                     })
 
+                    // « Hello I'm here and I want to peer with this ID »
                     fetch(helloUrl, {
                         method: 'POST',
                         body: JSON.stringify({identifier: this.peeringKey})

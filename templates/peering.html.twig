@@ -48,9 +48,9 @@
                         value: playerPeeringUrl
                     })
 
-                    // Socket
+                    // SSE Socket
                     this.socket = new EventSource(this.host)
-                    // feedback from GM
+                    // listen to requests from players (proxyed by symfony)
                     this.socket.addEventListener('ask', (msg) => {
                         console.log('Request peering from player')
                         this.player.push(JSON.parse(msg.data))
