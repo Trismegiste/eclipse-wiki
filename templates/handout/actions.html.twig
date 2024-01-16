@@ -1,6 +1,6 @@
 {# default actions #}
 <a href="{{ path('app_vertexcrud_show', {pk: vertex.pk}) }}" title="Voir"><i class="icon-eye"></i></a>
-<a href="{{ path('app_handoutcrud_qrcode', {pk: vertex.pk}) }}" title="Générer le QR Code du PDF"><i class="icon-qrcode"></i></a>
+<a href="{{ path('app_handoutcrud_pushpdf', {pk: vertex.pk}) }}" title="Envoyer le PDF vers les joueurs"><i class="icon-push"></i></a>
 <a href="{{ path('app_handoutcrud_edit', {pk: vertex.pk}) }}" title="Modifier"><i class="icon-edit"></i></a>
 <a href="{{ path('app_vertexcrud_rename', {pk: vertex.pk}) }}" title="Renommer"><i class="icon-rename"></i></a>
 <a href="{{ path('app_vertexcrud_delete', {pk: vertex.pk}) }}" title="Effacer"><i class="icon-trash-empty"></i></a>

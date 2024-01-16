@@ -61,6 +61,9 @@ class GmPusher extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->pusher->sendDocumentLink($url, $label);
+            $this->addFlash('success', "PDF $filename envoyé");
+
+            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
         }
 
         return $this->render('player/push_document.html.twig', [
