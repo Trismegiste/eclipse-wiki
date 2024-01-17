@@ -7,7 +7,6 @@
 namespace App\Command;
 
 use App\Command\QrCode\ConsoleWriter;
-use App\Service\NetTools;
 use Endroid\QrCode\Builder\Builder;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -30,20 +29,18 @@ class LoginLink extends Command
 
     protected $handler;
     protected $provider;
-    protected $tools;
 
-    public function __construct(LoginLinkHandlerInterface $loginLinkHandler, UserProviderInterface $repo, NetTools $tools)
+    public function __construct(LoginLinkHandlerInterface $loginLinkHandler, UserProviderInterface $repo, protected string $webLocalIp)
     {
         parent::__construct();
         $this->handler = $loginLinkHandler;
         $this->provider = $repo;
-        $this->tools = $tools;
     }
 
     public function configure(): void
     {
         $this->setDescription('Generates login link to connect to the web server')
-                ->addArgument('port', InputArgument::OPTIONAL, 'The port on which the web server is running', 8000)
+                ->addArgument('port', InputArgument::OPTIONAL, 'The port on which the web server is running', 80)
                 ->addOption('firefox', 'f', InputOption::VALUE_NONE, 'Launch Firefox')
                 ->addOption('qrcode', 'c', InputOption::VALUE_NONE, 'Print QR-Code')
         ;
@@ -55,7 +52,7 @@ class LoginLink extends Command
         $io->title('Connecting to EclipseWiki app');
 
         $user = $this->provider->loadUserByIdentifier('gamemaster');
-        $request = Request::create('http://' . $this->tools->getLocalIp() . ':' . $input->getArgument('port'));
+        $request = Request::create('http://' . $this->webLocalIp . ':' . $input->getArgument('port'));
 
         $loginLinkDetails = $this->handler->createLoginLink($user, $request);
         $loginLink = $loginLinkDetails->getUrl();
