@@ -70,7 +70,8 @@ class FirstPersonTest extends WebTestCase
 
     public function testPlayerView()
     {
-        $this->client->request('GET', "/player/fps");
+        $this->client->request('GET', "/player/log");
+        $this->assertSelectorExists('#renderCanvas');
         $this->assertResponseIsSuccessful();
     }
 
