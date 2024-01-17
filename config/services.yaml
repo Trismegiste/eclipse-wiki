@@ -86,12 +86,6 @@ services:
     App\Form\Type\RandomNameType:
         arguments:
             $yaml: '%kernel.project_dir%/database/place_names.yml'
-
-    # Websocket
-    App\Service\WebsocketPusher:
-        arguments:
-            $websocketPort: '%websocket_port%'   
-            $publicFolder: '%kernel.project_dir%/public'
          
     # Storage
     App\Service\Storage:
