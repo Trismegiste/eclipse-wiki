@@ -11,6 +11,8 @@ use App\Entity\Transhuman;
 use App\Entity\Vertex;
 use App\Form\PlaceType;
 use App\Service\DigraphExplore;
+use App\Service\Mercure\Pusher;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -104,9 +106,13 @@ class PlaceCrud extends GenericCrud
         return $this->render('fragment/place_connect.html.twig', ['connection' => $digraph->searchForConnectedPlace($place)]);
     }
 
-    public function legendHighlight(\App\Service\WebsocketPusher $pusher): Response
+    #[Route('/ping-position', methods: ['POST'])]
+    public function pingPosition(Request $request, Pusher $pusher): JsonResponse
     {
-        return $this->render('fragment/legend_highlight.html.twig', ['url_feedback' => $pusher->getUrlFeedback()]);
+        $pos = json_decode($request->getContent());
+        $pusher->pingIndexedPosition($pos->cell);
+
+        return new JsonResponse(['status' => 'OK']);
     }
 
 }

@@ -1,5 +1,5 @@
 {# socket for highlighting center of interest (legend) on battlemap3d #}
 <script type="module">
     import legendHighlightSubscriber from 'legend-highlight-subscriber';
-    legendHighlightSubscriber('{{ url_feedback }}')
+    legendHighlightSubscriber('{{ path('app_placecrud_pingposition') }}')
 </script>

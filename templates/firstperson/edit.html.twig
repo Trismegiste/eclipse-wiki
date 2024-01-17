@@ -199,25 +199,21 @@
 
             }))
 
-        const feedbackSocket = new WebSocket('{{ url_feedback }}')
-        feedbackSocket.onmessage = function (msg) {
+        const feedbackSocket = new EventSource('{{ mercure('ping-position') }}')
+        feedbackSocket.addEventListener('relative', (msg) => {
             const position = JSON.parse(msg.data)
-
-            switch (position.mode) {
-                case 'relative':
-                    const idx = scene.metadata.playerViewOnTileIndex
-                    if (idx !== null) {
-                        const ground = scene.metadata.grid[idx]
-                        scene.movePlayerCursor(ground.x + position.deltaX, position.deltaY - ground.y)
-                    }
-                    break
-
-                case 'indexed':
-                    const ground = scene.metadata.grid[parseInt(position.cell)]
-                    scene.movePlayerCursor(ground.x, -ground.y)
-                    break
+            const idx = scene.metadata.playerViewOnTileIndex
+            if (idx !== null) {
+                const ground = scene.metadata.grid[idx]
+                scene.movePlayerCursor(ground.x + position.deltaX, position.deltaY - ground.y)
             }
-        }
+        })
+        feedbackSocket.addEventListener('indexed', (msg) => {
+            const position = JSON.parse(msg.data)
+            const ground = scene.metadata.grid[parseInt(position.cell)]
+            scene.movePlayerCursor(ground.x, -ground.y)
+        })
+
     </script>
 {% endblock %}
 

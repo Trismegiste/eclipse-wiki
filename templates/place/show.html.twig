@@ -88,5 +88,5 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {{ render(controller('App\\Controller\\PlaceCrud::legendHighlight')) }}
+    {{ include('fragment/legend_highlight.html.twig') }}
 {% endblock %}

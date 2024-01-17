@@ -78,4 +78,15 @@ class Pusher
         $this->hub->publish($update);
     }
 
+    public function pingIndexedPosition(int $idx): void
+    {
+        $update = new Update(
+                'ping-position',
+                json_encode(['cell' => $idx]),
+                type: 'indexed'
+        );
+
+        $this->hub->publish($update);
+    }
+
 }
