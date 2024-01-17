@@ -12,12 +12,12 @@ use App\Entity\Transhuman;
 use App\Repository\VertexRepository;
 use App\Service\DigraphExplore;
 use App\Service\InfoDashboard;
-use App\Service\NetTools;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Trismegiste\NameGenerator\FileRepository;
 use Trismegiste\NameGenerator\RandomizerDecorator;
 
@@ -52,10 +52,10 @@ class GmHelper extends AbstractController
      * Generates a QR Code for external initiative tracker
      */
     #[Route("/tracker/qrcode", methods: ["GET"])]
-    public function tracker(VertexRepository $repo, NetTools $ntools): Response
+    public function tracker(VertexRepository $repo): Response
     {
         $listing = $repo->findByClass([Ali::class, Freeform::class, Transhuman::class]);
-        $lan = $ntools->generateUrlForExternalAccess('app_tracker_show');
+        $lan = $this->generateUrl('app_tracker_show', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
         return $this->render('tracker/qrcode.html.twig', ['listing' => $listing, 'url_tracker' => $lan]);
     }
