@@ -17,8 +17,6 @@ use App\Form\Tool3d\TileNpc;
 use App\Repository\VertexRepository;
 use App\Service\PlayerCastCache;
 use App\Service\Storage;
-use App\Service\WebsocketPusher;
-use App\Voronoi\HexaMap;
 use App\Voronoi\MapBuilder;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -37,13 +35,11 @@ class FirstPerson extends AbstractController
 {
 
     protected MapBuilder $builder;
-    protected $pusher;
     protected VertexRepository $repository;
 
-    public function __construct(VertexRepository $repo, MapBuilder $builder, WebsocketPusher $fac)
+    public function __construct(VertexRepository $repo, MapBuilder $builder)
     {
         $this->builder = $builder;
-        $this->pusher = $fac;
         $this->repository = $repo;
     }
 
@@ -74,8 +70,7 @@ class FirstPerson extends AbstractController
                     'texturing' => $texturing->createView(),
                     'writer' => $writer->createView(),
                     'broadcast' => $broadcast->createView(),
-                    'gm_view' => $gmView->createView(),
-                    'url_feedback' => $this->pusher->getUrlFeedback()
+                    'gm_view' => $gmView->createView()
         ]);
     }
 
@@ -147,22 +142,6 @@ class FirstPerson extends AbstractController
         }
 
         return new JsonResponse(['level' => 'error', 'message' => (string) $form->getErrors(true, true)], 400);
-    }
-
-    /**
-     * The actual player screen updated with websocket
-     */
-    #[Route('/player/fps', methods: ['GET'])]
-    public function player(): Response
-    {
-        $doc = new BattlemapDocument();
-        (new HexaMap(25))->dumpMap($doc);
-
-        return $this->render('firstperson/player.html.twig', [
-                    'doc' => $doc,
-                    'url_cubemap' => $this->pusher->getUrlCubemap(),
-                    'url_feedback' => $this->pusher->getUrlFeedback()
-        ]);
     }
 
     /**
