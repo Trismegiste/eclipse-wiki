@@ -56,4 +56,16 @@ class PlayerLog extends AbstractController
         return $broad->createResponseForFilename($filename);
     }
 
+    /**
+     * Send a ping on a relative position
+     */
+    #[Route('/ping-position', methods: ['POST'])]
+    public function pingPosition(Request $request, Pusher $pusher): JsonResponse
+    {
+        $pos = json_decode($request->getContent());
+        $pusher->pingRelativePosition($pos->deltaX, $pos->deltaY);
+
+        return new JsonResponse(['status' => 'OK']);
+    }
+
 }

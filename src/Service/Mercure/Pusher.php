@@ -67,4 +67,15 @@ class Pusher
         $this->hub->publish($update);
     }
 
+    public function pingRelativePosition(int $dx, int $dy): void
+    {
+        $update = new Update(
+                'ping-position',
+                json_encode(['deltaX' => $dx, 'deltaY' => $dy]),
+                type: 'relative'
+        );
+
+        $this->hub->publish($update);
+    }
+
 }

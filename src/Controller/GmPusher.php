@@ -60,6 +60,8 @@ class GmPusher extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $channel = $form->getData('channel');
+            // @todo inject the channel for private document
             $this->pusher->sendDocumentLink($url, $label);
             $this->addFlash('success', "PDF $filename envoyé");
 

@@ -62,7 +62,11 @@
 
         // performance issue : Babylon scene, engine objects must not be proxied by AlpineJs because it's slowing A LOT
         // That's why I initialize Babylon scene OUTSIDE of AlpineJs init()
-        Cubemap.createCubemap(JSON.parse(document.getElementById("cubemap-grid").textContent), document.getElementById("renderCanvas"))
+        Cubemap.createCubemap(
+                JSON.parse(document.getElementById("cubemap-grid").textContent),
+                document.getElementById("renderCanvas"),
+                '{{ path('app_playerlog_pingposition') }}'
+                )
 
         Alpine.data('playerLog', (host) => ({
                 host: host,
