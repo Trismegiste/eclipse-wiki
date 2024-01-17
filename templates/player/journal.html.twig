@@ -86,7 +86,7 @@
                         modules: [Manipulation]
                     })
 
-                    // check if lost websocket connection when focus
+                    // check if SSE connection is lost when window get focus
                     document.addEventListener('visibilitychange', () => {
                         if (document.visibilityState === 'visible') {
                             if (this.socket.readyState === EventSource.CLOSED) {
