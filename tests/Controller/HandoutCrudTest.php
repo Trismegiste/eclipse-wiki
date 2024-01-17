@@ -82,9 +82,11 @@ class HandoutCrudTest extends WebTestCase
     public function testQrCode(string $edit)
     {
         $crawler = $this->client->request('GET', $edit);
-        $url = $crawler->filterXPath('//nav/a/i[@class="icon-qrcode"]/parent::a')->attr('href');
+        $url = $crawler->filterXPath('//nav/a/i[@class="icon-push"]/parent::a')->attr('href');
 
-        $crawler = $this->client->request('GET', $url);
+        $this->client->request('GET', $url);
+        $this->assertResponseRedirects();
+        $crawler = $this->client->followRedirect();
         $this->assertResponseIsSuccessful();
         $this->assertStringContainsString('QRious', $this->client->getResponse()->getContent());
 

@@ -62,7 +62,7 @@ class PictureTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $ret = json_decode($this->client->getResponse()->getContent());
         $this->assertStringContainsString('yolo.png', $ret->message);
-        $this->assertStringContainsString('complete', $ret->message);
+        $this->assertStringContainsString('sent', $ret->message);
     }
 
     public function getVertices(): array

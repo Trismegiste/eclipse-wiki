@@ -4,10 +4,9 @@
  * eclipse-wiki
  */
 
-use App\Entity\MapConfig;
 use App\Entity\Place;
 use App\Repository\VertexRepository;
-use MongoDB\BSON\ObjectId;
+use App\Service\Storage;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -78,7 +77,7 @@ class FirstPersonTest extends WebTestCase
     /** @depends testCreate */
     public function testWrite(string $pk)
     {
-        $store = static::getContainer()->get(App\Service\Storage::class);
+        $store = static::getContainer()->get(Storage::class);
         $doc = join_paths($store->getRootDir(), "map3d-$pk.json");
         @unlink($doc);
 

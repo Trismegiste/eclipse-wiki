@@ -145,9 +145,11 @@ class LoveletterCrudTest extends WebTestCase
     public function testSend(string $show)
     {
         $crawler = $this->client->request('GET', $show);
-        $url = $crawler->filterXPath('//nav/a/i[@class="icon-qrcode"]/parent::a')->attr('href');
+        $url = $crawler->filterXPath('//nav/a/i[@class="icon-push"]/parent::a')->attr('href');
 
         $this->client->request('GET', $url);
+        $this->assertResponseRedirects();
+        $crawler = $this->client->followRedirect();
         $this->assertResponseIsSuccessful();
         $this->assertStringContainsString('QRious', $this->client->getResponse()->getContent());
     }
