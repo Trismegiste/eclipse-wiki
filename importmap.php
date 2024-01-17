@@ -30,6 +30,9 @@ return [
     'legend-highlight-subscriber' => [
         'path' => 'place/legend-highlight-subscriber.js',
     ],
+    'cubemap-viewer' => [
+        'path' => 'place/cubemap-viewer.js',
+    ],
     'dice-roller' => [
         'path' => 'DicePool.js',
     ],

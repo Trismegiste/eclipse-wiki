@@ -37,7 +37,8 @@
             <img x-ref="battlemap"/>
         </div>
         <div x-show="panel===4">
-            <img x-ref="cubemap"/>
+            <canvas id="renderCanvas">
+            </canvas>
         </div>
         <div x-show="panel===2">
             <ul class="document">
@@ -51,9 +52,17 @@
 
 {% block javascripts %}
     {# parent() #}
+    <script type="application/json" id="cubemap-grid">
+        {{ doc|json_encode()|raw }}
+    </script>
     <script type="module">
         import Swiper from 'swiper/swiper-bundle';
         import Manipulation from 'swiper/modules/manipulation';
+        import * as Cubemap from 'cubemap-viewer';
+
+        // performance issue : Babylon scene, engine objects must not be proxied by AlpineJs because it's slowing A LOT
+        // That's why I initialize Babylon scene OUTSIDE of AlpineJs init()
+        Cubemap.createCubemap(JSON.parse(document.getElementById("cubemap-grid").textContent), document.getElementById("renderCanvas"))
 
         Alpine.data('playerLog', (host) => ({
                 host: host,
@@ -133,7 +142,7 @@
                     this.socket.addEventListener('cubemap', (msg) => {
                         console.log('New cubemap')
                         localStorage.setItem('lastEventID', msg.lastEventId)
-                        this.$refs.cubemap.src = msg.data
+                        Cubemap.updateEnvironment(msg)
                         this.notifPanel(4)
                     })
 
@@ -210,6 +219,12 @@
 
         .new-content i {
             color: darkred;
+        }
+
+        #renderCanvas {
+            height: calc(100vh - 2.2em);
+            width: 100vw;
+            display: block;
         }
     </style>
 {% endblock %}

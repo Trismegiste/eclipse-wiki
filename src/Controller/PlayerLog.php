@@ -6,8 +6,10 @@
 
 namespace App\Controller;
 
+use App\Entity\BattlemapDocument;
 use App\Service\DocumentBroadcaster;
 use App\Service\Mercure\Pusher;
+use App\Voronoi\HexaMap;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,9 +24,12 @@ class PlayerLog extends AbstractController
 {
 
     #[Route('/log')]
-    public function index(/* Transhuman $vertex */): Response
+    public function index(): Response
     {
-        return $this->render('player/journal.html.twig');
+        $doc = new BattlemapDocument();
+        (new HexaMap(25))->dumpMap($doc);
+
+        return $this->render('player/journal.html.twig', ['doc' => $doc]);
     }
 
     #[Route('/peering')]
