@@ -23,14 +23,12 @@
 {% endblock %}
 
 {% block _peering_confirm_key_widget %}
-    <ul>
-        <template x-for="user in player" :key="user.identifier">
-            <label>
-                <input type="radio" name="{{ form.vars.full_name }}" x-bind:value="user.identifier"/>
-                <span x-text="user.identifier"></span>
-            </label>
-        </template>
-    </ul>
+    <template x-for="user in player" :key="user.identifier">
+        <label>
+            <input type="radio" name="{{ form.vars.full_name }}" x-bind:value="user.identifier"/>
+            <span x-text="user.identifier"></span>
+        </label>
+    </template>
 {% endblock %}
 
 {% block javascripts %}
@@ -104,6 +102,7 @@
         }
         #peering_confirm .form-widget label {
             display: block;
+            margin: 0.2em;
         }
     </style>
 {% endblock %}
