@@ -9,6 +9,7 @@ namespace App\Form\Type;
 use App\Service\Mercure\SubscriptionClient;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * SChoiceType for topics
@@ -26,7 +27,7 @@ class TopicSelectorType extends AbstractType
         return ChoiceType::class;
     }
 
-    public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $topic = $this->mercure->getPrivateTopic();
         array_unshift($topic, 'public');

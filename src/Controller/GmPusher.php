@@ -60,9 +60,9 @@ class GmPusher extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $channel = $form->getData('channel');
+            $channel = $form['channel']->getData();
             // @todo inject the channel for private document
-            $this->pusher->sendDocumentLink($url, $label);
+            $this->pusher->sendDocumentLink($url, $label, $channel);
             $this->addFlash('success', "PDF $filename envoyé");
 
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
