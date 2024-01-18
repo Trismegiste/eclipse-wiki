@@ -34,9 +34,11 @@ class PeeringConfirm extends AbstractType
                     'choices' => $this->vertexRepo->findByClass(Transhuman::class, ['wildCard' => true]),
                     'choice_label' => function ($choice, string $key, mixed $value): string {
                         return $choice->getTitle();
-                    }
+                    },
+                    'placeholder' => '------------',
+                    'required' => true
                 ])
-                ->add('confirm', SubmitType::class)
+                ->add('confirm', SubmitType::class, ['attr' => ['x-bind:disabled' => 'player.length === 0']])
         ;
     }
 
