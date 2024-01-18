@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Confirm a peering with player
@@ -29,7 +30,9 @@ class PeeringConfirm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-                ->add('key', IntegerType::class)
+                ->add('key', IntegerType::class, [
+                    'constraints' => [new NotBlank()]
+                ])
                 ->add('pc', ChoiceType::class, [
                     'choices' => $this->vertexRepo->findByClass(Transhuman::class, ['wildCard' => true]),
                     'choice_label' => function ($choice, string $key, mixed $value): string {

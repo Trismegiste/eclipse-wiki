@@ -17,20 +17,17 @@
                 {% endfor %}
             </ul>
         </nav>
+        <div x-show="panel===0"
+             x-on:contextmenu.prevent="toggleFullScreen">
+            <img x-ref="picture" src="/img/mire.png"/>
+        </div>
         <div x-show="panel===1"
              x-on:contextmenu.prevent="toggleFullScreen">
             <div class="swiper"
                  x-ref="gesture">
                 <div class="swiper-wrapper" x-ref="journal">
-                    <div class="swiper-slide">Slide 1</div>
-                    <div class="swiper-slide">Slide 2</div>
-                    <div class="swiper-slide">Slide 3</div>
                 </div>
             </div>
-        </div>
-        <div x-show="panel===0"
-             x-on:contextmenu.prevent="toggleFullScreen">
-            <img x-ref="picture"/>
         </div>
         <div x-show="panel===3"
              x-on:contextmenu.prevent="toggleFullScreen">
@@ -72,7 +69,7 @@
                 host: host,
                 socket: null,
                 swiper: null,
-                panel: 1,
+                panel: 0,
                 document: [],
                 newContent: [false, false, false, false, false],
 

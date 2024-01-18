@@ -11,11 +11,11 @@ use App\Form\Type\TopicSelectorType;
 use App\Repository\VertexRepository;
 use App\Service\DocumentBroadcaster;
 use App\Service\Mercure\Pusher;
-use App\Service\Mercure\SubscriptionClient;
 use Exception;
 use SplFileInfo;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -88,15 +88,22 @@ class GmPusher extends AbstractController
         $form = $this->createForm(PeeringConfirm::class);
 
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $assoc = $form->getData();
-            $this->pusher->validPeering($assoc['key'], $assoc['pc']->getTitle());
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $assoc = $form->getData();
+                $this->pusher->validPeering($assoc['key'], $assoc['pc']->getTitle());
 
-            return new JsonResponse([
-                'level' => 'success',
-                'message' => $assoc['pc']->getTitle() . ' appairé avec la clef ' . $assoc['key'],
-                'remove' => $assoc['key']  // for removing the key on the listing
-            ]);
+                return new JsonResponse([
+                    'level' => 'success',
+                    'message' => $assoc['pc']->getTitle() . ' appairé avec la clef ' . $assoc['key'],
+                    'remove' => $assoc['key']  // for removing the key on the listing
+                ]);
+            } else {
+                $errMsg = implode(' ', array_map(function (FormError $v) {
+                            return $v->getOrigin()->getName() . ' : ' . $v->getMessage();
+                        }, iterator_to_array($form->getErrors(true, true))));
+                return new JsonResponse(['level' => 'error', 'message' => $errMsg]);
+            }
         }
 
         return $this->render('gmpusher/peering.html.twig', [
