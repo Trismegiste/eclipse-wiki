@@ -69,12 +69,26 @@
                         method: 'post',
                         body: formContent,
                         redirect: 'manual'
-                    }).then(function (response) {
+                    }).then(response => {
                         return response.json()
-                    }).then(function (status) {
+                    }).then(status => {
                         Alpine.store('notif').push(status.level, status.message)
+                        const idx = this.searchPlayerIndexByIdentifier(status.remove)
+                        if (idx !== null) {
+                            this.player.splice(idx, 1)
+                        }
                     })
+                },
+
+                searchPlayerIndexByIdentifier(key) {
+                    for (let index = 0; index < this.player.length; index++) {
+                        if (key === this.player[index].identifier) {
+                            return index
+                        }
+                    }
+                    return null
                 }
+
             }))
     </script>
 {% endblock %}
@@ -87,6 +101,9 @@
         }
         figure {
             margin: 1em 2em;
+        }
+        #peering_confirm .form-widget label {
+            display: block;
         }
     </style>
 {% endblock %}

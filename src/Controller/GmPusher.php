@@ -94,7 +94,8 @@ class GmPusher extends AbstractController
 
             return new JsonResponse([
                 'level' => 'success',
-                'message' => $assoc['pc']->getTitle() . ' appairé avec la clef ' . $assoc['key']
+                'message' => $assoc['pc']->getTitle() . ' appairé avec la clef ' . $assoc['key'],
+                'remove' => $assoc['key']  // for removing the key on the listing
             ]);
         }
 
