@@ -28,8 +28,8 @@ class PeeringConfirm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-                ->add('key', IntegerType::class, ['attr' => ['x-model' => 'selectedKey']])
-                ->add('npc', ChoiceType::class, [
+                ->add('key', IntegerType::class)
+                ->add('pc', ChoiceType::class, [
                     'choices' => $this->vertexRepo->findByClass(Transhuman::class, ['wildCard' => true]),
                     'choice_label' => function ($choice, string $key, mixed $value): string {
                         return $choice->getTitle();

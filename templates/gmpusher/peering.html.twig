@@ -24,11 +24,13 @@
 
 {% block _peering_confirm_key_widget %}
     <ul>
-        <template x-for="user in player">
-            <li><a href="#" x-text="user.identifier" x-on:click.prevent="selectedKey=user.identifier"></li>
+        <template x-for="user in player" :key="user.identifier">
+            <label>
+                <input type="radio" name="{{ form.vars.full_name }}" x-bind:value="user.identifier"/>
+                <span x-text="user.identifier"></span>
+            </label>
         </template>
     </ul>
-    {{ form_widget(form) }}
     <script type="module">
         import QRious from 'qrious';
 
@@ -36,7 +38,6 @@
                 host: mercureHost,
                 socket: null,
                 player: [],
-                selectedKey: null,
                 qrCodeUrl: playerPeeringUrl,
 
                 init() {
