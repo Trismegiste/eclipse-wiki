@@ -39,7 +39,7 @@ class MigrationResync extends Command
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        set_error_handler([$this, 'interceptDynamicPropertyNotice'], E_DEPRECATED);
+        $previousErrorHandler = set_error_handler([$this, 'interceptDynamicPropertyNotice'], E_DEPRECATED);
 
         $io = new SymfonyStyle($input, $output);
         $io->title("Dynamic properties searching");
@@ -47,7 +47,7 @@ class MigrationResync extends Command
         $iter = $this->repo->search();
 
         foreach ($iter as $vertex) {
-            
+            // generates DEPRECATED NOTICE
         }
 
         $this->logging = array_unique($this->logging, SORT_REGULAR);
@@ -62,12 +62,15 @@ class MigrationResync extends Command
                     if ($input->getOption('remove')) {
                         $this->repo->removeField($vertex->getPk(), $entry['property']);
                         $io->writeln(' : removed');
-                    }else {
+                    } else {
                         $io->newLine();
                     }
                 }
             }
         }
+
+        // get back to previous error handler
+        set_error_handler($previousErrorHandler);
 
         return self::SUCCESS;
     }
