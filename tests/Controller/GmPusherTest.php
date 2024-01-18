@@ -21,4 +21,10 @@ class GmPusherTest extends Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $this->assertStringContainsString('QRious', $this->client->getResponse()->getContent());
     }
 
+    public function testBadCallOfAjaxPeering()
+    {
+        $this->client->request('POST', '/peering');
+        $this->assertResponseStatusCodeSame(400);
+    }
+
 }

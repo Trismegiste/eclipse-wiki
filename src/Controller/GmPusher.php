@@ -61,7 +61,6 @@ class GmPusher extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $channel = $form['channel']->getData();
-            // @todo inject the channel for private document
             $this->pusher->sendDocumentLink($url, $label, $channel);
             $this->addFlash('success', "PDF $filename envoyé");
 
@@ -80,10 +79,27 @@ class GmPusher extends AbstractController
     }
 
     /**
-     * Wait for peering with players
+     * Waiting screen for peering with players
      */
-    #[Route("/peering", methods: ["GET", "POST"])]
-    public function peering(Request $request): Response
+    #[Route("/peering", methods: ["GET"])]
+    public function peering(): Response
+    {
+        $form = $this->createForm(PeeringConfirm::class, null, [
+            // technically, the URL is identical to the ajax controller URL but it's clearer to understand that this form is sent through AJAX
+            'action' => $this->generateUrl('app_gmpusher_ajaxpeering')
+        ]);
+
+        return $this->render('gmpusher/peering.html.twig', [
+                    'form' => $form->createView(),
+                    'player_peering' => $this->generateUrl('app_playerlog_peering', [], UrlGeneratorInterface::ABSOLUTE_URL)
+        ]);
+    }
+
+    /**
+     * Ajax for peering a player with its peering key - managed with symfony form
+     */
+    #[Route("/peering", methods: ["POST"])]
+    public function ajaxPeering(Request $request): JsonResponse
     {
         $form = $this->createForm(PeeringConfirm::class);
 
@@ -106,10 +122,7 @@ class GmPusher extends AbstractController
             }
         }
 
-        return $this->render('gmpusher/peering.html.twig', [
-                    'form' => $form->createView(),
-                    'player_peering' => $this->generateUrl('app_playerlog_peering', [], UrlGeneratorInterface::ABSOLUTE_URL)
-        ]);
+        return new JsonResponse(['level' => 'error', 'message' => 'Invalid call'], 400);
     }
 
 }
