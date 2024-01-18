@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Confirm a peering with player
@@ -37,6 +38,11 @@ class PeeringConfirm extends AbstractType
                 ])
                 ->add('confirm', SubmitType::class)
         ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefault('attr', ['x-on:submit.prevent' => 'validation']);
     }
 
 }

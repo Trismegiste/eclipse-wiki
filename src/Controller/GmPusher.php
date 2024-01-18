@@ -91,6 +91,11 @@ class GmPusher extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $assoc = $form->getData();
             $this->pusher->validPeering($assoc['key'], $assoc['pc']->getTitle());
+
+            return new JsonResponse([
+                'level' => 'success',
+                'message' => $assoc['pc']->getTitle() . ' appairé avec la clef ' . $assoc['key']
+            ]);
         }
 
         return $this->render('gmpusher/peering.html.twig', [
