@@ -1,5 +1,6 @@
 {# Player peering #}
 {% extends "base.html.twig" %}
+{% form_theme(form) _self %}
 
 {% block title %}Validation appairage{% endblock %}
 {% block header_title %}{{ block('title') }}{% endblock %}
@@ -7,13 +8,7 @@
 {% block content %}
     <div class="pure-g" x-data="peering('{{ mercure('peering') }}', '{{ player_peering }}')">
         <div class="pure-u-1-2">
-            <ul>
-                <template x-for="user in player">
-                    <li><a href="#" x-text="user.identifier" x-on:click.prevent="selectedKey=user.identifier"></li>
-                </template>
-            </ul>
             {{ form(form) }}
-            {{ dump(subscription) }}
         </div>
         <div class="pure-u-1-2">
             <figure>
@@ -27,8 +22,13 @@
     </div>
 {% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
+{% block _peering_confirm_key_widget %}
+    <ul>
+        <template x-for="user in player">
+            <li><a href="#" x-text="user.identifier" x-on:click.prevent="selectedKey=user.identifier"></li>
+        </template>
+    </ul>
+    {{ form_widget(form) }}
     <script type="module">
         import QRious from 'qrious';
 

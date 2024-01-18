@@ -68,7 +68,7 @@ class GmPusher extends AbstractController
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
         }
 
-        return $this->render('player/push_document.html.twig', [
+        return $this->render('gmpusher/push_document.html.twig', [
                     'vertex' => $vertex,
                     'title' => $vertex->getTitle(),
                     'form' => $form->createView(),
@@ -83,7 +83,7 @@ class GmPusher extends AbstractController
      * Wait for peering with players
      */
     #[Route("/peering", methods: ["GET", "POST"])]
-    public function peering(Request $request, SubscriptionClient $mercure): Response
+    public function peering(Request $request): Response
     {
         $form = $this->createForm(PeeringConfirm::class);
 
@@ -93,10 +93,9 @@ class GmPusher extends AbstractController
             $this->pusher->validPeering($assoc['key'], $assoc['npc']->getTitle());
         }
 
-        return $this->render('peering.html.twig', [
+        return $this->render('gmpusher/peering.html.twig', [
                     'form' => $form->createView(),
-                    'player_peering' => $this->generateUrl('app_playerlog_peering', [], UrlGeneratorInterface::ABSOLUTE_URL),
-                    'subscription' => $mercure->getSubscriptions()->subscriptions
+                    'player_peering' => $this->generateUrl('app_playerlog_peering', [], UrlGeneratorInterface::ABSOLUTE_URL)
         ]);
     }
 
