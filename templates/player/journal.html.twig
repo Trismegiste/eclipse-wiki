@@ -101,13 +101,13 @@
                 connect() {
                     let url = new URL(this.host)
                     // append last event id
-                    const lastId = localStorage.getItem('lastEventID')
+                    const lastId = this.getLastEvent()
                     if (lastId) {
                         url.searchParams.append('lastEventID', lastId)
                     }
                     // append npc channel
-                    if (localStorage.getItem('npcTitle')) {
-                        url.searchParams.append('topic', 'private-' + localStorage.getItem('npcTitle'))
+                    if (this.getCurrentCharacterTitle()) {
+                        url.searchParams.append('topic', 'private-' + this.getCurrentCharacterTitle())
                     }
 
                     // connection
@@ -122,7 +122,7 @@
                         const content = document.createElement("div");
                         content.classList = ['swiper-slide']
                         content.dataset.contentId = msg.lastEventId
-                        localStorage.setItem('lastEventID', msg.lastEventId)
+                        this.setLastEvent(msg.lastEventId)
                         const profile = document.createElement("img");
                         profile.src = msg.data
                         content.append(profile)
@@ -133,7 +133,7 @@
 
                     this.socket.addEventListener('picture', (msg) => {
                         console.log('New picture')
-                        localStorage.setItem('lastEventID', msg.lastEventId)
+                        this.setLastEvent(msg.lastEventId)
                         this.$refs.picture.src = msg.data
                         this.notifPanel(0)
                     })
@@ -147,14 +147,14 @@
 
                     this.socket.addEventListener('cubemap', (msg) => {
                         console.log('New cubemap')
-                        localStorage.setItem('lastEventID', msg.lastEventId)
+                        this.setLastEvent(msg.lastEventId)
                         Cubemap.updateEnvironment(msg)
                         this.notifPanel(4)
                     })
 
                     this.socket.addEventListener('document', (msg) => {
                         console.log('New document')
-                        localStorage.setItem('lastEventID', msg.lastEventId)
+                        this.setLastEvent(msg.lastEventId)
                         this.document.push(JSON.parse(msg.data))
                         this.notifPanel(2)
                     })
@@ -190,8 +190,19 @@
                     if (window.confirm("Voulez-vous sauver cette page ?")) {
                         // do something with localStorage and innerHTML, indexed with dataset.contentId
                     }
-                }
+                },
 
+                getCurrentCharacterTitle() {
+                    return localStorage.getItem('characterTitle')
+                },
+
+                getLastEvent() {
+                    return localStorage.getItem('lastEventID')
+                },
+
+                setLastEvent(id) {
+                    localStorage.setItem('lastEventID', id)
+                }
             }))
     </script>
 {% endblock %}

@@ -24,7 +24,7 @@
 
                 init() {
                     // Before everything, check if the client was previously authenticated
-                    if (localStorage.getItem('npcTitle')) {
+                    if (this.getCurrentCharacterTitle()) {
                         window.location = playerLogUrl
                     }
 
@@ -37,8 +37,8 @@
                         console.log('Validation from GM')
                         const content = JSON.parse(msg.data)
                         if (content.identifier === this.peeringKey) {
-                            console.log('Client authentifié en tant que ' + content.npcTitle)
-                            localStorage.setItem('npcTitle', content.npcTitle)
+                            console.log('Client authentifié en tant que ' + content.characterTitle)
+                            this.setCurrentCharacterTitle(content.characterTitle)
                             window.location = playerLogUrl
                         }
                     })
@@ -54,6 +54,14 @@
                             .then(data => {
                                 console.log(data)
                             })
+                },
+
+                getCurrentCharacterTitle() {
+                    return localStorage.getItem('characterTitle')
+                },
+
+                setCurrentCharacterTitle(title) {
+                    localStorage.setItem('characterTitle', title)
                 }
             }))
     </script>
