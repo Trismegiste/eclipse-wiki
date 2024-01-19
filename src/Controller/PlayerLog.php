@@ -42,9 +42,21 @@ class PlayerLog extends AbstractController
     public function hello(Request $request, Pusher $pusher): JsonResponse
     {
         $body = json_decode($request->getContent());
-        $pusher->askPeering($body->identifier);
+        $browser = $this->extractBrowser($request->headers->get('user-agent', 'Unknown'));
+        $pusher->askPeering($body->identifier, $request->getClientIp(), $browser);
 
         return new JsonResponse(['status' => 'OK']);
+    }
+
+    // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent
+    protected function extractBrowser(string $rawUserAgent): string
+    {
+        return match (1) {
+            preg_match('#Firefox/\d#', $rawUserAgent) => 'Firefox',
+            preg_match('#Chrome/\d#', $rawUserAgent) => 'Chrome',
+            preg_match('#Edg/\d#', $rawUserAgent) => 'Edge',
+            default => 'Unknown'
+        };
     }
 
     /**

@@ -45,11 +45,11 @@ class Pusher
         $this->hub->publish($update);
     }
 
-    public function askPeering(int $identifier): void
+    public function askPeering(int $identifier, string $playerIp, string $userAgent): void
     {
         $update = new Update(
                 'peering',
-                json_encode(['identifier' => $identifier]),
+                json_encode(['identifier' => $identifier, 'ip' => $playerIp, 'browser' => $userAgent]),
                 type: 'ask'
         );
 
