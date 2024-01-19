@@ -104,4 +104,10 @@ class PlaceCrudTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    public function testPingPosition()
+    {
+        $this->client->request('POST', '/place/ping-position', content: json_encode(['cell' => 42]));
+        $this->assertResponseIsSuccessful();
+    }
+
 }

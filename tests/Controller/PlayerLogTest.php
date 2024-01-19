@@ -34,4 +34,10 @@ class PlayerLogTest extends Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    public function testPingPosition()
+    {
+        $this->client->request('POST', '/player/ping-position', content: json_encode(['deltaX' => -5.5, 'deltaY' => 7.6]));
+        $this->assertResponseIsSuccessful();
+    }
+
 }
