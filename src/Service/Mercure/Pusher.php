@@ -36,54 +36,35 @@ class Pusher
 
     public function sendDocumentLink(string $link, string $title, string $channel = 'public'): void
     {
-        $update = new Update(
-                $channel,
-                json_encode(['link' => $link, 'title' => $title]),
-                type: 'document'
-        );
-
-        $this->hub->publish($update);
+        $this->sendJsonEvent($channel, 'document', ['link' => $link, 'title' => $title]);
     }
 
     public function askPeering(int $identifier, string $playerIp, string $userAgent): void
     {
-        $update = new Update(
-                'peering',
-                json_encode(['identifier' => $identifier, 'ip' => $playerIp, 'browser' => $userAgent]),
-                type: 'ask'
-        );
-
-        $this->hub->publish($update);
+        $this->sendJsonEvent('peering', 'ask', ['identifier' => $identifier, 'ip' => $playerIp, 'browser' => $userAgent]);
     }
 
     public function validPeering(int $identifier, string $title): void
     {
-        $update = new Update(
-                'peering',
-                json_encode(['identifier' => $identifier, 'characterTitle' => $title]),
-                type: 'validation'
-        );
-
-        $this->hub->publish($update);
+        $this->sendJsonEvent('peering', 'validation', ['identifier' => $identifier, 'characterTitle' => $title]);
     }
 
     public function pingRelativePosition(float $dx, float $dy): void
     {
-        $update = new Update(
-                'ping-position',
-                json_encode(['deltaX' => $dx, 'deltaY' => $dy]),
-                type: 'relative'
-        );
-
-        $this->hub->publish($update);
+        $this->sendJsonEvent('ping-position', 'relative', ['deltaX' => $dx, 'deltaY' => $dy]);
     }
 
     public function pingIndexedPosition(int $idx): void
     {
+        $this->sendJsonEvent('ping-position', 'indexed', ['cell' => $idx]);
+    }
+
+    protected function sendJsonEvent(string $channel, string $type, array $content): void
+    {
         $update = new Update(
-                'ping-position',
-                json_encode(['cell' => $idx]),
-                type: 'indexed'
+                $channel,
+                json_encode($content),
+                type: $type
         );
 
         $this->hub->publish($update);
