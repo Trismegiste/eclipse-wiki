@@ -38,6 +38,27 @@ class GmPusherTest extends WebTestCase
         $this->assertEquals('error', $rsp->level);
     }
 
+    public function testPeeringValidCharacter()
+    {
+        $pc = $this->createRandomTranshuman();
+        $pc->wildCard = true;
+        $repo = static::getContainer()->get(App\Repository\VertexRepository::class);
+        $repo->save($pc);
+
+        $crawler = $this->client->request('GET', '/peering');
+
+        // peering in ajax
+        $this->client->request('POST', '/peering', ['peering_confirm' => [
+                'key' => '6666',
+                'pc' => (string) $pc->getPk()
+        ]]);
+
+        $this->assertResponseIsSuccessful();
+        $rsp = json_decode($this->client->getResponse()->getContent());
+        $this->assertEquals('success', $rsp->level, 'Invalid form ' . $rsp->message);
+        $this->assertEquals(6666, $rsp->remove);
+    }
+
     public function testBadCallOfAjaxPeering()
     {
         $this->client->request('POST', '/peering');
