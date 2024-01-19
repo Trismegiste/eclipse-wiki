@@ -38,6 +38,9 @@ class PeeringConfirm extends AbstractType
                     'choice_label' => function ($choice, string $key, mixed $value): string {
                         return $choice->getTitle();
                     },
+                    'choice_value' => function (?Transhuman $choice): string {
+                        return $choice ? $choice->getPk() : '';
+                    },
                     'placeholder' => '------------',
                     'required' => true
                 ])

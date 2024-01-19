@@ -79,7 +79,7 @@ class HandoutCrudTest extends WebTestCase
     }
 
     /** @depends testShow */
-    public function testQrCode(string $edit)
+    public function testSend(string $edit)
     {
         $crawler = $this->client->request('GET', $edit);
         $url = $crawler->filterXPath('//nav/a/i[@class="icon-push"]/parent::a')->attr('href');
@@ -90,10 +90,16 @@ class HandoutCrudTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertStringContainsString('QRious', $this->client->getResponse()->getContent());
 
+        $form = $crawler->selectButton('form_push')->form();
+        $this->client->submit($form);
+        $this->assertResponseRedirects();
+        $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
+
         return $crawler->filter('h2.big-link')->first()->text();
     }
 
-    /** @depends testQrCode */
+    /** @depends testSend */
     public function testGetDocument(string $url)
     {
         $this->client->request('GET', $url);
