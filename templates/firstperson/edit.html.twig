@@ -102,35 +102,16 @@
 {% endblock %}
 
 {% block javascripts %}
+    <script type="application/json" id="battlemap-url">
+        {{ path('app_firstperson_babylon', {pk: place.pk, _format:'battlemap'})|json_encode()|raw }}
+    </script>
     <script type="module">
-        import Alpine from 'alpinejs';
-        import BABYLON from 'babylonjs';
-        import battlemapLoader from 'battlemap-loader';
+        import createBattlemap from 'battlemap-editor';
         import broadcastPicture from 'picture-broadcasting';
+
         Alpine.data('broadcast', broadcastPicture)
-
-        BABYLON.SceneLoader.RegisterPlugin(battlemapLoader)
-        const canvas = document.getElementById("renderCanvas") // Get the canvas element
-        const engine = new BABYLON.Engine(canvas) // Generate the BABYLON 3D engine
-
-        // Creates Scene object
-        const scene = new BABYLON.Scene(engine)
-
-        // Creates and positions a free camera for GM
-        const camera = new BABYLON.UniversalCamera("gm-camera", new BABYLON.Vector3(0, 0, 0), scene)
-        camera.setTarget(new BABYLON.Vector3(0, 0, -1))
-        camera.attachControl(canvas)
-
-        BABYLON.SceneLoader.Append("/fps/scene/", "{{ place.pk }}.battlemap", scene, function (scene) { })
-
-        // Register a render loop to repeatedly render the scene
-        engine.runRenderLoop(function () {
-            scene.render()
-        })
-        // Watch for browser/canvas resize events
-        window.addEventListener("resize", function () {
-            engine.resize()
-        })
+        const url = JSON.parse(document.getElementById("battlemap-url").textContent)
+        const scene = createBattlemap(document.getElementById("renderCanvas"), url)
 
         Alpine.data('displayCellInfo', () => ({
                 cellInfo: null,

@@ -18,6 +18,9 @@ return [
         'path' => 'app.js',
         'entrypoint' => true,
     ],
+    'battlemap-editor' => [
+        'path' => 'place/battlemap-editor.js',
+    ],
     'battlemap-loader' => [
         'path' => 'place/battlemap-loader.js',
     ],
