@@ -1,6 +1,10 @@
 {# Player log view #}
 {% extends "base.html.twig" %}
 
+{% block metadata_header %}
+    <link rel="manifest" href="/playerlog.json">
+{% endblock %}
+
 {% block title %}Player{% endblock %}
 
 {% block body %}

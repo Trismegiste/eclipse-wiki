@@ -1,0 +1,19 @@
+{
+    "name": "Journal du Joueur",
+    "short_name": "JDJ",
+    "lang": "fr",
+    "description": "Application du joueur pour le JDR Eclipse Phase.",
+    "start_url": "/player/log",
+    "display": "standalone",
+    "theme_color": "darkred",
+    "icons": [
+        {
+            "src": "/pwa/eclipse-phase-192.png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "/pwa/eclipse-phase-512.png",
+            "sizes": "512x512"
+        }
+    ]
+}

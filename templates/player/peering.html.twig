@@ -9,7 +9,11 @@
         <h2>Bienvenue sur Eclipse-Wiki</h2>
         <h2>la webapp de VTTRPG</h2>
         <p>Ma clef d'appairage est</p>
-        <p x-text="peeringKey" class="big"/>
+        <p x-text="peeringKey" class="big"></p>
+        <a x-show="character !== null" x-bind:href="playerLogUrl" class="pure-button">
+            Se connecter en tant que
+            <span x-text="character"></span>
+        </a>
     </div>
 {% endblock %}
 
@@ -18,14 +22,16 @@
     <script type="module">
         Alpine.data('peering', (mercureHost, helloUrl, playerLogUrl) => ({
                 host: mercureHost,
+                playerLogUrl: playerLogUrl,
                 socket: null,
                 helloUrl: helloUrl,
                 peeringKey: null,
+                character: null,
 
                 init() {
                     // Before everything, check if the client was previously authenticated
                     if (this.getCurrentCharacterTitle()) {
-                        window.location = playerLogUrl
+                        this.character = this.getCurrentCharacterTitle()
                     }
 
                     // peering key
@@ -39,7 +45,6 @@
                         if (content.identifier === this.peeringKey) {
                             console.log('Client authentifié en tant que ' + content.characterTitle)
                             this.setCurrentCharacterTitle(content.characterTitle)
-                            window.location = playerLogUrl
                         }
                     })
 
@@ -61,6 +66,7 @@
                 },
 
                 setCurrentCharacterTitle(title) {
+                    this.character = title
                     localStorage.setItem('characterTitle', title)
                 }
             }))
