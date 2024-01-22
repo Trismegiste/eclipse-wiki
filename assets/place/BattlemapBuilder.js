@@ -551,7 +551,10 @@ export class BattlemapBuilder
                     anchor: "center",
                     "letter-height": 0.1,
                     "letter-thickness": 0.001,
-                    "colors": {diffuse: "#00ff00"},
+                    "colors": {
+                        diffuse: "#00ff00",
+                        emissive: "#00ff00"
+                    },
                     position: {
                         x: cell.x,
                         y: 0.02,
