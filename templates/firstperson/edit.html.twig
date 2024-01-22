@@ -4,7 +4,7 @@
 {% block title %}{{ place.title }}{% endblock %}
 
 {% block body %}
-    <div class="pure-g" x-data="displayCellInfo" x-on:selectcell.window="display($event)">
+    <div class="pure-g" x-data="displayCellInfo('{{ path('app_npcgenerator_minicard') }}?title=')" x-on:selectcell.window="display($event)">
         <div class="pure-u-1">
             <canvas id="renderCanvas">
             </canvas>
@@ -12,23 +12,11 @@
         <div class="pure-u-1-6">
             <section>
                 <template x-if="cellInfo !== null">
-                    <div class="pure-g property">
-                        <div class="pure-u-1-3"><label>Distance</label></div>
-                        <div class="pure-u-2-3"><p x-on:cursormove.window="cursorMoved($event)" x-text="distanceCursor"></p></div>
-                    </div>
-                </template>
-                {{ form(writer) }}
-                {% if place.battlemap3d is not empty %}
-                    <div class="pure-form">
-                        <a href="{{ path('app_firstperson_delete', {pk: place.pk}) }}" class="pure-button button-delete pure-input-1">Regénérer la map</a>
-                    </div>
-                {% endif %}
-            </section>
-        </div>
-        <div class="pure-u-1-6">
-            <section>
-                <template x-if="cellInfo !== null">
                     <div>
+                        <div class="pure-g property">
+                            <div class="pure-u-1-3"><label>Distance</label></div>
+                            <div class="pure-u-2-3"><p x-on:cursormove.window="cursorMoved($event)" x-text="distanceCursor"></p></div>
+                        </div>
                         <div class="pure-g property">
                             <div class="pure-u-1-3"><label>Pièce</label></div>
                             <div class="pure-u-2-3">
@@ -39,8 +27,14 @@
                                 </p>
                             </div>
                         </div>
-                        {{ form(texturing) }}
                     </div>
+                </template>
+            </section>
+        </div>
+        <div class="pure-u-1-6">
+            <section>
+                <template x-if="cellInfo !== null">
+                    {{ form(texturing) }}
                 </template>
             </section>
         </div>
@@ -88,6 +82,16 @@
         </div>
         <div class="pure-u-1-6">
             <section>
+                {{ form(writer) }}
+                {% if place.battlemap3d is not empty %}
+                    <div class="pure-form">
+                        <a href="{{ path('app_firstperson_delete', {pk: place.pk}) }}" class="pure-button button-delete pure-input-1">Regénérer la map</a>
+                    </div>
+                {% endif %}
+            </section>
+        </div>
+        <div class="pure-u-1-6">
+            <section>
                 {{ include('fragment/flashes.html.twig') }}
                 {{ form(broadcast,{attr: {hidden:true}}) }}
                 {{ form(gm_view,{attr: {hidden:true}}) }}
@@ -113,7 +117,7 @@
         const url = JSON.parse(document.getElementById("battlemap-url").textContent)
         const scene = createBattlemap(document.getElementById("renderCanvas"), url, '{{ mercure('ping-position') }}')
 
-        Alpine.data('displayCellInfo', () => ({
+        Alpine.data('displayCellInfo', (playerMinicardUrl) => ({
                 cellInfo: null,
                 characterCard: null,
                 selectedNpc: null,
@@ -123,7 +127,7 @@
                     this.cellInfo = event.detail
                     if (this.cellInfo.npc !== null) {
                         const npc = this.cellInfo.npc
-                        fetch('{{ path('app_npcgenerator_minicard') }}?title=' + npc.label)
+                        fetch(playerMinicardUrl + npc.label)
                                 .then(response => {
                                     return response.json()
                                 })
