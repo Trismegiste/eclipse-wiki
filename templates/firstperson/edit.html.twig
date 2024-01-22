@@ -9,7 +9,7 @@
             <canvas id="renderCanvas">
             </canvas>
         </div>
-        <div class="pure-u-1-5">
+        <div class="pure-u-1-6">
             <section>
                 <template x-if="cellInfo !== null">
                     <div class="pure-g property">
@@ -25,7 +25,7 @@
                 {% endif %}
             </section>
         </div>
-        <div class="pure-u-1-5">
+        <div class="pure-u-1-6">
             <section>
                 <template x-if="cellInfo !== null">
                     <div>
@@ -44,14 +44,14 @@
                 </template>
             </section>
         </div>
-        <div class="pure-u-1-5">
+        <div class="pure-u-1-6">
             <section>
                 <template x-if="cellInfo !== null">
                     {{ form(legend) }}
                 </template>
             </section>
         </div>
-        <div class="pure-u-1-5">
+        <div class="pure-u-1-6">
             <section>
                 <template x-if="characterCard !== null">
                     <div class="npc-minicard">
@@ -86,7 +86,7 @@
                 {{ form(npc_tool) }}
             </section>
         </div>
-        <div class="pure-u-1-5">
+        <div class="pure-u-1-6">
             <section>
                 {{ include('fragment/flashes.html.twig') }}
                 {{ form(broadcast,{attr: {hidden:true}}) }}
@@ -111,7 +111,7 @@
 
         Alpine.data('broadcast', broadcastPicture)
         const url = JSON.parse(document.getElementById("battlemap-url").textContent)
-        const scene = createBattlemap(document.getElementById("renderCanvas"), url)
+        const scene = createBattlemap(document.getElementById("renderCanvas"), url, '{{ mercure('ping-position') }}')
 
         Alpine.data('displayCellInfo', () => ({
                 cellInfo: null,
@@ -141,7 +141,6 @@
                 },
 
                 write(event) {
-                    event.preventDefault()
                     const form = new FormData(event.target)
                     const excluded = ['npcSpritePtr', 'legendPtr']
                     form.set('battlemap3d_write[battlemap3d]', JSON.stringify(scene.metadata, (key, value) => {
@@ -159,7 +158,6 @@
                 },
 
                 setLegend(event) {
-                    event.preventDefault()
                     scene.setLegendAtCell(this.cellInfo.cellIndex, this.cellInfo.legend)
 
                     let formColor = this.cellInfo.markerColor
@@ -175,17 +173,11 @@
                 },
 
                 appendNpc(event) {
-                    event.preventDefault()
                     scene.injectNpcAt(this.cellInfo.cellIndex, this.selectedNpc)
                 },
 
                 texturing(event) {
-                    event.preventDefault()
                     scene.paintRoomAt(this.cellInfo.cellIndex, this.cellInfo.template)
-                },
-
-                subscribePicture(img) {
-                    subscribePicture(img)
                 },
 
                 filterTexture(event) {
@@ -195,22 +187,6 @@
                 }
 
             }))
-
-        const feedbackSocket = new EventSource('{{ mercure('ping-position') }}')
-        feedbackSocket.addEventListener('relative', (msg) => {
-            const position = JSON.parse(msg.data)
-            const idx = scene.metadata.playerViewOnTileIndex
-            if (idx !== null) {
-                const ground = scene.metadata.grid[idx]
-                scene.movePlayerCursor(ground.x + position.deltaX, position.deltaY - ground.y)
-            }
-        })
-        feedbackSocket.addEventListener('indexed', (msg) => {
-            const position = JSON.parse(msg.data)
-            const ground = scene.metadata.grid[parseInt(position.cell)]
-            scene.movePlayerCursor(ground.x, -ground.y)
-        })
-
     </script>
 {% endblock %}
 
@@ -223,11 +199,11 @@
             touch-action: none;
         }
 
-        .pure-u-1-5 {
+        .pure-u-1-6 {
             font-size: 75%;
         }
 
-        .pure-u-1-5 section {
+        .pure-u-1-6 section {
             margin: 0.3em 0.3em 0;
         }
 

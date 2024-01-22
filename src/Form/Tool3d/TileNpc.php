@@ -32,7 +32,7 @@ class TileNpc extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('attr', [
-            'x-on:submit' => "appendNpc",
+            'x-on:submit.prevent' => "appendNpc",
             'x-show' => 'characterCard == null'
         ]);
     }

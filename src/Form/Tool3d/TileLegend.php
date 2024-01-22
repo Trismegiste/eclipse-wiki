@@ -43,7 +43,7 @@ class TileLegend extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefault('attr', ['x-on:submit' => "setLegend"]);
+        $resolver->setDefault('attr', ['x-on:submit.prevent' => "setLegend"]);
     }
 
 }

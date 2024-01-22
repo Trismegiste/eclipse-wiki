@@ -30,7 +30,7 @@ class Battlemap3dWrite extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefault('attr', ['x-on:submit' => "write"]);
+        $resolver->setDefault('attr', ['x-on:submit.prevent' => "write"]);
         $resolver->setDefault('csrf_protection', false);
         $resolver->setDefault('data_class', Place::class);
     }

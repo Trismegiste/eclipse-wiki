@@ -47,7 +47,7 @@ class RoomTexturing extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefault('attr', ['x-on:submit' => "texturing"]);
+        $resolver->setDefault('attr', ['x-on:submit.prevent' => "texturing"]);
     }
 
 }
