@@ -62,6 +62,7 @@ class FirstPerson extends AbstractController
         $writer = $this->createForm(Battlemap3dWrite::class, $place, [
             'action' => $this->generateUrl('app_firstperson_export', ['pk' => $place->getPk()])
         ]);
+        $spot = $this->createForm(\App\Form\Tool3d\SpotSelect::class, null, ['place' => $place]);
 
         return $this->render('firstperson/edit.html.twig', [
                     'place' => $place,
@@ -70,7 +71,8 @@ class FirstPerson extends AbstractController
                     'texturing' => $texturing->createView(),
                     'writer' => $writer->createView(),
                     'broadcast' => $broadcast->createView(),
-                    'gm_view' => $gmView->createView()
+                    'gm_view' => $gmView->createView(),
+                    'spot' => $spot->createView()
         ]);
     }
 

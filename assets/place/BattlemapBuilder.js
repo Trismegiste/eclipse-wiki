@@ -644,6 +644,11 @@ export class BattlemapBuilder
                 }
             })
         }
+
+        // helper
+        this.scene.moveSelectorToIndex = idx => {
+            this.moveSelectorToIndex(idx)
+        }
     }
 
     create() {

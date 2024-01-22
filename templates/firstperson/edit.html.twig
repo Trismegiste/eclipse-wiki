@@ -29,6 +29,7 @@
                         </div>
                     </div>
                 </template>
+                {{ form(spot) }}
             </section>
         </div>
         <div class="pure-u-1-6">
@@ -188,6 +189,11 @@
                     this.$el.querySelectorAll('option').forEach(opt => {
                         opt.hidden = !scene.metadata.texture.includes(opt.value)
                     })
+                },
+
+                jumpToSpot(event) {
+                    scene.moveSelectorToIndex(this.legendSpot)
+                    this.legendSpot = null
                 }
 
             }))
