@@ -234,4 +234,11 @@ export class BattlemapEditor extends BABYLON.Scene {
 
         this.beginDirectAnimation(this.blinkingCursor, [blinking, growing], 0, 3 * frameRate)
     }
+
+    dumpDocumentJson() {
+        const excluded = ['npcSpritePtr', 'legendPtr']
+        return JSON.stringify(this.metadata, (key, value) => {
+            return (-1 === excluded.indexOf(key)) ? value : undefined
+        })
+    }
 }

@@ -147,10 +147,7 @@
 
                 write(event) {
                     const form = new FormData(event.target)
-                    const excluded = ['npcSpritePtr', 'legendPtr']
-                    form.set('battlemap3d_write[battlemap3d]', JSON.stringify(scene.metadata, (key, value) => {
-                        return (-1 === excluded.indexOf(key)) ? value : undefined
-                    }))
+                    form.set('battlemap3d_write[battlemap3d]', scene.dumpDocumentJson())
                     fetch(event.target.action, {
                         method: 'post',
                         body: form,
