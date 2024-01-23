@@ -4,13 +4,14 @@
 
 import BABYLON from 'babylonjs';
 import battlemapLoader from 'battlemap-loader';
+import { BattlemapEditor } from 'battlemap-editor';
 BABYLON.SceneLoader.RegisterPlugin(battlemapLoader)
 
 export default function (canvas, mapUrl, sseUrl) {
     // Generate the BABYLON 3D engine
     const engine = new BABYLON.Engine(canvas)
     // Creates Scene object
-    const scene = new BABYLON.Scene(engine)
+    const scene = new BattlemapEditor(engine)
 
     // Creates and positions a free camera for GM
     const camera = new BABYLON.UniversalCamera("gm-camera", new BABYLON.Vector3(0, 0, 0), scene)
@@ -37,13 +38,13 @@ export default function (canvas, mapUrl, sseUrl) {
         const idx = scene.metadata.playerViewOnTileIndex
         if (idx !== null) {
             const ground = scene.metadata.grid[idx]
-            scene.movePlayerCursor(ground.x + position.deltaX, position.deltaY - ground.y)
+            scene.animateBlinkingCursor(ground.x + position.deltaX, position.deltaY - ground.y)
         }
     })
     feedbackSocket.addEventListener('indexed', (msg) => {
         const position = JSON.parse(msg.data)
         const ground = scene.metadata.grid[parseInt(position.cell)]
-        scene.movePlayerCursor(ground.x, -ground.y)
+        scene.animateBlinkingCursor(ground.x, -ground.y)
     })
 
     return scene

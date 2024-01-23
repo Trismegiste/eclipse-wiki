@@ -111,7 +111,7 @@
         {{ path('app_firstperson_babylon', {pk: place.pk, _format:'battlemap'})|json_encode()|raw }}
     </script>
     <script type="module">
-        import createBattlemap from 'battlemap-editor';
+        import createBattlemap from 'battlemap-factory';
         import broadcastPicture from 'picture-broadcasting';
 
         Alpine.data('broadcast', broadcastPicture)

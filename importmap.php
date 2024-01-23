@@ -18,8 +18,8 @@ return [
         'path' => 'app.js',
         'entrypoint' => true,
     ],
-    'battlemap-editor' => [
-        'path' => 'place/battlemap-editor.js',
+    'battlemap-factory' => [
+        'path' => 'place/battlemap-factory.js',
     ],
     'battlemap-loader' => [
         'path' => 'place/battlemap-loader.js',
@@ -29,6 +29,9 @@ return [
     ],
     'battlemap-document' => [
         'path' => 'place/BattlemapDocument.js',
+    ],
+    'battlemap-editor' => [
+        'path' => 'place/BattlemapEditor.js',
     ],
     'legend-highlight-subscriber' => [
         'path' => 'place/legend-highlight-subscriber.js',

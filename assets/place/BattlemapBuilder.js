@@ -9,17 +9,9 @@ let {MeshWriter} = PluginMeshWriter;
 
 export class BattlemapBuilder
 {
-    spriteManager = {}
     wheelSpeed = 1.4
     scene = null
     cameraMinZ = 0.35
-
-    // hexagonal torus selector when clicking on tile :
-    tileSelector
-    // hexagonal cursor when hovering on tiles :
-    tileCursor
-    // pictogram dictionary
-    pictogram = new Map()
 
     constructor(scene) {
         this.scene = scene
@@ -106,8 +98,8 @@ export class BattlemapBuilder
         target[5].y--
         this.scene.activeCamera = pov
         // save temporary state
-        const groundSelector = this.tileCursor
-        const itemSelector = this.tileSelector
+        const groundSelector = this.scene.tileCursor
+        const itemSelector = this.scene.tileSelector
         groundSelector.isVisible = false
         itemSelector.isVisible = false
         const currentFog = this.scene.fogMode
@@ -144,8 +136,8 @@ export class BattlemapBuilder
         const formData = new FormData(formElem)
 
         // save temporary state
-        const groundSelector = this.tileCursor
-        const itemSelector = this.tileSelector
+        const groundSelector = this.scene.tileCursor
+        const itemSelector = this.scene.tileSelector
         groundSelector.isVisible = false
         itemSelector.isVisible = false
 
@@ -175,7 +167,7 @@ export class BattlemapBuilder
         headlight.range = 8
 
         this.scene.registerBeforeRender(() => {
-            const selector = this.tileSelector
+            const selector = this.scene.tileSelector
             headlight.position.x = selector.position.x
             headlight.position.z = selector.position.z
             headlight.setEnabled(true)
@@ -224,7 +216,7 @@ export class BattlemapBuilder
         selectorMat.diffuseColor = new BABYLON.Color3(1, 0, 0)
         selectorMat.alpha = 0.3
         groundSelector.material = selectorMat
-        this.tileCursor = groundSelector
+        this.scene.tileCursor = groundSelector
 
         groundSelector.actionManager = new BABYLON.ActionManager(this.scene);
 
@@ -254,7 +246,7 @@ export class BattlemapBuilder
                         targetTileInfo.npc = sourceTileInfo.npc
                         sourceTileInfo.npc = null
                         // move item selector : 
-                        this.moveSelectorToIndex(groundSelector.metadata)
+                        this.scene.moveSelectorToIndex(groundSelector.metadata)
                     }
 
                     const target = event.meshUnderPointer.position.clone()
@@ -274,24 +266,9 @@ export class BattlemapBuilder
         // left click behavior
         groundSelector.actionManager.registerAction(
                 new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, e => {
-                    this.moveSelectorToIndex(groundSelector.metadata)
+                    this.scene.moveSelectorToIndex(groundSelector.metadata)
                 })
                 )
-    }
-
-    moveSelectorToIndex(idx) {
-        const cell = this.scene.metadata.grid[idx]
-        this.tileSelector.position.x = cell.x
-        this.tileSelector.position.z = -cell.y
-        this.tileSelector.metadata = idx
-
-        let metadata = cell.content
-        // fire an event for alpinejs :
-        const detail = {...metadata}
-        detail.x = cell.x
-        detail.y = -cell.y
-        detail.cellIndex = idx
-        document.querySelector('canvas').dispatchEvent(new CustomEvent('selectcell', {"bubbles": true, detail}))
     }
 
     declareSelector() {
@@ -308,11 +285,11 @@ export class BattlemapBuilder
         itemSelector.material = selectorMat
         itemSelector.isPickable = false
         itemSelector.metadata = 0 // default index
-        this.tileSelector = itemSelector
+        this.scene.tileSelector = itemSelector
     }
 
     getSelectedTileIndex() {
-        return this.tileSelector.metadata
+        return this.scene.tileSelector.metadata
     }
 
     declarePlayerCursor() {
@@ -325,30 +302,7 @@ export class BattlemapBuilder
         selectorMat.disableLighting = true
         sphere.material = selectorMat
         sphere.isPickable = false
-        // inject new method for player cursor
-        this.scene.movePlayerCursor = function (x, y) {
-            sphere.position.x = x
-            sphere.position.z = y
-            sphere.material.alpha = 0
-
-            const frameRate = 10
-
-            const blinking = new BABYLON.Animation("blinking", "material.alpha", frameRate, BABYLON.Animation.ANIMATIONTYPE_FLOAT)
-            blinking.setKeys([
-                {frame: 0, value: 1},
-                {frame: frameRate, value: 1},
-                {frame: 3 * frameRate, value: 0}
-            ])
-
-            const growing = new BABYLON.Animation("growing", "scaling", frameRate, BABYLON.Animation.ANIMATIONTYPE_VECTOR3)
-            growing.setKeys([
-                {frame: 0, value: new BABYLON.Vector3(1, 1, 1)},
-                {frame: frameRate, value: new BABYLON.Vector3(1, 1, 1)},
-                {frame: 3 * frameRate, value: new BABYLON.Vector3(15, 15, 15)}
-            ])
-
-            this.beginDirectAnimation(sphere, [blinking, growing], 0, 3 * frameRate)
-        }
+        this.scene.blinkingCursor = sphere
     }
 
     getGroundTileByIndex(idx) {
@@ -395,7 +349,7 @@ export class BattlemapBuilder
             ground.actionManager = new BABYLON.ActionManager(this.scene);
             ground.actionManager.registerAction(
                     new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, e => {
-                        const selector = this.tileCursor
+                        const selector = this.scene.tileCursor
                         const current = e.meshUnderPointer
                         selector.isVisible = true
                         selector.position.x = current.position.x
@@ -440,7 +394,7 @@ export class BattlemapBuilder
 
             // token if any
             if (cell.content.npc) {
-                this.appendNpcAt(cell.content.npc, cell.x, -cell.y)
+                this.scene.appendNpcAt(cell.content.npc, cell.x, -cell.y)
             }
 
             // legend if any
@@ -458,60 +412,8 @@ export class BattlemapBuilder
     declareNpcToken() {
         // map token
         this.getDoc().npcToken.forEach(npc => {
-            this.createSpriteManager(npc.label, npc.picture)
+            this.scene.createSpriteManager(npc.label, npc.picture)
         })
-
-        // prototyping for delete NPC
-        this.scene.deleteNpcAt = (cellIndex) => {
-            const metadata = this.getTileContent(cellIndex)
-            if (metadata.npc === null) {
-                return;
-            }
-            const sp = metadata.npc.npcSpritePtr
-            sp.dispose()
-            metadata.npc = null
-        }
-
-        // prototyping for appending NPC
-        this.scene.injectNpcAt = (cellIndex, npcTitle) => {
-            const metadata = this.getTileContent(cellIndex)
-            const selectedTile = this.getGroundTileByIndex(cellIndex)
-            if (metadata.npc === null) {
-                metadata.npc = {label: npcTitle}  // immediately update model to prevent double insertion
-                // does spritemanager exist ?
-                if (this.spriteManager[npcTitle] === undefined) {
-                    // append missing sprite manager
-                    fetch('/npc/show.json?title=' + npcTitle).then(resp => {
-                        return resp.json()
-                    }).then(npcInfo => {
-                        this.createSpriteManager(npcTitle, npcInfo.tokenPic)
-                        this.getDoc().npcToken.push({label: npcTitle, picture: npcInfo.tokenPic})
-                        // append sprite
-                        this.appendNpcAt(metadata.npc, selectedTile.position.x, selectedTile.position.z)
-                    })
-                } else {
-                    // append sprite
-                    this.appendNpcAt(metadata.npc, selectedTile.position.x, selectedTile.position.z)
-                }
-            }
-        }
-    }
-
-    createSpriteManager(label, picture) {
-        const sp = new BABYLON.SpriteManager('token-' + label, '/picture/get/' + picture, 2000, 504)
-        sp.metadata = picture
-        this.spriteManager[label] = sp
-    }
-
-    appendNpcAt(npcContent, x, y) {
-        const manager = this.spriteManager[npcContent.label]
-        const name = npcContent.label + Math.random()
-        const sprite = new BABYLON.Sprite(name, manager)
-        sprite.width = 0.6
-        sprite.height = 0.6
-        sprite.position = new BABYLON.Vector3(x, 0.7, y)
-        npcContent.npcSpritePtr = sprite
-        npcContent.picture = manager.metadata
     }
 
     drawCeiling() {
@@ -535,129 +437,8 @@ export class BattlemapBuilder
         ceiling.material = ceilingMat
     }
 
-    declareWriter() {
-        // Writer extension
-        this.scene.TextWriter = MeshWriter(this.scene)
-        this.scene.setLegendAtCell = function (cellIndex, message) {
-            const cell = this.metadata.grid[cellIndex]
-
-            if (cell.content.legendPtr) {
-                cell.content.legendPtr.dispose()
-            }
-
-            // @todo check if message is null
-            if (message && (message.length > 0)) {
-                const legendTxt = new this.TextWriter(message, {
-                    anchor: "center",
-                    "letter-height": 0.1,
-                    "letter-thickness": 0.001,
-                    "colors": {
-                        diffuse: "#00ff00",
-                        emissive: "#00ff00"
-                    },
-                    position: {
-                        x: cell.x,
-                        y: 0.02,
-                        z: -cell.y
-                    }
-                })
-                cell.content.legend = message
-                cell.content.legendPtr = legendTxt
-            } else {
-                cell.content.legend = null
-                cell.content.legendPtr = null
-            }
-        }
-    }
-
-    declarePictoWriter() {
-        this.scene.setPictogramAtCell = (cellIndex, title, color) => {
-            const cell = this.scene.metadata.grid[cellIndex]
-
-            let picto = this.scene.getMeshByName('picto-' + cellIndex)
-
-            // if the new picto title is not empty
-            if (title && (title.length > 0)) {
-
-                // if the mesh for the picto does not exist, create it
-                if (!picto) {
-                    picto = BABYLON.MeshBuilder.CreatePlane("picto-" + cellIndex, {width: 0.8, height: 0.8})
-                    picto.position = new BABYLON.Vector3(cell.x, 0.011, -cell.y)
-                    picto.rotation.x = Math.PI / 2
-                    picto.isPickable = false
-                }
-
-                // load the texture if non-existing
-                if (!this.pictogram.has(title)) {
-                    const svg = new BABYLON.Texture("/picto/get?title=" + title, this.scene)
-                    this.pictogram.set(title, svg)
-                }
-
-                // set the material
-                const mat = new BABYLON.StandardMaterial('mat-picto-' + cellIndex, this.scene)
-                mat.emissiveColor = BABYLON.Color3.FromHexString(color)
-                mat.opacityTexture = this.pictogram.get(title)
-                mat.disableLighting = true
-                picto.material = mat
-                // model
-                cell.content.pictogram = title
-                cell.content.markerColor = color
-            } else {
-                // else reset
-                if (picto) {
-                    picto.dispose()
-                }
-                // model
-                cell.content.pictogram = null
-                cell.content.markerColor = null
-            }
-        }
-    }
-
-    declareHelper() {
-        // calculate hexagonal distance between 2 tiles given by their indices
-        this.scene.getDistance = function (idx1, idx2) {
-            const cell1 = this.metadata.grid[idx1]
-            const cell2 = this.metadata.grid[idx2]
-            let dx = cell1.x - cell2.x
-            let dy = cell1.y - cell2.y
-
-            return Math.ceil(Math.sqrt(dx * dx + dy * dy) / (2 * Math.sqrt(3) / 3) - 0.05)
-        }
-
-        // paint a room with a new template by starting by a tile
-        this.scene.paintRoomAt = function (idx, template) {
-            const roomId = this.metadata.grid[idx].content.uid
-
-            this.metadata.grid.forEach((cell, k) => {
-                if (cell.content.uid === roomId) {
-                    let old = this.getMeshByName("ground-" + k)
-                    let x = old.position.x
-                    let z = old.position.z
-                    old.dispose()
-                    old = null
-                    const ground = this.getMeshByName('hexagon-' + template).createInstance("ground-" + k)
-                    ground.position.x = x
-                    ground.position.z = z
-                    ground.checkCollisions = true
-                    // keep track of index
-                    ground.metadata = k
-                    // update document
-                    cell.content.template = template
-                }
-            })
-        }
-
-        // helper
-        this.scene.moveSelectorToIndex = idx => {
-            this.moveSelectorToIndex(idx)
-        }
-    }
-
     create() {
         // build the scene from the model
-        this.declareWriter()
-        this.declarePictoWriter()
         this.setCamera()
         this.setLight()
         this.declareGround()
@@ -669,6 +450,5 @@ export class BattlemapBuilder
         this.declareNpcToken()
         this.buildGrid()
         this.drawCeiling()
-        this.declareHelper()
     }
 }

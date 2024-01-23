@@ -16,7 +16,7 @@ export default {
     },
     load: function (scene, data, rootUrl) {
         const battlemap = Object.assign(new BattlemapDocument(), JSON.parse(data))
-        scene.metadata = battlemap
+        scene.setDocument(battlemap)
 
         const builder = new BattlemapBuilder(scene)
         builder.create()
