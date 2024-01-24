@@ -30,7 +30,10 @@ class ChromiumPdfWriter implements Writer
     {
         $chromium = new Process([
             'chromium',
-            '--headless', '--disable-gpu', '--no-sandbox',
+            '--headless',
+            '--disable-gpu',
+            '--no-sandbox',
+            '--no-pdf-header-footer',
             '--print-to-pdf=' . $target->getPathname(),
             $source->getPathname()
         ]);
