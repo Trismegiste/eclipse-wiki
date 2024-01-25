@@ -199,7 +199,7 @@ class MapDrawer
     }
 
     /**
-     * Fills the map with a given cell according to a B&W bitmap
+     * Fills the map with a given cell according to a 8-bit grayscale bitmap
      * @param HexaCell $filling
      * @param \GdImage $raster
      * @return void
@@ -215,9 +215,8 @@ class MapDrawer
 
         for ($y = 0; $y < $size; $y++) {
             for ($x = 0; $x < $size; $x++) {
-                $rgb = imagecolorat($raster, $x, $y);
-                $red = ($rgb >> 16) & 0xFF;  // since the picture is in black and white
-                if ($red > $threshold) {
+                $gray = imagecolorat($raster, $x, $y);
+                if ($gray > $threshold) {
                     $this->map->setCell([$x, $y], clone $filling);
                 }
             }
