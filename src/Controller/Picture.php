@@ -173,9 +173,11 @@ class Picture extends AbstractController
         $output = fopen("$targetName.svg", 'w');
         $doc = new BattlemapDocument();
         $doc->unserializeFromJson(json_decode(file_get_contents($battlemap->getPathname())), $doc);
-        ob_start();
+        ob_start(function ($buffer) use ($output) {
+            fwrite($output, $buffer);
+        }, 1e5);
         $dumper->flush($doc);
-        fwrite($output, ob_get_clean());
+        ob_end_flush();
         fclose($output);
 
         $convert = new Process([
