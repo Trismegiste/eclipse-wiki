@@ -6,7 +6,7 @@
 
 namespace App\Service;
 
-use Knp\Snappy\Pdf;
+use App\Service\Pdf\ChromiumPdfWriter;
 use SplFileInfo;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -18,22 +18,23 @@ use function join_paths;
 class DocumentBroadcaster
 {
 
-    protected $knpPdf;
     protected $documentDir;
 
-    public function __construct(protected UrlGeneratorInterface $routing, Pdf $knpPdf, string $cacheDir)
+    public function __construct(protected UrlGeneratorInterface $routing, string $cacheDir, protected ChromiumPdfWriter $chromiumPdf)
     {
-        $this->knpPdf = $knpPdf;
         $this->documentDir = join_paths($cacheDir, PlayerCastCache::subDir);
     }
 
     public function generatePdf(string $fileTitle, string $htmlContent, array $options = []): SplFileInfo
     {
         $filename = $this->sanitizeFilename($fileTitle);
-        $pathname = \join_paths($this->documentDir, $filename);
-        $this->knpPdf->generateFromHtml($htmlContent, $pathname, $options, true);
+        $target = new SplFileInfo(\join_paths($this->documentDir, $filename));
 
-        return new SplFileInfo($pathname);
+        $doc = $this->chromiumPdf->htmlToDom($htmlContent);
+        $this->chromiumPdf->embedPictures($doc);
+        $this->chromiumPdf->domToPdf($doc, $target);
+
+        return $target;
     }
 
     protected function sanitizeFilename(string $filename): string

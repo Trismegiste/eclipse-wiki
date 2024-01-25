@@ -44,32 +44,67 @@ class ChromiumPdfWriter implements Writer
 
     public function renderToPdf(string $template, array $param, SplFileInfo $target): void
     {
-        $source = new \SplFileInfo(join_paths($this->cacheDir, 'book-fandom-' . time() . '.html'));
-        $content = $this->twig->render($template, $param);
-        file_put_contents($source->getPathname(), $content);
+        $doc = $this->htmlToDom($this->twigToHtml($template, $param));
+        $this->embedPictures($doc);
+        $this->domToPdf($doc, $target);
+    }
 
-        // redirect to localhost for downloading pictures (caching)
+    public function twigToHtml(string $template, array $param): string
+    {
+        return $this->twig->render($template, $param);
+    }
+
+    public function htmlToDom(string $html): \DOMDocument
+    {
         $doc = new DOMDocument("1.0", "utf-8");
         libxml_use_internal_errors(true); // because HTML5 tags warning
-        $doc->loadHTML($content);
+        $doc->loadHTML($html);
         $errors = libxml_get_errors();
+
+        return $doc;
+    }
+
+    public function embedPictures(\DOMDocument $doc): void
+    {
         $elements = $doc->getElementsByTagName('img');
         foreach ($elements as $img) {
             /** @var DOMElement $img */
             $src = $img->getAttribute('src');
+            // remote
             if (str_starts_with($src, 'http')) {
                 $img->setAttribute('src', $this->remoteImage->getDataUri($src));
-                $img->removeAttribute('srcset');
-                $img->removeAttribute('loading');
-                $img->removeAttribute('decoding');
                 usleep(5e5);
             }
+            // local
+            if (str_starts_with($src, 'file:///')) {
+                $img->setAttribute('src', $this->getDataUri($src));
+            }
+            $img->removeAttribute('srcset');
+            $img->removeAttribute('loading');
+            $img->removeAttribute('decoding');
         }
+    }
 
-        $local = new \SplFileInfo(join_paths($this->cacheDir, 'book-local-' . time() . '.html'));
-        $doc->saveHTMLFile($local->getPathname());
+    protected function getDataUri(string $localFile)
+    {
+        if (!preg_match('#^file://(/.+)#', $localFile, $match)) {
+            throw new \InvalidArgumentException("Invalid local URL $localFile");
+        }
+        $localFile = $match[1];
+        if (!file_exists($localFile)) {
+            throw new \InvalidArgumentException("$localFile does not exist");
+        }
+        $pictureInfo = getimagesize($localFile);
+        $mimetype = $pictureInfo['mime'];
 
-        $this->write($local, $target);
+        return "data:$mimetype;base64," . base64_encode(file_get_contents($localFile));
+    }
+
+    public function domToPdf(\DOMDocument $doc, \SplFileInfo $target): void
+    {
+        $html = new \SplFileInfo(join_paths($this->cacheDir, $target->getBasename() . '-' . time() . '.html'));
+        $doc->saveHTMLFile($html->getPathname());
+        $this->write($html, $target);
     }
 
 }
