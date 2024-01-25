@@ -30,7 +30,7 @@ class ChromiumPdfWriter implements Writer
     {
         $chromium = new Process([
             'chromium',
-            '--headless',
+            '--headless=new',
             '--disable-gpu',
             '--no-sandbox',
             '--no-pdf-header-footer',

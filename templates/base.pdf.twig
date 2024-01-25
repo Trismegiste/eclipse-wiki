@@ -6,12 +6,20 @@
         <title>{{ vertex.title }}</title>
         <link rel="stylesheet" href="{{ absolute_url(asset('purecss/pure-min.css')) }}"/>
         <link rel="stylesheet" href="{{ absolute_url(asset('styles/app.css')) }}"/>
+        <style>
+            @page {
+                margin: 5mm;
+                size: A5;
+            }
+        </style>
         {% block stylesheets %}
         {% endblock %}
     </head>
     <body>
         <h1 class="big-title bg-color">{{ vertex.title }}</h1>
-        {% block content %}
-        {% endblock %}
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
     </body>
 </html>
