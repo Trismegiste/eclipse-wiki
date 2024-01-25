@@ -10,11 +10,12 @@ use App\Entity\Loveletter;
 use App\Entity\Vertex;
 use App\Form\LoveletterPcChoice;
 use App\Form\LoveletterType;
-use App\Repository\VertexRepository;
-use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
-use Knp\Snappy\Pdf;
+use App\Service\DocumentBroadcaster;
+use SplFileInfo;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -25,14 +26,6 @@ class LoveletterCrud extends GenericCrud
 {
 
     const pdfOptions = ['page-size' => 'A5'];
-
-    protected $knpPdf;
-
-    public function __construct(VertexRepository $repo, Pdf $knpSnappyPdf)
-    {
-        parent::__construct($repo);
-        $this->knpPdf = $knpSnappyPdf;
-    }
 
     protected function createEntity(string $title): Vertex
     {
@@ -61,26 +54,22 @@ class LoveletterCrud extends GenericCrud
      * Generate PDF for a Love letter
      */
     #[Route('/pdf/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function pdf(Loveletter $vertex): Response
+    public function pdf(Loveletter $vertex, DocumentBroadcaster $broadcast): BinaryFileResponse
     {
-        $title = sprintf("Loveletter-%s-%s.pdf", $vertex->player, $vertex->getTitle());
-        $html = $this->renderView('loveletter/export.pdf.twig', ['vertex' => $vertex]);
+        $pdf = $this->generatePdf($vertex, $broadcast);
+        $resp = new BinaryFileResponse($pdf);
+        $resp->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $pdf->getBasename());
 
-        return new PdfResponse(
-                $this->knpPdf->getOutputFromHtml($html, self::pdfOptions),
-                iconv('UTF-8', 'ASCII//TRANSLIT', $title)
-        );
+        return $resp;
     }
 
     /**
      * Generates the Love letter PDF and push to players
      */
     #[Route('/push/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function pushPdf(Loveletter $vertex, \App\Service\DocumentBroadcaster $broadcast): Response
+    public function pushPdf(Loveletter $vertex, DocumentBroadcaster $broadcast): Response
     {
-        $title = sprintf("Loveletter-%s-%s.pdf", $vertex->player, $vertex->getTitle());
-        $html = $this->renderView('loveletter/export.pdf.twig', ['vertex' => $vertex]);
-        $pdf = $broadcast->generatePdf($title, $html, self::pdfOptions);
+        $pdf = $this->generatePdf($vertex, $broadcast);
         $this->addFlash('success', 'PDF Loveletter généré');
 
         return $this->redirectToRoute('app_gmpusher_pushdocument', [
@@ -97,6 +86,14 @@ class LoveletterCrud extends GenericCrud
     public function select(string $pk, Request $request): Response
     {
         return $this->handleEdit(LoveletterPcChoice::class, 'loveletter/select.html.twig', $pk, $request);
+    }
+
+    protected function generatePdf(Loveletter $vertex, DocumentBroadcaster $broadcast): SplFileInfo
+    {
+        $title = sprintf("Loveletter-%s-%s.pdf", $vertex->player, $vertex->getTitle());
+        $html = $this->renderView('loveletter/export.pdf.twig', ['vertex' => $vertex]);
+
+        return $broadcast->generatePdf($title, $html, self::pdfOptions);
     }
 
 }
