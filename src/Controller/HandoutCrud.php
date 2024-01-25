@@ -11,7 +11,6 @@ use App\Entity\Vertex;
 use App\Form\HandoutType;
 use App\Repository\VertexRepository;
 use App\Service\DocumentBroadcaster;
-use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,12 +24,9 @@ class HandoutCrud extends GenericCrud
 
     const pdfOptions = ['page-size' => 'A5'];
 
-    protected $knpPdf;
-
-    public function __construct(VertexRepository $repo, Pdf $knpSnappyPdf)
+    public function __construct(VertexRepository $repo)
     {
         parent::__construct($repo);
-        $this->knpPdf = $knpSnappyPdf;
     }
 
     protected function createEntity(string $title): Vertex
