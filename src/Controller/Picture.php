@@ -170,45 +170,19 @@ class Picture extends AbstractController
             }
         }
 
-        $output = fopen("$targetName.html", 'w');
+        $output = fopen("$targetName.svg", 'w');
         $doc = new BattlemapDocument();
         $doc->unserializeFromJson(json_decode(file_get_contents($battlemap->getPathname())), $doc);
-
-        $widthForMap = SvgDumper::defaultSizeForWeb;
-        fwrite(
-                $output,
-                <<<YOLO
-<html>
-<head>
-    <style>
-        #gm-fogofwar {
-            display: none;
-        }
-    </style>
-</head>
-<body style="width:$widthForMap">
-YOLO
-        );
-
         ob_start();
         $dumper->flush($doc);
         fwrite($output, ob_get_clean());
-
-        fwrite($output, '</body></html>');
         fclose($output);
-
-        $matrixing = new Process([
-            'wkhtmltoimage',
-            "$targetName.html",
-            "$targetName.png"
-        ]);
-        $matrixing->mustRun();
 
         $convert = new Process([
             'convert',
-            "$targetName.png",
-            '-resize', 300,
-            '-quality', 60,
+            "$targetName.svg",
+            '-resize', 400,
+            '-quality', 70,
             "$targetName.jpg"
         ]);
         $convert->mustRun();
