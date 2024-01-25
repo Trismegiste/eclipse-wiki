@@ -5,21 +5,6 @@
     "doctrine/instantiator": {
         "version": "1.4.0"
     },
-    "knplabs/knp-snappy": {
-        "version": "v1.3.1"
-    },
-    "knplabs/knp-snappy-bundle": {
-        "version": "1.8",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "1.5",
-            "ref": "c81bdcf4a9d4e7b1959071457f9608631865d381"
-        },
-        "files": [
-            "config/packages/knp_snappy.yaml"
-        ]
-    },
     "monolog/monolog": {
         "version": "2.3.5"
     },
