@@ -65,37 +65,40 @@ class AvatarMaker
 
         // hashtags
         $top += 70;
-        $box = new Box($profile);
-        $box->setFontFace('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf')
-                ->setFontColor(new Color(0x70, 0x70, 0x70))
-                ->setFontSize(24)
-                ->setBox($this->leftPadding, $top, $this->paddedWidth, 85)
-                ->setTextAlign(HorizontalAlignment::Left, VerticalAlignment::Center)
-                ->draw($npc->hashtag);
+        if (!empty($npc->hashtag)) {
+            $box = new Box($profile);
+            $box->setFontFace('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf')
+                    ->setFontColor(new Color(0x70, 0x70, 0x70))
+                    ->setFontSize(24)
+                    ->setBox($this->leftPadding, $top, $this->paddedWidth, 85)
+                    ->setTextAlign(HorizontalAlignment::Left, VerticalAlignment::Center)
+                    ->draw($npc->hashtag);
+        }
 
         // socnet icons
         $top += 110;
-        $imgPos = $this->width / 24;
+        $imgPos = (int) ($this->width / 24);
+        $iconSize = (int) ($this->width / 4);
         foreach ($this->filterSocNet($npc) as $key => $level) {
             $icon = imagecreatefrompng(join_paths($this->publicFolder, 'socnet', $key . '.png'));
-            $resized = imagescale($icon, $this->width / 4, -1, IMG_BICUBIC_FIXED);
-            imagecopy($profile, $resized, $imgPos, $top, 0, 0, $this->width / 4, $this->width / 4);
-            $imgPos += $this->width / 3;
+            $resized = imagescale($icon, $iconSize, -1, IMG_BICUBIC_FIXED);
+            imagecopy($profile, $resized, $imgPos, $top, 0, 0, $iconSize, $iconSize);
+            $imgPos += (int) ($this->width / 3);
         }
 
         // socnet followers
-        $top += $this->width / 4 + 10;
-        $txtPos = $this->width / 24;
+        $top += $iconSize + 10;
+        $txtPos = (int) ($this->width / 24);
         foreach ($this->filterSocNet($npc) as $level) {
             (new Box($profile))
                     ->setFontFace($this->publicFolder . '/designfonts/OpenSansCondensed-Light.ttf')
                     ->setFontColor(new Color(0, 0, 0))
                     ->setFontSize(40)
-                    ->setBox($txtPos, $top, $this->width / 4, 40)
+                    ->setBox($txtPos, $top, $iconSize, 40)
                     ->setTextAlign(HorizontalAlignment::Center, VerticalAlignment::Top)
                     ->draw($this->printFollowers(10 ** ($level - random_int(10, 75) / 100.0)));
 
-            $txtPos += $this->width / 3;
+            $txtPos += (int) ($this->width / 3);
         }
 
         // write
