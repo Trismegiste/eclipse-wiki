@@ -14,7 +14,7 @@ class SvgStrategyTest extends ShapeTestCase
 
     public function testDraw()
     {
-        $this->map->expects($this->exactly(201))  // ~ 25² - pi . 10²
+        $this->map->expects($this->exactly(188))  // ~ 20² - pi . 9²
                 ->method('setCell');
         $this->draw();
     }
