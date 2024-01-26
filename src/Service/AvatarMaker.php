@@ -8,6 +8,10 @@ namespace App\Service;
 
 use App\Entity\Transhuman;
 use GdImage;
+use GDText\Box;
+use GDText\Color;
+use GDText\Enum\HorizontalAlignment;
+use GDText\Enum\VerticalAlignment;
 use RuntimeException;
 use SplFileInfo;
 use Symfony\Component\Process\Process;
@@ -19,17 +23,12 @@ use Twig\Environment;
 class AvatarMaker
 {
 
-    protected $height;
-    protected $width;
-    protected $publicFolder;
-    protected $twig;
+    protected int $leftMargin = 20;
+    protected int $rightMargin;
 
-    public function __construct(Environment $twig, string $publicFolder, int $width = 503, int $height = 894)
+    public function __construct(protected Environment $twig, protected string $publicFolder, protected int $width = 503, protected int $height = 894)
     {
-        $this->height = $height;
-        $this->width = $width;
-        $this->publicFolder = $publicFolder;
-        $this->twig = $twig;
+        $this->rightMargin = $this->width - $this->leftMargin;
     }
 
     /**
@@ -41,6 +40,40 @@ class AvatarMaker
      */
     public function generate(Transhuman $npc, SplFileInfo $source): SplFileInfo
     {
+        // social network profile
+        $top = 0;
+        $profile = imagecreatetruecolor($this->width, $this->height);
+        $bg = imagecolorallocate($profile, 0xf0, 0xf0, 0xf0);
+        imagefill($profile, 0, 0, $bg);
+        // profile pic
+        $token = imagecreatefrompng($source->getPathname());
+        imagecopy($profile, $token, 0, $top, 0, 0, $this->width, $this->width);
+
+        // name
+        $top += $this->width + 10;
+        $box = new Box($profile);
+        $box->setFontFace($this->publicFolder . '/designfonts/OpenSansCondensed-Light.ttf')
+                ->setFontColor(new Color(0, 0, 0));
+        $box->setFontSize(50);
+        $box->setBox($this->leftMargin, $top, 460, 460);
+        $box->setTextAlign(HorizontalAlignment::Left, VerticalAlignment::Top);
+        $box->draw($npc->getTitle());
+
+        // hashtags
+        $top += 65;
+        $box = new Box($profile);
+        $box->setFontFace('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf')
+                ->setFontColor(new Color(0x70, 0x70, 0x70));
+        $box->setFontSize(24);
+        $box->setBox($this->leftMargin, $top, $this->rightMargin, $top + 72);
+        $box->setTextAlign(HorizontalAlignment::Left, VerticalAlignment::Top);
+        $box->draw($npc->hashtag);
+
+        $pngTarget = sys_get_temp_dir() . '/profile-' . $npc->getTitle() . '.png';
+        imagepng($profile, $pngTarget);
+
+        return new SplFileInfo($pngTarget);
+
         $profilePic = base64_encode(file_get_contents($source->getPathname()));
 
         $socnet = array_map(function (int $val) {

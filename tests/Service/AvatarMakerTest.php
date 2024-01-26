@@ -26,6 +26,7 @@ class AvatarMakerTest extends KernelTestCase
     {
         $obj = new Transhuman('Alice Blue', $this->createStub(Background::class), $this->createStub(Faction::class));
         $obj->economy = ['Ressource' => 8, 'L\'Œil' => 4, 'CivicNet' => 6, 'Guanxi' => 9];
+        $obj->hashtag = '#php #symfony #mongodb #mercure #babylonjs #alpinejs';
 
         return $obj;
     }

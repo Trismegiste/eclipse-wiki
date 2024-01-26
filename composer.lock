@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "89728b8bad9dd2522fd4843f8c76d15d",
+    "content-hash": "348a2a0a9018e73eed57af87017630a0",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -5723,6 +5723,77 @@
                 }
             ],
             "time": "2023-11-06T11:00:25+00:00"
+        },
+        {
+            "name": "teknoo/gd-text",
+            "version": "2.0.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/TeknooSoftware/gd-text.git",
+                "reference": "31ccad0055427569f3a5b95bbb92849f5fdfaba6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/TeknooSoftware/gd-text/zipball/31ccad0055427569f3a5b95bbb92849f5fdfaba6",
+                "reference": "31ccad0055427569f3a5b95bbb92849f5fdfaba6",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gd": "*",
+                "php": "^8.1"
+            },
+            "replace": {
+                "pe46dro/gd-text": "*"
+            },
+            "require-dev": {
+                "icanhazstring/composer-unused": "^0.8.10",
+                "phpstan/phpstan": "^1.10.46",
+                "phpunit/phpunit": "^10.4.2",
+                "roave/security-advisories": "dev-latest",
+                "squizlabs/php_codesniffer": "^3.7.2",
+                "symfony/property-access": "^6.3||^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "GDText\\": "src/",
+                    "GDText\\Tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Richard Déloge",
+                    "email": "richard@teknoo.software",
+                    "role": "Software architect, Lead developer"
+                }
+            ],
+            "description": "A class drawing multiline and aligned text on pictures. Uses GD extension.",
+            "homepage": "http://teknoo.software/gd-text",
+            "keywords": [
+                "draw",
+                "gd",
+                "image",
+                "text"
+            ],
+            "support": {
+                "issues": "https://github.com/TeknooSoftware/gd-text/issues",
+                "source": "https://github.com/TeknooSoftware/gd-text"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/TeknooSoftware",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/teknoo_software",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2023-11-29T18:21:50+00:00"
         },
         {
             "name": "trismegiste/rpg-name-generator",
