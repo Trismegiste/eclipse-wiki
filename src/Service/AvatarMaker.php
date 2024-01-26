@@ -69,15 +69,29 @@ class AvatarMaker
                 ->setTextAlign(HorizontalAlignment::Left, VerticalAlignment::Top)
                 ->draw($npc->hashtag);
 
-        // socnet icons + txt
+        // socnet icons
         $top += 105;
-        $txtPos = $this->width / 6;
         $imgPos = $this->width / 24;
         foreach ($this->filterSocNet($npc) as $key => $level) {
             $icon = imagecreatefrompng(join_paths($this->publicFolder, 'socnet', $key . '.png'));
             $resized = imagescale($icon, $this->width / 4, -1, IMG_BICUBIC_FIXED);
             imagecopy($profile, $resized, $imgPos, $top, 0, 0, $this->width / 4, $this->width / 4);
             $imgPos += $this->width / 3;
+        }
+
+        // socnet followers
+        $top += $this->width / 4 + 10;
+        $txtPos = $this->width / 24;
+        foreach ($this->filterSocNet($npc) as $level) {
+            (new Box($profile))
+                    ->setFontFace($this->publicFolder . '/designfonts/OpenSansCondensed-Light.ttf')
+                    ->setFontColor(new Color(0, 0, 0))
+                    ->setFontSize(40)
+                    ->setBox($txtPos, $top, $this->width / 4, 40)
+                    ->setTextAlign(HorizontalAlignment::Center, VerticalAlignment::Top)
+                    ->draw($this->printFollowers(10 ** ($level - random_int(10, 75) / 100.0)));
+
+            $txtPos += $this->width / 3;
         }
 
         // write
