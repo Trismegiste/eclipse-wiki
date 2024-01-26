@@ -14,8 +14,8 @@ use GDText\Enum\HorizontalAlignment;
 use GDText\Enum\VerticalAlignment;
 use RuntimeException;
 use SplFileInfo;
-use Symfony\Component\Process\Process;
 use Twig\Environment;
+use function join_paths;
 
 /**
  * Creating avatar for Transhuman
@@ -24,19 +24,22 @@ class AvatarMaker
 {
 
     protected int $leftPadding = 15;
-    protected int $paddedWidth;
+    protected readonly int $paddedWidth;
+    protected readonly Color $gray;
+    protected readonly Color $black;
 
     public function __construct(protected Environment $twig, protected string $publicFolder, protected int $width = 503, protected int $height = 894)
     {
         $this->paddedWidth = $this->width - 2 * $this->leftPadding;
+        $this->gray = new Color(0x70, 0x70, 0x70);
+        $this->black = new Color(0, 0, 0);
     }
 
     /**
      * Create the profile pic
      * @param Transhuman $npc
-     * @param GdImage $source the GD resource of an avatar picture
-     * @return resource the GD2 image resource
-     * @throws RuntimeException
+     * @param SplFileInfo $source
+     * @return SplFileInfo
      */
     public function generate(Transhuman $npc, SplFileInfo $source): SplFileInfo
     {
@@ -53,7 +56,7 @@ class AvatarMaker
         $top += $this->width + 10;
         $box = new Box($profile);
         $box->setFontFace($this->publicFolder . '/designfonts/OpenSansCondensed-Light.ttf')
-                ->setFontColor(new Color(0, 0, 0))
+                ->setFontColor($this->black)
                 ->setFontSize(50)
                 ->setBox($this->leftPadding, $top, (int) ($this->paddedWidth * 0.7), 65)
                 ->setTextAlign(HorizontalAlignment::Left, VerticalAlignment::Top)
@@ -68,7 +71,7 @@ class AvatarMaker
         if (!empty($npc->hashtag)) {
             $box = new Box($profile);
             $box->setFontFace('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf')
-                    ->setFontColor(new Color(0x70, 0x70, 0x70))
+                    ->setFontColor($this->gray)
                     ->setFontSize(24)
                     ->setBox($this->leftPadding, $top, $this->paddedWidth, 85)
                     ->setTextAlign(HorizontalAlignment::Left, VerticalAlignment::Center)
@@ -92,7 +95,7 @@ class AvatarMaker
         foreach ($this->filterSocNet($npc) as $level) {
             (new Box($profile))
                     ->setFontFace($this->publicFolder . '/designfonts/OpenSansCondensed-Light.ttf')
-                    ->setFontColor(new Color(0, 0, 0))
+                    ->setFontColor($this->black)
                     ->setFontSize(40)
                     ->setBox($txtPos, $top, $iconSize, 40)
                     ->setTextAlign(HorizontalAlignment::Center, VerticalAlignment::Top)
