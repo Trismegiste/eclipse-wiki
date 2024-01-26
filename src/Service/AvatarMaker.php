@@ -59,18 +59,22 @@ class AvatarMaker
                 ->setTextAlign(HorizontalAlignment::Left, VerticalAlignment::Top)
                 ->draw($npc->getTitle());
 
+        // button follow
+        $button = imagecreatefrompng(join_paths($this->publicFolder, 'socnet', 'button_follow.png'));
+        imagecopy($profile, $button, 358, $top + 15, 0, 0, 130, 40);
+
         // hashtags
-        $top += 65;
+        $top += 70;
         $box = new Box($profile);
         $box->setFontFace('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf')
                 ->setFontColor(new Color(0x70, 0x70, 0x70))
                 ->setFontSize(24)
-                ->setBox($this->leftPadding, $top, $this->paddedWidth, 72)
-                ->setTextAlign(HorizontalAlignment::Left, VerticalAlignment::Top)
+                ->setBox($this->leftPadding, $top, $this->paddedWidth, 85)
+                ->setTextAlign(HorizontalAlignment::Left, VerticalAlignment::Center)
                 ->draw($npc->hashtag);
 
         // socnet icons
-        $top += 105;
+        $top += 110;
         $imgPos = $this->width / 24;
         foreach ($this->filterSocNet($npc) as $key => $level) {
             $icon = imagecreatefrompng(join_paths($this->publicFolder, 'socnet', $key . '.png'));
@@ -97,37 +101,6 @@ class AvatarMaker
         // write
         $pngTarget = sys_get_temp_dir() . '/profile-' . $npc->getTitle() . '.png';
         imagepng($profile, $pngTarget);
-
-        return new SplFileInfo($pngTarget);
-
-        $profilePic = base64_encode(file_get_contents($source->getPathname()));
-
-        $socnet = array_map(function (int $val) {
-            return $this->printFollowers(10 ** ($val - random_int(10, 90) / 100.0));
-        }, $this->filterSocNet($npc));
-
-        $html = $this->twig->render('picture/wk_profile.html.twig', [
-            'width' => $this->width,
-            'profile_pic' => $profilePic,
-            'npc' => $npc,
-            'socnet' => $socnet,
-            'localbase' => $this->publicFolder
-        ]);
-
-        // extensions are important for wkhtmltopng
-        $basename = "target" . rand();
-        $htmlTarget = sys_get_temp_dir() . '/' . $basename . '.html';
-        $pngTarget = sys_get_temp_dir() . '/' . $basename . '.png';
-        file_put_contents($htmlTarget, $html);
-        $matrixing = new Process([
-            'wkhtmltoimage',
-            '--width', $this->width,
-            '--height', $this->height,
-            '--enable-local-file-access',
-            $htmlTarget,
-            $pngTarget
-        ]);
-        $matrixing->mustRun();
 
         return new SplFileInfo($pngTarget);
     }
