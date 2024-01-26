@@ -23,12 +23,12 @@ use Twig\Environment;
 class AvatarMaker
 {
 
-    protected int $leftMargin = 20;
-    protected int $rightMargin;
+    protected int $leftPadding = 15;
+    protected int $paddedWidth;
 
     public function __construct(protected Environment $twig, protected string $publicFolder, protected int $width = 503, protected int $height = 894)
     {
-        $this->rightMargin = $this->width - $this->leftMargin;
+        $this->paddedWidth = $this->width - 2 * $this->leftPadding;
     }
 
     /**
@@ -53,22 +53,34 @@ class AvatarMaker
         $top += $this->width + 10;
         $box = new Box($profile);
         $box->setFontFace($this->publicFolder . '/designfonts/OpenSansCondensed-Light.ttf')
-                ->setFontColor(new Color(0, 0, 0));
-        $box->setFontSize(50);
-        $box->setBox($this->leftMargin, $top, 460, 460);
-        $box->setTextAlign(HorizontalAlignment::Left, VerticalAlignment::Top);
-        $box->draw($npc->getTitle());
+                ->setFontColor(new Color(0, 0, 0))
+                ->setFontSize(50)
+                ->setBox($this->leftPadding, $top, (int) ($this->paddedWidth * 0.7), 65)
+                ->setTextAlign(HorizontalAlignment::Left, VerticalAlignment::Top)
+                ->draw($npc->getTitle());
 
         // hashtags
         $top += 65;
         $box = new Box($profile);
         $box->setFontFace('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf')
-                ->setFontColor(new Color(0x70, 0x70, 0x70));
-        $box->setFontSize(24);
-        $box->setBox($this->leftMargin, $top, $this->rightMargin, $top + 72);
-        $box->setTextAlign(HorizontalAlignment::Left, VerticalAlignment::Top);
-        $box->draw($npc->hashtag);
+                ->setFontColor(new Color(0x70, 0x70, 0x70))
+                ->setFontSize(24)
+                ->setBox($this->leftPadding, $top, $this->paddedWidth, 72)
+                ->setTextAlign(HorizontalAlignment::Left, VerticalAlignment::Top)
+                ->draw($npc->hashtag);
 
+        // socnet icons + txt
+        $top += 105;
+        $txtPos = $this->width / 6;
+        $imgPos = $this->width / 24;
+        foreach ($this->filterSocNet($npc) as $key => $level) {
+            $icon = imagecreatefrompng(join_paths($this->publicFolder, 'socnet', $key . '.png'));
+            $resized = imagescale($icon, $this->width / 4, -1, IMG_BICUBIC_FIXED);
+            imagecopy($profile, $resized, $imgPos, $top, 0, 0, $this->width / 4, $this->width / 4);
+            $imgPos += $this->width / 3;
+        }
+
+        // write
         $pngTarget = sys_get_temp_dir() . '/profile-' . $npc->getTitle() . '.png';
         imagepng($profile, $pngTarget);
 
