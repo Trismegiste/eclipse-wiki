@@ -3,8 +3,6 @@ services:
     symfony:
         build: .
         image: symfony:dev
-        ports:
-            - "9000:9000"
         volumes:
             - .:/app
         depends_on:

@@ -17,9 +17,6 @@ RUN apt-get install -y libzip-dev && docker-php-ext-install zip
 # INTL
 RUN docker-php-ext-install intl
 
-# PDF
-RUN apt-get install -y wkhtmltopdf
-
 # OPCache
 RUN docker-php-ext-install opcache
 
@@ -57,8 +54,6 @@ RUN apt-get update && apt-get install -y unzip
 RUN apt-get install -y net-tools
 
 COPY ./docker/php.ini /usr/local/etc/php
-
-EXPOSE 9000
 
 WORKDIR /app
 

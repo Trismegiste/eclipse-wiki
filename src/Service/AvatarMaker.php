@@ -70,7 +70,7 @@ class AvatarMaker
         $top += 70;
         if (!empty($npc->hashtag)) {
             $box = new Box($profile);
-            $box->setFontFace('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf')
+            $box->setFontFace($this->publicFolder . '/designfonts/DejaVuSans.ttf')
                     ->setFontColor($this->gray)
                     ->setFontSize(24)
                     ->setBox($this->leftPadding, $top, $this->paddedWidth, 85)
