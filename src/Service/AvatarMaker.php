@@ -45,65 +45,31 @@ class AvatarMaker
     public function generate(Transhuman $npc, SplFileInfo $source): SplFileInfo
     {
         // social network profile
-        $top = 0;
-        $profile = imagecreatetruecolor($this->width, $this->height);
-        $bg = imagecolorallocate($profile, 0xf0, 0xf0, 0xf0);
-        imagefill($profile, 0, 0, $bg);
+        $profile = $this->createProfileCanvas();
         // profile pic
-        $token = imagecreatefrompng($source->getPathname());
-        imagecopy($profile, $token, 0, $top, 0, 0, $this->width, $this->width);
+        $top = 0;
+        $this->copyTokenAt($profile, $source, $top);
 
         // name
         $top += $this->width + 10;
-        $box = new Box($profile);
-        $box->setFontFace($this->getFontPath('OpenSansCondensed-Light'))
-                ->setFontColor($this->black)
-                ->setFontSize(50)
-                ->setBox($this->leftPadding, $top, (int) ($this->paddedWidth * 0.7), 65)
-                ->setTextAlign(HorizontalAlignment::Left, VerticalAlignment::Top)
-                ->draw($npc->getTitle());
+        $this->printNameAt($profile, $top, $npc->getTitle());
 
         // button follow
-        $button = imagecreatefrompng(join_paths($this->publicFolder, self::iconSubDir, 'button_follow.png'));
-        imagecopy($profile, $button, 358, $top + 15, 0, 0, 130, 40);
+        $this->copyButtonFollowAt($profile, $top + 15);
 
         // hashtags
         $top += 70;
         if (!empty($npc->hashtag)) {
-            $box = new Box($profile);
-            $box->setFontFace($this->getFontPath('DejaVuSans'))
-                    ->setFontColor($this->gray)
-                    ->setFontSize(24)
-                    ->setBox($this->leftPadding, $top, $this->paddedWidth, 85)
-                    ->setTextAlign(HorizontalAlignment::Left, VerticalAlignment::Center)
-                    ->draw($npc->hashtag);
+            $this->copyHashtagAt($profile, $top, $npc->hashtag);
         }
 
         // socnet icons
         $top += 110;
-        $imgPos = (int) ($this->width / 24);
-        $iconSize = (int) ($this->width / 4);
-        foreach ($this->filterSocNet($npc) as $key => $level) {
-            $icon = imagecreatefrompng(join_paths($this->publicFolder, self::iconSubDir, $key . '.png'));
-            $resized = imagescale($icon, $iconSize, -1, IMG_BICUBIC_FIXED);
-            imagecopy($profile, $resized, $imgPos, $top, 0, 0, $iconSize, $iconSize);
-            $imgPos += (int) ($this->width / 3);
-        }
+        $this->copySocNetIconAt($profile, $top, $this->filterSocNet($npc));
 
         // socnet followers
-        $top += $iconSize + 10;
-        $txtPos = (int) ($this->width / 24);
-        foreach ($this->filterSocNet($npc) as $level) {
-            (new Box($profile))
-                    ->setFontFace($this->getFontPath('OpenSansCondensed-Light'))
-                    ->setFontColor($this->black)
-                    ->setFontSize(40)
-                    ->setBox($txtPos, $top, $iconSize, 40)
-                    ->setTextAlign(HorizontalAlignment::Center, VerticalAlignment::Top)
-                    ->draw($this->printFollowers(10 ** ($level - random_int(10, 75) / 100.0)));
-
-            $txtPos += (int) ($this->width / 3);
-        }
+        $top += 10 + (int) ($this->width / 4);
+        $this->copySocNetFollowerAt($profile, $top, $this->filterSocNet($npc));
 
         // write
         $pngTarget = sys_get_temp_dir() . '/profile-' . $npc->getTitle() . '.png';
@@ -139,6 +105,78 @@ class AvatarMaker
     protected function getFontPath(string $name): string
     {
         return join_paths($this->publicFolder, self::fontSubDir, $name . '.ttf');
+    }
+
+    protected function printNameAt(\GdImage $profile, int $top, string $name): void
+    {
+        $box = new Box($profile);
+        $box->setFontFace($this->getFontPath('OpenSansCondensed-Light'))
+                ->setFontColor($this->black)
+                ->setFontSize(50)
+                ->setBox($this->leftPadding, $top, (int) ($this->paddedWidth * 0.7), 65)
+                ->setTextAlign(HorizontalAlignment::Left, VerticalAlignment::Top)
+                ->draw($name);
+    }
+
+    protected function createProfileCanvas(): \GdImage
+    {
+        $profile = imagecreatetruecolor($this->width, $this->height);
+        $bg = imagecolorallocate($profile, 0xf0, 0xf0, 0xf0);
+        imagefill($profile, 0, 0, $bg);
+
+        return $profile;
+    }
+
+    protected function copyTokenAt(\GdImage $profile, \SplFileInfo $source, int $top): void
+    {
+        $token = imagecreatefrompng($source->getPathname());
+        imagecopy($profile, $token, 0, $top, 0, 0, $this->width, $this->width);
+    }
+
+    protected function copyButtonFollowAt(\GdImage $profile, int $top): void
+    {
+        $button = imagecreatefrompng(join_paths($this->publicFolder, self::iconSubDir, 'button_follow.png'));
+        imagecopy($profile, $button, 358, $top, 0, 0, 130, 40);
+    }
+
+    protected function copyHashtagAt(\GdImage $profile, int $top, string $hashtag): void
+    {
+        $box = new Box($profile);
+        $box->setFontFace($this->getFontPath('DejaVuSans'))
+                ->setFontColor($this->gray)
+                ->setFontSize(24)
+                ->setBox($this->leftPadding, $top, $this->paddedWidth, 85)
+                ->setTextAlign(HorizontalAlignment::Left, VerticalAlignment::Center)
+                ->draw($hashtag);
+    }
+
+    protected function copySocNetIconAt(\GdImage $profile, int $top, array $socnet): void
+    {
+        $imgPos = (int) ($this->width / 24);
+        $iconSize = (int) ($this->width / 4);
+        foreach ($socnet as $key => $level) {
+            $icon = imagecreatefrompng(join_paths($this->publicFolder, self::iconSubDir, $key . '.png'));
+            $resized = imagescale($icon, $iconSize, -1, IMG_BICUBIC_FIXED);
+            imagecopy($profile, $resized, $imgPos, $top, 0, 0, $iconSize, $iconSize);
+            $imgPos += (int) ($this->width / 3);
+        }
+    }
+
+    protected function copySocNetFollowerAt(\GdImage $profile, int $top, array $socnet): void
+    {
+        $iconSize = (int) ($this->width / 4);
+        $txtPos = (int) ($this->width / 24);
+        foreach ($socnet as $level) {
+            (new Box($profile))
+                    ->setFontFace($this->getFontPath('OpenSansCondensed-Light'))
+                    ->setFontColor($this->black)
+                    ->setFontSize(40)
+                    ->setBox($txtPos, $top, $iconSize, 40)
+                    ->setTextAlign(HorizontalAlignment::Center, VerticalAlignment::Top)
+                    ->draw($this->printFollowers(10 ** ($level - random_int(10, 75) / 100.0)));
+
+            $txtPos += (int) ($this->width / 3);
+        }
     }
 
 }
