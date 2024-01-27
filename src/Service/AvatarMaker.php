@@ -7,12 +7,10 @@
 namespace App\Service;
 
 use App\Entity\Transhuman;
-use GdImage;
 use GDText\Box;
 use GDText\Color;
 use GDText\Enum\HorizontalAlignment;
 use GDText\Enum\VerticalAlignment;
-use RuntimeException;
 use SplFileInfo;
 use Twig\Environment;
 use function join_paths;
@@ -22,6 +20,9 @@ use function join_paths;
  */
 class AvatarMaker
 {
+
+    const fontSubDir = 'designfonts';
+    const iconSubDir = 'socnet';
 
     protected int $leftPadding = 15;
     protected readonly int $paddedWidth;
@@ -55,7 +56,7 @@ class AvatarMaker
         // name
         $top += $this->width + 10;
         $box = new Box($profile);
-        $box->setFontFace($this->publicFolder . '/designfonts/OpenSansCondensed-Light.ttf')
+        $box->setFontFace($this->getFontPath('OpenSansCondensed-Light'))
                 ->setFontColor($this->black)
                 ->setFontSize(50)
                 ->setBox($this->leftPadding, $top, (int) ($this->paddedWidth * 0.7), 65)
@@ -63,14 +64,14 @@ class AvatarMaker
                 ->draw($npc->getTitle());
 
         // button follow
-        $button = imagecreatefrompng(join_paths($this->publicFolder, 'socnet', 'button_follow.png'));
+        $button = imagecreatefrompng(join_paths($this->publicFolder, self::iconSubDir, 'button_follow.png'));
         imagecopy($profile, $button, 358, $top + 15, 0, 0, 130, 40);
 
         // hashtags
         $top += 70;
         if (!empty($npc->hashtag)) {
             $box = new Box($profile);
-            $box->setFontFace($this->publicFolder . '/designfonts/DejaVuSans.ttf')
+            $box->setFontFace($this->getFontPath('DejaVuSans'))
                     ->setFontColor($this->gray)
                     ->setFontSize(24)
                     ->setBox($this->leftPadding, $top, $this->paddedWidth, 85)
@@ -83,7 +84,7 @@ class AvatarMaker
         $imgPos = (int) ($this->width / 24);
         $iconSize = (int) ($this->width / 4);
         foreach ($this->filterSocNet($npc) as $key => $level) {
-            $icon = imagecreatefrompng(join_paths($this->publicFolder, 'socnet', $key . '.png'));
+            $icon = imagecreatefrompng(join_paths($this->publicFolder, self::iconSubDir, $key . '.png'));
             $resized = imagescale($icon, $iconSize, -1, IMG_BICUBIC_FIXED);
             imagecopy($profile, $resized, $imgPos, $top, 0, 0, $iconSize, $iconSize);
             $imgPos += (int) ($this->width / 3);
@@ -94,7 +95,7 @@ class AvatarMaker
         $txtPos = (int) ($this->width / 24);
         foreach ($this->filterSocNet($npc) as $level) {
             (new Box($profile))
-                    ->setFontFace($this->publicFolder . '/designfonts/OpenSansCondensed-Light.ttf')
+                    ->setFontFace($this->getFontPath('OpenSansCondensed-Light'))
                     ->setFontColor($this->black)
                     ->setFontSize(40)
                     ->setBox($txtPos, $top, $iconSize, 40)
@@ -133,6 +134,11 @@ class AvatarMaker
         $multiplier = (int) floor(log10($num) / 3);
 
         return sprintf($multiplier !== 0 ? '%.1f%s' : '%d', \round($num / (10 ** (3 * $multiplier)), 2), self::coeff[$multiplier]);
+    }
+
+    protected function getFontPath(string $name): string
+    {
+        return join_paths($this->publicFolder, self::fontSubDir, $name . '.ttf');
     }
 
 }
