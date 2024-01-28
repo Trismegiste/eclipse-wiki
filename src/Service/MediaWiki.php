@@ -100,6 +100,26 @@ class MediaWiki
     }
 
     /**
+     * Gets the wikitext code for a given page id
+     * @param int $id
+     * @return \App\Entity\MediaWikiPage
+     */
+    public function getWikitextById(int $id): \App\Entity\MediaWikiPage
+    {
+        $response = $this->sendQuery([
+            'action' => 'parse',
+            'format' => 'json',
+            'pageid' => $id,
+            'prop' => 'wikitext'
+        ]);
+
+        $page = new \App\Entity\MediaWikiPage($response->parse->title, 'fandom');
+        $page->content = $response->parse->wikitext->{'*'};
+
+        return $page;
+    }
+
+    /**
      * Gets the XML Parsed Tree for a given page
      * @param string $name
      * @return string
@@ -221,6 +241,16 @@ class MediaWiki
         }
 
         return $extract;
+    }
+
+    public function searchPageByName(string $name): array
+    {
+        return $this->sendQuery([
+                    'action' => 'query',
+                    'srsearch' => $name,
+                    'list' => 'search',
+                    'format' => 'json'
+                ])->query->search;
     }
 
 }
