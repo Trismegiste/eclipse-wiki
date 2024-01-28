@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class TopicSelectorType extends AbstractType
 {
 
+    const PUBLIC_CHANNEL = 'public';
+
     public function __construct(protected SubscriptionClient $mercure)
     {
         
@@ -30,7 +32,7 @@ class TopicSelectorType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $topic = $this->mercure->getPrivateTopic();
-        array_unshift($topic, 'public');
+        array_unshift($topic, self::PUBLIC_CHANNEL);
         $resolver->setDefault('choices', array_combine($topic, $topic));
     }
 
