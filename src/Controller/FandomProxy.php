@@ -6,7 +6,6 @@
 
 namespace App\Controller;
 
-use App\Entity\MediaWikiPage;
 use App\Service\MediaWiki;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -29,7 +28,7 @@ class FandomProxy extends AbstractController
     }
 
     #[Route("/search", methods: ['GET'])]
-    public function fandom(Request $request,): Response
+    public function search(Request $request,): Response
     {
         $form = $this->createFormBuilder()
                 ->add('query')
@@ -54,30 +53,7 @@ class FandomProxy extends AbstractController
     #[Route("/show/{id}", methods: ['GET'])]
     public function show(int $id): Response
     {
-        $page = $this->wiki->getWikitextById($id);
-        $this->purifyRemoteWikitext($page);
-
-        return $this->render('fandom/show.html.twig', ['page' => $page]);
-    }
-
-    protected function purifyRemoteWikitext(MediaWikiPage $page): void
-    {
-        $page->content = preg_replace(
-                [
-                    '#\[\[Fichier\:([^\]]+)\]\]#',
-                    '#\[\[Catégorie\:([^]]+)\]\]#',
-                    '#\{\{([^\]]+)\}\}#',
-                    '#\[\[([^\]\|]+)\]\]#',
-                    '#\[\[[^\|\]]+\|([^\]]+)\]\]#',
-                ],
-                [
-                    '',
-                    '[https://eclipse-savage.fandom.com/fr/wiki/Cat%C3%A9gorie:$1 Catégorie $1]',
-                    '',
-                    "'''\$1'''",
-                    "'''\$1'''",
-                ],
-                $page->content);
+        return $this->render('fandom/show.html.twig', ['page' => $this->wiki->getWikitextById($id)]);
     }
 
 }

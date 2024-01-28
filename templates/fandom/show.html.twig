@@ -1,8 +1,11 @@
 {% extends "base.html.twig" %}
 
 {% block title %}{{ page.title }}{% endblock %}
-{% block header_title %}{{ page.title }}{% endblock %}
+{% block header_title %}
+    {{ include('fandom/menu.html.twig') }}
+    {{ block('title') }}
+{% endblock %}
 
 {% block content %}
-    {{ wiki(page.content) }}
+    {{ wiki(page.purifiedContentForLocalRendering) }}
 {% endblock %}

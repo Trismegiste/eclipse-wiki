@@ -34,4 +34,24 @@ class MediaWikiPage implements \Trismegiste\Strangelove\MongoDb\Root
         return $this->category;
     }
 
+    public function getPurifiedContentForLocalRendering(): string
+    {
+        return preg_replace(
+                [
+                    '#\[\[Fichier\:([^\]]+)\]\]#',
+                    '#\[\[Catégorie\:([^]]+)\]\]#',
+                    '#\{\{([^\]]+)\}\}#',
+                    '#\[\[([^\]\|]+)\]\]#',
+                    '#\[\[[^\|\]]+\|([^\]]+)\]\]#',
+                ],
+                [
+                    '',
+                    '',
+                    '',
+                    "'''\$1'''",
+                    "'''\$1'''",
+                ],
+                $this->content);
+    }
+
 }

@@ -2,9 +2,11 @@
 
 namespace App\Service;
 
+use App\Entity\MediaWikiPage;
 use DOMDocument;
 use DOMNode;
 use RuntimeException;
+use stdClass;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use UnexpectedValueException;
 
@@ -71,7 +73,7 @@ class MediaWiki
         return $response->parse->text->{'*'};
     }
 
-    protected function sendQuery(array $query): \stdClass
+    protected function sendQuery(array $query): stdClass
     {
         $response = $this->client->request('GET', $this->host, ['query' => $query]);
 
@@ -102,9 +104,9 @@ class MediaWiki
     /**
      * Gets the wikitext code for a given page id
      * @param int $id
-     * @return \App\Entity\MediaWikiPage
+     * @return MediaWikiPage
      */
-    public function getWikitextById(int $id): \App\Entity\MediaWikiPage
+    public function getWikitextById(int $id): MediaWikiPage
     {
         $response = $this->sendQuery([
             'action' => 'parse',
@@ -113,7 +115,7 @@ class MediaWiki
             'prop' => 'wikitext'
         ]);
 
-        $page = new \App\Entity\MediaWikiPage($response->parse->title, 'fandom');
+        $page = new MediaWikiPage($response->parse->title, 'fandom');
         $page->content = $response->parse->wikitext->{'*'};
 
         return $page;
