@@ -47,7 +47,7 @@ class GmPusher extends AbstractController
         }
     }
 
-    #[Route("/push/{pk}/document/{filename}/{label}", methods: ["GET", "POST"])]
+    #[Route("/push/{pk}/document/{filename}/{label}", methods: ["GET", "POST"], requirements: ['pk' => '[\\da-f]{24}'])]
     public function pushDocument(Request $request, string $pk, string $filename, string $label, VertexRepository $repo, DocumentBroadcaster $broadcaster)
     {
         $vertex = $repo->findByPk($pk);

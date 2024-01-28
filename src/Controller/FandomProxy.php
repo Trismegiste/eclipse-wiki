@@ -82,4 +82,21 @@ class FandomProxy extends AbstractController
         return $broadcast->generatePdf($title, $html);
     }
 
+    /**
+     * Generates the PDF from fandom page and pushes to players
+     */
+    #[Route('/push/{id}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
+    public function pushPdf(int $id, DocumentBroadcaster $broadcast): Response
+    {
+        $page = $this->wiki->getWikitextById($id);
+        $pdf = $this->generatePdf($page, $broadcast);
+        $this->addFlash('success', 'Aide Fandom générée');
+
+        return $this->redirectToRoute('app_gmpusher_pushdocument', [
+                    'pk' => $id,
+                    'filename' => $pdf->getBasename(),
+                    'label' => 'Aide - ' . $page->getTitle()
+        ]);
+    }
+
 }
