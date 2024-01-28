@@ -28,6 +28,7 @@
 {% endblock %}
 
 {% block info %}
+    {{ parent() }}    
     <div x-data="{}">
         <h2>Lancer de trait</h2>
         <div class="diceroller" 
@@ -68,7 +69,6 @@
             </div>        
         </div>
     </div>
-    {{ parent() }}    
 {% endblock %}
 
 {% block content %}

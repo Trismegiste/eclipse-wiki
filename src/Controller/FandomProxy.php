@@ -7,8 +7,10 @@
 namespace App\Controller;
 
 use App\Entity\MediaWikiPage;
+use App\Form\Type\TopicSelectorType;
 use App\Service\DocumentBroadcaster;
 use App\Service\MediaWiki;
+use App\Service\Mercure\Pusher;
 use SplFileInfo;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -49,7 +51,7 @@ class FandomProxy extends AbstractController
         }
 
         return $this->render('fandom/search.html.twig', [
-                    'title' => 'fandom',
+                    'title' => 'Fandom',
                     'form' => $form->createView(),
                     'result' => $result
         ]);
@@ -83,15 +85,16 @@ class FandomProxy extends AbstractController
     }
 
     /**
-     * Generates the PDF from fandom page and pushes to players
+     * Generates the PDF from fandom page and pushes to players (public channel since it's a public mediawiki)
      */
     #[Route('/push/{id}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function pushPdf(int $id, DocumentBroadcaster $broadcast, \App\Service\Mercure\Pusher $pusher): Response
+    public function pushPdf(int $id, DocumentBroadcaster $broadcast, Pusher $pusher): Response
     {
+        // @todo wikipage need to be cached
         $page = $this->wiki->getWikitextById($id);
         $pdf = $this->generatePdf($page, $broadcast);
         $url = $broadcast->getLinkToDocument($pdf->getBasename());
-        $pusher->sendDocumentLink($url, $page->getTitle(), \App\Form\Type\TopicSelectorType::PUBLIC_CHANNEL);
+        $pusher->sendDocumentLink($url, $page->getTitle(), TopicSelectorType::PUBLIC_CHANNEL);
         $this->addFlash('success', 'Aide Fandom envoyée');
 
         return $this->redirectToRoute('app_fandomproxy_show', ['id' => $id]);
