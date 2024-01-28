@@ -7,6 +7,7 @@
 namespace App\Service;
 
 use App\Entity\Transhuman;
+use GdImage;
 use GDText\Box;
 use GDText\Color;
 use GDText\Enum\HorizontalAlignment;
@@ -37,14 +38,13 @@ class AvatarMaker
     }
 
     /**
-     * Create the profile pic
+     * Create the social network profile
      * @param Transhuman $npc
      * @param SplFileInfo $source
      * @return SplFileInfo
      */
     public function generate(Transhuman $npc, SplFileInfo $source): SplFileInfo
     {
-        // social network profile
         $profile = $this->createProfileCanvas();
         // profile pic
         $top = 0;
@@ -107,7 +107,7 @@ class AvatarMaker
         return join_paths($this->publicFolder, self::fontSubDir, $name . '.ttf');
     }
 
-    protected function printNameAt(\GdImage $profile, int $top, string $name): void
+    protected function printNameAt(GdImage $profile, int $top, string $name): void
     {
         $box = new Box($profile);
         $box->setFontFace($this->getFontPath('OpenSansCondensed-Light'))
@@ -118,7 +118,7 @@ class AvatarMaker
                 ->draw($name);
     }
 
-    protected function createProfileCanvas(): \GdImage
+    protected function createProfileCanvas(): GdImage
     {
         $profile = imagecreatetruecolor($this->width, $this->height);
         $bg = imagecolorallocate($profile, 0xf0, 0xf0, 0xf0);
@@ -127,19 +127,19 @@ class AvatarMaker
         return $profile;
     }
 
-    protected function copyTokenAt(\GdImage $profile, \SplFileInfo $source, int $top): void
+    protected function copyTokenAt(GdImage $profile, \SplFileInfo $source, int $top): void
     {
         $token = imagecreatefrompng($source->getPathname());
         imagecopy($profile, $token, 0, $top, 0, 0, $this->width, $this->width);
     }
 
-    protected function copyButtonFollowAt(\GdImage $profile, int $top): void
+    protected function copyButtonFollowAt(GdImage $profile, int $top): void
     {
         $button = imagecreatefrompng(join_paths($this->publicFolder, self::iconSubDir, 'button_follow.png'));
         imagecopy($profile, $button, 358, $top, 0, 0, 130, 40);
     }
 
-    protected function copyHashtagAt(\GdImage $profile, int $top, string $hashtag): void
+    protected function copyHashtagAt(GdImage $profile, int $top, string $hashtag): void
     {
         $box = new Box($profile);
         $box->setFontFace($this->getFontPath('DejaVuSans'))
@@ -150,7 +150,7 @@ class AvatarMaker
                 ->draw($hashtag);
     }
 
-    protected function copySocNetIconAt(\GdImage $profile, int $top, array $socnet): void
+    protected function copySocNetIconAt(GdImage $profile, int $top, array $socnet): void
     {
         $imgPos = (int) ($this->width / 24);
         $iconSize = (int) ($this->width / 4);
@@ -162,7 +162,7 @@ class AvatarMaker
         }
     }
 
-    protected function copySocNetFollowerAt(\GdImage $profile, int $top, array $socnet): void
+    protected function copySocNetFollowerAt(GdImage $profile, int $top, array $socnet): void
     {
         $iconSize = (int) ($this->width / 4);
         $txtPos = (int) ($this->width / 24);

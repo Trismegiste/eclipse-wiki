@@ -99,7 +99,7 @@ class FirstPerson extends AbstractController
      * If it already exists, it sends back, or it generates it with voronoi algorithm
      */
     #[Route('/fps/scene/{pk}.{_format}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}', '_format' => 'battlemap'])]
-    public function babylon(Place $place, Storage $storage): Response
+    public function babylon(Place $place, Storage $storage, Request $request): Response
     {
         if (is_null($place->battlemap3d)) {
             $config = $place->voronoiParam;
@@ -109,11 +109,13 @@ class FirstPerson extends AbstractController
 
             $resp = new JsonResponse($doc);
             $resp->setLastModified(new DateTime());
-
-            return $resp;
         } else {
-            return $storage->createResponse($place->battlemap3d);
+            $resp = $storage->createResponse($place->battlemap3d);
+            $resp->isNotModified($request);
         }
+        $resp->setCache(['must_revalidate' => true]);
+
+        return $resp;
     }
 
     /**
