@@ -7,13 +7,13 @@
 namespace App\Controller;
 
 use App\Entity\MediaWikiPage;
+use App\Form\FandomSearch;
 use App\Form\Type\TopicSelectorType;
 use App\Service\DocumentBroadcaster;
 use App\Service\MediaWiki;
 use App\Service\Mercure\Pusher;
 use SplFileInfo;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,7 +37,7 @@ class FandomProxy extends AbstractController
     #[Route("/search", methods: ['GET'])]
     public function search(Request $request): Response
     {
-        $form = $this->createForm(\App\Form\FandomSearch::class);
+        $form = $this->createForm(FandomSearch::class);
         $result = [];
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
