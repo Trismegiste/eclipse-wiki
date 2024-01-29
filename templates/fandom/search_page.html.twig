@@ -1,0 +1,12 @@
+{% extends "fandom/search.html.twig" %}
+
+{% block result %}
+    <div class="pure-u-1">
+        <ul>
+            {% for page in result %}
+                <li><a href="{{ path('app_fandomproxy_show', {id: page.pageid}) }}">{{ page.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

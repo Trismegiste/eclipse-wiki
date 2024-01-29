@@ -1,0 +1,32 @@
+{% extends "fandom/search.html.twig" %}
+
+{% block result %}
+    {% for picture in result %}
+        <div class="pure-u-1-5">
+            <div x-data="broadcast">
+                <a href="{{ path('app_remotepicture_push', {url: picture.original|url_encode}) }}" x-bind="trigger">
+                    <img src="{{ path('app_remotepicture_read', {url: picture.thumbnail|url_encode}) }}" class="pure-img"/>
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }} 
+    <script type="module">
+        import broadcastPicture from 'picture-broadcasting';
+        Alpine.data('broadcast', broadcastPicture)
+    </script>  
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .result img {
+            max-height: 200px;
+            margin: auto;
+        }
+    </style>
+{% endblock %}

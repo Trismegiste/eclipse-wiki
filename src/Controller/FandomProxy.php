@@ -35,26 +35,27 @@ class FandomProxy extends AbstractController
     }
 
     #[Route("/search", methods: ['GET'])]
-    public function search(Request $request,): Response
+    public function search(Request $request): Response
     {
-        $form = $this->createFormBuilder()
-                ->add('query')
-                ->add('search', SubmitType::class)
-                ->setMethod('GET')
-                ->getForm();
-
+        $form = $this->createForm(\App\Form\FandomSearch::class);
         $result = [];
-
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $result = $this->wiki->searchPageByName($form['query']->getData());
+            $result = $form->getData();
         }
 
-        return $this->render('fandom/search.html.twig', [
-                    'title' => 'Fandom',
-                    'form' => $form->createView(),
-                    'result' => $result
-        ]);
+        if (key_exists('namespace', $result)) {
+            $resp = $this->render("fandom/search_{$result['namespace']}.html.twig", [
+                'form' => $form->createView(),
+                'result' => $result['listing']
+            ]);
+        } else {
+            $resp = $this->render("fandom/search.html.twig", [
+                'form' => $form->createView()
+            ]);
+        }
+
+        return $resp;
     }
 
     #[Route("/show/{id}", methods: ['GET'])]

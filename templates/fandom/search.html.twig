@@ -1,13 +1,14 @@
-{% extends "form.html.twig" %}
+{% extends "base.html.twig" %}
+
+{% block title %}Recherche Fandom{% endblock %}
+{% block header_title %}{{ block('title') }}{% endblock %}
 
 {% block content %}
-    {{ parent() }}
-    <section class="result">
-        <ul>
-            {% for page in result %}
-                <li><a href="{{ path('app_fandomproxy_show', {id: page.pageid}) }}">{{ page.title }}</a>
-                </li>
-            {% endfor %}
-        </ul>
+    <section>
+        {{ form(form) }}
+    </section>
+    <section class="pure-g result">
+        {% block result %}
+        {% endblock %}
     </section>
 {% endblock %}
