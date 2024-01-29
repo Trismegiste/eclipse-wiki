@@ -1,0 +1,50 @@
+<?php
+
+/*
+ * eclipse-wiki
+ */
+
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
+class FandomProxyTest extends WebTestCase
+{
+
+    protected $client;
+
+    protected function setUp(): void
+    {
+        $this->client = static::createClient();
+    }
+
+    public function testSearch()
+    {
+        $this->client->request('GET', '/fandom/search');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('#form_search');
+        $crawler = $this->client->submitForm('form_search', ['form[query]' => 'mars'], 'GET');
+        $this->assertResponseIsSuccessful();
+        $result = $crawler->filter('main .result a');
+        $this->assertGreaterThanOrEqual(1, count($result)); // at least there is one
+
+        return $result->first()->link();
+    }
+
+    /** @depends testSearch */
+    public function testShow(Symfony\Component\DomCrawler\Link $link): int
+    {
+        $this->client->click($link);
+        $this->assertResponseIsSuccessful();
+        $this->assertAnySelectorTextContains('main', 'Mars');
+
+        return $this->client->getRequest()->attributes->get('id');
+    }
+
+    /** @depends testShow */
+    public function testPdf(int $id)
+    {
+        $this->client->request('GET', "/fandom/pdf/$id");
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals('application/pdf', $this->client->getResponse()->headers->get('content-type'));
+    }
+
+}

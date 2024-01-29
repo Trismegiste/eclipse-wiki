@@ -2,10 +2,12 @@
 
 {% block content %}
     {{ parent() }}
-    <ul>
-        {% for page in result %}
-            <li><a href="{{ path('app_fandomproxy_show', {id: page.pageid}) }}">{{ page.title }}</a>
-            </li>
-        {% endfor %}
-    </ul>
+    <section class="result">
+        <ul>
+            {% for page in result %}
+                <li><a href="{{ path('app_fandomproxy_show', {id: page.pageid}) }}">{{ page.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
 {% endblock %}
