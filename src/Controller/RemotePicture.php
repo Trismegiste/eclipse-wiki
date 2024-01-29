@@ -30,28 +30,6 @@ class RemotePicture extends AbstractController
     }
 
     /**
-     * Image search against the remote MediaWiki
-     */
-    #[Route('/remote/search', methods: ['GET'])]
-    public function search(Request $request, MediaWiki $mw): Response
-    {
-        $form = $this->createFormBuilder()
-                ->add('query')
-                ->add('search', SubmitType::class)
-                ->setMethod('GET')
-                ->getForm();
-
-        $extract = [];
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $listing = $mw->searchImage($form['query']->getData());
-            $extract = $mw->extractUrlFromGallery($mw->renderGallery($listing));
-        }
-
-        return $this->render('picture/search.html.twig', ['form' => $form->createView(), 'gallery' => $extract]);
-    }
-
-    /**
      * Show image from MediaWiki
      */
     #[Route('/remote/get', methods: ['GET'])]

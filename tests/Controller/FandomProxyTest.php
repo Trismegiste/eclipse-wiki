@@ -20,8 +20,8 @@ class FandomProxyTest extends WebTestCase
     {
         $this->client->request('GET', '/fandom/search');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorExists('#form_search');
-        $crawler = $this->client->submitForm('form_search', ['form[query]' => 'mars'], 'GET');
+        $this->assertSelectorExists('#fandom_search_search');
+        $crawler = $this->client->submitForm('fandom_search_search', ['fandom_search' => ['query' => 'mars', 'namespace' => 'page']], 'GET');
         $this->assertResponseIsSuccessful();
         $result = $crawler->filter('main .result a');
         $this->assertGreaterThanOrEqual(1, count($result)); // at least there is one
