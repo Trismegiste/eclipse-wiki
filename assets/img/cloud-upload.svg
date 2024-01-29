@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg879"
+   version="1.1"
+   viewBox="0 0 44.00948 34.006611"
+   height="566.77686"
+   width="733.49133">
+  <metadata
+     id="metadata885">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>cloud-upload-solid</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs883" />
+  <title
+     id="title870">cloud-upload-solid</title>
+  <path
+     id="path875"
+     d="m 38.500271,14.800794 a 9.1,9.1 0 0 0 -3.4,-6.4999997 9.8,9.8 0 0 0 -7.5,-2.3 12.2,12.2 0 0 0 -10.1,-5.99999995664 A 11.6,11.6 0 0 0 8.6002706,4.0007943 a 12.4,12.4 0 0 0 -3.2,8.3999997 11.8,11.8 0 0 0 -5.20000003,8.2 11.5,11.5 0 0 0 3.10000003,10.2 12.4,12.4 0 0 0 8.7000004,3.2 h 20.5 c 7.7,0 11.3,-5.1 11.5,-9.9 a 9.9,9.9 0 0 0 -5.5,-9.3 z m -7.8,6.4 a 2,2 0 0 1 -3.1,0.2 l -3.6,-3.6 v 11.2 a 2,2 0 0 1 -4,0 v -11.2 l -3.6,3.6 a 2,2 0 0 1 -3.1,-0.2 2.1,2.1 0 0 1 0.4,-2.7 l 6.9,-6.9 a 1.9,1.9 0 0 1 2.8,0 l 6.9,6.9 a 2.1,2.1 0 0 1 0.4,2.7 z" />
+</svg>

@@ -48,7 +48,7 @@ class GmPusher extends AbstractController
     }
 
     #[Route("/push/{pk}/document/{filename}/{label}", methods: ["GET", "POST"], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function pushDocument(Request $request, string $pk, string $filename, string $label, VertexRepository $repo, DocumentBroadcaster $broadcaster)
+    public function pushDocument(Request $request, string $pk, string $filename, string $label, VertexRepository $repo, DocumentBroadcaster $broadcaster): Response
     {
         $vertex = $repo->findByPk($pk);
         $form = $this->createFormBuilder()
@@ -85,7 +85,8 @@ class GmPusher extends AbstractController
     public function peering(): Response
     {
         $form = $this->createForm(PeeringConfirm::class, null, [
-            // technically, the URL is identical to the ajax controller URL but it's clearer to understand that this form is sent through AJAX
+            // technically, the URL is identical to the ajax controller URL
+            // but it's clearer to understand that this form is sent through AJAX
             'action' => $this->generateUrl('app_gmpusher_ajaxpeering')
         ]);
 
@@ -123,6 +124,21 @@ class GmPusher extends AbstractController
         }
 
         return new JsonResponse(['level' => 'error', 'message' => 'Invalid call'], 400);
+    }
+
+    #[Route("/cloud/{filename}/upload", methods: ["GET", "POST"])]
+    public function cloudUpload(Request $request, string $filename, DocumentBroadcaster $broadcaster, \App\Service\FileIoClient $client): Response
+    {
+        $form = $this->createFormBuilder()
+                ->add('send', SubmitType::class)
+                ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+        }
+
+        return $this->render('form.html.twig', ['title' => 'Envoi sur File IO', 'form' => $form->createView()]);
     }
 
 }

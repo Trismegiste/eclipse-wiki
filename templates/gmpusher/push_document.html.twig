@@ -12,8 +12,16 @@
 {% block content %}
     <div class="pure-g">
         <div class="pure-u-1-2">
-            <h2>{{ document.label }}</h2>
-            {{ form(form) }}
+            <section class="local">
+                <h2>{{ document.label }}</h2>
+                {{ form(form) }}
+            </section>
+            <section class="cloud">
+                <a href="{{ path('app_gmpusher_cloudupload', {filename: app.request.get('filename')}) }}">
+                    <img src="{{ asset('img/cloud-upload.svg') }}" class="pure-img"/>
+                </a>
+                <h2>Failover sur le Cloud</h2>
+            </section>
         </div>
         <div class="pure-u-1-2">
             <figure>
@@ -53,6 +61,20 @@
         }
         figure {
             margin: 1em 2em;
+        }
+        .cloud {
+            padding-top: 9em;
+        }
+        .cloud h2 {
+            text-align: center;
+        }
+        .cloud img {
+            width: 50%;
+            margin: 0 auto;
+            opacity: 10%;
+        }
+        .cloud img:hover {
+            opacity: 100%;
         }
     </style>
 {% endblock %}
