@@ -10,6 +10,7 @@ use App\Form\PeeringConfirm;
 use App\Form\Type\TopicSelectorType;
 use App\Repository\VertexRepository;
 use App\Service\DocumentBroadcaster;
+use App\Service\FileIoClient;
 use App\Service\Mercure\Pusher;
 use Exception;
 use SplFileInfo;
@@ -126,19 +127,17 @@ class GmPusher extends AbstractController
         return new JsonResponse(['level' => 'error', 'message' => 'Invalid call'], 400);
     }
 
-    #[Route("/cloud/{filename}/upload", methods: ["GET", "POST"])]
-    public function cloudUpload(Request $request, string $filename, DocumentBroadcaster $broadcaster, \App\Service\FileIoClient $client): Response
+    #[Route("/cloud/{filename}/share", methods: ["POST"])]
+    public function cloudShare(string $filename, DocumentBroadcaster $broadcaster, FileIoClient $client): Response
     {
-        $form = $this->createFormBuilder()
-                ->add('send', SubmitType::class)
-                ->getForm();
+        $link = $client->upload(new \SplFileInfo($broadcaster->getLinkToDocument($filename)));
 
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            
-        }
-
-        return $this->render('form.html.twig', ['title' => 'Envoi sur File IO', 'form' => $form->createView()]);
+        return $this->render('gmpusher/cloud_share.html.twig', [
+                    'document' => [
+                        'label' => $filename,
+                        'url' => $link
+                    ]
+        ]);
     }
 
 }

@@ -1,5 +1,5 @@
 {# Pushing a dynamic document #}
-{% extends "base.html.twig" %}
+{% extends "gmpusher/share_qrcode.html.twig" %}
 
 {% block title %}{{ title }}{% endblock %}
 {% block header_title %}
@@ -9,59 +9,22 @@
     {{ title }}
 {% endblock %}
 
-{% block content %}
-    <div class="pure-g">
-        <div class="pure-u-1-2">
-            <section class="local">
-                <h2>{{ document.label }}</h2>
-                {{ form(form) }}
-            </section>
-            <section class="cloud">
-                <a href="{{ path('app_gmpusher_cloudupload', {filename: app.request.get('filename')}) }}">
-                    <img src="{{ asset('img/cloud-upload.svg') }}" class="pure-img"/>
-                </a>
-                <h2>Failover sur le Cloud</h2>
-            </section>
-        </div>
-        <div class="pure-u-1-2">
-            <figure>
-                <canvas id="qrious" class="pure-img"></canvas>
-            </figure>
-        </div>
-        <div class="pure-u-1">
-            <h2 class="big-link">
-                {{ document.url }}
-                <a href="{{ document.url }}" target="_blank"><i class="icon-export"></i></a>
-            </h2>  
-        </div>
-    </div>
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script type="module">
-        import QRious from 'qrious';
-
-        // QR code
-        new QRious({
-            element: document.getElementById('qrious'),
-            size: Math.min(innerWidth, innerHeight),
-            level: 'M',
-            value: '{{ document.url }}'
-        })
-    </script>
+{% block sharing_selection %}
+    <section class="local">
+        <h2>{{ document.label }}</h2>
+        {{ form(form) }}
+    </section>
+    <section class="cloud">
+        <form action="{{ path('app_gmpusher_cloudshare', {filename: app.request.get('filename')}) }}" method="post">
+            <button><img src="{{ asset('img/cloud-upload.svg') }}" class="pure-img"/></button>
+        </form>
+        <h2>Failover sur le Cloud</h2>
+    </section>
 {% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
     <style>
-        .big-link {
-            text-align: center;
-            font-size: 150%;
-        }
-        figure {
-            margin: 1em 2em;
-        }
         .cloud {
             padding-top: 9em;
         }
@@ -69,12 +32,16 @@
             text-align: center;
         }
         .cloud img {
-            width: 50%;
+            width: 40%;
             margin: 0 auto;
             opacity: 10%;
         }
         .cloud img:hover {
             opacity: 100%;
+        }
+        .cloud button {
+            background: none;
+            border: none;
         }
     </style>
 {% endblock %}

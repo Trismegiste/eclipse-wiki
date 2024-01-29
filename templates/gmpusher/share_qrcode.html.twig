@@ -1,0 +1,50 @@
+{# Pushing a dynamic document #}
+{% extends "base.html.twig" %}
+
+{% block content %}
+    <div class="pure-g">
+        <div class="pure-u-1-2">
+            {% block sharing_selection %}
+            {% endblock %}
+        </div>
+        <div class="pure-u-1-2">
+            <figure>
+                <canvas id="qrious" class="pure-img"></canvas>
+            </figure>
+        </div>
+        <div class="pure-u-1">
+            <h2 class="big-link">
+                {{ document.url }}
+                <a href="{{ document.url }}" target="_blank"><i class="icon-export"></i></a>
+            </h2>  
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="module">
+        import QRious from 'qrious';
+
+        // QR code
+        new QRious({
+            element: document.getElementById('qrious'),
+            size: Math.min(innerWidth, innerHeight),
+            level: 'M',
+            value: '{{ document.url }}'
+        })
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .big-link {
+            text-align: center;
+            font-size: 150%;
+        }
+        figure {
+            margin: 1em 2em;
+        }
+    </style>
+{% endblock %}
