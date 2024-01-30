@@ -9,20 +9,45 @@
 
 {% block content %}
     <div class="parsed-wikitext">
-        <ul>
-            {% for link, vertices in broken %}
-                <li>
-                    Lien manquant vers <a href="{{ path('app_wiki', {title:link}) }}" class="new">{{ link }}</a> dans :
-                    <ul>
-                        {% for title, dummy in vertices %}
-                            <li>
-                                <a href="{{ path('app_wiki', {title:title}) }}">{{ title }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </li>
-            {% endfor %}
-        </ul>
+        <table class="broken-link">
+            <thead>
+                <tr>
+                    <th>Lien manquant vers</th>
+                    <th>dans les vertex</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for link, vertices in broken %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('app_wiki', {title:link}) }}" class="new">
+                                <i class="icon-unlink"></i>
+                                {{ link }}
+                            </a>
+                        </td>
+                        <td>
+                            <ul>
+                                {% for title, dummy in vertices %}
+                                    <li>
+                                        <i class="icon-link"></i>
+                                        <a href="{{ path('app_wiki', {title:title}) }}">{{ title }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 {% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .broken-link li {
+            display: inline-block;
+            margin-right: 2em;
+        }
+    </style>
+{% endblock %}
