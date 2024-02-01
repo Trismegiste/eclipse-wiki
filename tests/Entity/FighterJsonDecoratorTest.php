@@ -4,17 +4,18 @@
  * eclipse-wiki
  */
 
-use App\Entity\FighterDecorator;
+use App\Entity\Attribute;
+use App\Entity\FighterJsonDecorator;
 use App\Entity\Freeform;
 use PHPUnit\Framework\TestCase;
 
-class FighterDecoratorTest extends TestCase
+class FighterJsonDecoratorTest extends TestCase
 {
 
     /** @dataProvider getCharacter */
     public function testSerialize($wrapped)
     {
-        $sut = new FighterDecorator($wrapped);
+        $sut = new FighterJsonDecorator($wrapped);
         $this->assertEquals(array(
             'ranged' => 0,
             'toughness' => 2,
@@ -29,7 +30,7 @@ class FighterDecoratorTest extends TestCase
     public function getCharacter(): array
     {
         $obj = new Freeform('rancor');
-        $obj->attributes[] = new App\Entity\Attribute('Vigueur');
+        $obj->attributes[] = new Attribute('Vigueur');
 
         return [
             [$obj]

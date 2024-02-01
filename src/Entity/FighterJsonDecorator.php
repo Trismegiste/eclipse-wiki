@@ -12,7 +12,7 @@ namespace App\Entity;
  * Design intent : Reduce the amount of data for sending a Character through ajax
  * #projection #json #ajax #decorator
  */
-class FighterDecorator implements Fighter, \JsonSerializable
+class FighterJsonDecorator implements Fighter, \JsonSerializable
 {
 
     public function __construct(protected Fighter $wrapped)
