@@ -49,16 +49,26 @@
                     })
 
                     // « Hello I'm here and I want to peer with this ID »
-                    fetch(helloUrl, {
+                    fetch(window.location.origin + '/.well-known/mercure', {
                         method: 'POST',
-                        body: JSON.stringify({identifier: this.peeringKey})
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXJjdXJlIjp7InB1Ymxpc2giOlsiKiJdfX0.vNOW2hD02pSbjq3F4vQE8-XwM4VooGhRkZjprA6getg`
+                        },
+                        body: new URLSearchParams({
+                            topic: 'peering',
+                            type: 'ask',
+                            data: JSON.stringify({
+                                identifier: this.peeringKey,
+                                ip: '192.168.1.1',
+                                browser: window.navigator.userAgent
+                            })
+                        })
+                    }).then(resp => {
+                        return resp.text()
+                    }).then(data => {
+                        console.log(data)
                     })
-                            .then(resp => {
-                                return resp.json()
-                            })
-                            .then(data => {
-                                console.log(data)
-                            })
                 },
 
                 getCurrentCharacterTitle() {

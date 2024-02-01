@@ -8,7 +8,7 @@ http://192.168.*.*:80 {
 	root * /app/public
 	php_server
         mercure {
-            publisher_jwt coucoucoucoucoucdffddfdfdfdfuocoucccoucuocou HS256
+            publisher_jwt "Arthur, j'apprécie les fruits au sirop"
             anonymous true
             transport_url bolt:///app/var/mercure.db
             subscriptions
