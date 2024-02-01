@@ -11,7 +11,7 @@ use Trismegiste\Strangelove\MongoDb\RootImpl;
 /**
  * A Character
  */
-abstract class Character extends Vertex implements \JsonSerializable
+abstract class Character extends Vertex implements \JsonSerializable, Fighter
 {
 
     const TOUGHNESS_ATTR = 'Vigueur';
@@ -249,6 +249,21 @@ abstract class Character extends Vertex implements \JsonSerializable
     public function getAttackRolls(): \Iterator
     {
         return new AttackRollIterator($this->attacks, $this->morph);
+    }
+
+    public function getMalusAgainstRangedAttack(): int
+    {
+        return $this->rangedMalus;
+    }
+
+    public function isWildcard(): bool
+    {
+        return $this->wildCard;
+    }
+
+    public function getTokenPicture(): ?string
+    {
+        return $this->tokenPic;
     }
 
 }
