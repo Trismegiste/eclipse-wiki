@@ -28,10 +28,4 @@ class PlayerLogTest extends Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $this->assertStringContainsString('swiper', $this->client->getResponse()->getContent());
     }
 
-    public function testPingPosition()
-    {
-        $this->client->request('POST', '/player/ping-position', content: json_encode(['deltaX' => -5.5, 'deltaY' => 7.6]));
-        $this->assertResponseIsSuccessful();
-    }
-
 }

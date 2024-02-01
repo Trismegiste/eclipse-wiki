@@ -2,6 +2,7 @@
  * cubemap viewer - side effect
  */
 
+import { MercureClient } from 'mercure-client';
 import BABYLON from 'babylonjs';
 import PluginGUI from 'babylonjs-gui';
 BABYLON.GUI = PluginGUI
@@ -10,7 +11,7 @@ BABYLON.GUI = PluginGUI
 let mat = null
 let scene = null
 
-export function createCubemap(doc, canvas, pingUrl) {
+export function createCubemap(doc, canvas, jwt) {
     const centerCell = doc.grid[(doc.side + 1) * (doc.side - 1) / 2]
 
     const engine = new BABYLON.Engine(canvas) // Generate the BABYLON 3D engine
@@ -68,10 +69,8 @@ export function createCubemap(doc, canvas, pingUrl) {
         ground.actionManager.registerAction(
                 new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, e => {
                     const current = e.meshUnderPointer
-                    fetch(pingUrl, {
-                        method: 'POST',
-                        body: JSON.stringify({deltaX: current.position.x, deltaY: current.position.z})
-                    })
+                    const client = new MercureClient(jwt)
+                    client.publish('ping-position', 'relative', {deltaX: current.position.x, deltaY: current.position.z})
                     const frameRate = 10
                     const blinking = new BABYLON.Animation("blinking", "material.alpha", frameRate, BABYLON.Animation.ANIMATIONTYPE_FLOAT)
                     blinking.setKeys([

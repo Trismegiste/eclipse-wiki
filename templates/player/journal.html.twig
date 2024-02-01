@@ -71,7 +71,7 @@
         Cubemap.createCubemap(
                 JSON.parse(document.getElementById("cubemap-grid").textContent),
                 document.getElementById("renderCanvas"),
-                '{{ path('app_playerlog_pingposition') }}'
+                '{{ mercure_publish_jwt }}'
                 )
 
         Alpine.data('playerLog', (host) => ({

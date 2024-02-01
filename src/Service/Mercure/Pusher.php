@@ -44,11 +44,6 @@ class Pusher
         $this->sendJsonEvent('peering', 'validation', ['identifier' => $identifier, 'characterTitle' => $title]);
     }
 
-    public function pingRelativePosition(float $dx, float $dy): void
-    {
-        $this->sendJsonEvent('ping-position', 'relative', ['deltaX' => $dx, 'deltaY' => $dy]);
-    }
-
     protected function sendJsonEvent(string $channel, string $type, array $content): void
     {
         $update = new Update(

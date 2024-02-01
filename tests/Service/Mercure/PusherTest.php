@@ -26,11 +26,6 @@ class PusherTest extends TestCase
         $this->sut = new Pusher($this->hub);
     }
 
-    public function testPingWithRelativePosition()
-    {
-        $this->sut->pingRelativePosition(1.3, 5.4);
-    }
-
     public function testValidPeering()
     {
         $this->sut->validPeering(666, 'Takeshi');

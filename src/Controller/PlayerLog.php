@@ -38,17 +38,6 @@ class PlayerLog extends AbstractController
         return $this->render('player/peering.html.twig');
     }
 
-    // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent
-    protected function extractBrowser(string $rawUserAgent): string
-    {
-        return match (1) {
-            preg_match('#Firefox/\d#', $rawUserAgent) => 'Firefox',
-            preg_match('#Chrome/\d#', $rawUserAgent) => 'Chrome',
-            preg_match('#Edg/\d#', $rawUserAgent) => 'Edge',
-            default => 'Unknown'
-        };
-    }
-
     /**
      * Returns a generated document
      */
@@ -56,18 +45,6 @@ class PlayerLog extends AbstractController
     public function getDocument(string $filename, DocumentBroadcaster $broad): Response
     {
         return $broad->createResponseForFilename($filename);
-    }
-
-    /**
-     * Send a ping on a relative position
-     */
-    #[Route('/ping-position', methods: ['POST'])]
-    public function pingPosition(Request $request, Pusher $pusher): JsonResponse
-    {
-        $pos = json_decode($request->getContent());
-        $pusher->pingRelativePosition($pos->deltaX, $pos->deltaY);
-
-        return new JsonResponse(['status' => 'OK']);
     }
 
 }
