@@ -1,5 +1,7 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
+    globals:
+        mercure_publish_jwt: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXJjdXJlIjp7InB1Ymxpc2giOlsiKiJdfX0.vNOW2hD02pSbjq3F4vQE8-XwM4VooGhRkZjprA6getg'
     form_themes: 
         - 'form/purecss_layout.html.twig'
         - 'form/rolltype.html.twig'

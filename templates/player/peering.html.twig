@@ -50,7 +50,7 @@
                     })
 
                     // « Hello I'm here and I want to peer with this ID »
-                    const client = new MercureClient('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXJjdXJlIjp7InB1Ymxpc2giOlsiKiJdfX0.vNOW2hD02pSbjq3F4vQE8-XwM4VooGhRkZjprA6getg')
+                    const client = new MercureClient({{ mercure_publish_jwt }})
                     client.publish('peering', 'ask', {
                         identifier: this.peeringKey,
                         ip: '192.168.1.1',

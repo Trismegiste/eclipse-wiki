@@ -26,11 +26,6 @@ class PusherTest extends TestCase
         $this->sut = new Pusher($this->hub);
     }
 
-    public function testPingWithIndexedPosition()
-    {
-        $this->sut->pingIndexedPosition(5);
-    }
-
     public function testPingWithRelativePosition()
     {
         $this->sut->pingRelativePosition(1.3, 5.4);

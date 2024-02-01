@@ -49,11 +49,6 @@ class Pusher
         $this->sendJsonEvent('ping-position', 'relative', ['deltaX' => $dx, 'deltaY' => $dy]);
     }
 
-    public function pingIndexedPosition(int $idx): void
-    {
-        $this->sendJsonEvent('ping-position', 'indexed', ['cell' => $idx]);
-    }
-
     protected function sendJsonEvent(string $channel, string $type, array $content): void
     {
         $update = new Update(

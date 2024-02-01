@@ -11,8 +11,6 @@ use App\Entity\Transhuman;
 use App\Entity\Vertex;
 use App\Form\PlaceType;
 use App\Service\DigraphExplore;
-use App\Service\Mercure\Pusher;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -104,15 +102,6 @@ class PlaceCrud extends GenericCrud
     public function connectionToPlace(Place $place, DigraphExplore $digraph): Response
     {
         return $this->render('fragment/place_connect.html.twig', ['connection' => $digraph->searchForConnectedPlace($place)]);
-    }
-
-    #[Route('/ping-position', methods: ['POST'])]
-    public function pingPosition(Request $request, Pusher $pusher): JsonResponse
-    {
-        $pos = json_decode($request->getContent());
-        $pusher->pingIndexedPosition($pos->cell);
-
-        return new JsonResponse(['status' => 'OK']);
     }
 
 }
