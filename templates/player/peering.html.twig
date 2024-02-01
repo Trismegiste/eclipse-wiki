@@ -5,7 +5,7 @@
 
 {% block body %}
     <h1 class="big-title">{{ block('title') }}</h1>
-    <div x-data="peering('{{ mercure('peering') }}', '{{ path('app_playerlog_hello') }}', '{{ path('app_playerlog_index') }}')" class="peering">
+    <div x-data="peering('{{ mercure('peering') }}', '{{ path('app_playerlog_index') }}')" class="peering">
         <h2>Bienvenue sur Eclipse-Wiki</h2>
         <h2>la webapp de VTTRPG</h2>
         <p>Ma clef d'appairage est</p>
@@ -22,11 +22,10 @@
     <script type="module">
         import { MercureClient } from 'mercure-client';
 
-        Alpine.data('peering', (mercureHost, helloUrl, playerLogUrl) => ({
+        Alpine.data('peering', (mercureHost, playerLogUrl) => ({
                 host: mercureHost,
                 playerLogUrl: playerLogUrl,
                 socket: null,
-                helloUrl: helloUrl,
                 peeringKey: null,
                 character: null,
 

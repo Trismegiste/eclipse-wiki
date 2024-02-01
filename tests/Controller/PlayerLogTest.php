@@ -28,12 +28,6 @@ class PlayerLogTest extends Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $this->assertStringContainsString('swiper', $this->client->getResponse()->getContent());
     }
 
-    public function testHelloPeering()
-    {
-        $this->client->request('POST', '/player/hello', content: json_encode(['identifier' => 666]));
-        $this->assertResponseIsSuccessful();
-    }
-
     public function testPingPosition()
     {
         $this->client->request('POST', '/player/ping-position', content: json_encode(['deltaX' => -5.5, 'deltaY' => 7.6]));

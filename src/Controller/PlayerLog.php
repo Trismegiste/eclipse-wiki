@@ -38,16 +38,6 @@ class PlayerLog extends AbstractController
         return $this->render('player/peering.html.twig');
     }
 
-    #[Route('/hello', methods: ["POST"])]
-    public function hello(Request $request, Pusher $pusher): JsonResponse
-    {
-        $body = json_decode($request->getContent());
-        $browser = $this->extractBrowser($request->headers->get('user-agent', 'Unknown'));
-        $pusher->askPeering($body->identifier, $request->getClientIp(), $browser);
-
-        return new JsonResponse(['status' => 'OK']);
-    }
-
     // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent
     protected function extractBrowser(string $rawUserAgent): string
     {
