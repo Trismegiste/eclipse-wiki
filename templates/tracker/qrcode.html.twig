@@ -6,14 +6,15 @@
     <div x-data="behavior" class="pure-g">
         <section class="pure-u-1-2">
             <div class="npc-list pure-g choices">
-                {% for npc in listing %}
+                {# for npc in listing %}
                     <div class="pure-u-1-3">
                         <a x-on:click="push('{{ npc.title }}',{{ npc.wildCard ? 'true' : 'false' }},{{ npc.parry }},{{ npc.rangedMalus }},{{ npc.toughness }},{{ npc.totalArmor }})">
                             <i class="{{ char_icon(npc) }}"></i>
                             {{ npc.title }}
                         </a>
                     </div>
-                {% endfor %}
+                {% endfor #}
+                <input type="text" x-ref="search"/>
             </div>
         </section>
         <section class="pure-u-1-6">
@@ -22,7 +23,7 @@
                     <div class="pure-u-1">
                         <p x-on:click="remove(idx)">
                             <i class="icon-token"></i>
-                            <span x-text="npc.name"></span>
+                            <span x-text="npc.title"></span>
                         </p>
                     </div>
                 </template>
@@ -37,13 +38,18 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script type="application/json" id="character-listing">
+        {{ listing|json_encode()|raw }}
+    </script>
     <script type="module">
         import QRious from 'qrious';
+        import autoComplete from 'js-autocomplete';
 
         Alpine.data('behavior', () => ({
                 staticUrl: '{{ url_tracker }}?',
                 encounter: [],
                 qrCode: null,
+
                 init() {
                     this.qrCode = new QRious({
                         element: this.$refs.qrious,
@@ -51,23 +57,50 @@
                         level: 'M',
                         value: '-Vide-'
                     })
+
+                    new autoComplete({
+                        selector: this.$refs.search,
+                        minChars: 2,
+                        source: (term, suggest) => {
+                            term = term.toLowerCase()
+                            var choices = JSON.parse(document.getElementById("character-listing").textContent)
+                            var suggestions = []
+                            for (let i = 0; i < choices.length; i++) {
+                                if (~choices[i].title.toLowerCase().indexOf(term)) {
+                                    suggestions.push(choices[i])
+                                }
+                            }
+                            suggest(suggestions)
+                        },
+                        renderItem: (item, search) => {
+                            return '<div class="autocomplete-suggestion" data-content="' + btoa(JSON.stringify(item)) +
+                                    '">' + item.title + '</div>'
+                        },
+                        onSelect: (e, term, item) => {
+                            let npc = item.getAttribute('data-content')
+                            this.encounter.push(JSON.parse(atob(npc)))
+                        }
+                    })
                 },
+
                 push(name, wc, par, rgm, tough, arm) {
                     this.encounter.push({name: name, w: wc, p: par, r: rgm, t: tough, a: arm})
                 },
+
                 getParameters() {
                     let param = new URLSearchParams()
                     for (const npc of this.encounter) {
-                        param.append('name', npc.name)
-                        param.append('w', npc.w)
-                        param.append('p', npc.p)
-                        param.append('r', npc.r)
-                        param.append('t', npc.t)
-                        param.append('a', npc.a)
+                        param.append('name', npc.title)
+                        param.append('w', npc.wildcard)
+                        param.append('p', npc.parry)
+                        param.append('r', npc.ranged)
+                        param.append('t', npc.toughness)
+                        param.append('a', npc.armor)
                     }
 
                     return param.toString()
                 },
+
                 remove(idx) {
                     this.encounter.splice(idx, 1)
                 }
@@ -76,6 +109,7 @@
 {% endblock %}
 
 {% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('pixabay/auto-complete.css') }}"/>
     <style>
         .npc-list {
             font-size: 110%;
