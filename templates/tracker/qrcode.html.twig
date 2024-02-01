@@ -11,7 +11,7 @@
             </div>
         </section>
         <section class="pure-u-1 pure-u-xl-1-3 npc-list">
-            <template x-for="(npc,idx) in encounter" :key="npc.title">
+            <template x-for="(npc,idx) in encounter" :key="npc.title + idx">
                 <div class="pure-g" x-on:click="remove(idx)">
                     <div class="pure-u-1-8">
                         <template x-if="npc.token">
