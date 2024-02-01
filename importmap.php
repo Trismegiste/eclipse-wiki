@@ -72,6 +72,9 @@ return [
     'cropper-utils' => [
         'path' => 'crop-helper.js',
     ],
+    'mercure-client' => [
+        'path' => 'mercure-client.js',
+    ],
     'babylonjs' => [
         'version' => '6.29.2',
     ],
