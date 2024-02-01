@@ -39,11 +39,6 @@ class Pusher
         $this->sendJsonEvent($channel, 'document', ['link' => $link, 'title' => $title]);
     }
 
-    public function askPeering(int $identifier, string $playerIp, string $userAgent): void
-    {
-        $this->sendJsonEvent('peering', 'ask', ['identifier' => $identifier, 'ip' => $playerIp, 'browser' => $userAgent]);
-    }
-
     public function validPeering(int $identifier, string $title): void
     {
         $this->sendJsonEvent('peering', 'validation', ['identifier' => $identifier, 'characterTitle' => $title]);

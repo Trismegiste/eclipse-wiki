@@ -41,11 +41,6 @@ class PusherTest extends TestCase
         $this->sut->validPeering(666, 'Takeshi');
     }
 
-    public function testAskPeeringFromPlayer()
-    {
-        $this->sut->askPeering(666, '192.168.1.1', 'Firefox/125');
-    }
-
     public function testSendDocumentLink()
     {
         $this->sut->sendDocumentLink('http://192.168.68.27/getdoc/yolo/pdf', 'Handout Yolo');
