@@ -43,6 +43,7 @@ class MediaWikiPage implements \Trismegiste\Strangelove\MongoDb\Root
                     '#\{\{([^\]]+)\}\}#',
                     '#\[\[([^\]\|]+)\]\]#',
                     '#\[\[[^\|\]]+\|([^\]]+)\]\]#',
+                    '#__notoc__#',
                 ],
                 [
                     '',
@@ -50,6 +51,7 @@ class MediaWikiPage implements \Trismegiste\Strangelove\MongoDb\Root
                     '',
                     "'''\$1'''",
                     "'''\$1'''",
+                    '',
                 ],
                 $this->content);
     }
