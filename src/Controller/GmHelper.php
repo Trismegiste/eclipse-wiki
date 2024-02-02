@@ -56,11 +56,8 @@ class GmHelper extends AbstractController
     {
         $lan = $this->generateUrl('app_tracker_show', [], UrlGeneratorInterface::ABSOLUTE_URL);
         $iter = $repo->findByClass([Ali::class, Freeform::class, Transhuman::class]);
-        $listing = new \Trismegiste\Strangelove\Iterator\ClosureDecorator($iter, function (\App\Entity\Fighter $value) {
-                    return new \App\Entity\FighterJsonDecorator($value);
-                });
 
-        return $this->render('tracker/qrcode.html.twig', ['listing' => iterator_to_array($listing), 'url_tracker' => $lan]);
+        return $this->render('tracker/qrcode.html.twig', ['listing' => new \App\Entity\Cursor\FighterIterator($iter), 'url_tracker' => $lan]);
     }
 
     /**
