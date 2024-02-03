@@ -144,7 +144,7 @@
 
                     this.socket.addEventListener('battlemap', (msg) => {
                         console.log('New battlemap')
-                        localStorage.setItem('lastEventID', msg.lastEventId)
+                        this.setLastEvent(msg.lastEventId)
                         this.$refs.battlemap.src = msg.data
                         this.notifPanel(3)
                     })
