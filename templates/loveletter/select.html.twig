@@ -2,45 +2,49 @@
 {% form_theme form _self %}
 
 {% block title %}
-	{{ form.vars.data.title }}
+    {{ form.vars.data.title }}
 {% endblock %}
 
 {% block header_title %}
-	{# the header menu with title #}
-	<nav style="float: right">
-		{{ include('loveletter/actions.html.twig', {vertex:form.vars.data}) }}
-	</nav>
-	{% block header_big_title %}
-		{{ form.vars.data.title }}
-	{% endblock %}
+    {# the header menu with title #}
+    <nav style="float: right">
+        {{ include('loveletter/actions.html.twig', {vertex:form.vars.data}) }}
+    </nav>
+    {% block header_big_title %}
+        {{ form.vars.data.title }}
+    {% endblock %}
 {% endblock %}
 
 {%- block _loveletter_pc_choice_pc_choice_row -%}
-<div {{ block('widget_container_attributes') }}>
-	{%- for child in form %}
-		<div>
-			{{- form_widget(child) -}}
-			{{- form_label(child, null, {translation_domain: choice_translation_domain}) -}}
-		</div>
-	{% endfor -%}
-</div>{%- endblock -%}{% block content %}
-{{ form(form) }}{% endblock %}
+    <div {{ block('widget_container_attributes') }}>
+        {%- for child in form %}
+            <div>
+                {{- form_widget(child) -}}
+                {{- form_label(child, null, {translation_domain: choice_translation_domain}) -}}
+            </div>
+        {% endfor -%}
+    </div>
+{%- endblock -%}
 
+{% block content %}
+    <h2>Choix du joueur</h2>
+    {{ form(form) }}
+{% endblock %}
 
 {% block stylesheets %}
-	{{ parent() }}
-	<style>
-		#loveletter_pc_choice_pc_choice > div {
-			margin-bottom: 1em;
+    {{ parent() }}
+    <style>
+        #loveletter_pc_choice_pc_choice > div {
+            margin-bottom: 0.5em;
             padding: 1em;
             line-height: 140%;
-		}
-		#loveletter_pc_choice_pc_choice > div:hover {
-			background-color: #c5f6c5;
-		}
-		#loveletter_pc_choice_pc_choice > div input[type=checkbox] {
-			margin-right: 1em;
-			margin-bottom: 0;
-		}
-	</style>
+        }
+        #loveletter_pc_choice_pc_choice > div:hover {
+            background-color: #c5f6c5;
+        }
+        #loveletter_pc_choice_pc_choice > div input[type=checkbox] {
+            margin-right: 1em;
+            margin-bottom: 0;
+        }
+    </style>
 {% endblock %}
