@@ -4,6 +4,10 @@
 * Artefact entity ?
 * templates de Timeline avec des Form scenaristiques différents d'une simple liste
 * Action Créer un Fork de Transhuman
+* Redo pixabay autocomplete avec Alpine
+* Autocomplete pour le namespace 'ep' dans les wikitext contents (ajax search to fandom, réactif ?)
+* le highlight de nouveauté sur l'icone dans journal.html.twig doit être plus+ visible (background-color ?)
+* bug de hauteur dans swipe quand on passe en fullscreen (à virer ? ou bricoler les max-height/height ? )
 
 ## Info NMAP
 nmap 192.168.44.2-254 -p9090 --open -oX - -sT
