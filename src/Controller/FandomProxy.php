@@ -38,13 +38,12 @@ class FandomProxy extends AbstractController
     public function search(Request $request): Response
     {
         $form = $this->createForm(FandomSearch::class);
-        $result = [];
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $result = $form->getData();
         }
 
-        if (key_exists('namespace', $result)) {
+        if (isset($result)) {
             $resp = $this->render("fandom/search_{$result['namespace']}.html.twig", [
                 'form' => $form->createView(),
                 'result' => $result['listing']
