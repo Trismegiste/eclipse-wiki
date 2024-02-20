@@ -44,7 +44,7 @@ class FandomProxy extends AbstractController
         }
 
         if (isset($result)) {
-            $resp = $this->render("fandom/search_{$result['namespace']}.html.twig", [
+            $resp = $this->render("fandom/search_{$result['namespace']->value}.html.twig", [
                 'form' => $form->createView(),
                 'result' => $result['listing']
             ]);
