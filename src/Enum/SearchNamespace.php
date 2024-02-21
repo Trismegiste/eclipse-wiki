@@ -15,4 +15,8 @@ enum SearchNamespace: string
     case Pages = 'page';
     case Images = 'picture';
 
+    public function getTemplateName(): string {
+        return 'search_' . $this->value . '.html.twig';
+    }
+
 }
