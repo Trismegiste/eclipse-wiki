@@ -7,7 +7,7 @@
 namespace App\Entity;
 
 /**
- * A wrapper for a Character
+ * A wrapper for a Fighter that add JSON serialization features
  * Design pattern : Decorator
  * Design intent : Reduce the amount of data for sending a Character through ajax
  * #projection #json #ajax #decorator

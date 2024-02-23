@@ -7,7 +7,7 @@
 namespace App\Entity;
 
 /**
- * This is a fighter
+ * This is a generic fighter
  */
 interface Fighter
 {

@@ -11,7 +11,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 use UnexpectedValueException;
 
 /**
- * OOP wrapper for the MediaWiki API
+ * HTTP Client for the MediaWiki API
  */
 class MediaWiki
 {

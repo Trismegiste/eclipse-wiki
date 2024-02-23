@@ -35,11 +35,20 @@ abstract class Character extends Vertex implements \JsonSerializable, Fighter
     public array $economy = [];
     public ?string $tokenPic = null;
 
+    /**
+     * Mutator of the morph
+     * @param Morph $mrp
+     * @return void
+     */
     public function setMorph(Morph $mrp): void
     {
         $this->morph = $mrp;
     }
 
+    /**
+     * Accessor of the morph
+     * @return Morph|null
+     */
     public function getMorph(): ?Morph
     {
         return $this->morph;
@@ -55,6 +64,11 @@ abstract class Character extends Vertex implements \JsonSerializable, Fighter
         $this->skills = array_values($this->skills);
     }
 
+    /**
+     * Adds a non-existing Skill to this Character
+     * @param Skill $sk
+     * @return void
+     */
     public function addSkill(Skill $sk): void
     {
         foreach ($this->skills as $item) {
@@ -66,6 +80,11 @@ abstract class Character extends Vertex implements \JsonSerializable, Fighter
         $this->skills[] = $sk;
     }
 
+    /**
+     * Removes a Skill from this Character
+     * @param Skill $sk
+     * @return void
+     */
     public function removeSkill(Skill $sk): void
     {
         foreach ($this->skills as $idx => $item) {
@@ -75,6 +94,10 @@ abstract class Character extends Vertex implements \JsonSerializable, Fighter
         }
     }
 
+    /**
+     * Gets the list of all Skills
+     * @return array
+     */
     public function getSkills(): array
     {
         return $this->skills;
@@ -85,6 +108,10 @@ abstract class Character extends Vertex implements \JsonSerializable, Fighter
         return $this->bsonSerialize();
     }
 
+    /**
+     * Returns a rough evaluation of how many progressions are spent in all Skills
+     * @return int
+     */
     public function getSkillPoints(): int
     {
         $cpt = 0;
@@ -96,6 +123,10 @@ abstract class Character extends Vertex implements \JsonSerializable, Fighter
         return $cpt;
     }
 
+    /**
+     * Returns a rough evaluation of how many progressions are spent in all Attributes
+     * @return int
+     */
     public function getAttributePoints(): int
     {
         $cpt = 0;
@@ -107,6 +138,10 @@ abstract class Character extends Vertex implements \JsonSerializable, Fighter
         return $cpt;
     }
 
+    /**
+     * Returns a rough evaluation of how many progressions are spent in this Character
+     * @return int
+     */
     public function getPowerIndex(): int
     {
         return (int) floor(($this->getAttributePoints() - 5) +
@@ -144,6 +179,10 @@ abstract class Character extends Vertex implements \JsonSerializable, Fighter
         $this->armors = $listing;
     }
 
+    /**
+     * Returns the parry secondary trait for this Character (for defense against melee attacks)
+     * @return int
+     */
     public function getParry(): int
     {
         $parry = 2;
@@ -156,6 +195,10 @@ abstract class Character extends Vertex implements \JsonSerializable, Fighter
         return $parry + $this->parryBonus;
     }
 
+    /**
+     * Returns the security secondary trait for this Character (for defense against hacking)
+     * @return int
+     */
     public function getSecurity(): int
     {
         $security = 2;
@@ -168,6 +211,11 @@ abstract class Character extends Vertex implements \JsonSerializable, Fighter
         return $security + $this->securityBonus;
     }
 
+    /**
+     * Searches a skill in this character, or null if not found
+     * @param string $name
+     * @return Skill|null
+     */
     public function searchSkillByName(string $name): ?Skill
     {
         foreach ($this->skills as $skill) {
@@ -180,6 +228,12 @@ abstract class Character extends Vertex implements \JsonSerializable, Fighter
         return null;
     }
 
+    /**
+     * Searches an attribute in this character, or throw exception if not found
+     * @param string $name
+     * @return Attribute|null
+     * @throws \InvalidArgumentException
+     */
     public function getAttributeByName(string $name): ?Attribute
     {
         foreach ($this->attributes as $attr) {
@@ -210,6 +264,10 @@ abstract class Character extends Vertex implements \JsonSerializable, Fighter
         return $toughness;
     }
 
+    /**
+     * Calculates the armor value for the torso
+     * @return int
+     */
     public function getTotalArmor(): int
     {
         // only torso armors, as per SaWo rules
@@ -222,45 +280,75 @@ abstract class Character extends Vertex implements \JsonSerializable, Fighter
             $torso[] = $tmp;
         }
 
-        // reverse order
+        // reverse sorting armor by the most powerful to the less
         usort($torso, function (Armor $a, Armor $b) {
             return $b->protect - $a->protect;
         });
 
         switch (count($torso)) {
+            // if no armor : bonus = 0
             case 0 : return 0;
+            // if one armor, return the value
             case 1 : return $torso[0]->protect;
+            // if 2 armor of more, only summing the first and the second and halfing the second, as per rules
             default : return $torso[0]->protect + (int) floor($torso[1]->protect / 2);
         }
     }
 
+    /**
+     * A summary of this character, must be implemented
+     */
     abstract public function getDescription(): string;
 
+    /**
+     * Gets the list of all Skill rolls fully modified by the morph
+     * @return \Iterator
+     */
     public function getSkillRolls(): \Iterator
     {
         return new SkillRollIterator($this->skills, $this->morph);
     }
 
+    /**
+     * Gets the list of all Attribute rolls fully modified by the morph
+     * @return \Iterator
+     */
     public function getAttributeRolls(): \Iterator
     {
         return new AttributeRollIterator($this->attributes, $this->morph);
     }
 
+    /**
+     * Gets the list of all Attack rolls fully modified by the morph
+     * @return \Iterator
+     */
     public function getAttackRolls(): \Iterator
     {
         return new AttackRollIterator($this->attacks, $this->morph);
     }
 
+    /**
+     * Returns the malus against this Character when attacked by a ranged attack
+     * @return int
+     */
     public function getMalusAgainstRangedAttack(): int
     {
         return $this->rangedMalus;
     }
 
+    /**
+     * Is this Character a Wild Card ?
+     * @return bool
+     */
     public function isWildcard(): bool
     {
         return $this->wildCard;
     }
 
+    /**
+     * Returns the profile picture filename for social network profile
+     * @return string|null
+     */
     public function getTokenPicture(): ?string
     {
         return $this->tokenPic;

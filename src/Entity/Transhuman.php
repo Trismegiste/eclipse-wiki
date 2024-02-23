@@ -45,6 +45,10 @@ class Transhuman extends Character
         }
     }
 
+    /**
+     * Gets a list of hashtags for this transhuman inherited from his/her faction and background
+     * @return string
+     */
     public function getDefaultHashtag(): string
     {
         $motiv = array_merge($this->background->motivation, $this->faction->motivation);

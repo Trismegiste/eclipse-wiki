@@ -60,6 +60,13 @@ WIKITEXT;
         $this->elevatorPitch .= "\n\n[[file:$filenameInStorage]]\n";
     }
 
+    /**
+     * When a vertex is renamed, backlinks should be renamed also. This method explores the tree and search for those backlinks
+     * Because renaming the content (default behavior) has no effet since it is generated each time the object is persisted
+     * @param string $oldTitle
+     * @param string $newTitle
+     * @return void
+     */
     public function renameInternalLink(string $oldTitle, string $newTitle): void
     {
         $this->recursivRenameInternalLink($this->tree, $oldTitle, $newTitle);

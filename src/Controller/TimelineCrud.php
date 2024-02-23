@@ -63,7 +63,7 @@ class TimelineCrud extends GenericCrud
     }
 
     /**
-     * Fragment : explore the graph and render the tree from a Timeline vertex
+     * Fragment : explores the graph of Vertex and renders the tree from a Timeline vertex
      * @param Timeline $root
      * @return Response
      */

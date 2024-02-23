@@ -11,7 +11,7 @@ use MongoDB\BSON\Persistable;
 use Trismegiste\Strangelove\MongoDb\PersistableImpl;
 
 /**
- * Config for HexaMap
+ * Config for generating HexaMap
  */
 class MapConfig implements Persistable
 {

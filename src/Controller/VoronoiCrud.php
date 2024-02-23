@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * CRUD controler for Hexagonal map
+ * CRUD controler for Hexagonal map generation
  */
 #[Route('/voronoi')]
 class VoronoiCrud extends AbstractController
@@ -63,6 +63,7 @@ class VoronoiCrud extends AbstractController
     }
 
     /**
+     * Renders the SVG of an voronoi map
      */
     #[Route('/generate/{pk}/{fog}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function generate(SvgDumper $dumper, Place $place, bool $fog = true): Response
@@ -106,6 +107,7 @@ class VoronoiCrud extends AbstractController
     }
 
     /**
+     * Gets some statistics of the hexagonal map
      */
     #[Route('/statistics/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function statistics(Place $place): Response
