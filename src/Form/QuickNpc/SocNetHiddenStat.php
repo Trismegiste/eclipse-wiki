@@ -12,9 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Description of SocNetHiddenStat
- *
- * @author trismegiste
+ * The form for social networks that will fill the economy into a Transhuman
  */
 class SocNetHiddenStat extends AbstractType
 {

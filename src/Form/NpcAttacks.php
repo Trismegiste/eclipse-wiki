@@ -22,7 +22,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Description of NpcAttacks
+ * Form for editing attacks of a Character
  */
 class NpcAttacks extends AbstractType
 {

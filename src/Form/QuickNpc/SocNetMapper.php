@@ -10,9 +10,7 @@ use Symfony\Component\Form\DataMapperInterface;
 use Traversable;
 
 /**
- * Description of SocNetMapper
- *
- * @author trismegiste
+ * Mapper to transform creation data from quick NPC graph into array for Transhuman entity
  */
 class SocNetMapper implements DataMapperInterface
 {

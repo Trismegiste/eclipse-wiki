@@ -10,7 +10,7 @@ use MongoDB\BSON\Persistable;
 use Trismegiste\Strangelove\MongoDb\PersistableImpl;
 
 /**
- * Description of Armor
+ * This is an armor
  */
 class Armor implements Persistable, Indexable
 {

@@ -21,9 +21,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * Description of FandomProxy
- *
- * @author florent
+ * Search against the fandom mediawiki (pictures and articles)
  */
 #[Route('/fandom')]
 class FandomProxy extends AbstractController

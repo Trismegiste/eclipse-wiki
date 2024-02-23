@@ -14,7 +14,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Description of ArmorType
+ * Form for editing one Armor of an NPC (used in acollection)
  */
 class ArmorType extends AbstractType
 {
