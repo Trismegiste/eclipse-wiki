@@ -32,6 +32,11 @@ class FandomProxy extends AbstractController
         
     }
 
+    /**
+     * Search items in the fandom mediawiki
+     * @param Request $request
+     * @return Response
+     */
     #[Route("/search", methods: ['GET'])]
     public function search(Request $request): Response
     {
@@ -55,6 +60,12 @@ class FandomProxy extends AbstractController
         return $resp;
     }
 
+    /**
+     * Show a remote (from the fandom) wikitext content with the local rendering engine (after some cleaning)
+     * Note : does not manage remote template. Experimental
+     * @param int $id the page id from the mediawiki
+     * @return Response
+     */
     #[Route("/show/{id}", methods: ['GET'])]
     public function show(int $id): Response
     {
@@ -64,6 +75,12 @@ class FandomProxy extends AbstractController
         ]);
     }
 
+    /**
+     * Same as show but generates a PDF
+     * @param int $id The page id on the remote MediaWiki
+     * @param DocumentBroadcaster $broadcast
+     * @return BinaryFileResponse
+     */
     #[Route("/pdf/{id}", methods: ['GET'])]
     public function pdf(int $id, DocumentBroadcaster $broadcast): BinaryFileResponse
     {
@@ -84,6 +101,10 @@ class FandomProxy extends AbstractController
 
     /**
      * Generates the PDF from fandom page and pushes to players (public channel since it's a public mediawiki)
+     * @param int $id The page id from MediaWiki
+     * @param DocumentBroadcaster $broadcast
+     * @param Pusher $pusher
+     * @return Response
      */
     #[Route('/push/{id}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function pushPdf(int $id, DocumentBroadcaster $broadcast, Pusher $pusher): Response

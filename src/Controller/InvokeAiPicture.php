@@ -55,7 +55,7 @@ class InvokeAiPicture extends AbstractController
     }
 
     /**
-     * Image search against InvokeAI api
+     * Image search into multiple collections generated with InvokeAI (remote server and local storage)
      */
     #[Route('/search', methods: ['GET'])]
     public function search(Request $request): Response
@@ -65,6 +65,12 @@ class InvokeAiPicture extends AbstractController
         return $this->render('invokeai/search.html.twig', ['form' => $form->createView()]);
     }
 
+    /**
+     * Same as self::search but the image will be appended in the Vertex content property
+     * @param string $pk
+     * @param Request $request
+     * @return Response
+     */
     #[Route('/vertex/{pk}/search', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function vertexSearch(string $pk, Request $request): Response
     {
@@ -74,6 +80,12 @@ class InvokeAiPicture extends AbstractController
         return $this->render('invokeai/vertex_search.html.twig', ['vertex' => $vertex, 'form' => $form->createView()]);
     }
 
+    /**
+     * Appends the found picture to the vertex
+     * @param string $pk
+     * @param Request $request
+     * @return Response
+     */
     #[Route('/vertex/{pk}/append', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function vertexAppend(string $pk, Request $request): Response
     {
@@ -98,6 +110,11 @@ class InvokeAiPicture extends AbstractController
         return $this->render('invokeai/vertex_append.html.twig', ['form' => $form->createView()]);
     }
 
+    /**
+     * Gets the InvokeAI picture locally stored by its UUID
+     * @param string $pic
+     * @return BinaryFileResponse
+     */
     #[Route('/local/{pic}', methods: ['GET'])]
     public function getLocal(string $pic): BinaryFileResponse
     {
@@ -105,7 +122,7 @@ class InvokeAiPicture extends AbstractController
     }
 
     /**
-     * Image search against local storage of InvokeAI
+     * AJAX Image search against local storage of InvokeAI
      */
     #[Route('/ajax/{source}/search', methods: ['GET'])]
     public function ajaxSearch(RepositoryChoice $source, Request $request): Response

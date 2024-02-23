@@ -16,6 +16,11 @@ use Symfony\Component\HttpFoundation\Response;
 class GameSession extends AbstractController
 {
 
+    /**
+     * Shows the history of the GM
+     * @param GameSessionTracker $tracker
+     * @return Response
+     */
     public function history(GameSessionTracker $tracker): Response
     {
         return $this->render('gamesession/history.html.twig', ['document' => $tracker->getDocument()]);

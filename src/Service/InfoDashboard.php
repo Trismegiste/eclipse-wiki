@@ -28,6 +28,10 @@ class InfoDashboard
         
     }
 
+    /**
+     * Counts all links ( a.k.a [[something]] ) that don't have a page (also know as "redlinks" in MediaWiki slang)
+     * @return int
+     */
     public function getBrokenLinkCount(): int
     {
         return $this->cache->get('dashboard_broken_link', function (ItemInterface $item) {
@@ -36,6 +40,10 @@ class InfoDashboard
                 });
     }
 
+    /**
+     * Counts all pictures ( a.k.a [[file:something.jpg]] ) that misses in the Storage
+     * @return int
+     */
     public function getBrokenPictureCount(): int
     {
         return $this->cache->get('dashboard_broken_picture', function (ItemInterface $item) {
@@ -44,6 +52,10 @@ class InfoDashboard
                 });
     }
 
+    /**
+     * Counts all pages that aren't connected to something
+     * @return int
+     */
     public function getOrphanCount(): int
     {
         return $this->cache->get('dashboard_orphan', function (ItemInterface $item) {
@@ -52,6 +64,9 @@ class InfoDashboard
                 });
     }
 
+    /**
+     * Counts all vertices in the game, with a distinct count for archived or not
+     */
     public function getVertexCount(): int
     {
         return $this->cache->get('dashboard_vertex', function (ItemInterface $item) {

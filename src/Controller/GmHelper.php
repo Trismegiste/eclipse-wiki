@@ -28,7 +28,7 @@ class GmHelper extends AbstractController
 {
 
     /**
-     * Names generator
+     * Names generator. Demographic specifications are chosen in the global parameter "generator"
      */
     #[Route("/gm/name/{card}", methods: ["GET"])]
     public function nameGenerate(int $card = 15): Response
@@ -70,7 +70,8 @@ class GmHelper extends AbstractController
     }
 
     /**
-     * load the graph
+     * Returns the adjacency matrix of the undirected graph representing all Vertex(ices) in the "vertex" database collection
+     * JSON format
      */
     #[Route("/digraph/load", methods: ["GET"])]
     public function getGraph(DigraphExplore $repo): JsonResponse
@@ -79,7 +80,7 @@ class GmHelper extends AbstractController
     }
 
     /**
-     * Ajax name generator
+     * Ajax name generator. Fully random
      */
     #[Route("/ajax/name", methods: ["GET"])]
     public function ajaxName(Request $request): JsonResponse
@@ -92,6 +93,11 @@ class GmHelper extends AbstractController
         return new JsonResponse($fullname);
     }
 
+    /**
+     * Shows some stats on the current game
+     * @param InfoDashboard $info
+     * @return Response
+     */
     public function summary(InfoDashboard $info): Response
     {
         return $this->render('summary.html.twig', ['stats' => $info]);

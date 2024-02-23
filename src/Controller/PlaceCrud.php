@@ -99,6 +99,12 @@ class PlaceCrud extends GenericCrud
         return $this->render('place/create.html.twig', ['form' => $form->createView()]);
     }
 
+    /**
+     * Rendering of Places that are connected to this Place
+     * @param Place $place
+     * @param DigraphExplore $digraph
+     * @return Response
+     */
     public function connectionToPlace(Place $place, DigraphExplore $digraph): Response
     {
         return $this->render('fragment/place_connect.html.twig', ['connection' => $digraph->searchForConnectedPlace($place)]);

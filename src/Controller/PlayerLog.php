@@ -8,11 +8,8 @@ namespace App\Controller;
 
 use App\Entity\BattlemapDocument;
 use App\Service\DocumentBroadcaster;
-use App\Service\Mercure\Pusher;
 use App\Voronoi\HexaMap;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -23,6 +20,10 @@ use Symfony\Component\Routing\Attribute\Route;
 class PlayerLog extends AbstractController
 {
 
+    /**
+     * The SPA
+     * @return Response
+     */
     #[Route('/log')]
     public function index(): Response
     {
@@ -32,6 +33,11 @@ class PlayerLog extends AbstractController
         return $this->render('player/journal.html.twig', ['doc' => $doc]);
     }
 
+    /**
+     * The peering page for the player, the player waits for GM peering action
+     * @see GmPusher::peering()
+     * @return Response
+     */
     #[Route('/peering')]
     public function peering(): Response
     {

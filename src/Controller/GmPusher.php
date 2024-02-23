@@ -48,6 +48,16 @@ class GmPusher extends AbstractController
         }
     }
 
+    /**
+     * Sends a file exsting in the Player cache storage. Technically the link is public but the GM can send it to a spacific channel A.K.A a player
+     * @param Request $request
+     * @param string $pk the primary key of the vertex associated with the file (for going back)
+     * @param string $filename The filename of the file to send
+     * @param string $label A human name for the file, used in the link
+     * @param VertexRepository $repo
+     * @param DocumentBroadcaster $broadcaster
+     * @return Response
+     */
     #[Route("/push/{pk}/document/{filename}/{label}", methods: ["GET", "POST"], requirements: ['pk' => '[\\da-f]{24}'])]
     public function pushDocument(Request $request, string $pk, string $filename, string $label, VertexRepository $repo, DocumentBroadcaster $broadcaster): Response
     {
@@ -127,6 +137,14 @@ class GmPusher extends AbstractController
         return new JsonResponse(['level' => 'error', 'message' => 'Invalid call'], 400);
     }
 
+    /**
+     * This controller uploads a file to cloud service for temporary storage and show a link (qrcode) to it
+     * This is only a failover in case of degraded infrastructure during the session (no WiFi, no 5G bluetooth shared connection, etc.)
+     * @param string $filename
+     * @param DocumentBroadcaster $broadcaster
+     * @param FileIoClient $client
+     * @return Response
+     */
     #[Route("/cloud/{filename}/share", methods: ["POST"])]
     public function cloudShare(string $filename, DocumentBroadcaster $broadcaster, FileIoClient $client): Response
     {

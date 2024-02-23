@@ -27,6 +27,11 @@ class NpcGraphCrud extends AbstractController
         
     }
 
+    /**
+     * Uses the quick npc graph to quickly generates a new NPC
+     * @param Request $request
+     * @return Response
+     */
     #[Route('/run', methods: ['GET', 'POST'])]
     public function run(Request $request): Response
     {
@@ -50,6 +55,11 @@ class NpcGraphCrud extends AbstractController
         ]);
     }
 
+    /**
+     * Edits the quick graph NPC
+     * @param Request $request
+     * @return Response
+     */
     #[Route('/edit', methods: ['GET', "PUT"])]
     public function edit(Request $request): Response
     {
@@ -66,6 +76,12 @@ class NpcGraphCrud extends AbstractController
         return $this->render('npcgraph/form.html.twig', ['form' => $form->createView()]);
     }
 
+    /**
+     * Deletes a node the quick npc graph, and removes all inbound edges
+     * @param string $node
+     * @param Request $request
+     * @return Response
+     */
     #[Route('/delete/{node}', methods: ['GET', "DELETE"])]
     public function delete(string $node, Request $request): Response
     {
@@ -84,6 +100,13 @@ class NpcGraphCrud extends AbstractController
         return $this->render('npcgraph/delete.html.twig', ['form' => $form->createView()]);
     }
 
+    /**
+     * Edits the quick graph NPC but for only ONE level and for ONE property of the node
+     * @param int $level
+     * @param string $propertyName
+     * @param Request $request
+     * @return Response
+     */
     #[Route('/perlevel/{level}/{propertyName}', methods: ['GET', "PUT"])]
     public function perlevel(int $level, string $propertyName, Request $request): Response
     {

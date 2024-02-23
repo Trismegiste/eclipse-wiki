@@ -25,12 +25,28 @@ abstract class GenericCrud extends AbstractController
         $this->repository = $repo;
     }
 
+    /**
+     * Creates a new entity managed in this CRUD
+     */
     abstract protected function createEntity(string $title): Vertex;
 
+    /**
+     * The 'create' controller that create a new Vertex subclass instance
+     */
     abstract public function create(Request $request): Response;
 
+    /**
+     * The 'edit' controller that edit the Vertex subclass instance with a PK $pk
+     */
     abstract public function edit(string $pk, Request $request): Response;
 
+    /**
+     * Mostly all the process of creation of a new Vertex. Should be used in self::create()
+     * @param string $formClass
+     * @param string $template
+     * @param Request $request
+     * @return Response
+     */
     protected function handleCreate(string $formClass, string $template, Request $request): Response
     {
         $obj = null;
@@ -53,6 +69,14 @@ abstract class GenericCrud extends AbstractController
         return $this->render($template, ['form' => $form->createView(), 'from_link' => $fromLink]);
     }
 
+    /**
+     * Mostly all the process of edition of an existing Vertex. Should be used in self::edit()
+     * @param string $formClass
+     * @param string $template
+     * @param string $pk
+     * @param Request $request
+     * @return Response
+     */
     protected function handleEdit(string $formClass, string $template, string $pk, Request $request): Response
     {
         $vertex = $this->repository->findByPk($pk);
