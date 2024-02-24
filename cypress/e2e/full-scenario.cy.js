@@ -141,4 +141,21 @@ describe('Full scenario', () => {
         cy.wait(350)  // bcause of fake wait inside rollpool
         cy.screenshot('Motoko from GitS rolls Agility')
     })
+
+    it('uploads a picture profile', () => {
+        cy.visit('/wiki/' + fixture.protagonist)
+        cy.get('.big-title .icon-user-circle').click()
+        cy.get('#profile_pic_avatar').selectFile(fixture.profilepic)
+        cy.get('#profile_pic_generate').click()
+        cy.get('img[src^="/picture/get/token"').should('exist')
+        cy.get('img[src^="/profile/unique/"]').click()
+        cy.get('.notif .flash-success').contains('sent')
+        // fetch profile pic
+        cy.get(`img[src^="/profile/unique/"]`).then(img => {
+            fetch(img[0].src).then(resp => {
+                expect(resp.status).to.equal(200)
+                expect(resp.headers.get('content-type')).to.equal('image/png')
+            })
+        })
+    })
 })

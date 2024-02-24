@@ -11,5 +11,6 @@
     "background": "Réinstancié : Militaire",
     "faction": "Traqueur de Singularité",
     "morph": "Biocore",
-    "place": "Hangar"
+    "place": "Hangar",
+    "profilepic": "tests/Service/profilepic.png"
 }
