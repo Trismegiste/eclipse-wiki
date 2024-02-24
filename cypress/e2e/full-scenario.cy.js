@@ -2,8 +2,14 @@ import { deleteVertex } from './business';
 
 describe('Full scenario', () => {
     let fixture
+
     beforeEach(() => {
         cy.fixture('timeline').then(c => fixture = c)
+    })
+
+    it('lands on homepage', () => {
+        cy.visit('/')
+        cy.contains('Eclipse Savage')
     })
 
     it('deletes Timeline if already existing', () => {
@@ -25,7 +31,6 @@ describe('Full scenario', () => {
     it('creates a new Timeline', () => {
         // home
         cy.visit('/')
-        cy.contains('Eclipse Savage')
         cy.get('.icon-movie-roll').click()
 
         // create timeline
@@ -120,5 +125,20 @@ describe('Full scenario', () => {
         cy.get('a').contains("Puppetmaster").should('have.class', 'new').click()
         cy.get('main a .icon-user-plus').click()
         cy.get('#npc_title').should('have.value', 'Project 2501')
+    })
+
+    it('rolls dice', () => {
+        cy.visit('/wiki/' + fixture.protagonist, {
+            onBeforeLoad(win) {
+                win.localStorage.setItem('symfony/profiler/toolbar/displayState', 'none')
+            }
+        })
+
+        cy.intercept('https://www.random.org/integers/*').as('getDice')
+        cy.get('td').contains("Agilité").parent().find('button').click()
+        cy.wait('@getDice')
+        cy.get('.diceroller .roll-result > div').invoke('text').should('match', /\d{1,2}/)
+        cy.wait(350)  // bcause of fake wait inside rollpool
+        cy.screenshot('Motoko from GitS rolls Agility')
     })
 })

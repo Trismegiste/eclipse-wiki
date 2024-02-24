@@ -26,3 +26,6 @@
 ###> symfony/asset-mapper ###
 /public/assets/
 ###< symfony/asset-mapper ###
+
+### cypress cfg
+/cypress/screenshots/
