@@ -1,13 +1,4 @@
-function deleteVertex(toDelete) {
-    cy.visit('/vertex/list')
-    cy.get('.pure-form input').type(toDelete)
-    cy.get('.block-link h2').first().then(title => {
-        if (title.text() === toDelete) {
-            cy.get('.entity-listing .icon-trash-empty').first().click()
-            cy.get('#form_delete').click()
-        }
-    })
-}
+import { deleteVertex } from './business';
 
 describe('Full scenario', () => {
     let fixture
@@ -87,9 +78,19 @@ describe('Full scenario', () => {
         cy.get('a').contains(fixture.protagonist).click()
         cy.get('main a .icon-user-plus').click()
         cy.get('.pure-form .icon-wildcard').click()
+
+        cy.intercept('/npc/background/info*').as('getBackground')
         cy.get('#npc_background').select(fixture.background)
+        cy.wait('@getBackground')
+
+        cy.intercept('/npc/faction/info*').as('getFaction')
         cy.get('#npc_faction').select(fixture.faction)
+        cy.wait('@getFaction')
+
+        cy.intercept('/npc/morph/info*').as('getMorph')
         cy.get('#npc_morph').select(fixture.morph)
+        cy.wait('@getMorph')
+
         cy.get('#npc_generate').click()
         cy.get('.big-title').contains('PNJ : ' + fixture.protagonist)
     })
