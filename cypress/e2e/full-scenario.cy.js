@@ -100,13 +100,32 @@ describe('Full scenario', () => {
         cy.get('.big-title').contains('PNJ : ' + fixture.protagonist)
     })
 
-    it('edits the Transhuman', () => {
+    it('initializes the Transhuman', () => {
         cy.visit('/wiki/' + fixture.protagonist)
         cy.get('.big-title .icon-d6').click()
         cy.get('#single_node_choice_node').select('root')
         cy.get('#single_node_choice_apply').click()
         cy.get('#npc_stats_edit').click()
         cy.get('nav.backlinks ul li').should('have.length', 2)
+    })
+
+    it('edits economy of the Transhuman', () => {
+        cy.visit('/wiki/' + fixture.protagonist)
+        cy.get('.big-title .icon-d6').click()
+        cy.get('#npc_stats_economy_economy_1').type("5")
+        cy.get('#npc_stats_economy_economy_2').type("4")
+        cy.get('#npc_stats_economy_economy_3').type("3")
+        cy.get('#npc_stats_edit').click()
+    })
+
+    it('edits info of the Transhuman', () => {
+        cy.visit('/wiki/' + fixture.protagonist)
+        cy.get('.big-title .icon-edit').click()
+        cy.get('#npc_info_content').type('a.k.a "Major" of the [[Section 9]]')
+        cy.get('#npc_info_hashtag').type('#self-improvment')
+        cy.get('#npc_info_create').click()
+
+        cy.get('.parsed-wikitext a').should('have.class', 'new')
     })
 
     it('creates the Place', () => {
@@ -139,7 +158,7 @@ describe('Full scenario', () => {
         cy.wait('@getDice')
         cy.get('.diceroller .roll-result > div').invoke('text').should('match', /\d{1,2}/)
         cy.wait(350)  // bcause of fake wait inside rollpool
-        cy.screenshot('Motoko from GitS rolls Agility')
+        cy.screenshot('Motoko from GitS rolls Agility', {overwrite: true})
     })
 
     it('uploads a picture profile', () => {
