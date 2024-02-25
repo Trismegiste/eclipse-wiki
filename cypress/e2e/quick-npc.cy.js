@@ -1,6 +1,20 @@
+import { deleteVertex } from './business';
+
 describe('Quick NPC creation', () => {
-    it('lands on home page', () => {
-        cy.visit('/')
+
+    let randomness = null
+    let fixture = {}
+
+    beforeEach(() => {
+        cy.fixture('npcgraph').then(c => {
+            fixture = c
+            if (randomness === null) {
+                const array = new Uint32Array(1)
+                crypto.getRandomValues(array)
+                randomness = array[0]
+            }
+            fixture.title += ' ' + randomness
+        })
     })
 
     it('lauches a quick npc creation', () => {
@@ -13,6 +27,8 @@ describe('Quick NPC creation', () => {
         cy.get('.node-selection footer label').contains('social').click()
         cy.get('.node-selection footer label').contains('espion').click()
         cy.get('main form a').contains('Random name').click()
+        cy.get('#selector_title').should('not.have.value', '')
+        cy.get('#selector_title').type(`{selectAll}${fixture.title}`)
 
         cy.get('.result-selection h2').contains('Background').parents('div').first().find('ul > li > input[type=radio]').first().click()
         cy.get('.result-selection h2').contains('Faction').parents('div').first().find('ul > li > input[type=radio]').first().click()
@@ -25,15 +41,10 @@ describe('Quick NPC creation', () => {
         cy.get('.avatar-suggest img').first().click()
 
         cy.get('#selector_generate').click()
-        cy.get('.big-title .icon-eye').click()
     })
 
     it('shows the quick npc', () => {
-        cy.intercept('/vertex/filter*').as('listing')
-        cy.visit('/vertex/list')
-        cy.wait('@listing')
-        cy.wait(200)
-        cy.get('main form input[type=text]').type('{enter}')
+        cy.visit('/wiki/' + fixture.title)
 
         // profile pic
         cy.get('img[src^="/picture/get/token"').should('exist')
@@ -44,10 +55,10 @@ describe('Quick NPC creation', () => {
         cy.get('.parsed-wikitext a[href^="/picture/push"]').click()
         cy.get('section.notif div.flash-success').should('have.length', 2)
         cy.screenshot('Quick NPC show', {overwrite: true})
-
-        //delete
-        cy.get('.big-title .icon-trash-empty').click()
-        cy.get('#form_delete').click()
-
     })
+
+    it('deletes the NPC', () => {
+        deleteVertex(fixture.title)
+    })
+
 })
