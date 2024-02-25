@@ -43,5 +43,11 @@ describe('Quick NPC creation', () => {
         // visual
         cy.get('.parsed-wikitext a[href^="/picture/push"]').click()
         cy.get('section.notif div.flash-success').should('have.length', 2)
+        cy.screenshot('Quick NPC show')
+
+        //delete
+        cy.get('.big-title .icon-trash-empty').click()
+        cy.get('#form_delete').click()
+
     })
 })
