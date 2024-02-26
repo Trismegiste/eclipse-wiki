@@ -4,6 +4,7 @@ describe('Quick NPC creation', () => {
 
     let randomness = null
     let fixture = {}
+    let creationGraph = null
 
     beforeEach(() => {
         cy.fixture('npcgraph').then(c => {
@@ -15,17 +16,48 @@ describe('Quick NPC creation', () => {
             }
             fixture.title += ' ' + randomness
         })
+
+        cy.readFile('./var/storage/dev/quick-creation.graph').then(content => {
+            creationGraph = {
+                tree: Object.values(JSON.parse(content)),
+                search(key) {
+                    const found = this.tree.find(node => {
+                        return node.name === key
+                    })
+                    if (typeof found === 'undefined') {
+                        throw new Error('The node named "' + key + '" is unknown')
+                    } else {
+                        return found
+                    }
+                },
+                getFirstChild(key) {
+                    const found = this.search(key)
+                    return found.children.length ? found.children[0] : null
+                },
+                getFirstDescendantsFrom(ancestors = ['root']) {
+                    const father = ancestors.at(-1)
+                    const firstChild = this.getFirstChild(father)
+                    if (firstChild !== null) {
+                        ancestors.push(firstChild)
+                        return this.getFirstDescendantsFrom(ancestors)
+                    } else {
+                        return ancestors
+                }
+                }
+            }
+        })
     })
 
     it('lauches a quick npc creation', () => {
         cy.visit('/')
         cy.get('main .icon-npcgraph').click()
         cy.get('.node-selection article h2').contains('root')
-        cy.get('.node-selection footer label').contains('homme').click()
-        cy.get('.node-selection footer label').contains('inner').click()
-        cy.get('.node-selection footer label').contains('ruche').click()
-        cy.get('.node-selection footer label').contains('social').click()
-        cy.get('.node-selection footer label').contains('espion').click()
+        const path = creationGraph.getFirstDescendantsFrom(['homme'])
+        cy.get('.node-selection footer label').contains(path[0]).click()
+        cy.get('.node-selection footer label').contains(path[1]).click()
+        cy.get('.node-selection footer label').contains(path[2]).click()
+        cy.get('.node-selection footer label').contains(path[3]).click()
+        cy.get('.node-selection footer label').contains(path[4]).click()
         cy.get('main form a').contains('Random name').click()
         cy.get('#selector_title').should('not.have.value', '')
         cy.get('#selector_title').type(`{selectAll}${fixture.title}`)
