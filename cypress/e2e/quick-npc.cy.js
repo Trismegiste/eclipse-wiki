@@ -32,7 +32,8 @@ describe('Quick NPC creation', () => {
                 },
                 getFirstChild(key) {
                     const found = this.search(key)
-                    return found.children.length ? found.children[0] : null
+                    let tab = Object.values(found.children)
+                    return tab.length ? tab[0] : null
                 },
                 getFirstDescendantsFrom(ancestors = ['root']) {
                     const father = ancestors.at(-1)
@@ -53,6 +54,7 @@ describe('Quick NPC creation', () => {
         cy.get('main .icon-npcgraph').click()
         cy.get('.node-selection article h2').contains('root')
         const path = creationGraph.getFirstDescendantsFrom(['homme'])
+        console.log(path)
         cy.get('.node-selection footer label').contains(path[0]).click()
         cy.get('.node-selection footer label').contains(path[1]).click()
         cy.get('.node-selection footer label').contains(path[2]).click()
