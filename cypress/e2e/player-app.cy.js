@@ -9,7 +9,7 @@ describe('Player Log', () => {
     })
 
     it('deletes test Handout if already existing', () => {
-        deleteVertex()
+        deleteVertex(handoutTitle)
     })
 
     it('creates a Handout with a picture', () => {
