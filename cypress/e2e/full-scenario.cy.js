@@ -177,4 +177,15 @@ describe('Full scenario', () => {
             })
         })
     })
+
+    it('sleeves in a different morph', () => {
+        cy.visit('/wiki/' + fixture.protagonist)
+        cy.get('.big-title .icon-sleeve').click()
+        cy.get('section[x-html="detail"] h2').should('contain', fixture.morph)
+
+        cy.intercept('/npc/morph/info*').as('morph')
+        cy.get('#form_morph').select(fixture.newMorph)
+        cy.wait('@morph')
+        cy.get('section[x-html="detail"] h2').should('contain', fixture.newMorph)
+    })
 })
