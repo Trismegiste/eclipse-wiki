@@ -18,9 +18,10 @@ describe('Wikitext autocomplete component', () => {
         cy.get('#handout_title').type(handoutTitle)
 
         cy.intercept('/vertex/search?q=*').as('vertices')
-        cy.get('#handout_pcInfo').type(`[[Intern{enter}`)
+        cy.get('#handout_pcInfo').type(`[[Intern`)
         cy.wait('@vertices')
         cy.wait(100)
+        cy.get('#handout_pcInfo').type(`{enter}`)
         cy.get('#handout_pcInfo').should('have.value', `[[${linkTitle}]] `)
     })
 

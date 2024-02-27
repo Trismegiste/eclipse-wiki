@@ -74,6 +74,7 @@ describe('Quick NPC creation', () => {
                 .not('#male-1')
                 .click({multiple: true})
         cy.wait('@getAvatar')
+        cy.wait(999)
         cy.get('.avatar-suggest img').first().click()
 
         cy.get('#selector_generate').click()

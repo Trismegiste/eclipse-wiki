@@ -1,3 +1,4 @@
+import './autofocus.cy';
 import './full-scenario.cy';
 import './quick-npc.cy';
 import './wikitext.cy';
