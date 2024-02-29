@@ -68,13 +68,14 @@ describe('Quick NPC creation', () => {
         cy.get('.result-selection h2').contains('Faction').parents('div').first().find('ul > li > input[type=radio]').first().click()
         cy.get('.result-selection h2').contains('Morphe').parents('div').first().find('ul > li > input[type=radio]').first().click()
 
-        cy.intercept('/invokeai/ajax/local/*').as('getAvatar')
+        cy.intercept('/invokeai/ajax/local/search?q=male').as('getMaleAvatar')
         cy.get('.result-selection h2').contains('Keywords').parents('div').first()
                 .find('ul > li > input[type=checkbox]')
                 .not('#male-1')
                 .click({multiple: true})
-        cy.wait('@getAvatar')
-        cy.wait(999)
+        cy.wait('@getMaleAvatar')
+        cy.wait(500)  // wait for draw (many images)
+        cy.get('.avatar-suggest img').should('have.length.of.at.least', 1)
         cy.get('.avatar-suggest img').first().click()
 
         cy.get('#selector_generate').click()
