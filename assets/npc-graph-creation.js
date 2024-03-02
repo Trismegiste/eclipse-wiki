@@ -80,6 +80,7 @@ export default () => ({
             return Array.from(cumulative.values())
         },
         updateAvatar: function () {
+            this.avatar = []
             let query = ''
             for (let key of this.getText2img()) {
                 if (this.keywords[key]) {
