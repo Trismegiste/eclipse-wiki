@@ -25,7 +25,7 @@ class DocumentBroadcaster
         $this->documentDir = join_paths($cacheDir, PlayerCastCache::subDir);
     }
 
-    public function generatePdf(string $fileTitle, string $htmlContent, array $options = []): SplFileInfo
+    public function generatePdf(string $fileTitle, string $htmlContent): SplFileInfo
     {
         $filename = $this->sanitizeFilename($fileTitle);
         $target = new SplFileInfo(\join_paths($this->documentDir, $filename));

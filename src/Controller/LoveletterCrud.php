@@ -25,8 +25,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class LoveletterCrud extends GenericCrud
 {
 
-    const pdfOptions = ['page-size' => 'A5'];
-
     protected function createEntity(string $title): Vertex
     {
         return new Loveletter($title);
@@ -93,7 +91,7 @@ class LoveletterCrud extends GenericCrud
         $title = sprintf("Loveletter-%s-%s.pdf", $vertex->player, $vertex->getTitle());
         $html = $this->renderView('loveletter/export.pdf.twig', ['vertex' => $vertex]);
 
-        return $broadcast->generatePdf($title, $html, self::pdfOptions);
+        return $broadcast->generatePdf($title, $html);
     }
 
 }

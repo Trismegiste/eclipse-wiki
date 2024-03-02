@@ -22,8 +22,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class HandoutCrud extends GenericCrud
 {
 
-    const pdfOptions = ['page-size' => 'A5'];
-
     public function __construct(VertexRepository $repo)
     {
         parent::__construct($repo);
@@ -60,7 +58,7 @@ class HandoutCrud extends GenericCrud
     {
         $title = sprintf("Handout-%s.pdf", $vertex->getTitle());
         $html = $this->renderView('handout/pc_export.pdf.twig', ['vertex' => $vertex]);
-        $pdf = $broadcast->generatePdf($title, $html, self::pdfOptions);
+        $pdf = $broadcast->generatePdf($title, $html);
         $this->addFlash('success', 'PDF Handout généré');
 
         return $this->redirectToRoute('app_gmpusher_pushdocument', [
