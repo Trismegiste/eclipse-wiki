@@ -38,11 +38,11 @@ class MediaWikiPage implements \Trismegiste\Strangelove\MongoDb\Root
     {
         return preg_replace(
                 [
-                    '#\[\[Fichier\:([^\]]+)\]\]#',
-                    '#\[\[Catégorie\:([^]]+)\]\]#',
-                    '#\{\{([^\]]+)\}\}#',
-                    '#\[\[([^\]\|]+)\]\]#',
-                    '#\[\[[^\|\]]+\|([^\]]+)\]\]#',
+                    '#\[\[Fichier\:([^\]]+)\]\]#',  // remove pictures
+                    '#\[\[Catégorie\:([^]]+)\]\]#', // remove categories
+                    '#\{\{([^\}]+)\}\}#', // remove template transclusions
+                    '#\[\[([^\]\|]+)\]\]#', // replace simple links by the link text
+                    '#\[\[[^\|\]]+\|([^\]]+)\]\]#',  // replace links with title by the title
                     '#__notoc__#',
                 ],
                 [
