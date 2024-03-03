@@ -54,6 +54,7 @@ form .collection nav a {
     margin-left: 0.8em;
 }
 
+/* VERTEX LISTING */
 .entity-listing > .pure-g:hover {
     background-color: #ffeded;
 }
@@ -63,14 +64,15 @@ form .collection nav a {
 }
 
 .entity-listing nav.listing-action {
-    text-align: right;
-    margin-top: 1em;
-    margin-bottom: 1.5em;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.8em;
+    flex-wrap: wrap;
+    height: 100%;
 }
 
 .entity-listing nav.listing-action a {
-    display: inline-block;
-    margin: 0 0.2em;
     color: #777;
 }
 
@@ -78,11 +80,17 @@ form .collection nav a {
     text-decoration: none;
     color: #333;
     display: block;
-    margin-bottom: 1em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
 }
 
 .entity-listing .block-link h2 {
     margin: 0 0 0.3em;
+}
+
+.entity-listing .thumb {
+    display: flex;
+    align-items: center;
 }
 
 .entity-listing .thumb i {
