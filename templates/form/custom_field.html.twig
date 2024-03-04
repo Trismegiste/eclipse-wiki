@@ -8,3 +8,32 @@
         })
     </script>
 {% endblock %}
+
+{% block morph_inventory_row %}
+    <template x-for="(entry, idx) in inventory">
+
+        <div class="pure-g">
+            <div class="pure-u-1-2">
+                {{ form_widget(form.vars.prototype.morph, {
+                    attr: {
+                        'x-bind:name': "'" ~ form.vars.prototype.morph.vars.full_name ~ "'.replace(/__name__/g, idx)",
+                        'x-model': 'entry.morph'
+                    }
+                }) }}
+            </div>
+        </div>
+    </template>
+
+    <script type="module">
+        Alpine.data('morphBank', () => ({
+                inventory: [],
+
+                morphSelect(event) {
+                    let chosen = event.currentTarget.value
+                    if (chosen.length) {
+                        this.inventory.push({morph: chosen})
+                    }
+                }
+            }))
+    </script>
+{% endblock %}
