@@ -18,4 +18,9 @@
 {% block _place_content_label %}
     {{ form_label(form) }}
     {% include 'fragment/form_minitoolbar.html.twig' %}
+    <div class="minitoolbar">
+        <a href="{{ path('app_placecrud_appendmorphbank', {pk: form.parent.vars.data.pk}) }}" class="pure-button" title="Body bank table">
+            <i class="icon-sleeve"></i>
+        </a>
+    </div>
 {% endblock %}

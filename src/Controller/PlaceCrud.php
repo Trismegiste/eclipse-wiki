@@ -9,6 +9,7 @@ namespace App\Controller;
 use App\Entity\Place;
 use App\Entity\Transhuman;
 use App\Entity\Vertex;
+use App\Form\PlaceAppendMorphBank;
 use App\Form\PlaceType;
 use App\Service\DigraphExplore;
 use Symfony\Component\HttpFoundation\Request;
@@ -108,6 +109,25 @@ class PlaceCrud extends GenericCrud
     public function connectionToPlace(Place $place, DigraphExplore $digraph): Response
     {
         return $this->render('fragment/place_connect.html.twig', ['connection' => $digraph->searchForConnectedPlace($place)]);
+    }
+
+    /**
+     * Append a morph bank to the Place content
+     */
+    #[Route('/append-morph-bank/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
+    public function appendMorphBank(Place $place, Request $request): Response
+    {
+        $form = $this->createForm(PlaceAppendMorphBank::class, $place);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $vertex = $form->getData();
+            //         $this->repository->save($vertex);
+
+            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
+        }
+
+        return $this->render('place/edit.html.twig', ['form' => $form->createView()]);
     }
 
 }
