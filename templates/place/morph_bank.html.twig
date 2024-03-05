@@ -1,0 +1,28 @@
+{# append a morph inventory #}
+{% extends "place/edit.html.twig" %}
+
+{% block content %}
+    {{ form_start(form) }}
+    <fieldset>
+        <div class="pure-g">
+            <div class="pure-u-2-5">
+                <h2>Listing</h2>
+                {{ form_widget(form.morph_list) }}
+            </div>
+            <div class="pure-u-3-5">
+                <h2>Inventaire</h2>
+                {{ form_widget(form.inventory) }}
+            </div>
+        </div>
+    </fieldset>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        main .pure-form h2 {
+            margin-top: 0;
+        }
+    </style>
+{% endblock %}

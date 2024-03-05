@@ -37,7 +37,7 @@ class PlaceAppendMorphBank extends AbstractType implements DataMapperInterface
                     'provider' => $this->morph,
                     'attr' => [
                         'x-on:change' => 'morphSelect',
-                        'size' => 10,
+                        'size' => 20,
                         'multiple' => true
                     ],
                     'required' => false
