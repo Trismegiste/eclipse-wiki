@@ -15,6 +15,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Traversable;
@@ -33,6 +34,7 @@ class PlaceAppendMorphBank extends AbstractType implements DataMapperInterface
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+                ->add('title', TextType::class)
                 ->add('morph_list', ProviderChoiceType::class, [
                     'provider' => $this->morph,
                     'attr' => [
@@ -71,7 +73,8 @@ class PlaceAppendMorphBank extends AbstractType implements DataMapperInterface
     {
         /** @var Place $viewData */
         $fields = iterator_to_array($forms);
-        $table = "{|\n|+ {{morphbank}}\n!Morphe!!Dispo!!Stock\n";
+        $title = $fields['title']->getData();
+        $table = "{|\n|+ {{morphbank|$title}}\n!Morphe!!Dispo!!Stock\n";
         foreach ($fields['inventory']->getData() as $entry) {
             $table .= "|-\n";
             $table .= "|{$entry['morph']}||{$entry['scarcity']}||{$entry['stock']}\n";

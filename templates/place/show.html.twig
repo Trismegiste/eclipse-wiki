@@ -91,7 +91,7 @@
     {{ include('fragment/legend_highlight.html.twig') }}
     <script type="module">
         document.querySelectorAll('i[data-pushable="pdf"]').forEach(item => {
-            console.log(item.parentElement.outerHTML)
+            console.log(item.dataset.title)
         })
     </script>
 {% endblock %}

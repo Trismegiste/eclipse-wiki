@@ -22,7 +22,7 @@ class InternalDataAccess extends DataAccess
     const template = [
         'legend' => '{{{1}}}<i class="icon-view3d" data-cell-index="{{{2}}}"></i>',
         'roll' => '',
-        'morphbank' => 'Link for push <i data-pushable="pdf" class="icon-file-pdf"></i>'
+        'morphbank' => '{{{1}}}<i data-pushable="pdf" class="icon-push" data-title="{{{1}}}"></i>'
     ];
 
     public function __construct(protected VertexRepository $repositoy, protected Storage $storage)
