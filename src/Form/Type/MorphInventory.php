@@ -22,7 +22,7 @@ class MorphInventory extends AbstractType
         $builder
                 ->add('morph', TextType::class)
                 ->add('stock', IntegerType::class)
-                ->add('dispo', IntegerType::class)
+                ->add('scarcity', IntegerType::class)
         ;
     }
 
