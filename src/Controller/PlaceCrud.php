@@ -122,7 +122,7 @@ class PlaceCrud extends GenericCrud
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $vertex = $form->getData();
-            //         $this->repository->save($vertex);
+            $this->repository->save($vertex);
 
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
         }

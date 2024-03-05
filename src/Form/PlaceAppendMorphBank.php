@@ -69,7 +69,16 @@ class PlaceAppendMorphBank extends AbstractType implements DataMapperInterface
 
     public function mapFormsToData(Traversable $forms, &$viewData): void
     {
-        
+        /** @var Place $viewData */
+        $fields = iterator_to_array($forms);
+        $table = "{|\n!Morphe!!Dispo!!Stock\n";
+        foreach ($fields['inventory']->getData() as $entry) {
+            $table .= "|-\n";
+            $table .= "|{$entry['morph']}||{$entry['scarcity']}||{$entry['stock']}\n";
+        }
+        $table .= "|}";
+
+        $viewData->setContent($viewData->getContent() . "\n\n$table\n");
     }
 
 }
