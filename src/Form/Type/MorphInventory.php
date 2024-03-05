@@ -20,9 +20,27 @@ class MorphInventory extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-                ->add('morph', TextType::class)
-                ->add('stock', IntegerType::class)
-                ->add('scarcity', IntegerType::class)
+                ->add('morph', TextType::class, [
+                    'attr' => [
+                        'x-model' => 'entry.morph',
+                        'placeholder' => 'Morph',
+                        'class' => 'pure-input-1'
+                    ]
+                ])
+                ->add('stock', IntegerType::class, [
+                    'attr' => [
+                        'x-model' => 'entry.stock',
+                        'placeholder' => 'Stock',
+                        'class' => 'pure-input-1'
+                    ]
+                ])
+                ->add('scarcity', IntegerType::class, [
+                    'attr' => [
+                        'x-model' => 'entry.scarcity',
+                        'placeholder' => 'Dispo',
+                        'class' => 'pure-input-1'
+                    ]
+                ])
         ;
     }
 

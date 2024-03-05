@@ -26,32 +26,17 @@
         <div class="pure-g">
             <div class="pure-u-1-2">
                 {{ form_widget(form.vars.prototype.morph, {
-                    attr: {
-                        'x-bind:name': "'" ~ form.vars.prototype.morph.vars.full_name ~ "'.replace(/__name__/g, idx)",
-                        'x-model': 'entry.morph',
-                        placeholder: 'Morphe',
-                        class: 'pure-input-1'
-                    }
+                    attr: {'x-bind:name': "'" ~ form.vars.prototype.morph.vars.full_name ~ "'.replace(/__name__/g, idx)"}
                 }) }}
             </div>
             <div class="pure-u-1-6">
                 {{ form_widget(form.vars.prototype.scarcity, {
-                    attr: {
-                        'x-bind:name': "'" ~ form.vars.prototype.scarcity.vars.full_name ~ "'.replace(/__name__/g, idx)",
-                        'x-model': 'entry.scarcity',
-                        placeholder: 'Dispo',
-                        class: 'pure-input-1'
-                    }
+                    attr: {'x-bind:name': "'" ~ form.vars.prototype.scarcity.vars.full_name ~ "'.replace(/__name__/g, idx)"}
                 }) }}
             </div>
             <div class="pure-u-1-6">
                 {{ form_widget(form.vars.prototype.stock, {
-                    attr: {
-                        'x-bind:name': "'" ~ form.vars.prototype.stock.vars.full_name ~ "'.replace(/__name__/g, idx)",
-                        'x-model': 'entry.stock',
-                        placeholder: 'Stock',
-                        class: 'pure-input-1'
-                    }
+                    attr: {'x-bind:name': "'" ~ form.vars.prototype.stock.vars.full_name ~ "'.replace(/__name__/g, idx)"}
                 }) }}
             </div>     
             <div class="pure-u-1-6" style="text-align: center">
@@ -66,13 +51,25 @@
 
                 morphSelect(event) {
                     let chosen = event.currentTarget.value
+                    console.log(chosen)
                     if (chosen.length) {
-                        this.inventory.push({morph: chosen, scarcity: 1, stock: 10})
+                        if (!this.alreadyHas(chosen)) {
+                            this.inventory.push({morph: chosen, scarcity: 1, stock: 10})
+                        }
                     }
                 },
 
                 deleteEntry(idx) {
                     this.inventory.splice(idx, 1)
+                },
+
+                alreadyHas(morph) {
+                    for (let entry of this.inventory) {
+                        if (entry.morph === morph) {
+                            return true
+                        }
+                    }
+                    return false
                 }
             }))
     </script>

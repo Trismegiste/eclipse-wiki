@@ -35,10 +35,12 @@ class PlaceAppendMorphBank extends AbstractType implements DataMapperInterface
         $builder
                 ->add('morph_list', ProviderChoiceType::class, [
                     'provider' => $this->morph,
-                    'placeholder' => '--- Ajouter un Morphe ---',
                     'attr' => [
-                        'x-on:change' => 'morphSelect'
-                    ]
+                        'x-on:change' => 'morphSelect',
+                        'size' => 10,
+                        'multiple' => true
+                    ],
+                    'required' => false
                 ])
                 ->add('inventory', CollectionType::class, [
                     'entry_type' => MorphInventory::class,
