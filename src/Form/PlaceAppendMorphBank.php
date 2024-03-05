@@ -71,7 +71,7 @@ class PlaceAppendMorphBank extends AbstractType implements DataMapperInterface
     {
         /** @var Place $viewData */
         $fields = iterator_to_array($forms);
-        $table = "{|\n!Morphe!!Dispo!!Stock\n";
+        $table = "{|\n|+ {{morphbank}}\n!Morphe!!Dispo!!Stock\n";
         foreach ($fields['inventory']->getData() as $entry) {
             $table .= "|-\n";
             $table .= "|{$entry['morph']}||{$entry['scarcity']}||{$entry['stock']}\n";
