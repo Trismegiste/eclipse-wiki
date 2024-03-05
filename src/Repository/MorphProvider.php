@@ -161,7 +161,7 @@ class MorphProvider extends CachedProvider
                     foreach ($elements as $li) {
                         if (preg_match('#rie:(.+)$#', urldecode($li->nodeValue), $match)) {
                             $category = $match[1];
-                            $morph = $this->wiki->searchPageFromCategory($category, 50);
+                            $morph = $this->wiki->searchPageFromCategory($category, 50);  // @todo hardcoded value
                             foreach ($morph as $item) {
                                 $listing[$category][$item->title] = $item->title;
                             }

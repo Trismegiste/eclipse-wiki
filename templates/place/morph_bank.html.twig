@@ -10,7 +10,6 @@
                 {{ form_widget(form.morph_list) }}
             </div>
             <div class="pure-u-3-5">
-                <h2>Inventaire</h2>
                 {{ form_widget(form.inventory) }}
             </div>
         </div>
@@ -21,7 +20,7 @@
 {% block stylesheets %}
     {{ parent() }}
     <style>
-        main .pure-form h2 {
+        main .pure-form h2, main .pure-form h3 {
             margin-top: 0;
         }
     </style>

@@ -9,17 +9,11 @@
     </script>
 {% endblock %}
 
-{% block morph_inventory_row %}
-    <div x-show="inventory.length > 0">
-        {{ form_row(form) }}
-    </div>
-{% endblock %}
-
 {% block morph_inventory_widget %}
     <div class="pure-g">
-        <div class="pure-u-1-2">Morphe</div>     
-        <div class="pure-u-1-6">Dispo</div>   
-        <div class="pure-u-1-6">Stock</div>  
+        <div class="pure-u-1-2"><h3>Morphe</h3></div>
+        <div class="pure-u-1-6"><h3>Dispo</h3></div>
+        <div class="pure-u-1-6"><h3>Stock</h3></div>
     </div>     
 
     <template x-for="(entry, idx) in inventory" :key="entry.morph">
@@ -51,7 +45,6 @@
 
                 morphSelect(event) {
                     let chosen = event.currentTarget.value
-                    console.log(chosen)
                     if (chosen.length) {
                         if (!this.alreadyHas(chosen)) {
                             this.inventory.push({morph: chosen, scarcity: 1, stock: 10})
