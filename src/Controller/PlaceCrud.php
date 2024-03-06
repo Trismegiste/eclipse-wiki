@@ -14,6 +14,7 @@ use App\Form\PlaceType;
 use App\Service\DigraphExplore;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -128,6 +129,15 @@ class PlaceCrud extends GenericCrud
         }
 
         return $this->render('place/morph_bank.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * Push a PDF with the content of the morph bank to the player public channel
+     */
+    #[Route('/push-morph-bank/{pk}', methods: ['POST'], requirements: ['pk' => '[\\da-f]{24}'])]
+    public function pushMorphBank(Place $place, Request $request): JsonResponse
+    {
+        return new JsonResponse(['level' => 'error', 'message' => 'Not implemented']);
     }
 
 }

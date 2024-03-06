@@ -91,6 +91,6 @@
     {{ include('fragment/legend_highlight.html.twig') }}
     <script type="module">
         import pushSubscriber from 'morphbank-push-subscriber';
-        pushSubscriber()
+        pushSubscriber('{{ path('app_placecrud_pushmorphbank', {pk: vertex.pk}) }}')
     </script>
 {% endblock %}

@@ -142,8 +142,8 @@ h2 {
 
 /* WIKI templates */
 .legend-highlighting {
-    color: darkorange;
-    cursor: pointer;
+    color: darkred;
+    cursor: zoom-in;
 }
 
 .highlighting-action {
@@ -153,16 +153,22 @@ h2 {
 
 @keyframes hiliteActionSequence {
     from {
-        color: black;
-        background-color: darkorange;
+        color: white;
+        background-color: darkred;
     }
 
     to {
-        color: darkorange;
+        color: darkred;
         background-color: none;
 
     }
 }
+
+table i[data-pushable="pdf"] {
+    color: darkred;
+    cursor: zoom-in;
+}
+
 
 /* ROLL */
 .diceroller {
