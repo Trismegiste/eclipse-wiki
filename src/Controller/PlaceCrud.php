@@ -137,7 +137,15 @@ class PlaceCrud extends GenericCrud
     #[Route('/push-morph-bank/{pk}', methods: ['POST'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function pushMorphBank(Place $place, Request $request): JsonResponse
     {
-        return new JsonResponse(['level' => 'error', 'message' => 'Not implemented']);
+        $data = $request->getPayload();
+        if (!$data->has('title')) {
+	    $title = $data->getString('title');
+            // @todo generate PDF from the fragment of HTML
+        } else {
+            $errorMessage = 'No title';
+        }
+
+        return new JsonResponse(['level' => 'error', 'message' => $errorMessage]);
     }
 
 }
