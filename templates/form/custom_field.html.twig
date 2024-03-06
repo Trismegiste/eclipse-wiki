@@ -34,7 +34,7 @@
                 }) }}
             </div>     
             <div class="pure-u-1-6" style="text-align: center">
-                <button class="pure-button" x-on:click="deleteEntry(idx)"><i class="icon-trash-empty"></i></button>
+                <a class="pure-button" x-on:click.prevent="deleteEntry(idx)"><i class="icon-trash-empty"></i></a>
             </div>
         </div>
     </template>

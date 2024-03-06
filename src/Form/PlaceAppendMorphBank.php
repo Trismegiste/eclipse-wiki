@@ -34,7 +34,11 @@ class PlaceAppendMorphBank extends AbstractType implements DataMapperInterface
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-                ->add('title', TextType::class)
+                ->add('title', TextType::class, [
+                    'required' => false,
+                    'empty_data' => 'Banque de morphes',
+                    'attr' => ['placeholder' => 'Nom de la banque de morphes (par défaut : "Banque de morphes" si laissé vide)']
+                ])
                 ->add('morph_list', ProviderChoiceType::class, [
                     'provider' => $this->morph,
                     'attr' => [
@@ -42,7 +46,8 @@ class PlaceAppendMorphBank extends AbstractType implements DataMapperInterface
                         'size' => 25,
                         'multiple' => true
                     ],
-                    'required' => false
+                    'required' => false,
+                    'placeholder' => false
                 ])
                 ->add('inventory', CollectionType::class, [
                     'entry_type' => MorphInventory::class,

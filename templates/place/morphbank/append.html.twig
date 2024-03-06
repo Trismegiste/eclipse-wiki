@@ -4,7 +4,7 @@
 {% block content %}
     {{ form_start(form) }}
     <fieldset>
-        {{ form_row(form.title) }}
+        {{ form_widget(form.title, {attr:{class:'pure-input-1'}}) }}
         <div class="pure-g">
             <div class="pure-u-2-5">
                 <h2>Listing</h2>
@@ -22,7 +22,8 @@
     {{ parent() }}
     <style>
         main .pure-form h2, main .pure-form h3 {
-            margin-top: 0;
+            margin-top: 0.2rem;
+            margin-bottom: 0.5rem;
         }
     </style>
 {% endblock %}
