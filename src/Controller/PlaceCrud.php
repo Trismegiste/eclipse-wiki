@@ -142,7 +142,7 @@ class PlaceCrud extends GenericCrud
         $data = $request->getPayload();
         if ($data->has('title')) {
             $title = $data->getString('title');
-            // @todo generate PDF from the fragment of HTML
+            // doing extraction in twig with xpath = //table/caption/*[@data-pushable="pdf"][@data-title="coucou"]/ancestor::table
             $content = $parsoid->parse($place->getContent(), 'pdf');
             $html = $this->renderView('place/morphbank/inventory.pdf.twig', ['vertex' => $place, 'inventory' => $content]);
             $filename = "Banque-de-morphes-$title.pdf";
