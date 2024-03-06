@@ -6,9 +6,15 @@
     <fieldset>
         {{ form_widget(form.title, {attr:{class:'pure-input-1'}}) }}
         <div class="pure-g">
-            <div class="pure-u-2-5">
+            <div class="pure-u-1-5">
                 <h2>Listing</h2>
                 {{ form_widget(form.morph_list) }}
+            </div>
+            <div class="pure-u-1-5">
+                <h3>Dispo par défaut</h3>
+                {{ form_widget(form.scarcity) }}
+                <h3>Stock par défaut</h3>
+                {{ form_widget(form.stock) }}
             </div>
             <div class="pure-u-3-5">
                 {{ form_widget(form.inventory) }}
@@ -26,4 +32,51 @@
             margin-bottom: 0.5rem;
         }
     </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="module">
+        Alpine.data('morphBank', () => ({
+                inventory: [],
+                scarcity: '{"bonus":1}',
+                stock: '{"bonus":10}',
+
+                morphSelect(event) {
+                    let chosen = event.currentTarget.value
+                    if (chosen.length) {
+                        if (!this.alreadyHas(chosen)) {
+                            this.inventory.push({morph: chosen, scarcity: this.roll(JSON.parse(this.scarcity)), stock: this.roll(JSON.parse(this.stock))})
+                        }
+                    }
+                },
+
+                deleteEntry(idx) {
+                    this.inventory.splice(idx, 1)
+                },
+
+                alreadyHas(morph) {
+                    for (let entry of this.inventory) {
+                        if (entry.morph === morph) {
+                            return true
+                        }
+                    }
+                    return false
+                },
+
+                roll(pool) {
+                    let sum = 0
+                    for (const [side, qty] of Object.entries(pool)) {
+                        if (side === 'bonus') {
+                            sum += qty
+                        } else {
+                            for (let k = 0; k < qty; k++) {
+                                sum += parseInt(Math.floor(Math.random() * side + 1))
+                            }
+                        }
+                    }
+                    return sum
+                }
+            }))
+    </script>
 {% endblock %}

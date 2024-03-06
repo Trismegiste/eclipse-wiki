@@ -13,6 +13,7 @@ use App\Repository\MorphProvider;
 use App\Repository\VertexRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataMapperInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -25,6 +26,26 @@ use Traversable;
  */
 class PlaceAppendMorphBank extends AbstractType implements DataMapperInterface
 {
+
+    const defaultScarcity = [
+        1 => ['bonus' => 1],
+        2 => ['bonus' => 2],
+        3 => ['bonus' => 3],
+        4 => ['bonus' => 4],
+        '1d2' => [2 => 1],
+        '1d3' => [3 => 1],
+        '1d4' => [4 => 1],
+        '1d3+1' => [3 => 1, 'bonus' => 1],
+    ];
+    const defaultStock = [
+        5 => ['bonus' => 5],
+        10 => ['bonus' => 10],
+        '1d4' => [4 => 1],
+        '1d8' => [8 => 1],
+        '2d6' => [6 => 2],
+        '3d10' => [10 => 3],
+        '5d10' => [10 => 5],
+    ];
 
     public function __construct(protected VertexRepository $repository, protected MorphProvider $morph)
     {
@@ -48,6 +69,14 @@ class PlaceAppendMorphBank extends AbstractType implements DataMapperInterface
                     ],
                     'required' => false,
                     'placeholder' => false
+                ])
+                ->add('scarcity', ChoiceType::class, [
+                    'choices' => array_map(fn($v) => json_encode($v), self::defaultScarcity),
+                    'attr' => ['x-model' => 'scarcity']
+                ])
+                ->add('stock', ChoiceType::class, [
+                    'choices' => array_map(fn($v) => json_encode($v), self::defaultStock),
+                    'attr' => ['x-model' => 'stock']
                 ])
                 ->add('inventory', CollectionType::class, [
                     'entry_type' => MorphInventory::class,

@@ -38,32 +38,4 @@
             </div>
         </div>
     </template>
-
-    <script type="module">
-        Alpine.data('morphBank', () => ({
-                inventory: [],
-
-                morphSelect(event) {
-                    let chosen = event.currentTarget.value
-                    if (chosen.length) {
-                        if (!this.alreadyHas(chosen)) {
-                            this.inventory.push({morph: chosen, scarcity: 1, stock: 10})
-                        }
-                    }
-                },
-
-                deleteEntry(idx) {
-                    this.inventory.splice(idx, 1)
-                },
-
-                alreadyHas(morph) {
-                    for (let entry of this.inventory) {
-                        if (entry.morph === morph) {
-                            return true
-                        }
-                    }
-                    return false
-                }
-            }))
-    </script>
 {% endblock %}
