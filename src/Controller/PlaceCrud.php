@@ -12,9 +12,11 @@ use App\Entity\Vertex;
 use App\Form\PlaceAppendMorphBank;
 use App\Form\PlaceType;
 use App\Service\DigraphExplore;
+use App\Service\DocumentBroadcaster;
+use App\Service\Mercure\Pusher;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -128,19 +130,27 @@ class PlaceCrud extends GenericCrud
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
         }
 
-        return $this->render('place/morph_bank.html.twig', ['form' => $form->createView()]);
+        return $this->render('place/morphbank/append.html.twig', ['form' => $form->createView()]);
     }
 
     /**
      * Push a PDF with the content of the morph bank to the player public channel
      */
     #[Route('/push-morph-bank/{pk}', methods: ['POST'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function pushMorphBank(Place $place, Request $request): JsonResponse
+    public function pushMorphBank(Place $place, Request $request, DocumentBroadcaster $broadcast, Pusher $pusher, \App\Parsoid\Parser $parsoid): JsonResponse
     {
         $data = $request->getPayload();
-        if (!$data->has('title')) {
-	    $title = $data->getString('title');
+        if ($data->has('title')) {
+            $title = $data->getString('title');
             // @todo generate PDF from the fragment of HTML
+            $content = $parsoid->parse($place->getContent(), 'pdf');
+            $html = $this->renderView('place/morphbank/inventory.pdf.twig', ['vertex' => $place, 'inventory' => $content]);
+            $filename = "Banque-de-morphes-$title.pdf";
+            $pdf = $broadcast->generatePdf($filename, $html);
+            $link = $broadcast->getLinkToDocument($pdf->getBasename());
+            $pusher->sendDocumentLink($link, "Banque de morphes $title");
+
+            return new JsonResponse(['level' => 'success', 'message' => "$title envoyé"]);
         } else {
             $errorMessage = 'No title';
         }
