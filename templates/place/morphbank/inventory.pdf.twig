@@ -1,5 +1,18 @@
 {% extends "base.pdf.twig" %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        table caption {
+            text-align: left;
+            font-size: 140%;
+            margin-top: 1em;
+            margin-bottom: 0.1em;
+            text-transform: capitalize;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
-    {{ inventory|raw }}
+    {{ wiki(vertex.content, 'pdf')|xpath(xpath) }}
 {% endblock %}
