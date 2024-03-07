@@ -12,12 +12,13 @@ use App\Entity\Morph;
 use App\Repository\CharacterFactory;
 use App\Repository\VertexRepository;
 use MongoDB\BSON\ObjectIdInterface;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class PlaceCrudTest extends WebTestCase
 {
 
-    protected $client;
+    protected KernelBrowser $client;
 
     protected function setUp(): void
     {
@@ -102,6 +103,43 @@ class PlaceCrudTest extends WebTestCase
         $this->assertResponseRedirects();
         $this->client->followRedirect();
         $this->assertResponseIsSuccessful();
+    }
+
+    /** @depends testShow */
+    public function testAppendMorphBank(string $edit)
+    {
+        $crawler = $this->client->request('GET', $edit);
+        $url = $crawler->filterXPath('//div[@class="minitoolbar"]//i[@class="icon-sleeve"]/parent::a')->attr('href');
+        $crawler = $this->client->request('GET', $url);
+        $this->assertResponseIsSuccessful();
+        $this->assertPageTitleContains('Tatooine');
+        $form = $crawler->selectButton('place_append_morph_bank_append')->form();
+
+        $values = $form->getPhpValues();
+        $values['place_append_morph_bank']['inventory'][0]['morph'] = 'DummyMorph';
+        $values['place_append_morph_bank']['inventory'][0]['stock'] = 10;
+        $values['place_append_morph_bank']['inventory'][0]['scarcity'] = 4;
+
+        $this->client->request($form->getMethod(), $form->getUri(), $values, $form->getPhpFiles());
+        $this->assertResponseRedirects();
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('.parsed-wikitext', 'Banque de morphes');
+        $this->assertSelectorTextContains('.parsed-wikitext', 'Dispo');
+        $this->assertSelectorTextContains('.parsed-wikitext', 'Stock');
+        $this->assertSelectorTextContains('.parsed-wikitext', 'DummyMorph');
+    }
+
+    /** @depends testList */
+    public function testPushPdf(string $show)
+    {
+        $crawler = $this->client->request('GET', $show);
+        $push = $crawler->filterXPath('//main//div[@class="parsed-wikitext"]/table//i[@class="icon-push"]')->attr('data-title');
+        $this->assertEquals('Banque de morphes', $push);
+        $pk = $this->client->getRequest()->attributes->get('pk');
+
+        $this->client->xmlHttpRequest(method: 'POST', uri: '/place/push-morph-bank/' . $pk);
+        var_dump($this->client->getResponse()->getContent());
     }
 
 }
