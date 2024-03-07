@@ -109,7 +109,7 @@ class PlaceCrudTest extends WebTestCase
     public function testAppendMorphBank(string $edit)
     {
         $crawler = $this->client->request('GET', $edit);
-        $url = $crawler->filterXPath('//div[@class="minitoolbar"]//i[@class="icon-sleeve"]/parent::a')->attr('href');
+        $url = $crawler->filterXPath('//div[@class="minitoolbar"]//i[@class="icon-morph"]/parent::a')->attr('href');
         $crawler = $this->client->request('GET', $url);
         $this->assertResponseIsSuccessful();
         $this->assertPageTitleContains('Tatooine');
