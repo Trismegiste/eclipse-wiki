@@ -138,8 +138,11 @@ class PlaceCrudTest extends WebTestCase
         $this->assertEquals('Banque de morphes', $push);
         $pk = $this->client->getRequest()->attributes->get('pk');
 
-        $this->client->xmlHttpRequest(method: 'POST', uri: '/place/push-morph-bank/' . $pk);
-        var_dump($this->client->getResponse()->getContent());
+        $this->client->jsonRequest('POST', '/place/push-morph-bank/' . $pk, ['title' => $push]);
+        $resp = $this->client->getResponse()->getContent();
+        $this->assertJson($resp);
+        $resp = json_decode($resp);
+        $this->assertEquals('success', $resp->level);
     }
 
 }
