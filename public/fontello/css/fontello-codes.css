@@ -57,6 +57,8 @@
 .icon-orphan:before { content: '\e84b'; } /* '' */
 .icon-abacus:before { content: '\e84c'; } /* '' */
 .icon-push:before { content: '\e852'; } /* '' */
+.icon-openai:before { content: '\e854'; } /* '' */
+.icon-morph:before { content: '\e855'; } /* '' */
 .icon-randomize:before { content: '\e859'; } /* '' */
 .icon-album:before { content: '\e860'; } /* '' */
 .icon-duplicate:before { content: '\f0c5'; } /* '' */

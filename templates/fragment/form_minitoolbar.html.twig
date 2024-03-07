@@ -1,10 +1,13 @@
 {# a set of button for special action in form #}
 <div class="minitoolbar" x-data>
-    <a href="{{ path('app_invokeaipicture_vertexsearch', {pk: form.parent.vars.data.pk}) }}" class="pure-button" title="Append InvokeAI">
+    <a href="{{ path('app_invokeaipicture_vertexsearch', {pk: form.parent.vars.data.pk}) }}" class="pure-button" title="Go to insert InvokeAI picture">
         <i class="icon-dcgan"></i>
     </a>
-    <a href="#" class="pure-button" title="Picture gallery" x-bind="GalleryButton">
+    <a href="#" class="pure-button" title="Transform the selection as a picture gallery" x-bind="GalleryButton">
         <i class="icon-album"></i>
+    </a>
+    <a href="#" class="pure-button" title="Transform the selection from an OpenAI output">
+        <i class="icon-openai"></i>
     </a>
 </div>
 
