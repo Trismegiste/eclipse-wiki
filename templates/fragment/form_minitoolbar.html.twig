@@ -6,7 +6,7 @@
     <a href="#" class="pure-button" title="Transform the selection as a picture gallery" x-bind="GalleryButton">
         <i class="icon-album"></i>
     </a>
-    <a href="#" class="pure-button" title="Transform the selection from an OpenAI output">
+    <a href="#" class="pure-button" title="Transform the selection from an OpenAI output" x-bind="OpenAiButton">
         <i class="icon-openai"></i>
     </a>
 </div>
@@ -14,6 +14,7 @@
 <script type="module">
     Alpine.bind('GalleryButton', () => ({
             'x-on:click.prevent'() {
+                // @todo inject the id or a query selector instead of doing dynamic JS
                 const widget = document.getElementById('{{ form.vars.id }}')
                 // cleaning and splitting into array of lines
                 let selection = widget.value.substring(widget.selectionStart, widget.selectionEnd).trim().split("\n")
@@ -44,6 +45,37 @@
                     // replacing the selection with the table wikitext
                     widget.value = widget.value.substring(0, widget.selectionStart) + replacing + widget.value.substr(widget.selectionEnd)
                 }
+            }
+        }))
+
+    Alpine.bind('OpenAiButton', () => ({
+            'x-on:click.prevent'() {
+                // @todo inject the id or a query selector instead of doing dynamic JS
+                const widget = document.getElementById('{{ form.vars.id }}')
+                // cleaning the selection in the textarea
+                let selection = widget.value.substring(widget.selectionStart, widget.selectionEnd).trim()
+                let wikitext = []
+
+                // title
+                const titleRegex = /^\*\*([^\*]+)\s:\*\*/g
+                const title = titleRegex.exec(selection)
+                if (null !== title) {
+                    wikitext.push(`==${title[1]}==`)
+                }
+
+                // paragraph
+                const regex = /^.+\*\*([^\*]+)\s:\*\*\n\s+(.+)$/gm
+                let m = null
+                while ((m = regex.exec(selection)) !== null) {
+                    // This is necessary to avoid infinite loops with zero-width matches
+                    if (m.index === regex.lastIndex) {
+                        regex.lastIndex++
+                    }
+                    wikitext.push(`===${m[1]}===`)
+                    wikitext.push(m[2])
+                }
+                // replacing the selection with the formatted wikitext
+                widget.value = widget.value.substring(0, widget.selectionStart) + wikitext.join("\n") + widget.value.substr(widget.selectionEnd)
             }
         }))
 </script>        
