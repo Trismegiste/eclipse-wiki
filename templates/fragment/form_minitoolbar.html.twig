@@ -54,14 +54,14 @@
                 let wikitext = []
 
                 // title
-                const titleRegex = /^\*\*([^\*]+)\s:\*\*/g
+                const titleRegex = /^\*\*([^\*]+)\s:\*\*\n\n/gm
                 const title = titleRegex.exec(selection)
                 if (null !== title) {
                     wikitext.push(`==${title[1]}==`)
                 }
 
                 // paragraph
-                const regex = /^.+\*\*([^\*]+)\s:\*\*\n\s+(.+)$/gm
+                const regex = /^.*\*\*([^\*]+)\s:\*\*\n\s+([^\n]+)\n\n/gm
                 let m = null
                 while ((m = regex.exec(selection)) !== null) {
                     // This is necessary to avoid infinite loops with zero-width matches
