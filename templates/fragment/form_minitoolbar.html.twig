@@ -1,21 +1,21 @@
 {# a set of button for special action in form #}
-<div class="minitoolbar" x-data>
-    <a href="{{ path('app_invokeaipicture_vertexsearch', {pk: form.parent.vars.data.pk}) }}" class="pure-button" title="Go to insert InvokeAI picture">
+<div class="minitoolbar" x-data="commonToolbar('{{ form.vars.id }}')">
+    <a href="{{ path('app_invokeaipicture_vertexsearch', {pk: form.parent.vars.data.pk}) }}" class="pure-button button-delete" title="Cancel edition and jump to append an InvokeAI picture">
         <i class="icon-dcgan"></i>
     </a>
-    <a href="#" class="pure-button" title="Transform the selection as a picture gallery" x-bind="GalleryButton">
+    <a href="#" class="pure-button" title="Transform current selection into a picture gallery" x-on:click.prevent="selectionToGallery">
         <i class="icon-album"></i>
     </a>
-    <a href="#" class="pure-button" title="Transform the selection from an OpenAI output" x-bind="OpenAiButton">
+    <a href="#" class="pure-button" title="Transform selected OpenAI output into wikitext" x-on:click.prevent="openAiToWikitext">
         <i class="icon-openai"></i>
     </a>
 </div>
 
 <script type="module">
-    Alpine.bind('GalleryButton', () => ({
-            'x-on:click.prevent'() {
-                // @todo inject the id or a query selector instead of doing dynamic JS
-                const widget = document.getElementById('{{ form.vars.id }}')
+    Alpine.data('commonToolbar', (widgetId) => ({
+
+            selectionToGallery() {
+                const widget = document.getElementById(widgetId)
                 // cleaning and splitting into array of lines
                 let selection = widget.value.substring(widget.selectionStart, widget.selectionEnd).trim().split("\n")
                 // if even number of lines
@@ -45,13 +45,10 @@
                     // replacing the selection with the table wikitext
                     widget.value = widget.value.substring(0, widget.selectionStart) + replacing + widget.value.substr(widget.selectionEnd)
                 }
-            }
-        }))
+            },
 
-    Alpine.bind('OpenAiButton', () => ({
-            'x-on:click.prevent'() {
-                // @todo inject the id or a query selector instead of doing dynamic JS
-                const widget = document.getElementById('{{ form.vars.id }}')
+            openAiToWikitext() {
+                const widget = document.getElementById(widgetId)
                 // cleaning the selection in the textarea
                 let selection = widget.value.substring(widget.selectionStart, widget.selectionEnd).trim()
                 let wikitext = []
@@ -77,5 +74,6 @@
                 // replacing the selection with the formatted wikitext
                 widget.value = widget.value.substring(0, widget.selectionStart) + wikitext.join("\n") + widget.value.substr(widget.selectionEnd)
             }
+
         }))
 </script>        
