@@ -23,7 +23,7 @@ class PusherTest extends TestCase
         $this->hub->expects($this->once())
                 ->method('publish');
 
-        $this->sut = new Pusher($this->hub);
+        $this->sut = new Pusher($this->hub, $this->createStub(App\Service\SessionPushHistory::class));
     }
 
     public function testValidPeering()
