@@ -12,6 +12,8 @@ namespace App\Entity;
 class GameSessionDoc
 {
 
+    const filteredCategory = ['place', 'transhuman', 'scene', 'handout'];
+
     protected \MongoDB\BSON\ObjectId $pinnedTimelinePk;
     protected string $pinnedTimelineTitle;
     protected array $history = [];
@@ -51,7 +53,7 @@ class GameSessionDoc
      */
     public function push(Vertex $vertex): void
     {
-        if (!in_array($vertex->getCategory(), ['place', 'transhuman', 'scene', 'handout'])) {
+        if (!in_array($vertex->getCategory(), self::filteredCategory)) {
             return;
         }
 

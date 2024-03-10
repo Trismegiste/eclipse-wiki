@@ -6,6 +6,7 @@
 
 namespace App\Service\Mercure;
 
+use App\Service\SessionPushHistory;
 use SplFileInfo;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
@@ -16,7 +17,9 @@ use Symfony\Component\Mercure\Update;
 class Pusher
 {
 
-    public function __construct(protected HubInterface $hub)
+    const filteredPicture = ['picture', 'profile'];
+
+    public function __construct(protected HubInterface $hub, protected SessionPushHistory $store)
     {
         
     }
@@ -32,6 +35,10 @@ class Pusher
         );
 
         $this->hub->publish($update);
+
+        if (in_array($eventType, self::filteredPicture)) {
+            $this->store->backupFile($pic);
+        }
     }
 
     public function sendDocumentLink(string $link, string $title, string $channel = 'public'): void
