@@ -6,10 +6,13 @@
 
 namespace App\Service;
 
+use SplFileInfo;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use function join_paths;
 
 /**
@@ -50,10 +53,29 @@ class SessionPushHistory implements CacheWarmerInterface, CacheClearerInterface
         return [];
     }
 
-    public function backupFile(\SplFileInfo $originFile): void
+    public function backupFile(SplFileInfo $originFile): void
     {
         $targetFile = join_paths($this->cacheDir, $originFile->getBasename());
         $this->fs->copy($originFile->getPathname(), $targetFile, true);
+    }
+
+    public function getListing(): iterable
+    {
+        return (new Finder())
+                        ->in($this->cacheDir)
+                        ->files()
+                        ->sortByModifiedTime()
+                        ->getIterator();
+    }
+
+    public function createResponse(string $filename): BinaryFileResponse
+    {
+        $path = join_paths($this->cacheDir, $filename);
+        if (!file_exists($path)) {
+            throw new NotFoundHttpException($filename . ' does not exist');
+        }
+
+        return new BinaryFileResponse($path);
     }
 
 }

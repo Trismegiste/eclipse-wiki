@@ -1,0 +1,36 @@
+{# Session cache of broadcasted pictures #}
+{% extends "base.html.twig" %}
+
+{% block title %}Broadcasted picture{% endblock %}
+{% block header_title %}{{ block('title') }}{% endblock %}
+
+{% block content %}
+    <section class="pure-g mosaic">
+        {% for picture in listing %}
+            <div class="pure-u-1-8">
+                <img src="{{ path('app_gamesession_broadcasted', {title: picture.filename}) }}" title="{{ picture.filename }}"/>
+            </div>
+        {% endfor %}
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="module">
+
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .mosaic img {
+            object-fit: contain;
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+        }
+    </style>
+{% endblock %}
+
+
