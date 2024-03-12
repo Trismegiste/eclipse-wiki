@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "@furkot/webfonts-generator": "github:furkot/webfonts-generator"
+  }
+}

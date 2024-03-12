@@ -29,3 +29,7 @@
 
 ### cypress cfg
 /cypress/screenshots/
+
+### webfont
+/node_modules
+/public/webfont
