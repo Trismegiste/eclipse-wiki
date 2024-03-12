@@ -34,6 +34,7 @@ class ChromiumPdfWriter implements Writer
             '--disable-gpu',
             '--no-sandbox',
             '--no-pdf-header-footer',
+            '--disable-dev-shm-usage',  // @see https://stackoverflow.com/questions/69173469/meaning-of-selenium-chromeoptions
             '--print-to-pdf=' . $target->getPathname(),
             $source->getPathname()
         ]);

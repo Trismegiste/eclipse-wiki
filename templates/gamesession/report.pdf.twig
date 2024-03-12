@@ -5,9 +5,24 @@
 {% block content %}
     <div class="pure-g">
         {% for picture in listing %}
-            <div class="pure-u-1-6">
-                <img src="{{ absolute_url(path('app_gamesession_broadcasted', {title: picture.basename})) }}" class="pure-img"/>
+            <div class="pure-u-1-5">
+                <figure>
+                    <img src="{{ absolute_url(path('app_gamesession_broadcasted', {title: picture.basename})) }}" class="pure-img"/>
+                </figure>
             </div>
         {% endfor %}
     </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        @page {
+            margin: 5mm;
+            size: A4 landscape;
+        }
+        figure {
+            margin: 0.3em;
+        }
+    </style>
 {% endblock %}
