@@ -1,14 +1,22 @@
 {# Session cache of broadcasted pictures #}
 {% extends "base.html.twig" %}
+{% form_theme form _self %}
 
-{% block title %}Broadcasted picture{% endblock %}
+{% block title %}Broadcasted pictures{% endblock %}
 {% block header_title %}{{ block('title') }}{% endblock %}
 
 {% block content %}
+    {{ form(form) }}
+{% endblock %}
+
+{% block _form_picture_row %}
     <section class="pure-g mosaic">
-        {% for picture in listing %}
+        {% for child in form.children %}
             <div class="pure-u-1-8">
-                <img src="{{ path('app_gamesession_broadcasted', {title: picture.filename}) }}" title="{{ picture.filename }}"/>
+                {{ form_widget(child) }}
+                <label for="{{ child.vars.id }}">
+                    <img src="{{ path('app_gamesession_broadcasted', {title: child.vars.value}) }}"/>
+                </label>
             </div>
         {% endfor %}
     </section>
@@ -29,6 +37,14 @@
             max-width: 100%;
             max-height: 100%;
             display: block;
+        }
+
+        .mosaic input {
+            display: none;
+        }
+
+        .mosaic input:not(:checked) + label img {
+            filter: grayscale(1) blur(4px) opacity(50%);
         }
     </style>
 {% endblock %}

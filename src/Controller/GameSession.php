@@ -15,6 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Tracking actions for the current Game Session
  */
+#[Route('/session')]
 class GameSession extends AbstractController
 {
 
@@ -33,18 +34,33 @@ class GameSession extends AbstractController
         return $this->render('gamesession/history.html.twig', ['document' => $tracker->getDocument()]);
     }
 
-    #[Route('/session/broadcasted-picture', methods: ['GET'])]
-    public function broadcastedListing(): Response
+    #[Route('/broadcast-export', methods: ['GET', 'POST'])]
+    public function broadcastExport(\Symfony\Component\HttpFoundation\Request $request): Response
     {
+        $form = $this->createFormBuilder()
+                ->add('picture', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+                    'expanded' => true,
+                    'multiple' => true,
+                    'choices' => $this->broadcastHistory->getListing(),
+                    'choice_value' => 'filename'
+                ])
+                ->add('export', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class)
+                ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+        }
+
         return $this->render('gamesession/broadcasted.html.twig', [
-                    'listing' => $this->broadcastHistory->getListing()
+                    'form' => $form->createView()
         ]);
     }
 
     /**
      * Show broadcasted picture from cache
      */
-    #[Route('/session/broadcasted-picture/{title}', methods: ['GET'])]
+    #[Route('/broadcasted-picture/{title}', methods: ['GET'])]
     public function broadcasted(string $title): Response
     {
         return $this->broadcastHistory->createResponse($title);
