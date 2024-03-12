@@ -13,20 +13,13 @@
     <section class="pure-g mosaic">
         {% for child in form.children %}
             <div class="pure-u-1-8">
-                {{ form_widget(child) }}
+                {{ form_widget(child, {checked:true}) }}
                 <label for="{{ child.vars.id }}">
                     <img src="{{ path('app_gamesession_broadcasted', {title: child.vars.value}) }}"/>
                 </label>
             </div>
         {% endfor %}
     </section>
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script type="module">
-
-    </script>
 {% endblock %}
 
 {% block stylesheets %}
