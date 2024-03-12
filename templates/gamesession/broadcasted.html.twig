@@ -32,12 +32,17 @@
             display: block;
         }
 
+        .mosaic label {
+            display: block;
+            margin: 0.5rem;
+        }
+
         .mosaic input {
             display: none;
         }
 
         .mosaic input:not(:checked) + label img {
-            filter: grayscale(1) blur(4px) opacity(50%);
+            filter: grayscale(0.8) blur(2px) opacity(50%);
         }
     </style>
 {% endblock %}
