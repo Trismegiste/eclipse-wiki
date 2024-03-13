@@ -3,26 +3,28 @@
 {% block title %}Rapport de session{% endblock %}
 
 {% block content %}
-    <div class="pure-g">
-        {% for picture in listing %}
-            <div class="pure-u-1-5">
-                <figure>
-                    <img src="file://{{ picture.pathname }}" class="pure-img"/>
-                </figure>
-            </div>
-        {% endfor %}
-    </div>
+    {% for picture in listing %}
+        <section>
+            <img src="file://{{ picture.pathname }}"/>
+        </section>
+    {% endfor %}
 {% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
     <style>
-        @page {
-            margin: 5mm;
-            size: A4 landscape;
+        section {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        figure {
-            margin: 0.3em;
+        img {
+            margin: auto;
+            width: 100vw;
+            height: 100vh;
+            object-fit: contain;
         }
     </style>
 {% endblock %}

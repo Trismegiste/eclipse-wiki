@@ -34,13 +34,17 @@ class ChromiumPdfWriter implements Writer
             '--disable-gpu',
             '--no-sandbox',
             '--no-pdf-header-footer',
-            '--disable-dev-shm-usage',  // @see https://stackoverflow.com/questions/69173469/meaning-of-selenium-chromeoptions
+            '--disable-dev-shm-usage', // @see https://stackoverflow.com/questions/69173469/meaning-of-selenium-chromeoptions
             '--print-to-pdf=' . $target->getPathname(),
             $source->getPathname()
         ]);
         $chromium->setTimeout(300);
 
-        $chromium->mustRun();
+        try {
+            $chromium->mustRun();
+        } catch (\Symfony\Component\Process\Exception\ProcessSignaledException $e) {
+            throw new \RuntimeException($chromium->getExitCodeText(), $chromium->getExitCodeText(), $e);
+        }
     }
 
     public function renderToPdf(string $template, array $param, SplFileInfo $target): void
