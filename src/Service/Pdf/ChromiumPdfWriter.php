@@ -9,7 +9,10 @@ namespace App\Service\Pdf;
 use App\Service\MwImageCache;
 use DOMDocument;
 use DOMElement;
+use InvalidArgumentException;
+use RuntimeException;
 use SplFileInfo;
+use Symfony\Component\Process\Exception\ProcessSignaledException;
 use Symfony\Component\Process\Process;
 use Twig\Environment;
 use function join_paths;
@@ -42,8 +45,8 @@ class ChromiumPdfWriter implements Writer
 
         try {
             $chromium->mustRun();
-        } catch (\Symfony\Component\Process\Exception\ProcessSignaledException $e) {
-            throw new \RuntimeException($chromium->getExitCodeText(), $chromium->getExitCodeText(), $e);
+        } catch (ProcessSignaledException $e) {
+            throw new RuntimeException(code: $chromium->getExitCode(), message: $chromium->getExitCodeText() . "\n" . $chromium->getErrorOutput(), previous: $e);
         }
     }
 
@@ -93,11 +96,11 @@ class ChromiumPdfWriter implements Writer
     protected function getDataUri(string $localFile)
     {
         if (!preg_match('#^file://(/.+)#', $localFile, $match)) {
-            throw new \InvalidArgumentException("Invalid local URL $localFile");
+            throw new InvalidArgumentException("Invalid local URL $localFile");
         }
         $localFile = $match[1];
         if (!file_exists($localFile)) {
-            throw new \InvalidArgumentException("$localFile does not exist");
+            throw new InvalidArgumentException("$localFile does not exist");
         }
         $pictureInfo = getimagesize($localFile);
         $mimetype = $pictureInfo['mime'];
