@@ -33,3 +33,4 @@
 ### webfont
 /node_modules
 /public/webfont
+/bun.lockb

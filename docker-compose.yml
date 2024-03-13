@@ -14,11 +14,13 @@ services:
         volumes:
             - eclipse-mongo:/bitnami/mongodb
         network_mode: host
-    node:
-        image: node:20-alpine
+
+    bun:
+        image: oven/bun
         volumes:
-            - .:/home/node
-        command: sh /home/node/bin/generate-font.sh
+            - .:/home/bun/app
+        network_mode: host
+        command: sh /home/bun/app/bin/generate-font.sh
 
 volumes:
     eclipse-mongo:

@@ -1,11 +1,13 @@
-const webfontsGenerator = require('@furkot/webfonts-generator');
+import webfontsGenerator from '@furkot/webfonts-generator';
+import {globby} from 'globby';
 
 (async () => {
+    const paths = await globby('/home/bun/app/webfont/src/*.svg')
+
+    console.log(paths.length + ' icons found')
+
     await webfontsGenerator({
-        files: [
-            'webfont/src/hurricane.svg',
-            'webfont/src/cloud-rain.svg',
-        ],
+        files: paths,
         dest: 'public/webfont/',
         html: true,
         htmlPath: 'public/webfont/',
@@ -13,4 +15,6 @@ const webfontsGenerator = require('@furkot/webfonts-generator');
             hurricane: 0xF222
         }
     })
+
+    console.log('CSS generated')
 })()

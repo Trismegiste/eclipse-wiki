@@ -1,5 +1,10 @@
 {
-  "devDependencies": {
-    "@furkot/webfonts-generator": "github:furkot/webfonts-generator"
+  "dependencies": {
+    "@furkot/webfonts-generator": "^2.0.0",
+    "globby": "^14.0.1"
+  },
+  "type": "module",
+  "scripts": {
+    "webfont": "bun run webfont/index.js"
   }
 }

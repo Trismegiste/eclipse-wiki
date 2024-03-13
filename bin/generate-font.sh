@@ -1,3 +1,3 @@
-cd /home/node
-npm install --save
-node webfont/index.js
+cd /home/bun/app
+bun install
+bun run webfont
