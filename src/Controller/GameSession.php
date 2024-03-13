@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use function join_paths;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * Tracking actions for the current Game Session
@@ -56,10 +57,14 @@ class GameSession extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $target = new SplFileInfo(join_paths($this->getParameter('kernel.cache_dir'), 'Rapport-' . date('d-m-Y') . '.pdf'));
+            $filename = 'Rapport-' . date('d-m-Y') . '.pdf';
+            $target = new SplFileInfo(join_paths($this->getParameter('kernel.cache_dir'), $filename));
             $pdf->renderToPdf('gamesession/report.pdf.twig', ['listing' => $form['picture']->getData()], $target);
 
-            return new BinaryFileResponse($target);
+            $resp = new BinaryFileResponse($target);
+            $resp->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);
+
+            return $resp;
         }
 
         return $this->render('gamesession/broadcasted.html.twig', ['form' => $form->createView()]);
