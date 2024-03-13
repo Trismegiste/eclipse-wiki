@@ -10,10 +10,7 @@ import {globby} from 'globby';
         files: paths,
         dest: 'public/webfont/',
         html: true,
-        htmlPath: 'public/webfont/',
-        codepoints: {
-            hurricane: 0xF222
-        }
+        htmlPath: 'public/webfont/'
     })
 
     console.log('CSS generated')
