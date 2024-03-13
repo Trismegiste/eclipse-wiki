@@ -3,6 +3,15 @@
 {% block title %}Rapport de session{% endblock %}
 
 {% block content %}
+    <header>
+        <img src="https://static.wikia.nocookie.net/eclipse-savage/images/7/7a/Logo_SaWoFan.png/revision/latest?cb=20210219100416&path-prefix=fr" class="pure-img"/>
+        <p>
+            <a href="https://eclipse-savage.fandom.com/fr/wiki/Wiki_Eclipse_Savage">Le Wiki Eclipse Savage sur Fandom</a>
+        </p>
+        <p>
+            <a href="https://eclipse-savage.fandom.com/fr/f">Le Blog du Wiki - News récentes</a>
+        </p>
+    </header>
     {% for picture in listing %}
         <section>
             <img src="file://{{ picture.pathname }}"/>
@@ -13,6 +22,15 @@
 {% block stylesheets %}
     {{ parent() }}
     <style>
+        header img {
+            width: 70%;
+            margin: 3em auto;
+        }
+        header p {
+            text-align: center;
+            font-size: 160%;
+        }
+
         section {
             width: 100vw;
             height: 100vh;
@@ -20,7 +38,7 @@
             justify-content: center;
             align-items: center;
         }
-        img {
+        section img {
             margin: auto;
             width: 100vw;
             height: 100vh;
