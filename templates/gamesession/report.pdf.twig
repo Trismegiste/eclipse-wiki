@@ -7,7 +7,7 @@
         {% for picture in listing %}
             <div class="pure-u-1-5">
                 <figure>
-                    <img src="{{ absolute_url(path('app_gamesession_broadcasted', {title: picture.basename})) }}" class="pure-img"/>
+                    <img src="file://{{ picture.pathname }}" class="pure-img"/>
                 </figure>
             </div>
         {% endfor %}
