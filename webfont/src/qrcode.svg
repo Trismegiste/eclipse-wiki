@@ -1,3 +1,54 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -1000 1000 1000">
-	<path fill="#000000" d="M214 -207V-136H143V-207ZM214 -636V-564H143V-636ZM643 -636V-564H571V-636ZM71 -65H286V-279H71ZM71 -493H286V-707H71ZM500 -493H714V-707H500ZM357 -350V7H0V-350ZM643 -64V7H571V-64ZM786 -64V7H714V-64ZM786 -350V-136H571V-207H500V7H429V-350H643V-279H714V-350ZM357 -779V-421H0V-779ZM786 -779V-421H429V-779Z"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 -1000 1000 1000"
+   version="1.1"
+   id="svg8931"
+   sodipodi:docname="qrcode.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <metadata
+     id="metadata8937">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs8935" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1542"
+     inkscape:window-height="754"
+     id="namedview8933"
+     showgrid="false"
+     inkscape:zoom="0.4325"
+     inkscape:cx="420.98566"
+     inkscape:cy="401.34658"
+     inkscape:window-x="2298"
+     inkscape:window-y="288"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg8931" />
+  <path
+     d="m 283.61455,-283.61455 v 85.82887 h -85.82887 v -85.82887 z m 0,-518.59978 v 87.03773 h -85.82887 v -87.03773 z m 518.59978,0 v 87.03773 H 715.1766 v -87.03773 z M 110.74794,-111.9568 H 370.65226 V -370.65226 H 110.74794 Z m 0,-517.39094 H 370.65226 V -888.04319 H 110.74794 Z m 518.5998,0 H 888.04319 V -888.04319 H 629.34774 Z m -172.8666,172.8666 V -24.919075 H 24.919075 V -456.48113 Z m 345.73319,345.7332 v 85.828865 H 715.1766 v -85.828865 z m 172.86659,0 v 85.828865 h -87.03773 v -85.828865 z m 0,-345.73319 v 258.69545 H 715.1766 v -85.82887 H 629.34774 V -24.919075 H 543.51886 V -456.48113 h 258.69547 v 85.82887 h 85.82886 v -85.82887 z M 456.48113,-975.08092 v 432.77091 H 24.919075 v -432.77091 z m 518.59979,0 v 432.77091 H 543.51886 v -432.77091 z"
+     id="path8929"
+     inkscape:connector-curvature="0"
+     style="fill:#000000;stroke-width:1.2088573" />
 </svg>
