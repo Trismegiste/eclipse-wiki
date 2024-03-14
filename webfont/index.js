@@ -10,7 +10,8 @@ import {globby} from 'globby';
         files: paths,
         dest: 'public/webfont/',
         html: true,
-        htmlPath: 'public/webfont/'
+        htmlPath: 'public/webfont/',
+        cssTemplate: 'webfont/template/css.hbs'
     })
 
     console.log('CSS generated')

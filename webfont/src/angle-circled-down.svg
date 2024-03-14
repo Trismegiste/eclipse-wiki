@@ -1,3 +1,54 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -1000 1000 1000">
-	<path fill="#000000" d="M454 -125L707 -379Q718 -389 718 -404Q718 -419 707 -429L650 -486Q640 -496 625 -496Q610 -496 600 -486L429 -314L257 -486Q247 -496 232 -496Q217 -496 207 -486L150 -429Q140 -418 140 -404Q140 -390 150 -379L404 -125Q414 -115 429 -115Q444 -115 454 -125ZM857 -350Q857 -233 800 -135Q743 -37 644 21Q545 79 429 79Q313 79 213 21Q113 -37 58 -135Q3 -233 0 -350Q-3 -467 58 -565Q119 -663 213 -721Q307 -779 429 -779Q551 -779 644 -721Q737 -663 800 -565Q863 -467 857 -350Z"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 -1000 1000 1000"
+   version="1.1"
+   id="svg1204"
+   sodipodi:docname="angle-circled-down.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <metadata
+     id="metadata1210">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs1208" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1848"
+     inkscape:window-height="1016"
+     id="namedview1206"
+     showgrid="false"
+     inkscape:zoom="0.838"
+     inkscape:cx="500"
+     inkscape:cy="500"
+     inkscape:window-x="72"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1204" />
+  <path
+     d="m 529.35752,-239.01272 293.4657,-294.62564 q 12.75938,-11.59944 12.75938,-28.99859 0,-17.39915 -12.75938,-28.99859 l -66.11678,-66.11677 q -11.59943,-11.59944 -28.99858,-11.59944 -17.39916,0 -28.99859,11.59944 L 500.35893,-458.24204 300.84866,-657.75231 q -11.59944,-11.59944 -28.99859,-11.59944 -17.39915,0 -28.99859,11.59944 l -66.11678,66.11677 q -11.59943,12.75938 -11.59943,28.99859 0,16.23921 11.59943,28.99859 l 294.62565,294.62564 q 11.59943,11.59944 28.99858,11.59944 17.39916,0 28.99859,-11.59944 z M 996.81474,-500 q 0,135.71339 -66.11678,249.38785 -66.11677,113.67446 -180.95118,180.951178 -114.8344,67.276722 -249.38785,67.276722 -134.55344,0 -250.54779,-67.276722 Q 133.81679,-136.93769 70.019908,-250.61215 6.2230169,-364.28661 2.7431865,-500 -0.73664398,-635.71339 70.019908,-749.38785 140.77646,-863.06231 249.81114,-930.33903 q 109.03469,-67.27672 250.54779,-67.27672 141.51311,0 249.38785,67.27672 107.87474,67.27672 180.95118,180.95118 73.07644,113.67446 66.11678,249.38785 z"
+     id="path1202"
+     inkscape:connector-curvature="0"
+     style="fill:#000000;stroke-width:1.15994346" />
 </svg>

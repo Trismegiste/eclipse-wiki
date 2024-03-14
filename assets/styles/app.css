@@ -284,6 +284,10 @@ i.archived {
     margin-bottom: 0.5em;
 }
 
+.dashboard h2 {
+    margin-top: 0;
+}
+
 /* timeline TOC */
 .timeline-toc {
     margin: 1em;
