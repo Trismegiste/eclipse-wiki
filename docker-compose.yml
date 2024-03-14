@@ -20,7 +20,8 @@ services:
         volumes:
             - .:/home/bun/app
         network_mode: host
-        command: sh /home/bun/app/bin/generate-font.sh
+        working_dir: /home/bun/app
+        command: bun run --install auto webfont
 
 volumes:
     eclipse-mongo:
