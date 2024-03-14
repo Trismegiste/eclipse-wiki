@@ -1,6 +1,6 @@
 {# Summary on this app #}
 {% macro summary_item(route, icon, label) %}
-    <div class="pure-u-1-2 pure-u-xl-1-4">
+    <div class="pure-u-1-2 pure-u-xl-1-5">
         <a href="{{ path(route) }}">
             <i class="icon-{{ icon }}"></i>
             <h2>{{ label }}</h2>
@@ -9,6 +9,7 @@
 {% endmacro %}
 
 <section class="pure-g dashboard">
+    {{ _self.summary_item('app_gamesession_broadcastexport','session-report', 'Rapport session') }}
     {{ _self.summary_item('app_vertexcrud_showstats','abacus', stats.vertexCount ~ ' vertex') }}
     {{ _self.summary_item('app_vertexcrud_showbroken','unlink', stats.brokenLinkCount ~ ' liens cassés') }}
     {{ _self.summary_item('app_picture_showbroken', 'broken-picture', stats.brokenPictureCount~' images manquantes') }}
