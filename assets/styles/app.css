@@ -119,8 +119,8 @@ h2 {
 }
 
 .parsed-wikitext a.external::after {
-    font-family: "fontello";
-    content: ' \e843';
+    font-family: 'iconfont';
+    content: ' \f300';
 }
 
 .parsed-wikitext a.new {
@@ -279,9 +279,10 @@ i.archived {
 }
 
 .dashboard .mediawiki img {
-    height: 8em;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
+    height: calc(9.6em - 1.6em);
+    margin-top: 0.8em;
+    margin-bottom: 0.8em;
+    vertical-align: text-bottom;
 }
 
 .dashboard h2 {
@@ -339,19 +340,19 @@ i.archived {
 }
 
 .icon-vertex-transhuman:before {
-    content: '\f2bd';
+    content: '\f200';
 }
 
 .icon-vertex-place:before {
-    content: '\e80d';
+    content: '\f201';
 }
 
 .icon-vertex-scene:before {
-    content: '\e80c'
+    content: '\f202'
 }
 
 .icon-vertex-handout:before {
-    content: '\e816'
+    content: '\f203'
 }
 
 /* backlinks nav */

@@ -11,7 +11,14 @@ import {globby} from 'globby';
         dest: 'public/webfont/',
         html: true,
         htmlPath: 'public/webfont/',
-        cssTemplate: 'webfont/template/css.hbs'
+        cssTemplate: 'webfont/template/css.hbs',
+        codepoints: {
+            'user-circle': 0xF200,
+            'place': 0xF201,
+            'video': 0xF202,
+            'handout': 0xF203,
+            'export': 0xF300
+        }
     })
 
     console.log('CSS generated')
