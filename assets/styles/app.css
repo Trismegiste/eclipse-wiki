@@ -121,6 +121,8 @@ h2 {
 .parsed-wikitext a.external::after {
     font-family: 'iconfont';
     content: ' \f300';
+    display: inline-block;
+    margin-left: 0.2em;
 }
 
 .parsed-wikitext a.new {
