@@ -31,9 +31,12 @@ class ChromiumPdfWriter implements Writer
 
     public function write(SplFileInfo $source, SplFileInfo $target): void
     {
+        // @see https://peter.sh/experiments/chromium-command-line-switches/
         $chromium = new Process([
             'chromium',
             '--headless=new',
+            '--no-first-run',
+            '--enable-chrome-browser-cloud-management',
             '--disable-gpu',
             '--no-sandbox',
             '--no-pdf-header-footer',
