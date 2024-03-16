@@ -38,6 +38,7 @@ class ChromiumPdfWriter implements Writer
             '--no-first-run',
             '--enable-chrome-browser-cloud-management',
             '--disable-gpu',
+            '--disable-extensions',
             '--no-sandbox',
             '--no-pdf-header-footer',
             '--disable-dev-shm-usage', // @see https://stackoverflow.com/questions/69173469/meaning-of-selenium-chromeoptions
