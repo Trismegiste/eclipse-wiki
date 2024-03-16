@@ -13,12 +13,20 @@
     <script type="application/json" id="{{ form.vars.id }}">
         {{ form.vars.choices|json_encode()|raw }}
     </script>
-    <section class="mosaic" x-data="gallery('{{ form.vars.id }}')" x-id="['pic']">
+    <section class="mosaic" x-data="gallery('{{ form.vars.id }}')" x-id="['pic']"
+             x-on:dragenter.prevent="gapEnter"
+             x-on:dragover.prevent="gapOver"
+             x-on:dragleave.prevent="gapLeave"
+             x-on:drop.prevent="dropPicture">
         <template x-for="(child, idx) in listing" :key="child.value">
-            <div class="flow">
+            <div class="flow" x-bind:data-index="idx">
                 <input x-bind:id="$id('pic', idx)" type="checkbox" name="{{ form.vars.full_name }}[]" x-bind:value="child.value" checked="checked"/>
                 <label x-bind:for="$id('pic', idx)">
-                    <img x-bind:src="'/session/broadcasted-picture/' + child.value"/>
+                    <img x-bind:src="'/session/broadcasted-picture/' + child.value"
+                         x-bind:data-index="idx"
+                         draggable="true"
+                         x-on:dragstart="pictureDragStart"
+                         x-on:dragend="pictureDragEnd"/>
                 </label>
             </div>
         </template>
@@ -26,8 +34,71 @@
     <script type="module">
         Alpine.data('gallery', (modelId) => ({
                 listing: [],
+
                 init() {
                     this.listing = JSON.parse(document.getElementById(modelId).textContent)
+                },
+
+                pictureDragStart(event) {
+                    event.dataTransfer.setData("text/plain", this.$el.dataset.index)
+                    event.dataTransfer.effectAllowed = "move";
+                    event.target.classList.add("dragging")
+                },
+
+                pictureDragEnd(event) {
+                    event.target.classList.remove("dragging")
+                },
+
+                gapEnter(event) {
+                    if (event.currentTarget === event.target) {
+                        event.target.classList.add("dropzone-hilite")
+                    }
+                },
+
+                gapOver(event) {
+                    let around = this.getChildrenAround(event.currentTarget.children, event.clientX, event.clientY)
+                    if (around.childOnTheRight === null || around.childOnTheLeft === null) {
+                        event.target.classList.remove("dropzone-hilite")
+                    }
+                },
+
+                gapLeave(event) {
+                    event.target.classList.remove("dropzone-hilite")
+                },
+
+                dropPicture(event) {
+                    if (event.target.nodeName === 'SECTION') {
+                        let around = this.getChildrenAround(event.currentTarget.children, event.clientX, event.clientY)
+                        console.log(around)
+                    }
+                },
+
+                getChildrenAround(children, x, y) {
+                    // search for child before the cursor
+                    let childOnTheRight = null
+                    for (let child of children) {
+                        let rect = child.getBoundingClientRect()
+                        if ((y >= rect.top) && (y <= rect.bottom)) {
+                            if (x < rect.left) {
+                                childOnTheRight = child
+                                break
+                            }
+                        }
+                    }
+                    // search for child after the cursor
+                    let childOnTheLeft = null
+                    for (let idx = children.length - 1; idx >= 0; idx--) {
+                        let child = children[idx]
+                        let rect = child.getBoundingClientRect()
+                        if ((y >= rect.top) && (y <= rect.bottom)) {
+                            if (x > rect.right) {
+                                childOnTheLeft = child
+                                break
+                            }
+                        }
+                    }
+
+                    return {childOnTheRight, childOnTheLeft}
                 }
             }))
     </script>
@@ -59,6 +130,18 @@
 
         .mosaic input:not(:checked) + label img {
             filter: grayscale(0.8) blur(2px) opacity(50%);
+        }
+
+        .dragging {
+            filter: grayscale(0.8);
+        }
+
+        .dropzone-hilite {
+            background-color: lightgreen;
+        }
+
+        .mosaic label {
+            margin: 0;
         }
     </style>
 {% endblock %}
