@@ -10,16 +10,27 @@
 {% endblock %}
 
 {% block _form_picture_row %}
-    <section class="pure-g mosaic">
-        {% for child in form.children %}
+    <script type="application/json" id="{{ form.vars.id }}">
+        {{ form.vars.choices|json_encode()|raw }}
+    </script>
+    <section class="pure-g mosaic" x-data="gallery('{{ form.vars.id }}')" x-id="['pic']">
+        <template x-for="(child, idx) in listing" :key="child.value">
             <div class="pure-u-1-8">
-                {{ form_widget(child, {checked:true}) }}
-                <label for="{{ child.vars.id }}">
-                    <img src="{{ path('app_gamesession_broadcasted', {title: child.vars.value}) }}"/>
+                <input x-bind:id="$id('pic', idx)" type="checkbox" name="{{ form.vars.full_name }}[]" x-bind:value="child.value" checked="checked">
+                <label x-bind:for="$id('pic', idx)">
+                    <img x-bind:src="'/session/broadcasted-picture/' + child.value"/>
                 </label>
             </div>
-        {% endfor %}
+        </template>
     </section>
+    <script type="module">
+        Alpine.data('gallery', (modelId) => ({
+                listing: [],
+                init() {
+                    this.listing = JSON.parse(document.getElementById(modelId).textContent)
+                }
+            }))
+    </script>
 {% endblock %}
 
 {% block stylesheets %}
@@ -46,5 +57,3 @@
         }
     </style>
 {% endblock %}
-
-
