@@ -17,7 +17,8 @@ import {globby} from 'globby';
             'place': 0xF201,
             'video': 0xF202,
             'handout': 0xF203,
-            'export': 0xF300
+            'export': 0xF300,
+            'check': 0xF301
         }
     })
 
