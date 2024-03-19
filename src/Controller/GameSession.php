@@ -51,12 +51,12 @@ class GameSession extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $filename = 'Rapport-' . date('d-m-Y') . '.pdf';
             $target = new SplFileInfo(join_paths($this->getParameter('kernel.cache_dir'), $filename));
-            $pdf->renderToPdf('gamesession/report.pdf.twig', ['listing' => $form->getData()], $target);
+            /*   $pdf->renderToPdf('gamesession/report.pdf.twig', ['listing' => $form->getData()], $target);
 
-            $resp = new BinaryFileResponse($target);
-            $resp->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);
+              $resp = new BinaryFileResponse($target);
+              $resp->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);
 
-            return $resp;
+              return $resp; */
         }
 
         return $this->render('gamesession/broadcasted.html.twig', ['form' => $form->createView()]);

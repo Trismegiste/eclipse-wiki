@@ -78,4 +78,14 @@ class SessionPushHistory implements CacheWarmerInterface, CacheClearerInterface
         return new BinaryFileResponse($path);
     }
 
+    public function getFileInfo(string $filename): \SplFileInfo
+    {
+        $path = join_paths($this->cacheDir, $filename);
+        if (!file_exists($path)) {
+            throw new NotFoundHttpException($filename . ' does not exist');
+        }
+
+        return new \SplFileInfo($path);
+    }
+
 }

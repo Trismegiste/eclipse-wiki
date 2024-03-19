@@ -1,14 +1,10 @@
 {# For GallerySelection form #}
 
-{% block local_picture_widget %}
-    {{ form_widget(form, {attr:{hidden:true}}) }}
-    <img src="{{ path('app_gamesession_broadcasted', {title:form.vars.data.filename}) }}"/>
-{% endblock %}
-
 {% block picture_selection_widget %}
-    {{ form_widget(form.selected, {attr:{hidden:true}}) }}
+    {{ form_widget(form.picture, {attr:{hidden:true}}) }}
+    {{ form_widget(form.selected) }}
     <label for="{{ form.selected.vars.id }}">
-        {{ form_widget(form.picture) }}
+        <img src="{{ path('app_gamesession_broadcasted', {title:form.vars.data.picture.filename}) }}"/>
     </label>
 {% endblock %}
 
