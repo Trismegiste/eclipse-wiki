@@ -17,13 +17,25 @@
         ]
     </script>
 
-    <section class="mosaic" x-data="gallery('model_{{ form.vars.id }}')" x-id="['pic']">
-        {% for child in form.children %}
-            <div class="flow">
-                {{ form_widget(child) }}
+    <section class="mosaic" x-data="gallery('model_{{ form.vars.id }}')" x-id="['pic']"
+             x-on:dragenter.prevent="gapEnter"
+             x-on:dragover.prevent="gapOver"
+             x-on:dragleave.prevent="gapLeave"
+             x-on:drop.prevent="dropPicture">
+        <template x-for="(child, idx) in listing" :key="child">
+            <div class="flow" x-bind:data-index="idx">
+                <input type="text" x-bind:name="`{{ form.vars.full_name }}[${idx}][picture]`" required="required" hidden="hidden" x-bind:value="child">
+                <input x-bind:id="$id('pic', idx)" type="checkbox" x-bind:name="`{{ form.vars.full_name }}[${idx}][selected]`" checked="checked"/>
+                <label x-bind:for="$id('pic', idx)">
+                    <img x-bind:src="'/session/broadcasted-picture/' + child"
+                         x-bind:data-index="idx"
+                         draggable="true"
+                         x-on:dragstart="pictureDragStart"
+                         x-on:dragend="pictureDragEnd"/>
+                </label>
             </div>
-        {% endfor %}
-    </section>  
+        </template>
+    </section>
 
     <script type="module">
         Alpine.data('gallery', (modelId) => ({
@@ -31,6 +43,94 @@
 
                 init() {
                     this.listing = JSON.parse(document.getElementById(modelId).textContent)
+                },
+
+                pictureDragStart(event) {
+                    event.dataTransfer.setData("text/plain", this.$el.dataset.index)
+                    event.dataTransfer.effectAllowed = "move";
+                    event.target.classList.add("dragging")
+                },
+
+                pictureDragEnd(event) {
+                    event.target.classList.remove("dragging")
+                },
+
+                gapEnter(event) {
+                },
+
+                gapOver(event) {
+                    if (event.currentTarget === event.target) {
+                        let around = this.getChildrenAround(event.currentTarget.children, event.clientX, event.clientY)
+                        if (around.childOnTheRight !== null && around.childOnTheLeft !== null) {
+                            around.childOnTheRight.classList.add('dropzone-hilite-right')
+                            around.childOnTheLeft.classList.add('dropzone-hilite-left')
+                        } else {
+                            this.removeHilite()
+                        }
+                    } else {
+                        this.removeHilite()
+                    }
+                },
+
+                removeHilite() {
+                    for (let child of this.$el.children) {
+                        child.classList.remove('dropzone-hilite-left')
+                        child.classList.remove('dropzone-hilite-right')
+                    }
+                },
+
+                gapLeave(event) {
+                },
+
+                dropPicture(event) {
+                    if (event.target.nodeName === 'SECTION') {
+                        let around = this.getChildrenAround(event.currentTarget.children, event.clientX, event.clientY)
+                        if (around.childOnTheRight !== null && around.childOnTheLeft !== null) {
+                            const left = parseInt(around.childOnTheLeft.dataset.index)
+                            const right = parseInt(around.childOnTheRight.dataset.index)
+                            const source = parseInt(event.dataTransfer.getData("text"))
+
+                            if (left === (right - 1)) {
+                                let dragged = this.listing[source]
+                                this.listing[source] = null
+                                this.listing.splice(right, 0, dragged)
+                                for (const [idx, entry] of this.listing.entries()) {
+                                    if (entry === null) {
+                                        this.listing.splice(idx, 1)
+                                    }
+                                }
+                                this.removeHilite()
+                            }
+                        }
+                    }
+                },
+
+                getChildrenAround(children, x, y) {
+                    // search for child before the cursor
+                    let childOnTheRight = null
+                    for (let child of children) {
+                        let rect = child.getBoundingClientRect()
+                        if ((y >= rect.top) && (y <= rect.bottom)) {
+                            if (x < rect.left) {
+                                childOnTheRight = child
+                                break
+                            }
+                        }
+                    }
+                    // search for child after the cursor
+                    let childOnTheLeft = null
+                    for (let idx = children.length - 1; idx >= 0; idx--) {
+                        let child = children[idx]
+                        let rect = child.getBoundingClientRect()
+                        if ((y >= rect.top) && (y <= rect.bottom)) {
+                            if (x > rect.right) {
+                                childOnTheLeft = child
+                                break
+                            }
+                        }
+                    }
+
+                    return {childOnTheRight, childOnTheLeft}
                 }
             }))
     </script>
