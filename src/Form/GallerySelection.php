@@ -28,7 +28,7 @@ class GallerySelection extends AbstractType implements DataTransformerInterface
         $builder
                 ->add('gallery', CollectionType::class, [
                     'entry_type' => PictureSelectionType::class,
-                    'block_prefix' => 'gallery_selection'
+                    'block_prefix' => 'picture_collection'
                 ])
                 ->add('export', SubmitType::class)
                 ->addModelTransformer($this)
