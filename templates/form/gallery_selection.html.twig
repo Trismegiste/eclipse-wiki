@@ -12,12 +12,12 @@
     <script type="application/json" id="model_{{ form.vars.id }}">
         [
         {% for entry in form.vars.data %}
-                '{{ entry.picture.filename }}',
+                "{{ entry.picture.filename }}" {%- if not loop.last -%},{%- endif -%}
         {% endfor %}
         ]
     </script>
 
-    <section class="mosaic">
+    <section class="mosaic" x-data="gallery('model_{{ form.vars.id }}')" x-id="['pic']">
         {% for child in form.children %}
             <div class="flow">
                 {{ form_widget(child) }}
