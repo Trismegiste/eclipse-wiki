@@ -45,15 +45,7 @@ class GameSession extends AbstractController
     #[Route('/broadcast-export', methods: ['GET', 'POST'])]
     public function broadcastExport(Request $request, ChromiumPdfWriter $pdf): Response
     {
-        $form = $this->createFormBuilder()
-                ->add('picture', ChoiceType::class, [
-                    'expanded' => true,
-                    'multiple' => true,
-                    'choices' => $this->broadcastHistory->getListing(),
-                    'choice_value' => 'filename'
-                ])
-                ->add('export', SubmitType::class)
-                ->getForm();
+        $form = $this->createForm(\App\Form\GallerySelection::class, $this->broadcastHistory->getListing());
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

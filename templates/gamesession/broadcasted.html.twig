@@ -1,6 +1,5 @@
 {# Session cache of broadcasted pictures #}
 {% extends "base.html.twig" %}
-{% form_theme form _self %}
 
 {% block title %}Broadcasted pictures{% endblock %}
 {% block header_title %}{{ block('title') }}{% endblock %}
@@ -9,7 +8,7 @@
     {{ form(form) }}
 {% endblock %}
 
-{% block _form_picture_row %}
+{% block _xform_picture_row %}
     <script type="application/json" id="{{ form.vars.id }}">
         {{ form.vars.choices|json_encode()|raw }}
     </script>

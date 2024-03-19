@@ -16,6 +16,7 @@ twig:
         - 'form/submitwait_type.html.twig'
         - 'form/custom_field.html.twig'
         - 'form/multi_checkbox_type.html.twig'
+        - 'form/gallery_selection.html.twig'
 
 when@test:
     twig:

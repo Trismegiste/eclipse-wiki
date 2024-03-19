@@ -1,0 +1,24 @@
+{# For GallerySelection form #}
+
+{% block local_picture_widget %}
+    {{ form_widget(form, {attr:{hidden:true}}) }}
+    <img src="{{ path('app_gamesession_broadcasted', {title:form.vars.data.filename}) }}"/>
+{% endblock %}
+
+{% block picture_selection_widget %}
+    {{ form_widget(form.selected, {attr:{hidden:true}}) }}
+    <label for="{{ form.selected.vars.id }}">
+        {{ form_widget(form.picture) }}
+    </label>
+{% endblock %}
+
+{% block gallery_selection_row %}
+    <section class="mosaic">
+        {% for child in form.children %}
+            <div class="flow">
+                {{ form_widget(child) }}
+            </div>
+        {% endfor %}
+    </section>
+{% endblock %}
+
