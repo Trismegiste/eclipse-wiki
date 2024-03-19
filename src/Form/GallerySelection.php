@@ -31,13 +31,20 @@ class GallerySelection extends AbstractType implements DataTransformerInterface
                     'block_prefix' => 'gallery_selection'
                 ])
                 ->add('export', SubmitType::class)
-                ->addViewTransformer($this)
+                ->addModelTransformer($this)
         ;
     }
 
     public function reverseTransform(mixed $value): mixed
     {
-        
+        $listing = [];
+        foreach ($value['gallery'] as $entry) {
+            if ($entry['selected']) {
+                $listing[] = $entry['picture'];
+            }
+        }
+
+        return $listing;
     }
 
     public function transform(mixed $value): mixed
