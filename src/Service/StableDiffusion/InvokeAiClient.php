@@ -94,7 +94,7 @@ class InvokeAiClient extends PictureRepository
      */
     protected function getImageMetadata(string $name): ?stdClass
     {
-        return $this->invokeaiCache->get('metadata-' . $name, function (ItemInterface $item) use ($name): \stdClass {
+        return $this->invokeaiCache->get('metadata-' . $name, function (ItemInterface $item) use ($name): ?\stdClass {
                     $item->expiresAfter(DateInterval::createFromDateString('1 month'));
                     $response = $this->client->request('GET', $this->baseUrl . "api/v1/images/i/$name/metadata");
                     $metadata = json_decode($response->getContent());
