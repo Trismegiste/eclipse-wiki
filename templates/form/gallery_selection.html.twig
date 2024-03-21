@@ -27,7 +27,7 @@
                 <input type="text" x-bind:name="`{{ form.vars.full_name }}[${idx}][picture]`" required="required" hidden="hidden" x-bind:value="child">
                 <input x-bind:id="$id('pic', idx)" type="checkbox" x-bind:name="`{{ form.vars.full_name }}[${idx}][selected]`" checked="checked"/>
                 <label x-bind:for="$id('pic', idx)">
-                    <img x-bind:src="'/session/broadcasted-picture/' + child"
+                    <img x-bind:src="'{{ path('app_gamesession_broadcasted', {title:'missing'}) }}'.replace(/([^\/]+$)/, child)"
                          x-bind:data-index="idx"
                          draggable="true"
                          x-on:dragstart="pictureDragStart"
