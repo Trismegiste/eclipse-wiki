@@ -20,8 +20,8 @@
                 })
                 const href = '{{ path('app_invokeaipicture_vertexappend', {pk: vertex.pk}) }}?' + param
                 return {
-                    ['href']: href,
-                    ['title']: picture.prompt
+                    href,
+                    title: picture.prompt
                 }
             }
 
