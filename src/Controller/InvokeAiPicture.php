@@ -136,4 +136,11 @@ class InvokeAiPicture extends AbstractController
         }
     }
 
+    public function lastPicture(): Response
+    {
+        return $this->render('invokeai/last_picture.html.twig', [
+                    'listing' => $this->source[RepositoryChoice::remote->value]->searchLastImage()
+        ]);
+    }
+
 }

@@ -29,3 +29,10 @@
         })
     </script>
 {% endblock %}
+
+{% block info %}
+    {{ parent() }}
+    <section>
+    {{ render(controller('App\\Controller\\InvokeAiPicture::lastPicture')) }}
+    </section>
+{% endblock %}

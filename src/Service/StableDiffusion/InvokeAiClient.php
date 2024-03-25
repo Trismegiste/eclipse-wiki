@@ -136,4 +136,26 @@ class InvokeAiClient extends PictureRepository
         return '';
     }
 
+    public function searchLastImage(int $limit = 24): iterable
+    {
+        $response = $this->client->request('GET', $this->baseUrl . "api/v1/images/?is_intermediate=false&categories=general&board_id=none&limit=$limit", ['timeout' => self::TIMEOUT]);
+        if ($response->getStatusCode() !== 200) {
+            throw new UnexpectedValueException('API returned ' . $response->getStatusCode() . ' status code');
+        }
+
+        $listing = json_decode($response->getContent());
+
+        $found = [];
+        foreach ($listing->items as $picture) {
+            $found[] = new PictureInfo(
+                    $this->baseUrl . $picture->image_url,
+                    $this->baseUrl . $picture->thumbnail_url,
+                    $picture->width,
+                    $picture->image_name
+            );
+        }
+
+        return $found;
+    }
+
 }
