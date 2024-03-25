@@ -52,11 +52,11 @@
                     try {
                         const resp = await fetch(url)
                         if (!resp.ok) {
-                            throw new Error(this.source, {cause: await resp.json()})
+                            throw new Error('Last InvokeAI pictures unreachable')
                         }
                         this.gallery = await resp.json()
-                    } catch (error) {
-                        console.error(error.cause)
+                    } catch (e) {
+                        console.error(e.message)
                     }
                 },
 

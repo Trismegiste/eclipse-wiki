@@ -136,7 +136,7 @@ class InvokeAiClient extends PictureRepository
         return '';
     }
 
-    public function searchLastImage(int $limit = 24): iterable
+    public function searchLastImage(int $limit = 27): iterable
     {
         $response = $this->client->request('GET', $this->baseUrl . "api/v1/images/?is_intermediate=false&categories=general&board_id=none&limit=$limit", ['timeout' => self::TIMEOUT]);
         if ($response->getStatusCode() !== 200) {
