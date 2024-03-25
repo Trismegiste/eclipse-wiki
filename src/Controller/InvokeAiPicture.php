@@ -136,11 +136,10 @@ class InvokeAiPicture extends AbstractController
         }
     }
 
-    public function lastPicture(): Response
+    #[Route('/ajax/last-picture', methods: ['GET'])]
+    public function ajaxLastPicture(): JsonResponse
     {
-        return $this->render('invokeai/last_picture.html.twig', [
-                    'listing' => $this->source[RepositoryChoice::remote->value]->searchLastImage()
-        ]);
+        return $this->json($this->source[RepositoryChoice::remote->value]->searchLastImage());
     }
 
 }

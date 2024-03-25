@@ -32,7 +32,43 @@
 
 {% block info %}
     {{ parent() }}
-    <section>
-    {{ render(controller('App\\Controller\\InvokeAiPicture::lastPicture')) }}
+    <section class="last-picture" x-data="lastPicture('{{ path('app_invokeaipicture_ajaxlastpicture') }}')">
+        <div class="pure-g">
+            <template x-for="picture in gallery" :key="picture.thumb">
+                <div class="pure-u-1-3">
+                    <a x-bind:href="getLink(picture)">
+                        <img x-bind:src="picture.thumb" class="pure-img"/>
+                    </a>
+                </div>
+            </template>
+        </div>
     </section>
+
+    <script type="module">
+        Alpine.data('lastPicture', (url) => ({
+                gallery: [],
+
+                async init() {
+                    try {
+                        const resp = await fetch(url)
+                        if (!resp.ok) {
+                            throw new Error(this.source, {cause: await resp.json()})
+                        }
+                        this.gallery = await resp.json()
+                    } catch (error) {
+                        console.error(error.cause)
+                    }
+                },
+
+                getLink(picture) {
+                    const param = new URLSearchParams({
+                        storage: 'remote',
+                        pic: picture.name,
+                        query: 'last'
+                    })
+
+                    return '{{ path('app_invokeaipicture_vertexappend', {pk: vertex.pk}) }}?' + param
+                }
+            }))
+    </script>
 {% endblock %}
