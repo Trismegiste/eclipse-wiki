@@ -84,7 +84,7 @@ class AppendRemotePicture extends AbstractType implements DataMapperInterface
         $localName = $fields['local_name']->getData();
         try {
             $this->storage->storePicture(new UploadedFile($pathname, 'tmp.png'), $localName);
-            $viewData->setContent($viewData->getContent() . "\n[[file:$localName.jpg]]");
+            $viewData->attachPicture("$localName.jpg");
         } catch (RuntimeException $e) {
             $fields['local_name']->addError(new FormError($e->getMessage()));
         }
