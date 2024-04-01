@@ -43,6 +43,7 @@ class PlaceAppendMorphBank extends AbstractType implements DataMapperInterface
         '1d4' => [4 => 1],
         '1d8' => [8 => 1],
         '2d6' => [6 => 2],
+        '2d10' => [10 => 2],
         '3d10' => [10 => 3],
         '5d10' => [10 => 5],
     ];

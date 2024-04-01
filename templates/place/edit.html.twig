@@ -19,8 +19,9 @@
     {{ form_label(form) }}
     {% include 'fragment/form_minitoolbar.html.twig' %}
     <div class="minitoolbar">
-        <a href="{{ path('app_placecrud_appendmorphbank', {pk: form.parent.vars.data.pk}) }}" class="pure-button button-delete" title="Cancel edition and jump to append a morph bank">
-            <i class="icon-morph"></i>
+        <a href="{{ path('app_placecrud_appendmorphbank', {pk: form.parent.vars.data.pk}) }}"
+           class="pure-button button-delete" title="Cancel edition and append a morph bank">
+            <i class="icon-cryo-morph"></i>
         </a>
     </div>
 {% endblock %}

@@ -1,6 +1,7 @@
 {# a set of button for special action in form #}
 <div class="minitoolbar" x-data="commonToolbar('{{ form.vars.id }}')">
-    <a href="{{ path('app_invokeaipicture_vertexsearch', {pk: form.parent.vars.data.pk}) }}" class="pure-button button-delete" title="Cancel edition and jump to append an InvokeAI picture">
+    <a href="{{ path('app_invokeaipicture_vertexsearch', {pk: form.parent.vars.data.pk}) }}" class="pure-button button-delete"
+       title="Cancel edition and append InvokeAI picture">
         <i class="icon-dcgan"></i>
     </a>
     <a href="#" class="pure-button" title="Transform current selection into a picture gallery" x-on:click.prevent="selectionToGallery">
