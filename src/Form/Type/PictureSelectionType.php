@@ -12,9 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Description of PictureSelectionType
- *
- * @author florent
+ * an entry in the session history
  */
 class PictureSelectionType extends AbstractType
 {

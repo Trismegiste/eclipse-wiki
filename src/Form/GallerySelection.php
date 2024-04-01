@@ -16,9 +16,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Description of GallerySelection
- *
- * @author florent
+ * Edit entries in the session history pictures
  */
 class GallerySelection extends AbstractType implements DataTransformerInterface
 {
