@@ -10,6 +10,9 @@
     <a href="#" class="pure-button" title="Transform selected OpenAI output into wikitext" x-on:click.prevent="openAiToWikitext">
         <i class="icon-openai"></i>
     </a>
+    <a href="#" class="pure-button" title="Transform selected text into jpg picture" x-on:click.prevent="selectionToPicture">
+        <i class="icon-broken-picture"></i>
+    </a>
 </div>
 
 <script type="module">
@@ -74,6 +77,12 @@
                 }
                 // replacing the selection with the formatted wikitext
                 widget.value = widget.value.substring(0, widget.selectionStart) + wikitext.join("\n") + widget.value.substr(widget.selectionEnd)
+            },
+
+            selectionToPicture() {
+                const widget = document.getElementById(widgetId)
+                let selection = widget.value.substring(widget.selectionStart, widget.selectionEnd)
+                widget.value = widget.value.substring(0, widget.selectionStart) + `[[file:${selection}.jpg]]` + widget.value.substr(widget.selectionEnd)
             }
 
         }))
