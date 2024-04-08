@@ -26,7 +26,7 @@ class WikitextType extends AbstractType
     {
         $view->vars['attr'] = array_merge($view->vars['attr'], [
             'x-model' => "content",
-            'x-on:keyup' => "editKeyUp",
+            'x-on:keyup.debounce.100ms' => "editKeyUp",
             'x-on:click' => "open=false",
             'x-ref' => "editor"
         ]);
