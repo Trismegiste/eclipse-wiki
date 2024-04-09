@@ -110,7 +110,7 @@ class DigraphExplore
     {
         $keep = [];
         // absolutely NOT optimized algorithm
-        foreach ($this->repository->search() as $vertex) {
+        foreach ($this->repository->search(descendingSortField: 'lastModified') as $vertex) {
             $scan = $vertex->getInternalLink();
             foreach ($scan as $target) {
                 if (is_null($this->repository->findByTitle($target))) {
@@ -118,8 +118,6 @@ class DigraphExplore
                 }
             }
         }
-
-        ksort($keep);
 
         return $keep;
     }
