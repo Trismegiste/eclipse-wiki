@@ -15,9 +15,7 @@ use Wikimedia\Parsoid\Core\ContentMetadataCollector;
 use Wikimedia\Parsoid\Core\LinkTarget;
 
 /**
- * Description of RpgDataAccess
- *
- * @author trismegiste
+ * Repository for MediaWiki bridging with Vertex repository and Storage service
  */
 class RpgDataAccess extends DataAccess
 {
@@ -47,7 +45,7 @@ class RpgDataAccess extends DataAccess
     {
         if (preg_match('#^template:(.+)$#', $title, $matches)) {
             if (key_exists($matches[1], self::template)) {
-                return new \Wikimedia\Parsoid\Mocks\MockPageContent(['main' => self::template[$matches[1]]]);
+                return new RpgPageContent(self::template[$matches[1]]);
             }
         }
 

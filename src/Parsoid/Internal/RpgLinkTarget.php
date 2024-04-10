@@ -10,9 +10,7 @@ use Wikimedia\Parsoid\Core\LinkTarget;
 use Wikimedia\Parsoid\Core\LinkTargetTrait;
 
 /**
- * Description of RpgLinkTarget
- *
- * @author trismegiste
+ * Page title
  */
 class RpgLinkTarget implements LinkTarget
 {
@@ -21,7 +19,7 @@ class RpgLinkTarget implements LinkTarget
 
     public function createFragmentTarget(string $fragment): LinkTarget
     {
-      //  return new self();
+        //  return new self();
     }
 
     public function getDBkey(): string

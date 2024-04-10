@@ -13,9 +13,7 @@ use Wikimedia\Parsoid\Core\LinkTarget;
 use Wikimedia\Parsoid\Utils\Utils;
 
 /**
- * Description of RpgPageConfig
- *
- * @author trismegiste
+ * Configuration of a Page
  */
 class RpgPageConfig extends PageConfig
 {

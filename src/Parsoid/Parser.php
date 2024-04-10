@@ -6,9 +6,8 @@
 
 namespace App\Parsoid;
 
-use App\Entity\Vertex;
-use Wikimedia\Parsoid\Mocks\MockPageConfig;
-use Wikimedia\Parsoid\Mocks\MockPageContent;
+use App\Parsoid\Internal\RpgPageConfig;
+use App\Parsoid\Internal\RpgPageContent;
 
 /**
  * Facade for Parsoid
@@ -32,8 +31,8 @@ class Parser
     public function parse(string $page, string $target): string
     {
         $parser = $this->factory->create($target);
-        $pageContent = new MockPageContent(['main' => $page]);
-        $pageConfig = new Internal\RpgPageConfig($pageContent);
+        $pageContent = new RpgPageContent($page);
+        $pageConfig = new RpgPageConfig($pageContent);
 
         return $parser->wikitext2html($pageConfig, self::parserOpts);
     }
