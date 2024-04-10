@@ -22,6 +22,12 @@ use Wikimedia\Parsoid\Core\LinkTarget;
 class RpgDataAccess extends DataAccess
 {
 
+    const template = [
+        'legend' => '{{{1}}}<i class="icon-view3d" data-cell-index="{{{2}}}"></i>',
+        'roll' => '',
+        'morphbank' => '{{{1}}}<i data-pushable="pdf" class="icon-push" data-title="{{{1}}}"></i>'
+    ];
+
     public function __construct(protected VertexRepository $repositoy, protected Storage $storage)
     {
         
@@ -50,7 +56,30 @@ class RpgDataAccess extends DataAccess
 
     public function getFileInfo(PageConfig $pageConfig, array $files): array
     {
-        
+        $ret = [];
+        foreach ($files as $source) {
+            $filename = str_replace('_', ' ', $source[0]);
+            $srcInfo = $this->storage->getFileInfo($filename);
+            if (!$srcInfo->isReadable()) {
+                $ret[] = null;
+                continue;
+            }
+
+            $pictureInfo = getimagesize($srcInfo->getPathname());
+            $info = [
+                'size' => $srcInfo->getSize(),
+                'height' => $pictureInfo[1],
+                'width' => $pictureInfo[0],
+                'url' => "/picture/get/" . $filename,
+                'mediatype' => 'BITMAP',
+                'mime' => $pictureInfo['mime'],
+                'badFile' => false
+            ];
+
+            $ret[] = $info;
+        }
+
+        return $ret;
     }
 
     public function getPageInfo($pageConfigOrTitle, array $titles): array

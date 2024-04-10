@@ -24,6 +24,11 @@ class RpgSiteConfig extends SiteConfig
             'url' => 'https://eclipse-savage.fandom.com/fr/wiki/$1'
         ]
     ];
+    protected $namespaceMap = [
+        '' => 0,
+        'file' => 6,
+        'template' => 7
+    ];
 
     protected function getMagicWords(): array
     {
@@ -82,7 +87,7 @@ class RpgSiteConfig extends SiteConfig
 
     public function canonicalNamespaceId(string $name): ?int
     {
-        return null;
+        return $this->namespaceMap[$name] ?? null;
     }
 
     public function categoryRegexp(): string
@@ -177,7 +182,7 @@ class RpgSiteConfig extends SiteConfig
 
     public function namespaceName(int $ns): ?string
     {
-        return '';
+        return array_search($ns, $this->namespaceMap);
     }
 
     public function redirectRegexp(): string
