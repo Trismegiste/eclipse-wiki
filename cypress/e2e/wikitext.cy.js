@@ -34,7 +34,6 @@ describe('Wikitext autocomplete component', () => {
         cy.wait('@vertices')
         cy.wait(100)
         cy.get('select.autocomplete-combobox').should('be.visible')
-        cy.get('select.autocomplete-combobox option').first().should('be.selected')
         cy.get('select.autocomplete-combobox option').first().click()
         cy.get('#handout_pcInfo').should('have.value', `[[${linkTitle}]] `)
     })

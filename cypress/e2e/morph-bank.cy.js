@@ -20,7 +20,7 @@ describe('Morph bank creation', () => {
         cy.visit('/wiki/' + vertexName)
         cy.get('.big-title .icon-edit').click()
 
-        cy.get('main .minitoolbar .icon-morph').click()
+        cy.get('main .minitoolbar .icon-cryo-morph').click()
         cy.get('#place_append_morph_bank_morph_list').select('Huldre')
         cy.get('#place_append_morph_bank_append').click()
         cy.get('.parsed-wikitext table caption').should('contain', 'Banque de morphes')
