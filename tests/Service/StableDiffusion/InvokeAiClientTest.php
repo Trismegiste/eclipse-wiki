@@ -8,6 +8,7 @@ use App\Service\StableDiffusion\InvokeAiClient;
 use App\Service\StableDiffusion\PictureInfo;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpClient\Exception\TimeoutException;
+use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
@@ -28,7 +29,9 @@ class InvokeAiClientTest extends KernelTestCase
             $this->assertIsArray($listing);
             return $listing;
         } catch (TimeoutException $e) {
-            $this->markTestSkipped('InvokeAI server is unreachable');
+            $this->markTestSkipped('Stable diffusion server is unreachable');
+        } catch (TransportException $e) {
+            $this->markTestSkipped('InvokeAI server is down');
         }
     }
 

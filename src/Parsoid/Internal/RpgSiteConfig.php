@@ -122,7 +122,10 @@ class RpgSiteConfig extends SiteConfig
 
     public function getNoFollowConfig(): array
     {
-        
+        return ['nofollow' => true,
+            'nsexceptions' => [1],
+            'domainexceptions' => ['mediawiki.org']
+        ];
     }
 
     public function interwikiMagic(): bool

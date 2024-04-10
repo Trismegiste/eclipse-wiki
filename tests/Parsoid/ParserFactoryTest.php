@@ -4,7 +4,7 @@
  * eclipse-wiki
  */
 
-use App\Parsoid\InternalDataAccess;
+use App\Parsoid\Internal\RpgDataAccess;
 use App\Parsoid\ParserFactory;
 use App\Service\Storage;
 use PHPUnit\Framework\TestCase;
@@ -18,7 +18,7 @@ class ParserFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $access = $this->createStub(InternalDataAccess::class);
+        $access = $this->createStub(RpgDataAccess::class);
         $router = $this->createStub(UrlGeneratorInterface::class);
         $storage = $this->createStub(Storage::class);
         $this->sut = new ParserFactory($access, $router, $storage);
