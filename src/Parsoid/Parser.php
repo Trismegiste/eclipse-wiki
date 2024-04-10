@@ -33,17 +33,7 @@ class Parser
     {
         $parser = $this->factory->create($target);
         $pageContent = new MockPageContent(['main' => $page]);
-        $pageConfig = new MockPageConfig([], $pageContent);
-
-        return $parser->wikitext2html($pageConfig, self::parserOpts);
-    }
-
-    // work in progress, just a random thought
-    protected function parseVertex(Vertex $vertex): string
-    {
-        $parser = $this->factory->create('browser');
-        $pageContent = new MockPageContent(['main' => $vertex->getContent()]);
-        $pageConfig = new MockPageConfig(['title' => $vertex->getTitle()], $pageContent);
+        $pageConfig = new Internal\RpgPageConfig($pageContent);
 
         return $parser->wikitext2html($pageConfig, self::parserOpts);
     }

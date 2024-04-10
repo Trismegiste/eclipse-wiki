@@ -21,7 +21,7 @@ class ParserFactory
     protected array $instance = [];
     protected array $extension;
 
-    public function __construct(protected InternalDataAccess $access,
+    public function __construct(protected Internal\RpgDataAccess $access,
             UrlGeneratorInterface $router,
             Storage $storage)
     {
@@ -47,7 +47,7 @@ class ParserFactory
                             . "Current configurations avaliable are: [" . implode(', ', array_keys($this->extension)) . ']');
         }
 
-        $siteConfig = new InternalSiteConfig();
+        $siteConfig = new Internal\RpgSiteConfig();
         $siteConfig->registerExtensionModule($this->extension[$target]);
 
         $this->instance[$target] = new Parsoid($siteConfig, $this->access);
