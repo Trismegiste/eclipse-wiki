@@ -27,6 +27,9 @@ class SymfonyBridge implements ExtensionModule
             'name' => 'symfony-bridge',
             'domProcessors' => [
                 ['class' => BrowserOverride::class, 'args' => [$this->router]]
+            ],
+            'tags' => [
+                ['name' => 'carrousel', 'handler' => CarrouselTagHandler::class]
             ]
         ];
     }
