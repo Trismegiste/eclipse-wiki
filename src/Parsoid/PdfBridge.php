@@ -29,7 +29,8 @@ class PdfBridge implements ExtensionModule
                 ['class' => PdfOverride::class, 'args' => [$this->storage]]
             ],
             'tags' => [
-                ['name' => 'carrousel', 'handler' => CarrouselTagHandler::class]
+                ['name' => 'carrousel', 'handler' => CarrouselTagHandler::class],
+                ['name' => 'morphbank', 'handler' => MorphBankTagHandler::class]
             ]
         ];
     }

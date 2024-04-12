@@ -46,6 +46,12 @@ class MorphBankTagHandler extends ExtensionTagHandler
             $tbody->appendChild($tr);
         }
 
+        $icon = $doc->createElement('i');
+        $icon->setAttribute('class', 'icon-push');
+        $icon->setAttribute('data-pushable', 'pdf');
+        $icon->setAttribute('data-title', $param['title']);
+        $caption->appendChild($icon);
+
         return $fragment;
     }
 
