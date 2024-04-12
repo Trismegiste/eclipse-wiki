@@ -24,30 +24,12 @@
                 let selection = widget.value.substring(widget.selectionStart, widget.selectionEnd).trim().split("\n")
                 // if even number of lines
                 if ((selection.length > 0) && (0 === selection.length % 2)) {
-                    // checking if first half set of lines start with a picture link
-                    for (let i = 0; i < selection.length / 2; i++) {
-                        selection[i] = selection[i].trim()
-                        if (!(selection[i].startsWith('[[file:') && selection[i].endsWith(']]'))) {
-                            return;
-                        }
-                    }
-                    // transforms into table cells
-                    for (let i = 0; i < selection.length / 2; i++) {
-                        selection[i] = '|' + selection[i]
-                    }
-                    // transforms into table header
-                    for (let i = selection.length / 2; i < selection.length; i++) {
-                        selection[i] = '!' + selection[i]
-                    }
-                    // table row separator
-                    selection.splice(selection.length / 2, 0, "|-")
-                    // table start and end
-                    selection.unshift('{|')
-                    selection.push('|}')
-                    // joins lines into one string
-                    let replacing = selection.join("\n") + "\n"
                     // replacing the selection with the table wikitext
-                    widget.value = widget.value.substring(0, widget.selectionStart) + replacing + widget.value.substr(widget.selectionEnd)
+                    widget.value = widget.value.substring(0, widget.selectionStart)
+                            + "<carrousel>\n"
+                            + selection.join("\n")
+                            + "\n</carrousel>"
+                            + widget.value.substr(widget.selectionEnd)
                 }
             },
 

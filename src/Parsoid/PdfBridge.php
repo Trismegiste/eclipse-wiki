@@ -27,6 +27,9 @@ class PdfBridge implements ExtensionModule
             'name' => 'symfony-bridge',
             'domProcessors' => [
                 ['class' => PdfOverride::class, 'args' => [$this->storage]]
+            ],
+            'tags' => [
+                ['name' => 'carrousel', 'handler' => CarrouselTagHandler::class]
             ]
         ];
     }
