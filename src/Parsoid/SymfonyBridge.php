@@ -29,7 +29,8 @@ class SymfonyBridge implements ExtensionModule
                 ['class' => BrowserOverride::class, 'args' => [$this->router]]
             ],
             'tags' => [
-                ['name' => 'carrousel', 'handler' => CarrouselTagHandler::class]
+                ['name' => 'carrousel', 'handler' => CarrouselTagHandler::class],
+                ['name' => 'morphbank', 'handler' => MorphBankTagHandler::class]
             ]
         ];
     }
