@@ -1,0 +1,27 @@
+{% extends "base.pdf.twig" %}
+
+{% block title %}Aide{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        table caption {
+            text-align: left;
+            font-size: 140%;
+            margin-top: 1em;
+            margin-bottom: 0.1em;
+            text-transform: capitalize;
+        }
+        td, th {
+            padding: 0.2em;
+            text-align: center;
+        }
+        td:first-child, th:first-child {
+            text-align: left;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    {{ wiki(content) }}
+{% endblock %}

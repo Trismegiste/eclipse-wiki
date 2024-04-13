@@ -45,6 +45,9 @@ return [
     'picture-broadcasting' => [
         'path' => 'picture-pusher.js',
     ],
+    'quote-broadcasting' => [
+        'path' => 'quote-pusher.js',
+    ],
     'wikitext' => [
         'path' => 'wikitext-autocomplete.js',
     ],

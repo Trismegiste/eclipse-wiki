@@ -18,7 +18,9 @@
     {{ parent() }}
     <script type="module">
         import broadcastPicture from 'picture-broadcasting';
+        import broadcastQuote from 'quote-broadcasting';
         Alpine.data('broadcast', broadcastPicture)
+        Alpine.data('quoteBroadcasting', broadcastQuote)
     </script>
     <script type="module">
         import Mousetrap from 'mousetrap';

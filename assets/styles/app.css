@@ -166,9 +166,13 @@ h2 {
     }
 }
 
-table i[data-pushable="pdf"] {
+table i[data-pushable="pdf"], blockquote i[data-pushable="pdf"] {
     color: darkred;
     cursor: zoom-in;
+}
+
+blockquote i[data-pushable="pdf"] {
+    float: right;
 }
 
 
@@ -395,7 +399,7 @@ form .minitoolbar i {
 }
 
 /* read aloud quote */
-.parsed-wikitext blockquote {
+.parsed-wikitext blockquote.read-aloud {
     background-image: url('/img/left-quote.svg');
     background-repeat: no-repeat;
     background-size: 3em;

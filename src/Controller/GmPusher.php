@@ -8,6 +8,7 @@ namespace App\Controller;
 
 use App\Form\PeeringConfirm;
 use App\Form\Type\TopicSelectorType;
+use App\Parsoid\Parser;
 use App\Repository\VertexRepository;
 use App\Service\DocumentBroadcaster;
 use App\Service\FileIoClient;
@@ -156,6 +157,20 @@ class GmPusher extends AbstractController
                         'url' => $link
                     ]
         ]);
+    }
+
+    #[Route("/push-quote", methods: ["POST"])]
+    public function pushQuote(Request $request, DocumentBroadcaster $broadcaster, Pusher $pusher): Response
+    {
+        $wikitext = $request->request->get('wikitext');
+        $html = $this->renderView('gmpusher/quote.pdf.twig', ['content' => $wikitext]);
+
+        $filename = 'quote-' . date('H-i-s') . '.pdf';
+        $pdf = $broadcaster->generatePdf($filename, $html);
+        $link = $broadcaster->getLinkToDocument($pdf->getBasename());
+        $pusher->sendDocumentLink($link, $filename);
+
+        return new JsonResponse(['level' => 'success', 'message' => 'Blockquote sent'], 200);
     }
 
 }
