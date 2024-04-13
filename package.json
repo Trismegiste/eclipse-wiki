@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@furkot/webfonts-generator": "^2.0.0",
+    "@furkot/webfonts-generator": "^2.0.2",
     "globby": "^14.0.1"
   },
   "type": "module",
