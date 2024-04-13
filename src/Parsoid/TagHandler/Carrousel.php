@@ -4,7 +4,7 @@
  * Eclipse Wiki
  */
 
-namespace App\Parsoid;
+namespace App\Parsoid\TagHandler;
 
 use Wikimedia\Parsoid\Ext\ExtensionTagHandler;
 use Wikimedia\Parsoid\Ext\ParsoidExtensionAPI;
@@ -13,7 +13,7 @@ use function str_starts_with;
 /**
  * Inline picture gallery tag <carrousel>
  */
-class CarrouselTagHandler extends ExtensionTagHandler
+class Carrousel extends ExtensionTagHandler
 {
 
     public function sourceToDom(ParsoidExtensionAPI $extApi, string $src, array $extArgs)

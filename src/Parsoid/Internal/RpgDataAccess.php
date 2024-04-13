@@ -22,8 +22,7 @@ class RpgDataAccess extends DataAccess
 
     const template = [
         'legend' => '{{{1}}}<i class="icon-view3d" data-cell-index="{{{2}}}"></i>',
-        'roll' => '',
-        'morphbank' => '{{{1}}}<i data-pushable="pdf" class="icon-push" data-title="{{{1}}}"></i>'
+        'roll' => ''
     ];
 
     public function __construct(protected VertexRepository $repositoy, protected Storage $storage)

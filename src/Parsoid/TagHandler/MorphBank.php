@@ -4,7 +4,7 @@
  * Eclipse Wiki
  */
 
-namespace App\Parsoid;
+namespace App\Parsoid\TagHandler;
 
 use Wikimedia\Parsoid\Ext\ExtensionTagHandler;
 use Wikimedia\Parsoid\Ext\ParsoidExtensionAPI;
@@ -12,7 +12,7 @@ use Wikimedia\Parsoid\Ext\ParsoidExtensionAPI;
 /**
  * Inline picture gallery tag <morphbank>
  */
-class MorphBankTagHandler extends ExtensionTagHandler
+class MorphBank extends ExtensionTagHandler
 {
 
     public function sourceToDom(ParsoidExtensionAPI $extApi, string $src, array $extArgs)
