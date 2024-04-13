@@ -10,7 +10,7 @@ use Wikimedia\Parsoid\Ext\ExtensionTagHandler;
 use Wikimedia\Parsoid\Ext\ParsoidExtensionAPI;
 
 /**
- * Inline picture gallery tag <carrousel>
+ * Inline picture gallery tag <morphbank>
  */
 class MorphBankTagHandler extends ExtensionTagHandler
 {
