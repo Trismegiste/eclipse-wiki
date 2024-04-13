@@ -166,15 +166,16 @@ h2 {
     }
 }
 
-table i[data-pushable="pdf"], blockquote i[data-pushable="pdf"] {
+/* Wikitext TAG extension styling */
+table i[data-pushable="pdf"], .read-aloud i[data-pushable="pdf"] {
     color: darkred;
     cursor: zoom-in;
 }
 
-blockquote i[data-pushable="pdf"] {
+.read-aloud i[data-pushable="pdf"] {
     float: right;
+    font-size: 120%;
 }
-
 
 /* ROLL */
 .diceroller {

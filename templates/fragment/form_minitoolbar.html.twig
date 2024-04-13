@@ -13,6 +13,9 @@
     <a href="#" class="pure-button" title="Transform selected text into jpg picture" x-on:click.prevent="selectionToPicture">
         <i class="icon-broken-picture"></i>
     </a>
+    <a href="#" class="pure-button" title="Transform selected text into quote" x-on:click.prevent="selectionToQuote">
+        <i class="icon-blockquote"></i>
+    </a>       
 </div>
 
 <script type="module">
@@ -65,6 +68,14 @@
                 const widget = document.getElementById(widgetId)
                 let selection = widget.value.substring(widget.selectionStart, widget.selectionEnd)
                 widget.value = widget.value.substring(0, widget.selectionStart) + `[[file:${selection}.jpg]]` + widget.value.substr(widget.selectionEnd)
+            },
+
+            selectionToQuote() {
+                const widget = document.getElementById(widgetId)
+                let selection = widget.value.substring(widget.selectionStart, widget.selectionEnd)
+                widget.value = widget.value.substring(0, widget.selectionStart)
+                        + `<pushpublic>\n${selection}\n</pushpublic>`
+                        + widget.value.substr(widget.selectionEnd)
             }
 
         }))
