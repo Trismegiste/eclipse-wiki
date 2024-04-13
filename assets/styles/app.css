@@ -404,8 +404,8 @@ form .minitoolbar i {
     background-image: url('/img/left-quote.svg');
     background-repeat: no-repeat;
     background-size: 3em;
-    margin-left: 0;
-    padding-left: 4em;
+    margin: 0;
+    padding: 0 1em 0.3em 4em;
     background-color: rgba(255,255,255,0.85);
     background-blend-mode: overlay;
 }
