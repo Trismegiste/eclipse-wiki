@@ -393,3 +393,14 @@ form .minitoolbar i {
     background-size: auto 5em;
     width: 10em;
 }
+
+/* read aloud quote */
+.parsed-wikitext blockquote {
+    background-image: url('/img/left-quote.svg');
+    background-repeat: no-repeat;
+    background-size: 3em;
+    margin-left: 0;
+    padding-left: 4em;
+    background-color: rgba(255,255,255,0.85);
+    background-blend-mode: overlay;
+}

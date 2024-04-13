@@ -18,8 +18,8 @@ class PushPublic extends ExtensionTagHandler
     public function sourceToDom(ParsoidExtensionAPI $extApi, string $src, array $extArgs)
     {
         $doc = $extApi->getTopLevelDoc();
-        $node = $extApi->wikitextToDOM($src, ['parseOpts' => ['extTag' => 'carrousel', 'context' => 'inline']], false);
-        $container = $doc->createElement('section');
+        $node = $extApi->wikitextToDOM($src, ['parseOpts' => ['extTag' => 'pushpublic']], false);
+        $container = $doc->createElement('blockquote');
         $container->setAttribute('class', 'read-aloud');
         $container->appendChild($node);
         $fragment = $doc->createDocumentFragment();
