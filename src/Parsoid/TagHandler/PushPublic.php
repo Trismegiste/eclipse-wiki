@@ -6,7 +6,6 @@
 
 namespace App\Parsoid\TagHandler;
 
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Wikimedia\Parsoid\Ext\ExtensionTagHandler;
 use Wikimedia\Parsoid\Ext\ParsoidExtensionAPI;
 
@@ -16,19 +15,13 @@ use Wikimedia\Parsoid\Ext\ParsoidExtensionAPI;
 class PushPublic extends ExtensionTagHandler
 {
 
-    public function __construct(protected UrlGeneratorInterface $router)
-    {
-        
-    }
-
-    public function sourceToDom(ParsoidExtensionAPI $extApi, string $src, array $extArgs)
+     public function sourceToDom(ParsoidExtensionAPI $extApi, string $src, array $extArgs)
     {
         $doc = $extApi->getTopLevelDoc();
         $node = $extApi->wikitextToDOM($src, ['parseOpts' => ['extTag' => 'pushpublic']], false);
         $container = $doc->createElement('blockquote');
         $container->setAttribute('class', 'read-aloud');
-        $url = $this->router->generate('app_gmpusher_pushquote');
-        $container->setAttribute('x-data', "quoteBroadcasting('$url')");
+        $container->setAttribute('x-data', "quoteBroadcasting");
         $fragment = $doc->createDocumentFragment();
         $fragment->appendChild($container);
         // icon

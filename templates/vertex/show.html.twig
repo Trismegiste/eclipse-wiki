@@ -20,7 +20,7 @@
         import broadcastPicture from 'picture-broadcasting';
         import broadcastQuote from 'quote-broadcasting';
         Alpine.data('broadcast', broadcastPicture)
-        Alpine.data('quoteBroadcasting', broadcastQuote)
+        Alpine.data('quoteBroadcasting', broadcastQuote('{{ path('app_gmpusher_pushquote', {pk: vertex.pk}) }}'))
     </script>
     <script type="module">
         import Mousetrap from 'mousetrap';

@@ -8,7 +8,6 @@ namespace App\Controller;
 
 use App\Form\PeeringConfirm;
 use App\Form\Type\TopicSelectorType;
-use App\Parsoid\Parser;
 use App\Repository\VertexRepository;
 use App\Service\DocumentBroadcaster;
 use App\Service\FileIoClient;
@@ -31,7 +30,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class GmPusher extends AbstractController
 {
 
-    public function __construct(protected Pusher $pusher)
+    public function __construct(protected Pusher $pusher, protected VertexRepository $repository)
     {
         
     }
@@ -60,9 +59,9 @@ class GmPusher extends AbstractController
      * @return Response
      */
     #[Route("/push/{pk}/document/{filename}/{label}", methods: ["GET", "POST"], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function pushDocument(Request $request, string $pk, string $filename, string $label, VertexRepository $repo, DocumentBroadcaster $broadcaster): Response
+    public function pushDocument(Request $request, string $pk, string $filename, string $label, DocumentBroadcaster $broadcaster): Response
     {
-        $vertex = $repo->findByPk($pk);
+        $vertex = $this->repository->findByPk($pk);
         $form = $this->createFormBuilder()
                 ->add('channel', TopicSelectorType::class)
                 ->add('push', SubmitType::class)
@@ -159,16 +158,17 @@ class GmPusher extends AbstractController
         ]);
     }
 
-    #[Route("/push-quote", methods: ["POST"])]
-    public function pushQuote(Request $request, DocumentBroadcaster $broadcaster, Pusher $pusher): Response
+    #[Route("/push-quote/{pk}", methods: ["POST"], requirements: ['pk' => '[\\da-f]{24}'])]
+    public function pushQuote(string $pk, Request $request, DocumentBroadcaster $broadcaster): Response
     {
+        $vertex = $this->repository->load($pk);
         $wikitext = $request->request->get('wikitext');
-        $html = $this->renderView('gmpusher/quote.pdf.twig', ['content' => $wikitext]);
+        $html = $this->renderView('gmpusher/quote.pdf.twig', ['vertex' => $vertex, 'content' => $wikitext]);
 
-        $filename = 'quote-' . date('H-i-s') . '.pdf';
+        $filename = $vertex->getTitle() . '-' . date('H-i-s') . '.pdf';
         $pdf = $broadcaster->generatePdf($filename, $html);
         $link = $broadcaster->getLinkToDocument($pdf->getBasename());
-        $pusher->sendDocumentLink($link, $filename);
+        $this->pusher->sendDocumentLink($link, $filename);
 
         return new JsonResponse(['level' => 'success', 'message' => 'Blockquote sent'], 200);
     }

@@ -34,7 +34,7 @@ class SymfonyBridge implements ExtensionModule
             'tags' => [
                 ['name' => 'carrousel', 'handler' => Carrousel::class],
                 ['name' => 'morphbank', 'handler' => MorphBank::class],
-                ['name' => 'pushpublic', 'handler' => ['class' => PushPublic::class, 'args' => [$this->router]]],
+                ['name' => 'pushpublic', 'handler' => PushPublic::class],
             ]
         ];
     }
