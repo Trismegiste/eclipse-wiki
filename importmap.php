@@ -36,9 +36,6 @@ return [
     'legend-highlight-subscriber' => [
         'path' => 'place/legend-highlight-subscriber.js',
     ],
-    'morphbank-push-subscriber' => [
-        'path' => 'place/morphbank-push-subscriber.js',
-    ],
     'cubemap-viewer' => [
         'path' => 'place/cubemap-viewer.js',
     ],

@@ -90,7 +90,16 @@
     {{ parent() }}
     {{ include('fragment/legend_highlight.html.twig') }}
     <script type="module">
-        import pushSubscriber from 'morphbank-push-subscriber';
-        pushSubscriber('{{ path('app_placecrud_pushmorphbank', {pk: vertex.pk}) }}')
+        Alpine.data('pushableContent', () => ({
+                urlPush: '{{ path('app_placecrud_pushmorphbank', {pk: vertex.pk}) }}',
+
+                pushPdf(title) {
+                    fetch(this.urlPush, {method: 'POST', body: new URLSearchParams({title})})
+                            .then(resp => resp.json())
+                            .then(json => {
+                                Alpine.store('notif').push(json.level, json.message)
+                            })
+                }
+            }))
     </script>
 {% endblock %}

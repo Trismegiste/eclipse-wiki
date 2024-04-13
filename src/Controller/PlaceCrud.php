@@ -142,10 +142,11 @@ class PlaceCrud extends GenericCrud
         $data = $request->getPayload();
         if ($data->has('title')) {
             $title = $data->getString('title');
+            $content = $parsoid->extractTagContent($place->getContent(), 'morphbank', $title);
             $html = $this->renderView('place/morphbank/inventory.pdf.twig', [
-		'vertex' => $place,
-		'xpath' => "//table/caption/*[@data-pushable=\"pdf\"][@data-title=\"$title\"]/ancestor::table"
-	    ]);
+                'vertex' => $place,
+                'content' => $content
+            ]);
             $filename = "Banque-de-morphes-$title.pdf";
             $pdf = $broadcast->generatePdf($filename, $html);
             $link = $broadcast->getLinkToDocument($pdf->getBasename());

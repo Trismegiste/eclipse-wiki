@@ -37,4 +37,12 @@ class Parser
         return $parser->wikitext2html($pageConfig, self::parserOpts);
     }
 
+    public function extractTagContent(string $wikitext, string $tagName, string $title): string
+    {
+        $xml = new \SimpleXMLElement("<wikitext>$wikitext</wikitext>");
+        $result = $xml->xpath("//{$tagName}[@title=\"$title\"]");
+
+        return $result[0]->asXml();
+    }
+
 }

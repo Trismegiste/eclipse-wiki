@@ -108,4 +108,11 @@ class ParserTest extends WebTestCase
         $this->assertCount(1, $this->crawler->filter('i[data-cell-index=123]'));
     }
 
+    public function testExtractTag()
+    {
+        $wikitext = 'outside<tag title="yolo">content</tag>outside';
+        $filtered = $this->sut->extractTagContent($wikitext, 'tag', 'yolo');
+        $this->assertEquals('<tag title="yolo">content</tag>', $filtered);
+    }
+
 }

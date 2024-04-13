@@ -30,6 +30,7 @@ class MorphBankTagHandler extends ExtensionTagHandler
         $param = $extApi->extArgsToArray($extArgs);
         $caption = $doc->createElement('caption', $param['title']);
         $table = $doc->createElement('table');
+        $table->setAttribute('x-data', "pushableContent");
         $tbody = $doc->createElement('tbody');
         $table->appendChild($header);
         $table->appendChild($caption);
@@ -50,6 +51,7 @@ class MorphBankTagHandler extends ExtensionTagHandler
         $icon->setAttribute('class', 'icon-push');
         $icon->setAttribute('data-pushable', 'pdf');
         $icon->setAttribute('data-title', $param['title']);
+        $icon->setAttribute('x-on:click', "pushPdf('{$param['title']}')");
         $caption->appendChild($icon);
 
         return $fragment;
