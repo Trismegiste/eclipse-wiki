@@ -42,6 +42,41 @@
 |}</pre>
         </li>
     </ul>
+    <h2>Tags étendus</h2>
+    <ul>
+        <li>Tag &lt;pushpublic&gt; permet de définir un block qui peut être lu à voix haute pour les joueurs.
+            Ce contenu peut être diffusé vers l'application de journal des joueurs sous forme de PDF
+            <pre>
+&lt;pushpublic&gt;
+Description
+&lt;/pushpublic&gt;</pre>
+        </li>
+        <li>Tag &lt;param&gt; permet de définir un groupe de paramètres sous la forme <strong>Clef: Valeur</strong> à chaque ligne.
+            Une table sera créée pour la mise en forme
+            <pre>
+&lt;param&gt;
+Population: 145
+Langue: Mandarin
+&lt;/param&gt;</pre>
+        </li>
+        <li>Tag &lt;carrousel&gt; permet de mettre en page un groupe d'images avec légendes. Les ligne impaires sont 
+            des images de la forme <strong>[[file:XXX.jpg]]</strong> et les lignes paires sont les légendes
+            <pre>
+&lt;carrousel&gt;
+[[file:Station.jpg]]
+Station Ilima
+&lt;/carrousel&gt;</pre>
+        </li>
+        <li>Tag &lt;morphbank&gt; permet de lister un inventaire de morphes. 
+            Chaque ligne dans le tag est de la forme <strong>Nom du morphe | Dispo | Stock</strong>. Ce contenu est diffusable vers les joueurs
+            <pre>
+&lt;morphbank title="Skinesthesia"&gt;
+Furie | 2 | 17
+Cosse | 1 | 6
+&lt;/morphbank&gt;</pre>
+        </li>
+    </ul>
+
 {% endblock %}
 
 {% block stylesheets %}
