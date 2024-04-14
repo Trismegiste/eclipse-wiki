@@ -18,10 +18,24 @@
 {% block _place_content_label %}
     {{ form_label(form) }}
     {% include 'fragment/form_minitoolbar.html.twig' %}
-    <div class="minitoolbar">
+    <div class="minitoolbar" x-data="placeToolbar('{{ form.vars.id }}')">
         <a href="{{ path('app_placecrud_appendmorphbank', {pk: form.parent.vars.data.pk}) }}"
            class="pure-button button-delete" title="Cancel edition and append a morph bank">
             <i class="icon-cryo-morph"></i>
         </a>
+        <a href="#" class="pure-button" title="Transform selected text into parameters" x-on:click.prevent="selectionToParam">
+            <i class="icon-gear"></i>
+        </a>     
     </div>
+    <script type="module">
+        Alpine.data('placeToolbar', (widgetId) => ({
+                selectionToParam() {
+                    const widget = document.getElementById(widgetId)
+                    let selection = widget.value.substring(widget.selectionStart, widget.selectionEnd)
+                    widget.value = widget.value.substring(0, widget.selectionStart)
+                            + `<param>\n${selection}\n</param>`
+                            + widget.value.substr(widget.selectionEnd)
+                }
+            }))
+    </script>
 {% endblock %}
