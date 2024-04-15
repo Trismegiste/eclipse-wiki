@@ -6,19 +6,18 @@
 
 namespace App\Controller;
 
+use App\Form\GallerySelection;
 use App\Service\GameSessionTracker;
 use App\Service\Pdf\ChromiumPdfWriter;
 use App\Service\SessionPushHistory;
 use SplFileInfo;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Attribute\Route;
 use function join_paths;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * Tracking actions for the current Game Session
@@ -45,7 +44,7 @@ class GameSession extends AbstractController
     #[Route('/broadcast-export', methods: ['GET', 'POST'])]
     public function broadcastExport(Request $request, ChromiumPdfWriter $pdf): Response
     {
-        $form = $this->createForm(\App\Form\GallerySelection::class, $this->broadcastHistory->getListing());
+        $form = $this->createForm(GallerySelection::class, $this->broadcastHistory->getListing());
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

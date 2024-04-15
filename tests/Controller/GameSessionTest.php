@@ -57,8 +57,14 @@ class GameSessionTest extends WebTestCase
         $crawler = $this->client->request('GET', '/session/broadcast-export');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('script[type="application/json"]', 'history.png');
-
         $this->assertSelectorExists('#gallery_selection_export');
+    }
+
+    public function testBroadcastedPicture()
+    {
+        $this->client->request('GET', '/session/broadcasted-picture/history.png');
+        $this->assertEquals($this->client->getResponse()->getStatusCode(), 200);
+        $this->assertEquals('image/png', $this->client->getResponse()->headers->get('Content-Type'));
     }
 
 }

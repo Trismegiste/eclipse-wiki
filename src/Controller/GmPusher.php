@@ -158,6 +158,13 @@ class GmPusher extends AbstractController
         ]);
     }
 
+    /**
+     * Broadcasts a blockquote to "read aloud". The text is ajax-posted in wikitext format
+     * @param string $pk
+     * @param Request $request
+     * @param DocumentBroadcaster $broadcaster
+     * @return Response
+     */
     #[Route("/push-quote/{pk}", methods: ["POST"], requirements: ['pk' => '[\\da-f]{24}'])]
     public function pushQuote(string $pk, Request $request, DocumentBroadcaster $broadcaster): Response
     {

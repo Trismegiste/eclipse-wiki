@@ -65,4 +65,13 @@ class GmPusherTest extends WebTestCase
         $this->assertResponseStatusCodeSame(400);
     }
 
+    public function testPushBlockQuote()
+    {
+        $place = $this->createRandomPlace();
+        $repo = static::getContainer()->get(App\Repository\VertexRepository::class);
+        $repo->save($place);
+        $this->client->request('POST','/push-quote/'.$place->getPk());
+//        $this->assertResponseIsSuccessful();
+    }
+
 }
