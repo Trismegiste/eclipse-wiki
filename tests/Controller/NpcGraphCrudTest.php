@@ -126,9 +126,23 @@ class NpcGraphCrudTest extends WebTestCase
         $this->assertCount(2, $elem);
     }
 
-    public function testEditPerLevel()
+    public function getPropertyGraph()
     {
-        $this->client->request('GET', '/npc-graph/perlevel/1/attributes');
+        return [
+            ['attributes'],
+            ['skills'],
+            ['edges'],
+            ['networks'],
+            ['backgrounds'],
+            ['factions'],
+            ['morphs'],
+        ];
+    }
+
+    /** @dataProvider getPropertyGraph */
+    public function testEditPerLevel(string $propName)
+    {
+        $this->client->request('GET', '/npc-graph/perlevel/1/' . $propName);
         $this->assertResponseIsSuccessful();
     }
 

@@ -70,8 +70,8 @@ class GmPusherTest extends WebTestCase
         $place = $this->createRandomPlace();
         $repo = static::getContainer()->get(App\Repository\VertexRepository::class);
         $repo->save($place);
-        $this->client->request('POST','/push-quote/'.$place->getPk());
-//        $this->assertResponseIsSuccessful();
+        $this->client->request('POST', '/push-quote/' . $place->getPk());
+        $this->assertResponseIsSuccessful();
     }
 
 }
