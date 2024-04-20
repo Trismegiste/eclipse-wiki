@@ -43,5 +43,11 @@
 {% endblock %}
 
 {% block info %}
+    {{ include('fragment/quick_search.html.twig') }}
     {{ render(controller('App\\Controller\\GameSession::history')) }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('pixabay/auto-complete.css') }}"/>
 {% endblock %}

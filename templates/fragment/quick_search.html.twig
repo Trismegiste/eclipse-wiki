@@ -1,0 +1,31 @@
+{# quick search ajax form #}
+<div class="quick-search">
+    <form class="pure-form">
+        <input type="text" class="pure-input-1" autocomplete="off" id="quicksearch"/>
+    </form>
+    <script type="module">
+        import autoComplete from 'js-autocomplete';
+        // autocomplete
+        new autoComplete({
+            selector: '#quicksearch',
+            minChars: 3,
+            source: function (term, suggest) {
+                fetch('{{ path('app_picture_vertexsearch') }}?q=' + term)
+                        .then(response => {
+                            return response.json()
+                        })
+                        .then(data => {
+                            suggest(data)
+                        })
+            },
+            renderItem: function (item, search) {
+                return '<div class="autocomplete-suggestion" data-pk="' + item.pk +
+                        '">' + item.title + '</div>'
+            },
+            onSelect: function (e, term, item) {
+                const pk = item.getAttribute('data-pk')
+                window.location.assign('/vertex/show/' + pk)
+            }
+        })
+    </script>
+</div>
