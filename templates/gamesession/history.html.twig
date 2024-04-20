@@ -7,7 +7,7 @@
             {{ timeline.title }}
         </a>
         <ul class="history">
-            {% for pk, vertex in document.history|slice(0, 12) %}
+            {% for pk, vertex in document.history|slice(0, 8) %}
                 <li class="icon-vertex-{{ vertex.category }}">
                     <a href="{{ path('app_vertexcrud_show', {pk: pk}) }}">
                         {{ vertex.title }}

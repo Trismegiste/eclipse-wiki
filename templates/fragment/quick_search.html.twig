@@ -1,10 +1,12 @@
 {# quick search ajax form #}
 <div class="quick-search">
     <form class="pure-form">
-        <input type="text" class="pure-input-1" autocomplete="off" id="quicksearch"/>
+        <input type="text" class="pure-input-1" autocomplete="off" id="quicksearch" placeholder="Ctrl+K to search"/>
     </form>
     <script type="module">
+        import Mousetrap from 'mousetrap';
         import autoComplete from 'js-autocomplete';
+
         // autocomplete
         new autoComplete({
             selector: '#quicksearch',
@@ -24,8 +26,13 @@
             },
             onSelect: function (e, term, item) {
                 const pk = item.getAttribute('data-pk')
-                window.location.assign('/vertex/show/' + pk)
+                location.assign('/vertex/show/' + pk)
             }
+        })
+
+        Mousetrap.bind('ctrl+k', function () {
+            document.getElementById('quicksearch').focus()
+            return false
         })
     </script>
 </div>
