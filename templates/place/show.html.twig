@@ -1,17 +1,5 @@
 {% extends "vertex/show.html.twig" %}
 
-{% block info %}
-    {% if vertex.youtubeUrl is not empty %}
-        <iframe width="100%" height="150" src="https://www.youtube.com/embed/{{ vertex.youtubeUrl }}"
-                title="{{ vertex.title }}" 
-                frameborder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowfullscreen>
-        </iframe>
-    {% endif %}
-    {{ parent() }}
-{% endblock %}
-
 {% block header_title %}
     <nav style="float: right">
         {{ include('place/actions.html.twig') }}
@@ -43,6 +31,16 @@
                 <div class="conditions"><i class="icon-gravity"></i>{{ vertex.gravity }}</div>
                 <div class="conditions"><i class="icon-pressure"></i>{{ vertex.pressure }}</div>
                 <div class="conditions"><i class="icon-temperature"></i>{{ vertex.temperature }}</div>
+                    {% if vertex.youtubeUrl is not empty %}
+                    <div>
+                        <iframe width="100%" height="150" src="https://www.youtube.com/embed/{{ vertex.youtubeUrl }}"
+                                title="{{ vertex.title }}" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                {% endif %}
                 <div class="place-connections">
                     {{ render(controller('App\\Controller\\PlaceCrud::connectionToPlace', {place: vertex})) }}
                 </div>
@@ -78,11 +76,15 @@
         .infobox img {
             margin: auto;
         }
-        .infobox .place-connections ul {
-            list-style-type: none;
-            line-height: 160%;
+        .infobox .place-connections {
             background-color: #eee;
             padding: 1em;
+        }
+        .place-connections ul {
+            list-style-type: none;
+            line-height: 160%;
+            margin: 0;
+            padding: 0;
         }
     </style>
 {% endblock %}
