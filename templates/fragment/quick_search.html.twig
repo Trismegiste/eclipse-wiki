@@ -1,7 +1,7 @@
 {# quick search ajax form #}
 <div class="quick-search">
     <form class="pure-form">
-        <input type="text" class="pure-input-1" autocomplete="off" id="quicksearch" placeholder="Ctrl+K to search"/>
+        <input type="text" class="pure-input-1 pure-input-rounded" autocomplete="off" id="quicksearch" placeholder="Ctrl+K to search"/>
     </form>
     <script type="module">
         import Mousetrap from 'mousetrap';
@@ -12,7 +12,7 @@
             selector: '#quicksearch',
             minChars: 3,
             source: function (term, suggest) {
-                fetch('{{ path('app_picture_vertexsearch') }}?q=' + term)
+                fetch('{{ path('app_vertexcrud_search') }}?q=' + term)
                         .then(response => {
                             return response.json()
                         })
@@ -21,12 +21,10 @@
                         })
             },
             renderItem: function (item, search) {
-                return '<div class="autocomplete-suggestion" data-pk="' + item.pk +
-                        '">' + item.title + '</div>'
+                return `<div class="autocomplete-suggestion">${item}</div>`
             },
             onSelect: function (e, term, item) {
-                const pk = item.getAttribute('data-pk')
-                location.assign('/vertex/show/' + pk)
+                location.assign('/wiki/' + item.textContent)
             }
         })
 
