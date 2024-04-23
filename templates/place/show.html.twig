@@ -32,24 +32,18 @@
                 <div class="conditions"><i class="icon-pressure"></i>{{ vertex.pressure }}</div>
                 <div class="conditions"><i class="icon-temperature"></i>{{ vertex.temperature }}</div>
                     {% if vertex.youtubeUrl is not empty %}
-                    <div>
-                        <iframe width="100%" height="150" src="https://www.youtube.com/embed/{{ vertex.youtubeUrl }}"
-                                title="{{ vertex.title }}" 
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen>
-                        </iframe>
-                    </div>
+                    <iframe width="100%" height="150" src="https://www.youtube.com/embed/{{ vertex.youtubeUrl }}"
+                            title="{{ vertex.title }}"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                    </iframe>
                 {% endif %}
-                <div class="place-connections">
-                    {{ render(controller('App\\Controller\\PlaceCrud::connectionToPlace', {place: vertex})) }}
-                </div>
+                {{ render(controller('App\\Controller\\PlaceCrud::connectionToPlace', {place: vertex})) }}
                 {% if vertex.battlemap3d is not empty %}
-                    <div>
-                        <a href="{{ path('app_firstperson_edit', {pk: vertex.pk}) }}" target="_blank">
-                            <img src="{{ path('app_picture_battlemapthumbnail', {pk: vertex.pk}) }}" class="pure-img"/>
-                        </a>
-                    </div>
+                    <a href="{{ path('app_firstperson_edit', {pk: vertex.pk}) }}" target="_blank">
+                        <img src="{{ path('app_picture_battlemapthumbnail', {pk: vertex.pk}) }}" class="pure-img"/>
+                    </a>
                 {% endif %}
             </div>
         </aside>
@@ -73,18 +67,12 @@
             font-size: 170%;
             margin-bottom: 0.2rem;
         }
-        .infobox img {
-            margin: auto;
-        }
-        .infobox .place-connections {
+        ul.place-connections {
             background-color: #eee;
-            padding: 1em;
-        }
-        .place-connections ul {
             list-style-type: none;
             line-height: 160%;
             margin: 0;
-            padding: 0;
+            padding: 0.5em;
         }
     </style>
 {% endblock %}
