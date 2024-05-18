@@ -19,7 +19,7 @@ class VertexTest extends PHPUnit\Framework\TestCase
 
     public function testTitle()
     {
-        $this->assertEquals('yolo', $this->sut->getTitle());
+        $this->assertEquals('Yolo', $this->sut->getTitle());
     }
 
     public function testEmptyContent()

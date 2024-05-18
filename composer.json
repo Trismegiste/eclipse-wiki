@@ -24,6 +24,7 @@
         "symfony/mercure-bundle": "^0.3.8",
         "symfony/mime": "^6.4",
         "symfony/monolog-bundle": "^3.1",
+        "symfony/polyfill-php84": "1.*-dev",
         "symfony/process": "^6.4",
         "symfony/runtime": "^6.4",
         "symfony/security-bundle": "^6.4",

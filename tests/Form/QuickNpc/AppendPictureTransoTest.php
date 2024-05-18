@@ -33,11 +33,12 @@ class AppendPictureTransoTest extends TestCase
         $transfo = new AppendPictureTranso($source, $target);
 
         $npc = new Transhuman('alice', $this->createStub(Background::class), $this->createStub(Faction::class));
+        $this->assertEquals('Alice', $npc->getTitle());
         $npc->setContent('picture_name');
 
         $transfo->reverseTransform($npc);
 
-        $this->assertStringStartsWith("[[file:alice-", $npc->getContent());
+        $this->assertStringStartsWith("[[file:Alice-", $npc->getContent());
         $this->assertStringEndsWith(".jpg]]", $npc->getContent());
         $this->assertStringStartsWith('token-', $npc->tokenPic);
         $this->assertStringEndsWith('.png', $npc->tokenPic);

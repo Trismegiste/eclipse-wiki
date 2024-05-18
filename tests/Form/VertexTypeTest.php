@@ -37,7 +37,7 @@ class VertexTypeTest extends KernelTestCase
         $sample = new Scene('sample');
         $this->sut = $this->factory->create(VertexType::class, $sample, ['edit' => true]);
         $this->sut->submit(['content' => 'sample text']);
-        $this->assertEquals('sample', $sample->getTitle());
+        $this->assertEquals('Sample', $sample->getTitle());
         $this->assertEquals('sample text', $sample->getContent());
         $this->repo->save($this->sut->getData());
     }

@@ -43,7 +43,7 @@ class VertexRepository extends DefaultRepository
      */
     public function findByTitle(string $title): ?Vertex
     {
-        return $this->searchOne(['title' => new Regex('^' . $this->getFirstLetterCaseInsensitiveRegexPart($title) . '$')]);
+        return $this->searchOne(['title' => mb_ucfirst($title)]);
     }
 
     /**
@@ -73,6 +73,7 @@ class VertexRepository extends DefaultRepository
     public function searchByBacklinks(string $title): array
     {
         $it = $this->search([
+            // @todo search in the array of outbound links
             'content' => new Regex("\[\[" . $this->getFirstLetterCaseInsensitiveRegexPart($title) . "(\]\]|\|)")
         ]);
 
@@ -127,6 +128,7 @@ class VertexRepository extends DefaultRepository
         $regex = "\[\[" . $this->getFirstLetterCaseInsensitiveRegexPart($vertex->getTitle()) . "(\]\]|\|)";
 
         // search for vertex with links to $vertex
+        // @todo search in the outbound links array embedded in Vertex class
         $iter = $this->search(['content' => new Regex($regex)]);
         $updated = [];
         foreach ($iter as $inbound) {

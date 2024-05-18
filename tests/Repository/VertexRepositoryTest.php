@@ -41,7 +41,7 @@ class VertexRepositoryTest extends KernelTestCase
         $backlinked = $this->sut->searchByBacklinks('Backlink');
         $this->assertIsArray($backlinked);
         $this->assertCount(1, $backlinked);
-        $this->assertEquals('one doc', $backlinked[0]);
+        $this->assertEquals('One doc', $backlinked[0]);
     }
 
     public function testPrevious()
@@ -51,11 +51,11 @@ class VertexRepositoryTest extends KernelTestCase
         $this->sut->save($doc);
         $pk = $doc->getPk();
         usleep(Import::delayForTimestamp); // delay to get two different typestamps
-        $doc = new Scene('doc 3');
+        $doc = new Scene('Doc 3');
         $this->sut->save($doc);
 
         $found = $this->sut->searchPreviousOf($pk);
-        $this->assertEquals('doc 3', $found->getTitle());
+        $this->assertEquals('Doc 3', $found->getTitle());
         $this->assertNull($this->sut->searchPreviousOf($doc->getPk()));
 
         return (string) $pk;
@@ -65,7 +65,7 @@ class VertexRepositoryTest extends KernelTestCase
     public function testNext(string $pk)
     {
         $found = $this->sut->searchNextOf($pk);
-        $this->assertEquals('one doc', $found->getTitle());
+        $this->assertEquals('One doc', $found->getTitle());
     }
 
     public function testRenameTitle()
@@ -78,6 +78,7 @@ class VertexRepositoryTest extends KernelTestCase
 
         // check backlink
         $changed = $this->sut->findByTitle('one doc');
+        $this->assertEquals('One doc', $changed->getTitle());
         $this->assertEquals('some [[Newlink]].', $changed->getContent());
     }
 
@@ -87,7 +88,7 @@ class VertexRepositoryTest extends KernelTestCase
         $it->rewind();
         $obj = $it->current();
         $this->assertInstanceOf(Vertex::class, $obj);
-        $this->assertEquals('one doc', $obj->getTitle());
+        $this->assertEquals('One doc', $obj->getTitle());
     }
 
     public function testFilterEmpty()
@@ -225,7 +226,7 @@ class VertexRepositoryTest extends KernelTestCase
         $modif = $this->sut->renameTitle('starkiller', 'Skywalker');
         $this->assertEquals(4, $modif);
 
-	// just to be sure we lost original objects, sending only the primary keys
+        // just to be sure we lost original objects, sending only the primary keys
         return array_map(function (Vertex $obj) {
             return $obj->getPk();
         }, $bunch);

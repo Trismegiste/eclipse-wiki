@@ -21,7 +21,7 @@ class FighterJsonDecoratorTest extends TestCase
             'toughness' => 2,
             'parry' => 2,
             'wildcard' => false,
-            'title' => 'rancor',
+            'title' => 'Rancor',
             'armor' => 0,
             'token' => NULL,
                 ), $sut->jsonSerialize());

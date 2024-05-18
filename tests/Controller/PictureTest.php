@@ -116,12 +116,12 @@ class PictureTest extends WebTestCase
         $this->assertStringStartsWith('<?xml', $this->client->getResponse()->getContent());
     }
 
-    public function testDyamicVertexList()
+    public function testDynamicVertexList()
     {
         $this->client->request('GET', '/picture/vertex/search?q=tak');
         $result = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(1, $result);
-        $this->assertStringStartsWith('takeshi', $result[0]->title);
+        $this->assertStringStartsWith('Takeshi', $result[0]->title);
     }
 
     public function testBrokenPicture()
