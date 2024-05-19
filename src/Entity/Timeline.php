@@ -28,7 +28,6 @@ class Timeline extends Vertex
 
     protected function beforeSave(): void
     {
-        parent::beforeSave();
         $accumul = [];
         $this->flattenTree($accumul, $this->tree->nodes, 1);
         $tree = implode(PHP_EOL, $accumul);
@@ -40,6 +39,8 @@ $tree
 ==Debriefing==
 {$this->debriefing}
 WIKITEXT;
+        // dump outbound links
+        parent::beforeSave();
     }
 
     protected function flattenTree(array &$accumul, array $children, int $level): void
@@ -74,7 +75,7 @@ WIKITEXT;
 
     protected function recursivRenameInternalLink(PlotNode $node, string $oldTitle, string $newTitle): void
     {
-        $regex = "#\[\[" . static::getFirstLetterCaseInsensitiveRegexPart($oldTitle) . "(\]\]|\|)#";
+        $regex = "#\[\[" . static::getFirstLetterCaseInsensitiveRegexPart($oldTitle) . "(\]\]|\|)#u";
         $node->title = preg_replace($regex, "[[$newTitle" . '$1', $node->title);
         foreach ($node->nodes as $child) {
             $this->recursivRenameInternalLink($child, $oldTitle, $newTitle);

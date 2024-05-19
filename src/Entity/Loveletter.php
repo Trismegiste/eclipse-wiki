@@ -23,7 +23,6 @@ class Loveletter extends Vertex
 
     protected function beforeSave(): void
     {
-        parent::beforeSave();
         // not used : just for text search indexing
         $this->content = <<<WIKITEXT
 ==Context==
@@ -31,6 +30,8 @@ class Loveletter extends Vertex
 ==Drama==
 {$this->drama}
 WIKITEXT;
+        // dump outbound links
+        parent::beforeSave();
     }
 
     public function attachPicture(string $filenameInStorage): void
@@ -40,10 +41,9 @@ WIKITEXT;
 
     public function renameInternalLink(string $oldTitle, string $newTitle): void
     {
-        $regex = "#\[\[" . static::getFirstLetterCaseInsensitiveRegexPart($oldTitle) . "(\]\]|\|)#";
+        $regex = "#\[\[" . static::getFirstLetterCaseInsensitiveRegexPart($oldTitle) . "(\]\]|\|)#u";
         $this->context = preg_replace($regex, "[[$newTitle" . '$1', $this->context);
         $this->drama = preg_replace($regex, "[[$newTitle" . '$1', $this->drama);
     }
-
 
 }

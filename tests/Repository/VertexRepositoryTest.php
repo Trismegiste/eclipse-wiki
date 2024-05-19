@@ -182,7 +182,6 @@ class VertexRepositoryTest extends KernelTestCase
     {
         $iter = $this->sut->dumpAllInternalLinks();
         $edges = iterator_to_array($iter);
-        var_dump($edges);
         $this->assertCount(4, $edges);
     }
 

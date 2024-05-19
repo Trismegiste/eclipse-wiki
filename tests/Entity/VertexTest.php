@@ -4,17 +4,20 @@
  * Eclipse Wiki
  */
 
+use App\Entity\Vertex;
+use PHPUnit\Framework\TestCase;
+
 /**
  * unit test for Vertex
  */
-class VertexTest extends PHPUnit\Framework\TestCase
+class VertexTest extends TestCase
 {
 
-    protected $sut;
+    protected Vertex $sut;
 
     protected function setUp(): void
     {
-        $this->sut = $this->getMockForAbstractClass(App\Entity\Vertex::class, ['yolo']);
+        $this->sut = $this->getMockForAbstractClass(Vertex::class, ['yolo']);
     }
 
     public function testTitle()
@@ -69,6 +72,13 @@ class VertexTest extends PHPUnit\Framework\TestCase
         $str = 'voila [[essai]] rien [[arf|link]] [[file:xxx]] [[ep:ext]]';
         $this->sut->setContent($str);
         $this->assertEquals(['essai', 'arf'], $this->sut->getInternalLink());
+    }
+
+    public function testRenameLink()
+    {
+        $this->sut->setContent('[[épisseur]]');
+        $this->sut->renameInternalLink('Épisseur', 'ülyss');
+        $this->assertEquals('[[ülyss]]', $this->sut->getContent());
     }
 
 }

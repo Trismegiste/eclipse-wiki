@@ -121,12 +121,8 @@ class VertexRepository extends DefaultRepository
     public function renameTitle(string $oldTitle, string $newTitle): int
     {
         $vertex = $this->findByTitle($oldTitle);
-        // build the regex with insensitive case on the first letter
-        $regex = "\[\[" . $this->getFirstLetterCaseInsensitiveRegexPart($vertex->getTitle()) . "(\]\]|\|)";
-
         // search for vertex with links to $vertex
-        // @todo search in the outbound links array embedded in Vertex class
-        $iter = $this->search(['content' => new Regex($regex)]);
+        $iter = $this->search(['outboundLink' => $vertex->getTitle()]);
         $updated = [];
         foreach ($iter as $inbound) {
             $inbound->renameInternalLink($vertex->getTitle(), $newTitle);
@@ -324,18 +320,10 @@ class VertexRepository extends DefaultRepository
                     'aggregate' => $this->collectionName,
                     // the pipeline is an array of stages
                     'pipeline' => [
-                        // extract all links and add the array
-                        ['$addFields' => ['returnObject' => ['$regexFindAll' => ['input' => '$content', 'regex' => new Regex('\[\[([^\]\|]+)')]]]],
+                        // unwind on all outbound links
+                        ['$unwind' => '$outboundLink'],
                         // remove noise
-                        ['$project' => ['title' => true, 'returnObject' => true]],
-                        // unwind for each link in content
-                        ['$unwind' => '$returnObject'],
-                        // remove noise : keeping only captures list
-                        ['$project' => ['title' => true, 'outbound' => '$returnObject.captures']],
-                        // unwind the only capture (there is only one capture parenthesis per Regex but the return value is always an array)
-                        ['$unwind' => '$outbound'],
-                        // skip external links (namespaced ou file, containing a colon)
-                        ['$match' => ['$nor' => [['outbound' => new Regex(':')]]]] // is there a better way to do this ?
+                        ['$project' => ['title' => true, 'outboundLink' => true]],
                     ],
                     'cursor' => ['batchSize' => 0]
         ]));
@@ -362,41 +350,24 @@ class VertexRepository extends DefaultRepository
             $matrix[$pk] = $vertexPk;
         }
 
-        /*
-          db.vertex.aggregate([
-          {$addFields: {returnObject: {$regexFindAll: {input:'$content', regex: /\[\[([^\]\|]+)/}}}},
-          {$unwind: '$returnObject'},
-          {$unwind: '$returnObject.captures'},
-          {$lookup: {from: 'vertex', as: 'internalLink', let: {searchTitle: '$returnObject.captures'}, pipeline: [ {$match: {$expr: {$eq: [0, {$strcasecmp: ['$$searchTitle', '$title' ]}] }}}] }},
-          {$project: {title: true, linkLabel: '$returnObject.captures', outboundVertexId: '$internalLink._id', outboundVertexTitle: '$internalLink.title' }},
-          {$unwind: '$outboundVertexId'},
-          {$unwind:'$outboundVertexTitle'} ])
-         */
         $cursor = $this->manager->executeReadCommand($this->dbName, new Command([
                     'aggregate' => $this->collectionName,
                     'cursor' => ['batchSize' => 0],
                     // the pipeline is an array of stages
                     'pipeline' => [
-                        // extract all links and add the array
-                        ['$addFields' => ['returnObject' => ['$regexFindAll' => ['input' => '$content', 'regex' => new Regex('\[\[([^\]\|]+)')]]]],
-                        // unwind on all links in the content
-                        ['$unwind' => '$returnObject'],
-                        // unwind on all captures in one link (only one)
-                        ['$unwind' => '$returnObject.captures'],
+                        // unwind on all outbound links in the content
+                        ['$unwind' => '$outboundLink'],
                         // left join in the same collection
                         [
                             '$lookup' => [
                                 'from' => $this->collectionName,
-                                'as' => 'internalLink',
-                                'let' => ['searchTitle' => '$returnObject.captures'], // this is alias
-                                'pipeline' => [
-                                    // match on title, case insensitive
-                                    ['$match' => ['$expr' => ['$eq' => [0, ['$strcasecmp' => ['$$searchTitle', '$title']]]]]]
-                                ]
+                                'localField' => 'outboundLink',
+                                'foreignField' => 'title',
+                                'as' => 'internalLink'
                             ]
                         ],
                         // remove noise
-                        ['$project' => ['title' => true, 'linkLabel' => '$returnObject.captures', 'outboundVertexId' => '$internalLink._id']],
+                        ['$project' => ['title' => true, 'linkLabel' => '$outboundLink', 'outboundVertexId' => '$internalLink._id']],
                         // unwind on the id found
                         ['$unwind' => '$outboundVertexId']
                     ]

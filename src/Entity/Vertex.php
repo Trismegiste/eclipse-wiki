@@ -29,9 +29,16 @@ abstract class Vertex implements Root, Archivable
     protected function beforeSave(): void
     {
         // extracting outbound links in a special array for backlinks and adjacency matrix
-        $this->outboundLink = array_map(function ($v) {
-            return mb_ucfirst($v);
-        }, $this->getInternalLink());
+        $this->outboundLink = array_values(
+                array_unique(
+                        array_map(
+                                function ($v) {
+                                    return mb_ucfirst($v);
+                                },
+                                $this->getInternalLink()
+                        )
+                )
+        );
 
         // timestamp
         $this->lastModified = new UTCDateTime();
@@ -171,7 +178,7 @@ abstract class Vertex implements Root, Archivable
     public function renameInternalLink(string $oldTitle, string $newTitle): void
     {
         // @todo this regex is buggy with UTF8 char on the first letter
-        $regex = "#\[\[" . static::getFirstLetterCaseInsensitiveRegexPart($oldTitle) . "(\]\]|\|)#";
+        $regex = "#\[\[" . static::getFirstLetterCaseInsensitiveRegexPart($oldTitle) . "(\]\]|\|)#u";
         $this->content = preg_replace($regex, "[[$newTitle" . '$1', $this->content);
     }
 

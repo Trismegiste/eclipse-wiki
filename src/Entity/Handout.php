@@ -18,7 +18,6 @@ class Handout extends Vertex
 
     protected function beforeSave(): void
     {
-        parent::beforeSave();
         // not used : just for text search indexing       
         $this->content = <<<WIKITEXT
 ==PC==
@@ -26,6 +25,8 @@ class Handout extends Vertex
 ==GM==
 {$this->gmInfo}
 WIKITEXT;
+        // dump outbound links
+        parent::beforeSave();
     }
 
     public function attachPicture(string $filenameInStorage): void
@@ -35,7 +36,7 @@ WIKITEXT;
 
     public function renameInternalLink(string $oldTitle, string $newTitle): void
     {
-        $regex = "#\[\[" . static::getFirstLetterCaseInsensitiveRegexPart($oldTitle) . "(\]\]|\|)#";
+        $regex = "#\[\[" . static::getFirstLetterCaseInsensitiveRegexPart($oldTitle) . "(\]\]|\|)#u";
         $this->pcInfo = preg_replace($regex, "[[$newTitle" . '$1', $this->pcInfo);
         $this->gmInfo = preg_replace($regex, "[[$newTitle" . '$1', $this->gmInfo);
     }
