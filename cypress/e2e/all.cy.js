@@ -1,7 +1,9 @@
 import './autofocus.cy';
-import './full-scenario.cy';
-import './quick-npc.cy';
-import './wikitext.cy';
 import './battlemap3d.cy';
-import './player-app.cy';
+import './full-scenario.cy';
 import './morph-bank.cy';
+import './player-app.cy';
+import './pushpublic-tag.cy';
+import './quick-npc.cy';
+import './session-report.cy';
+import './wikitext.cy';
