@@ -24,9 +24,16 @@ abstract class Vertex implements Root, Archivable
     protected string $title;
     protected ?string $content = null;
     protected $lastModified;
+    protected array $outboundLink = [];
 
     protected function beforeSave(): void
     {
+        // extracting outbound links in a special array for backlinks and adjacency matrix
+        $this->outboundLink = array_map(function ($v) {
+            return mb_ucfirst($v);
+        }, $this->getInternalLink());
+
+        // timestamp
         $this->lastModified = new UTCDateTime();
     }
 

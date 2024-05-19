@@ -72,10 +72,7 @@ class VertexRepository extends DefaultRepository
 
     public function searchByBacklinks(string $title): array
     {
-        $it = $this->search([
-            // @todo search in the array of outbound links
-            'content' => new Regex("\[\[" . $this->getFirstLetterCaseInsensitiveRegexPart($title) . "(\]\]|\|)")
-        ]);
+        $it = $this->search(['outboundLink' => mb_ucfirst($title)]);
 
         $linked = [];
         foreach ($it as $vertex) {
@@ -422,4 +419,5 @@ class VertexRepository extends DefaultRepository
                             ]
         ]));
     }
+
 }

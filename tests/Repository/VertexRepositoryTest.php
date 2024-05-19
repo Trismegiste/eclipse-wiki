@@ -42,6 +42,10 @@ class VertexRepositoryTest extends KernelTestCase
         $this->assertIsArray($backlinked);
         $this->assertCount(1, $backlinked);
         $this->assertEquals('One doc', $backlinked[0]);
+
+        $backlinked = $this->sut->searchByBacklinks('backlink');
+        $this->assertCount(1, $backlinked);
+        $this->assertEquals('One doc', $backlinked[0]);
     }
 
     public function testPrevious()
@@ -178,6 +182,7 @@ class VertexRepositoryTest extends KernelTestCase
     {
         $iter = $this->sut->dumpAllInternalLinks();
         $edges = iterator_to_array($iter);
+        var_dump($edges);
         $this->assertCount(4, $edges);
     }
 
