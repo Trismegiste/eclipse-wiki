@@ -214,20 +214,20 @@ class VertexRepositoryTest extends KernelTestCase
 
     public function testRenameComplexContent()
     {
-        $inbound = new Freeform('Starkiller');
+        $inbound = new Freeform('Štarkiller');
         $handout = new App\Entity\Handout('BG of Jedi');
-        $handout->pcInfo = 'Link to [[Starkiller|Luke]]';
-        $handout->gmInfo = 'Link to [[Starkiller|starkiller family]]';
+        $handout->pcInfo = 'Link to [[štarkiller|Luke]]';
+        $handout->gmInfo = 'Link to [[štarkiller|Štarkiller family]]';
         $loveletter = new App\Entity\Loveletter('Buy some droids');
-        $loveletter->context = '[[Starkiller|Luke]] lived in a farm';
-        $loveletter->drama = '[[Starkiller|Luke]] must purchase some droids';
+        $loveletter->context = '[[štarkiller|Luke]] lived in a farm';
+        $loveletter->drama = '[[štarkiller|Luke]] must purchase some droids';
         $timeline = new Timeline('A new hope');
         $timeline->elevatorPitch = 'Space opera';
-        $timeline->setTree(new \App\Entity\PlotNode('root', [new \App\Entity\PlotNode('Starting with [[Starkiller|Luke]]')]));
+        $timeline->setTree(new \App\Entity\PlotNode('root', [new \App\Entity\PlotNode('Starting with [[štarkiller|Luke]]')]));
         $bunch = [$inbound, $handout, $loveletter, $timeline];
         $this->sut->save($bunch);
 
-        $modif = $this->sut->renameTitle('starkiller', 'Skywalker');
+        $modif = $this->sut->renameTitle('Štarkiller', 'Skywalker');
         $this->assertEquals(4, $modif);
 
         // just to be sure we lost original objects, sending only the primary keys
@@ -247,7 +247,7 @@ class VertexRepositoryTest extends KernelTestCase
         $this->assertEquals('Skywalker', $inbound->getTitle());
         // handout
         $this->assertEquals('Link to [[Skywalker|Luke]]', $handout->pcInfo);
-        $this->assertEquals('Link to [[Skywalker|starkiller family]]', $handout->gmInfo);
+        $this->assertEquals('Link to [[Skywalker|Štarkiller family]]', $handout->gmInfo);
         // loveletter
         $this->assertEquals('[[Skywalker|Luke]] lived in a farm', $loveletter->context);
         $this->assertEquals('[[Skywalker|Luke]] must purchase some droids', $loveletter->drama);
