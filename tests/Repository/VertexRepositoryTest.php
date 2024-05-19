@@ -227,7 +227,7 @@ class VertexRepositoryTest extends KernelTestCase
         $bunch = [$inbound, $handout, $loveletter, $timeline];
         $this->sut->save($bunch);
 
-        $modif = $this->sut->renameTitle('Štarkiller', 'Skywalker');
+        $modif = $this->sut->renameTitle('štarkiller', 'Skywalker');
         $this->assertEquals(4, $modif);
 
         // just to be sure we lost original objects, sending only the primary keys

@@ -177,7 +177,6 @@ abstract class Vertex implements Root, Archivable
 
     public function renameInternalLink(string $oldTitle, string $newTitle): void
     {
-        // @todo this regex is buggy with UTF8 char on the first letter
         $regex = "#\[\[" . static::getFirstLetterCaseInsensitiveRegexPart($oldTitle) . "(\]\]|\|)#u";
         $this->content = preg_replace($regex, "[[$newTitle" . '$1', $this->content);
     }
