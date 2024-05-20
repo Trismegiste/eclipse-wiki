@@ -38,30 +38,37 @@ class DigraphExplore
     }
 
     /**
-     * Explores the digraph from a Timeline node and stop until another Timeline or after a given distance
+     * Gets the partition for a given Timeline
+     * It returns an array of vertices close to the Timeline
      * @return array
      */
     public function graphToSortedCategory(Timeline $root): array
     {
-        //   return $this->cache->get('tree_extract_' . $root->getPk(), function (ItemInterface $item) use ($root, $distance) {
-        // $item->expiresAfter(DateInterval::createFromDateString('5 minute'));
-        $partition = $this->getPartitionByTimeline()[$root->getTitle()];
-        $intl = new Collator($this->localeParam);
+        return $this->cache->get('tree_extract_' . $root->getPk(), function (ItemInterface $item) use ($root) {
+                    $item->expiresAfter(DateInterval::createFromDateString('5 minute'));
+                    $partition = $this->getPartitionByTimeline()[$root->getTitle()];
+                    $intl = new Collator($this->localeParam);
 
-        $dump = [];
-        // dispatch by category
-        foreach ($partition as $v) {
-            $dump[$v['category']][] = $v['title'];
-        }
-        // sort each category
-        foreach ($dump as $key => $v) {
-            $intl->sort($dump[$key]);
-        }
+                    $dump = [];
+                    // dispatch by category
+                    foreach ($partition as $v) {
+                        $dump[$v['category']][] = $v['title'];
+                    }
+                    // sort each category
+                    foreach ($dump as $key => $v) {
+                        $intl->sort($dump[$key]);
+                    }
 
-        return $dump;
-        //       });
+                    return $dump;
+                });
     }
 
+    /**
+     * This algorithm creates a partition of vertices in the wiki graph
+     * For each vertex, it calculates the shortest distance to all Timeline
+     * Then it regroups all vertices to the closest Timeline (or multiple Timeline if the vertex is equidistant to several Timeline)
+     * @return array
+     */
     public function getPartitionByTimeline(): array
     {
         $edge = $this->repository->getAdjacencyMatrix();

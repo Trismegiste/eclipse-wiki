@@ -64,12 +64,13 @@ class TimelineCrud extends GenericCrud
 
     /**
      * Fragment : explores the graph of Vertex and renders the tree from a Timeline vertex
-     * @param Timeline $root
+     * @param Timeline $vertex
      * @return Response
      */
-    public function tree(Timeline $root, DigraphExplore $explorer): Response
+    #[Route('partition/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
+    public function partition(Timeline $vertex, DigraphExplore $explorer): Response
     {
-        $dump = $explorer->graphToSortedCategory($root);
+        $dump = $explorer->graphToSortedCategory($vertex);
 
         return $this->render('timeline/tree.html.twig', ['network' => $dump]);
     }
