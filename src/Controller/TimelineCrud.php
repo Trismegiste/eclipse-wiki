@@ -69,7 +69,7 @@ class TimelineCrud extends GenericCrud
      */
     public function tree(Timeline $root, DigraphExplore $explorer): Response
     {
-        $dump = $explorer->graphToSortedCategory($root, 1);
+        $dump = $explorer->graphToSortedCategory($root);
 
         return $this->render('timeline/tree.html.twig', ['network' => $dump]);
     }

@@ -24,6 +24,8 @@ use Trismegiste\Strangelove\MongoDb\Repository;
 class DigraphExplore
 {
 
+    const INFINITY = 32767;
+
     protected Repository $repository;
     protected CacheInterface $cache;
     protected string $localeParam;
@@ -37,28 +39,107 @@ class DigraphExplore
 
     /**
      * Explores the digraph from a Timeline node and stop until another Timeline or after a given distance
-     * @param int $distance
      * @return array
      */
-    public function graphToSortedCategory(Timeline $root, int $distance = 2): array
+    public function graphToSortedCategory(Timeline $root): array
     {
-        return $this->cache->get('tree_extract_' . $root->getPk(), function (ItemInterface $item) use ($root, $distance) {
-                    $item->expiresAfter(DateInterval::createFromDateString('5 minute'));
-                    $tree = $this->repository->exploreTreeFrom($root, $distance);
-                    $intl = new Collator($this->localeParam);
+        //   return $this->cache->get('tree_extract_' . $root->getPk(), function (ItemInterface $item) use ($root, $distance) {
+        // $item->expiresAfter(DateInterval::createFromDateString('5 minute'));
+        $partition = $this->getPartitionByTimeline()[$root->getTitle()];
+        $intl = new Collator($this->localeParam);
 
-                    $dump = [];
-                    // dispatch by category
-                    foreach ($tree as $v) {
-                        $dump[$v->getCategory()][] = $v->getTitle();
-                    }
-                    // sort each category
-                    foreach ($dump as $key => $v) {
-                        $intl->sort($dump[$key]);
-                    }
+        $dump = [];
+        // dispatch by category
+        foreach ($partition as $v) {
+            $dump[$v['category']][] = $v['title'];
+        }
+        // sort each category
+        foreach ($dump as $key => $v) {
+            $intl->sort($dump[$key]);
+        }
 
-                    return $dump;
-                });
+        return $dump;
+        //       });
+    }
+
+    public function getPartitionByTimeline(): array
+    {
+        $edge = $this->repository->getAdjacencyMatrix();
+        $dim = count($edge);
+        $assocId = array_keys($edge); // index => mongodb pk
+        $invertAssocId = array_flip($assocId); // mongodb pk => index
+        // Initialize distance matrix
+        $matrix = [];
+        for ($row = 0; $row < $dim; $row++) {
+            $matrix[$row] = [];
+            for ($col = 0; $col < $dim; $col++) {
+                $matrix[$row][$col] = match (true) {
+                    $row === $col => 0,
+                    $edge[$assocId[$row]][$assocId[$col]] || $edge[$assocId[$col]][$assocId[$row]] => 1,
+                    default => self::INFINITY
+                };
+            }
+        }
+
+        // Floyd-Warshall algorithm
+        for ($k = 0; $k < $dim; $k++) {
+            for ($line = 0; $line < $dim; $line++) {
+                for ($column = 0; $column < $dim; $column++) {
+                    $newSum = $matrix[$line][$k] + $matrix[$k][$column];
+                    if ($newSum < $matrix[$line][$column]) {
+                        $matrix[$line][$column] = $newSum;
+                    }
+                }
+            }
+        }
+
+        // dump minimal info for vertices
+        $timelineIdx = [];
+        $title = [];
+        $category = [];
+        foreach ($this->repository->search() as $vertex) {
+            $pk = (string) $vertex->getPk();
+            $title[$pk] = $vertex->getTitle();
+            $category[$pk] = $vertex->getCategory();
+            if ($vertex instanceof \App\Entity\Timeline) {
+                $timelineIdx[] = $invertAssocId[$pk];
+            }
+        }
+
+        // group vertices by closest Timeline. If a vertex is closest to multiple Timeline, it is duplicated
+        $partition = [];
+        foreach ($matrix as $row => $column) {
+            // if the vertex is a Timeline, skip
+            if (in_array($row, $timelineIdx)) {
+                continue;
+            }
+            // extract all distances from this vertex to all Timeline
+            $distanceToTimeline = [];
+            foreach ($timelineIdx as $origin) {
+                $distanceToTimeline[$origin] = $column[$origin];
+            }
+            // sort extracted Timeline by distance
+            asort($distanceToTimeline);
+            // get the closest distance
+            $found = array_key_first($distanceToTimeline);
+            $minDist = $distanceToTimeline[$found];
+            // if it's infinity, it's an orphan, skip
+            if ($minDist === self::INFINITY) {
+                continue;
+            }
+            // append the vertex to all Timeline at the closest distance
+            foreach ($distanceToTimeline as $found => $dist) {
+                if ($minDist === $dist) {
+                    $partition[$title[$assocId[$found]]][] = [
+                        'title' => $title[$assocId[$row]],
+                        'category' => $category[$assocId[$row]],
+                        'distance' => $dist
+                    ];
+                }
+            }
+        }
+
+        return $partition;
     }
 
     /**
