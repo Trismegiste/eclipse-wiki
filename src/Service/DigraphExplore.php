@@ -40,6 +40,7 @@ class DigraphExplore
     /**
      * Gets the partition for a given Timeline
      * It returns an array of vertices close to the Timeline
+     * CACHED
      * @return array
      */
     public function graphToSortedCategory(Timeline $root): array
@@ -203,6 +204,38 @@ class DigraphExplore
             foreach ($scan as $target) {
                 if (is_null($this->repository->findByTitle($target))) {
                     $keep[$target][$vertex->getTitle()] = true;
+                }
+            }
+        }
+
+        return $keep;
+    }
+
+    /**
+     * Search for broken links in vertex content
+     */
+    public function searchForBrokenLinkByTimeline(Timeline $root): array
+    {
+        $outbound = [];
+        $edges = $this->repository->dumpAllInternalLinks();
+        foreach ($edges as $link) {
+            if (key_exists($link->title, $outbound)) {
+                $outbound[$link->title][] = $link->outboundLink;
+            } else {
+                $outbound[$link->title] = [$link->outboundLink];
+            }
+        }
+
+        $partition = $this->getPartitionByTimeline();
+        $keep = [];
+        foreach ($partition[$root->getTitle()] as $vertex) {
+            $title = $vertex['title'];
+            if (!key_exists($title, $outbound)) {
+                continue;
+            }
+            foreach ($outbound[$title] as $target) {
+                if (is_null($this->repository->findByTitle($target))) {
+                    $keep[$target][$title] = true;
                 }
             }
         }

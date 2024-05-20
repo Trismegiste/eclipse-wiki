@@ -1,0 +1,14 @@
+{# show broken/missing links in a given timeline #}
+{% extends "digraph/broken.html.twig" %}
+
+{% block title %}
+    {{ parent() }}
+    dans {{ timeline.title }}
+{% endblock %}
+
+{% block header_title %}
+    <nav style="float: right">
+        {{ include('timeline/actions.html.twig', {vertex:timeline}) }}
+    </nav>
+    {{ parent() }}
+{% endblock %}

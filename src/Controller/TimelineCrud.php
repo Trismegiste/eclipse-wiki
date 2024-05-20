@@ -67,7 +67,7 @@ class TimelineCrud extends GenericCrud
      * @param Timeline $vertex
      * @return Response
      */
-    #[Route('partition/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
+    #[Route('/partition/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function partition(Timeline $vertex, DigraphExplore $explorer): Response
     {
         $dump = $explorer->graphToSortedCategory($vertex);
@@ -85,6 +85,18 @@ class TimelineCrud extends GenericCrud
         $this->addFlash('success', 'Scenario ' . $timeline->getTitle() . ' épinglé');
 
         return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $timeline->getPk()]);
+    }
+
+    /**
+     * Show the list of broken links for a given timeline
+     */
+    #[Route('/broken/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
+    public function showBroken(Timeline $timeline, DigraphExplore $explorer): Response
+    {
+        return $this->render('timeline/broken_link.html.twig', [
+                    'timeline' => $timeline,
+                    'broken' => $explorer->searchForBrokenLinkByTimeline($timeline)
+        ]);
     }
 
 }
