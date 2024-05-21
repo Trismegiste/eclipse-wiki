@@ -40,7 +40,7 @@ class DigraphExplore
     /**
      * Gets the partition for a given Timeline
      * It returns an array of vertices close to the Timeline
-     * CACHED
+     *  - CACHED -
      * @return array
      */
     public function graphToSortedCategory(Timeline $root): array
@@ -68,6 +68,7 @@ class DigraphExplore
      * This algorithm creates a partition of vertices in the wiki graph
      * For each vertex, it calculates the shortest distance to all Timeline
      * Then it regroups all vertices to the closest Timeline (or multiple Timeline if the vertex is equidistant to several Timeline)
+     *  - SLOW -
      * @return array
      */
     public function getPartitionByTimeline(): array
@@ -90,6 +91,7 @@ class DigraphExplore
         }
 
         // Floyd-Warshall algorithm
+        // https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm
         for ($k = 0; $k < $dim; $k++) {
             for ($line = 0; $line < $dim; $line++) {
                 for ($column = 0; $column < $dim; $column++) {
@@ -135,7 +137,7 @@ class DigraphExplore
             if ($minDist === self::INFINITY) {
                 continue;
             }
-            // append the vertex to all Timeline at the closest distance
+            // append the vertex to all Timeline at the same closest distance
             foreach ($distanceToTimeline as $found => $dist) {
                 if ($minDist === $dist) {
                     $partition[$title[$assocId[$found]]][] = [
@@ -212,7 +214,9 @@ class DigraphExplore
     }
 
     /**
-     * Search for broken links in vertex content
+     * Searches for broken links in vertex content. This list is filtered for one Timeline
+     * Vertices are connected to one Timeline thanks to the Floyd-Warshall algorithm
+     *  - SLOW -
      */
     public function searchForBrokenLinkByTimeline(Timeline $root): array
     {

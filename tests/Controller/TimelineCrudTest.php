@@ -131,4 +131,15 @@ class TimelineCrudTest extends WebTestCase
         $this->client->submit($form);
     }
 
+    /** @depends testList */
+    public function testBroken(string $show)
+    {
+        $crawler = $this->client->request('GET', $show);
+        $this->assertResponseIsSuccessful();
+        $this->assertPageTitleContains('A new hope');
+        $link = $crawler->filterXPath('//nav/a/i[@class="icon-edit"]/parent::a')->link();
+        $this->client->click($link);
+        $this->assertResponseIsSuccessful();
+    }
+
 }
