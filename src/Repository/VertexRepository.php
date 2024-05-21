@@ -17,13 +17,13 @@ use InvalidArgumentException;
 use IteratorIterator;
 use MongoDB\BSON\Binary;
 use MongoDB\BSON\ObjectId;
-use MongoDB\BSON\Regex;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Driver\Command;
 use MongoDB\Driver\Cursor;
 use MongoDB\Driver\Query;
 use RuntimeException;
 use Trismegiste\Strangelove\MongoDb\DefaultRepository;
+use function mb_ucfirst;
 
 /**
  * Repository for Vertices

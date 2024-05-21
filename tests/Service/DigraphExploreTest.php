@@ -189,4 +189,44 @@ class DigraphExploreTest extends KernelTestCase
         $this->assertCount(1, $this->sut->searchForConnectedPlace($level3));
     }
 
+    public function testPartitionRealCase()
+    {
+        // reset repo
+        $this->repository->delete(iterator_to_array($this->repository->search()));
+        $this->assertCount(0, $this->repository->search());
+
+        $root = new App\Entity\Timeline('A new hope');
+        $root->elevatorPitch = 'It begins';
+        $root->setTree(new \App\Entity\PlotNode('root', [new \App\Entity\PlotNode('[[scene1]]')]));
+        $scene1 = new Scene('scene1');
+        $scene1->setContent('[[Luke]] on [[Tatooine]]');
+        $place = new \App\Entity\Place('Tatooine');
+        $place->setContent('Desert');
+        $char1 = new \App\Entity\Freeform('C3PO');
+        $char2 = new \App\Entity\Freeform('Luke');
+        $char2->setContent('Buying [[C3PO]]');
+
+        $spinoff = new App\Entity\Timeline('Rogue One');
+        $spinoff->elevatorPitch = 'the plans';
+        $spinoff->setTree(new \App\Entity\PlotNode('root', [new \App\Entity\PlotNode('[[scene5]]')]));
+        $scene5 = new Scene('scene5');
+        $scene5->setContent('Cameo of [[C3PO]] on [[Yavin 4]]');
+
+        $orphan = new App\Entity\Timeline('Ep9');
+        $orphan->elevatorPitch = 'trash';
+        $orphan->setTree(new \App\Entity\PlotNode('root'));
+
+        $this->repository->save([$root, $spinoff, $char1, $char2, $scene1, $scene5, $place, $orphan]);
+        $partition = $this->sut->getPartitionByTimeline();
+        $this->assertArrayHasKey('A new hope', $partition);
+        $this->assertArrayHasKey('Rogue One', $partition);
+        $this->assertArrayHasKey('Ep9', $partition);
+        $this->assertCount(3, $partition['A new hope']);
+        $this->assertCount(2, $partition['Rogue One']);
+        $this->assertCount(0, $partition['Ep9']);
+
+        $this->assertEquals(['Luke', 'Scene1', 'Tatooine'], array_column($partition['A new hope'], 'title'));
+        $this->assertEquals(['C3PO', 'Scene5'], array_column($partition['Rogue One'], 'title'));
+    }
+
 }
