@@ -200,7 +200,7 @@ class DigraphExplore
     public function searchForBrokenLink(): array
     {
         $keep = [];
-        // absolutely NOT optimized algorithm
+        // @todo absolutely NOT optimized algorithm
         foreach ($this->repository->search(descendingSortField: 'lastModified') as $vertex) {
             $scan = $vertex->getInternalLink();
             foreach ($scan as $target) {

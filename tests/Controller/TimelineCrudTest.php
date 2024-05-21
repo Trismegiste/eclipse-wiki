@@ -137,8 +137,18 @@ class TimelineCrudTest extends WebTestCase
         $crawler = $this->client->request('GET', $show);
         $this->assertResponseIsSuccessful();
         $this->assertPageTitleContains('A new hope');
-        $link = $crawler->filterXPath('//nav/a/i[@class="icon-edit"]/parent::a')->link();
+        $link = $crawler->filterXPath('//nav/a/i[@class="icon-broken-child"]/parent::a')->link();
         $this->client->click($link);
+        $this->assertResponseIsSuccessful();
+    }
+
+    /** @depends testList */
+    public function testAjaxPartition(string $show)
+    {
+        $this->client->request('GET', $show);
+        $pk = $this->client->getRequest()->attributes->get('pk');
+        $this->client->xmlHttpRequest('GET', "/timeline/partition/$pk");
+        $this->assertStringContainsString('Star destroyer', $this->client->getResponse()->getContent());
         $this->assertResponseIsSuccessful();
     }
 
