@@ -1,6 +1,10 @@
 <?php
 
+use App\Entity\Freeform;
+use App\Entity\Place;
+use App\Entity\PlotNode;
 use App\Entity\Scene;
+use App\Entity\Timeline;
 use App\Entity\Vertex;
 use App\Repository\VertexRepository;
 use App\Service\DigraphExplore;
@@ -177,11 +181,11 @@ class DigraphExploreTest extends KernelTestCase
 
     public function testConnectedPlace()
     {
-        $level1 = new App\Entity\Place('level1');
+        $level1 = new Place('level1');
         $level1->setContent('[[level2]]');
-        $level2 = new App\Entity\Place('level2');
+        $level2 = new Place('level2');
         $level2->setContent('[[level3]]');
-        $level3 = new App\Entity\Place('level3');
+        $level3 = new Place('level3');
         $this->repository->save([$level1, $level2, $level3]);
 
         $this->assertCount(1, $this->sut->searchForConnectedPlace($level1));
@@ -195,26 +199,26 @@ class DigraphExploreTest extends KernelTestCase
         $this->repository->delete(iterator_to_array($this->repository->search()));
         $this->assertCount(0, $this->repository->search());
 
-        $root = new App\Entity\Timeline('A new hope');
+        $root = new Timeline('A new hope');
         $root->elevatorPitch = 'It begins';
-        $root->setTree(new \App\Entity\PlotNode('root', [new \App\Entity\PlotNode('[[scene1]]')]));
+        $root->setTree(new PlotNode('root', [new PlotNode('[[scene1]]')]));
         $scene1 = new Scene('scene1');
         $scene1->setContent('[[Luke]] on [[Tatooine]]');
-        $place = new \App\Entity\Place('Tatooine');
+        $place = new Place('Tatooine');
         $place->setContent('Desert');
-        $char1 = new \App\Entity\Freeform('C3PO');
-        $char2 = new \App\Entity\Freeform('Luke');
-        $char2->setContent('Buying [[C3PO]]');
+        $char1 = new Freeform('C3PO');
+        $char2 = new Freeform('Luke');
+        $char2->setContent('Buying [[C3PO]] and [[R2D2]]');
 
-        $spinoff = new App\Entity\Timeline('Rogue One');
+        $spinoff = new Timeline('Rogue One');
         $spinoff->elevatorPitch = 'the plans';
-        $spinoff->setTree(new \App\Entity\PlotNode('root', [new \App\Entity\PlotNode('[[scene5]]')]));
+        $spinoff->setTree(new PlotNode('root', [new PlotNode('[[scene5]]')]));
         $scene5 = new Scene('scene5');
         $scene5->setContent('Cameo of [[C3PO]] on [[Yavin 4]]');
 
-        $orphan = new App\Entity\Timeline('Ep9');
+        $orphan = new Timeline('Ep9');
         $orphan->elevatorPitch = 'trash';
-        $orphan->setTree(new \App\Entity\PlotNode('root'));
+        $orphan->setTree(new PlotNode('root'));
 
         $this->repository->save([$root, $spinoff, $char1, $char2, $scene1, $scene5, $place, $orphan]);
         $partition = $this->sut->getPartitionByTimeline();
@@ -227,6 +231,17 @@ class DigraphExploreTest extends KernelTestCase
 
         $this->assertEquals(['Luke', 'Scene1', 'Tatooine'], array_column($partition['A new hope'], 'title'));
         $this->assertEquals(['C3PO', 'Scene5'], array_column($partition['Rogue One'], 'title'));
+
+        return $root;
+    }
+
+    /** @depends testPartitionRealCase */
+    public function testBrokenByTimeline(Timeline $root)
+    {
+        $listing = $this->sut->searchForBrokenLinkByTimeline($root);
+        $this->assertCount(1, $listing);
+        $this->assertArrayHasKey('R2D2', $listing);
+        $this->assertEquals(['Luke' => true], $listing['R2D2']);
     }
 
 }
