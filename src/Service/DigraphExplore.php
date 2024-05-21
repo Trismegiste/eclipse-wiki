@@ -107,17 +107,20 @@ class DigraphExplore
         $timelineIdx = [];
         $title = [];
         $category = [];
+        $partition = [];
         foreach ($this->repository->search() as $vertex) {
             $pk = (string) $vertex->getPk();
             $title[$pk] = $vertex->getTitle();
             $category[$pk] = $vertex->getCategory();
             if ($vertex instanceof \App\Entity\Timeline) {
+                // keep the pk of Timeline for skipping
                 $timelineIdx[] = $invertAssocId[$pk];
+                // initialise the partition for each Timeline
+                $partition[$vertex->getTitle()] = [];
             }
         }
 
         // group vertices by closest Timeline. If a vertex is closest to multiple Timeline, it is duplicated
-        $partition = [];
         foreach ($matrix as $row => $column) {
             // if the vertex is a Timeline, skip
             if (in_array($row, $timelineIdx)) {
