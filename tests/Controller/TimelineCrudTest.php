@@ -162,4 +162,12 @@ class TimelineCrudTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    /** @depends testAjaxPartition */
+    public function testPartitionGallery(string $pk)
+    {
+        $this->client->request('GET', "/timeline/partition/$pk/gallery");
+        $this->assertStringContainsString('Star destroyer', $this->client->getResponse()->getContent());
+        $this->assertResponseIsSuccessful();
+    }
+
 }
