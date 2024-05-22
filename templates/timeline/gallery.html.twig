@@ -1,0 +1,43 @@
+{# Graphical view of all vertices associated to a Timeline #}
+{% extends "timeline/vertex_listing.html.twig" %}
+
+{% block content %}
+    <div class="gallery">
+        {% for node in network %}
+            <div>
+                {% set pic = node.extractFirstPicture %}
+                {% if pic is not empty %}
+                    <img src="{{ path('get_picture', {title: pic}) }}"/>
+                {% endif %}
+                <h2>{{ node.title }}</h2>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .gallery {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(6, 1fr);
+        }
+
+        .gallery img {
+            height: 12vw;
+            width: 12vw;
+            object-fit: cover;
+        }
+
+        .gallery > div {
+            text-align: center;
+        }
+
+        .gallery h2 {
+            font-size: 100%;
+            margin-top: 1rem;
+        }
+    </style>
+{% endblock %}

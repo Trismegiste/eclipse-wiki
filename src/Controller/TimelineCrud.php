@@ -10,6 +10,7 @@ use App\Entity\Timeline;
 use App\Entity\Vertex;
 use App\Form\TimelineCreate;
 use App\Form\TimelineType;
+use App\Repository\VertexRepository;
 use App\Service\DigraphExplore;
 use App\Service\GameSessionTracker;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,6 +23,11 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/timeline')]
 class TimelineCrud extends GenericCrud
 {
+
+    public function __construct(VertexRepository $repo, protected DigraphExplore $explorer)
+    {
+        parent::__construct($repo);
+    }
 
     protected function createEntity(string $title): Vertex
     {
@@ -68,9 +74,9 @@ class TimelineCrud extends GenericCrud
      * @return Response
      */
     #[Route('/partition/{pk}/summary', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function partitionSummary(Timeline $vertex, DigraphExplore $explorer): Response
+    public function partitionSummary(Timeline $vertex): Response
     {
-        $dump = $explorer->graphToSortedCategory($vertex);
+        $dump = $this->explorer->graphToSortedCategory($vertex);
 
         return $this->render('timeline/ajax/summary.html.twig', ['network' => $dump]);
     }
@@ -91,11 +97,11 @@ class TimelineCrud extends GenericCrud
      * Show the list of broken links for a given timeline
      */
     #[Route('/broken/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function showBroken(Timeline $timeline, DigraphExplore $explorer): Response
+    public function showBroken(Timeline $timeline): Response
     {
         return $this->render('timeline/broken_link.html.twig', [
                     'timeline' => $timeline,
-                    'broken' => $explorer->searchForBrokenLinkByTimeline($timeline)
+                    'broken' => $this->explorer->searchForBrokenLinkByTimeline($timeline)
         ]);
     }
 
@@ -103,14 +109,31 @@ class TimelineCrud extends GenericCrud
      * Lists Vertices linked to this Timeline
      */
     #[Route('/partition/{pk}/list', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function partitionListing(Timeline $timeline, DigraphExplore $explorer): Response
+    public function partitionListing(Timeline $timeline): Response
     {
-        $dump = $explorer->graphToSortedCategory($timeline);
+        $dump = $this->explorer->graphToSortedCategory($timeline);
         $title = array_merge(...array_values($dump));
-
         $iter = $this->repository->search(['title' => ['$in' => $title]]);
 
         return $this->render('timeline/vertex_listing.html.twig', ['listing' => $iter, 'vertex' => $timeline]);
+    }
+
+    /**
+     * Shows a visual listing of all Vertices linked to a Timeline
+     * @param Timeline $vertex
+     * @return Response
+     */
+    #[Route('/partition/{pk}/gallery', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
+    public function partitionGallery(Timeline $vertex): Response
+    {
+        $dump = $this->explorer->graphToSortedCategory($vertex);
+        $title = array_merge(...array_values($dump));
+        $iter = $this->repository->search(['title' => ['$in' => $title]]);
+
+        return $this->render('timeline/gallery.html.twig', [
+                    'vertex' => $vertex,
+                    'network' => $iter
+        ]);
     }
 
 }
