@@ -147,7 +147,17 @@ class TimelineCrudTest extends WebTestCase
     {
         $this->client->request('GET', $show);
         $pk = $this->client->getRequest()->attributes->get('pk');
-        $this->client->xmlHttpRequest('GET', "/timeline/partition/$pk");
+        $this->client->xmlHttpRequest('GET', "/timeline/partition/$pk/summary");
+        $this->assertStringContainsString('Star destroyer', $this->client->getResponse()->getContent());
+        $this->assertResponseIsSuccessful();
+
+        return $pk;
+    }
+
+    /** @depends testAjaxPartition */
+    public function testPartitionListing(string $pk)
+    {
+        $this->client->request('GET', "/timeline/partition/$pk/list");
         $this->assertStringContainsString('Star destroyer', $this->client->getResponse()->getContent());
         $this->assertResponseIsSuccessful();
     }
