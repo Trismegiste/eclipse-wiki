@@ -6,9 +6,12 @@
 
 namespace App\Entity;
 
+use App\Attribute\Icon;
+
 /**
  * Loveletter
  */
+#[Icon('loveletter')]
 class Loveletter extends Vertex
 {
 

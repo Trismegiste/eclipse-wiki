@@ -6,12 +6,15 @@
         {% for node in network %}
             <div>
                 {% set pic = node.extractFirstPicture %}
+                {% if pic is empty and node.tokenPic is defined %}
+                    {% set pic = node.tokenPic %}
+                {% endif %}
                 {% if pic is not empty %}
                     <a href="{{ path('app_picture_push', {title: pic}) }}" x-bind="trigger">
                         <img src="{{ path('get_picture', {title: pic}) }}"/>
                     </a>
                 {% else %}
-                    <i class="icon-picture"></i>
+                    <i class="{{ vertex_icon(node) }}"></i>
                 {% endif %}
                 <h2><a href="{{ path('app_wiki', {title: node.title}) }}">{{ node.title }}</a></h2>
             </div>
@@ -34,6 +37,7 @@
             width: 12vw;
             object-fit: cover;
             display: block;
+            margin: auto;
         }
 
         .gallery i {
@@ -48,6 +52,10 @@
         .gallery h2 {
             font-size: 100%;
             margin-top: 0.5rem;
+        }
+
+        .gallery h2 a {
+            text-decoration-style: dotted;
         }
     </style>
 {% endblock %}

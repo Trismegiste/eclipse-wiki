@@ -6,9 +6,12 @@
 
 namespace App\Entity;
 
+use App\Attribute\Icon;
+
 /**
  * A game hand out for PCs with a GM part
  */
+#[Icon('handout')]
 class Handout extends Vertex
 {
 

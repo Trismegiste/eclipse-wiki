@@ -6,6 +6,7 @@
 
 namespace App\Twig;
 
+use App\Attribute\Icon;
 use App\Entity\Ali;
 use App\Entity\Character;
 use App\Entity\DamageRoll;
@@ -19,6 +20,7 @@ use App\Entity\Transhuman;
 use App\Entity\Vertex;
 use App\Repository\HindranceProvider;
 use OutOfBoundsException;
+use ReflectionObject;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -64,6 +66,7 @@ class SaWoExtension extends AbstractExtension
             new TwigFunction('select_row_template', [$this, 'getVertexTemplate']),
             new TwigFunction('dice_icon', [$this, 'diceIcon'], ['is_safe' => ['html']]),
             new TwigFunction('char_icon', [$this, 'iconForCharacter']),
+            new TwigFunction('vertex_icon', [$this, 'iconForVertex']),
         ];
     }
 
@@ -115,6 +118,26 @@ class SaWoExtension extends AbstractExtension
     public function getVertexTemplate(Vertex $v): string
     {
         return self::rowTemplate[get_class($v)];
+    }
+
+    public function iconForVertex(Vertex $v): string
+    {
+        if ($v instanceof Character) {
+            return $this->iconForCharacter($v);
+        }
+
+        $refl = new ReflectionObject($v);
+        while (0 === count($attr = $refl->getAttributes(Icon::class))) {
+            $refl = $refl->getParentClass();
+            if (!$refl) {
+                break;
+            }
+        }
+        if (count($attr)) {
+            return 'icon-' . $attr[0]->newInstance()->name;
+        }
+
+        return 'icon-graph';
     }
 
 }
