@@ -12,7 +12,7 @@
         <div class="pure-u-3-4">
             {{ wiki(vertex.content) }}
         </div>
-        <div class="pure-u-1-4" x-data="partition('{{ path('app_timelinecrud_partition', {pk: vertex.pk})}}')">
+        <div class="pure-u-1-4" x-data="partition('{{ path('app_timelinecrud_partitionsummary', {pk: vertex.pk})}}')">
             <div style="text-align: center">
                 <i class="icon-spin3 animate-spin big-waiting"></i>
             </div>

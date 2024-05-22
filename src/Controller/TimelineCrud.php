@@ -67,12 +67,12 @@ class TimelineCrud extends GenericCrud
      * @param Timeline $vertex
      * @return Response
      */
-    #[Route('/partition/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function partition(Timeline $vertex, DigraphExplore $explorer): Response
+    #[Route('/partition/{pk}/summary', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
+    public function partitionSummary(Timeline $vertex, DigraphExplore $explorer): Response
     {
         $dump = $explorer->graphToSortedCategory($vertex);
 
-        return $this->render('timeline/tree.html.twig', ['network' => $dump]);
+        return $this->render('timeline/ajax/summary.html.twig', ['network' => $dump]);
     }
 
     /**
@@ -97,6 +97,20 @@ class TimelineCrud extends GenericCrud
                     'timeline' => $timeline,
                     'broken' => $explorer->searchForBrokenLinkByTimeline($timeline)
         ]);
+    }
+
+    /**
+     * Lists Vertices linked to this Timeline
+     */
+    #[Route('/partition/{pk}/list', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
+    public function partitionListing(Timeline $timeline, DigraphExplore $explorer): Response
+    {
+        $dump = $explorer->graphToSortedCategory($timeline);
+        $title = array_merge(...array_values($dump));
+
+        $iter = $this->repository->search(['title' => ['$in' => $title]]);
+
+        return $this->render('timeline/vertex_listing.html.twig', ['listing' => $iter, 'vertex' => $timeline]);
     }
 
 }

@@ -1,0 +1,17 @@
+{# lists all vertices associated to a Timeline #}
+{% extends "vertex/show.html.twig" %}
+
+{% block header_title %}
+    <nav style="float: right">
+        {{ include('timeline/actions.html.twig') }}
+    </nav>   
+    {{ vertex.title }}
+{% endblock %}
+
+{% block content %}
+    <section class="entity-listing">
+        {% for item in listing %}
+            {{ include(select_row_template(item)) }}
+        {% endfor %}
+    </section>  
+{% endblock %}
