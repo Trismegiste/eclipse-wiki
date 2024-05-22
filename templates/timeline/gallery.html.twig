@@ -2,16 +2,18 @@
 {% extends "timeline/vertex_listing.html.twig" %}
 
 {% block content %}
-    <div class="gallery">
+    <div class="gallery" x-data="broadcast">
         {% for node in network %}
             <div>
                 {% set pic = node.extractFirstPicture %}
                 {% if pic is not empty %}
-                    <img src="{{ path('get_picture', {title: pic}) }}"/>
+                    <a href="{{ path('app_picture_push', {title: pic}) }}" x-bind="trigger">
+                        <img src="{{ path('get_picture', {title: pic}) }}"/>
+                    </a>
                 {% else %}
                     <i class="icon-picture"></i>
                 {% endif %}
-                <h2>{{ node.title }}</h2>
+                <h2><a href="{{ path('app_wiki', {title: node.title}) }}">{{ node.title }}</a></h2>
             </div>
         {% endfor %}
     </div>
