@@ -8,6 +8,8 @@
                 {% set pic = node.extractFirstPicture %}
                 {% if pic is not empty %}
                     <img src="{{ path('get_picture', {title: pic}) }}"/>
+                {% else %}
+                    <i class="icon-picture"></i>
                 {% endif %}
                 <h2>{{ node.title }}</h2>
             </div>
@@ -29,6 +31,12 @@
             height: 12vw;
             width: 12vw;
             object-fit: cover;
+            display: block;
+        }
+
+        .gallery i {
+            font-size: 10vw;
+            display: block;
         }
 
         .gallery > div {
@@ -37,7 +45,7 @@
 
         .gallery h2 {
             font-size: 100%;
-            margin-top: 1rem;
+            margin-top: 0.5rem;
         }
     </style>
 {% endblock %}
