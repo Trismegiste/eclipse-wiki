@@ -13,9 +13,11 @@ use App\Form\TimelineType;
 use App\Repository\VertexRepository;
 use App\Service\DigraphExplore;
 use App\Service\GameSessionTracker;
+use MongoDB\BSON\ObjectId;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Environment;
 
 /**
  * CRUD for Timeline entity
@@ -124,15 +126,39 @@ class TimelineCrud extends GenericCrud
      * @return Response
      */
     #[Route('/partition/{pk}/gallery', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function partitionGallery(Timeline $vertex): Response
+    public function partitionGallery(Timeline $timeline, Environment $twig): Response
     {
-        $dump = $this->explorer->graphToSortedCategory($vertex);
-        $title = array_merge(...array_values($dump));
-        $iter = $this->repository->search(['title' => ['$in' => $title]]);
+        $partition = $this->explorer->getPartitionByTimeline()[$timeline->getTitle()];
+
+        $pk = array_map(function ($val) {
+            return new ObjectId($val);
+        }, array_column($partition, 'pk'));
+
+        $iter = $this->repository->search(['_id' => ['$in' => $pk]]);
+        $gallery = [];
+        foreach ($iter as $vertex) {
+            /** @var Vertex $vertex */
+            $pic = $vertex->extractPicture();
+            $entry = [
+                'pk' => $vertex->getPk(),
+                'title' => $vertex->getTitle(),
+                'picture' => $pic,
+                'icon' => $twig->getFunction('vertex_icon')->getCallable()($vertex),
+                'url' => null
+            ];
+            if ($vertex instanceof \App\Entity\Character && !empty($vertex->tokenPic)) {
+                $entry['url'] = $this->generateUrl('app_profilepicture_unique', ['pk' => $vertex->getPk()]);
+            } else {
+                if (count($pic)) {
+                    $entry['url'] = $this->generateUrl('get_picture', ['title' => array_shift($pic)]);
+                }
+            }
+            $gallery[$vertex->getCategory()][] = $entry;
+        }
 
         return $this->render('timeline/gallery.html.twig', [
-                    'vertex' => $vertex,
-                    'network' => $iter
+                    'vertex' => $timeline,
+                    'gallery' => $gallery
         ]);
     }
 

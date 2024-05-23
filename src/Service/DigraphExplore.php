@@ -144,7 +144,7 @@ class DigraphExplore
             foreach ($distanceToTimeline as $found => $dist) {
                 if ($minDist === $dist) {
                     $partition[$title[$assocId[$found]]][] = [
-                        'pk' => $assocId[$found],
+                        'pk' => $assocId[$row],
                         'title' => $title[$assocId[$row]],
                         'category' => $category[$assocId[$row]],
                         'distance' => $dist
