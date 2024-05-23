@@ -6,9 +6,12 @@
 
 namespace App\Entity;
 
+use App\Attribute\Icon;
+
 /**
  * Timeline of events
  */
+#[Icon('movie-roll')]
 class Timeline extends Vertex
 {
 

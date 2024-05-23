@@ -103,7 +103,7 @@ class DigraphExplore
             }
         }
 
-        // dump minimal info for vertices
+        // dump minimal info for vertices and initialize partitions for each Timeline
         $timelineIdx = [];
         $title = [];
         $category = [];
@@ -113,7 +113,7 @@ class DigraphExplore
             $title[$pk] = $vertex->getTitle();
             $category[$pk] = $vertex->getCategory();
             if ($vertex instanceof \App\Entity\Timeline) {
-                // keep the pk of Timeline for skipping
+                // keep the pk of Timeline for skipping in the next loop
                 $timelineIdx[] = $invertAssocId[$pk];
                 // initialise the partition for each Timeline
                 $partition[$vertex->getTitle()] = [];
@@ -144,6 +144,7 @@ class DigraphExplore
             foreach ($distanceToTimeline as $found => $dist) {
                 if ($minDist === $dist) {
                     $partition[$title[$assocId[$found]]][] = [
+                        'pk' => $assocId[$found],
                         'title' => $title[$assocId[$row]],
                         'category' => $category[$assocId[$row]],
                         'distance' => $dist

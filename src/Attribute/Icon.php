@@ -6,6 +6,7 @@
 
 namespace App\Attribute;
 
+use App\Entity\Vertex;
 use Attribute;
 
 /**
@@ -15,9 +16,14 @@ use Attribute;
 class Icon
 {
 
-    public function __construct(public string $name)
+    public function __construct(protected string $name)
     {
         
+    }
+
+    public function getName(Vertex $v): string
+    {
+        return $this->name;
     }
 
 }

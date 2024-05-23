@@ -6,12 +6,12 @@
 
 namespace App\Entity;
 
-use App\Attribute\Icon;
+use App\Attribute\PlaceIcon;
 
 /**
  * Stage scene
  */
-#[Icon('place')]
+#[PlaceIcon('place')]
 class Place extends Vertex
 {
 

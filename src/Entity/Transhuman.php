@@ -6,9 +6,13 @@
 
 namespace App\Entity;
 
+use App\Attribute\TranshumanIcon;
+use function mb_strtolower;
+
 /**
  * A Transhuman character
  */
+#[TranshumanIcon('user-circle')]
 class Transhuman extends Character
 {
 
