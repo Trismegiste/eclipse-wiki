@@ -51,7 +51,7 @@ class NpcGraphCrud extends AbstractController
         return $this->render('npcgraph/run.html.twig', [
                     'graph' => $fullGraph,
                     'form' => $form->createView(),
-                    'default_name' => mb_convert_case($title, MB_CASE_TITLE)
+                    'default_name' => mb_ucfirst($title)
         ]);
     }
 

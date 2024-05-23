@@ -70,7 +70,7 @@ class NpcGenerator extends AbstractController
 
         return $this->render('npc/create.html.twig', [
                     'form' => $form->createView(),
-                    'default_name' => mb_convert_case($title, MB_CASE_TITLE)
+                    'default_name' => mb_ucfirst($title)
         ]);
     }
 
