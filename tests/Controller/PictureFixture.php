@@ -41,17 +41,22 @@ trait PictureFixture
         return $obj;
     }
 
-    protected function createRandomTranshuman()
+    protected function createRandomTranshuman(bool $wildcard = false, $extra = false)
     {
         $obj = new Transhuman('takeshi' . rand(), new Background('bg'), new Faction('diplo'));
         $obj->setContent('information');
+        $obj->wildCard = $wildcard;
+        if ($extra) {
+            $obj->surnameLang = 'random';
+        }
         return $obj;
     }
 
-    protected function createRandomPlace()
+    protected function createRandomPlace(string $world = 'World')
     {
         $obj = new Place('place' . rand());
         $obj->setContent('information');
+        $obj->world = $world;
         return $obj;
     }
 

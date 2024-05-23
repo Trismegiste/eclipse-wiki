@@ -306,7 +306,7 @@ class NpcGenerator extends AbstractController
 
         $dump = [
             'title' => $npc->getTitle(),
-            'icon' => $twig->getFunction('char_icon')->getCallable()($npc),
+            'icon' => $twig->getFunction('vertex_icon')->getCallable()($npc),
             'sheet' => $this->generateUrl('app_vertexcrud_show', ['pk' => $npc->getPk()]),
             'instantiate' => null
         ];

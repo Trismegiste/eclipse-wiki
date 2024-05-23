@@ -4,10 +4,21 @@
  * eclipse-wiki
  */
 
+use App\Entity\Ali;
+use App\Entity\Background;
+use App\Entity\Character;
+use App\Entity\DamageRoll;
+use App\Entity\Faction;
+use App\Entity\Freeform;
+use App\Entity\Transhuman;
+use App\Entity\Vertex;
 use App\Twig\SaWoExtension;
+use PHPUnit\Framework\TestCase;
 
-class SaWoExtensionTest extends PHPUnit\Framework\TestCase
+class SaWoExtensionTest extends TestCase
 {
+
+    use \App\Tests\Controller\PictureFixture;
 
     protected $sut;
 
@@ -41,31 +52,40 @@ class SaWoExtensionTest extends PHPUnit\Framework\TestCase
 
     public function testAddRaise()
     {
-        $roll = new App\Entity\DamageRoll();
+        $roll = new DamageRoll();
         $roll = $this->sut->addRaise($roll);
         $this->assertEquals(1, $roll->getDieCount(6));
         $roll = $this->sut->addRaise($roll);
         $this->assertEquals(2, $roll->getDieCount(6));
     }
 
-    public function getNpc(): array
+    public function getVertex(): array
     {
         return [
-            [new App\Entity\Ali('ali')],
-            [new App\Entity\Freeform('free')]
+            [new Ali('ali'), 'icon-ali'],
+            [new Freeform('free'), 'icon-monster'],
+            [$this->createRandomTranshuman(), 'icon-male'],
+            [$this->createRandomTranshuman(wildcard: true), 'icon-wildcard'],
+            [$this->createRandomTranshuman(extra: true), 'icon-extra'],
+            [$this->createRandomPlace(), 'icon-place'],
+            [$this->createRandomPlace('Simulespace'), 'icon-simulspace'],
+            [$this->createRandomTimeline(), 'icon-movie-roll'],
+            [$this->createRandomScene(), 'icon-video'],
+            [$this->createRandomHandout(), 'icon-handout'],
+            [$this->createRandomLoveletter(), 'icon-loveletter'],
         ];
     }
 
-    /** @dataProvider getNpc */
-    public function testIconForCharacter(App\Entity\Character $npc)
+    /** @dataProvider getVertex */
+    public function testIconForVertex(Vertex $npc, $expected)
     {
-        $this->assertStringStartsWith('icon', $this->sut->iconForCharacter($npc));
+        $icon = $this->sut->iconForVertex($npc);
+        $this->assertEquals($expected, $icon);
     }
 
-    public function testBadCharIcon()
+    public function testDefaultIcon()
     {
-        $this->expectException(OutOfBoundsException::class);
-        $this->assertStringStartsWith('icon', $this->sut->iconForCharacter($this->createStub(App\Entity\Character::class)));
+        $this->assertEquals('icon-graph', $this->sut->iconForVertex($this->createStub(Character::class)));
     }
 
 }
