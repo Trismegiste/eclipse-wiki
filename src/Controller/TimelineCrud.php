@@ -126,7 +126,7 @@ class TimelineCrud extends GenericCrud
      * @return Response
      */
     #[Route('/partition/{pk}/gallery', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function partitionGallery(Timeline $timeline, Environment $twig): Response
+    public function partitionGallery(Timeline $timeline, \App\Service\PartitionGalleryFactory $fac): Response
     {
         $partition = $this->explorer->getPartitionByTimeline()[$timeline->getTitle()];
 
@@ -135,43 +135,10 @@ class TimelineCrud extends GenericCrud
         }, array_column($partition, 'pk'));
 
         $iter = $this->repository->search(['_id' => ['$in' => $pk]]);
-        $gallery = [];
-        foreach ($iter as $vertex) {
-            /** @var Vertex $vertex */
-            $pic = $vertex->extractPicture();
-            $entry = [
-                'pk' => $vertex->getPk(),
-                'title' => $vertex->getTitle(),
-                'picture' => $pic,
-                'icon' => $twig->getFunction('vertex_icon')->getCallable()($vertex),
-                'thumb' => null,
-                'push' => null,
-                'classname' => 'square'
-            ];
-            if ($vertex instanceof \App\Entity\Character && !empty($vertex->tokenPic)) {
-                $entry['thumb'] = $this->generateUrl('app_profilepicture_unique', ['pk' => $vertex->getPk()]);
-                $entry['push'] = $entry['thumb'];
-                $entry['classname'] = 'pure-img';
-            } else {
-                if (count($pic)) {
-                    $firstEntry = array_shift($pic);
-                    $entry['thumb'] = $this->generateUrl('get_picture', ['title' => $firstEntry]);
-                    $entry['push'] = $this->generateUrl('app_picture_push', ['title' => $firstEntry]);
-                }
-            }
-            $gallery[$vertex->getCategory()][] = $entry;
-        }
-        // transhuman and place categories in front of the array
-        if (key_exists('place', $gallery)) {
-            $gallery = array_merge(['place' => $gallery['place']], $gallery);
-        }
-        if (key_exists('transhuman', $gallery)) {
-            $gallery = array_merge(['transhuman' => $gallery['transhuman']], $gallery);
-        }
 
         return $this->render('timeline/partition/gallery.html.twig', [
                     'vertex' => $timeline,
-                    'gallery' => $gallery
+                    'gallery' => $fac->create($iter)
         ]);
     }
 
