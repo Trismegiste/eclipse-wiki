@@ -7,14 +7,14 @@
         <section class="gallery" x-data="broadcast">
             {% for node in listing %}
                 <div>
-                    {% if node.url is not empty %}
-                        <a href="{{ node.url }}" x-bind="trigger">
-                            <img src="{{ node.url }}"/>
+                    {% if node.push is not empty %}
+                        <a href="{{ node.push }}" x-bind="trigger">
+                            <img src="{{ node.thumb }}" class="{{ node.classname }}"/>
                         </a>
                     {% else %}
                         <i class="{{ node.icon }}"></i>
                     {% endif %}
-                    <h2><a href="{{ path('app_wiki', {title: node.title}) }}">{{ node.title }}</a></h2>
+                    <h3><a href="{{ path('app_wiki', {title: node.title}) }}">{{ node.title }}</a></h3>
                 </div>
             {% endfor %}
         </section>
@@ -25,35 +25,44 @@
 {% block stylesheets %}
     {{ parent() }}
     <style>
+        main {
+            --columns: 8;
+        }
+
         .gallery {
             display: grid;
             gap: 1rem;
-            grid-template-columns: repeat(6, 1fr);
+            grid-template-columns: repeat(var(--columns), 1fr);
         }
 
-        .gallery img {
-            height: 12vw;
-            width: 12vw;
+        .gallery img.square {
+            height: calc(100vw * 5 / 6 / var(--columns) - 1em);
+            width: calc(100vw * 5 / 6 / var(--columns) - 1em);
             object-fit: cover;
             display: block;
             margin: auto;
         }
 
         .gallery i {
-            font-size: 10vw;
+            font-size: calc(100vw * 5 / 6 / var(--columns) / 1.5);
             display: block;
+            margin: 0;
         }
 
         .gallery > div {
             text-align: center;
         }
 
-        .gallery h2 {
-            font-size: 100%;
-            margin-top: 0.5rem;
+        main h2 {
+            text-transform: capitalize;
         }
 
-        .gallery h2 a {
+        .gallery h3 {
+            font-size: 100%;
+            margin: 0;
+        }
+
+        .gallery h3 a {
             text-decoration-style: dotted;
         }
     </style>

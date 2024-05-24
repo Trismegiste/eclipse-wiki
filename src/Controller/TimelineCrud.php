@@ -144,16 +144,29 @@ class TimelineCrud extends GenericCrud
                 'title' => $vertex->getTitle(),
                 'picture' => $pic,
                 'icon' => $twig->getFunction('vertex_icon')->getCallable()($vertex),
-                'url' => null
+                'thumb' => null,
+                'push' => null,
+                'classname' => 'square'
             ];
             if ($vertex instanceof \App\Entity\Character && !empty($vertex->tokenPic)) {
-                $entry['url'] = $this->generateUrl('app_profilepicture_unique', ['pk' => $vertex->getPk()]);
+                $entry['thumb'] = $this->generateUrl('app_profilepicture_unique', ['pk' => $vertex->getPk()]);
+                $entry['push'] = $entry['thumb'];
+                $entry['classname'] = 'pure-img';
             } else {
                 if (count($pic)) {
-                    $entry['url'] = $this->generateUrl('get_picture', ['title' => array_shift($pic)]);
+                    $firstEntry = array_shift($pic);
+                    $entry['thumb'] = $this->generateUrl('get_picture', ['title' => $firstEntry]);
+                    $entry['push'] = $this->generateUrl('app_picture_push', ['title' => $firstEntry]);
                 }
             }
             $gallery[$vertex->getCategory()][] = $entry;
+        }
+        // transhuman and place categories in front of the array
+        if (key_exists('place', $gallery)) {
+            $gallery = array_merge(['place' => $gallery['place']], $gallery);
+        }
+        if (key_exists('transhuman', $gallery)) {
+            $gallery = array_merge(['transhuman' => $gallery['transhuman']], $gallery);
         }
 
         return $this->render('timeline/partition/gallery.html.twig', [
