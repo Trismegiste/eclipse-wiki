@@ -2,14 +2,19 @@
 
 {% block title %}Liste des Scenarii{% endblock %}
 
-{% block header_title %}{{ block('title') }}{% endblock %}
+{% block header_title %}
+    <div style="float: right">
+        <a href="{{ path('app_timelinecrud_create') }}" title="Créer un nouveau scenario">
+            <i class="icon-movie-plus"></i>
+        </a> 
+    </div>
+    {{ block('title') }}
+{% endblock %}
 
 {% block content %}
-    <a href="{{ path('app_timelinecrud_create') }}">
-        <i class="icon-movie-plus"></i>
-        Créer un nouveau scenario
-    </a> 
-    {% for vertex in listing %}
-        {{ dump(vertex.title) }}
-    {% endfor %}
+    <section class="entity-listing">
+        {% for item in listing %}
+            {{ include(select_row_template(item)) }}
+        {% endfor %}
+    </section>
 {% endblock %}

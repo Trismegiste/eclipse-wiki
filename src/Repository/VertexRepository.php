@@ -234,6 +234,17 @@ class VertexRepository extends DefaultRepository
         );
     }
 
+    public function searchTimeline(): iterable
+    {
+        return $this->manager->executeQuery($this->getNamespace(), new Query(
+                                ['__pclass' => new Binary(Timeline::class, Binary::TYPE_USER_DEFINED)],
+                                ['sort' => [
+                                'archived' => 1,
+                                'lastModified' => -1
+                            ]]
+        ));
+    }
+
     /**
      * Starts from an instance of Timeline and recursively explores all adjacent neighbours (inbound and outbound)
      * until it reaches another Timeline instance or it crosses a given number of edges.
