@@ -7,7 +7,7 @@
         <section class="gallery" x-data="broadcast">
             {% for node in listing %}
                 <div>
-                    {% if node.push is not empty %}
+                    {% if node.pushable %}
                         <a href="{{ node.push }}" x-bind="trigger">
                             <img src="{{ node.thumb }}" class="{{ node.classname }}"/>
                         </a>
@@ -40,7 +40,6 @@
             width: calc(100vw * 5 / 6 / var(--columns) - 1em);
             object-fit: cover;
             display: block;
-            margin: auto;
         }
 
         .gallery i {
@@ -59,7 +58,7 @@
 
         .gallery h3 {
             font-size: 100%;
-            margin: 0;
+            margin-top: 0.5em;
         }
 
         .gallery h3 a {

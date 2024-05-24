@@ -7,6 +7,7 @@
 namespace App\Service;
 
 use App\Entity\Character;
+use App\Entity\GalleryItem;
 use App\Entity\Vertex;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
@@ -17,9 +18,11 @@ use Twig\Environment;
 class PartitionGalleryFactory
 {
 
-    public function __construct(protected UrlGeneratorInterface $routing, protected Environment $twig)
+    protected $getIcon;
+
+    public function __construct(protected UrlGeneratorInterface $routing, Environment $twig)
     {
-        
+        $this->getIcon = $twig->getFunction('vertex_icon')->getCallable();
     }
 
     public function create(iterable $cursor): array
@@ -27,26 +30,17 @@ class PartitionGalleryFactory
         $gallery = [];
         foreach ($cursor as $vertex) {
             /** @var Vertex $vertex */
-            $pic = $vertex->extractPicture();
-            // @todo this should be a class
-            $entry = [
-                'pk' => $vertex->getPk(),
-                'title' => $vertex->getTitle(),
-                'picture' => $pic,
-                'icon' => $this->twig->getFunction('vertex_icon')->getCallable()($vertex),
-                'thumb' => null,
-                'push' => null,
-                'classname' => 'square'
-            ];
+            $entry = new GalleryItem($vertex, ($this->getIcon)($vertex));
+            $entry->classname = 'square';
+
             if ($vertex instanceof Character && !empty($vertex->tokenPic)) {
-                $entry['thumb'] = $this->routing->generate('app_profilepicture_unique', ['pk' => $vertex->getPk()]);
-                $entry['push'] = $entry['thumb'];
-                $entry['classname'] = 'pure-img';
+                $entry->push = $entry->thumb = $this->routing->generate('app_profilepicture_unique', ['pk' => $vertex->getPk()]);
+                $entry->classname = 'pure-img';
             } else {
-                if (count($pic)) {
-                    $firstEntry = array_shift($pic);
-                    $entry['thumb'] = $this->routing->generate('get_picture', ['title' => $firstEntry]);
-                    $entry['push'] = $this->routing->generate('app_picture_push', ['title' => $firstEntry]);
+                if (count($entry->picture)) {
+                    $firstEntry = reset($entry->picture);
+                    $entry->thumb = $this->routing->generate('get_picture', ['title' => $firstEntry]);
+                    $entry->push = $this->routing->generate('app_picture_push', ['title' => $firstEntry]);
                 }
             }
             $gallery[$vertex->getCategory()][] = $entry;
