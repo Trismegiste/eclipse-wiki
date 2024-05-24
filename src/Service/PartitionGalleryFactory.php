@@ -46,14 +46,17 @@ class PartitionGalleryFactory
             $gallery[$vertex->getCategory()][] = $entry;
         }
         // transhuman and place categories in front of the array
-        if (key_exists('place', $gallery)) {
-            $gallery = array_merge(['place' => $gallery['place']], $gallery);
-        }
-        if (key_exists('transhuman', $gallery)) {
-            $gallery = array_merge(['transhuman' => $gallery['transhuman']], $gallery);
-        }
+        $this->moveKeyInFront($gallery, 'place');
+        $this->moveKeyInFront($gallery, 'transhuman');
 
         return $gallery;
+    }
+
+    protected function moveKeyInFront(&$assoc, string $key): void
+    {
+        if (key_exists($key, $assoc)) {
+            $assoc = array_merge([$key => $assoc[$key]], $assoc);
+        }
     }
 
 }
