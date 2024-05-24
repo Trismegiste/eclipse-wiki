@@ -6,8 +6,8 @@
 
 namespace App\Service;
 
-use App\Entity\Character;
 use App\Entity\GalleryItem;
+use App\Entity\Transhuman;
 use App\Entity\Vertex;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
@@ -33,7 +33,7 @@ class PartitionGalleryFactory
             $entry = new GalleryItem($vertex, ($this->getIcon)($vertex));
             $entry->classname = 'square';
 
-            if ($vertex instanceof Character && !empty($vertex->tokenPic)) {
+            if ($vertex instanceof Transhuman && !empty($vertex->tokenPic)) {
                 $entry->push = $entry->thumb = $this->routing->generate('app_profilepicture_unique', ['pk' => $vertex->getPk()]);
                 $entry->classname = 'pure-img';
             } else {
