@@ -101,7 +101,7 @@ class TimelineCrud extends GenericCrud
     #[Route('/broken/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function showBroken(Timeline $timeline): Response
     {
-        return $this->render('timeline/broken_link.html.twig', [
+        return $this->render('timeline/partition/broken.html.twig', [
                     'timeline' => $timeline,
                     'broken' => $this->explorer->searchForBrokenLinkByTimeline($timeline)
         ]);
@@ -117,7 +117,7 @@ class TimelineCrud extends GenericCrud
         $title = array_merge(...array_values($dump));
         $iter = $this->repository->search(['title' => ['$in' => $title]]);
 
-        return $this->render('timeline/vertex_listing.html.twig', ['listing' => $iter, 'vertex' => $timeline]);
+        return $this->render('timeline/partition/listing.html.twig', ['listing' => $iter, 'vertex' => $timeline]);
     }
 
     /**
@@ -156,7 +156,7 @@ class TimelineCrud extends GenericCrud
             $gallery[$vertex->getCategory()][] = $entry;
         }
 
-        return $this->render('timeline/gallery.html.twig', [
+        return $this->render('timeline/partition/gallery.html.twig', [
                     'vertex' => $timeline,
                     'gallery' => $gallery
         ]);
