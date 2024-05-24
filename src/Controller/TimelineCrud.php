@@ -142,4 +142,12 @@ class TimelineCrud extends GenericCrud
         ]);
     }
 
+    #[Route('/listing', methods: ['GET'])]
+    public function listing(): Response
+    {
+        $iter = $this->repository->findByClass(Timeline::class);
+
+        return $this->render('timeline/listing.html.twig', ['listing' => $iter]);
+    }
+
 }

@@ -1,0 +1,15 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Liste des Scenarii{% endblock %}
+
+{% block header_title %}{{ block('title') }}{% endblock %}
+
+{% block content %}
+    <a href="{{ path('app_timelinecrud_create') }}">
+        <i class="icon-movie-plus"></i>
+        Créer un nouveau scenario
+    </a> 
+    {% for vertex in listing %}
+        {{ dump(vertex.title) }}
+    {% endfor %}
+{% endblock %}
