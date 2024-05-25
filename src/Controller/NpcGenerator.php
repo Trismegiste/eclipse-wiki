@@ -18,6 +18,7 @@ use App\Form\NpcResync;
 use App\Form\NpcStats;
 use App\Form\QuickNpc\SingleNodeChoice;
 use App\Form\Type\ProviderChoiceType;
+use App\Form\Type\WikiTitleType;
 use App\Repository\BackgroundProvider;
 use App\Repository\CharacterFactory;
 use App\Repository\FactionProvider;
@@ -27,15 +28,13 @@ use App\Twig\SaWoExtension;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
-use const MB_CASE_TITLE;
-use function mb_convert_case;
+use function mb_ucfirst;
 
 /**
  * CRUD for NPC
@@ -140,7 +139,7 @@ class NpcGenerator extends AbstractController
         $newNpc->setTitle($npc->getTitle() . ' (copie)');
 
         $form = $this->createFormBuilder($newNpc)
-                ->add('title', TextType::class)
+                ->add('title', WikiTitleType::class)
                 ->add('wildCard', CheckboxType::class, ['required' => false])
                 ->add('copy', SubmitType::class)
                 ->getForm();
