@@ -7,22 +7,19 @@
 namespace App\Controller;
 
 use App\Entity\Vertex;
+use App\Form\Type\WikiTitleType;
 use App\Form\VertexType;
 use App\Repository\VertexRepository;
 use App\Service\DigraphExplore;
 use App\Service\GameSessionTracker;
 use App\Twig\SaWoExtension;
-use App\Validator\UniqueVertexTitle;
 use LogicException;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Regex;
 
 /**
  * CRUD for Vertex
@@ -170,14 +167,7 @@ class VertexCrud extends GenericCrud
         $backlinks = $this->repository->searchByBacklinks($vertex->getTitle());
 
         $form = $this->createFormBuilder($vertex)
-                ->add('title', TextType::class, [
-                    'label' => 'Nouveau nom',
-                    'constraints' => [
-                        new Regex(Vertex::FORBIDDEN_REGEX_TITLE, match: false),
-                        new NotBlank(),
-                        new UniqueVertexTitle()
-                    ]
-                ])
+                ->add('title', WikiTitleType::class, ['label' => 'Nouveau nom'])
                 ->add('rename', SubmitType::class)
                 ->setMethod('PUT')
                 ->getForm();

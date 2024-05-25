@@ -7,18 +7,15 @@
 namespace App\Form;
 
 use App\Entity\Freeform;
-use App\Entity\Vertex;
+use App\Form\Type\FullTextChoice;
+use App\Form\Type\WikiTitleType;
 use App\Repository\CharacterFactory;
-use App\Validator\UniqueVertexTitle;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Regex;
 
 /**
  * A form type for creating a free from NPC
@@ -37,15 +34,8 @@ class FreeformCreate extends AbstractType
     {
         $builder
                 ->add('wildCard', CheckboxType::class, ['required' => false])
-                ->add('title', TextType::class, [
-                    'attr' => ['placeholder' => 'Choisissez un nom'],
-                    'constraints' => [
-                        new Regex(Vertex::FORBIDDEN_REGEX_TITLE, match: false),
-                        new NotBlank(),
-                        new UniqueVertexTitle()
-                    ]
-                ])
-                ->add('type', Type\FullTextChoice::class, ['category' => 'freeform_type',
+                ->add('title', WikiTitleType::class, ['attr' => ['placeholder' => 'Choisissez un nom']])
+                ->add('type', FullTextChoice::class, ['category' => 'freeform_type',
                     'placeholder' => '-------------',
                     'mapped' => false
                 ])

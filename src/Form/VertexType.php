@@ -7,14 +7,12 @@
 namespace App\Form;
 
 use App\Entity\Vertex;
-use App\Validator\UniqueVertexTitle;
+use App\Form\Type\WikitextType;
+use App\Form\Type\WikiTitleType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Regex;
 
 /**
  * Type for Vertex
@@ -26,19 +24,12 @@ class VertexType extends AbstractType
     {
         if (!$options['edit']) {
             $builder
-                    ->add('title', TextType::class, [
-                        'constraints' => [
-                            new Regex(Vertex::FORBIDDEN_REGEX_TITLE, match: false),
-                            new NotBlank(),
-                            new UniqueVertexTitle()
-                        ],
-                        'attr' => ['data-autofocus' => null]
-                    ])
-                    ->add('content', Type\WikitextType::class, ['attr' => ['rows' => 30, 'data-autofocus' => null]])
+                    ->add('title', WikiTitleType::class)
+                    ->add('content', WikitextType::class, ['attr' => ['rows' => 30, 'data-autofocus' => null]])
                     ->add('create', SubmitType::class);
         } else {
             $builder
-                    ->add('content', Type\WikitextType::class, ['attr' => ['rows' => 30, 'data-autofocus' => null]])
+                    ->add('content', WikitextType::class, ['attr' => ['rows' => 30, 'data-autofocus' => null]])
                     ->add('create', SubmitType::class, ['label' => 'Edit'])
                     ->setMethod('PUT');
         }

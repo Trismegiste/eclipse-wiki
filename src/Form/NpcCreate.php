@@ -7,22 +7,20 @@
 namespace App\Form;
 
 use App\Entity\Transhuman;
-use App\Entity\Vertex;
+use App\Form\Type\ProviderChoiceType;
 use App\Form\Type\SurnameLanguageType;
+use App\Form\Type\WikitextType;
+use App\Form\Type\WikiTitleType;
 use App\Repository\BackgroundProvider;
 use App\Repository\CharacterFactory;
 use App\Repository\FactionProvider;
 use App\Repository\MorphProvider;
-use App\Validator\UniqueVertexTitle;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Regex;
 
 /**
  * Creation of Npc
@@ -47,19 +45,12 @@ class NpcCreate extends AbstractType
     {
         $builder
                 ->add('wildCard', CheckboxType::class, ['required' => false])
-                ->add('title', TextType::class, [
-                    'attr' => ['placeholder' => 'Choisissez un nom'],
-                    'constraints' => [
-                        new Regex(Vertex::FORBIDDEN_REGEX_TITLE, match: false),
-                        new NotBlank(),
-                        new UniqueVertexTitle()
-                    ]
-                ])
-                ->add('background', Type\ProviderChoiceType::class, ['provider' => $this->background, 'placeholder' => '--- Choisissez un Historique ---'])
-                ->add('faction', Type\ProviderChoiceType::class, ['provider' => $this->faction, 'placeholder' => '--- Choisissez une Faction ---'])
-                ->add('morph', Type\ProviderChoiceType::class, ['provider' => $this->morph, 'placeholder' => '--- Choisissez un Morphe ---'])
+                ->add('title', WikiTitleType::class, ['attr' => ['placeholder' => 'Choisissez un nom']])
+                ->add('background', ProviderChoiceType::class, ['provider' => $this->background, 'placeholder' => '--- Choisissez un Historique ---'])
+                ->add('faction', ProviderChoiceType::class, ['provider' => $this->faction, 'placeholder' => '--- Choisissez une Faction ---'])
+                ->add('morph', ProviderChoiceType::class, ['provider' => $this->morph, 'placeholder' => '--- Choisissez un Morphe ---'])
                 ->add('surnameLang', SurnameLanguageType::class)
-                ->add('content', Type\WikitextType::class, ['required' => false])
+                ->add('content', WikitextType::class, ['required' => false])
                 ->add('generate', SubmitType::class);
     }
 
