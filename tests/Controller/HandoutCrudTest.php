@@ -45,9 +45,9 @@ class HandoutCrudTest extends WebTestCase
 
     public function testCreateWithTitle()
     {
-        $crawler = $this->client->request('GET', '/handout/create?title=help');
+        $crawler = $this->client->request('GET', '/handout/create?title=àled');
         $form = $crawler->selectButton('handout_create')->form();
-        $this->assertEquals('Help', $form['handout']['title']->getValue());
+        $this->assertEquals('Àled', $form['handout']['title']->getValue());
     }
 
     public function testList()

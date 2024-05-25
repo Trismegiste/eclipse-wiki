@@ -81,4 +81,10 @@ class VertexTest extends TestCase
         $this->assertEquals('[[ülyss]]', $this->sut->getContent());
     }
 
+    public function testSetTitle()
+    {
+        $this->sut->setTitle('àlèd');
+        $this->assertEquals('Àlèd', $this->sut->getTitle());
+    }
+
 }

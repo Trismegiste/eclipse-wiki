@@ -102,7 +102,7 @@ abstract class Vertex implements Root, Archivable
      */
     public function setTitle(string $newTitle): void
     {
-        $this->title = $newTitle;
+        $this->title = mb_ucfirst($newTitle);
     }
 
     /**
