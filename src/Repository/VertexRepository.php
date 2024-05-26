@@ -32,11 +32,6 @@ use function mb_ucfirst;
 class VertexRepository extends DefaultRepository
 {
 
-    protected function getFirstLetterCaseInsensitiveRegexPart(string $title): string
-    {
-        return Vertex::getFirstLetterCaseInsensitiveRegexPart($title);
-    }
-
     /**
      * Find the first vertex by its title. First letter is case-insensitive
      * @param string $title

@@ -73,13 +73,14 @@ WIKITEXT;
      */
     public function renameInternalLink(string $oldTitle, string $newTitle): void
     {
+        $this->elevatorPitch = static::replaceInternalLinkFirstCharCaseInsensitive($this->elevatorPitch, $oldTitle, $newTitle);
+        $this->debriefing = static::replaceInternalLinkFirstCharCaseInsensitive($this->debriefing, $oldTitle, $newTitle);
         $this->recursivRenameInternalLink($this->tree, $oldTitle, $newTitle);
     }
 
     protected function recursivRenameInternalLink(PlotNode $node, string $oldTitle, string $newTitle): void
     {
-        $regex = "#\[\[" . static::getFirstLetterCaseInsensitiveRegexPart($oldTitle) . "(\]\]|\|)#u";
-        $node->title = preg_replace($regex, "[[$newTitle" . '$1', $node->title);
+        $node->title = static::replaceInternalLinkFirstCharCaseInsensitive($node->title, $oldTitle, $newTitle);
         foreach ($node->nodes as $child) {
             $this->recursivRenameInternalLink($child, $oldTitle, $newTitle);
         }

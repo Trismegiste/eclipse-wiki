@@ -167,18 +167,22 @@ abstract class Vertex implements Root, Archivable
         $this->content .= "\n\n[[file:$filenameInStorage]]\n";
     }
 
-    static public function getFirstLetterCaseInsensitiveRegexPart(string $title): string
+    static protected function replaceInternalLinkFirstCharCaseInsensitive(?string $field, string $oldTitle, string $newTitle): ?string
     {
-        $tmp = preg_split('//u', $title, -1, PREG_SPLIT_NO_EMPTY);
-        $firstLetter = array_shift($tmp);
+        if (is_null($field)) {
+            return null;
+        }
 
-        return "(?i:$firstLetter)" . preg_quote(implode('', $tmp));
+        $tmp = preg_split('//u', $oldTitle, -1, PREG_SPLIT_NO_EMPTY);
+        $firstLetter = array_shift($tmp);
+        $regex = "#\[\[(?i:$firstLetter)" . preg_quote(implode('', $tmp)) . "(\]\]|\|)#u";
+
+        return preg_replace($regex, "[[$newTitle" . '$1', $field);
     }
 
     public function renameInternalLink(string $oldTitle, string $newTitle): void
     {
-        $regex = "#\[\[" . static::getFirstLetterCaseInsensitiveRegexPart($oldTitle) . "(\]\]|\|)#u";
-        $this->content = preg_replace($regex, "[[$newTitle" . '$1', $this->content);
+        $this->content = static::replaceInternalLinkFirstCharCaseInsensitive($this->content, $oldTitle, $newTitle);
     }
 
 }

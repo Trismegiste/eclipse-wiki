@@ -44,9 +44,8 @@ WIKITEXT;
 
     public function renameInternalLink(string $oldTitle, string $newTitle): void
     {
-        $regex = "#\[\[" . static::getFirstLetterCaseInsensitiveRegexPart($oldTitle) . "(\]\]|\|)#u";
-        $this->context = preg_replace($regex, "[[$newTitle" . '$1', $this->context);
-        $this->drama = preg_replace($regex, "[[$newTitle" . '$1', $this->drama);
+        $this->context = static::replaceInternalLinkFirstCharCaseInsensitive($this->context, $oldTitle, $newTitle);
+        $this->drama = static::replaceInternalLinkFirstCharCaseInsensitive($this->drama, $oldTitle, $newTitle);
     }
 
 }

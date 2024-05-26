@@ -39,9 +39,8 @@ WIKITEXT;
 
     public function renameInternalLink(string $oldTitle, string $newTitle): void
     {
-        $regex = "#\[\[" . static::getFirstLetterCaseInsensitiveRegexPart($oldTitle) . "(\]\]|\|)#u";
-        $this->pcInfo = preg_replace($regex, "[[$newTitle" . '$1', $this->pcInfo);
-        $this->gmInfo = preg_replace($regex, "[[$newTitle" . '$1', $this->gmInfo);
+        $this->pcInfo = static::replaceInternalLinkFirstCharCaseInsensitive($this->pcInfo, $oldTitle, $newTitle);
+        $this->gmInfo = static::replaceInternalLinkFirstCharCaseInsensitive($this->gmInfo, $oldTitle, $newTitle);
     }
 
 }
