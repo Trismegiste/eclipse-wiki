@@ -44,9 +44,9 @@ class WikitextContentMapperTest extends TestCase
                 ->method('render')
                 ->willReturn('content');
 
-        $obj = new Scene('old');
+        $obj = [];
         $this->sut->mapFormsToData(new ArrayIterator([]), $obj);
-        $this->assertEquals('content', $obj->getContent());
+        $this->assertEquals('content', $obj);
     }
 
 }

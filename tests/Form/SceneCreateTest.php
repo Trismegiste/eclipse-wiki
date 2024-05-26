@@ -43,8 +43,10 @@ class SceneCreateTest extends KernelTestCase
     {
         $this->sut->submit([
             "title" => "In The Pale Moonlight",
-            'place' => 'Deep Space 9',
-            'npc' => ['Sisko', 'Garak', 'Vreenak']
+            'content' => [
+                'place' => 'Deep Space 9',
+                'npc' => ['Sisko', 'Garak', 'Vreenak']
+            ]
         ]);
         $this->assertTrue($this->sut->isSynchronized());
         $this->assertTrue($this->sut->isValid(), $this->sut->getErrors(true, true));

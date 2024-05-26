@@ -30,16 +30,6 @@ class WikitextContentMapper implements DataMapperInterface
     public function mapDataToForms($viewData, Traversable $forms): void
     {
         // there is no data yet, so nothing to prepopulate
-        if (null === $viewData) {
-            return;
-        }
-
-        if (!$viewData instanceof Vertex) {
-            throw new UnexpectedTypeException($viewData, Vertex::class);
-        }
-
-        $forms = iterator_to_array($forms);
-        $forms['title']->setData($viewData->getTitle());
     }
 
     public function mapFormsToData(Traversable $forms, &$viewData): void
@@ -49,8 +39,8 @@ class WikitextContentMapper implements DataMapperInterface
             return;
         }
 
-        if (!$viewData instanceof Vertex) {
-            throw new UnexpectedTypeException($viewData, Vertex::class);
+        if (!is_array($viewData)) {
+            throw new UnexpectedTypeException($viewData, 'array');
         }
 
         $fields = [];
@@ -58,7 +48,7 @@ class WikitextContentMapper implements DataMapperInterface
             $fields[$key] = $widget->getData();
         }
 
-        $viewData->setContent($this->twig->render($this->template, $fields));
+        $viewData = $this->twig->render($this->template, $fields);
     }
 
 }

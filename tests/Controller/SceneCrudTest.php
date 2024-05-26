@@ -31,7 +31,7 @@ class SceneCrudTest extends WebTestCase
         $form = $crawler->selectButton('scene_create_create')->form();
         $form->setValues(['scene_create' => [
                 'title' => 'Scene1',
-                'place' => 'Stage'
+                'content' => ['place' => 'Stage']
         ]]);
         $this->client->submit($form);
         $this->assertResponseRedirects();
