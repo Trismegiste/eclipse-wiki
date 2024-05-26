@@ -1,10 +1,10 @@
 <nav class="backlinks">
     <ul>
-        {% for title in backlinks %}
+        {% for inbound in backlinks %}
             <li>
-                <a href="{{ path('app_wiki', {title:title}) }}">
+                <a href="{{ path('app_wiki', {title:inbound.title}) }}">
                     <i class="icon-link"></i>
-                    {{ title }}
+                    {{ inbound.title }}
                 </a>
             </li>
         {% endfor %}

@@ -3,10 +3,15 @@
 {% block content %}
     <h2>Voulez-vous renommer <strong>{{ form.vars.data.title }}</strong> ?</h2>
     <span>Ce vertex est mentionné dans les documents suivants :</span>
-    <ul>
-        {% for title in backlinks %}
-            <li><a href="{{ path('app_wiki', {title:title}) }}"><i class="icon-link"></i> {{ title }}</a></li>
-            {% endfor %}
-    </ul>
+    {{ include('fragment/wiki_backlinks.html.twig') }}
     {{ form(form) }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .backlinks ul li {
+            display: block;
+        }
+    </style>
 {% endblock %}

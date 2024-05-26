@@ -47,12 +47,12 @@ class VertexCrud extends GenericCrud
     #[Route('/vertex/show/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function show(string $pk): Response
     {
-        $vertex = $this->repository->findByPk($pk);
+        $subgraph = $this->repository->loadSubgraph($pk);
+        $vertex = $subgraph->getFocus();
         $this->tracker->getDocument()->push($vertex);
-        $backlinks = $this->repository->searchByBacklinks($vertex->getTitle());
         $template = SaWoExtension::showTemplate[get_class($vertex)];
 
-        return $this->render($template, ['vertex' => $vertex, 'backlinks' => $backlinks]);
+        return $this->render($template, ['vertex' => $vertex, 'backlinks' => $subgraph->getInbound()]);
     }
 
     /**
@@ -95,8 +95,9 @@ class VertexCrud extends GenericCrud
     #[Route('/vertex/delete/{pk}', methods: ['GET', 'DELETE'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function delete(string $pk, Request $request): Response
     {
-        $vertex = $this->repository->findByPk($pk);
-        $backlinks = $this->repository->searchByBacklinks($vertex->getTitle());
+        $subgraph = $this->repository->loadSubgraph($pk);
+        $vertex = $subgraph->getFocus();
+
         $form = $this->createFormBuilder($vertex)
                 ->add('delete', SubmitType::class, ['attr' => ['class' => 'button-delete']])
                 ->setMethod('DELETE')
@@ -110,7 +111,7 @@ class VertexCrud extends GenericCrud
             return $this->redirectToRoute('app_vertexcrud_list');
         }
 
-        return $this->render('vertex/delete.html.twig', ['form' => $form->createView(), 'backlinks' => $backlinks]);
+        return $this->render('vertex/delete.html.twig', ['form' => $form->createView(), 'backlinks' => $subgraph->getInbound()]);
     }
 
     /**
@@ -162,9 +163,9 @@ class VertexCrud extends GenericCrud
     #[Route('/vertex/rename/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function rename(string $pk, Request $request): Response
     {
-        $vertex = $this->repository->findByPk($pk);
+        $subgraph = $this->repository->loadSubgraph($pk);
+        $vertex = $subgraph->getFocus();
         $oldTitle = $vertex->getTitle();
-        $backlinks = $this->repository->searchByBacklinks($vertex->getTitle());
 
         $form = $this->createFormBuilder($vertex)
                 ->add('title', WikiTitleType::class, ['label' => 'Nouveau nom'])
@@ -181,7 +182,7 @@ class VertexCrud extends GenericCrud
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
         }
 
-        return $this->render('vertex/rename.html.twig', ['form' => $form->createView(), "backlinks" => $backlinks]);
+        return $this->render('vertex/rename.html.twig', ['form' => $form->createView(), "backlinks" => $subgraph->getInbound()]);
     }
 
     /**
