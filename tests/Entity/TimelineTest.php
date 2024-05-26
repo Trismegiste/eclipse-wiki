@@ -47,4 +47,24 @@ class TimelineTest extends TestCase
         $this->assertStringStartsWith('{"data":{"title":"Root"', json_encode($this->sut->getTree()));
     }
 
+    /** @dataProvider getComplexTree */
+    public function testRenameLinkInElevatorPitch($tree)
+    {
+        $this->sut->setTree($tree);
+        $this->sut->elevatorPitch = '[[épisseur|morphe]]';
+        $this->sut->renameInternalLink('Épisseur', 'ülyss');
+        $this->assertEquals('[[ülyss|morphe]]', $this->sut->elevatorPitch);
+    }
+
+    /** @dataProvider getComplexTree */
+    public function testRenameLinkInTree($tree)
+    {
+        $this->sut->elevatorPitch = 'pitch';
+        $tree->nodes[] = new PlotNode('[[épisseur|morphe]]');
+        $this->sut->setTree($tree);
+
+        $this->sut->renameInternalLink('Épisseur', 'ülyss');
+        $this->assertEquals('[[ülyss|morphe]]', $this->sut->getTree()->nodes[3]->title);
+    }
+
 }

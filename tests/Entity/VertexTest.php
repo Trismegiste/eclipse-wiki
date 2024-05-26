@@ -81,6 +81,13 @@ class VertexTest extends TestCase
         $this->assertEquals('[[ülyss]]', $this->sut->getContent());
     }
 
+    public function testRenameLinkWithAlias()
+    {
+        $this->sut->setContent('[[épisseur|morphe]]');
+        $this->sut->renameInternalLink('Épisseur', 'ülyss');
+        $this->assertEquals('[[ülyss|morphe]]', $this->sut->getContent());
+    }
+
     public function testSetTitle()
     {
         $this->sut->setTitle('àlèd');
