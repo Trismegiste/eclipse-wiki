@@ -2,8 +2,8 @@
     <ul>
         {% for inbound in backlinks %}
             <li>
+                <i class="{{ vertex_icon(inbound) }}"></i>
                 <a href="{{ path('app_wiki', {title:inbound.title}) }}">
-                    <i class="icon-link"></i>
                     {{ inbound.title }}
                 </a>
             </li>
