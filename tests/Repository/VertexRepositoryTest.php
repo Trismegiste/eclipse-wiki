@@ -123,10 +123,11 @@ class VertexRepositoryTest extends KernelTestCase
         $obj->elevatorPitch = 'nihil';
         $this->sut->save($obj);
 
-        $res = $this->sut->exploreTreeFrom($obj);
-        $this->assertCount(1, $res);
-        $this->assertArrayHasKey('Root', $res);
-        $this->assertInstanceOf(Timeline::class, $res['Root']);
+        $matrix = $this->sut->getAdjacencyMatrix();
+        $this->assertCount(6, $matrix);
+        $this->assertArrayHasKey((string) $obj->getPk(), $matrix);
+        $this->assertEquals(array_fill(0, 6, false), array_values($matrix[(string) $obj->getPk()]));
+        $this->assertEquals(array_fill(0, 6, false), array_column($matrix, (string) $obj->getPk()));
 
         return $obj;
     }
@@ -138,11 +139,13 @@ class VertexRepositoryTest extends KernelTestCase
         $obj->setContent('Part of [[Root]]');
         $this->sut->save($obj);
 
-        $res = $this->sut->exploreTreeFrom($root);
-        $this->assertCount(2, $res);
-        $this->assertArrayHasKey('Root', $res);
-        $this->assertArrayHasKey('Intro', $res);
-        $this->assertInstanceOf(Scene::class, $res['Intro']);
+        $matrix = $this->sut->getAdjacencyMatrix();
+        $this->assertCount(7, $matrix);
+        $this->assertArrayHasKey((string) $root->getPk(), $matrix);
+        $this->assertArrayHasKey((string) $obj->getPk(), $matrix);
+
+        $this->assertTrue($matrix[(string) $obj->getPk()][(string) $root->getPk()]);
+        $this->assertFalse($matrix[(string) $root->getPk()][(string) $obj->getPk()]);
 
         return $root;
     }
@@ -155,10 +158,13 @@ class VertexRepositoryTest extends KernelTestCase
         $obj->setContent('Fight with [[Antagonist]] - Part of [[Root]]');
         $this->sut->save([$npc, $obj]);
 
-        $res = $this->sut->exploreTreeFrom($root);
-        $this->assertCount(4, $res);
-        $this->assertArrayHasKey('Antagonist', $res);
-        $this->assertArrayHasKey('Fight', $res);
+        $matrix = $this->sut->getAdjacencyMatrix();
+        $this->assertCount(9, $matrix);
+        $this->assertArrayHasKey((string) $npc->getPk(), $matrix);
+        $this->assertArrayHasKey((string) $obj->getPk(), $matrix);
+
+        $this->assertTrue($matrix[(string) $obj->getPk()][(string) $root->getPk()]);
+        $this->assertTrue($matrix[(string) $obj->getPk()][(string) $npc->getPk()]);
 
         return $obj;
     }

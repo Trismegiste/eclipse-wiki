@@ -9,6 +9,7 @@ namespace App\Repository;
 use App\Entity\Ali;
 use App\Entity\Cursor\AggregateCounter;
 use App\Entity\Freeform;
+use App\Entity\Subgraph;
 use App\Entity\Timeline;
 use App\Entity\Transhuman;
 use App\Entity\Vertex;
@@ -122,7 +123,7 @@ class VertexRepository extends DefaultRepository
     {
         $vertex = $this->findByTitle($oldTitle);
         // search for vertex with links to $vertex
-        $iter = $this->search(['outboundLink' => $vertex->getTitle()]);
+        $iter = $this->searchInbound($vertex);
         $updated = [];
         foreach ($iter as $inbound) {
             $inbound->renameInternalLink($vertex->getTitle(), $newTitle);
@@ -246,41 +247,6 @@ class VertexRepository extends DefaultRepository
     }
 
     /**
-     * Starts from an instance of Timeline and recursively explores all adjacent neighbours (inbound and outbound)
-     * until it reaches another Timeline instance or it crosses a given number of edges.
-     * Imagine the whole digraph is partitioned into multiple trees (where roots are Timeline) and 
-     * some branches are connected between some trees.
-     * @param Timeline $vertex the starting point
-     * @param int $level how many edges before stopping exploration of the digraph
-     * @return array an array of Vertex of all close neighbours (unordered)
-     */
-    public function exploreTreeFrom(Timeline $vertex, int $level = 2): array
-    {
-        $carry = [];
-        $this->recursionExploreTimeline($vertex, $level, $carry);
-
-        return $carry;
-    }
-
-    // the recursion for the above method
-    private function recursionExploreTimeline(Vertex $vertex, int $level, array &$carry): void
-    {
-        $title = $vertex->getTitle();
-        $carry[$title] = $vertex;
-
-        if ($level > 0) {
-            $neighbours = array_unique(array_merge($vertex->getInternalLink(), $this->searchByBacklinks($title)));
-            foreach ($neighbours as $neighbour) {
-                // optim : do not fetch vertex already fetched but we must continue exploring since the current distance for this path could be shorter than a previous path
-                $item = key_exists($neighbour, $carry) ? $carry[$neighbour] : $this->findByTitle($neighbour);
-                if (!is_null($item) && !($item instanceof Timeline)) {
-                    $this->recursionExploreTimeline($item, $level - 1, $carry);
-                }
-            }
-        }
-    }
-
-    /**
      * Returns a count, archived or not for each Vertex subclass
      * @return Cursor a cursor that iterates on AggregateCounter objects
      */
@@ -400,6 +366,22 @@ class VertexRepository extends DefaultRepository
                                 '__pclass' => true
                             ]
         ]));
+    }
+
+    public function searchInbound(Vertex $vertex): IteratorIterator
+    {
+        return $this->search(['outboundLink' => $vertex->getTitle()]);
+    }
+
+    public function loadSubgraph(string $pk): Subgraph
+    {
+        $focus = $this->load($pk);
+        $subgraph = new Subgraph($focus);
+        foreach ($this->searchInbound($focus)as $inbound) {
+            $subgraph->appendInbound($inbound);
+        }
+
+        return $subgraph;
     }
 
 }
