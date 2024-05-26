@@ -32,20 +32,19 @@ class VertexRepositoryTest extends KernelTestCase
         $this->assertCount(0, $this->sut->search());
     }
 
-    public function testBacklinks()
+    public function testInboundSubgraph()
     {
         $doc = new Scene('one doc');
         $doc->setContent('some [[backlink]].');
         $this->sut->save($doc);
 
-        $backlinked = $this->sut->searchByBacklinks('Backlink');
-        $this->assertIsArray($backlinked);
+        $backlinked = iterator_to_array($this->sut->searchInbound(new Timeline('Backlink')));
         $this->assertCount(1, $backlinked);
-        $this->assertEquals('One doc', $backlinked[0]);
+        $this->assertEquals('One doc', $backlinked[0]->getTitle());
 
-        $backlinked = $this->sut->searchByBacklinks('backlink');
+        $backlinked = iterator_to_array($this->sut->searchInbound(new Timeline('backlink')));
         $this->assertCount(1, $backlinked);
-        $this->assertEquals('One doc', $backlinked[0]);
+        $this->assertEquals('One doc', $backlinked[0]->getTitle());
     }
 
     public function testPrevious()

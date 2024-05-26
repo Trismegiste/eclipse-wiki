@@ -66,18 +66,6 @@ class VertexRepository extends DefaultRepository
         return $this->searchAutocomplete('title', $title);
     }
 
-    public function searchByBacklinks(string $title): array
-    {
-        $it = $this->search(['outboundLink' => mb_ucfirst($title)]);
-
-        $linked = [];
-        foreach ($it as $vertex) {
-            $linked[] = $vertex->getTitle();
-        }
-
-        return $linked;
-    }
-
     protected function getLastModified(string $pk): UTCDateTime
     {
         $current = $this->manager->executeQuery($this->getNamespace(), new Query(
