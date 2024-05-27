@@ -180,7 +180,10 @@ class VertexCrud extends GenericCrud
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $pk]);
         }
 
-        return $this->render('vertex/rename.html.twig', ['form' => $form->createView()]);
+        return $this->render('vertex/rename.html.twig', [
+                    'form' => $form->createView(),
+                    'mention' => $this->repository->searchKeywordNotLink($oldTitle)
+        ]);
     }
 
     /**

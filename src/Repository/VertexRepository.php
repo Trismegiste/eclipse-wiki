@@ -18,6 +18,7 @@ use InvalidArgumentException;
 use IteratorIterator;
 use MongoDB\BSON\Binary;
 use MongoDB\BSON\ObjectId;
+use MongoDB\BSON\Regex;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Driver\Command;
 use MongoDB\Driver\Cursor;
@@ -134,6 +135,25 @@ class VertexRepository extends DefaultRepository
                         ]
             ]));
         }
+
+        return new IteratorIterator($cursor);
+    }
+
+    /**
+     * Regex search a keyword in the content of all Vertex collection but we exlude vertices if the keyword in a wikilink or title.
+     * Useful for tracking mentions of a Vertex before renaming it.
+     * @param string $keyword
+     * @return IteratorIterator
+     */
+    public function searchKeywordNotLink(string $keyword): IteratorIterator
+    {
+        $cursor = $this->manager->executeQuery($this->getNamespace(),
+                new Query([
+                    'content' => new Regex($keyword, 'i'),
+                    'outboundLink' => ['$ne' => $keyword],
+                    'title' => ['$ne' => $keyword]
+                        ])
+        );
 
         return new IteratorIterator($cursor);
     }

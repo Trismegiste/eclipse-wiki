@@ -13,14 +13,32 @@
 
 {% block content %}
     <h2>Voulez-vous renommer le {{ focus.category }} <strong>{{ focus.title }}</strong> ?</h2>
-    <span>Les liens vers <strong>{{ focus.title }}</strong> seront aussi renommés dans les documents suivants :</span>
-    {{ include('fragment/wiki_backlinks.html.twig', {backlinks: form.vars.data.inbound}) }}
+    <div class="neighbor">
+        <div>
+            <span>Tous les liens vers <strong>{{ focus.title }}</strong> seront aussi renommés dans les documents suivants :</span>
+            {{ include('fragment/wiki_backlinks.html.twig', {backlinks: form.vars.data.inbound}) }}
+        </div>
+        <div>
+            <span>Pour information, le mot-clef "<strong>{{ focus.title }}</strong>"
+                est aussi mentionné sans lien dans les documents suivants.
+                Ces mentions ne seront <strong>pas</strong> renommées :
+            </span>
+            {{ include('fragment/wiki_backlinks.html.twig', {backlinks: mention}) }}
+        </div>
+    </div>
+
     {{ form(form) }}
 {% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
     <style>
+        .neighbor {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: 1fr 1fr;
+        }
+
         .backlinks ul li {
             display: block;
         }
