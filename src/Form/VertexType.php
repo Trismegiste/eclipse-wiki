@@ -22,25 +22,19 @@ class VertexType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        if (!$options['edit']) {
-            $builder
-                    ->add('title', WikiTitleType::class)
-                    ->add('content', WikitextType::class, ['attr' => ['rows' => 30, 'data-autofocus' => null]])
-                    ->add('create', SubmitType::class);
-        } else {
-            $builder
-                    ->add('content', WikitextType::class, ['attr' => ['rows' => 30, 'data-autofocus' => null]])
-                    ->add('create', SubmitType::class, ['label' => 'Edit'])
-                    ->setMethod('PUT');
+        if ($options['method'] === 'POST') {
+            $builder->add('title', WikiTitleType::class);
         }
+
+        $builder
+                ->add('content', WikitextType::class, ['attr' => ['rows' => 30, 'data-autofocus' => null]])
+                ->add('create', SubmitType::class, ['label' => ($options['method'] === 'POST') ? 'Create' : 'Edit'])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'edit' => false,
-            'data_class' => Vertex::class
-        ]);
+        $resolver->setDefault('data_class', Vertex::class);
     }
 
 }

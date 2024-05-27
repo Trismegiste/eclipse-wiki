@@ -35,7 +35,7 @@ class VertexTypeTest extends KernelTestCase
     public function testEdit()
     {
         $sample = new Scene('sample');
-        $this->sut = $this->factory->create(VertexType::class, $sample, ['edit' => true]);
+        $this->sut = $this->factory->create(VertexType::class, $sample, ['method' => 'PUT']);
         $this->sut->submit(['content' => 'sample text']);
         $this->assertEquals('Sample', $sample->getTitle());
         $this->assertEquals('sample text', $sample->getContent());
@@ -45,7 +45,7 @@ class VertexTypeTest extends KernelTestCase
     public function testUniqueTitleFail()
     {
         $sample = new Scene('sample');
-        $this->sut = $this->factory->create(VertexType::class, $sample, ['edit' => false]); // not used in reality but for test, we need the field
+        $this->sut = $this->factory->create(VertexType::class, $sample);
         $this->sut->submit(['title' => 'sample', 'content' => 'dummy']);
         $this->assertTrue($this->sut->isSynchronized());
         $this->assertFalse($this->sut->isValid());

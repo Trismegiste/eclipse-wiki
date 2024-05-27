@@ -24,7 +24,6 @@ class LoveletterPcChoice extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('data_class', Loveletter::class);
-        $resolver->setDefined('edit');
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void

@@ -31,7 +31,7 @@ class PlaceType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        if (!$options['edit']) {
+        if ($options['method'] !== 'PUT') {
             $builder->add('title', Type\RandomNameType::class);
         }
 

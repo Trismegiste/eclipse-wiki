@@ -263,7 +263,7 @@ class NpcGenerator extends AbstractController
     #[Route('/info/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function info(Character $npc, Request $request): Response
     {
-        $form = $this->createForm(NpcInfo::class, $npc, ['edit' => true]);
+        $form = $this->createForm(NpcInfo::class, $npc, ['method' => 'PUT']);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

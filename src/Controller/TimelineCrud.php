@@ -55,7 +55,7 @@ class TimelineCrud extends GenericCrud
     public function edit(string $pk, Request $request): Response
     {
         $vertex = $this->repository->findByPk($pk);
-        $form = $this->createForm(TimelineType::class, $vertex, ['edit' => true]);
+        $form = $this->createForm(TimelineType::class, $vertex, ['method' => 'PUT']);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

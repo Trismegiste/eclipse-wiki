@@ -72,7 +72,7 @@ class InvokeAiPictureTest extends WebTestCase
     /** @depends testGetLocalPicture */
     public function testSearchPictureForPlace()
     {
-        $place = new Place('noimage' . rand());
+        $place = new Place('noimage' . sha1(random_bytes(20)));
         $this->repository->save($place);
         $crawler = $this->client->request('GET', '/invokeai/vertex/' . $place->getPk() . '/search');
         $this->assertResponseIsSuccessful();

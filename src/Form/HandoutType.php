@@ -7,8 +7,8 @@
 namespace App\Form;
 
 use App\Entity\Handout;
+use App\Form\Type\WikitextType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -32,11 +32,11 @@ class HandoutType extends AbstractType
     {
         $builder->remove('content');
         $builder
-                ->add('pcInfo', Type\WikitextType::class, [
+                ->add('pcInfo', WikitextType::class, [
                     'required' => true,
                     'attr' => ['rows' => 16]
                 ])
-                ->add('gm_info', Type\WikitextType::class, [
+                ->add('gm_info', WikitextType::class, [
                     'required' => false,
                     'attr' => ['rows' => 16],
                     'property_path' => 'gmInfo'

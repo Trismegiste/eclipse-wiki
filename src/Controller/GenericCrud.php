@@ -36,7 +36,7 @@ abstract class GenericCrud extends AbstractController
     abstract public function create(Request $request): Response;
 
     /**
-     * The 'edit' controller that edit the Vertex subclass instance with a PK $pk
+     * The update controller that edit the Vertex subclass instance with a PK $pk
      */
     abstract public function edit(string $pk, Request $request): Response;
 
@@ -80,7 +80,7 @@ abstract class GenericCrud extends AbstractController
     protected function handleEdit(string $formClass, string $template, string $pk, Request $request): Response
     {
         $vertex = $this->repository->findByPk($pk);
-        $form = $this->createForm($formClass, $vertex, ['edit' => true]);
+        $form = $this->createForm($formClass, $vertex, ['method' => 'PUT']);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
