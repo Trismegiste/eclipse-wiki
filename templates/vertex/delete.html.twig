@@ -7,7 +7,7 @@
     <nav style="float: right">
         {{ include('vertex/actions.html.twig', {vertex:form.vars.data}) }}
     </nav>   
-    {% block header_big_title %}{{ form.vars.data.title }}{% endblock %}
+    {% block header_big_title %}{{ block('title') }}{% endblock %}
 {% endblock %}
 
 {% block content %}
