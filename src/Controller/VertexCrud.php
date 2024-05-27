@@ -7,7 +7,7 @@
 namespace App\Controller;
 
 use App\Entity\Vertex;
-use App\Form\Type\WikiTitleType;
+use App\Form\VertexRename;
 use App\Form\VertexType;
 use App\Repository\VertexRepository;
 use App\Service\DigraphExplore;
@@ -164,21 +164,23 @@ class VertexCrud extends GenericCrud
     public function rename(string $pk, Request $request): Response
     {
         $subgraph = $this->repository->loadSubgraph($pk);
-        $vertex = $subgraph->getFocus();
-        $oldTitle = $vertex->getTitle();
+        $oldTitle = $subgraph->getFocus()->getTitle();
 
-        $form = $this->createForm(\App\Form\VertexRename::class, $subgraph);
+        $form = $this->createForm(VertexRename::class, $subgraph);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $subgraph = $form->getData();
             $this->repository->save($subgraph->all());
-            $this->addFlash('success', sprintf("'%s' a été renommé en '%s'", $oldTitle, $subgraph->getTitle()));
+            $this->addFlash('success', sprintf("'%s' a été renommé en '%s' ansi que dans les %d backlinks",
+                            $oldTitle,
+                            $subgraph->getFocus()->getTitle(),
+                            count($subgraph->getInbound())));
 
-            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
+            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $pk]);
         }
 
-        return $this->render('vertex/rename.html.twig', ['form' => $form->createView(), "backlinks" => $subgraph->getInbound()]);
+        return $this->render('vertex/rename.html.twig', ['form' => $form->createView()]);
     }
 
     /**

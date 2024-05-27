@@ -41,7 +41,7 @@ class VertexRename extends AbstractType implements \Symfony\Component\Form\DataM
     public function mapDataToForms(mixed $viewData, \Traversable $forms): void
     {
         $field = iterator_to_array($forms);
-        $field['title']->setData($viewData->getTitle());
+        $field['title']->setData($viewData->getFocus()->getTitle());
     }
 
     public function mapFormsToData(\Traversable $forms, &$viewData): void
