@@ -102,16 +102,6 @@ class VertexRepository extends DefaultRepository
         return count($item) ? $item[0] : null;
     }
 
-    public function renameTitle(string $oldTitle, string $newTitle): int
-    {
-        $vertex = $this->findByTitle($oldTitle);
-        $subgraph = $this->loadSubgraph($vertex->getPk());
-        $subgraph->renameFocused($newTitle);
-        $this->save($subgraph->all());
-
-        return 4;
-    }
-
     /**
      * Generic search for most-used listing of vertices
      * @param string $keyword

@@ -75,13 +75,8 @@ class VertexRepositoryTest extends KernelTestCase
     {
         $doc = new Scene('Backlink');
         $this->sut->save($doc);
-
-        $this->sut->renameTitle('Backlink', 'Newlink');
-
-        // check backlink
         $changed = $this->sut->findByTitle('one doc');
         $this->assertEquals('One doc', $changed->getTitle());
-        $this->assertEquals('some [[Newlink]].', $changed->getContent());
     }
 
     public function testFilterByContent()
@@ -214,49 +209,6 @@ class VertexRepositoryTest extends KernelTestCase
         $this->assertNull($this->sut->findByTitle('karen'));
         $this->assertNotNull($this->sut->findByTitle('KArEn'));
         $this->assertNull($this->sut->findByTitle('KAREN'));
-    }
-
-    public function testRenameComplexContent()
-    {
-        $inbound = new Freeform('Štarkiller');
-        $handout = new App\Entity\Handout('BG of Jedi');
-        $handout->pcInfo = 'Link to [[štarkiller|Luke]]';
-        $handout->gmInfo = 'Link to [[štarkiller|Štarkiller family]]';
-        $loveletter = new App\Entity\Loveletter('Buy some droids');
-        $loveletter->context = '[[štarkiller|Luke]] lived in a farm';
-        $loveletter->drama = '[[štarkiller|Luke]] must purchase some droids';
-        $timeline = new Timeline('A new hope');
-        $timeline->elevatorPitch = 'Space opera';
-        $timeline->setTree(new \App\Entity\PlotNode('root', [new \App\Entity\PlotNode('Starting with [[štarkiller|Luke]]')]));
-        $bunch = [$inbound, $handout, $loveletter, $timeline];
-        $this->sut->save($bunch);
-
-        $modif = $this->sut->renameTitle('štarkiller', 'Skywalker');
-        $this->assertEquals(4, $modif);
-
-        // just to be sure we lost original objects, sending only the primary keys
-        return array_map(function (Vertex $obj) {
-            return $obj->getPk();
-        }, $bunch);
-    }
-
-    /** @depends testRenameComplexContent */
-    public function testRenameIsCorrect(array $pk)
-    {
-        $vertex = array_map(function ($i) {
-            return $this->sut->load($i);
-        }, $pk);
-        list($inbound, $handout, $loveletter, $timeline) = $vertex;
-        // inbound
-        $this->assertEquals('Skywalker', $inbound->getTitle());
-        // handout
-        $this->assertEquals('Link to [[Skywalker|Luke]]', $handout->pcInfo);
-        $this->assertEquals('Link to [[Skywalker|Štarkiller family]]', $handout->gmInfo);
-        // loveletter
-        $this->assertEquals('[[Skywalker|Luke]] lived in a farm', $loveletter->context);
-        $this->assertEquals('[[Skywalker|Luke]] must purchase some droids', $loveletter->drama);
-        /** @var App\Entity\Timeline $timeline */
-        $this->assertEquals('Starting with [[Skywalker|Luke]]', $timeline->getTree()[0]->title);
     }
 
 }

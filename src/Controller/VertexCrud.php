@@ -173,7 +173,7 @@ class VertexCrud extends GenericCrud
         if ($form->isSubmitted() && $form->isValid()) {
             $subgraph = $form->getData();
             $this->repository->save($subgraph->all());
-            $this->addFlash('success', "'$oldTitle' a été renommé en 'newTitle'");
+            $this->addFlash('success', sprintf("'%s' a été renommé en '%s'", $oldTitle, $subgraph->getTitle()));
 
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
         }
