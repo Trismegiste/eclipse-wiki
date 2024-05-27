@@ -167,17 +167,13 @@ class VertexCrud extends GenericCrud
         $vertex = $subgraph->getFocus();
         $oldTitle = $vertex->getTitle();
 
-        $form = $this->createFormBuilder($vertex)
-                ->add('title', WikiTitleType::class, ['label' => 'Nouveau nom'])
-                ->add('rename', SubmitType::class)
-                ->setMethod('PUT')
-                ->getForm();
+        $form = $this->createForm(\App\Form\VertexRename::class, $subgraph);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $newTitle = $form->getData()->getTitle();
-            $this->repository->renameTitle($oldTitle, $newTitle);
-            $this->addFlash('success', "'$oldTitle' a été renommé en '$newTitle'");
+            $subgraph = $form->getData();
+            $this->repository->save($subgraph->all());
+            $this->addFlash('success', "'$oldTitle' a été renommé en 'newTitle'");
 
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
         }

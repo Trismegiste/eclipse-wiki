@@ -33,4 +33,30 @@ class Subgraph
         return $this->inbound;
     }
 
+    public function renameFocused(string $newTitle): void
+    {
+        $oldTitle = $this->focus->getTitle();
+        foreach ($this->inbound as $inbound) {
+            $inbound->renameInternalLink($oldTitle, $newTitle);
+        }
+        $this->focus->setTitle($newTitle);
+    }
+
+    // @todo I think we can remove this, only for backward compatibility in twig
+    public function getTitle(): string
+    {
+        return $this->focus->getTitle();
+    }
+
+    // @todo I think we can remove this, only for backward compatibility in twig
+    public function getPk(): \MongoDB\BSON\ObjectIdInterface
+    {
+        return $this->focus->getPk();
+    }
+
+    public function all(): array
+    {
+        return array_merge($this->inbound, [$this->focus]);
+    }
+
 }

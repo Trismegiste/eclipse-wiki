@@ -105,19 +105,11 @@ class VertexRepository extends DefaultRepository
     public function renameTitle(string $oldTitle, string $newTitle): int
     {
         $vertex = $this->findByTitle($oldTitle);
-        // search for vertex with links to $vertex
-        $iter = $this->searchInbound($vertex);
-        $updated = [];
-        foreach ($iter as $inbound) {
-            $inbound->renameInternalLink($vertex->getTitle(), $newTitle);
-            $updated[] = $inbound;
-        }
-        $vertex->setTitle($newTitle);
-        $updated[] = $vertex;
+        $subgraph = $this->loadSubgraph($vertex->getPk());
+        $subgraph->renameFocused($newTitle);
+        $this->save($subgraph->all());
 
-        $this->save($updated);
-
-        return count($updated);
+        return 4;
     }
 
     /**

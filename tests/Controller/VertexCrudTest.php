@@ -121,8 +121,8 @@ class VertexCrudTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $url = $crawler->filterXPath('//nav/a/i[@class="icon-rename"]/parent::a')->attr('href');
         $crawler = $this->client->request('GET', $url);
-        $form = $crawler->selectButton('form_rename')->form();
-        $form['form[title]'] = 'Renamed';
+        $form = $crawler->selectButton('vertex_rename_rename')->form();
+        $form['vertex_rename[title]'] = 'Renamed';
         $crawler = $this->client->submit($form);
         $this->assertResponseRedirects();
         $this->client->followRedirect();
