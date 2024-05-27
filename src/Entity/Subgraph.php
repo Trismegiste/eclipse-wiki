@@ -36,10 +36,10 @@ class Subgraph
     public function renameFocused(string $newTitle): void
     {
         $oldTitle = $this->focus->getTitle();
-        foreach ($this->inbound as $inbound) {
-            $inbound->renameInternalLink($oldTitle, $newTitle);
-        }
         $this->focus->setTitle($newTitle);
+        foreach ($this->inbound as $inbound) {
+            $inbound->renameInternalLink($oldTitle, $this->focus->getTitle());
+        }
     }
 
     // @todo I think we can remove this, only for backward compatibility in twig
