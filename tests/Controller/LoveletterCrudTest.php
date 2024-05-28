@@ -125,6 +125,7 @@ class LoveletterCrudTest extends WebTestCase
         $url = $crawler->filterXPath('//nav/a/i[@class="icon-select-list"]/parent::a')->attr('href');
 
         $crawler = $this->client->request('GET', $url);
+        $this->assertResponseIsSuccessful();
         $this->assertPageTitleContains('Love letter');
         $button = $crawler->selectButton('loveletter_pc_choice_select');
         $this->assertCount(1, $button);
