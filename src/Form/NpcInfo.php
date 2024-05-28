@@ -12,8 +12,6 @@ use App\Form\Type\SurnameLanguageType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -21,8 +19,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class NpcInfo extends AbstractType
 {
-
-    use FormTypeUtils;
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -34,11 +30,6 @@ class NpcInfo extends AbstractType
     public function getParent(): ?string
     {
         return VertexType::class;
-    }
-
-    public function finishView(FormView $view, FormInterface $form, array $options): void
-    {
-        $this->moveChildAtEnd($view, 'create');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

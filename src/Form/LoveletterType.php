@@ -7,13 +7,14 @@
 namespace App\Form;
 
 use App\Entity\Loveletter;
+use App\Form\Type\RollType;
+use App\Form\Type\WikitextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -22,18 +23,19 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class LoveletterType extends AbstractType
 {
 
-    use FormTypeUtils;
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->remove('content');
         $builder
-                ->add('player', TextType::class, ['attr' => ['class' => 'pure-input-1-3']])
-                ->add('context', Type\WikitextType::class, ['attr' => ['rows' => 3]])
-                ->add('drama', Type\WikitextType::class, ['attr' => ['rows' => 3]])
-                ->add('roll1', Type\RollType::class)
-                ->add('roll2', Type\RollType::class)
-                ->add('roll3', Type\RollType::class)
+                ->add('player', TextType::class, [
+                    'attr' => ['class' => 'pure-input-1-3'],
+                    'priority' => 2000
+                ])
+                ->add('context', WikitextType::class, ['attr' => ['rows' => 3]])
+                ->add('drama', WikitextType::class, ['attr' => ['rows' => 3]])
+                ->add('roll1', RollType::class)
+                ->add('roll2', RollType::class)
+                ->add('roll3', RollType::class)
                 ->add('resolution', CollectionType::class, [
                     'entry_type' => TextareaType::class,
                     'allow_add' => true
@@ -51,12 +53,6 @@ class LoveletterType extends AbstractType
     public function getParent(): ?string
     {
         return VertexType::class;
-    }
-
-    public function finishView(FormView $view, FormInterface $form, array $options): void
-    {
-        $this->moveChildAtBegin($view, 'player');
-        $this->moveChildAtEnd($view, 'create');
     }
 
 }

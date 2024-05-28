@@ -23,12 +23,15 @@ class VertexType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         if ($options['method'] === 'POST') {
-            $builder->add('title', WikiTitleType::class);
+            $builder->add('title', WikiTitleType::class, ['priority' => 1000]);
         }
 
         $builder
                 ->add('content', WikitextType::class, ['attr' => ['rows' => 30, 'data-autofocus' => null]])
-                ->add('create', SubmitType::class, ['label' => ($options['method'] === 'POST') ? 'Create' : 'Edit'])
+                ->add('create', SubmitType::class, [
+                    'priority' => -1000,
+                    'label' => ($options['method'] === 'POST') ? 'Create' : 'Edit'
+                ])
         ;
     }
 

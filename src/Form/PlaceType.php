@@ -32,21 +32,22 @@ class PlaceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         if ($options['method'] !== 'PUT') {
-            $builder->add('title', Type\RandomNameType::class);
+            $builder->add('title', Type\RandomNameType::class, ['priority' => 1000]);
         }
 
         $builder
-                ->add('world', Type\FullTextChoice::class, ['category' => 'world'])
-                ->add('gravity', Type\FullTextChoice::class, ['category' => 'gravity'])
-                ->add('temperature', Type\FullTextChoice::class, ['category' => 'temperature'])
-                ->add('pressure', Type\FullTextChoice::class, ['category' => 'pressure'])
+                ->add('world', Type\FullTextChoice::class, ['category' => 'world', 'priority' => 500])
+                ->add('gravity', Type\FullTextChoice::class, ['category' => 'gravity', 'priority' => 500])
+                ->add('temperature', Type\FullTextChoice::class, ['category' => 'temperature', 'priority' => 500])
+                ->add('pressure', Type\FullTextChoice::class, ['category' => 'pressure', 'priority' => 500])
                 ->add('youtubeUrl', Type\YoutubeType::class, [
                     'required' => false,
                     'label' => 'Youtube ID',
                     'attr' => [
                         'class' => 'pure-input-1-2',
                         'placeholder' => 'ID unique de Youtube ou url de la vidéo'
-                    ]
+                    ],
+                    'priority' => 500
                 ])
         ;
     }
@@ -69,8 +70,6 @@ class PlaceType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         $this->changeAttribute($view, 'content', 'rows', 24);
-        $this->moveChildAtEnd($view, 'content');
-        $this->moveChildAtEnd($view, 'create');
     }
 
 }

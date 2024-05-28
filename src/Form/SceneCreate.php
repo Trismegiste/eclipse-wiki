@@ -11,7 +11,6 @@ use App\Form\Type\SceneContentWizardType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -19,8 +18,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class SceneCreate extends AbstractType
 {
-
-    use FormTypeUtils;
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -38,11 +35,6 @@ class SceneCreate extends AbstractType
     public function getParent(): ?string
     {
         return VertexType::class;
-    }
-
-    public function finishView(FormView $view, FormInterface $form, array $options): void
-    {
-        $this->moveChildAtEnd($view, 'create');
     }
 
 }

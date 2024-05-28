@@ -12,7 +12,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -20,8 +19,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class HandoutType extends AbstractType
 {
-
-    use FormTypeUtils;
 
     public function getParent(): ?string
     {
@@ -41,7 +38,7 @@ class HandoutType extends AbstractType
                     'attr' => ['rows' => 16],
                     'property_path' => 'gmInfo'
                 ])
-                ->add('target', TextType::class);
+                ->add('target', TextType::class, ['priority' => 2000]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -50,12 +47,6 @@ class HandoutType extends AbstractType
         $resolver->setDefault('empty_data', function (FormInterface $form) {
             return new Handout($form->get('title')->getData());
         });
-    }
-
-    public function finishView(FormView $view, FormInterface $form, array $options): void
-    {
-        $this->moveChildAtBegin($view, 'target');
-        $this->moveChildAtEnd($view, 'create');
     }
 
 }
