@@ -16,6 +16,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Love letter form type
@@ -38,7 +40,17 @@ class LoveletterType extends AbstractType
                 ->add('roll3', RollType::class)
                 ->add('resolution', CollectionType::class, [
                     'entry_type' => TextareaType::class,
-                    'allow_add' => true
+                    'allow_add' => true,
+                    'entry_options' => ['required' => false],
+                    'constraints' => [
+                        new Callback(function (array $val, ExecutionContextInterface $ctx) {
+                                    if (count(array_filter($val)) < 4) {
+                                        $ctx->buildViolation('Au moins 4 résolutions doivent être renseignées')
+                                        ->atPath('[0]')
+                                        ->addViolation();
+                                    }
+                                })
+                    ]
                 ])
         ;
     }

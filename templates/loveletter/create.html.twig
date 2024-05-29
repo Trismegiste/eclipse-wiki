@@ -6,6 +6,7 @@
 {% block header_title %}Création d'une Love letter{% endblock %}
 
 {% block _loveletter_resolution_widget %}
+    {{ form_errors(form.children[0]) }}
     {% for idx in 0..4 %}
         <textarea id="loveletter_resolution_{{ idx }}" 
                   name="loveletter[resolution][{{ idx }}]"

@@ -13,13 +13,11 @@
 
 {% block _loveletter_resolution_widget %}
     {% for idx, child in form %}
-        <textarea id="loveletter_resolution_{{ idx }}" 
-                  name="loveletter[resolution][{{ idx }}]"
-                  class="pure-input-1">{{ child.vars.data }}</textarea>
+        {{ form_errors(child) }}
+        {{ form_widget(child, {attr:{class:'pure-input-1'}}) }}
     {% endfor %}
 {% endblock %}
 
 {% block content %}
     {{ form(form) }}
 {% endblock %}
-
