@@ -11,11 +11,9 @@
     {% block header_big_title %}{{ form.vars.data.title }}{% endblock %}
 {% endblock %}
 
-{% block _loveletter_resolution_widget %}
-    {% for idx, child in form %}
-        {{ form_errors(child) }}
-        {{ form_widget(child, {attr:{class:'pure-input-1'}}) }}
-    {% endfor %}
+{% block _loveletter_resolution_entry_row %}
+    {{ form_errors(form) }}
+    {{ form_widget(form, {attr:{class:'pure-input-1'}}) }}
 {% endblock %}
 
 {% block content %}

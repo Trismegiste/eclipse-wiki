@@ -38,20 +38,24 @@ class LoveletterType extends AbstractType
                 ->add('roll1', RollType::class)
                 ->add('roll2', RollType::class)
                 ->add('roll3', RollType::class)
-                ->add('resolution', CollectionType::class, [
-                    'entry_type' => TextareaType::class,
-                    'allow_add' => true,
-                    'entry_options' => ['required' => false],
-                    'constraints' => [
-                        new Callback(function (array $val, ExecutionContextInterface $ctx) {
-                                    if (count(array_filter($val)) < 4) {
-                                        $ctx->buildViolation('Au moins 4 résolutions doivent être renseignées')
-                                        ->atPath('[0]')
-                                        ->addViolation();
-                                    }
-                                })
-                    ]
-                ])
+                ->add('resolution', CollectionType::class, array_merge(
+                                [
+                                    'entry_type' => TextareaType::class,
+                                    'allow_add' => true,
+                                    'entry_options' => ['required' => false],
+                                    'constraints' => [
+                                        new Callback(function (array $val, ExecutionContextInterface $ctx) {
+                                                    if (count(array_filter($val)) < 4) {
+                                                        $ctx->buildViolation('Au moins 4 résolutions doivent être renseignées')
+                                                        ->atPath('[0]')
+                                                        ->addViolation();
+                                                    }
+                                                })
+                                    ]
+                                ],
+                                // if we are not in EDIT mode, we initialize the resolution array
+                                ($options['method'] === 'PUT') ? [] : ['data' => array_fill(0, 5, null)]
+                        ))
         ;
     }
 

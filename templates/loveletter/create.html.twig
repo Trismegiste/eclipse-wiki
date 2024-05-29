@@ -6,18 +6,18 @@
 {% block header_title %}Création d'une Love letter{% endblock %}
 
 {% block _loveletter_resolution_widget %}
-    {{ form_errors(form.children[0]) }}
-    {% for idx in 0..4 %}
-        <textarea id="loveletter_resolution_{{ idx }}" 
-                  name="loveletter[resolution][{{ idx }}]"
-                  class="pure-input-1"></textarea>
-    {% endfor %}
+    {{ form_widget(form) }}
     <div class="helper">
         <i class="icon-info-circled"></i>
         Remplissez une liste qui doit comporter un choix positif,
         un choix neutre (ou positif/négatif)
         et au moins 2 choix négatifs.
     </div>    
+{% endblock %}
+
+{% block _loveletter_resolution_entry_row %}
+    {{ form_errors(form) }}
+    {{ form_widget(form, {attr:{class:'pure-input-1'}}) }}
 {% endblock %}
 
 {% block _loveletter_roll3_widget %}
