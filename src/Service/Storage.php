@@ -53,9 +53,7 @@ class Storage
         }
 
         $file = new BinaryFileResponse($path);
-        // struggling with cache
-        clearstatcache(true, $path);
-        $file->setEtag(sha1(filesize($path) . '-' . filemtime($path)));
+        $file->setMaxAge(36000);
 
         return $file;
     }

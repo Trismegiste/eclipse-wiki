@@ -43,12 +43,23 @@ class ProfilePicture extends AbstractController
      * Generate a socnet profile for a unique Transhuman
      */
     #[Route('/profile/unique/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function unique(Transhuman $npc, AvatarMaker $maker): BinaryFileResponse
+    public function unique(Transhuman $npc, AvatarMaker $maker, Request $request): Response
     {
+        // HTTP Cache with ETag
+        $etag = sha1(serialize($npc));
+        $notModified = new Response();
+        if ($notModified->isNotModified($request)) {
+            $notModified->setPublic();
+            return $notModified;
+        }
+
         $pathname = $this->storage->getFileInfo($npc->tokenPic);
         $profile = $maker->generate($npc, $pathname);
 
-        return new BinaryFileResponse($profile);
+        $pic = new BinaryFileResponse($profile);
+        $pic->setEtag($etag);
+
+        return $pic;
     }
 
     /**
