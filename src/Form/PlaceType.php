@@ -7,7 +7,9 @@
 namespace App\Form;
 
 use App\Entity\Place;
-use App\Repository\VertexRepository;
+use App\Form\Type\FullTextChoice;
+use App\Form\Type\RandomNameType;
+use App\Form\Type\YoutubeType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -22,25 +24,18 @@ class PlaceType extends AbstractType
 
     use FormTypeUtils;
 
-    protected $repository;
-
-    public function __construct(VertexRepository $repository)
-    {
-        $this->repository = $repository;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         if ($options['method'] !== 'PUT') {
-            $builder->add('title', Type\RandomNameType::class, ['priority' => 1000]);
+            $builder->add('title', RandomNameType::class, ['priority' => 1000]);
         }
 
         $builder
-                ->add('world', Type\FullTextChoice::class, ['category' => 'world', 'priority' => 500])
-                ->add('gravity', Type\FullTextChoice::class, ['category' => 'gravity', 'priority' => 500])
-                ->add('temperature', Type\FullTextChoice::class, ['category' => 'temperature', 'priority' => 500])
-                ->add('pressure', Type\FullTextChoice::class, ['category' => 'pressure', 'priority' => 500])
-                ->add('youtubeUrl', Type\YoutubeType::class, [
+                ->add('world', FullTextChoice::class, ['category' => 'world', 'priority' => 500])
+                ->add('gravity', FullTextChoice::class, ['category' => 'gravity', 'priority' => 500])
+                ->add('temperature', FullTextChoice::class, ['category' => 'temperature', 'priority' => 500])
+                ->add('pressure', FullTextChoice::class, ['category' => 'pressure', 'priority' => 500])
+                ->add('youtubeUrl', YoutubeType::class, [
                     'required' => false,
                     'label' => 'Youtube ID',
                     'attr' => [
