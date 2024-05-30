@@ -18,6 +18,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 class YoutubeType extends AbstractType implements DataTransformerInterface
 {
 
+    const YOUTUBE_ID = '#^([-_a-zA-Z\d]{11})$#';
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->addViewTransformer($this);
@@ -34,15 +36,48 @@ class YoutubeType extends AbstractType implements DataTransformerInterface
             return null;
         }
 
-        if (preg_match('#^https://(www\.)?youtube\.com/watch\?v=([-_a-zA-Z\d]{11})([\&]|$)#', $value, $extract, PREG_UNMATCHED_AS_NULL)) {
-            return $extract[2];
-        } else if (preg_match('#^https://youtu.be/([-_a-zA-Z\d]{11})$#', $value, $extract)) {
+        // only the ID is sent
+        if (preg_match(self::YOUTUBE_ID, $value, $extract)) {
             return $extract[1];
-        } else if (preg_match('#^([-_a-zA-Z\d]{11})$#', $value, $extract)) {
-            return $extract[1];
-        } else {
-            throw new TransformationFailedException("Invalid format");
         }
+
+        // test if URL
+        $url = parse_url($value);
+        if (false === $url) {
+            throw new TransformationFailedException("Malformed URL");
+        }
+
+        // Is there a hostname ?
+        if (!key_exists('host', $url)) {
+            throw new TransformationFailedException("Bad hostname");
+        }
+
+        // Is this one of youtube hostnames ?
+        if (!in_array($url['host'], ['youtu.be', 'www.youtube.com', 'youtube.com'])) {
+            throw new TransformationFailedException("Hostname is not Youtube");
+        }
+
+        switch ($url['host']) {
+            case 'youtube.com':
+            case 'www.youtube.com':
+                parse_str($url['query'], $parameters);
+                if (!key_exists('v', $parameters)) {
+                    throw new TransformationFailedException("ID of the video is missing");
+                }
+                if (!preg_match(self::YOUTUBE_ID, $parameters['v'])) {
+                    throw new TransformationFailedException("Video ID is not valid");
+                }
+                return $parameters['v'];
+
+            case 'youtu.be':
+                if (preg_match('#^/([-_a-zA-Z\d]{11})$#', $url['path'], $extract)) {
+                    return $extract[1];
+                } else {
+                    throw new TransformationFailedException("Incomplete shortened URL");
+                }
+        }
+
+        throw new TransformationFailedException("Unable to find the ID of the video");
     }
 
     public function transform($value): mixed
