@@ -22,13 +22,12 @@ class Digraph
     public function __construct(GraphVertexIterator $vertex)
     {
         $this->vertex = iterator_to_array($vertex);
+        $this->idx2pk = array_keys($this->vertex);
+        $this->pk2idx = array_flip($this->idx2pk);
     }
 
     public function setAdjacency(GraphEdgeIterator $iter): void
     {
-        $this->idx2pk = array_keys($this->vertex);
-        $this->pk2idx = array_flip($this->idx2pk);
-
         // initialize adjacency matrix
         $this->adjacency = [];
         $side = count($this->vertex);
@@ -41,6 +40,23 @@ class Digraph
         foreach ($iter as $edge) {
             $this->adjacency[$this->pk2idx[$edge->source]][$this->pk2idx[$edge->target]] = true;
         }
+    }
+
+    public function extractVectorByCategory(string $category): array
+    {
+        $vector = [];
+        foreach ($this->vertex as $pk => $vertex) {
+            if ($vertex->category === $category) {
+                $vector[$this->pk2idx[$pk]] = $vertex;
+            }
+        }
+
+        return $vector;
+    }
+
+    public function getVertexByIndex(int $idx): GraphVertex
+    {
+        return $this->vertex[$this->idx2pk[$idx]];
     }
 
 }

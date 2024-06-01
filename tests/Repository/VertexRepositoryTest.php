@@ -230,7 +230,7 @@ class VertexRepositoryTest extends KernelTestCase
     public function testLoadGraph()
     {
         $graph = $this->sut->loadGraph();
-        var_dump($graph);
+        $this->assertCount(10, $graph->vertex);
     }
 
 }

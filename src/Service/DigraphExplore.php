@@ -26,7 +26,7 @@ class DigraphExplore
 
     const INFINITY = 32767;
 
-    protected Repository $repository;
+    protected VertexRepository $repository;
     protected CacheInterface $cache;
     protected string $localeParam;
 
@@ -53,7 +53,7 @@ class DigraphExplore
                     $dump = [];
                     // dispatch by category
                     foreach ($partition as $v) {
-                        $dump[$v['category']][] = $v['title'];
+                        $dump[$v->category][] = $v->title;
                     }
                     // sort each category
                     foreach ($dump as $key => $v) {
@@ -64,6 +64,77 @@ class DigraphExplore
                 });
     }
 
+    public function getPartitionByTimeline(): array
+    {
+        $graph = $this->repository->loadGraph();
+        $dim = count($graph->vertex);
+
+        // Initialize distance matrix
+        $matrix = [];
+        for ($row = 0; $row < $dim; $row++) {
+            $matrix[$row] = [];
+            for ($col = 0; $col < $dim; $col++) {
+                $matrix[$row][$col] = match (true) {
+                    $row === $col => 0,
+                    $graph->adjacency[$row][$col] || $graph->adjacency[$col][$row] => 1,
+                    default => self::INFINITY
+                };
+            }
+        }
+
+        // Floyd-Warshall algorithm
+        // https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm
+        for ($k = 0; $k < $dim; $k++) {
+            for ($line = 0; $line < $dim; $line++) {
+                for ($column = 0; $column < $dim; $column++) {
+                    $newSum = $matrix[$line][$k] + $matrix[$k][$column];
+                    if ($newSum < $matrix[$line][$column]) {
+                        $matrix[$line][$column] = $newSum;
+                    }
+                }
+            }
+        }
+
+        // initialize partitions
+        $partition = [];
+        $timeline = $graph->extractVectorByCategory('timeline');
+        foreach ($timeline as $vertex) {
+            $partition[$vertex->title] = [];
+        }
+
+        // group vertices by closest Timeline. If a vertex is closest to multiple Timeline, it is duplicated
+        foreach ($matrix as $row => $column) {
+            // if the vertex is a Timeline, skip
+            if (key_exists($row, $timeline)) {
+                continue;
+            }
+            // extract all distances from this vertex to all Timeline
+            $distanceToTimeline = [];
+            foreach ($timeline as $origin => $notused) {
+                $distanceToTimeline[$origin] = $column[$origin];
+            }
+            // sort extracted Timeline by distance
+            asort($distanceToTimeline);
+            // get the closest distance
+            $found = array_key_first($distanceToTimeline);
+            $minDist = $distanceToTimeline[$found];
+            // if it's infinity, it's an orphan, skip
+            if ($minDist === self::INFINITY) {
+                continue;
+            }
+            // append the vertex to all Timeline at the same closest distance
+            foreach ($distanceToTimeline as $found => $dist) {
+                if ($minDist === $dist) {
+                    $vertex = clone $graph->getVertexByIndex($row);
+                    $vertex->distance = $dist;
+                    $partition[$timeline[$found]->title][] = $vertex;
+                }
+            }
+        }
+
+        return $partition;
+    }
+
     /**
      * This algorithm creates a partition of vertices in the wiki graph
      * For each vertex, it calculates the shortest distance to all Timeline
@@ -71,7 +142,7 @@ class DigraphExplore
      *  - SLOW -
      * @return array
      */
-    public function getPartitionByTimeline(): array
+    public function getPartitionByTimelineV1(): array
     {
         $edge = $this->repository->getAdjacencyMatrix();
         $dim = count($edge);
@@ -237,7 +308,7 @@ class DigraphExplore
         $partition = $this->getPartitionByTimeline();
         $keep = [];
         foreach ($partition[$root->getTitle()] as $vertex) {
-            $title = $vertex['title'];
+            $title = $vertex->title;
             if (!key_exists($title, $outbound)) {
                 continue;
             }
