@@ -6,17 +6,15 @@
 
 namespace App\Service;
 
+use App\Algebra\GraphVertex;
 use App\Entity\Place;
 use App\Entity\Timeline;
-use App\Entity\Vertex;
 use App\Repository\VertexRepository;
 use Collator;
 use DateInterval;
 use IteratorIterator;
-use MongoDB\BSON\ObjectId;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
-use Trismegiste\Strangelove\MongoDb\Repository;
 
 /**
  * Some heavy operations on the digraph
@@ -242,25 +240,13 @@ class DigraphExplore
      * @param Place $place
      * @return IteratorIterator
      */
-    public function searchForConnectedPlace(Place $place): IteratorIterator
+    public function searchForConnectedPlace(Place $place): array
     {
-        $pk = (string) $place->getPk();
-        $matrix = $this->repository->getAdjacencyMatrix();
-        $edges = [];
+        $graph = $this->repository->loadGraph();
 
-        foreach ($matrix[$pk] as $target => $flag) {
-            if ($flag) {
-                $edges[] = new ObjectId($target);
-            }
-        }
-
-        foreach ($matrix as $source => $row) {
-            if ($row[$pk]) {
-                $edges[] = new ObjectId($source);
-            }
-        }
-
-        return $this->repository->findByClass(Place::class, ['_id' => ['$in' => $edges]]);
+        return array_filter($graph->getConnectedVertex($place->getPk()), function (GraphVertex $v) {
+            return $v->category === 'place';
+        });
     }
 
     public function getNonDirectedGraphAdjacency(): array

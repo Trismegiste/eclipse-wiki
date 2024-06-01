@@ -71,4 +71,24 @@ class Digraph
         return $matrix;
     }
 
+    public function getConnectedVertex(string $pk): array
+    {
+        $connected = [];
+        $focusIdx = $this->pk2idx[$pk];
+        // stack outbound vertices
+        foreach ($this->adjacency[$focusIdx] as $idx => $flag) {
+            if ($flag) {
+                $connected[$idx] = $this->vertex[$this->idx2pk[$idx]];
+            }
+        }
+        // stack inbound vertices
+        foreach (array_column($this->adjacency, $focusIdx) as $idx => $flag) {
+            if ($flag) {
+                $connected[$idx] = $this->vertex[$this->idx2pk[$idx]];
+            }
+        }
+
+        return $connected;
+    }
+
 }
