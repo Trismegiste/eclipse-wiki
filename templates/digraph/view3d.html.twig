@@ -102,8 +102,8 @@
             sphereAggregate.push(physic)
             // Material
             let matos = 'default'
-            if (material.has(vertex.class)) {
-                matos = vertex.class
+            if (material.has(vertex.category)) {
+                matos = vertex.category
             }
             mesh.material = material.get(matos)
             // label

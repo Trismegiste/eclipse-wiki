@@ -64,6 +64,13 @@ class DigraphExplore
                 });
     }
 
+    /**
+     * This algorithm creates a partition of vertices in the wiki graph
+     * For each vertex, it calculates the shortest distance to all Timeline
+     * Then it regroups all vertices to the closest Timeline (or multiple Timeline if the vertex is equidistant to several Timeline)
+     *  - SLOW -
+     * @return array
+     */
     public function getPartitionByTimeline(): array
     {
         $graph = $this->repository->loadGraph();
@@ -128,98 +135,6 @@ class DigraphExplore
                     $vertex = clone $graph->getVertexByIndex($row);
                     $vertex->distance = $dist;
                     $partition[$timeline[$found]->title][] = $vertex;
-                }
-            }
-        }
-
-        return $partition;
-    }
-
-    /**
-     * This algorithm creates a partition of vertices in the wiki graph
-     * For each vertex, it calculates the shortest distance to all Timeline
-     * Then it regroups all vertices to the closest Timeline (or multiple Timeline if the vertex is equidistant to several Timeline)
-     *  - SLOW -
-     * @return array
-     */
-    public function getPartitionByTimelineV1(): array
-    {
-        $edge = $this->repository->getAdjacencyMatrix();
-        $dim = count($edge);
-        $assocId = array_keys($edge); // index => mongodb pk
-        $invertAssocId = array_flip($assocId); // mongodb pk => index
-        // Initialize distance matrix
-        $matrix = [];
-        for ($row = 0; $row < $dim; $row++) {
-            $matrix[$row] = [];
-            for ($col = 0; $col < $dim; $col++) {
-                $matrix[$row][$col] = match (true) {
-                    $row === $col => 0,
-                    $edge[$assocId[$row]][$assocId[$col]] || $edge[$assocId[$col]][$assocId[$row]] => 1,
-                    default => self::INFINITY
-                };
-            }
-        }
-
-        // Floyd-Warshall algorithm
-        // https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm
-        for ($k = 0; $k < $dim; $k++) {
-            for ($line = 0; $line < $dim; $line++) {
-                for ($column = 0; $column < $dim; $column++) {
-                    $newSum = $matrix[$line][$k] + $matrix[$k][$column];
-                    if ($newSum < $matrix[$line][$column]) {
-                        $matrix[$line][$column] = $newSum;
-                    }
-                }
-            }
-        }
-
-        // dump minimal info for vertices and initialize partitions for each Timeline
-        $timelineIdx = [];
-        $title = [];
-        $category = [];
-        $partition = [];
-        foreach ($this->repository->search() as $vertex) {
-            $pk = (string) $vertex->getPk();
-            $title[$pk] = $vertex->getTitle();
-            $category[$pk] = $vertex->getCategory();
-            if ($vertex instanceof \App\Entity\Timeline) {
-                // keep the pk of Timeline for skipping in the next loop
-                $timelineIdx[] = $invertAssocId[$pk];
-                // initialise the partition for each Timeline
-                $partition[$vertex->getTitle()] = [];
-            }
-        }
-
-        // group vertices by closest Timeline. If a vertex is closest to multiple Timeline, it is duplicated
-        foreach ($matrix as $row => $column) {
-            // if the vertex is a Timeline, skip
-            if (in_array($row, $timelineIdx)) {
-                continue;
-            }
-            // extract all distances from this vertex to all Timeline
-            $distanceToTimeline = [];
-            foreach ($timelineIdx as $origin) {
-                $distanceToTimeline[$origin] = $column[$origin];
-            }
-            // sort extracted Timeline by distance
-            asort($distanceToTimeline);
-            // get the closest distance
-            $found = array_key_first($distanceToTimeline);
-            $minDist = $distanceToTimeline[$found];
-            // if it's infinity, it's an orphan, skip
-            if ($minDist === self::INFINITY) {
-                continue;
-            }
-            // append the vertex to all Timeline at the same closest distance
-            foreach ($distanceToTimeline as $found => $dist) {
-                if ($minDist === $dist) {
-                    $partition[$title[$assocId[$found]]][] = [
-                        'pk' => $assocId[$row],
-                        'title' => $title[$assocId[$row]],
-                        'category' => $category[$assocId[$row]],
-                        'distance' => $dist
-                    ];
                 }
             }
         }
@@ -350,31 +265,11 @@ class DigraphExplore
 
     public function getNonDirectedGraphAdjacency(): array
     {
-        $listing = [];
-        $cursor = $this->repository->searchAllTitleOnly();
-        $cursor->setTypeMap(['root' => 'array']);
-        foreach ($cursor as $vertex) {
-            $pk = (string) $vertex['_id'];
-            $listing[] = [
-                'id' => $pk,
-                'title' => $vertex['title'],
-                'class' => Vertex::getCategoryForVertex($vertex['__pclass'])
-            ];
-        }
-
-        $adjacency = $this->repository->getAdjacencyMatrix();
-        $matrix = [];
-        foreach ($listing as $rowIdx => $rowVertex) {
-            foreach ($listing as $colIdx => $colVertex) {
-                $rowPk = $rowVertex['id'];
-                $colPk = $colVertex['id'];
-                $matrix[$rowIdx][$colIdx] = $adjacency[$rowPk][$colPk] || $adjacency[$colPk][$rowPk];
-            }
-        }
+        $graph = $this->repository->loadGraph();
 
         return [
-            'vertex' => $listing,
-            'adjacency' => $matrix
+            'vertex' => array_values($graph->vertex),
+            'adjacency' => $graph->createUndirectedAdjacency()
         ];
     }
 

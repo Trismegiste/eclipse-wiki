@@ -59,4 +59,16 @@ class Digraph
         return $this->vertex[$this->idx2pk[$idx]];
     }
 
+    public function createUndirectedAdjacency(): array
+    {
+        $matrix = [];
+        foreach ($this->adjacency as $row => $vector) {
+            foreach ($vector as $col => $flag) {
+                $matrix[$row][$col] = $flag || $this->adjacency[$col][$row];
+            }
+        }
+
+        return $matrix;
+    }
+
 }
