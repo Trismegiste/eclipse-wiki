@@ -140,7 +140,7 @@ class VertexRepository extends DefaultRepository
     }
 
     /**
-     * Regex search a keyword in the content of all Vertex collection but we exlude vertices if the keyword in a wikilink or title.
+     * Regex search a keyword in the content of all Vertex collection but we exclude vertices if the keyword in a wikilink or title.
      * Useful for tracking mentions of a Vertex before renaming it.
      * @param string $keyword
      * @return IteratorIterator
@@ -291,6 +291,55 @@ class VertexRepository extends DefaultRepository
         ]));
 
         return $cursor;
+    }
+
+    public function searchGraphVertex(array $filter = []): \App\Algebra\GraphVertexIterator
+    {
+        $cursor = $this->manager->executeQuery($this->getNamespace(), new Query($filter, [
+                    'projection' => [
+                        '_id' => true,
+                        'title' => true,
+                        '__pclass' => true
+                    ]
+        ]));
+
+        return new \App\Algebra\GraphVertexIterator($cursor);
+    }
+
+    public function searchGraphEdge(): \App\Algebra\GraphEdgeIterator
+    {
+        $cursor = $this->manager->executeReadCommand($this->dbName, new Command([
+                    'aggregate' => $this->collectionName,
+                    'cursor' => ['batchSize' => 0],
+                    // the pipeline is an array of stages
+                    'pipeline' => [
+                        // unwind on all outbound links in the content
+                        ['$unwind' => '$outboundLink'],
+                        // left join in the same collection
+                        [
+                            '$lookup' => [
+                                'from' => $this->collectionName,
+                                'localField' => 'outboundLink',
+                                'foreignField' => 'title',
+                                'as' => 'internalLink'
+                            ]
+                        ],
+                        // remove noise
+                        ['$project' => ['source' => '$_id', 'target' => '$internalLink._id']],
+                        // unwind on the id found
+                        ['$unwind' => '$target']
+                    ]
+        ]));
+
+        return new \App\Algebra\GraphEdgeIterator($cursor);
+    }
+
+    public function loadGraph(): \App\Algebra\Digraph
+    {
+        $graph = new \App\Algebra\Digraph($this->searchGraphVertex());
+        $graph->setAdjacency($this->searchGraphEdge());
+        
+        return $graph;
     }
 
     /**

@@ -211,4 +211,26 @@ class VertexRepositoryTest extends KernelTestCase
         $this->assertNull($this->sut->findByTitle('KAREN'));
     }
 
+    public function testGraphVertexCursor()
+    {
+        $dump = iterator_to_array($this->sut->searchGraphVertex());
+        $this->assertCount(10, $dump);
+        $first = array_shift($dump);
+        $this->assertInstanceOf(\App\Algebra\GraphVertex::class, $first);
+    }
+
+    public function testGraphEdgeCursor()
+    {
+        $dump = iterator_to_array($this->sut->searchGraphEdge());
+        $this->assertCount(4, $dump);
+        $first = array_shift($dump);
+        $this->assertInstanceOf(\App\Algebra\GraphEdge::class, $first);
+    }
+
+    public function testLoadGraph()
+    {
+        $graph = $this->sut->loadGraph();
+        var_dump($graph);
+    }
+
 }
