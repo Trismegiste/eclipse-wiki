@@ -6,6 +6,9 @@
 
 namespace App\Repository;
 
+use App\Algebra\Digraph;
+use App\Algebra\GraphEdgeIterator;
+use App\Algebra\GraphVertexIterator;
 use App\Entity\Ali;
 use App\Entity\Cursor\AggregateCounter;
 use App\Entity\Freeform;
@@ -293,7 +296,7 @@ class VertexRepository extends DefaultRepository
         return $cursor;
     }
 
-    public function searchGraphVertex(array $filter = []): \App\Algebra\GraphVertexIterator
+    public function searchGraphVertex(array $filter = []): GraphVertexIterator
     {
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query($filter, [
                     'projection' => [
@@ -303,10 +306,10 @@ class VertexRepository extends DefaultRepository
                     ]
         ]));
 
-        return new \App\Algebra\GraphVertexIterator($cursor);
+        return new GraphVertexIterator($cursor);
     }
 
-    public function searchGraphEdge(): \App\Algebra\GraphEdgeIterator
+    public function searchGraphEdge(): GraphEdgeIterator
     {
         $cursor = $this->manager->executeReadCommand($this->dbName, new Command([
                     'aggregate' => $this->collectionName,
@@ -331,12 +334,12 @@ class VertexRepository extends DefaultRepository
                     ]
         ]));
 
-        return new \App\Algebra\GraphEdgeIterator($cursor);
+        return new GraphEdgeIterator($cursor);
     }
 
-    public function loadGraph(): \App\Algebra\Digraph
+    public function loadGraph(): Digraph
     {
-        $graph = new \App\Algebra\Digraph($this->searchGraphVertex());
+        $graph = new Digraph($this->searchGraphVertex());
         $graph->setAdjacency($this->searchGraphEdge());
 
         return $graph;
@@ -361,17 +364,6 @@ class VertexRepository extends DefaultRepository
         }
 
         return $retro;
-    }
-
-    public function searchAllTitleOnly(): Cursor
-    {
-        return $this->manager->executeQuery($this->getNamespace(), new Query([], [
-                            'projection' => [
-                                '_id' => true,
-                                'title' => true,
-                                '__pclass' => true
-                            ]
-        ]));
     }
 
     public function searchInbound(Vertex $vertex): IteratorIterator
