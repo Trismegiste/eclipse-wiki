@@ -55,7 +55,7 @@ class AppendPictureTranso implements DataTransformerInterface
         }
 
         // import into storage
-        $importedName = $value->getTitle() . '-' . sha1($remoteName);
+        $importedName = $value->getTitle() . '-' . time();
         $this->storage->storePicture(new UploadedFile($pathname, 'tmp.png'), $importedName);
 
         // managing avatar

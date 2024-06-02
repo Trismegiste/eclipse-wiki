@@ -338,57 +338,29 @@ class VertexRepository extends DefaultRepository
     {
         $graph = new \App\Algebra\Digraph($this->searchGraphVertex());
         $graph->setAdjacency($this->searchGraphEdge());
-        
+
         return $graph;
     }
 
     /**
      * Calculates the adjacency matrix for the current digraph stored in vertices collection
+     * @deprecated
      * @return array
      */
     public function getAdjacencyMatrix(): array
     {
-        // census of vertices
-        $cursor = $this->manager->executeQuery($this->getNamespace(), new Query([], ['projection' => ['_id' => true]]));
-        $vertexPk = [];
-        foreach ($cursor as $vertex) {
-            $vertexPk[(string) $vertex->_id] = false;
+        $graph = $this->loadGraph();
+        $retro = [];
+        $dim = count($graph->vertex);
+        for ($row = 0; $row < $dim; $row++) {
+            for ($col = 0; $col < $dim; $col++) {
+                $rowPk = $graph->getVertexByIndex($row)->pk;
+                $colPk = $graph->getVertexByIndex($col)->pk;
+                $retro[$rowPk][$colPk] = $graph->adjacency[$row][$col];
+            }
         }
 
-        // init matrix
-        $matrix = [];
-        foreach ($vertexPk as $pk => $dummy) {
-            $matrix[$pk] = $vertexPk;
-        }
-
-        $cursor = $this->manager->executeReadCommand($this->dbName, new Command([
-                    'aggregate' => $this->collectionName,
-                    'cursor' => ['batchSize' => 0],
-                    // the pipeline is an array of stages
-                    'pipeline' => [
-                        // unwind on all outbound links in the content
-                        ['$unwind' => '$outboundLink'],
-                        // left join in the same collection
-                        [
-                            '$lookup' => [
-                                'from' => $this->collectionName,
-                                'localField' => 'outboundLink',
-                                'foreignField' => 'title',
-                                'as' => 'internalLink'
-                            ]
-                        ],
-                        // remove noise
-                        ['$project' => ['title' => true, 'linkLabel' => '$outboundLink', 'outboundVertexId' => '$internalLink._id']],
-                        // unwind on the id found
-                        ['$unwind' => '$outboundVertexId']
-                    ]
-        ]));
-
-        foreach ($cursor as $edge) {
-            $matrix[(string) $edge->_id][(string) $edge->outboundVertexId] = true;
-        }
-
-        return $matrix;
+        return $retro;
     }
 
     public function searchAllTitleOnly(): Cursor

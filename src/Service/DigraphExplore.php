@@ -147,26 +147,20 @@ class DigraphExplore
     public function findOrphan(): array
     {
         $orphan = [];
-        $matrix = $this->getAdjacencyMatrix();
+        $graph = $this->repository->loadGraph();
+        $undirected = $graph->createUndirectedAdjacency();
 
-        foreach ($matrix as $source => $row) {
+        foreach ($undirected as $source => $row) {
             $isOrphan = true;
-            // check outbound vertices
-            foreach ($row as $target => $link) {
-                if ($link && ($target !== $source)) {
-                    $isOrphan = false;
-                    break;
-                }
-            }
-            // check inbound vertices
-            foreach ($matrix as $inbound => $notused) {
-                if (($inbound !== $source) && $matrix[$inbound][$source]) {
+            // check vertices
+            foreach ($row as $target => $flag) {
+                if ($flag && ($target !== $source)) {
                     $isOrphan = false;
                     break;
                 }
             }
             if ($isOrphan) {
-                $orphan[] = $source;
+                $orphan[] = $graph->getVertexByIndex($source);
             }
         }
 
@@ -176,6 +170,7 @@ class DigraphExplore
     /**
      * Calculates the adjacency matrix for the current digraph stored in vertices collection
      * @return array
+     * @deprecated
      */
     public function getAdjacencyMatrix(): array
     {

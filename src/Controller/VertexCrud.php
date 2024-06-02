@@ -233,9 +233,7 @@ class VertexCrud extends GenericCrud
     #[Route('/digraph/orphan', methods: ['GET'])]
     public function showOrphan(DigraphExplore $explorer): Response
     {
-        return $this->render('digraph/orphan.html.twig', ['orphan' => array_map(function ($pk) {
-                        return $this->repository->load($pk);
-                    }, $explorer->findOrphan())]);
+        return $this->render('digraph/orphan.html.twig', ['orphan' => $explorer->findOrphan()]);
     }
 
     /**
