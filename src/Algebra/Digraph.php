@@ -91,4 +91,26 @@ class Digraph
         return $connected;
     }
 
+    public function searchOrphan(): array
+    {
+        $orphan = [];
+        $undirected = $this->createUndirectedAdjacency();
+
+        foreach ($undirected as $source => $row) {
+            $isOrphan = true;
+            // check vertices
+            foreach ($row as $target => $flag) {
+                if ($flag && ($target !== $source)) {
+                    $isOrphan = false;
+                    break;
+                }
+            }
+            if ($isOrphan) {
+                $orphan[] = $this->getVertexByIndex($source);
+            }
+        }
+
+        return $orphan;
+    }
+
 }

@@ -146,25 +146,7 @@ class DigraphExplore
      */
     public function findOrphan(): array
     {
-        $orphan = [];
-        $graph = $this->repository->loadGraph();
-        $undirected = $graph->createUndirectedAdjacency();
-
-        foreach ($undirected as $source => $row) {
-            $isOrphan = true;
-            // check vertices
-            foreach ($row as $target => $flag) {
-                if ($flag && ($target !== $source)) {
-                    $isOrphan = false;
-                    break;
-                }
-            }
-            if ($isOrphan) {
-                $orphan[] = $graph->getVertexByIndex($source);
-            }
-        }
-
-        return $orphan;
+        return $this->repository->loadGraph()->searchOrphan();
     }
 
     /**
