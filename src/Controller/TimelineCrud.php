@@ -13,11 +13,11 @@ use App\Form\TimelineType;
 use App\Repository\VertexRepository;
 use App\Service\DigraphExplore;
 use App\Service\GameSessionTracker;
+use App\Service\PartitionGalleryFactory;
 use MongoDB\BSON\ObjectId;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Twig\Environment;
 
 /**
  * CRUD for Timeline entity
@@ -84,7 +84,7 @@ class TimelineCrud extends GenericCrud
     }
 
     /**
-     * Pin the current timeline in the user session
+     * Pins the current timeline in the user session
      */
     #[Route('/pin/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function pin(Timeline $timeline, GameSessionTracker $tracker): Response
@@ -96,7 +96,7 @@ class TimelineCrud extends GenericCrud
     }
 
     /**
-     * Show the list of broken links for a given timeline
+     * Shows the list of broken links for a given timeline
      */
     #[Route('/broken/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function showBroken(Timeline $timeline): Response
@@ -113,6 +113,7 @@ class TimelineCrud extends GenericCrud
     #[Route('/partition/{pk}/list', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function partitionListing(Timeline $timeline): Response
     {
+        // @todo this code sux, graphToSortedCategory is not usefull here, except for the cache
         $dump = $this->explorer->graphToSortedCategory($timeline);
         $title = array_merge(...array_values($dump));
         $iter = $this->repository->search(['title' => ['$in' => $title]]);
@@ -126,7 +127,7 @@ class TimelineCrud extends GenericCrud
      * @return Response
      */
     #[Route('/partition/{pk}/gallery', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function partitionGallery(Timeline $timeline, \App\Service\PartitionGalleryFactory $fac): Response
+    public function partitionGallery(Timeline $timeline, PartitionGalleryFactory $fac): Response
     {
         $partition = $this->explorer->getPartitionByTimeline()[$timeline->getTitle()];
 
@@ -142,6 +143,10 @@ class TimelineCrud extends GenericCrud
         ]);
     }
 
+    /**
+     * Lists all Timeline
+     * @return Response
+     */
     #[Route('/listing', methods: ['GET'])]
     public function listing(): Response
     {
