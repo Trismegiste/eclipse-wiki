@@ -6,17 +6,18 @@
 
 namespace App\Algebra;
 
-use MongoDB\Driver\Cursor;
+use Iterator;
 
 /**
  * Iterator on GraphVertex
+  * DP : Decorator for an Iterator with a Factory
  */
-class GraphVertexIterator implements \Iterator
+class GraphVertexIterator implements Iterator
 {
 
-    public function __construct(protected Cursor $cursor)
+    public function __construct(protected Iterator $cursor)
     {
-        $cursor->setTypeMap(['root' => 'array']);
+        
     }
 
     public function current(): mixed

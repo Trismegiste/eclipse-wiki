@@ -6,10 +6,10 @@
 
 namespace App\Algebra;
 
+use Iterator;
+
 /**
- * Description of Graph
- *
- * @author florent
+ * A digraph for the wiki
  */
 class Digraph
 {
@@ -19,14 +19,23 @@ class Digraph
     protected array $idx2pk;
     protected array $pk2idx;
 
-    public function __construct(GraphVertexIterator $vertex)
+    /**
+     * Creates a neW digraph with an iterator on GraphVertex, the key of the iterator should be the primary key of the vertex
+     * @param Iterator $vertex
+     */
+    public function __construct(Iterator $vertex)
     {
         $this->vertex = iterator_to_array($vertex);
         $this->idx2pk = array_keys($this->vertex);
         $this->pk2idx = array_flip($this->idx2pk);
     }
 
-    public function setAdjacency(GraphEdgeIterator $iter): void
+    /**
+     * Initializes the adjacency matrix with a iterator on GraphEdge
+     * @param Iterator $iter
+     * @return void
+     */
+    public function setAdjacency(Iterator $iter): void
     {
         // initialize adjacency matrix
         $this->adjacency = [];
@@ -42,6 +51,11 @@ class Digraph
         }
     }
 
+    /**
+     * Extracts a partial vector of Vertices for one category. Keeps the algebric index of the vertex, therefore could have holes in indexing
+     * @param string $category
+     * @return array
+     */
     public function extractVectorByCategory(string $category): array
     {
         $vector = [];
@@ -54,6 +68,11 @@ class Digraph
         return $vector;
     }
 
+    /**
+     * Gets a vertex in the graph by its algebraic index
+     * @param int $idx
+     * @return GraphVertex
+     */
     public function getVertexByIndex(int $idx): GraphVertex
     {
         return $this->vertex[$this->idx2pk[$idx]];
@@ -71,6 +90,11 @@ class Digraph
         return $matrix;
     }
 
+    /**
+     * Gets an array of vertices connected (inbound and outbound) to a given vertex given by its primary key
+     * @param string $pk
+     * @return array
+     */
     public function getConnectedVertex(string $pk): array
     {
         $connected = [];
@@ -91,6 +115,10 @@ class Digraph
         return $connected;
     }
 
+    /**
+     * Searches for the list of orphan vertices (no inbound and outbound edges)
+     * @return array
+     */
     public function searchOrphan(): array
     {
         $orphan = [];

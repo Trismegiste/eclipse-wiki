@@ -7,17 +7,17 @@
 namespace App\Algebra;
 
 use Iterator;
-use MongoDB\Driver\Cursor;
 
 /**
  * Iterator on GraphEdge
+ * DP : Decorator for an Iterator with a Factory
  */
 class GraphEdgeIterator implements Iterator
 {
 
-    public function __construct(protected Cursor $cursor)
+    public function __construct(protected \Iterator $cursor)
     {
-        $cursor->setTypeMap(['root' => 'array']);
+        
     }
 
     public function current(): mixed

@@ -18,6 +18,7 @@ use App\Entity\Transhuman;
 use App\Entity\Vertex;
 use DomainException;
 use InvalidArgumentException;
+use Iterator;
 use IteratorIterator;
 use MongoDB\BSON\Binary;
 use MongoDB\BSON\ObjectId;
@@ -223,6 +224,10 @@ class VertexRepository extends DefaultRepository
         );
     }
 
+    /**
+     * Searches all Timeline
+     * @return iterable
+     */
     public function searchTimeline(): iterable
     {
         return $this->manager->executeQuery($this->getNamespace(), new Query(
@@ -296,7 +301,11 @@ class VertexRepository extends DefaultRepository
         return $cursor;
     }
 
-    public function searchGraphVertex(array $filter = []): GraphVertexIterator
+    /**
+     * Gets an iterator on all existing vertices. Each value is a GraphVertex and its key is its MongoDb primary key
+     * @return Iterator
+     */
+    public function searchGraphVertex(array $filter = []): Iterator
     {
         $cursor = $this->manager->executeQuery($this->getNamespace(), new Query($filter, [
                     'projection' => [
@@ -305,11 +314,16 @@ class VertexRepository extends DefaultRepository
                         '__pclass' => true
                     ]
         ]));
+        $cursor->setTypeMap(['root' => 'array']);
 
         return new GraphVertexIterator($cursor);
     }
 
-    public function searchGraphEdge(): GraphEdgeIterator
+    /**
+     * Gets an iterator on all existing edges. Each value is a GraphEdge
+     * @return Iterator
+     */
+    public function searchGraphEdge(): Iterator
     {
         $cursor = $this->manager->executeReadCommand($this->dbName, new Command([
                     'aggregate' => $this->collectionName,
@@ -333,10 +347,15 @@ class VertexRepository extends DefaultRepository
                         ['$unwind' => '$target']
                     ]
         ]));
+        $cursor->setTypeMap(['root' => 'array']);
 
         return new GraphEdgeIterator($cursor);
     }
 
+    /**
+     * Loads the full digraph
+     * @return Digraph
+     */
     public function loadGraph(): Digraph
     {
         $graph = new Digraph($this->searchGraphVertex());
@@ -366,11 +385,21 @@ class VertexRepository extends DefaultRepository
         return $retro;
     }
 
+    /**
+     * Searches all bakclinks for a given Vertex
+     * @param Vertex $vertex
+     * @return IteratorIterator
+     */
     public function searchInbound(Vertex $vertex): IteratorIterator
     {
         return $this->search(['outboundLink' => $vertex->getTitle()]);
     }
 
+    /**
+     * Loads a subgraph including one vertex (the focus) and its inbound vertices
+     * @param string $pk
+     * @return Subgraph
+     */
     public function loadSubgraph(string $pk): Subgraph
     {
         $focus = $this->load($pk);
