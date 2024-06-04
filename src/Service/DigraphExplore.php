@@ -28,7 +28,11 @@ class DigraphExplore
     protected CacheInterface $cache;
     protected string $localeParam;
 
-    public function __construct(VertexRepository $repo, CacheInterface $cache, string $locale)
+    public function __construct(VertexRepository $repo,
+            CacheInterface $cache,
+            string $locale,
+            protected \Symfony\Contracts\HttpClient\HttpClientInterface $client,
+            protected \Symfony\Component\Stopwatch\Stopwatch $stopwatch)
     {
         $this->repository = $repo;
         $this->cache = $cache;
@@ -87,18 +91,27 @@ class DigraphExplore
             }
         }
 
-        // Floyd-Warshall algorithm
-        // https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm
-        for ($k = 0; $k < $dim; $k++) {
-            for ($line = 0; $line < $dim; $line++) {
-                for ($column = 0; $column < $dim; $column++) {
-                    $newSum = $matrix[$line][$k] + $matrix[$k][$column];
-                    if ($newSum < $matrix[$line][$column]) {
-                        $matrix[$line][$column] = $newSum;
+        $this->stopwatch->start('floyd-warshall');
+        if (true) {
+            $response = $this->client->request('POST', 'http://localhost:3333/algebra/floydwarshall', [
+                'json' => $matrix
+            ]);
+            $matrix = json_decode($response->getContent(), true);
+        } else {
+            // Floyd-Warshall algorithm
+            // https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm
+            for ($k = 0; $k < $dim; $k++) {
+                for ($line = 0; $line < $dim; $line++) {
+                    for ($column = 0; $column < $dim; $column++) {
+                        $newSum = $matrix[$line][$k] + $matrix[$k][$column];
+                        if ($newSum < $matrix[$line][$column]) {
+                            $matrix[$line][$column] = $newSum;
+                        }
                     }
                 }
             }
         }
+        $this->stopwatch->stop('floyd-warshall');
 
         // initialize partitions
         $partition = [];

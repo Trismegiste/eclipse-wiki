@@ -155,14 +155,4 @@ class TimelineCrud extends GenericCrud
         return $this->render('timeline/listing.html.twig', ['listing' => $iter]);
     }
 
-    #[Route('/gofloyd')]
-    public function goFloyd(\Symfony\Contracts\HttpClient\HttpClientInterface $client): Response
-    {
-        $response = $client->request('POST', 'http://localhost:3333/algebra/floydwarshall', [
-            'json' => [[1, 2], [3, 4]]
-        ]);
-        
-        return new Response($response->getContent());
-    }
-
 }
