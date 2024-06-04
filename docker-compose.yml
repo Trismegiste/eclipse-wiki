@@ -22,6 +22,14 @@ services:
         network_mode: host
         working_dir: /home/bun/app
         command: bun run webfont
+        
+    goapi:
+        image: golang:alpine3.20
+        volumes:
+            - ./golang:/app
+        network_mode: host
+        working_dir: /app
+        command: go run httpd.go
 
 volumes:
     eclipse-mongo:
