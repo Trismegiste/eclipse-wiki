@@ -9,6 +9,9 @@ import (
 	"os"
 )
 
+// Floyd-Warshall algorithm
+// https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm
+// Warning : this algorithm has a complexity of O(n³)
 func computeFloydWarshall(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("Floyd-Warshall request\n")
 	body, err := io.ReadAll(r.Body)
@@ -35,6 +38,7 @@ func computeFloydWarshall(w http.ResponseWriter, r *http.Request) {
 	enc.Encode(matrix)
 }
 
+// This is a web server that provides comuting for intensive algorithms
 func main() {
 	http.HandleFunc("/algebra/floydwarshall", computeFloydWarshall)
 

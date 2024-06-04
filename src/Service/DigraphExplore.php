@@ -31,8 +31,7 @@ class DigraphExplore
     public function __construct(VertexRepository $repo,
             CacheInterface $cache,
             string $locale,
-            protected AlgorithmClient $algorithm,
-            protected \Symfony\Component\Stopwatch\Stopwatch $stopwatch)
+            protected AlgorithmClient $algorithm)
     {
         $this->repository = $repo;
         $this->cache = $cache;
@@ -91,24 +90,8 @@ class DigraphExplore
             }
         }
 
-        $this->stopwatch->start('floyd-warshall');
-        if (true) {
-            $this->algorithm->floydWarshall($matrix);
-        } else {
-            // Floyd-Warshall algorithm
-            // https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm
-            for ($k = 0; $k < $dim; $k++) {
-                for ($line = 0; $line < $dim; $line++) {
-                    for ($column = 0; $column < $dim; $column++) {
-                        $newSum = $matrix[$line][$k] + $matrix[$k][$column];
-                        if ($newSum < $matrix[$line][$column]) {
-                            $matrix[$line][$column] = $newSum;
-                        }
-                    }
-                }
-            }
-        }
-        $this->stopwatch->stop('floyd-warshall');
+        // distance matrix computed by Floyd-Warshall algorithm
+        $this->algorithm->floydWarshall($matrix);
 
         // initialize partitions
         $partition = [];
