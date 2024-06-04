@@ -31,7 +31,7 @@ class DigraphExplore
     public function __construct(VertexRepository $repo,
             CacheInterface $cache,
             string $locale,
-            protected \Symfony\Contracts\HttpClient\HttpClientInterface $client,
+            protected AlgorithmClient $algorithm,
             protected \Symfony\Component\Stopwatch\Stopwatch $stopwatch)
     {
         $this->repository = $repo;
@@ -93,10 +93,7 @@ class DigraphExplore
 
         $this->stopwatch->start('floyd-warshall');
         if (true) {
-            $response = $this->client->request('POST', 'http://localhost:3333/algebra/floydwarshall', [
-                'json' => $matrix
-            ]);
-            $matrix = json_decode($response->getContent(), true);
+            $this->algorithm->floydWarshall($matrix);
         } else {
             // Floyd-Warshall algorithm
             // https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm
