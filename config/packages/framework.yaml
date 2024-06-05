@@ -18,6 +18,12 @@ framework:
     php_errors:
         log: true
 
+    # scoping clients for API
+    http_client:
+        scoped_clients:
+            algorithm.client:
+                base_uri: 'http://localhost:%env(ALGORITHM_PORT)%'
+
 when@test:
     framework:
         csrf_protection: false

@@ -14,7 +14,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class AlgorithmClient
 {
 
-    public function __construct(protected HttpClientInterface $client)
+    public function __construct(protected HttpClientInterface $algorithmClient)
     {
         
     }
@@ -26,9 +26,7 @@ class AlgorithmClient
      */
     public function floydWarshall(array &$matrix): void
     {
-        $response = $this->client->request('POST', 'http://localhost:3333/algebra/floydwarshall', [// @todo remove hardcoded value
-            'json' => $matrix
-        ]);
+        $response = $this->algorithmClient->request('POST', '/algebra/floydwarshall', ['json' => $matrix]);
         $matrix = json_decode($response->getContent(), true);
     }
 
