@@ -53,7 +53,7 @@ class Storage
         }
 
         $file = new BinaryFileResponse($path);
-        $file->setMaxAge(36000);
+        $file->setMaxAge(3600);
 
         return $file;
     }
