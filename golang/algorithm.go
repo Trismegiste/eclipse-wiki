@@ -22,6 +22,7 @@ func computeFloydWarshall(w http.ResponseWriter, r *http.Request) {
 	var matrix [][]int
 	json.Unmarshal(body, &matrix)
 	dim := len(matrix)
+	fmt.Printf("Computing Floyd-Warshall algorithm on a matrix with a size of %d\n", dim)
 
 	for k := 0; k < dim; k++ {
 		for line := 0; line < dim; line++ {
@@ -40,9 +41,14 @@ func computeFloydWarshall(w http.ResponseWriter, r *http.Request) {
 
 // This is a web server that provides comuting for intensive algorithms
 func main() {
+	// Routing
 	http.HandleFunc("/algebra/floydwarshall", computeFloydWarshall)
 
-	err := http.ListenAndServe(":3333", nil)
+	// launching server
+	var port string = os.Args[1]
+	fmt.Printf("Lauching server on port " + port + "\n")
+	err := http.ListenAndServe(":"+port, nil)
+
 	if errors.Is(err, http.ErrServerClosed) {
 		fmt.Printf("server closed\n")
 	} else if err != nil {
