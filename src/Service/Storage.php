@@ -25,11 +25,13 @@ class Storage
 
     const tokenSize = 503;
 
-    protected $root;
+    protected string $root;
+    protected string $dummyProfilePic;
 
     public function __construct(string $projectDir, string $env)
     {
         $this->root = join_paths($projectDir, '/var/storage/', $env);
+        $this->dummyProfilePic = join_paths($projectDir, 'public/img/not-modified.png');
     }
 
     /**
@@ -216,6 +218,17 @@ class Storage
         ksort($keep);
 
         return $keep;
+    }
+
+    public function createDummyProfilePic304(string $etag): BinaryFileResponse
+    {
+        $pic = new BinaryFileResponse($this->dummyProfilePic);
+        $pic->headers->set(AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER, 'true');
+        $pic->setEtag($etag);
+        $pic->setPublic();
+        $pic->mustRevalidate();
+
+        return $pic;
     }
 
 }

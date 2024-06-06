@@ -23,7 +23,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
 
 /**
  * Managing Social Networks Profile Pictures
@@ -46,12 +45,7 @@ class ProfilePicture extends AbstractController
     #[Route('/profile/unique/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function unique(Transhuman $npc, AvatarMaker $maker, Request $request): BinaryFileResponse
     {
-        // HTTP Cache with ETag
-        $pic = new BinaryFileResponse('/app/public/img/not-modified.png');  // @todo remove hardcoded
-        $pic->headers->set(AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER, 'true');
-        $pic->setEtag(sha1(serialize($npc)));
-        $pic->setPublic();
-        $pic->mustRevalidate();
+        $pic = $this->storage->createDummyProfilePic304(sha1(serialize($npc)));
 
         if ($pic->isNotModified($request)) {
             return $pic;
@@ -60,7 +54,6 @@ class ProfilePicture extends AbstractController
         $pathname = $this->storage->getFileInfo($npc->tokenPic);
         $profile = $maker->generate($npc, $pathname);
         $pic->setFile($profile);
-        $pic->headers->set('X-Network-Profile', 'Generated at ' . date('Y-m-d h:i:s'));
 
         return $pic;
     }
