@@ -23,6 +23,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
 
 /**
  * Managing Social Networks Profile Pictures
@@ -47,6 +48,7 @@ class ProfilePicture extends AbstractController
     {
         // HTTP Cache with ETag
         $pic = new BinaryFileResponse('/app/public/img/not-modified.png');  // @todo remove hardcoded
+        $pic->headers->set(AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER, 'true');
         $pic->setEtag(sha1(serialize($npc)));
         $pic->setPublic();
         $pic->mustRevalidate();
