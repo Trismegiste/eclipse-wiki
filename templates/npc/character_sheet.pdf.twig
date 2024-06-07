@@ -1,0 +1,105 @@
+{# PDF Summary of Character Sheet #}
+{% extends "base.pdf.twig" %}
+
+{% macro print_trait(trait, rof = 1, bonus = 0) %}
+    d{{ trait.dice }}
+    {% set delta = trait.modifier + bonus %}
+    {% if delta > 0 %}
+        + {{ delta }}
+    {% endif %}
+    {% if delta < 0 %}
+        - {{ -delta }}
+    {% endif %}
+{% endmacro %}
+
+{% block content %}
+    <div class="character-show">
+        <div class="pure-g">
+            <div class="pure-u-1-2">
+                <h2>Attributs</h2>
+                <table class="pure-table">
+                    {% for attr in vertex.attributeRolls %}
+                        <tr>
+                            <td>{{ attr.label }}</td>
+                            <td>{{ _self.print_trait(attr) }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <h2>Carac. 2<sup>ndaires</sup></h2>
+                <table class="pure-table">
+                    <tr>
+                        <td>Parade</td>
+                        <td>{{ vertex.parry }}</td>
+                    </tr>
+                    <tr>
+                        <td>Malus distance</td>
+                        <td>{{ vertex.rangedMalus }}</td>
+                    </tr>
+                    <tr>
+                        <td>Résistance</td>
+                        <td>{{ vertex.toughness }} ({{ vertex.totalArmor }})</td>
+                    </tr>
+                    <tr>
+                        <td>Sécurité</td>
+                        <td>{{ vertex.security }}</td>
+                    </tr>
+                </table>
+            </div>      
+            <div class="pure-u-1-2">
+                <h2>Compétences</h2>
+                <table class="pure-table">
+                    {% for skill in vertex.skillRolls %}
+                        <tr>
+                            <td>{{ skill.label }}</td>
+                            <td>{{ _self.print_trait(skill) }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>   
+            <div class="pure-u-1">
+                <ul class="edge-list">
+                    {% for edge in vertex.edges %}
+                        <li>{{ edge.name }}
+                        </li>
+                    {% endfor %}
+                    {% for edge in vertex.morph.edges %}
+                        <li>{{ edge.name }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>  
+            <div class="pure-u-1">
+                <table class="pure-table">
+                    {% for item in vertex.attackRolls %}
+                        <tr>
+                            <td>{{ item.title }}</td>
+                            <td>{{ item.reach }}</td>
+                            <td>{{ item.rateOfFire }}×</td>
+                            <td>{{ item.roll.label }}</td>
+                            <td>{{ _self.print_trait(item.roll, item.rateOfFire, item.rollBonus) }}</td>
+                            <td>{{ item.damage }}</td>
+                            <td>PA {{ item.armorPiercing }}</td>                            
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}  
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        h2:has(+ table) {
+            margin-bottom: 0;
+            font-size: 110%;
+        }
+        .edge-list {
+            padding-left: 0;
+        }
+        .edge-list li {
+            display: inline-block;
+            margin-right: 1em;
+        }
+    </style>
+{% endblock %}

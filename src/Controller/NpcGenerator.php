@@ -24,6 +24,7 @@ use App\Repository\CharacterFactory;
 use App\Repository\FactionProvider;
 use App\Repository\MorphProvider;
 use App\Repository\VertexRepository;
+use App\Service\DocumentBroadcaster;
 use App\Twig\SaWoExtension;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -368,6 +369,24 @@ class NpcGenerator extends AbstractController
         }
 
         return $this->render('npc/transhuman/resync.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * Generates the Summary PDF and push to players
+     */
+    #[Route('/push-sheet/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
+    public function pushPdf(Character $vertex, DocumentBroadcaster $broadcast): Response
+    {
+        $title = sprintf("Stats-%s.pdf", $vertex->getTitle());
+        $html = $this->renderView('npc/character_sheet.pdf.twig', ['vertex' => $vertex]);
+        $pdf = $broadcast->generatePdf($title, $html);
+        $this->addFlash('success', 'PDF Fiche de perso généré');
+        
+        return $this->redirectToRoute('app_gmpusher_pushdocument', [
+                    'pk' => $vertex->getPk(),
+                    'filename' => $pdf->getBasename(),
+                    'label' => 'Fiche - ' . $vertex->getTitle()
+        ]);
     }
 
 }

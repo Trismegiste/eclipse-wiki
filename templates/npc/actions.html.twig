@@ -17,7 +17,10 @@
 <a href="{{ path('app_npcgenerator_duplicate', {pk: npc.pk}) }}" title="Dupliquer"><i class="icon-duplicate"></i></a>
     {% if npc.category == 'transhuman' and npc.instantiatedFrom %}
     <a href="{{ path('app_npcgenerator_resync', {pk: npc.pk}) }}" title="Resynchroniser avec le parent"><i class="icon-spin3"></i></a>
-    {% endif %}
+    {% endif %}   
+    {% if not npc.wildcard %}
+    <a href="{{ path('app_npcgenerator_pushpdf', {pk: npc.pk}) }}" title="Envoyer la fiche de perso"><i class="icon-push"></i></a>
+    {% endif %}   
 <a href="{{ path('app_vertexcrud_rename', {pk: npc.pk}) }}" title="Renommer"><i class="icon-rename"></i></a>
 <a href="{{ path('app_vertexcrud_archive', {pk: npc.pk}) }}" title="He's dead, Jim"><i class="icon-dead"></i></a>
 <a href="{{ path('app_vertexcrud_delete', {pk: npc.pk}) }}" title="Effacer"><i class="icon-trash-empty"></i></a>
