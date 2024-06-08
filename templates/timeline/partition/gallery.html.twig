@@ -9,7 +9,7 @@
                 <div>
                     {% if node.pushable %}
                         <a href="{{ node.push }}" x-bind="trigger">
-                            <img src="{{ node.thumb }}" class="{{ node.classname }}"/>
+                            <img src="{{ node.thumb }}" class="{{ node.classname }}" loading="lazy"/>
                         </a>
                     {% else %}
                         <i class="{{ node.icon }}"></i>

@@ -6,12 +6,14 @@
 
 namespace App\Service;
 
+use InvalidArgumentException;
 use Iterator;
 use RuntimeException;
 use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use function join_paths;
 
@@ -23,11 +25,13 @@ class Storage
 
     const tokenSize = 503;
 
-    protected $root;
+    protected string $root;
+    protected string $dummyProfilePic;
 
     public function __construct(string $projectDir, string $env)
     {
         $this->root = join_paths($projectDir, '/var/storage/', $env);
+        $this->dummyProfilePic = join_paths($projectDir, 'public/img/not-modified.png');
     }
 
     /**
@@ -53,9 +57,8 @@ class Storage
         }
 
         $file = new BinaryFileResponse($path);
-        // struggling with cache
-        clearstatcache(true, $path);
-        $file->setEtag(sha1(filesize($path) . '-' . filemtime($path)));
+        $file->setMaxAge(3600);
+        $file->headers->set(AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER, 'true');
 
         return $file;
     }
@@ -184,7 +187,7 @@ class Storage
     public function storeToken(UploadedFile $picture, string $filename): void
     {
         if ($picture->getMimeType() !== 'image/png') {
-            throw new \InvalidArgumentException('Not a PNG format');
+            throw new InvalidArgumentException('Not a PNG format');
         }
 
         list($width, $height) = getimagesize($picture->getPathname());
@@ -215,6 +218,17 @@ class Storage
         ksort($keep);
 
         return $keep;
+    }
+
+    public function createDummyProfilePic304(string $etag): BinaryFileResponse
+    {
+        $pic = new BinaryFileResponse($this->dummyProfilePic);
+        $pic->headers->set(AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER, 'true');
+        $pic->setEtag($etag);
+        $pic->setPublic();
+        $pic->mustRevalidate();
+
+        return $pic;
     }
 
 }
