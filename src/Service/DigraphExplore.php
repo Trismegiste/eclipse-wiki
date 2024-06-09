@@ -235,4 +235,30 @@ class DigraphExplore
         ];
     }
 
+    public function getVertexSortedByCentrality(Timeline $timeline): array
+    {
+        $graph = $this->repository->loadGraph();
+        $partition = $this->getPartitionByDistanceFromCategory($graph, 'timeline')[$timeline->getTitle()];
+        $pk2idx = array_flip(array_keys($graph->vertex));
+        $matrix = [];
+        foreach ($partition as $row => $source) {
+            foreach ($partition as $col => $target) {
+                $s = $pk2idx[$source->pk];
+                $t = $pk2idx[$target->pk];
+                $matrix[$row][$col] = $graph->adjacency[$s][$t] || $graph->adjacency[$t][$s];
+            }
+        }
+
+        $between = $this->algorithm->brandesCentrality($matrix);
+        arsort($between);
+
+        $perCategory = [];
+        foreach ($between as $idx => $weight) {
+            $vertex = $partition[$idx];
+            $perCategory[$vertex->category][] = $vertex;
+        }
+
+        return $perCategory;
+    }
+
 }

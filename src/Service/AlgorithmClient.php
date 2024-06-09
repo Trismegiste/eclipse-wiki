@@ -31,6 +31,13 @@ class AlgorithmClient
         $matrix = json_decode($response->getContent(), true);
     }
 
+    /**
+     * Brandes algorithm for Intermediary Centrality
+     * https://en.wikipedia.org/wiki/Brandes%27_algorithm
+     * Call of https://github.com/m-chrzan/brandes multithreaded implementation in C++
+     * @param array $matrix
+     * @return array
+     */
     public function brandesCentrality(array &$matrix): array
     {
         $edge = tmpfile();
