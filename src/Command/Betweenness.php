@@ -7,10 +7,12 @@
 namespace App\Command;
 
 use App\Repository\VertexRepository;
+use App\Service\DigraphExplore;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Process;
 
 /**
  * Description of Betweenness
@@ -21,7 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Betweenness extends Command
 {
 
-    public function __construct(protected VertexRepository $repository)
+    public function __construct(protected VertexRepository $repository, protected DigraphExplore $explorer)
     {
 
         parent::__construct();
@@ -33,23 +35,29 @@ class Betweenness extends Command
         $result = tmpfile();
 
         $graph = $this->repository->loadGraph();
-        foreach ($graph->adjacency as $row => $vector) {
-      //      $output->writeln(sprintf('%d %s', $row, $graph->getVertexByIndex($row)->title));
+        $partition = $this->explorer->getPartitionByDistanceFromCategory($graph, 'timeline')['La porte de la Nuit'];
+        $pk2idx = array_flip(array_keys($graph->vertex));
+        $matrix = [];
+        foreach ($partition as $row => $source) {
+            foreach ($partition as $col => $target) {
+                $matrix[$row][$col] = $graph->adjacency[$pk2idx[$source->pk]][$pk2idx[$target->pk]];
+            }
+        }
+
+        foreach ($matrix as $row => $vector) {
             foreach ($vector as $col => $flag) {
-                if ($flag || $graph->adjacency[$col][$row]) {
+                if ($flag || $matrix[$col][$row]) {
                     fprintf($edge, "%d %d\n", $row, $col);
                 }
             }
         }
-        $brandes = new \Symfony\Component\Process\Process([
+        $brandes = new Process([
             'brandes',
             16,
             stream_get_meta_data($edge)['uri'],
             stream_get_meta_data($result)['uri']
         ]);
         $brandes->mustRun();
-    //    echo file_get_contents(stream_get_meta_data($edge)['uri']) . PHP_EOL;
-     //   echo file_get_contents(stream_get_meta_data($result)['uri']) . PHP_EOL;
         fclose($edge);
 
         $between = [];
@@ -61,10 +69,10 @@ class Betweenness extends Command
 
         arsort($between);
         foreach ($between as $idx => $weight) {
-            $vertex = $graph->getVertexByIndex($idx);
-            if ($vertex->category === 'transhuman') {
+            $vertex = $partition[$idx];
+        //    if ($vertex->category === 'transhuman') {
                 $output->writeln(sprintf("%s %f", $vertex->title, $weight));
-            }
+        //    }
         }
 
         return self::SUCCESS;
