@@ -1,0 +1,17 @@
+{# Graphical view of most important vertices associated to a Timeline #}
+{% extends "vertex/show.html.twig" %}
+
+{% block content %}
+    {% for category, listing in gallery %}
+        <h2>{{ category }}</h2>
+        <section class="gallery" x-data="broadcast">
+            <ul>
+                {% for node in listing %}
+                    <li>
+                        {{ node.title }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+    {% endfor %}
+{% endblock %}

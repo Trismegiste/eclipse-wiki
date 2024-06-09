@@ -155,4 +155,21 @@ class TimelineCrud extends GenericCrud
         return $this->render('timeline/listing.html.twig', ['listing' => $iter]);
     }
 
+    /**
+     * Show highlighted vertex for a Timeline
+     * @param Timeline $timeline
+     * @param PartitionGalleryFactory $fac
+     * @return Response
+     */
+    #[Route('/partition/{pk}/trailer', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
+    public function partitionHighlight(Timeline $timeline, PartitionGalleryFactory $fac): Response
+    {
+        $highlight = $this->explorer->getVertexSortedByCentrality($timeline);
+
+        return $this->render('timeline/partition/trailer.html.twig', [
+                    'vertex' => $timeline,
+                    'gallery' => $highlight
+        ]);
+    }
+
 }
