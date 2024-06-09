@@ -42,7 +42,7 @@ class Betweenness extends Command
             }
         }
         $brandes = new \Symfony\Component\Process\Process([
-            'bin/brandes',
+            'brandes',
             16,
             stream_get_meta_data($edge)['uri'],
             stream_get_meta_data($result)['uri']

@@ -6,6 +6,7 @@
 
 namespace App\Service;
 
+use App\Algebra\Digraph;
 use App\Algebra\GraphVertex;
 use App\Entity\Place;
 use App\Entity\Timeline;
@@ -65,16 +66,8 @@ class DigraphExplore
                 });
     }
 
-    /**
-     * This algorithm creates a partition of vertices in the wiki graph
-     * For each vertex, it calculates the shortest distance to all Timeline
-     * Then it regroups all vertices to the closest Timeline (or multiple Timeline if the vertex is equidistant to several Timeline)
-     *  - SLOW -
-     * @return array
-     */
-    public function getPartitionByTimeline(): array
+    public function getPartitionByDistanceFromCategory(Digraph $graph, string $category): array
     {
-        $graph = $this->repository->loadGraph();
         $dim = count($graph->vertex);
 
         // Initialize distance matrix
@@ -95,7 +88,7 @@ class DigraphExplore
 
         // initialize partitions
         $partition = [];
-        $timeline = $graph->extractVectorByCategory('timeline');
+        $timeline = $graph->extractVectorByCategory($category);
         foreach ($timeline as $vertex) {
             $partition[$vertex->title] = [];
         }
@@ -131,6 +124,19 @@ class DigraphExplore
         }
 
         return $partition;
+    }
+
+    /**
+     * This algorithm creates a partition of vertices in the wiki graph
+     * For each vertex, it calculates the shortest distance to all Timeline
+     * Then it regroups all vertices to the closest Timeline (or multiple Timeline if the vertex is equidistant to several Timeline)
+     *  - SLOW -
+     * @return array
+     */
+    public function getPartitionByTimeline(): array
+    {
+        $graph = $this->repository->loadGraph();
+        return $this->getPartitionByDistanceFromCategory($graph, 'timeline');
     }
 
     /**
