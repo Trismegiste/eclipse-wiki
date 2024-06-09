@@ -6,6 +6,7 @@
 
 namespace App\Service;
 
+use Symfony\Component\Process\Process;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
@@ -28,6 +29,37 @@ class AlgorithmClient
     {
         $response = $this->algorithmClient->request('POST', '/algebra/floydwarshall', ['json' => $matrix]);
         $matrix = json_decode($response->getContent(), true);
+    }
+
+    public function brandesCentrality(array &$matrix): array
+    {
+        $edge = tmpfile();
+        $result = tmpfile();
+
+        foreach ($matrix as $row => $vector) {
+            foreach ($vector as $col => $flag) {
+                if ($flag) {
+                    fprintf($edge, "%d %d\n", $row, $col);
+                }
+            }
+        }
+        $brandes = new Process([
+            'brandes',
+            16,
+            stream_get_meta_data($edge)['uri'],
+            stream_get_meta_data($result)['uri']
+        ]);
+        $brandes->mustRun();
+        fclose($edge);
+
+        $between = [];
+        while ($row = fscanf($result, '%d %f')) {
+            list($idx, $centrality) = $row;
+            $between[$idx] = $centrality;
+        }
+        fclose($result);
+
+        return $between;
     }
 
 }
