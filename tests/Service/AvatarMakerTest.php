@@ -9,7 +9,6 @@ use App\Entity\Faction;
 use App\Entity\Transhuman;
 use App\Service\AvatarMaker;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Twig\Environment;
 
 class AvatarMakerTest extends KernelTestCase
 {
@@ -18,8 +17,7 @@ class AvatarMakerTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        $twig = static::getContainer()->get(Environment::class);
-        $this->sut = new AvatarMaker($twig, static::getContainer()->getParameter('kernel.project_dir') . '/public');
+        $this->sut = new AvatarMaker(static::getContainer()->getParameter('kernel.project_dir') . '/public');
     }
 
     protected function createNpc(): Transhuman

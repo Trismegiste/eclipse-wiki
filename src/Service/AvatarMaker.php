@@ -13,7 +13,6 @@ use GDText\Color;
 use GDText\Enum\HorizontalAlignment;
 use GDText\Enum\VerticalAlignment;
 use SplFileInfo;
-use Twig\Environment;
 use function join_paths;
 
 /**
@@ -30,7 +29,7 @@ class AvatarMaker
     protected readonly Color $gray;
     protected readonly Color $black;
 
-    public function __construct(protected Environment $twig, protected string $publicFolder, protected int $width = 503, protected int $height = 894)
+    public function __construct(protected string $publicFolder, protected int $width = 503, protected int $height = 894)
     {
         $this->paddedWidth = $this->width - 2 * $this->leftPadding;
         $this->gray = new Color(0x70, 0x70, 0x70);

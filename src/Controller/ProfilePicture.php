@@ -45,17 +45,10 @@ class ProfilePicture extends AbstractController
     #[Route('/profile/unique/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function unique(Transhuman $npc, AvatarMaker $maker, Request $request): BinaryFileResponse
     {
-        $pic = $this->storage->createDummyProfilePic304(sha1(serialize($npc)));
-
-        if ($pic->isNotModified($request)) {
-            return $pic;
-        }
-
         $pathname = $this->storage->getFileInfo($npc->tokenPic);
         $profile = $maker->generate($npc, $pathname);
-        $pic->setFile($profile);
 
-        return $pic;
+        return new BinaryFileResponse($profile);
     }
 
     /**
