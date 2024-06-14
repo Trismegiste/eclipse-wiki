@@ -35,14 +35,11 @@ class GmPusher extends AbstractController
         
     }
 
-    //  /!\ -- Big security breach : internally called ONLY -- /!\
-    // DO NOT EXPOSE THIS CONTROLLER PUBLICLY
-    public function internalPushPicture(string $pathname, string $imgType = 'picture'): JsonResponse
+    public function internalPushPicture(string $label, \GdImage $picture, string $imgType = 'picture'): JsonResponse
     {
         try {
-            $pic = new SplFileInfo($pathname);
-            $this->pusher->sendPictureAsDataUrl($pic, $imgType);
-            return new JsonResponse(['level' => 'success', 'message' => $pic->getBasename() . ' sent'], Response::HTTP_OK);
+            $this->pusher->sendPictureAsDataUrl($picture, $imgType);
+            return new JsonResponse(['level' => 'success', 'message' => $label . ' sent'], Response::HTTP_OK);
         } catch (Exception $e) {
             return new JsonResponse(['level' => 'error', 'message' => $e->getMessage()], Response::HTTP_SERVICE_UNAVAILABLE);
         }

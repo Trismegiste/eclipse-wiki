@@ -42,7 +42,7 @@ class AvatarMaker
      * @param SplFileInfo $source
      * @return SplFileInfo
      */
-    public function generate(Transhuman $npc, SplFileInfo $source): SplFileInfo
+    public function generate(Transhuman $npc, SplFileInfo $source): \GdImage
     {
         $profile = $this->createProfileCanvas();
         // profile pic
@@ -70,11 +70,7 @@ class AvatarMaker
         $top += 10 + (int) ($this->width / 4);
         $this->copySocNetFollowerAt($profile, $top, $this->filterSocNet($npc));
 
-        // write
-        $pngTarget = sys_get_temp_dir() . '/profile-' . $npc->getTitle() . '.png';
-        imagepng($profile, $pngTarget);
-
-        return new SplFileInfo($pngTarget);
+        return $profile;
     }
 
     protected function filterSocNet(Transhuman $npc): array

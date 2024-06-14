@@ -24,13 +24,15 @@ class Pusher
         
     }
 
-    public function sendPictureAsDataUrl(SplFileInfo $pic, string $eventType): void
+    public function sendPictureAsDataUrl(\GdImage $pic, string $eventType): void
     {
-        $pictureInfo = getimagesize($pic->getPathname());
+        ob_start();
+        imagejpeg($pic, null, 75);
+        $content = ob_get_clean();
 
         $update = new Update(
                 'public',
-                'data:' . $pictureInfo['mime'] . ';base64,' . base64_encode(file_get_contents($pic->getPathname())),
+                'data:image/jpeg;base64,' . base64_encode($content),
                 type: $eventType
         );
 

@@ -57,15 +57,8 @@ class PlayerCastCache implements CacheWarmerInterface, CacheClearerInterface
         }
     }
 
-    public function slimPictureForPush(SplFileInfo $picture): SplFileInfo
+    public function slimPictureForPush(\GdImage $gd2): \GdImage
     {
-        if ($picture->getSize() < $this->maxSize) {
-            // small image, do nothing
-            return $picture;
-        }
-
-        // this picture is big, need to reduce its size
-        $gd2 = imagecreatefromstring(file_get_contents($picture->getPathname()));
         // checking dimension of picture
         $sx = imagesx($gd2);
         $sy = imagesy($gd2);
@@ -77,10 +70,7 @@ class PlayerCastCache implements CacheWarmerInterface, CacheClearerInterface
             $forPlayer = $gd2;
         }
 
-        $compressedPicture = join_paths($this->cacheDir, $picture->getBasename('.' . $picture->getExtension()) . '.jpg');
-        imagejpeg($forPlayer, $compressedPicture, 75);
-
-        return new SplFileInfo($compressedPicture);
+        return $forPlayer;
     }
 
 }

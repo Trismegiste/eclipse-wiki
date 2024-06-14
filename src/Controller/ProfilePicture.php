@@ -18,10 +18,10 @@ use App\Service\PlayerCastCache;
 use App\Service\Storage;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -43,12 +43,14 @@ class ProfilePicture extends AbstractController
      * Generate a socnet profile for a unique Transhuman
      */
     #[Route('/profile/unique/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function unique(Transhuman $npc, AvatarMaker $maker, Request $request): BinaryFileResponse
+    public function unique(Transhuman $npc, AvatarMaker $maker, Request $request): StreamedResponse
     {
         $pathname = $this->storage->getFileInfo($npc->tokenPic);
         $profile = $maker->generate($npc, $pathname);
 
-        return new BinaryFileResponse($profile);
+        return new StreamedResponse(function () use ($profile): void {
+                    imagepng($profile);
+                });
     }
 
     /**
@@ -61,7 +63,11 @@ class ProfilePicture extends AbstractController
         $profile = $maker->generate($npc, $pathname);
         $cached = $cache->slimPictureForPush($profile);
 
-        return $this->forward(GmPusher::class . '::internalPushPicture', ['pathname' => $cached->getPathname(), 'imgType' => 'profile']);
+        return $this->forward(GmPusher::class . '::internalPushPicture', [
+                    'label' => 'Profile ' . $npc->getTitle(),
+                    'picture' => $cached,
+                    'imgType' => 'profile'
+        ]);
     }
 
     /**
