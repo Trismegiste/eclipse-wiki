@@ -10,7 +10,6 @@ use App\Entity\Character;
 use App\Entity\Transhuman;
 use App\Form\ProfileOnTheFly;
 use App\Form\ProfilePic;
-use App\Repository\CharacterFactory;
 use App\Repository\VertexRepository;
 use App\Service\AvatarMaker;
 use App\Service\Mercure\Pusher;
@@ -33,7 +32,7 @@ class ProfilePicture extends AbstractController
     protected $storage;
     protected $repository;
 
-    public function __construct(Storage $store, VertexRepository $repo)
+    public function __construct(Storage $store, VertexRepository $repo, protected AvatarMaker $maker)
     {
         $this->storage = $store;
         $this->repository = $repo;
@@ -43,12 +42,12 @@ class ProfilePicture extends AbstractController
      * Generate a socnet profile for a unique Transhuman
      */
     #[Route('/profile/unique/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function unique(Transhuman $npc, AvatarMaker $maker, Request $request): StreamedResponse
+    public function unique(Transhuman $npc): StreamedResponse
     {
         $pathname = $this->storage->getFileInfo($npc->tokenPic);
-        $profile = $maker->generate($npc, $pathname);
+        $profile = $this->maker->generate($npc, $pathname);
 
-        return new StreamedResponse(function () use ($profile): void {
+        return new StreamedResponse(headers: ['Content-Type' => 'image/png'], callback: function () use ($profile): void {
                     imagepng($profile);
                 });
     }
@@ -57,10 +56,10 @@ class ProfilePicture extends AbstractController
      * Push a socnet profile for a unique Transhuman
      */
     #[Route('/profile/unique/{pk}', methods: ['POST'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function pushUnique(Transhuman $npc, AvatarMaker $maker, PlayerCastCache $cache): JsonResponse
+    public function pushUnique(Transhuman $npc, PlayerCastCache $cache): JsonResponse
     {
         $pathname = $this->storage->getFileInfo($npc->tokenPic);
-        $profile = $maker->generate($npc, $pathname);
+        $profile = $this->maker->generate($npc, $pathname);
         $cached = $cache->slimPictureForPush($profile);
 
         return $this->forward(GmPusher::class . '::internalPushPicture', [
@@ -96,7 +95,7 @@ class ProfilePicture extends AbstractController
      * Show a list of NPC profiles from a template (a Transhuman with isNpcTemplate() method returning true)
      */
     #[Route('/profile/template/{pk}', methods: ['GET', 'POST'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function template(Transhuman $vertex, Request $request, AvatarMaker $maker, Pusher $pusher, PlayerCastCache $cache, CharacterFactory $fac): Response
+    public function template(Transhuman $vertex, Request $request, Pusher $pusher, PlayerCastCache $cache): Response
     {
         $form = $this->createForm(ProfileOnTheFly::class, null, ['transhuman' => $vertex]);
 
@@ -108,7 +107,7 @@ class ProfilePicture extends AbstractController
             //
             // Pushes the profile created on the fly
             if ($form->get('push_profile')->isClicked()) {
-                $profile = $maker->generate($extra, $avatar);
+                $profile = $this->maker->generate($extra, $avatar);
                 $cached = $cache->slimPictureForPush($profile);
 
                 try {

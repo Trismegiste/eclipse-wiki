@@ -13,7 +13,7 @@ use App\Service\DocumentBroadcaster;
 use App\Service\FileIoClient;
 use App\Service\Mercure\Pusher;
 use Exception;
-use SplFileInfo;
+use GdImage;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
@@ -35,7 +35,7 @@ class GmPusher extends AbstractController
         
     }
 
-    public function internalPushPicture(string $label, \GdImage $picture, string $imgType = 'picture'): JsonResponse
+    public function internalPushPicture(string $label, GdImage $picture, string $imgType = 'picture'): JsonResponse
     {
         try {
             $this->pusher->sendPictureAsDataUrl($picture, $imgType);

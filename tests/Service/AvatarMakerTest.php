@@ -33,10 +33,9 @@ class AvatarMakerTest extends KernelTestCase
     {
         $npc = $this->createNpc();
         $res = $this->sut->generate($npc, new SplFileInfo(__DIR__ . '/avatar.png'));
-        $this->assertInstanceOf(SplFileInfo::class, $res);
-        list($w, $h) = getimagesize($res->getPathname());
-        $this->assertEquals(503, $w);
-        $this->assertEquals(894, $h);
+        $this->assertInstanceOf(GdImage::class, $res);
+        $this->assertEquals(503, imagesx($res));
+        $this->assertEquals(894, imagesy($res));
     }
 
 }

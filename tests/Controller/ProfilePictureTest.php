@@ -60,11 +60,11 @@ class ProfilePictureTest extends WebTestCase
     /** @depends testCreateToken */
     public function testUnique(string $pk)
     {
-        ob_start();
         $this->client->request('GET', '/profile/unique/' . $pk);
-        ob_end_clean();
         $this->assertResponseIsSuccessful();
-        $this->assertEquals('image/png', $this->client->getResponse()->headers->get('content-type'));
+
+        $resp = $this->client->getResponse();
+        $this->assertEquals('image/png', $resp->headers->get('content-type'));
     }
 
     /** @depends testCreateToken */

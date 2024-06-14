@@ -26,7 +26,6 @@ class PlayerCastCacheTest extends KernelTestCase
     public function testSlimPicture(int $side)
     {
         $big = imagecreatetruecolor($side, $side);
-        $target = sys_get_temp_dir() . '/big.png';
 
         $white = imagecolorallocate($big, 255, 255, 255);
         for ($x = 0; $x < $side; $x++) {
@@ -37,11 +36,10 @@ class PlayerCastCacheTest extends KernelTestCase
             }
         }
 
-        imagepng($big, $target);
-        $this->assertGreaterThan(1e5, filesize($target));
-
-        $slim = $this->sut->slimPictureForPush(new SplFileInfo($target));
-        $this->assertInstanceOf(SplFileInfo::class, $slim);
+        $slim = $this->sut->slimPictureForPush($big);
+        $this->assertInstanceOf(GdImage::class, $slim);
+        $this->assertLessThanOrEqual(1000, imagesx($slim));
+        $this->assertLessThanOrEqual(1000, imagesy($slim));
     }
 
     public function testClearCache()

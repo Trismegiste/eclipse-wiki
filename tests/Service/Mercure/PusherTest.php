@@ -38,9 +38,8 @@ class PusherTest extends TestCase
 
     public function testPicture()
     {
-        $folder = __DIR__ . '/../../fixtures';
-        $img = join_paths($folder, App\Tests\Service\StableDiffusion\PngReaderTest::fixture);
-        $this->sut->sendPictureAsDataUrl(new SplFileInfo($img), 'picture');
+        $big = imagecreatetruecolor(1000, 1000);
+        $this->sut->sendPictureAsDataUrl($big, 'picture');
     }
 
 }
