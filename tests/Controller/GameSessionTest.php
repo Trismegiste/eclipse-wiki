@@ -62,9 +62,9 @@ class GameSessionTest extends WebTestCase
 
     public function testBroadcastedPicture()
     {
-        $this->client->request('GET', '/session/broadcasted-picture/history.png');
+        $this->client->request('GET', '/session/broadcasted-picture/history.png.jpg');
         $this->assertEquals($this->client->getResponse()->getStatusCode(), 200);
-        $this->assertEquals('image/png', $this->client->getResponse()->headers->get('Content-Type'));
+        $this->assertEquals('image/jpeg', $this->client->getResponse()->headers->get('Content-Type'));
     }
 
 }

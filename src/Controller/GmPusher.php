@@ -12,8 +12,10 @@ use App\Repository\VertexRepository;
 use App\Service\DocumentBroadcaster;
 use App\Service\FileIoClient;
 use App\Service\Mercure\Pusher;
+use App\Service\SessionPushHistory;
 use Exception;
 use GdImage;
+use SplFileInfo;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
@@ -30,7 +32,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class GmPusher extends AbstractController
 {
 
-    public function __construct(protected Pusher $pusher, protected VertexRepository $repository)
+    const keepingHistory = ['picture', 'profile'];
+
+    public function __construct(protected Pusher $pusher, protected VertexRepository $repository, protected SessionPushHistory $history)
     {
         
     }
@@ -39,6 +43,11 @@ class GmPusher extends AbstractController
     {
         try {
             $this->pusher->sendPictureAsDataUrl($picture, $imgType);
+
+            if (in_array($imgType, self::keepingHistory)) {
+                $this->history->backupFile($picture, $label);
+            }
+
             return new JsonResponse(['level' => 'success', 'message' => $label . ' sent'], Response::HTTP_OK);
         } catch (Exception $e) {
             return new JsonResponse(['level' => 'error', 'message' => $e->getMessage()], Response::HTTP_SERVICE_UNAVAILABLE);
@@ -145,7 +154,7 @@ class GmPusher extends AbstractController
     #[Route("/cloud/{filename}/share", methods: ["POST"])]
     public function cloudShare(string $filename, DocumentBroadcaster $broadcaster, FileIoClient $client): Response
     {
-        $link = $client->upload(new \SplFileInfo($broadcaster->getLinkToDocument($filename)));
+        $link = $client->upload(new SplFileInfo($broadcaster->getLinkToDocument($filename)));
 
         return $this->render('gmpusher/cloud_share.html.twig', [
                     'document' => [

@@ -53,9 +53,9 @@ class SessionPushHistory implements CacheWarmerInterface, CacheClearerInterface
         return [];
     }
 
-    public function backupFile(\GdImage $originFile): void
+    public function backupFile(\GdImage $originFile, string $label): void
     {
-        $targetFile = join_paths($this->cacheDir, time() . '.jpg');
+        $targetFile = join_paths($this->cacheDir, $label . '.jpg');
         imagejpeg($originFile, $targetFile, 85);
     }
 

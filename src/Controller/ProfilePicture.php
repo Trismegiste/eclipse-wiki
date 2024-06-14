@@ -95,7 +95,7 @@ class ProfilePicture extends AbstractController
      * Show a list of NPC profiles from a template (a Transhuman with isNpcTemplate() method returning true)
      */
     #[Route('/profile/template/{pk}', methods: ['GET', 'POST'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function template(Transhuman $vertex, Request $request, Pusher $pusher, PlayerCastCache $cache): Response
+    public function template(Transhuman $vertex, Request $request, Pusher $pusher, PlayerCastCache $cache, \App\Service\SessionPushHistory $history): Response
     {
         $form = $this->createForm(ProfileOnTheFly::class, null, ['transhuman' => $vertex]);
 
@@ -112,6 +112,7 @@ class ProfilePicture extends AbstractController
 
                 try {
                     $pusher->sendPictureAsDataUrl($cached, 'profile');
+                    $history->backupFile($profile, 'Profile-' . $extra->getTitle());
                     $this->addFlash('success', 'Profile for ' . $extra->getTitle() . ' sent');
                 } catch (Exception $e) {
                     $this->addFlash('error', $e->getMessage());
