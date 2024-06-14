@@ -90,7 +90,7 @@ services:
                 quality: 50                
             cubemap:
                 maxSize: 5000
-                quality: 70                
+                quality: 50
 
     # Custom Types
     App\Form\Type\FullTextChoice:
