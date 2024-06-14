@@ -6,7 +6,6 @@
 
 namespace App\Service;
 
-use SplFileInfo;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
@@ -14,7 +13,7 @@ use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 use function join_paths;
 
 /**
- * Tree structure for storing temporary files to be casted for players
+ * Folder for storing temporary files to be broadcasted to players
  */
 class PlayerCastCache implements CacheWarmerInterface, CacheClearerInterface
 {
@@ -23,15 +22,11 @@ class PlayerCastCache implements CacheWarmerInterface, CacheClearerInterface
 
     protected $cacheDir;
     protected $fs;
-    protected $maxDimension;
-    protected $maxSize;
 
-    public function __construct(Filesystem $fs, string $cacheDir, float $maxSize = 1e5, int $maxDim = 1000)
+    public function __construct(Filesystem $fs, string $cacheDir)
     {
         $this->fs = $fs;
         $this->cacheDir = join_paths($cacheDir, self::subDir);
-        $this->maxDimension = (float) $maxDim;
-        $this->maxSize = $maxSize;
     }
 
     public function warmUp(string $cacheDir, ?string $buildDir = null): array
@@ -55,22 +50,6 @@ class PlayerCastCache implements CacheWarmerInterface, CacheClearerInterface
 
             $this->fs->remove($iter);
         }
-    }
-
-    public function slimPictureForPush(\GdImage $gd2): \GdImage
-    {
-        // checking dimension of picture
-        $sx = imagesx($gd2);
-        $sy = imagesy($gd2);
-        $maxSize = max([$sx, $sy]);
-        if ($maxSize > $this->maxDimension) {
-            $forPlayer = imagescale($gd2, intval($sx * $this->maxDimension / $maxSize), intval($sy * $this->maxDimension / $maxSize));
-            imagedestroy($gd2);
-        } else {
-            $forPlayer = $gd2;
-        }
-
-        return $forPlayer;
     }
 
 }

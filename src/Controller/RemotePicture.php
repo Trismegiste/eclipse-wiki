@@ -47,7 +47,7 @@ class RemotePicture extends AbstractController
     {
         $url = rawurldecode($request->query->get('url'));
         $local = $this->remoteStorage->download($url);
-        $picture = $cache->slimPictureForPush(imagecreatefromstring(file_get_contents($local->getPathname())));
+        $picture = imagecreatefromstring(file_get_contents($local->getPathname()));
 
         return $this->forward(GmPusher::class . '::internalPushPicture', [
                     'label' => $local->getBasename(),

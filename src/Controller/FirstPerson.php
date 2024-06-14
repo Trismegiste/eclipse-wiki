@@ -138,12 +138,12 @@ class FirstPerson extends AbstractController
                 imagecopy($cubemap, $side, $k * $w, 0, 0, 0, $w, $h);
                 imagedestroy($side);
             }
-            $target = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir, 'tmp-cubemap.jpg');
-            imagejpeg($cubemap, $target, 50);
-            imagedestroy($cubemap);
 
-            // @todo this call is failing
-            return $this->forward(GmPusher::class . '::internalPushPicture', ['pathname' => $target, 'imgType' => 'cubemap']);
+            return $this->forward(GmPusher::class . '::internalPushPicture', [
+                        'label' => 'cubemap 3d',
+                        'picture' => $cubemap,
+                        'imgType' => 'cubemap'
+            ]);
         }
 
         return new JsonResponse(['level' => 'error', 'message' => (string) $form->getErrors(true, true)], 400);
@@ -184,7 +184,7 @@ class FirstPerson extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var UploadedFile $screenshot */
             $screenshot = $form['picture']->getData();
-            $target = $cache->slimPictureForPush(imagecreatefromstring($screenshot->getContent()));
+            $target = imagecreatefromstring($screenshot->getContent());
 
             return $this->forward(GmPusher::class . '::internalPushPicture', [
                         'label' => $screenshot->getBasename(),

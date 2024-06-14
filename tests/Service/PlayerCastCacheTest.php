@@ -17,31 +17,6 @@ class PlayerCastCacheTest extends KernelTestCase
         $this->sut = static::getContainer()->get(PlayerCastCache::class);
     }
 
-    public function getSizeConfig()
-    {
-        return [[700], [1100]];
-    }
-
-    /** @dataProvider getSizeConfig */
-    public function testSlimPicture(int $side)
-    {
-        $big = imagecreatetruecolor($side, $side);
-
-        $white = imagecolorallocate($big, 255, 255, 255);
-        for ($x = 0; $x < $side; $x++) {
-            for ($y = 0; $y < $side; $y++) {
-                if (rand() % 2) { // a lot of noise to mess with PNG compression
-                    imagesetpixel($big, $x, $y, $white);
-                }
-            }
-        }
-
-        $slim = $this->sut->slimPictureForPush($big);
-        $this->assertInstanceOf(GdImage::class, $slim);
-        $this->assertLessThanOrEqual(1000, imagesx($slim));
-        $this->assertLessThanOrEqual(1000, imagesy($slim));
-    }
-
     public function testClearCache()
     {
         $cacheDir = static::$kernel->getCacheDir();

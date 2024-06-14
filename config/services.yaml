@@ -77,6 +77,21 @@ services:
     App\Service\AvatarMaker:
         $publicFolder: '%kernel.project_dir%/public'
 
+    App\Service\Mercure\Pusher:
+        $pictureConfig:
+            profile:
+                maxSize: 1920
+                quality: 75
+            picture:
+                maxSize: 1920
+                quality: 75
+            battlemap:
+                maxSize: 1920
+                quality: 50                
+            cubemap:
+                maxSize: 5000
+                quality: 70                
+
     # Custom Types
     App\Form\Type\FullTextChoice:
         arguments:

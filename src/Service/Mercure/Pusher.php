@@ -16,15 +16,33 @@ use Symfony\Component\Mercure\Update;
 class Pusher
 {
 
-    public function __construct(protected HubInterface $hub)
+    public function __construct(protected HubInterface $hub, protected array $pictureConfig)
     {
         
     }
 
+    protected function slimPictureForPush(\GdImage $gd2, int $maxDimension): \GdImage
+    {
+        // checking dimension of picture
+        $sx = imagesx($gd2);
+        $sy = imagesy($gd2);
+        $maxSize = max([$sx, $sy]);
+        if ($maxSize > $maxDimension) {
+            $forPlayer = imagescale($gd2, intval($sx * $maxDimension / $maxSize), intval($sy * $maxDimension / $maxSize));
+            imagedestroy($gd2);
+        } else {
+            $forPlayer = $gd2;
+        }
+
+        return $forPlayer;
+    }
+
     public function sendPictureAsDataUrl(GdImage $pic, string $eventType): void
     {
+        $cfg = $this->pictureConfig[$eventType];
+        $compressed = $this->slimPictureForPush($pic, $cfg['maxSize']);
         ob_start();
-        imagejpeg($pic, null, 75);
+        imagejpeg($compressed, null, $cfg['quality']);
         $content = ob_get_clean();
 
         $update = new Update(

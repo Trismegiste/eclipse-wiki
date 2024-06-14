@@ -60,11 +60,10 @@ class ProfilePicture extends AbstractController
     {
         $pathname = $this->storage->getFileInfo($npc->tokenPic);
         $profile = $this->maker->generate($npc, $pathname);
-        $cached = $cache->slimPictureForPush($profile);
 
         return $this->forward(GmPusher::class . '::internalPushPicture', [
                     'label' => 'Profile ' . $npc->getTitle(),
-                    'picture' => $cached,
+                    'picture' => $profile,
                     'imgType' => 'profile'
         ]);
     }
@@ -108,10 +107,9 @@ class ProfilePicture extends AbstractController
             // Pushes the profile created on the fly
             if ($form->get('push_profile')->isClicked()) {
                 $profile = $this->maker->generate($extra, $avatar);
-                $cached = $cache->slimPictureForPush($profile);
 
                 try {
-                    $pusher->sendPictureAsDataUrl($cached, 'profile');
+                    $pusher->sendPictureAsDataUrl($profile, 'profile');
                     $history->backupFile($profile, 'Profile-' . $extra->getTitle());
                     $this->addFlash('success', 'Profile for ' . $extra->getTitle() . ' sent');
                 } catch (Exception $e) {

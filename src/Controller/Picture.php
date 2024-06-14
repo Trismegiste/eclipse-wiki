@@ -77,7 +77,7 @@ class Picture extends AbstractController
     public function push(string $title, PlayerCastCache $cache): JsonResponse
     {
         $info = $this->storage->getFileInfo($title);
-        $picture = $cache->slimPictureForPush(imagecreatefromstring(file_get_contents($info)));
+        $picture = imagecreatefromstring(file_get_contents($info));
 
         return $this->forward(GmPusher::class . '::internalPushPicture', [
                     'label' => $info->getBasename(),
