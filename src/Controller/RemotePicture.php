@@ -46,9 +46,13 @@ class RemotePicture extends AbstractController
     public function push(Request $request, PlayerCastCache $cache): JsonResponse
     {
         $url = rawurldecode($request->query->get('url'));
-        $picture = $cache->slimPictureForPush($this->remoteStorage->download($url));
+        $local = $this->remoteStorage->download($url);
+        $picture = $cache->slimPictureForPush(imagecreatefromstring(file_get_contents($local->getPathname())));
 
-        return $this->forward(GmPusher::class . '::internalPushPicture', ['pathname' => $picture->getPathname()]);
+        return $this->forward(GmPusher::class . '::internalPushPicture', [
+                    'label' => $local->getBasename(),
+                    'picture' => $picture
+        ]);
     }
 
 }

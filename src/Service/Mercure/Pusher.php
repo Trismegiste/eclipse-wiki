@@ -7,7 +7,7 @@
 namespace App\Service\Mercure;
 
 use App\Service\SessionPushHistory;
-use SplFileInfo;
+use GdImage;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
 
@@ -24,7 +24,7 @@ class Pusher
         
     }
 
-    public function sendPictureAsDataUrl(\GdImage $pic, string $eventType): void
+    public function sendPictureAsDataUrl(GdImage $pic, string $eventType): void
     {
         ob_start();
         imagejpeg($pic, null, 75);

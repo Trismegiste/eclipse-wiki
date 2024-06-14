@@ -76,9 +76,13 @@ class Picture extends AbstractController
     #[Route('/picture/push/{title}', methods: ['POST'])]
     public function push(string $title, PlayerCastCache $cache): JsonResponse
     {
-        $picture = $cache->slimPictureForPush($this->storage->getFileInfo($title));
+        $info = $this->storage->getFileInfo($title);
+        $picture = $cache->slimPictureForPush(imagecreatefromstring(file_get_contents($info)));
 
-        return $this->forward(GmPusher::class . '::internalPushPicture', ['pathname' => $picture->getPathname()]);
+        return $this->forward(GmPusher::class . '::internalPushPicture', [
+                    'label' => $info->getBasename(),
+                    'picture' => $picture
+        ]);
     }
 
     /**
