@@ -170,4 +170,11 @@ class TimelineCrudTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    /** @depends testAjaxPartition */
+    public function testPartitionPoster(string $pk)
+    {
+        $this->client->request('GET', "/timeline/partition/$pk/poster");
+        $this->assertResponseIsSuccessful();
+    }
+
 }
