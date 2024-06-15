@@ -25,7 +25,7 @@ class PartitionGalleryFactory
         $this->getIcon = $twig->getFunction('vertex_icon')->getCallable();
     }
 
-    public function create(iterable $cursor): array
+    public function createGalleryPerCategory(iterable $cursor): array
     {
         $gallery = [];
         foreach ($cursor as $vertex) {
@@ -57,6 +57,24 @@ class PartitionGalleryFactory
         if (key_exists($key, $assoc)) {
             $assoc = array_merge([$key => $assoc[$key]], $assoc);
         }
+    }
+
+    public function createMoviePoster(array $listing): array
+    {
+        $mostViewed = [];
+        foreach ($listing as $vertex) {
+            foreach ($vertex->picture as $picture) {
+                if (!key_exists($picture, $mostViewed)) {
+                    $mostViewed[$picture] = $vertex->betweenness;
+                } else {
+                    $mostViewed[$picture] += $vertex->betweenness;
+                }
+            }
+        }
+
+        arsort($mostViewed);
+
+        return array_keys($mostViewed);
     }
 
 }

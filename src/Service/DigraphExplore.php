@@ -14,6 +14,7 @@ use App\Repository\VertexRepository;
 use Collator;
 use DateInterval;
 use IteratorIterator;
+use MongoDB\BSON\ObjectId;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 
@@ -267,16 +268,31 @@ class DigraphExplore
         }
 
         $between = $this->algorithm->brandesCentrality($matrix);
-        arsort($between);
 
-        $perCategory = [];
-        // distributes the 1D list into list per category of vertex
+        // creates an array to store all info in vertices for the movie poster
+        $moviePoster = [];
         foreach ($between as $idx => $weight) {
+            /** @var GraphVertex $vertex */
             $vertex = $partition[$idx];
-            $perCategory[$vertex->category][] = $vertex;
+            $vertex->betweenness = $weight;
+            $moviePoster[$vertex->pk] = $vertex;
         }
 
-        return $perCategory;
+        // loads vertices content to extract pictures
+        $pk = array_map(function ($val) {
+            return new ObjectId($val);
+        }, array_keys($moviePoster));
+
+        $iter = $this->repository->search(['_id' => ['$in' => $pk]]);
+        foreach ($iter as $v) {
+            $moviePoster[(string) $v->getPk()]->picture = $v->extractPicture();
+        }
+
+        usort($moviePoster, function (GraphVertex $a, GraphVertex $b) {
+            return $b->betweenness <=> $a->betweenness;
+        });
+
+        return $moviePoster;
     }
 
 }

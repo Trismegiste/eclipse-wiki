@@ -139,7 +139,7 @@ class TimelineCrud extends GenericCrud
 
         return $this->render('timeline/partition/gallery.html.twig', [
                     'vertex' => $timeline,
-                    'gallery' => $fac->create($iter)
+                    'gallery' => $fac->createGalleryPerCategory($iter)
         ]);
     }
 
@@ -158,17 +158,16 @@ class TimelineCrud extends GenericCrud
     /**
      * Show highlighted vertex for a Timeline
      * @param Timeline $timeline
-     * @param PartitionGalleryFactory $fac
      * @return Response
      */
-    #[Route('/partition/{pk}/trailer', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function partitionHighlight(Timeline $timeline, PartitionGalleryFactory $fac): Response
+    #[Route('/partition/{pk}/poster', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
+    public function partitionPoster(Timeline $timeline, PartitionGalleryFactory $fac): Response
     {
         $highlight = $this->explorer->getVertexSortedByCentrality($timeline);
 
-        return $this->render('timeline/partition/trailer.html.twig', [
+        return $this->render('timeline/partition/poster.html.twig', [
                     'vertex' => $timeline,
-                    'gallery' => $highlight
+                    'gallery' => $fac->createMoviePoster($highlight)
         ]);
     }
 

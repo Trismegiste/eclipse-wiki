@@ -1,0 +1,12 @@
+{# Graphical view of most important vertices associated to a Timeline #}
+{% extends "vertex/show.html.twig" %}
+
+{% block content %}
+    <div class="pure-g">
+        {% for pic in gallery %}
+            <div class="pure-u-1-8">
+                <img src="{{ path('get_picture',{title:pic}) }}" class="pure-img" loading="lazy"/>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

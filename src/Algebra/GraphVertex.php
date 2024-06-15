@@ -18,6 +18,8 @@ class GraphVertex
     public string $title;
     public string $category;
     public int $distance;
+    public float $betweenness;
+    public array $picture;
 
     public function __construct(array $vertex)
     {
