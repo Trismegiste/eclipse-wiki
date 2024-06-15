@@ -1,12 +1,30 @@
 {# Graphical view of most important vertices associated to a Timeline #}
-{% extends "vertex/show.html.twig" %}
+{% extends "timeline/partition/listing.html.twig" %}
 
 {% block content %}
-    <div class="pure-g">
+    <div class="pure-g poster" x-data="broadcast">
         {% for pic in gallery %}
             <div class="pure-u-1-8">
-                <img src="{{ path('get_picture',{title:pic}) }}" class="pure-img" loading="lazy"/>
+                <a href="{{ path('app_picture_push', {title: pic}) }}" x-bind="trigger">
+                    <img src="{{ path('get_picture',{title: pic}) }}" class="square" loading="lazy"/>
+                </a>
             </div>
         {% endfor %}
     </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        main {
+            --columns: 8;
+        }
+
+        .poster img.square {
+            height: calc(100vw * 5 / 6 / var(--columns) - 1em);
+            width: 100%;
+            object-fit: cover;
+            display: block;
+        }
+    </style>
 {% endblock %}
