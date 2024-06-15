@@ -66,6 +66,15 @@ class DigraphExplore
                 });
     }
 
+    /**
+     * Divides a big graph into smaller partitions. 
+     * Each partition is centered around one vertex (aka the focus point) of the given category.
+     * The criterion to distribute others vertices in each partition is based on the distance of the vertex from the focus point.
+     * The closest focus point "owns" that vertex. If that vertex is at the same distance from multiple focus point, it is duplicated
+     * @param Digraph $graph
+     * @param string $category
+     * @return array an array indexed by the title of those focus points (vertices of the given category) of arrays of GraphVertex
+     */
     public function getPartitionByDistanceFromCategory(Digraph $graph, string $category): array
     {
         $dim = count($graph->vertex);
@@ -235,16 +244,24 @@ class DigraphExplore
         ];
     }
 
+    /**
+     * Gets a partition for a given timeline, sorted by betweenness centrality (Brandes algorithm)
+     * @param Timeline $timeline
+     * @return array an array per category of arrays of GraphVertex sorted by betweenness centrality weights
+     */
     public function getVertexSortedByCentrality(Timeline $timeline): array
     {
         $graph = $this->repository->loadGraph();
         $partition = $this->getPartitionByDistanceFromCategory($graph, 'timeline')[$timeline->getTitle()];
         $pk2idx = array_flip(array_keys($graph->vertex));
         $matrix = [];
+        // we scan the subset and fill an unidrected adjacency matrix with the full graph adjacency matrix
         foreach ($partition as $row => $source) {
             foreach ($partition as $col => $target) {
+                // gets indicies from the full graph
                 $s = $pk2idx[$source->pk];
                 $t = $pk2idx[$target->pk];
+                // with the original indicies, we can fill the subset matrix at [row][col]
                 $matrix[$row][$col] = $graph->adjacency[$s][$t] || $graph->adjacency[$t][$s];
             }
         }
@@ -253,6 +270,7 @@ class DigraphExplore
         arsort($between);
 
         $perCategory = [];
+        // distributes the 1D list into list per category of vertex
         foreach ($between as $idx => $weight) {
             $vertex = $partition[$idx];
             $perCategory[$vertex->category][] = $vertex;
