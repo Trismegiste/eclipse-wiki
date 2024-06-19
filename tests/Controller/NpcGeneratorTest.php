@@ -226,18 +226,6 @@ class NpcGeneratorTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
-    public function testCreateWildcard()
-    {
-        $fac = static::getContainer()->get(CharacterFactory::class);
-        $template = $fac->create('Warrior', new Background('dummy'), new Faction('dummy'));
-        $repo = static::getContainer()->get(VertexRepository::class);
-        $repo->save($template);
-
-        $this->client->request('GET', '/npc/extra/John/' . $template->getPk());
-        $this->assertResponseRedirects();
-        $this->assertStringStartsWith('/npc/token', $this->client->getResponse()->headers->get('Location'));
-    }
-
     public function getCharacterFqcn()
     {
         return [

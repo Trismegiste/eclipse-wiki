@@ -279,23 +279,6 @@ class NpcGenerator extends AbstractController
     }
 
     /**
-     * Creates an Extra NPC from a template and a new name
-     */
-    #[Route('/extra/{title}/{template}', methods: ['GET'], requirements: ['template' => '[\\da-f]{24}'])]
-    public function createExtra(string $title, string $template, CharacterFactory $fac): Response
-    {
-        $npc = $this->repository->findByPk($template);
-        if (!$npc instanceof Transhuman) {
-            throw new NotFoundHttpException("$template is not a Transhuman");
-        }
-        $extra = $fac->createExtraFromTemplate($npc, $title);
-        $this->repository->save($extra);
-        $this->addFlash('success', "$title a été créé à partir de " . $npc->getTitle());
-
-        return $this->redirectToRoute('app_profilepicture_token', ['pk' => $extra->getPk()]);
-    }
-
-    /**
      * Ajax get character in json
      */
     #[Route('/minicard', methods: ['GET'])]
