@@ -34,7 +34,7 @@ class ChromiumPdfWriter implements Writer
         // @see https://peter.sh/experiments/chromium-command-line-switches/
         $chromium = new Process([
             'chromium',
-            '--headless=new',
+            '--headless',
             '--no-first-run',
             '--enable-chrome-browser-cloud-management',
             '--disable-gpu',

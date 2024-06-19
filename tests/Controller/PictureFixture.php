@@ -41,7 +41,7 @@ trait PictureFixture
         return $obj;
     }
 
-    protected function createRandomTranshuman(bool $wildcard = false, $extra = false)
+    protected function createRandomTranshuman(bool $wildcard = false, $extra = false): Transhuman
     {
         $obj = new Transhuman('takeshi' . rand(), new Background('bg'), new Faction('diplo'));
         $obj->setContent('information');

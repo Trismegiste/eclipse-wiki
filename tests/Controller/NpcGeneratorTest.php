@@ -274,6 +274,22 @@ class NpcGeneratorTest extends WebTestCase
         $this->assertNotNull($dump['instantiate']);
     }
 
+    public function testPictureInMinicard()
+    {
+        $repo = static::getContainer()->get(VertexRepository::class);
+        $npc = $this->createRandomTranshuman();
+        $npc->setContent("[[file:pp.jpg]]");
+        $repo->save($npc);
+
+        $this->client->request('GET', "/npc/minicard?title=" . $npc->getTitle());
+        $this->assertResponseIsSuccessful();
+        $dump = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertArrayHasKey('title', $dump);
+        $this->assertEquals($npc->getTitle(), $dump['title']);
+        $this->assertArrayHasKey('picture', $dump);
+        $this->assertCount(1, $dump['picture']);
+    }
+
     public function testGetUnknownNpcJson()
     {
         $this->client->request('GET', "/npc/show.json?title=sjfhsqlfdh");
@@ -325,6 +341,26 @@ class NpcGeneratorTest extends WebTestCase
         $this->assertResponseRedirects();
         $this->client->followRedirect();
         $this->assertResponseIsSuccessful();
+    }
+
+    /**
+     * @depends testInfo
+     */
+    public function testPushPdf(string $pk)
+    {
+        $this->client->request('GET', "/npc/push-sheet/$pk");
+        $this->assertResponseRedirects();
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('main .big-link a .icon-export');
+
+        $doc = $crawler->filter('main .big-link a .icon-export')
+                ->ancestors()
+                ->first()
+                ->link();
+        $this->client->click($doc);
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals('application/pdf', $this->client->getResponse()->headers->get('content-type'));
     }
 
 }
