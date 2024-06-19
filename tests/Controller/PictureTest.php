@@ -132,7 +132,19 @@ class PictureTest extends WebTestCase
 
     public function testMissingPictureUpload()
     {
-        $this->client->request('GET', '/picture/missing/The Shrike.jpg/upload');
+        $crawler = $this->client->request('GET', '/picture/missing/The Shrike' . rand() . '.jpg/upload');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('#missing_picture_upload_upload');
+        $form = $crawler->selectButton('missing_picture_upload_upload')->form();
+
+        $filename = sys_get_temp_dir() . '/tmp.png';
+        $image = $this->createTestChart(500);
+        imagepng($image, $filename);
+
+        $form['missing_picture_upload[picture]']->upload($filename);
+        $this->client->submit($form);
+        $this->assertResponseRedirects();
+        $this->client->followRedirect();
         $this->assertResponseIsSuccessful();
     }
 
