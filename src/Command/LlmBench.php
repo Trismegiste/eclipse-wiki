@@ -19,12 +19,16 @@ class LlmBench extends Command
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        $iter = new \App\Service\LlmIterator($this->ollamaClient, 'eclipse-phase', "Écris-moi une histoire dramatique en 5 actes");
+        for ($k = 0; $k < 10; $k++) {
+            $iter = new \App\Service\LlmIterator($this->ollamaClient, 'eclipse-phase',
+                    "Fais un historique en 7 points d'un écumeur qui vit sur une barge. C'est un homme, un technicien, spécialisé dans la réparation de moteurs à fusion. Un des 7 points doit comporter un evenement tragique et un autre point doit concerner sa famille");
 
-        foreach ($iter as $val) {
-            $output->write($val);
+            foreach ($iter as $val) {
+                $output->write($val);
+            }
+            $output->writeln('-------------------------');
+            $output->writeln('');
         }
-        $output->writeln('');
 
         return self::SUCCESS;
     }
