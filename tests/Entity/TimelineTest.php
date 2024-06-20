@@ -41,6 +41,17 @@ class TimelineTest extends TestCase
     }
 
     /** @dataProvider getComplexTree */
+    public function testStrikeNode($tree)
+    {
+        $tree[0]->nodes[0]->finished = true;
+        $this->sut->setTree($tree);
+        $this->sut->elevatorPitch = 'pitch';
+
+        $dump = $this->sut->bsonSerialize();
+        $this->assertStringContainsString('<strike>', $dump['content']);
+    }
+
+    /** @dataProvider getComplexTree */
     public function testSerialization($tree)
     {
         $this->sut->setTree($tree);

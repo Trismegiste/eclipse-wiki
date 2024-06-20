@@ -39,6 +39,7 @@ class CharacterFactoryTest extends KernelTestCase
         $this->assertInstanceOf(Transhuman::class, $created);
         $this->assertEquals('Diplo', $created->instantiatedFrom);
         $this->assertStringContainsString('[[Diplo]]', $created->getContent());
+        $this->assertStringStartsWith('Instance', $created->getDescription());
     }
 
 }

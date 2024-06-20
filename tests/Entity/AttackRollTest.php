@@ -22,6 +22,7 @@ class AttackRollTest extends TestCase
         $attack->roll = new Skill('Fight', 'AGI');
         $attack->roll->dice = 10;
         $attack->reach = 'melee';
+        $attack->rollBonus = 2;
         $attack->damage = DamageRoll::createFromString('2d6');
 
         $roll = new AttackRoll($attack, new TraitBonus(1));
@@ -35,6 +36,7 @@ class AttackRollTest extends TestCase
         $this->assertEquals(0, $roll->getArmorPiercing());
         $this->assertEquals(1, $roll->getRateOfFire());
         $this->assertEquals('2d6', $roll->getDamage());
+        $this->assertEquals(2, $roll->getRollBonus());
     }
 
 }
