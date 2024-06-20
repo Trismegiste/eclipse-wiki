@@ -25,11 +25,22 @@ class Battlemap3dTransfoTest extends TestCase
         $this->sut->reverseTransform('');
     }
 
-    public function testFailedReversedWhenCorrupt()
+    public function getCorruptJson(): array
+    {
+        return [
+            ['{"a":123}}'],
+            ['{"a":123'],
+            ["{'a':123}"],
+            ['{a:123}']
+        ];
+    }
+
+    /** @dataProvider getCorruptJson */
+    public function testFailedReversedWhenCorrupt(string $content)
     {
         $this->expectException(Symfony\Component\Form\Exception\TransformationFailedException::class);
         $this->expectExceptionMessage('not valid');
-        $this->sut->reverseTransform('{"a":123}}');
+        $this->sut->reverseTransform($content);
     }
 
 }
