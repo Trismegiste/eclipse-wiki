@@ -102,4 +102,28 @@ class ResyncMapperTest extends KernelTestCase
         $this->assertEquals('Fast draw', $this->instance->getEdges()[0]->getName());
     }
 
+    public function testCloneEconomy()
+    {
+        $this->template->economy = ['old' => 4];
+        $this->sut->mapFormsToData($this->createFakeForm(['economy' => true]), $this->instance);
+        $this->assertEquals(4, $this->instance->economy['old']);
+    }
+
+    public function testCloneAttack()
+    {
+        $att = new App\Entity\Attack();
+        $att->title = 'gun';
+        $this->template->setAttacks([$att]);
+        $this->sut->mapFormsToData($this->createFakeForm(['attacks' => true]), $this->instance);
+        $this->assertCount(1, $this->instance->getAttacks());
+    }
+
+    public function testCloneArmor()
+    {
+        $a = new App\Entity\Armor('beskar');
+        $this->template->setArmors([$a]);
+        $this->sut->mapFormsToData($this->createFakeForm(['armors' => true]), $this->instance);
+        $this->assertEquals('beskar', $this->instance->getArmors()[0]->name);
+    }
+
 }
