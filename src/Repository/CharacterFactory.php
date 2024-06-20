@@ -97,6 +97,7 @@ class CharacterFactory
 
     /**
      * Creates a new transhuman extra from a transhuman template. Resets contents and surnameLang
+     * WARNING : Attributes, Skills etc. are NOT deep-cloned. It's intended to be saved in the DB and discarded just after that
      * @param Transhuman $template
      * @param string $newName
      * @return Transhuman
