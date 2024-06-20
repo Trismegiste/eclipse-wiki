@@ -244,4 +244,26 @@ class DigraphExploreTest extends KernelTestCase
         $this->assertEquals(['Luke' => true], $listing['R2D2']);
     }
 
+    public function testSortedCentrality()
+    {
+        $center = new Timeline('center');
+        $center->elevatorPitch = 'summary';
+        $vertex = [$center];
+        $tree = new PlotNode('root');
+        for ($k = 0; $k < 5; $k++) {
+            $tree->nodes[] = new PlotNode("[[scene $k]]");
+            $vertex[] = new Scene("scene $k");
+        }
+        $center->setTree($tree);
+
+        $this->repository->save($vertex);
+        $result = $this->sut->getVertexSortedByCentrality($center);
+
+        $this->assertCount(6, $result);
+        $this->assertEquals('Center', $result[0]->title);
+        // the path from each 5 scenes to the 4 other scenes need to get through the timeline
+        // therefore, the timeline has a betweenness of 20
+        $this->assertEquals(20.0, $result[0]->betweenness);
+    }
+
 }

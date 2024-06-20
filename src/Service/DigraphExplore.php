@@ -245,6 +245,15 @@ class DigraphExplore
         ];
     }
 
+    protected function createGraphVertexFor(\App\Entity\Vertex $vertex): GraphVertex
+    {
+        return new GraphVertex([
+            '_id' => (string) $vertex->getPk(),
+            'title' => $vertex->getTitle(),
+            '__pclass' => get_class($vertex)
+        ]);
+    }
+
     /**
      * Gets a partition for a given timeline, sorted by betweenness centrality (Brandes algorithm)
      * @param Timeline $timeline
@@ -254,6 +263,11 @@ class DigraphExplore
     {
         $graph = $this->repository->loadGraph();
         $partition = $this->getPartitionByDistanceFromCategory($graph, 'timeline')[$timeline->getTitle()];
+        // the partition par timeline with floyd-warshall excludes the timeline itself (and it's a good thing)
+        // but when it comes to betweenness, we need this vertex, therefore it is added to the partition
+        // for the Brandes algorithm :
+        array_unshift($partition, $this->createGraphVertexFor($timeline));
+
         $pk2idx = array_flip(array_keys($graph->vertex));
         $matrix = [];
         // we scan the subset and fill an unidrected adjacency matrix with the full graph adjacency matrix
