@@ -47,4 +47,13 @@ class FandomProxyTest extends WebTestCase
         $this->assertEquals('application/pdf', $this->client->getResponse()->headers->get('content-type'));
     }
 
+    /** @depends testShow */
+    public function testPushPdf(int $id)
+    {
+        $this->client->request('GET', "/fandom/push/$id");
+        $this->assertResponseRedirects();
+        $this->client->followRedirect();
+        $this->assertStringContainsString('Aide Fandom envoy', $this->client->getResponse()->getContent());
+    }
+
 }
