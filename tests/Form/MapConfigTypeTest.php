@@ -72,4 +72,17 @@ class MapConfigTypeTest extends KernelTestCase
         $this->assertEquals(25, $model->side);
     }
 
+    /** @dataProvider getMinimalData */
+    public function testErodingRooms(array $inputData)
+    {
+        $inputData['erosionForHallway'] = true;
+        $this->sut->submit($inputData);
+        $this->assertTrue($this->sut->isSynchronized());
+        $this->assertFalse($this->sut->isValid());
+        $checkError = $this->sut->getErrors(true, true);
+        $this->assertCount(2, $checkError);
+        $this->assertStringContainsString('erosion', $checkError[0]->getMessage());
+        $this->assertStringContainsString('erosion', $checkError[1]->getMessage());
+    }
+
 }
