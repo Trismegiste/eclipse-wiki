@@ -235,7 +235,7 @@ class VertexRepositoryTest extends KernelTestCase
 
     public function testSearchPkByTitleAsSaved()
     {
-        $match = $this->sut->searchPkByTitle(['Monster','Antagonist','Supercanard']);
+        $match = $this->sut->searchPkByTitle(['Monster', 'Antagonist', 'Supercanard']);
         $this->assertCount(3, $match);
         $this->assertArrayHasKey('Monster', $match);
         $this->assertArrayHasKey('Antagonist', $match);
@@ -247,7 +247,7 @@ class VertexRepositoryTest extends KernelTestCase
 
     public function testSearchPkByTitleAsLinked()
     {
-        $match = $this->sut->searchPkByTitle(['monster','antagonist','supercanard']);
+        $match = $this->sut->searchPkByTitle(['monster', 'antagonist', 'supercanard']);
         $this->assertCount(3, $match);
         $this->assertArrayHasKey('monster', $match);
         $this->assertArrayHasKey('antagonist', $match);
