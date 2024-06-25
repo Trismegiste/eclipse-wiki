@@ -114,6 +114,7 @@ class VertexRepository extends DefaultRepository
      */
     public function filterBy(string $keyword): IteratorIterator
     {
+        $this->logger->debug('Full-text search for keyword=' . $keyword);
         if (!empty($keyword)) {
             $cursor = $this->manager->executeQuery($this->getNamespace(),
                     new Query(['$text' => ['$search' => $keyword]], [
@@ -392,6 +393,7 @@ class VertexRepository extends DefaultRepository
      */
     public function searchInbound(Vertex $vertex): IteratorIterator
     {
+        $this->logger->debug('Loading inbound vertices for title=' . $vertex->getTitle());
         return $this->search(['outboundLink' => $vertex->getTitle()]);
     }
 
@@ -402,6 +404,7 @@ class VertexRepository extends DefaultRepository
      */
     public function loadSubgraph(string $pk): Subgraph
     {
+        $this->logger->debug('Loading subgraph for pk=' . $pk);
         $focus = $this->load($pk);
         $subgraph = new Subgraph($focus);
         foreach ($this->searchInbound($focus)as $inbound) {
@@ -422,6 +425,7 @@ class VertexRepository extends DefaultRepository
             $searched[mb_ucfirst($entry)] = $entry;
         }
 
+        $this->logger->debug('Searching pk for title=' . json_encode($title));
         $iter = $this->searchGraphVertex(['title' => ['$in' => array_keys($searched)]]);
         foreach($iter as $vertex) {
             $matched[$searched[$vertex->title]] = $vertex->pk;  // in this way, we keep the case of the requested title
