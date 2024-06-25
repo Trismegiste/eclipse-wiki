@@ -81,13 +81,13 @@ class RpgDataAccess extends DataAccess
 
     public function getPageInfo($pageConfigOrTitle, array $titles): array
     {
+        $iter = $this->repositoy->searchPkByTitle($titles);
         $ret = [];
-        foreach ($titles as $title) {
-            // @todo shortcut for template
-            $found = $this->repositoy->findByTitle($title);
-            if ($found) {
+
+        foreach ($iter as $title => $pk) {
+            if (!is_null($pk)) {
                 $ret[$title] = [
-                    'pageId' => $found->getPk(),
+                    'pageId' => $pk,
                     'revId' => 1,
                     'missing' => false,
                     'known' => true,
