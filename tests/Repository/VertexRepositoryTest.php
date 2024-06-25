@@ -233,4 +233,28 @@ class VertexRepositoryTest extends KernelTestCase
         $this->assertCount(10, $graph->vertex);
     }
 
+    public function testSearchPkByTitleAsSaved()
+    {
+        $match = $this->sut->searchPkByTitle(['Monster','Antagonist','Supercanard']);
+        $this->assertCount(3, $match);
+        $this->assertArrayHasKey('Monster', $match);
+        $this->assertArrayHasKey('Antagonist', $match);
+        $this->assertArrayHasKey('Supercanard', $match);
+        $this->assertNotNull($match['Monster']);
+        $this->assertNotNull($match['Antagonist']);
+        $this->assertNull($match['Supercanard']);
+    }
+
+    public function testSearchPkByTitleAsLinked()
+    {
+        $match = $this->sut->searchPkByTitle(['monster','antagonist','supercanard']);
+        $this->assertCount(3, $match);
+        $this->assertArrayHasKey('monster', $match);
+        $this->assertArrayHasKey('antagonist', $match);
+        $this->assertArrayHasKey('supercanard', $match);
+        $this->assertNotNull($match['monster']);
+        $this->assertNotNull($match['antagonist']);
+        $this->assertNull($match['supercanard']);
+    }
+
 }

@@ -411,4 +411,23 @@ class VertexRepository extends DefaultRepository
         return $subgraph;
     }
 
+    /**
+     * Returns an array with keys as titles and values as found pks (or null if not found)
+     */
+    public function searchPkByTitle(array $title): array
+    {
+        $matched = array_combine($title, array_fill(0, count($title), null));
+        $searched = [];
+        foreach($title as $entry) {
+            $searched[mb_ucfirst($entry)] = $entry;
+        }
+
+        $iter = $this->searchGraphVertex(['title' => ['$in' => array_keys($searched)]]);
+        foreach($iter as $vertex) {
+            $matched[$searched[$vertex->title]] = $vertex->pk;  // in this way, we keep the case of the requested title
+        }
+
+        return $matched;
+    }
+
 }

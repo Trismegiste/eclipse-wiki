@@ -152,6 +152,7 @@ class Picture extends AbstractController
 
     /**
      * Returns a pixelized thumbnail for the vector battlemap linked to the Place given by its pk
+     * @todo this ugly code could be replace with Image Magic extension, more on : https://stackoverflow.com/questions/4809194/convert-svg-image-to-png-with-php
      */
     #[Route('/battlemap/thumbnail/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function battlemapThumbnail(Place $place, Request $request, SvgDumper $dumper): Response
