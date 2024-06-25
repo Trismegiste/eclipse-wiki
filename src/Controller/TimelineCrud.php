@@ -71,7 +71,7 @@ class TimelineCrud extends GenericCrud
     }
 
     /**
-     * Fragment : explores the graph of Vertex and renders the tree from a Timeline vertex
+     * Ajax fragment : explores the graph of Vertex and renders the tree from a Timeline vertex
      * @param Timeline $vertex
      * @return Response
      */
@@ -113,10 +113,7 @@ class TimelineCrud extends GenericCrud
     #[Route('/partition/{pk}/list', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function partitionListing(Timeline $timeline): Response
     {
-        // @todo this code sux, graphToSortedCategory is not usefull here, except for the cache
-        $dump = $this->explorer->graphToSortedCategory($timeline);
-        $title = array_merge(...array_values($dump));
-        $iter = $this->repository->search(['title' => ['$in' => $title]]);
+        $iter = $this->explorer->getPartitionListing($timeline);
 
         return $this->render('timeline/partition/listing.html.twig', ['listing' => $iter, 'vertex' => $timeline]);
     }

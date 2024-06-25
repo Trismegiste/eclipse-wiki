@@ -309,4 +309,20 @@ class DigraphExplore
         return $moviePoster;
     }
 
+    /**
+     * Get the list of Vertex entities for a given partition centered around a Timeline
+     * @param Timeline $timeline
+     * @return iterable
+     */
+    public function getPartitionListing(Timeline $timeline): iterable
+    {
+        $partition = $this->getPartitionByTimeline()[$timeline->getTitle()];
+        // loads full content of vertices
+        $pk = array_map(function (GraphVertex $val) {
+            return new ObjectId($val->pk);
+        }, $partition);
+
+        return $this->repository->findSubsetSortedByTitle($pk);
+    }
+
 }

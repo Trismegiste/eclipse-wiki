@@ -434,4 +434,11 @@ class VertexRepository extends DefaultRepository
         return $matched;
     }
 
+    public function findSubsetSortedByTitle(array $pk): iterable
+    {
+        return $this->manager->executeQuery($this->getNamespace(),
+                        new Query(['_id' => ['$in' => $pk]],
+                                ['collation' => ['locale' => 'fr'], 'sort' => ['title' => 1]]));
+    }
+
 }
