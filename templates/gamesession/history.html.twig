@@ -16,4 +16,13 @@
             {% endfor %}
         </ul>
     </section>
+
+    <script type="module">
+        import Mousetrap from 'mousetrap';
+
+        Mousetrap.bind('ctrl+s', function () {
+            location.assign('{{ path('app_vertexcrud_show', {pk: timeline.pk}) }}')
+            return false
+        })
+    </script>
 {% endif %}

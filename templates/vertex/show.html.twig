@@ -23,24 +23,6 @@
         Alpine.data('broadcast', broadcastPicture)
         Alpine.data('quoteBroadcasting', broadcastQuote('{{ path('app_gmpusher_pushquote', {pk: vertex.pk}) }}'))
     </script>
-    <script type="module">
-        import Mousetrap from 'mousetrap';
-
-        Mousetrap.bind('left', function () {
-            location.assign('{{ path('app_vertexcrud_seekprevious', {pk: vertex.pk}) }}')
-            return false
-        })
-
-        Mousetrap.bind('right', function () {
-            location.assign('{{ path('app_vertexcrud_seeknext', {pk: vertex.pk}) }}')
-            return false
-        })
-
-        Mousetrap.bind('e', function () {
-            location.assign('{{ path('app_vertexcrud_edit', {pk: vertex.pk}) }}')
-            return false
-        })
-    </script>
 {% endblock %}
 
 {% block info %}
