@@ -77,11 +77,7 @@ class PlaceCrud extends GenericCrud
         }
     }
 
-    /**
-     * Creates a Place child from the current Place
-     */
-    #[Route('/child/{pk}', methods: ['GET', 'POST'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function child(Place $place, Request $request): Response
+    protected function createPlaceChild(Place $place): Place
     {
         $title = $place->getTitle();
         $child = clone $place;
@@ -89,7 +85,17 @@ class PlaceCrud extends GenericCrud
         $child->setContent("Localisé sur [[$title]]");
         $child->battlemap3d = null;
         $child->voronoiParam = null;
-        // @todo faire qqc pour cette initialisation => methode __clone ? Dans la factory des Vertex ?
+
+        return $child;
+    }
+
+    /**
+     * Creates a Place child from the current Place
+     */
+    #[Route('/child/{pk}', methods: ['GET', 'POST'], requirements: ['pk' => '[\\da-f]{24}'])]
+    public function child(Place $place, Request $request): Response
+    {
+        $child = $this->createPlaceChild($place);
         $form = $this->createForm(PlaceType::class, $child);
 
         $form->handleRequest($request);
