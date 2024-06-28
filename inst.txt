@@ -1,0 +1,5 @@
+apt-get install -y libmagickwand-dev
+pecl install imagick
+docker-php-ext-enable imagick
+
+https://thriveread.com/docker-php-ext-imagick/

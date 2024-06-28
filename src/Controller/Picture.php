@@ -175,24 +175,16 @@ class Picture extends AbstractController
             }
         }
 
-        $output = fopen("$targetName.svg", 'w');
         $doc = new BattlemapDocument();
         $doc->unserializeFromJson(json_decode(file_get_contents($battlemap->getPathname())), $doc);
-        ob_start(function ($buffer) use ($output) {
-            fwrite($output, $buffer);
-        }, 1e5);
+        $im = new \Imagick();
+        ob_start();
         $dumper->flush($doc);
-        ob_end_flush();
-        fclose($output);
+        $im->readImageBlob(ob_get_clean());
 
-        $convert = new Process([
-            'convert',
-            "$targetName.svg",
-            '-resize', 400,
-            '-quality', 70,
-            "$targetName.jpg"
-        ]);
-        $convert->mustRun();
+        $im->setImageFormat("jpeg");
+        $im->adaptiveResizeImage(400, 400);
+        $im->writeImage("$targetName.jpg");
 
         $response = new BinaryFileResponse("$targetName.jpg");
         $response->setLastModified(DateTime::createFromFormat('U', $battlemap->getMTime()));
