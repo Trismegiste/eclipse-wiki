@@ -6,11 +6,8 @@
 
 namespace App\Controller;
 
-use App\Service\MediaWiki;
 use App\Service\MwImageCache;
-use App\Service\PlayerCastCache;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,7 +40,7 @@ class RemotePicture extends AbstractController
      * Pushes a picture (from the remote MediaWiki) to player screen
      */
     #[Route('/remote/push', methods: ['POST'])]
-    public function push(Request $request, PlayerCastCache $cache): JsonResponse
+    public function push(Request $request): JsonResponse
     {
         $url = rawurldecode($request->query->get('url'));
         $local = $this->remoteStorage->download($url);

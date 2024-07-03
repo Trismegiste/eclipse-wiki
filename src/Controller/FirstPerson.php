@@ -12,10 +12,10 @@ use App\Form\Tool3d\Battlemap3dWrite;
 use App\Form\Tool3d\CubemapBroadcast;
 use App\Form\Tool3d\GmViewBroadcast;
 use App\Form\Tool3d\RoomTexturing;
+use App\Form\Tool3d\SpotSelect;
 use App\Form\Tool3d\TileLegend;
 use App\Form\Tool3d\TileNpc;
 use App\Repository\VertexRepository;
-use App\Service\PlayerCastCache;
 use App\Service\Storage;
 use App\Voronoi\MapBuilder;
 use DateTime;
@@ -26,7 +26,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use function join_paths;
 
 /**
  * 3D real time first personwith babylon.js
@@ -62,7 +61,7 @@ class FirstPerson extends AbstractController
         $writer = $this->createForm(Battlemap3dWrite::class, $place, [
             'action' => $this->generateUrl('app_firstperson_export', ['pk' => $place->getPk()])
         ]);
-        $spot = $this->createForm(\App\Form\Tool3d\SpotSelect::class, null, ['place' => $place]);
+        $spot = $this->createForm(SpotSelect::class, null, ['place' => $place]);
 
         return $this->render('firstperson/edit.html.twig', [
                     'place' => $place,
@@ -176,7 +175,7 @@ class FirstPerson extends AbstractController
      * Broadcast the GM view 2d screenshot
      */
     #[Route('/fps/push/gmview', methods: ['POST'])]
-    public function pushGmView(Request $request, PlayerCastCache $cache): JsonResponse
+    public function pushGmView(Request $request): JsonResponse
     {
         $form = $this->createForm(GmViewBroadcast::class);
         $form->handleRequest($request);

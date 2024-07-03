@@ -74,7 +74,7 @@ class Picture extends AbstractController
      * Pushes a picture (from the Storage) to player screen
      */
     #[Route('/picture/push/{title}', methods: ['POST'])]
-    public function push(string $title, PlayerCastCache $cache): JsonResponse
+    public function push(string $title): JsonResponse
     {
         $info = $this->storage->getFileInfo($title);
         $picture = imagecreatefromstring(file_get_contents($info));

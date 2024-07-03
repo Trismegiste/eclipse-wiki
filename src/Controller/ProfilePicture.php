@@ -13,7 +13,7 @@ use App\Form\ProfilePic;
 use App\Repository\VertexRepository;
 use App\Service\AvatarMaker;
 use App\Service\Mercure\Pusher;
-use App\Service\PlayerCastCache;
+use App\Service\SessionPushHistory;
 use App\Service\Storage;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -56,7 +56,7 @@ class ProfilePicture extends AbstractController
      * Push a socnet profile for a unique Transhuman
      */
     #[Route('/profile/unique/{pk}', methods: ['POST'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function pushUnique(Transhuman $npc, PlayerCastCache $cache): JsonResponse
+    public function pushUnique(Transhuman $npc): JsonResponse
     {
         $pathname = $this->storage->getFileInfo($npc->tokenPic);
         $profile = $this->maker->generate($npc, $pathname);
@@ -94,7 +94,7 @@ class ProfilePicture extends AbstractController
      * Show a list of NPC profiles from a template (a Transhuman with isNpcTemplate() method returning true)
      */
     #[Route('/profile/template/{pk}', methods: ['GET', 'POST'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function template(Transhuman $vertex, Request $request, Pusher $pusher, PlayerCastCache $cache, \App\Service\SessionPushHistory $history): Response
+    public function template(Transhuman $vertex, Request $request, Pusher $pusher, SessionPushHistory $history): Response
     {
         $form = $this->createForm(ProfileOnTheFly::class, null, ['transhuman' => $vertex]);
 
