@@ -160,7 +160,7 @@ class Picture extends AbstractController
         if (is_null($place->battlemap3d)) {
             throw $this->createNotFoundException();
         }
-        $battlemap = new SplFileInfo(join_paths($this->storage->getRootDir(), $place->battlemap3d));
+        $battlemap = $this->storage->getFileInfo($place->battlemap3d);
 
         // folder for caching :
         $cacheDir = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir);
@@ -185,6 +185,10 @@ class Picture extends AbstractController
         ob_end_flush();
         fclose($output);
 
+        // @todo could use stdin/stdout with https://stackoverflow.com/questions/67269725/convert-image-from-one-format-to-another-sent-to-stdout
+        // and streamed input with https://stackoverflow.com/questions/67269725/convert-image-from-one-format-to-another-sent-to-stdout
+        // with a passthru() ?
+        // Use stream at least for input since output should be cached
         $convert = new Process([
             'convert',
             "$targetName.svg",
