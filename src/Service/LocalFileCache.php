@@ -75,6 +75,11 @@ abstract class LocalFileCache implements CacheWarmerInterface, CacheClearerInter
                         ->getIterator();
     }
 
+    /**
+     * Creates a file info for a sanitized filename into the cache folder
+     * @param string $filename
+     * @return SplFileInfo
+     */
     public function createTargetFile(string $filename): SplFileInfo
     {
         return new SplFileInfo($this->folder . '/' . $this->sanitizeFilename($filename));

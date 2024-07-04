@@ -17,7 +17,6 @@ use App\Service\Storage;
 use App\Voronoi\SvgDumper;
 use DateTime;
 use RuntimeException;
-use SplFileInfo;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,7 +24,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
-use function join_paths;
 
 /**
  * Controller for pictures
@@ -153,9 +151,10 @@ class Picture extends AbstractController
     /**
      * Returns a pixelized thumbnail for the vector battlemap linked to the Place given by its pk
      * @todo this ugly code could be replace with Image Magic extension, more on : https://stackoverflow.com/questions/4809194/convert-svg-image-to-png-with-php
+     * @todo thumbanailing a battlemap has nothing to do with PlayerCastCache now. Use a new cache for dynamic pictures (could be used also for Profile pic)
      */
     #[Route('/battlemap/thumbnail/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function battlemapThumbnail(Place $place, Request $request, SvgDumper $dumper): Response
+    public function battlemapThumbnail(Place $place, Request $request, SvgDumper $dumper, PlayerCastCache $playerCache): Response
     {
         if (is_null($place->battlemap3d)) {
             throw $this->createNotFoundException();
@@ -163,19 +162,19 @@ class Picture extends AbstractController
         $battlemap = $this->storage->getFileInfo($place->battlemap3d);
 
         // folder for caching :
-        $cacheDir = join_paths($this->getParameter('kernel.cache_dir'), PlayerCastCache::subDir);
-        $targetName = join_paths($cacheDir, 'tmp-' . $place->getPk());
+        $targetJpeg = $playerCache->createTargetFile('tmp-' . $place->getPk() . '.jpg');
 
         // managing HTTP Cache
-        if (file_exists("$targetName.jpg")) {
-            $response = new BinaryFileResponse("$targetName.jpg");
+        if ($targetJpeg->isReadable()) {
+            $response = new BinaryFileResponse($targetJpeg);
             $response->setLastModified(DateTime::createFromFormat('U', $battlemap->getMTime()));
             if ($response->isNotModified($request)) {
                 return $response;
             }
         }
 
-        $output = fopen("$targetName.svg", 'w');
+        $targetSvg = $playerCache->createTargetFile('tmp-' . $place->getPk() . '.svg');
+        $output = fopen($targetSvg->getPathname(), 'w');
         $doc = new BattlemapDocument();
         $doc->unserializeFromJson(json_decode(file_get_contents($battlemap->getPathname())), $doc);
         ob_start(function ($buffer) use ($output) {
@@ -191,14 +190,14 @@ class Picture extends AbstractController
         // Use stream at least for input since output should be cached
         $convert = new Process([
             'convert',
-            "$targetName.svg",
+            $targetSvg->getPathname(),
             '-resize', 400,
             '-quality', 70,
-            "$targetName.jpg"
+            $targetJpeg->getPathname()
         ]);
         $convert->mustRun();
 
-        $response = new BinaryFileResponse("$targetName.jpg");
+        $response = new BinaryFileResponse($targetJpeg);
         $response->setLastModified(DateTime::createFromFormat('U', $battlemap->getMTime()));
 
         return $response;

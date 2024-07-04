@@ -10,7 +10,6 @@ use App\Service\Pdf\ChromiumPdfWriter;
 use SplFileInfo;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use function join_paths;
 
 /**
  * Generates and exposes PDF for public access
@@ -18,17 +17,16 @@ use function join_paths;
 class DocumentBroadcaster
 {
 
-    protected $documentDir;
-
-    public function __construct(protected UrlGeneratorInterface $routing, string $cacheDir, protected ChromiumPdfWriter $chromiumPdf)
+    public function __construct(protected UrlGeneratorInterface $routing,
+            protected PlayerCastCache $playerCache,
+            protected ChromiumPdfWriter $chromiumPdf)
     {
-        $this->documentDir = join_paths($cacheDir, PlayerCastCache::subDir);
+        
     }
 
     public function generatePdf(string $fileTitle, string $htmlContent): SplFileInfo
     {
-        $filename = $this->sanitizeFilename($fileTitle);
-        $target = new SplFileInfo(\join_paths($this->documentDir, $filename));
+        $target = $this->playerCache->createTargetFile($fileTitle);
 
         $doc = $this->chromiumPdf->htmlToDom($htmlContent);
         $this->chromiumPdf->embedPictures($doc);
@@ -37,14 +35,9 @@ class DocumentBroadcaster
         return $target;
     }
 
-    protected function sanitizeFilename(string $filename): string
-    {
-        return preg_replace('#([^A-Za-z0-9-_\.])#', '-', iconv('UTF-8', 'ASCII//TRANSLIT', $filename));
-    }
-
     public function createResponseForFilename(string $filename): BinaryFileResponse
     {
-        return new BinaryFileResponse(join_paths($this->documentDir, $filename));
+        return $this->playerCache->createResponse($filename);
     }
 
     public function getLinkToDocument(string $filename): string
