@@ -60,6 +60,9 @@ services:
     App\Twig\MediaWikiExtension:
         arguments:
             $src: '%env(resolve:WIKISOURCE)%'
+            
+    App\Service\MwImageCache:
+        $folder: '%kernel.cache_dir%/mediawiki'
 
    # FLAT FILE
     app.choicetype.repository:

@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * A generic local cache for files
  */
-class LocalFileCache implements CacheWarmerInterface, CacheClearerInterface
+abstract class LocalFileCache implements CacheWarmerInterface, CacheClearerInterface
 {
 
     public function __construct(protected Filesystem $fs, protected string $folder)
