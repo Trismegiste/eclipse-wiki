@@ -6,7 +6,6 @@
 
 use App\Service\SessionPushHistory;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SessionPushHistoryTest extends WebTestCase
@@ -24,10 +23,7 @@ class SessionPushHistoryTest extends WebTestCase
     public function testClear()
     {
         $this->sut->clear($this->cacheDir);
-        $it = (new Finder())
-                ->in(join_paths($this->cacheDir, SessionPushHistory::subDir))
-                ->files();
-        $this->assertCount(0, $it);
+        $this->assertCount(0, $this->sut->getListing());
     }
 
     public function testNotFoundFile()
