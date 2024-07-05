@@ -38,7 +38,7 @@ class DynamicPictureCache extends LocalFileCache
         $cachedName = $this->createTargetFile(sprintf('profile-%s.png', $npc->getPk()));
         $etag = '"' . sha1(serialize($npc)) . '"';
 
-        if ($cachedName->isFile() && ($etag === $request->headers->get('If-None-Match'))) {
+        if (!$cachedName->isFile() || ($etag !== $request->headers->get('If-None-Match'))) {
             $pathname = $this->storage->getFileInfo($npc->tokenPic);
             $profile = $this->maker->generate($npc, $pathname);
             imagepng($profile, $cachedName->getPathname());
