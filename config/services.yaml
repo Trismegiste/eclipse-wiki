@@ -71,8 +71,8 @@ services:
     App\Service\PlayerCastCache:
         $folder: '%kernel.cache_dir%/player'
 
-    App\Service\DynamicPictureCache:
-        $folder: '%kernel.cache_dir%/dynpic'
+    App\Service\ProfilePictureCache:
+        $folder: '%kernel.cache_dir%/profilepic'
 
    # FLAT FILE
     app.choicetype.repository:

@@ -12,13 +12,12 @@ use App\Form\ProfileOnTheFly;
 use App\Form\ProfilePic;
 use App\Repository\VertexRepository;
 use App\Service\AvatarMaker;
-use App\Service\DynamicPictureCache;
 use App\Service\Mercure\Pusher;
+use App\Service\ProfilePictureCache;
 use App\Service\SessionPushHistory;
 use App\Service\Storage;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,9 +42,9 @@ class ProfilePicture extends AbstractController
      * Generate a socnet profile for a unique Transhuman
      */
     #[Route('/profile/unique/{pk}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function unique(Transhuman $npc, DynamicPictureCache $cache, Request $request): Response
+    public function unique(Transhuman $npc, ProfilePictureCache $cache, Request $request): Response
     {
-        return $cache->createProfilePic($npc, $request);
+        return $cache->getPicture($npc, $request);
     }
 
     /**

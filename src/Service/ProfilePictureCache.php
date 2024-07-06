@@ -17,7 +17,7 @@ use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
 /**
  * Local cache for dynamic pictures generation
  */
-class DynamicPictureCache extends LocalFileCache
+class ProfilePictureCache extends LocalFileCache
 {
 
     public function __construct(Filesystem $fs, string $folder, protected AvatarMaker $maker, protected Storage $storage)
@@ -31,14 +31,17 @@ class DynamicPictureCache extends LocalFileCache
         $resp->setEtag($etag);
         $resp->setPrivate();
         $resp->mustRevalidate();
+        $resp->headers->set('content-type','image/png');
     }
 
-    public function createProfilePic(Transhuman $npc, Request $request): Response
+    public function getPicture(Transhuman $npc, Request $request): Response
     {
         $cachedName = $this->createTargetFile(sprintf('profile-%s.png', $npc->getPk()));
         $etag = '"' . sha1(serialize($npc)) . '"';
 
-        if (!$cachedName->isFile() || ($etag !== $request->headers->get('If-None-Match'))) {
+        if ($cachedName->isFile() && ($etag === $request->headers->get('If-None-Match'))) {
+            $resp = new BinaryFileResponse($cachedName);
+        } else {
             $pathname = $this->storage->getFileInfo($npc->tokenPic);
             $profile = $this->maker->generate($npc, $pathname);
             imagepng($profile, $cachedName->getPathname());
@@ -46,8 +49,6 @@ class DynamicPictureCache extends LocalFileCache
             $resp = new StreamedResponse(function () use ($profile) {
                         imagepng($profile);
                     });
-        } else {
-            $resp = new BinaryFileResponse($cachedName);
         }
 
         $this->appendEtagCache($resp, $etag);
