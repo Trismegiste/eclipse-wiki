@@ -31,7 +31,7 @@ class ProfilePictureCache extends LocalFileCache
         $resp->setEtag($etag);
         $resp->setPrivate();
         $resp->mustRevalidate();
-        $resp->headers->set('content-type','image/png');
+        $resp->headers->set('content-type', 'image/png');
     }
 
     public function getPicture(Transhuman $npc, Request $request): Response
@@ -41,13 +41,15 @@ class ProfilePictureCache extends LocalFileCache
 
         if ($cachedName->isFile() && ($etag === $request->headers->get('If-None-Match'))) {
             $resp = new BinaryFileResponse($cachedName);
+            $resp::trustXSendfileTypeHeader();
         } else {
             $pathname = $this->storage->getFileInfo($npc->tokenPic);
             $profile = $this->maker->generate($npc, $pathname);
-            imagepng($profile, $cachedName->getPathname());
 
-            $resp = new StreamedResponse(function () use ($profile) {
+            $resp = new StreamedResponse(function () use ($profile, $cachedName) {
                         imagepng($profile);
+                        imagepng($profile, $cachedName->getPathname());
+                        imagedestroy($profile);
                     });
         }
 
