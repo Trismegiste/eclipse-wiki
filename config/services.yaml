@@ -138,3 +138,8 @@ services:
         factory: ['@App\Service\StableDiffusion\InvokeAiClientFactory', 'createFromHostname']
         arguments:
             - '%env(resolve:STABLE_DIFFUSION_HOSTNAME)%'
+
+    # OLlama
+    App\Ollama\RequestFactory:
+        arguments:
+            $settingPathname: '%kernel.project_dir%/database/llm/setting.txt'
