@@ -42,9 +42,9 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en  
 ENV LC_ALL en_US.UTF-8 
 
-RUN apt-get install -y imagemagick
-
 RUN apt-get update && apt-get install -y chromium
+
+RUN install-php-extensions imagick/imagick@master
 
 RUN apt-get update && apt-get install -y pip
 RUN pip install --break-system-packages -U pdf.tocgen
