@@ -17,6 +17,9 @@ use Symfony\Component\Process\Process;
 use Twig\Environment;
 use function join_paths;
 use function str_starts_with;
+use Symfony\Component\Mime\Part\DataPart;
+use Symfony\Component\Mime\Part\Multipart\FormDataPart;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * PDF writer with headless Chromium
@@ -24,34 +27,26 @@ use function str_starts_with;
 class ChromiumPdfWriter implements Writer
 {
 
-    public function __construct(protected Environment $twig, protected string $cacheDir, protected MwImageCache $remoteImage)
+    public function __construct(protected Environment $twig, protected string $cacheDir, protected MwImageCache $remoteImage, private HttpClientInterface $client)
     {
         
     }
 
     public function write(SplFileInfo $source, SplFileInfo $target): void
     {
-        // @see https://peter.sh/experiments/chromium-command-line-switches/
-        $chromium = new Process([
-            'chromium',
-            '--headless',
-            '--no-first-run',
-            '--enable-chrome-browser-cloud-management',
-            '--disable-gpu',
-            '--disable-extensions',
-            '--no-sandbox',
-            '--no-pdf-header-footer',
-            '--disable-dev-shm-usage', // @see https://stackoverflow.com/questions/69173469/meaning-of-selenium-chromeoptions
-            '--print-to-pdf=' . $target->getPathname(),
-            $source->getPathname()
-        ]);
-        $chromium->setTimeout(300);
+        $stopwatch = microtime(true);
+        $formFields = [
+            'file' => DataPart::fromPath($source->getPathname(), $source->getBasename(), 'text/html'),
+        ];
+        $formData = new FormDataPart($formFields);
 
-        try {
-            $chromium->mustRun();
-        } catch (ProcessSignaledException $e) {
-            throw new RuntimeException(code: $chromium->getExitCode(), message: $chromium->getExitCodeText() . "\n" . $chromium->getErrorOutput(), previous: $e);
-        }
+        $resp = $this->client->request('POST', "http://localhost:4444/upload", [
+            'headers' => $formData->getPreparedHeaders()->toArray(),
+            'body' => $formData->bodyToIterable(),
+        ]);
+
+        file_put_contents($target->getPathname(), $resp->getContent());
+        $delta = microtime(true) - $stopwatch;
     }
 
     public function renderToPdf(string $template, array $param, SplFileInfo $target): void
