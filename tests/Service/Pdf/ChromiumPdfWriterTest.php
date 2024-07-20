@@ -4,40 +4,35 @@
  * eclipse-wiki
  */
 
-class ChromiumPdfWriterTest extends PHPUnit\Framework\TestCase
+use App\Service\Pdf\ChromiumPdfWriter;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+
+class ChromiumPdfWriterTest extends KernelTestCase
 {
 
-    protected $sut;
-    protected $twig;
+    protected ChromiumPdfWriter $sut;
 
     protected function setUp(): void
     {
-        $this->twig = $this->createMock(Twig\Environment::class);
-        $remoteImg = $this->createMock(App\Service\MwImageCache::class);
-
-        $this->sut = new \App\Service\Pdf\ChromiumPdfWriter($this->twig, __DIR__ . '/../../../var/cache/test', $remoteImg);
+        $this->sut = static::getContainer()->get(ChromiumPdfWriter::class);
     }
 
-    public function testWrite()
+    public function testDomToPdf()
     {
-        $source = new SplFileInfo('source.html');
         $target = new SplFileInfo('target.pdf');
 
-        file_put_contents($source->getPathname(), '<html><body>Yolo</body></html>');
-        $this->sut->write($source, $target);
+        $source = new DOMDocument();
+        $source->loadHTML('<html><body>Yolo</body></html>');
+        $this->sut->domToPdf($source, $target);
         $this->assertFileExists($target->getPathname());
 
-        unlink($source->getPathname());
         unlink($target->getPathname());
     }
 
-    public function testRenderToPdf()
+    public function testTwigToPdf()
     {
         $target = new SplFileInfo('target.pdf');
-        $this->twig->expects($this->once())
-                ->method('render')
-                ->willReturn('<html><body><a href="http://link">Yolo</a><img src="http://yolo.jpg"/></body></html>');
-        $this->sut->renderToPdf('dummy', [], $target);
+        $this->sut->renderToPdf('base.pdf.twig', ['vertex' => ['title' => 'Yolo']], $target);
         $this->assertFileExists($target->getPathname());
 
         unlink($target->getPathname());

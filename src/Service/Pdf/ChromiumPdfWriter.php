@@ -10,16 +10,12 @@ use App\Service\MwImageCache;
 use DOMDocument;
 use DOMElement;
 use InvalidArgumentException;
-use RuntimeException;
 use SplFileInfo;
-use Symfony\Component\Process\Exception\ProcessSignaledException;
-use Symfony\Component\Process\Process;
-use Twig\Environment;
-use function join_paths;
-use function str_starts_with;
 use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Twig\Environment;
+use function str_starts_with;
 
 /**
  * PDF writer with headless Chromium
@@ -27,17 +23,17 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class ChromiumPdfWriter implements Writer
 {
 
-    public function __construct(protected Environment $twig, protected string $cacheDir, protected MwImageCache $remoteImage, private HttpClientInterface $client)
+    public function __construct(
+            protected Environment $twig,
+            protected MwImageCache $remoteImage,
+            private HttpClientInterface $client)
     {
         
     }
 
-    public function write(SplFileInfo $source, SplFileInfo $target): void
+    public function domToPdf(\DOMDocument $doc, \SplFileInfo $target): void
     {
-        $stopwatch = microtime(true);
-        $formFields = [
-            'file' => DataPart::fromPath($source->getPathname(), $source->getBasename(), 'text/html'),
-        ];
+        $formFields = ['file' => new DataPart($doc->saveHTML(), 'doc-eclipsewiki.html', 'text/html')];
         $formData = new FormDataPart($formFields);
 
         $resp = $this->client->request('POST', "http://localhost:4444/upload", [
@@ -46,7 +42,6 @@ class ChromiumPdfWriter implements Writer
         ]);
 
         file_put_contents($target->getPathname(), $resp->getContent());
-        $delta = microtime(true) - $stopwatch;
     }
 
     public function renderToPdf(string $template, array $param, SplFileInfo $target): void
@@ -105,13 +100,6 @@ class ChromiumPdfWriter implements Writer
         $mimetype = $pictureInfo['mime'];
 
         return "data:$mimetype;base64," . base64_encode(file_get_contents($localFile));
-    }
-
-    public function domToPdf(\DOMDocument $doc, \SplFileInfo $target): void
-    {
-        $html = new \SplFileInfo(join_paths($this->cacheDir, $target->getBasename() . '-' . time() . '.html'));
-        $doc->saveHTMLFile($html->getPathname());
-        $this->write($html, $target);
     }
 
 }
