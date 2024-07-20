@@ -25,6 +25,7 @@ class ChromiumPdfWriterTest extends KernelTestCase
         $source->loadHTML('<html><body>Yolo</body></html>');
         $this->sut->domToPdf($source, $target);
         $this->assertFileExists($target->getPathname());
+        $this->assertPdf($target);
 
         unlink($target->getPathname());
     }
@@ -34,8 +35,17 @@ class ChromiumPdfWriterTest extends KernelTestCase
         $target = new SplFileInfo('target.pdf');
         $this->sut->renderToPdf('base.pdf.twig', ['vertex' => ['title' => 'Yolo']], $target);
         $this->assertFileExists($target->getPathname());
+        $this->assertPdf($target);
 
         unlink($target->getPathname());
+    }
+
+    protected function assertPdf(SplFileInfo $pdf): void
+    {
+        $stream = fopen($pdf->getPathname(), 'r');
+        $magic = fread($stream, 4);
+        $this->assertEquals('%PDF', $magic);
+        fclose($stream);
     }
 
 }
