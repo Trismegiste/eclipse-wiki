@@ -44,8 +44,6 @@ ENV LC_ALL en_US.UTF-8
 
 RUN apt-get install -y imagemagick
 
-RUN apt-get update && apt-get install -y chromium
-
 RUN apt-get update && apt-get install -y pip
 RUN pip install --break-system-packages -U pdf.tocgen
 
@@ -53,7 +51,7 @@ RUN apt-get update && apt-get install -y unzip
 
 RUN apt-get install -y net-tools
 
-COPY ./docker/php.ini /usr/local/etc/php
+COPY ./php.ini /usr/local/etc/php
 
 # compil brandes algorithm
 RUN git clone https://github.com/m-chrzan/brandes.git /root/brandes

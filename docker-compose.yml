@@ -1,7 +1,8 @@
 version: "3.9"
+
 services:
-    symfony:
-        build: .
+    web:
+        build: ./docker/web
         image: symfony:dev
         volumes:
             - .:/app
@@ -15,7 +16,7 @@ services:
             - eclipse-mongo:/bitnami/mongodb
         network_mode: host
 
-    bun:
+    iconfont:
         image: oven/bun
         volumes:
             - .:/home/bun/app
@@ -26,10 +27,15 @@ services:
     algogo:
         image: golang:alpine3.20
         volumes:
-            - ./golang:/app
+            - ./docker/algogo:/app
         network_mode: host
         working_dir: /app
         command: go run algorithm.go 3333
+
+    pdfgofast:
+        build: ./docker/pdfgofast
+        image: pdfgofast:server
+        network_mode: host
 
 volumes:
     eclipse-mongo:
