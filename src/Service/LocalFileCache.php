@@ -41,7 +41,7 @@ abstract class LocalFileCache implements CacheWarmerInterface, CacheClearerInter
         return false;
     }
 
-    public function warmUp(string $cacheDir): array
+    public function warmUp(string|null $cacheDir): array
     {
         $this->fs->mkdir($this->folder);
         if (!is_readable($this->folder)) {

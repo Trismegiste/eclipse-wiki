@@ -13,6 +13,7 @@ use InvalidArgumentException;
 use SplFileInfo;
 use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
+use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Twig\Environment;
 use function str_starts_with;
@@ -26,13 +27,15 @@ class ChromiumPdfWriter implements Writer
     public function __construct(
             protected Environment $twig,
             protected MwImageCache $remoteImage,
-            private HttpClientInterface $client)
+            private HttpClientInterface $client,
+            protected Stopwatch $stopwatch)
     {
         
     }
 
     public function domToPdf(\DOMDocument $doc, \SplFileInfo $target): void
     {
+        $this->stopwatch->start('dom-to-pdf');
         $formFields = ['file' => new DataPart($doc->saveHTML(), 'doc-eclipsewiki.html', 'text/html')];
         $formData = new FormDataPart($formFields);
 
@@ -42,6 +45,7 @@ class ChromiumPdfWriter implements Writer
         ]);
 
         file_put_contents($target->getPathname(), $resp->getContent());
+        $this->stopwatch->stop('dom-to-pdf');
     }
 
     public function renderToPdf(string $template, array $param, SplFileInfo $target): void
