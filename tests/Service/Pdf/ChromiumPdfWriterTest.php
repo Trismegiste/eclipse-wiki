@@ -6,6 +6,7 @@
 
 use App\Service\Pdf\ChromiumPdfWriter;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Process\Process;
 
 class ChromiumPdfWriterTest extends KernelTestCase
 {
@@ -17,6 +18,13 @@ class ChromiumPdfWriterTest extends KernelTestCase
         $this->sut = static::getContainer()->get(ChromiumPdfWriter::class);
     }
 
+    protected function assertPdfContainsString(string $expected, string $filename): void
+    {
+        $txtDump = new Process(['pdftotext', $filename, '-']);
+        $txtDump->mustRun();
+        $this->assertStringContainsString('Yolo', $txtDump->getOutput());
+    }
+
     public function testDomToPdf()
     {
         $target = new SplFileInfo('target.pdf');
@@ -26,6 +34,7 @@ class ChromiumPdfWriterTest extends KernelTestCase
         $this->sut->domToPdf($source, $target);
         $this->assertFileExists($target->getPathname());
         $this->assertPdf($target);
+        $this->assertPdfContainsString('Yolo', $target->getPathname());
 
         unlink($target->getPathname());
     }
@@ -36,6 +45,7 @@ class ChromiumPdfWriterTest extends KernelTestCase
         $this->sut->renderToPdf('base.pdf.twig', ['vertex' => ['title' => 'Yolo']], $target);
         $this->assertFileExists($target->getPathname());
         $this->assertPdf($target);
+        $this->assertPdfContainsString('Yolo', $target->getPathname());
 
         unlink($target->getPathname());
     }

@@ -60,6 +60,9 @@ RUN cd /root/brandes/ && mkdir build
 RUN cd /root/brandes/build/ && cmake .. && make && mv brandes /usr/bin/
 RUN cd /root && rm -rf brandes
 
+### FOR testing PDF
+RUN apt install -y poppler-utils
+
 WORKDIR /app
 
 CMD bash -c "bin/launch.sh"
