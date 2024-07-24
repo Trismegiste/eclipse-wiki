@@ -8,6 +8,7 @@ namespace App\Tests\Controller;
 
 use App\Repository\VertexRepository;
 use App\Service\Storage;
+use App\Tests\Service\Pdf\PdfAssert;
 use Exception;
 use SplFileInfo;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -15,6 +16,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class LoveletterCrudTest extends WebTestCase
 {
+
+    use PdfAssert;
 
     protected $client;
 
@@ -115,7 +118,7 @@ class LoveletterCrudTest extends WebTestCase
     {
         $this->client->request('GET', $pdf);
         $this->assertResponseIsSuccessful();
-        $this->assertEquals('application/pdf', $this->client->getResponse()->headers->get('Content-type'));
+        $this->assertResponsePdf($this->client->getResponse());
     }
 
     /** @depends testShow */

@@ -6,15 +6,18 @@ use App\Entity\Ali;
 use App\Entity\Background;
 use App\Entity\Faction;
 use App\Entity\Freeform;
+use App\Entity\Morph;
 use App\Entity\Transhuman;
 use App\Repository\CharacterFactory;
 use App\Repository\VertexRepository;
+use App\Tests\Service\Pdf\PdfAssert;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class NpcGeneratorTest extends WebTestCase
 {
 
     use PictureFixture;
+    use PdfAssert;
 
     protected $client;
 
@@ -296,7 +299,7 @@ class NpcGeneratorTest extends WebTestCase
     {
         $fac = static::getContainer()->get(CharacterFactory::class);
         $template = $fac->create('Generic', new Background('dummy'), new Faction('dummy'));
-        $template->setMorph(new \App\Entity\Morph('morph'));
+        $template->setMorph(new Morph('morph'));
         $repo = static::getContainer()->get(VertexRepository::class);
         $template->surnameLang = 'japanese';
         $repo->save($template);
@@ -348,7 +351,7 @@ class NpcGeneratorTest extends WebTestCase
                 ->link();
         $this->client->click($doc);
         $this->assertResponseIsSuccessful();
-        $this->assertEquals('application/pdf', $this->client->getResponse()->headers->get('content-type'));
+        $this->assertResponsePdf($this->client->getResponse());
     }
 
 }

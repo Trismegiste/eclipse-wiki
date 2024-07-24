@@ -7,10 +7,13 @@
 namespace App\Tests\Controller;
 
 use App\Repository\VertexRepository;
+use App\Tests\Service\Pdf\PdfAssert;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class HandoutCrudTest extends WebTestCase
 {
+
+    use PdfAssert;
 
     protected $client;
 
@@ -103,7 +106,7 @@ class HandoutCrudTest extends WebTestCase
     public function testGetDocument(string $url)
     {
         $this->client->request('GET', $url);
-        $this->assertEquals('application/pdf', $this->client->getResponse()->headers->get('content-type'));
+        $this->assertResponsePdf($this->client->getResponse());
     }
 
 }

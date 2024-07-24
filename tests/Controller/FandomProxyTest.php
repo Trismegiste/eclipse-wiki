@@ -4,10 +4,14 @@
  * eclipse-wiki
  */
 
+use App\Tests\Service\Pdf\PdfAssert;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Link;
 
 class FandomProxyTest extends WebTestCase
 {
+
+    use PdfAssert;
 
     protected $client;
 
@@ -30,7 +34,7 @@ class FandomProxyTest extends WebTestCase
     }
 
     /** @depends testSearch */
-    public function testShow(Symfony\Component\DomCrawler\Link $link): int
+    public function testShow(Link $link): int
     {
         $this->client->click($link);
         $this->assertResponseIsSuccessful();
@@ -44,7 +48,7 @@ class FandomProxyTest extends WebTestCase
     {
         $this->client->request('GET', "/fandom/pdf/$id");
         $this->assertResponseIsSuccessful();
-        $this->assertEquals('application/pdf', $this->client->getResponse()->headers->get('content-type'));
+        $this->assertResponsePdf($this->client->getResponse());
     }
 
     /** @depends testShow */
