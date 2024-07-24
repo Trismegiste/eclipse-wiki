@@ -17,6 +17,7 @@ class BackgroundPromptType extends AbstractType
     {
         $builder
                 ->add('role', TextType::class)
+                ->add('location', TextType::class)
                 ->add('gender', ChoiceType::class, [
                     'choices' => [
                         'un homme' => 'un homme',

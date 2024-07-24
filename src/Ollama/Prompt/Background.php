@@ -7,9 +7,7 @@
 namespace App\Ollama\Prompt;
 
 /**
- * Description of Background
- *
- * @author trismegiste
+ * Parameters for a background prompt
  */
 class Background implements \Stringable
 {
