@@ -25,6 +25,11 @@ class Mistral extends AbstractController
     {
         $form = $this->createForm(\App\Ollama\BackgroundPromptType::class);
 
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            var_dump($form->getData());
+        }
+
         return $this->render('form.html.twig', ['title' => 'Mistral', 'form' => $form->createView()]);
     }
 

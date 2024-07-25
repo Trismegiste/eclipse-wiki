@@ -2,7 +2,6 @@
 
 namespace App\Ollama;
 
-use App\Ollama\Prompt\Background;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -32,7 +31,14 @@ class BackgroundPromptType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefault('data_class', Background::class);
+        $resolver->setDefault('prompt_template', "Fais un historique sur 7 points d'{{role}} qui vit sur {{location}}. " .
+                "C'est {{gender}}, {{job}}, spécialisé dans {{speciality}}. " .
+                "Un des 7 points doit comporter un evenement tragique et un autre point doit concerner sa famille");
+    }
+
+    public function getParent(): string
+    {
+        return PromptType::class;
     }
 
 }
