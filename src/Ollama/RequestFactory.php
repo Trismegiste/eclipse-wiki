@@ -7,9 +7,7 @@
 namespace App\Ollama;
 
 /**
- * Description of RequestFacotry
- *
- * @author florent
+ * Builds the payload for Ollama server
  */
 class RequestFactory
 {
@@ -19,7 +17,7 @@ class RequestFactory
         
     }
 
-    public function createBackground(): ChatPayload
+    public function create(string $prompt): ChatPayload
     {
         $req = new ChatPayload('mistral');
 
@@ -28,7 +26,7 @@ class RequestFactory
         $req->messages[] = $system;
 
         $question = new ChatMessage('user');
-        $question->content = "Fais un historique sur 7 points d'un écumeur qui vit sur une barge. C'est un homme, un technicien, spécialisé dans la réparation de moteurs à fusion. Un des 7 points doit comporter un evenement tragique et un autre point doit concerner sa famille";
+        $question->content = $prompt;
         $req->messages[] = $question;
 
         return $req;
