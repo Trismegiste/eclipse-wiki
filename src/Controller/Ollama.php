@@ -12,12 +12,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * Description of Mistral
- *
- * @author florent
+ * Controller for text generation with LLM
  */
-#[Route('/mistral')]
-class Mistral extends AbstractController
+#[Route('/ollama')]
+class Ollama extends AbstractController
 {
 
     #[Route('/index')]
@@ -31,7 +29,7 @@ class Mistral extends AbstractController
             $prompt = $form->getData()->prompt;
         }
 
-        return $this->render('form.html.twig', ['title' => 'Mistral : ' . $prompt, 'form' => $form->createView()]);
+        return $this->render('ollama/index.html.twig', ['title' => 'Ollama', 'form' => $form->createView(), 'prompt' => $prompt]);
     }
 
 }
