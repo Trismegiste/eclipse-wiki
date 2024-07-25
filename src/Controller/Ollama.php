@@ -18,18 +18,20 @@ use Symfony\Component\Routing\Attribute\Route;
 class Ollama extends AbstractController
 {
 
+    public function __construct(protected \App\Ollama\RequestFactory $factory) {}
+
     #[Route('/index')]
     public function index(Request $request): Response
     {
         $form = $this->createForm(\App\Ollama\BackgroundPromptType::class);
 
-        $prompt = '';
+        $payload = null;
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $prompt = $form->getData()->prompt;
+            $payload = $this->factory->create($form->getData()->prompt);
         }
 
-        return $this->render('ollama/index.html.twig', ['title' => 'Ollama', 'form' => $form->createView(), 'prompt' => $prompt]);
+        return $this->render('ollama/index.html.twig', ['title' => 'Ollama', 'form' => $form->createView(), 'payload' => $payload]);
     }
 
 }

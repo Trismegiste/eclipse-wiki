@@ -1,10 +1,12 @@
 {% extends 'form.html.twig' %}
 
 {% block content %}
-<section>
-    {{ parent() }}
-</section>
-<section>
-    {{ prompt }}
-</section>
+    <section>
+        {{ parent() }}
+    </section>
+    {% if payload is not empty %}
+        <section>
+             {{ payload|json_encode }}
+        </section>
+    {% endif %}
 {% endblock %}
