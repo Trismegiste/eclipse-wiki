@@ -143,3 +143,5 @@ services:
     App\Ollama\RequestFactory:
         arguments:
             $settingPathname: '%kernel.project_dir%/database/llm/setting.txt'
+            
+    Twig\Extension\StringLoaderExtension:

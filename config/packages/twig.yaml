@@ -17,6 +17,7 @@ twig:
         - 'form/custom_field.html.twig'
         - 'form/multi_checkbox_type.html.twig'
         - 'form/gallery_selection.html.twig'
+        - 'form/prompt.html.twig'
 
 when@test:
     twig:

@@ -41,7 +41,6 @@ class PromptMapper implements DataMapperInterface
 
     public function mapFormsToData(Traversable $forms, &$viewData): void
     {
-
         if (!$viewData instanceof ParameterizedPrompt) {
             throw new UnexpectedTypeException($viewData, ParameterizedPrompt::class);
         }
