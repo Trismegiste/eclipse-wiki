@@ -10,3 +10,10 @@
         </section>
     {% endif %}
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="application/json" id="ollama-payload">
+        {{ payload|json_encode()|raw }}
+    </script>
+{% endblock %}
