@@ -5,9 +5,10 @@
         {{ parent() }}
     </section>
     <section x-data="llm">
-        <div class="pure-form">
+        <div x-show="waiting" style="text-align: center"><i class="icon-spin3 animate-spin big-waiting"></i></div>
+        <div class="pure-form" x-show="content !== ''">
             <fieldset>
-                <textarea x-model="content" class="pure-input-1" rows="30"></textarea>
+                <textarea x-model="content" class="pure-input-1" rows="35"></textarea>
             </fieldset>
         </div>
     </section>
@@ -23,17 +24,27 @@
                 content: '',
                 reader: null,
                 decoder: null,
+                waiting: false,
 
                 async init() {
+                    this.decoder = new TextDecoder()
+
+                    const payload = JSON.parse(document.getElementById('ollama-payload').textContent)
+                    if (payload === null) {
+                        return;
+                    }
+
+                    this.waiting = true
+
                     const resp = await fetch('http://localhost:11434/api/chat', {
                         method: 'POST',
-                        body: document.getElementById('ollama-payload').textContent
+                        body: JSON.stringify(payload)
                     })
 
-                    this.decoder = new TextDecoder()
                     this.reader = await resp.body.getReader()
                     for (; ; ) {
                         let {value: chunk, done: readerDone} = await this.reader.read()
+                        this.waiting = false
                         if (readerDone) {
                             break
                         }
