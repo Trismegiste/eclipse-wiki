@@ -13,7 +13,7 @@ class ChatPayload
 {
 
     public array $messages = [];
-    public bool $stream = false;
+    public bool $stream = true;
 
     public function __construct(public string $model)
     {

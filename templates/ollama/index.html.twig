@@ -4,16 +4,42 @@
     <section>
         {{ parent() }}
     </section>
-    {% if payload is not empty %}
-        <section>
-             {{ payload|json_encode }}
-        </section>
-    {% endif %}
+    <section x-data="llm">
+    </section>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     <script type="application/json" id="ollama-payload">
         {{ payload|json_encode()|raw }}
+    </script>
+    <script type="module">
+        Alpine.data('llm', () => ({
+                async init() {
+
+                    const resp = await fetch('http://localhost:11434/api/chat', {
+                        method: 'POST',
+                        body: document.getElementById('ollama-payload').textContent
+                    })
+
+                    const reader = await resp.body.getReader()
+                    reader.read().then(function processText( { done, value }) {
+                        // Result objects contain two properties:
+                        // done  - true if the stream has already given you all its data.
+                        // value - some data. Always undefined when done is true.
+                        if (done) {
+                            console.log("Stream complete");
+                            //    para.textContent = value;
+                            return;
+                        }
+
+                        const utf8decoder = new TextDecoder()
+                        console.log(JSON.parse(utf8decoder.decode(value)))
+
+                        // Read some more, and call this function again
+                        return reader.read().then(processText);
+                    });
+                }
+            }))
     </script>
 {% endblock %}
