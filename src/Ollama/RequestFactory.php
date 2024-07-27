@@ -19,7 +19,7 @@ class RequestFactory
 
     public function create(string $prompt): ChatPayload
     {
-        $req = new ChatPayload('llama3.1:8b');
+        $req = new ChatPayload('llama3.1:8b', 20000);
 
         $system = new ChatMessage('system');
         $system->content = file_get_contents($this->settingPathname);
