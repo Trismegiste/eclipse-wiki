@@ -5,6 +5,11 @@
         {{ parent() }}
     </section>
     <section x-data="llm">
+        <div class="pure-form">
+            <fieldset>
+                <textarea x-model="content" class="pure-input-1" rows="30"></textarea>
+            </fieldset>
+        </div>
     </section>
 {% endblock %}
 
@@ -15,30 +20,26 @@
     </script>
     <script type="module">
         Alpine.data('llm', () => ({
-                async init() {
+                content: '',
+                reader: null,
+                decoder: null,
 
+                async init() {
                     const resp = await fetch('http://localhost:11434/api/chat', {
                         method: 'POST',
                         body: document.getElementById('ollama-payload').textContent
                     })
 
-                    const reader = await resp.body.getReader()
-                    reader.read().then(function processText( { done, value }) {
-                        // Result objects contain two properties:
-                        // done  - true if the stream has already given you all its data.
-                        // value - some data. Always undefined when done is true.
-                        if (done) {
-                            console.log("Stream complete");
-                            //    para.textContent = value;
-                            return;
+                    this.decoder = new TextDecoder()
+                    this.reader = await resp.body.getReader()
+                    for (; ; ) {
+                        let {value: chunk, done: readerDone} = await this.reader.read()
+                        if (readerDone) {
+                            break
                         }
-
-                        const utf8decoder = new TextDecoder()
-                        console.log(JSON.parse(utf8decoder.decode(value)))
-
-                        // Read some more, and call this function again
-                        return reader.read().then(processText);
-                    });
+                        const msg = JSON.parse(this.decoder.decode(chunk))
+                        this.content = this.content.concat(msg.message.content)
+                    }
                 }
             }))
     </script>
