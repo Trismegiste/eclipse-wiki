@@ -36,10 +36,15 @@
 
                     this.waiting = true
 
-                    const resp = await fetch('http://localhost:11434/api/chat', {
-                        method: 'POST',
-                        body: JSON.stringify(payload)
-                    })
+                    try {
+                        const resp = await fetch('http://localhost:11434/api/chat', {
+                            method: 'POST',
+                            body: JSON.stringify(payload)
+                        })
+                    } catch (ex) {
+                        Alpine.store('notif').push('error', 'Ollama is unreachable : ' + ex.message)
+                        return;
+                    }
 
                     this.reader = await resp.body.getReader()
                     for (; ; ) {
