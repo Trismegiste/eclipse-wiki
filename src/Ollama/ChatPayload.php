@@ -14,11 +14,10 @@ class ChatPayload
 
     public array $messages = [];
     public bool $stream = true;
-    public array $options = [];
 
-    public function __construct(public string $model, int $contextToken)
+    public function __construct(public string $model)
     {
-        $this->options['num_ctx'] = $contextToken;
+        
     }
 
 }

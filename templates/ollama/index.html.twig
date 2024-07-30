@@ -41,20 +41,20 @@
                             method: 'POST',
                             body: JSON.stringify(payload)
                         })
+
+                        this.reader = await resp.body.getReader()
+                        for (; ; ) {
+                            let {value: chunk, done: readerDone} = await this.reader.read()
+                            this.waiting = false
+                            if (readerDone) {
+                                break
+                            }
+                            const msg = JSON.parse(this.decoder.decode(chunk))
+                            this.content = this.content.concat(msg.message.content)
+                        }
                     } catch (ex) {
                         Alpine.store('notif').push('error', 'Ollama is unreachable : ' + ex.message)
                         return;
-                    }
-
-                    this.reader = await resp.body.getReader()
-                    for (; ; ) {
-                        let {value: chunk, done: readerDone} = await this.reader.read()
-                        this.waiting = false
-                        if (readerDone) {
-                            break
-                        }
-                        const msg = JSON.parse(this.decoder.decode(chunk))
-                        this.content = this.content.concat(msg.message.content)
                     }
                 }
             }))
