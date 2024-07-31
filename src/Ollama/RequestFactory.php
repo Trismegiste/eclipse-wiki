@@ -12,14 +12,14 @@ namespace App\Ollama;
 class RequestFactory
 {
 
-    public function __construct(protected string $settingPathname)
+    public function __construct(protected string $settingPathname, protected string $llmName)
     {
         
     }
 
     public function create(string $prompt): ChatPayload
     {
-        $req = new ChatPayload('mistral:latest');
+        $req = new ChatPayload($this->llmName);
 
         $system = new ChatMessage('system');
         $system->content = file_get_contents($this->settingPathname);

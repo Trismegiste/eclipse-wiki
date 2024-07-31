@@ -54,6 +54,7 @@
                         }
                     } catch (ex) {
                         Alpine.store('notif').push('error', 'Ollama is unreachable : ' + ex.message)
+                        this.waiting = false
                         return;
                     }
                 }
