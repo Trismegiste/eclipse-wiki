@@ -11,6 +11,7 @@ use App\Entity\Vertex;
 use App\Form\Llm\BackgroundPromptType;
 use App\Form\LlmOutputAppend;
 use App\Repository\VertexRepository;
+use App\Service\Ollama\ParameterizedPrompt;
 use App\Service\Ollama\RequestFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,9 +39,11 @@ class Ollama extends AbstractController
     #[Route('/npc/{pk}/background', methods: ['GET', 'POST'])]
     public function npcBackground(Request $request, Transhuman $npc): Response
     {
+        $prefill = new ParameterizedPrompt();
+        $prefill->param['title'] = $npc->getTitle();
         // Warning : the form in $append is PATCHed to the controller method below (see below)
-        // This current method only deal with prompt and payload generation for Ollama with the form in $prompt
-        $prompt = $this->createForm(BackgroundPromptType::class);
+        // This current method only deals with prompts and payloads generation for Ollama API, by using the form in $prompt
+        $prompt = $this->createForm(BackgroundPromptType::class, $prefill);
         $append = $this->createForm(LlmOutputAppend::class, $npc, [
             'action' => $this->generateUrl('app_ollama_contentappend', ['pk' => $npc->getPk()]),
             'subtitle' => 'Background'
@@ -61,7 +64,7 @@ class Ollama extends AbstractController
     }
 
     /**
-     * Generic updates the content of a vertex with LLM-generated output
+     * Generic update on the content of a vertex with LLM-generated output
      * @param Request $request
      * @param Vertex $vertex
      * @return Response

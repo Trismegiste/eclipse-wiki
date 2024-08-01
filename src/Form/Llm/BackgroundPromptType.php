@@ -15,6 +15,7 @@ class BackgroundPromptType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+                ->add('title', TextType::class)
                 ->add('role', TextType::class)
                 ->add('location', TextType::class)
                 ->add('gender', ChoiceType::class, [
@@ -31,9 +32,10 @@ class BackgroundPromptType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefault('prompt_template', "Écris un historique sur 7 points d'{{role}} qui vit sur {{location}}. " .
+        $resolver->setDefault('prompt_template', "Dans le contexte précedemment décris, rédige un historique pour le personnage nommé {{title}}. " .
+                "Ce personnage est {{role}} qui vit sur {{location}}. " .
                 "C'est {{gender}}, {{job}}, spécialisé dans {{speciality}}. " .
-                "Un des 7 points doit comporter un evenement tragique et un autre point doit concerner sa famille. Pour chaque point, précise le lieu dans le système solaire.");
+                "Cet historique doit comporter 7 points. Un des 7 points doit comporter un evenement tragique et un autre point doit concerner sa famille. Pour chaque point, précise le lieu dans le système solaire.");
     }
 
     public function getParent(): string

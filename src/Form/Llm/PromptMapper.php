@@ -36,7 +36,9 @@ class PromptMapper implements DataMapperInterface
 
         foreach ($forms as $key => $field) {
             /** @var FormInterface $field */
-            $field->setData($viewData->param[$key]);
+            if (key_exists($key, $viewData->param)) {
+                $field->setData($viewData->param[$key]);
+            }
         }
     }
 
