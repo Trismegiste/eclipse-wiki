@@ -8,7 +8,7 @@ namespace App\Controller;
 
 use App\Entity\Transhuman;
 use App\Entity\Vertex;
-use App\Form\LlmContentAppend;
+use App\Form\LlmOutputAppend;
 use App\Ollama\BackgroundPromptType;
 use App\Ollama\RequestFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,11 +28,17 @@ class Ollama extends AbstractController
         
     }
 
+    /**
+     * Generates a specific prompt for ollama and fills a form, on client-side, for the provided vertex
+     * @param Request $request
+     * @param Transhuman $npc
+     * @return Response
+     */
     #[Route('/npc/{pk}/background', methods: ['GET', 'POST'])]
     public function npcBackground(Request $request, Transhuman $npc): Response
     {
         $prompt = $this->createForm(BackgroundPromptType::class);
-        $append = $this->createForm(LlmContentAppend::class, $npc, [
+        $append = $this->createForm(LlmOutputAppend::class, $npc, [
             'action' => $this->generateUrl('app_ollama_contentappend', ['pk' => $npc->getPk()])
         ]);
 
@@ -50,10 +56,16 @@ class Ollama extends AbstractController
         ]);
     }
 
+    /**
+     * Generic updates the content of a vertex with LLM-generated output
+     * @param Request $request
+     * @param Vertex $vertex
+     * @return Response
+     */
     #[Route('/content/{pk}/append', methods: ['PATCH'])]
     public function contentAppend(Request $request, Vertex $vertex): Response
     {
-        $form = $this->createForm(LlmContentAppend::class, $vertex);
+        $form = $this->createForm(LlmOutputAppend::class, $vertex);
 
         $form->handleRequest($request);
         if ($form->isValid() && $form->isSubmitted()) {
