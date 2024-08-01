@@ -45,7 +45,7 @@ class Ollama extends AbstractController
 
         $payload = null;
         $prompt->handleRequest($request);
-        if ($prompt->isValid() && $prompt->isSubmitted()) {
+        if ($prompt->isSubmitted() && $prompt->isValid()) {
             $payload = $this->factory->create($prompt->getData()->prompt);
         }
 
@@ -70,7 +70,7 @@ class Ollama extends AbstractController
         $form = $this->createForm(LlmOutputAppend::class, $vertex);
 
         $form->handleRequest($request);
-        if ($form->isValid() && $form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             
         }
 
