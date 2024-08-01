@@ -26,6 +26,10 @@ coucou
 Paraph suppl
 **title 2**  
 Content paraph with **hilite** youiyou
+3. **title 3**, suite
+rien
+4. Le Désastre : Un jour,
+fin
 
 MARKDOWN;
 
@@ -34,6 +38,8 @@ MARKDOWN;
         $this->assertStringContainsString('===title1===', $result);
         $this->assertStringContainsString('===title 2===', $result);
         $this->assertStringContainsString("'''hilite'''", $result);
+        $this->assertStringContainsString('===title 3===', $result);
+        $this->assertStringContainsString('===Le Désastre===', $result);
     }
 
 }
