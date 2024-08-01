@@ -1,5 +1,13 @@
-{% extends 'form.html.twig' %}
+{% extends 'base.html.twig' %}
 {% form_theme append _self %}
+
+{% block title %}{{ append.vars.data.title }}{% endblock %}
+{% block header_title %}
+    <nav style="float: right">
+        <a href="{{ path('app_vertexcrud_show', {pk: append.vars.data.pk}) }}" title="Voir"><i class="icon-eye"></i></a>
+    </nav>
+    {{ block('title') }}
+{% endblock %}
 
 {% block content %}
     <section>
