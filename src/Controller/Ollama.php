@@ -6,9 +6,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Place;
 use App\Entity\Transhuman;
 use App\Entity\Vertex;
 use App\Form\Llm\BackgroundPromptType;
+use App\Form\Llm\BarPromptType;
 use App\Form\LlmOutputAppend;
 use App\Repository\VertexRepository;
 use App\Service\Ollama\ParameterizedPrompt;
@@ -57,6 +59,39 @@ class Ollama extends AbstractController
 
         return $this->render('ollama/index.html.twig', [
                     'title' => $npc->getTitle(),
+                    'prompt' => $prompt->createView(),
+                    'append' => $append->createView(),
+                    'payload' => $payload
+        ]);
+    }
+
+    /**
+     * Generates a specific prompt for ollama and fills a form, on client-side, for the provided vertex
+     * @param Request $request
+     * @param Transhuman $npc
+     * @return Response
+     */
+    #[Route('/place/{pk}/bar', methods: ['GET', 'POST'])]
+    public function barDescription(Request $request, Place $place): Response
+    {
+        $prefill = new ParameterizedPrompt();
+        $prefill->param['title'] = $place->getTitle();
+        // Warning : the form in $append is PATCHed to the controller method below (see below)
+        // This current method only deals with prompts and payloads generation for Ollama API, by using the form in $prompt
+        $prompt = $this->createForm(BarPromptType::class, $prefill);
+        $append = $this->createForm(LlmOutputAppend::class, $place, [
+            'action' => $this->generateUrl('app_ollama_contentappend', ['pk' => $place->getPk()]),
+            'subtitle' => 'Description'
+        ]);
+
+        $payload = null;
+        $prompt->handleRequest($request);
+        if ($prompt->isSubmitted() && $prompt->isValid()) {
+            $payload = $this->factory->create($prompt->getData()->prompt);
+        }
+
+        return $this->render('ollama/index.html.twig', [
+                    'title' => $place->getTitle(),
                     'prompt' => $prompt->createView(),
                     'append' => $append->createView(),
                     'payload' => $payload
