@@ -71,7 +71,8 @@ class Ollama extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            
+            $repo->save($vertex);
+            $this->addFlash('success', 'Content from LLM appended');
         }
 
         return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);

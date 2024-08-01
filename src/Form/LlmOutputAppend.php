@@ -7,6 +7,7 @@
 namespace App\Form;
 
 use App\Entity\Vertex;
+use App\Service\Ollama\OutputConverter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -20,6 +21,11 @@ use Traversable;
  */
 class LlmOutputAppend extends AbstractType implements DataMapperInterface
 {
+
+    public function __construct(protected OutputConverter $converter)
+    {
+        
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -43,7 +49,8 @@ class LlmOutputAppend extends AbstractType implements DataMapperInterface
 
     public function mapFormsToData(Traversable $forms, &$viewData): void
     {
-        
+        $field = iterator_to_array($forms);
+        $viewData->setContent($viewData->getContent() . "\n\n" . $this->converter->toWikitext($field['generation']->getData()));
     }
 
 }
