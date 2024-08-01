@@ -185,4 +185,9 @@ abstract class Vertex implements Root, Archivable
         $this->content = static::replaceInternalLinkFirstCharCaseInsensitive($this->content, $oldTitle, $newTitle);
     }
 
+    public function appendBlockWithTitle(string $subtitle, string $section): void
+    {
+        $this->content = trim($this->content) . "\n\n==$subtitle==\n$section";
+    }
+
 }

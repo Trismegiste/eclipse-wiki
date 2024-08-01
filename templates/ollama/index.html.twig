@@ -1,4 +1,5 @@
 {% extends 'form.html.twig' %}
+{% form_theme append _self %}
 
 {% block content %}
     <section>
@@ -7,9 +8,14 @@
     <section x-data="llm">
         <div x-show="waiting" style="text-align: center"><i class="icon-spin3 animate-spin big-waiting"></i></div>
         <div x-show="content !== ''">
+            <h2>Ce contenu généré s'ajoutera à {{ append.vars.data.title }}</h2>
             {{ form(append) }}
         </div>
     </section>
+{% endblock %}
+
+{% block _llm_output_append_generation_row %}
+    {{ form_widget(form, {attr:{class:'pure-input-1'}}) }}
 {% endblock %}
 
 {% block javascripts %}
@@ -31,7 +37,7 @@
                     }
 
                     this.waiting = true
-
+                    this.content = "**titre**\ncontenu"
                     try {
                         const resp = await fetch('http://localhost:11434/api/chat', {
                             method: 'POST',

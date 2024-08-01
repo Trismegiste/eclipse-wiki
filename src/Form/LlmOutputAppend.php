@@ -49,8 +49,12 @@ class LlmOutputAppend extends AbstractType implements DataMapperInterface
 
     public function mapFormsToData(Traversable $forms, &$viewData): void
     {
+        if (!$viewData instanceof Vertex) {
+            throw new \InvalidArgumentException("Object viewdata is not a Vertex");
+        }
+
         $field = iterator_to_array($forms);
-        $viewData->setContent($viewData->getContent() . "\n\n" . $this->converter->toWikitext($field['generation']->getData()));
+        $viewData->appendBlockWithTitle('soustitre', $this->converter->toWikitext($field['generation']->getData()));
     }
 
 }
