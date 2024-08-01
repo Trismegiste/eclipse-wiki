@@ -2,14 +2,12 @@
 
 {% block content %}
     <section>
-        {{ parent() }}
+        {{ form(prompt) }}
     </section>
     <section x-data="llm">
         <div x-show="waiting" style="text-align: center"><i class="icon-spin3 animate-spin big-waiting"></i></div>
-        <div class="pure-form" x-show="content !== ''">
-            <fieldset>
-                <textarea x-model="content" class="pure-input-1" rows="35"></textarea>
-            </fieldset>
+        <div x-show="content !== ''">
+            {{ form(append) }}
         </div>
     </section>
 {% endblock %}
@@ -22,12 +20,10 @@
     <script type="module">
         Alpine.data('llm', () => ({
                 content: '',
-                reader: null,
-                decoder: null,
                 waiting: false,
 
                 async init() {
-                    this.decoder = new TextDecoder()
+                    const decoder = new TextDecoder()
 
                     const payload = JSON.parse(document.getElementById('ollama-payload').textContent)
                     if (payload === null) {
@@ -42,14 +38,14 @@
                             body: JSON.stringify(payload)
                         })
 
-                        this.reader = await resp.body.getReader()
+                        const reader = await resp.body.getReader()
                         for (; ; ) {
-                            let {value: chunk, done: readerDone} = await this.reader.read()
+                            let {value: chunk, done: readerDone} = await reader.read()
                             this.waiting = false
                             if (readerDone) {
                                 break
                             }
-                            const msg = JSON.parse(this.decoder.decode(chunk))
+                            const msg = JSON.parse(decoder.decode(chunk))
                             this.content = this.content.concat(msg.message.content)
                         }
                     } catch (ex) {

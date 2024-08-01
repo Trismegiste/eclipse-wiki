@@ -6,6 +6,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Transhuman;
+use App\Entity\Vertex;
+use App\Form\LlmContentAppend;
 use App\Ollama\BackgroundPromptType;
 use App\Ollama\RequestFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,18 +28,39 @@ class Ollama extends AbstractController
         
     }
 
-    #[Route('/index')]
-    public function index(Request $request): Response
+    #[Route('/npc/{pk}/background', methods: ['GET', 'POST'])]
+    public function npcBackground(Request $request, Transhuman $npc): Response
     {
-        $form = $this->createForm(BackgroundPromptType::class);
+        $prompt = $this->createForm(BackgroundPromptType::class);
+        $append = $this->createForm(LlmContentAppend::class, $npc, [
+            'action' => $this->generateUrl('app_ollama_contentappend', ['pk' => $npc->getPk()])
+        ]);
 
         $payload = null;
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $payload = $this->factory->create($form->getData()->prompt);
+        $prompt->handleRequest($request);
+        if ($prompt->isValid() && $prompt->isSubmitted()) {
+            $payload = $this->factory->create($prompt->getData()->prompt);
         }
 
-        return $this->render('ollama/index.html.twig', ['title' => 'Ollama', 'form' => $form->createView(), 'payload' => $payload]);
+        return $this->render('ollama/index.html.twig', [
+                    'title' => $npc->getTitle(),
+                    'prompt' => $prompt->createView(),
+                    'append' => $append->createView(),
+                    'payload' => $payload
+        ]);
+    }
+
+    #[Route('/content/{pk}/append', methods: ['PATCH'])]
+    public function contentAppend(Request $request, Vertex $vertex): Response
+    {
+        $form = $this->createForm(LlmContentAppend::class, $vertex);
+
+        $form->handleRequest($request);
+        if ($form->isValid() && $form->isSubmitted()) {
+            
+        }
+
+        return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
     }
 
 }
