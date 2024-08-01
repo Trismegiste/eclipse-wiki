@@ -38,9 +38,12 @@ class Ollama extends AbstractController
     #[Route('/npc/{pk}/background', methods: ['GET', 'POST'])]
     public function npcBackground(Request $request, Transhuman $npc): Response
     {
+        // Warning : the form in $append is PATCHed to the controller method below (see below)
+        // This current method only deal with prompt and payload generation for Ollama with the form in $prompt
         $prompt = $this->createForm(BackgroundPromptType::class);
         $append = $this->createForm(LlmOutputAppend::class, $npc, [
-            'action' => $this->generateUrl('app_ollama_contentappend', ['pk' => $npc->getPk()])
+            'action' => $this->generateUrl('app_ollama_contentappend', ['pk' => $npc->getPk()]),
+            'subtitle' => 'Background'
         ]);
 
         $payload = null;
