@@ -4,8 +4,9 @@
  * eclipse-wiki
  */
 
-namespace App\Ollama;
+namespace App\Form\Llm;
 
+use App\Service\Ollama\ParameterizedPrompt;
 use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\FormInterface;

@@ -8,9 +8,10 @@ namespace App\Controller;
 
 use App\Entity\Transhuman;
 use App\Entity\Vertex;
+use App\Form\Llm\BackgroundPromptType;
 use App\Form\LlmOutputAppend;
-use App\Ollama\BackgroundPromptType;
-use App\Ollama\RequestFactory;
+use App\Repository\VertexRepository;
+use App\Service\Ollama\RequestFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -63,8 +64,9 @@ class Ollama extends AbstractController
      * @return Response
      */
     #[Route('/content/{pk}/append', methods: ['PATCH'])]
-    public function contentAppend(Request $request, Vertex $vertex): Response
+    public function contentAppend(Request $request, string $pk, VertexRepository $repo): Response
     {
+        $vertex = $repo->load($pk);
         $form = $this->createForm(LlmOutputAppend::class, $vertex);
 
         $form->handleRequest($request);

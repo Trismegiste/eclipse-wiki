@@ -4,10 +4,13 @@
  * eclipse-wiki
  */
 
-namespace App\Ollama;
+namespace App\Form\Llm;
 
+use App\Service\Ollama\ParameterizedPrompt;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Twig\Environment;
 
@@ -34,7 +37,7 @@ class PromptType extends AbstractType
         $builder->setDataMapper(new PromptMapper($options['prompt_template'], $this->twig));
     }
 
-    public function finishView(\Symfony\Component\Form\FormView $view, \Symfony\Component\Form\FormInterface $form, array $options): void
+    public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['prompt_template'] = preg_replace('#\{\{([^\}]+)\}\}#', '{{form_widget(form.$1)}}', $options['prompt_template']);
     }

@@ -4,7 +4,7 @@
  * Eclipse Wiki
  */
 
-namespace App\Ollama;
+namespace App\Service\Ollama;
 
 /**
  * Builds the payload for Ollama server

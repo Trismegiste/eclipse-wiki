@@ -4,12 +4,10 @@
  * eclipse-wiki
  */
 
-namespace App\Ollama;
+namespace App\Service\Ollama;
 
 /**
- * Description of ParameterizedPrompt
- *
- * @author trismegiste
+ * Entity used in prompt generation
  */
 class ParameterizedPrompt
 {

@@ -140,7 +140,7 @@ services:
             - '%env(resolve:STABLE_DIFFUSION_HOSTNAME)%'
 
     # OLlama
-    App\Ollama\RequestFactory:
+    App\Service\Ollama\RequestFactory:
         arguments:
             $settingPathname: '%kernel.project_dir%/database/llm/setting.txt'
             $llmName: 'mistral:latest'
