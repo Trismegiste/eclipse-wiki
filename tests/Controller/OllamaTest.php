@@ -6,6 +6,7 @@ use App\Repository\VertexRepository;
 
 class OllamaTest extends WebTestCase
 {
+
     use \App\Tests\Controller\PictureFixture;
 
     protected KernelBrowser $client;
@@ -22,7 +23,7 @@ class OllamaTest extends WebTestCase
         $npc = $this->createRandomTranshuman();
         $this->repository->save($npc);
         $pk = $npc->getPk();
-        $this->client->request('GET', "/ollama/npc/$pk/background");
+        $this->client->request('GET', "/ollama/vertex/$pk/generate/npc-bg");
         $this->assertResponseIsSuccessful();
     }
 

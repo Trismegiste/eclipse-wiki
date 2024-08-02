@@ -11,7 +11,7 @@
     {{ form_label(form) }}
     {% include 'fragment/form_minitoolbar.html.twig' %}
     <div class="minitoolbar">
-        <a href="{{ path('app_ollama_npcbackground', {pk: form.parent.vars.data.pk}) }}"
+        <a href="{{ path('app_ollama_contentgenerate', {pk: form.parent.vars.data.pk, promptKey: 'npc-bg'}) }}"
            class="pure-button button-delete" title="Cancel edition and append a LLM-generated background">
             <i class="icon-background"></i>
         </a>
