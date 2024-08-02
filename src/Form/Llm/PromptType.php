@@ -8,6 +8,7 @@ namespace App\Form\Llm;
 
 use App\Service\Ollama\ParameterizedPrompt;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -34,7 +35,10 @@ class PromptType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->setDataMapper(new PromptMapper($options['prompt_template'], $this->twig));
+        $builder
+                ->add('generate', SubmitType::class, ['priority' => -1000])
+                ->setDataMapper(new PromptMapper($options['prompt_template'], $this->twig))
+        ;
     }
 
     public function finishView(FormView $view, FormInterface $form, array $options): void

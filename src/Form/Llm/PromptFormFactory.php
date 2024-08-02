@@ -7,6 +7,8 @@
 namespace App\Form\Llm;
 
 use App\Entity\Vertex;
+use App\Form\Llm\Sample\BackgroundPromptType;
+use App\Form\Llm\Sample\BarPromptType;
 use App\Service\Ollama\ParameterizedPrompt;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;

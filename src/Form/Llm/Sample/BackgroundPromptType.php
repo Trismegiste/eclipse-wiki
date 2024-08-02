@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Form\Llm;
+namespace App\Form\Llm\Sample;
 
+use App\Form\Llm\PromptType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -26,7 +26,6 @@ class BackgroundPromptType extends AbstractType
                 ])
                 ->add('job', TextType::class)
                 ->add('speciality', TextType::class)
-                ->add('generate', SubmitType::class)
         ;
     }
 

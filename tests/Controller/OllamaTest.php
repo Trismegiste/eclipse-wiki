@@ -27,4 +27,13 @@ class OllamaTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    public function testBar()
+    {
+        $v = $this->createRandomPlace();
+        $this->repository->save($v);
+        $pk = $v->getPk();
+        $this->client->request('GET', "/ollama/vertex/$pk/generate/bar");
+        $this->assertResponseIsSuccessful();
+    }
+
 }
