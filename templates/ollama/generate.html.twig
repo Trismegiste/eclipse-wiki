@@ -16,7 +16,10 @@
     <section x-data="llm">
         <div x-show="waiting" style="text-align: center"><i class="icon-spin3 animate-spin big-waiting"></i></div>
         <div x-show="content !== ''">
-            <h2>Ce contenu généré s'ajoutera à {{ append.vars.data.title }}</h2>
+            <hgroup>
+                <h2>Ce contenu généré s'ajoutera à {{ append.vars.data.title }}</h2>
+                <h3>(Le formatage Markdown sera converti à la volée en formatage Wikitext)</h3>
+            </hgroup>
             {{ form(append) }}
         </div>
     </section>
