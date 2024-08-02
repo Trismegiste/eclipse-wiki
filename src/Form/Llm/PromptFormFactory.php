@@ -39,9 +39,8 @@ class PromptFormFactory
      */
     public function create(string $key, Vertex $vertex, array $options = []): FormInterface
     {
-        /** @var LlmContentInfo $fqcn */
-        $fqcn = $this->getFormType($key);
         $prefill = $this->createNewParameters();
+        $fqcn = $this->getFormType($key);
         $fqcn::initializeWithVertex($prefill, $vertex);
         $prompt = $this->formFac->create($fqcn, $prefill, $options);
 

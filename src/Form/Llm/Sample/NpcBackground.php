@@ -52,7 +52,8 @@ class NpcBackground extends AbstractType implements LlmContentInfo
 
     public static function initializeWithVertex(ParameterizedPrompt $param, Vertex $vertex): void
     {
-        $param->param['title'] = $vertex->getTitle();
+        $splitted = explode(' ', $vertex->getTitle());
+        $param->param['title'] = $splitted[0];
     }
 
 }
