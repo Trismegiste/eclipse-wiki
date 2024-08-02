@@ -44,8 +44,8 @@ class PromptFormFactory
      */
     public function create(string $key, Vertex $vertex, array $options = []): FormInterface
     {
-        $prefill = new ParameterizedPrompt();
-        $prefill->param['title'] = $vertex->getTitle();  // @todo this line, probably, would be replaced by a closure (this line will become the default behavior)
+        $prefill = $this->createNewParameters();
+        $this->initParameters($prefill, $vertex);
         $prompt = $this->formFac->create(self::promptRepository[$key]['type'], $prefill, $options);
 
         return $prompt;
@@ -59,6 +59,17 @@ class PromptFormFactory
     public function getSubtitle(string $key): string
     {
         return self::promptRepository[$key]['subtitle'];
+    }
+
+    protected function createNewParameters(): ParameterizedPrompt
+    {
+        return new ParameterizedPrompt();
+    }
+
+    protected function initParameters(ParameterizedPrompt $param, Vertex $vertex): void
+    {
+        // @todo this line, probably, would be replaced by a closure (this line will become the default behavior)
+        $param->param['title'] = $vertex->getTitle();
     }
 
 }
