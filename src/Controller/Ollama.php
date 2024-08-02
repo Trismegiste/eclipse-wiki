@@ -56,7 +56,7 @@ class Ollama extends AbstractController
             $payload = $this->payloadFactory->create($prompt->getData()->prompt);
         }
 
-        return $this->render('ollama/index.html.twig', [
+        return $this->render('ollama/generate.html.twig', [
                     'title' => $vertex->getTitle(),
                     'prompt' => $prompt->createView(),
                     'append' => $append->createView(),
