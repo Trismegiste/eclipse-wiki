@@ -7,8 +7,8 @@
 namespace App\Form\Llm;
 
 use App\Entity\Vertex;
-use App\Form\Llm\Sample\BackgroundPromptType;
-use App\Form\Llm\Sample\BarPromptType;
+use App\Form\Llm\Sample\BarDescription;
+use App\Form\Llm\Sample\NpcBackground;
 use App\Service\Ollama\ParameterizedPrompt;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -21,11 +21,11 @@ class PromptFormFactory
 
     const promptRepository = [
         'npc-bg' => [
-            'type' => BackgroundPromptType::class,
+            'type' => NpcBackground::class,
             'subtitle' => 'Background'
         ],
         'bar' => [
-            'type' => BarPromptType::class,
+            'type' => BarDescription::class,
             'subtitle' => 'Description'
         ]
     ];
