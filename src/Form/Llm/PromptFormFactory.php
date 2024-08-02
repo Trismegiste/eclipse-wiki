@@ -10,6 +10,7 @@ use App\Entity\Vertex;
 use App\Form\Llm\Sample\BarDescription;
 use App\Form\Llm\Sample\NpcBackground;
 use App\Service\Ollama\ParameterizedPrompt;
+use InvalidArgumentException;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 
@@ -20,14 +21,8 @@ class PromptFormFactory
 {
 
     const promptRepository = [
-        'npc-bg' => [
-            'type' => NpcBackground::class,
-            'subtitle' => 'Background'
-        ],
-        'bar' => [
-            'type' => BarDescription::class,
-            'subtitle' => 'Description'
-        ]
+        'npc-bg' => NpcBackground::class,
+        'bar' => BarDescription::class
     ];
 
     public function __construct(protected FormFactoryInterface $formFac)
@@ -44,9 +39,11 @@ class PromptFormFactory
      */
     public function create(string $key, Vertex $vertex, array $options = []): FormInterface
     {
+        /** @var LlmContentInfo $fqcn */
+        $fqcn = $this->getFormType($key);
         $prefill = $this->createNewParameters();
-        $this->initParameters($prefill, $vertex);
-        $prompt = $this->formFac->create(self::promptRepository[$key]['type'], $prefill, $options);
+        $fqcn::initializeWithVertex($prefill, $vertex);
+        $prompt = $this->formFac->create($fqcn, $prefill, $options);
 
         return $prompt;
     }
@@ -58,7 +55,9 @@ class PromptFormFactory
      */
     public function getSubtitle(string $key): string
     {
-        return self::promptRepository[$key]['subtitle'];
+        $fqcn = $this->getFormType($key);
+
+        return $fqcn::getContentTitle();
     }
 
     protected function createNewParameters(): ParameterizedPrompt
@@ -66,10 +65,19 @@ class PromptFormFactory
         return new ParameterizedPrompt();
     }
 
-    protected function initParameters(ParameterizedPrompt $param, Vertex $vertex): void
+    protected function getFormType(string $key): string
     {
-        // @todo this line, probably, would be replaced by a closure (this line will become the default behavior)
-        $param->param['title'] = $vertex->getTitle();
+        if (!key_exists($key, self::promptRepository)) {
+            throw new InvalidArgumentException("$key is not a valid key");
+        }
+
+        $fqcn = self::promptRepository[$key];
+
+        if (!is_a($fqcn, LlmContentInfo::class, true)) {
+            throw new InvalidArgumentException("$fqcn does not implement LlmContentInfo");
+        }
+
+        return $fqcn;
     }
 
 }
