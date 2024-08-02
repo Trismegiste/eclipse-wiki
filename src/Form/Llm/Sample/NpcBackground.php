@@ -15,17 +15,17 @@ class NpcBackground extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-                ->add('title', TextType::class)
-                ->add('role', TextType::class)
-                ->add('location', TextType::class)
+                ->add('title', TextType::class, ['attr' => ['placeholder' => 'nom ou surnom']])
+                ->add('role', TextType::class, ['attr' => ['placeholder' => 'un rôle']])
+                ->add('location', TextType::class, ['attr' => ['placeholder' => 'un lieu']])
                 ->add('gender', ChoiceType::class, [
                     'choices' => [
                         'un homme' => 'un homme',
                         'une femme' => 'une femme'
                     ]
                 ])
-                ->add('job', TextType::class)
-                ->add('speciality', TextType::class)
+                ->add('job', TextType::class, ['attr' => ['placeholder' => 'son travail']])
+                ->add('speciality', TextType::class, ['attr' => ['placeholder' => 'sa spécialité']])
         ;
     }
 

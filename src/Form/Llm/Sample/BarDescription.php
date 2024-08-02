@@ -14,9 +14,9 @@ class BarDescription extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-                ->add('title', TextType::class)
-                ->add('ambience', TextType::class)
-                ->add('crowd', TextType::class)
+                ->add('title', TextType::class, ['attr' => ['placeholder' => 'un nom']])
+                ->add('ambience', TextType::class, ['attr' => ['placeholder' => 'une ambiance']])
+                ->add('crowd', TextType::class, ['attr' => ['placeholder' => 'un type de clients']])
         ;
     }
 
