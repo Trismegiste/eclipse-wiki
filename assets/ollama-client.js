@@ -43,6 +43,6 @@ export default (url, payloadId) => ({
             }
         },
 
-        /** subclass this method if you want to extend the behavior of this factory after the content generation */
+        /** override this method if you want to extend the behavior of this factory after the content generation */
         postProcessing: function () {}
     })

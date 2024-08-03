@@ -9,6 +9,8 @@ namespace App\Form\Llm;
 use App\Entity\Vertex;
 use App\Form\Llm\Sample\BarDescription;
 use App\Form\Llm\Sample\NpcBackground;
+use App\Form\Llm\Sample\NpcName;
+use App\Form\Llm\Sample\ThingName;
 use App\Service\Ollama\ParameterizedPrompt;
 use InvalidArgumentException;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -23,8 +25,8 @@ class PromptFormFactory
     const promptRepository = [
         'npc-bg' => NpcBackground::class,
         'bar' => BarDescription::class,
-        'thing-name' => Sample\ThingName::class,
-        'npc-name' => Sample\NpcName::class
+        'thing-name' => ThingName::class,
+        'npc-name' => NpcName::class
     ];
 
     public function __construct(protected FormFactoryInterface $formFac)

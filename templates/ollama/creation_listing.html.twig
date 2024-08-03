@@ -11,15 +11,15 @@
     </section>
     <section x-data="llm('{{ ollama_api }}')">
         <div x-show="waiting" style="text-align: center"><i class="icon-spin3 animate-spin big-waiting"></i></div>
-        <div x-show="content !== ''">
+        <div x-show="content !== '' && !listing.length">
             <h2>Ce contenu sera converti en liens de création à la fin de la génération, veuillez patienter...</h2>
             <pre x-text="content"></pre>
-            <ul>
-                <template x-for="entry in listing">
-                    <li><a x-bind:href="'/wiki/' + entry" x-text="entry"></a></li>
-                </template>
-            </ul>
         </div>
+        <ul>
+            <template x-for="entry in listing">
+                <li><a x-bind:href="'/wiki/' + entry" x-text="entry"></a></li>
+            </template>
+        </ul>
     </section>
 {% endblock %}
 
