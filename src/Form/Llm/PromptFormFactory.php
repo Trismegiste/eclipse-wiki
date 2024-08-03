@@ -22,7 +22,9 @@ class PromptFormFactory
 
     const promptRepository = [
         'npc-bg' => NpcBackground::class,
-        'bar' => BarDescription::class
+        'bar' => BarDescription::class,
+        'thing-name' => Sample\ThingName::class,
+        'npc-name' => Sample\NpcName::class
     ];
 
     public function __construct(protected FormFactoryInterface $formFac)
