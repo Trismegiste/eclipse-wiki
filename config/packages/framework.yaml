@@ -23,8 +23,6 @@ framework:
         scoped_clients:
             algorithm.client:
                 base_uri: 'http://localhost:%env(ALGORITHM_PORT)%'
-            ollama.client:
-                base_uri: 'http://localhost:%env(OLLAMA_PORT)%'
 
 when@test:
     framework:

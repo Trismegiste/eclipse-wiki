@@ -24,12 +24,11 @@ use Symfony\Component\Routing\Attribute\Route;
 class Ollama extends AbstractController
 {
 
-    const ollamaApi = 'http://ganism.local:11434/api/chat';
-
     public function __construct(
             protected RequestFactory $payloadFactory,
             protected PromptFormFactory $promptFactory,
-            protected VertexRepository $repository)
+            protected VertexRepository $repository,
+            protected string $ollamaApi)
     {
         
     }
@@ -59,7 +58,7 @@ class Ollama extends AbstractController
         }
 
         return $this->render('ollama/content_generate.html.twig', [
-                    'ollama_api' => self::ollamaApi,
+                    'ollama_api' => $this->ollamaApi,
                     'prompt' => $prompt->createView(),
                     'append' => $append->createView(),
                     'payload' => $payload
@@ -99,7 +98,7 @@ class Ollama extends AbstractController
         }
 
         return $this->render('ollama/creation_listing.html.twig', [
-                    'ollama_api' => self::ollamaApi,
+                    'ollama_api' => $this->ollamaApi,
                     'title' => $promptKey,
                     'prompt' => $prompt->createView(),
                     'payload' => $payload

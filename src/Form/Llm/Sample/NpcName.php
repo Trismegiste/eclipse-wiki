@@ -48,7 +48,7 @@ class NpcName extends AbstractType implements LlmContentInfo
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('prompt_template', <<<PROMPT
-Dans le contexte précedemment décris, donne moi 10 noms et prénoms {{style}} pour des personnages {{gender}}.
+Dans le contexte précedemment décris, donne moi 10 noms et prénoms {{style}} rares pour des personnages {{gender}}.
 Réponds sous forme de tableau JSON où chaque élément du tableau est un objet qui contient 2 clefs "firstname" et "lastname".
 Voici un exemple de tableau avec un élément
 [{"firstname":"Takeshi", "lastname":"Kovacs"}];
