@@ -35,43 +35,11 @@
         {{ payload|json_encode()|raw }}
     </script>
     <script type="module">
-        Alpine.data('llm', () => ({
-                content: '',
-                waiting: false,
+        import llmClient from 'ollama-client';
 
-                async init() {
-                    const decoder = new TextDecoder()
-
-                    const payload = JSON.parse(document.getElementById('ollama-payload').textContent)
-                    if (payload === null) {
-                        return;
-                    }
-
-                    this.waiting = true
-//this.content = 'yolo'
-                    try {
-                        const resp = await fetch('http://localhost:11434/api/chat', {
-                            method: 'POST',
-                            body: JSON.stringify(payload)
-                        })
-
-                        const reader = await resp.body.getReader()
-                        for (; ; ) {
-                            let {value: chunk, done: readerDone} = await reader.read()
-                            this.waiting = false
-                            if (readerDone) {
-                                break
-                            }
-                            const msg = JSON.parse(decoder.decode(chunk))
-                            this.content = this.content.concat(msg.message.content)
-                        }
-                    } catch (ex) {
-                        Alpine.store('notif').push('error', 'Ollama is unreachable : ' + ex.message)
-                        this.waiting = false
-                        return;
-                    }
-                }
-            }))
+        Alpine.data('llm', () => {
+            return llmClient('http://localhost:11434/api/chat', 'ollama-payload')
+        })
     </script>
 {% endblock %}
 

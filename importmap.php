@@ -69,6 +69,9 @@ return [
     'sd-gallery-search' => [
         'path' => 'sd-gallery-search.js',
     ],
+    'ollama-client' => [
+        'path' => 'ollama-client.js',
+    ],
     'avatar-type' => [
         'path' => 'avatar-type.js',
     ],
