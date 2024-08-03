@@ -34,7 +34,7 @@ class LlmOutputAppend extends AbstractType implements DataMapperInterface
         $builder
                 ->add('subtitle', HiddenType::class, key_exists('subtitle', $options) ? ['data' => $options['subtitle']] : [])
                 ->add('generation', TextareaType::class, ['attr' => ['x-model' => 'content', 'rows' => 30]])
-                ->add('save', SubmitType::class, ['attr' => ['class' => 'button-continue']])
+                ->add('save', SubmitType::class)
                 ->setMethod('PATCH')
                 ->setDataMapper($this)
         ;

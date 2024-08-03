@@ -18,6 +18,8 @@ class BarDescription extends AbstractType implements LlmContentInfo
     {
         $builder
                 ->add('title', TextType::class, ['attr' => ['placeholder' => 'un nom']])
+                ->add('location', TextType::class, ['attr' => ['placeholder' => 'un lieu']])
+                ->add('theme', TextType::class, ['attr' => ['placeholder' => 'un thème']])
                 ->add('ambience', TextType::class, ['attr' => ['placeholder' => 'une ambiance']])
                 ->add('crowd', TextType::class, ['attr' => ['placeholder' => 'un type de clients']])
         ;
@@ -26,8 +28,8 @@ class BarDescription extends AbstractType implements LlmContentInfo
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('prompt_template',
-                "Dans le contexte précedemment décris, rédige une description en 15 lignes d'un bar nommé \"{{title}}\". " .
-                "Ce bar est plutôt {{ambience}} et il est fréquenté par {{crowd}}. " .
+                "Dans le contexte précedemment décris, rédige une description en 20 lignes d'un bar nommé \"{{title}}\" localisé sur {{location}}. " .
+                "Le thème de ce bar est {{theme}}, il est plutôt {{ambience}} et il est principalement fréquenté par {{crowd}}. " .
                 "Ajoute une description succinte du barman et des serveuses. Décris les alcools qu'on peut y boire. " .
                 "Décris la musique qu'on peut y écouter et raconte quelques faits notables.");
     }

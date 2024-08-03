@@ -36,7 +36,10 @@ class PromptType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-                ->add('generate', SubmitType::class, ['priority' => -1000])
+                ->add('generate', SubmitType::class, [
+                    'attr' => ['class' => 'button-continue'],
+                    'priority' => -1000
+                ])
                 ->setDataMapper(new PromptMapper($options['prompt_template'], $this->twig))
         ;
     }
