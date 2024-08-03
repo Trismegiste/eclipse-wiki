@@ -24,6 +24,8 @@ use Symfony\Component\Routing\Attribute\Route;
 class Ollama extends AbstractController
 {
 
+    const ollamaApi = 'http://ganism.local:11434/api/chat';
+
     public function __construct(
             protected RequestFactory $payloadFactory,
             protected PromptFormFactory $promptFactory,
@@ -56,8 +58,8 @@ class Ollama extends AbstractController
             $payload = $this->payloadFactory->create($prompt->getData()->prompt);
         }
 
-        return $this->render('ollama/generate.html.twig', [
-                    'title' => $vertex->getTitle(),
+        return $this->render('ollama/content_generate.html.twig', [
+                    'ollama_api' => self::ollamaApi,
                     'prompt' => $prompt->createView(),
                     'append' => $append->createView(),
                     'payload' => $payload
@@ -83,6 +85,25 @@ class Ollama extends AbstractController
         }
 
         return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
+    }
+
+    #[Route('/creation/listing/{promptKey}', methods: ['GET', 'POST'])]
+    public function creationListing(Request $request, string $promptKey): Response
+    {
+        $prompt = $this->promptFactory->create($promptKey);
+
+        $payload = null;
+        $prompt->handleRequest($request);
+        if ($prompt->isSubmitted() && $prompt->isValid()) {
+            $payload = $this->payloadFactory->create($prompt->getData()->prompt);
+        }
+
+        return $this->render('ollama/creation_listing.html.twig', [
+                    'ollama_api' => self::ollamaApi,
+                    'title' => $promptKey,
+                    'prompt' => $prompt->createView(),
+                    'payload' => $payload
+        ]);
     }
 
 }

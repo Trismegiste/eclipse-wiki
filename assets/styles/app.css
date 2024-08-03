@@ -409,3 +409,8 @@ form .minitoolbar i {
     background-color: rgba(255,255,255,0.85);
     background-blend-mode: overlay;
 }
+
+/* LLM form */
+.form-prompt fieldset {
+    line-height: 2.2em;
+}

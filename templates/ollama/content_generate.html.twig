@@ -13,7 +13,7 @@
     <section class="form-prompt">
         {{ form(prompt) }}
     </section>
-    <section x-data="llm">
+    <section x-data="llm('{{ ollama_api }}')">
         <div x-show="waiting" style="text-align: center"><i class="icon-spin3 animate-spin big-waiting"></i></div>
         <div x-show="content !== ''">
             <hgroup>
@@ -37,17 +37,8 @@
     <script type="module">
         import llmClient from 'ollama-client';
 
-        Alpine.data('llm', () => {
-            return llmClient('http://localhost:11434/api/chat', 'ollama-payload')
+        Alpine.data('llm', (url) => {
+            return llmClient(url, 'ollama-payload')
         })
     </script>
-{% endblock %}
-
-{% block stylesheets %}
-    {{ parent() }}
-    <style>
-        .form-prompt fieldset {
-            line-height: 2.2em;
-        }
-    </style>
 {% endblock %}

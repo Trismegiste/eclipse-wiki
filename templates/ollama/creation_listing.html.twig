@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block header_title %}
+    {{ block('title') }}
+{% endblock %}
+
+{% block content %}
+    <section class="form-prompt">
+        {{ form(prompt) }}
+    </section>
+    <section x-data="llm('{{ ollama_api }}')">
+        <div x-show="waiting" style="text-align: center"><i class="icon-spin3 animate-spin big-waiting"></i></div>
+        <div x-show="content !== ''">
+            <h2>Ce contenu sera converti en liens de création à la fin de la génération, veuillez patienter...</h2>
+            <pre x-text="content"></pre>
+            <ul>
+                <template x-for="entry in listing">
+                    <li><a x-bind:href="'/wiki/' + entry" x-text="entry"></a></li>
+                </template>
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="application/json" id="ollama-payload">
+        {{ payload|json_encode()|raw }}
+    </script>
+    <script type="module">
+        import llmClient from 'ollama-client';
+        Alpine.data('llm', (url) => {
+            let obj = llmClient(url, 'ollama-payload')
+
+            obj.listing = []
+            obj.postProcessing = function () {  // this is a method on purpose, not an arrow function
+                const regex = /(\[[^\]]+\])/
+                const extract = regex.exec(this.content)
+                if (extract !== null) {
+                    const listing = JSON.parse(extract[1])
+                    if (listing !== null) {
+                        for (let entry of listing) {
+                            this.listing.push(entry.firstname + ' ' + entry.lastname)
+                        }
+                    }
+                }
+            }
+
+            return obj
+        })
+    </script>
+{% endblock %}
