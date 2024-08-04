@@ -45,7 +45,7 @@ class Ollama extends AbstractController
         $vertex = $this->repository->load($pk);
         // Warning : the form in $append is PATCHed to the controller method below (see below)
         // This current method only deals with prompts and payloads generation for Ollama API, by using the form in $prompt
-        $prompt = $this->promptFactory->create($promptKey, $vertex);
+        $prompt = $this->promptFactory->createForContentGeneration($promptKey, $vertex);
         $append = $this->createForm(LlmOutputAppend::class, $vertex, [
             'action' => $this->generateUrl('app_ollama_contentappend', ['pk' => $vertex->getPk()]),
             'subtitle' => $this->promptFactory->getSubtitle($promptKey)
@@ -89,7 +89,7 @@ class Ollama extends AbstractController
     #[Route('/creation/listing/{promptKey}', methods: ['GET', 'POST'])]
     public function creationListing(Request $request, string $promptKey): Response
     {
-        $prompt = $this->promptFactory->create($promptKey);
+        $prompt = $this->promptFactory->createForListingGeneration($promptKey);
 
         $payload = null;
         $prompt->handleRequest($request);
@@ -101,7 +101,8 @@ class Ollama extends AbstractController
                     'ollama_api' => $this->ollamaApi,
                     'title' => $promptKey,
                     'prompt' => $prompt->createView(),
-                    'payload' => $payload
+                    'payload' => $payload,
+                    'entry_dump' => $this->promptFactory->getEntryDump($promptKey)
         ]);
     }
 

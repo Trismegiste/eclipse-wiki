@@ -41,14 +41,28 @@ class PromptFormFactory
      * @param array $options Options for the form
      * @return FormInterface Ready to use form
      */
-    public function create(string $key, ?Vertex $vertex = null, array $options = []): FormInterface
+    public function createForContentGeneration(string $key, Vertex $vertex, array $options = []): FormInterface
     {
-        $prefill = $this->createNewParameters();
         $fqcn = $this->getFormType($key);
-        if (!is_null($vertex)) {
-            $fqcn::initializeWithVertex($prefill, $vertex);
+        if (!is_a($fqcn, LlmContentInfo::class, true)) {
+            throw new InvalidArgumentException("$fqcn does not implement LlmContentInfo");
         }
+
+        $prefill = $this->createNewParameters();
+        $fqcn::initializeWithVertex($prefill, $vertex);
         $prompt = $this->formFac->create($fqcn, $prefill, $options);
+
+        return $prompt;
+    }
+
+    public function createForListingGeneration(string $key, array $options = []): FormInterface
+    {
+        $fqcn = $this->getFormType($key);
+        if (!is_a($fqcn, LlmListingInfo::class, true)) {
+            throw new InvalidArgumentException("$fqcn does not implement LlmListingInfo");
+        }
+
+        $prompt = $this->formFac->create($fqcn, null, $options);
 
         return $prompt;
     }
@@ -76,13 +90,14 @@ class PromptFormFactory
             throw new InvalidArgumentException("$key is not a valid key");
         }
 
-        $fqcn = self::promptRepository[$key];
+        return self::promptRepository[$key];
+    }
 
-        if (!is_a($fqcn, LlmContentInfo::class, true)) {
-            throw new InvalidArgumentException("$fqcn does not implement LlmContentInfo");
-        }
+    public function getEntryDump(string $key): string
+    {
+        $fqcn = $this->getFormType($key);
 
-        return $fqcn;
+        return $fqcn::getEntryDumpJs();
     }
 
 }
