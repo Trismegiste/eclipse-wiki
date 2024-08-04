@@ -24,6 +24,8 @@ use Symfony\Component\Routing\Attribute\Route;
 class Ollama extends AbstractController
 {
 
+    const temperatureForListing = 1.5;
+
     public function __construct(
             protected RequestFactory $payloadFactory,
             protected PromptFormFactory $promptFactory,
@@ -94,7 +96,7 @@ class Ollama extends AbstractController
         $payload = null;
         $prompt->handleRequest($request);
         if ($prompt->isSubmitted() && $prompt->isValid()) {
-            $payload = $this->payloadFactory->create($prompt->getData()->prompt);
+            $payload = $this->payloadFactory->create($prompt->getData()->prompt, self::temperatureForListing);
         }
 
         return $this->render('ollama/creation_listing.html.twig', [

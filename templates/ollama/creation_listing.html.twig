@@ -15,11 +15,13 @@
             <h2>Ce contenu sera converti en liens de création à la fin de la génération, veuillez patienter...</h2>
             <pre x-text="content"></pre>
         </div>
-        <ul>
+        <div class="pure-g listing">
             <template x-for="entry in listing">
-                <li><a x-bind:href="'/wiki/' + entry" x-text="entry"></a></li>
+                <div class="pure-u-1 pure-u-xl-1-4">
+                    <a x-bind:href="'/wiki/' + entry" x-text="entry"></a>
+                </div>
             </template>
-        </ul>
+        </div>
     </section>
 {% endblock %}
 
@@ -50,4 +52,17 @@
             return obj
         })
     </script>
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .listing {
+            margin-top: 2em;
+        }
+        .listing .pure-u-1 {
+            margin-bottom: 1em;
+        }
+    </style>
 {% endblock %}

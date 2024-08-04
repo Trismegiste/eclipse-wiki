@@ -17,9 +17,9 @@ class RequestFactory
         
     }
 
-    public function create(string $prompt): ChatPayload
+    public function create(string $prompt, float $temperature = 0.8): ChatPayload
     {
-        $req = new ChatPayload($this->llmName);
+        $req = new ChatPayload($this->llmName, $temperature);
 
         $system = new ChatMessage('system');
         $system->content = file_get_contents($this->settingPathname);

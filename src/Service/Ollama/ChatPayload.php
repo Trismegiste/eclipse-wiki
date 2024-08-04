@@ -14,10 +14,11 @@ class ChatPayload
 
     public array $messages = [];
     public bool $stream = true;
+    public array $options = [];
 
-    public function __construct(public string $model)
+    public function __construct(public string $model, float $temperature)
     {
-        
+        $this->options['temperature'] = $temperature;
     }
 
 }
