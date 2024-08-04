@@ -7,8 +7,9 @@
     <a href="#" class="pure-button" title="Transform current selection into a picture gallery" x-on:click.prevent="selectionToGallery">
         <i class="icon-album"></i>
     </a>
-    <a href="#" class="pure-button" title="Transform selected OpenAI output into wikitext" x-on:click.prevent="openAiToWikitext">
-        <i class="icon-openai"></i>
+    <a href="{{ path('app_ollama_contentgenerate', {pk: form.parent.vars.data.pk, promptKey: 'free'}) }}"
+       class="pure-button button-delete" title="Cancel edition and append a LLM-generated content">
+        <i class="icon-ollama"></i>
     </a>
     <a href="#" class="pure-button" title="Transform selected text into jpg picture" x-on:click.prevent="selectionToPicture">
         <i class="icon-broken-picture"></i>

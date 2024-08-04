@@ -26,7 +26,8 @@ class PromptFormFactory
         'npc-bg' => NpcBackground::class,
         'bar' => BarDescription::class,
         'thing-name' => ThingName::class,
-        'npc-name' => NpcName::class
+        'npc-name' => NpcName::class,
+        'free' => Sample\FreePrompt::class
     ];
 
     public function __construct(protected FormFactoryInterface $formFac)
