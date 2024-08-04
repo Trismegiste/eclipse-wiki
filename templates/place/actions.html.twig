@@ -4,10 +4,10 @@
 <a href="{{ path('app_voronoicrud_edit', {pk: vertex.pk}) }}" title="Modifier la battlemap"><i class="icon-hexagon"></i></a>
     {% if vertex.voronoiParam is not empty %}
     <a href="{{ path('app_voronoicrud_texture', {pk: vertex.pk}) }}" title="Colorier la battlemap"><i class="icon-paintbrush"></i></a>
-    <a href="{{ path('app_voronoicrud_populate', {pk: vertex.pk}) }}" title="Population"><i class="icon-extra"></i></a>
+    <a href="{{ path('app_voronoicrud_populate', {pk: vertex.pk}) }}" title="Peupler la battlemap"><i class="icon-extra"></i></a>
     <a href="{{ path('app_voronoicrud_statistics', {pk: vertex.pk}) }}" title="Statistiques de la battlemap"><i class="icon-info-circled"></i></a>
     <a href="{{ path('app_firstperson_edit', {pk: vertex.pk}) }}" target="_blank" title="Explorer la Battlemap en 3D"><i class="icon-view3d"></i></a>
     {% endif %}
-<a href="{{ path('app_placecrud_child', {pk: vertex.pk}) }}" title="Créer lieu-enfant"><i class="icon-newchild"></i></a>
+<a href="{{ path('app_placecrud_child', {pk: vertex.pk}) }}" title="Créer un décor enfant de ce vertex"><i class="icon-newchild"></i></a>
 <a href="{{ path('app_vertexcrud_rename', {pk: vertex.pk}) }}" title="Renommer"><i class="icon-rename"></i></a>
 <a href="{{ path('app_vertexcrud_delete', {pk: vertex.pk}) }}" title="Effacer"><i class="icon-trash-empty"></i></a>
