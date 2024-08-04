@@ -8,6 +8,7 @@ namespace App\Service\Ollama;
 
 /**
  * Payload to send to OLlama API
+ * https://github.com/ollama/ollama/blob/main/docs/api.md#generate-a-chat-completion
  */
 class ChatPayload
 {

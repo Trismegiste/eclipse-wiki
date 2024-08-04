@@ -23,6 +23,10 @@
            class="pure-button button-delete" title="Cancel edition and append a morph bank">
             <i class="icon-cryo-morph"></i>
         </a>
+        <a href="{{ path('app_ollama_contentgenerate', {pk: form.parent.vars.data.pk, promptKey: 'bar'}) }}"
+           class="pure-button button-delete" title="Cancel edition and append a LLM-generated description of a bar">
+            <i class="icon-llm-bar"></i>
+        </a>
         <a href="#" class="pure-button" title="Transform selected text into parameters" x-on:click.prevent="selectionToParam">
             <i class="icon-gear"></i>
         </a>     
