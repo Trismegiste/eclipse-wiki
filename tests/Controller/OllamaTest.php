@@ -36,4 +36,19 @@ class OllamaTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    public function getListingKey()
+    {
+        return [
+            ['npc-name'],
+            ['thing-name'],
+        ];
+    }
+
+    /** @dataProvider getListingKey */
+    public function testListingGeneration(string $key)
+    {
+        $this->client->request('GET', "/ollama/creation/listing/$key");
+        $this->assertResponseIsSuccessful();
+    }
+
 }
