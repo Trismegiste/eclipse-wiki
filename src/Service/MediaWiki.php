@@ -255,4 +255,14 @@ class MediaWiki
                 ])->query->search;
     }
 
+    public function prefixSearch(string $q): array
+    {
+        return $this->sendQuery([
+            'action' => 'query',
+            'format' => 'json',
+            'list' => 'prefixsearch',
+            'pssearch' => $q
+        ])->query->prefixsearch;
+    }
+
 }

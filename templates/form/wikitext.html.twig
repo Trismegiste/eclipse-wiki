@@ -18,6 +18,18 @@
         import buildWikitextClosure from 'wikitext';
         let strategy = [
             {
+                pattern: /\[\[ep:([^\]]+)$/,
+                url: '{{ path('app_fandomproxy_autocomplete') }}?q=',
+                boundAttr: entry => ({
+                        ['x-text'] () {
+                            return entry
+                        }
+                    }),
+                replace: found => {
+                    return `[[ep:${found}]]`
+                }
+            },
+            {
                 pattern: /\[\[file:([^\]]+)$/,
                 url: '{{ path('app_picture_search') }}?q=',
                 boundAttr: (entry) => ({

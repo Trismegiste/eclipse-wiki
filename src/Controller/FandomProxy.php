@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Search against the fandom mediawiki (pictures and articles)
@@ -117,6 +118,18 @@ class FandomProxy extends AbstractController
         $this->addFlash('success', 'Aide Fandom envoyée');
 
         return $this->redirectToRoute('app_fandomproxy_show', ['id' => $id]);
+    }
+
+    /**
+     * Ajax search for autocomplete with fandom content
+     * @param Request $request
+     * @return JsonResponse
+     */
+    #[Route("/autocomplete", methods: ['GET'])]
+    public function autocomplete(Request $request): JsonResponse
+    {
+        $title = $request->query->get('q', '');
+        return new JsonResponse(array_column($this->wiki->prefixSearch($title), 'title'));
     }
 
 }
