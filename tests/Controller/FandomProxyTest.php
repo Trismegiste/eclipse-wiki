@@ -60,4 +60,12 @@ class FandomProxyTest extends WebTestCase
         $this->assertStringContainsString('Aide Fandom envoy', $this->client->getResponse()->getContent());
     }
 
+    public function testAutocomplete()
+    {
+        $this->client->request('GET', "/fandom/autocomplete?q=mars");
+        $this->assertResponseIsSuccessful();
+        $found = json_decode($this->client->getResponse()->getContent());
+        $this->assertCount(5, $found);
+    }
+
 }
