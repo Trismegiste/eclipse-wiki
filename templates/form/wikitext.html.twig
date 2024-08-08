@@ -18,7 +18,7 @@
         import buildWikitextClosure from 'wikitext';
         let strategy = [
             {
-                pattern: /\[\[ep:([^\]]{3,})$/,
+                pattern: /\[\[ep:([^\]]+)$/,
                 url: '{{ path('app_fandomproxy_autocomplete') }}?q=',
                 boundAttr: entry => ({
                         ['x-text'] () {

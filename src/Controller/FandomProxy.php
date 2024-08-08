@@ -128,8 +128,17 @@ class FandomProxy extends AbstractController
     #[Route("/autocomplete", methods: ['GET'])]
     public function autocomplete(Request $request): JsonResponse
     {
+        $found = [];
         $title = $request->query->get('q', '');
-        return new JsonResponse(array_column($this->wiki->prefixSearch($title), 'title'));
+        if (strlen($title) > 2) {
+            try {
+                $found = array_column($this->wiki->prefixSearch($title), 'title');
+            } catch (\Exception $e) {
+                return new JsonResponse([], 500);
+            }
+        }
+
+        return new JsonResponse($found);
     }
 
 }

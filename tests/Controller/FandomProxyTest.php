@@ -68,4 +68,11 @@ class FandomProxyTest extends WebTestCase
         $this->assertCount(5, $found);
     }
 
+    public function testAutocompleteCutoff()
+    {
+        $this->client->request('GET', "/fandom/autocomplete?q=ma");
+        $this->assertResponseIsSuccessful();
+        $this->assertCount(0, json_decode($this->client->getResponse()->getContent()));
+    }
+
 }
