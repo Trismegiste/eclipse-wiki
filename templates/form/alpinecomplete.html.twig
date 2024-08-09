@@ -1,0 +1,67 @@
+{% block alpine_complete_widget %}
+    <div x-data="ajaxComplete('{{ form.vars.ajax }}')">
+        {{ form_widget(form) }}
+        <template x-if="result.length">
+            <select size="10"
+                    class="combobox"
+                    x-model="selected"
+                    x-ref="selection"
+                    x-on:click="content = selected"
+                    x-on:blur="result=[]"
+                    x-on:keyup="comboKeyUp">
+                <template x-for="item in result" :key="item">
+                    <option x-text="item" x-bind:value="item"></option>
+                </template>
+            </select>
+        </template>
+    </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('ajaxComplete', (url) => ({
+                    content: null,
+                    selected: null,
+                    result: [],
+
+                    fieldKeyUp(event) {
+                        if (event.key === 'Escape') {
+                            this.result = []
+                            return;
+                        }
+
+                        if (this.result.length && (event.key === 'ArrowDown')) {
+                            this.selected = this.result[0]
+                            this.$nextTick(() => {
+                                this.$refs.selection.focus()
+                            })
+                            return;
+                        }
+                    },
+
+                    userInput() {
+                        if (this.content) {
+                            fetch(url + this.content)
+                                    .then(resp => resp.json())
+                                    .then(data => this.result = data)
+                        } else {
+                            this.result = []
+                        }
+                    },
+
+                    comboKeyUp(event) {
+                        switch (event.key) {
+                            case 'Enter':
+                                this.content = this.selected
+                                this.result = []
+                                break
+                            case 'Escape':
+                                this.result = []
+                                this.$refs.textfield.focus()
+                                break
+                        }
+                    }
+
+                }))
+        })
+    </script>
+{% endblock %}
