@@ -20,6 +20,7 @@ class ChatPayload
     public function __construct(public string $model, float $temperature)
     {
         $this->options['temperature'] = $temperature;
+        $this->options['num_ctx'] = 4096;
     }
 
 }
