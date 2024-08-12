@@ -2,14 +2,12 @@
  * Eclipse Wiki
  */
 import { Ollama } from 'ollama/browser';
-export default (url, payloadId) => ({
-        payload: JSON.parse(document.getElementById(payloadId).textContent),
+export default (url, payload) => ({
         content: '',
         waiting: false,
 
         async init() {
-
-            if (this.payload === null) {
+            if (payload === null) {
                 return;
             }
 
@@ -17,7 +15,7 @@ export default (url, payloadId) => ({
 
             try {
                 const ollama = new Ollama({host: url})
-                const response = await ollama.chat(this.payload)
+                const response = await ollama.chat(payload)
                 for await (const part of response) {
                     this.waiting = false
                     this.content = this.content.concat(part.message.content)
@@ -25,7 +23,7 @@ export default (url, payloadId) => ({
 
                 this.postProcessing()
             } catch (ex) {
-                console.log(ex)
+                console.error(ex)
                 Alpine.store('notif').push('error', 'Ollama is unreachable : ' + ex.message)
                 this.waiting = false
                 return;

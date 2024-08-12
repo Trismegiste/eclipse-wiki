@@ -33,7 +33,7 @@
     <script type="module">
         import llmClient from 'ollama-client';
         Alpine.data('llm', (url) => {
-            let obj = llmClient(url, 'ollama-payload')
+            let obj = llmClient(url, JSON.parse(document.getElementById('ollama-payload').textContent))
 
             obj.listing = []
             obj.postProcessing = function () {  // this is a method on purpose, not an arrow function

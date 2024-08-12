@@ -38,7 +38,7 @@
         import llmClient from 'ollama-client';
 
         Alpine.data('llm', (url) => {
-            return llmClient(url, 'ollama-payload')
+            return llmClient(url, JSON.parse(document.getElementById('ollama-payload').textContent))
         })
     </script>
 {% endblock %}
