@@ -147,6 +147,6 @@ services:
             
     App\Controller\Ollama:
         arguments:
-            $ollamaApi: '%env(resolve:OLLAMA_BASE_URL)%/api/chat'
+            $ollamaApi: '%env(resolve:OLLAMA_BASE_URL)%'
             
     Twig\Extension\StringLoaderExtension:

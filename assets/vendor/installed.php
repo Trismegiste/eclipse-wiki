@@ -130,4 +130,14 @@
     array (
     ),
   ),
+  'ollama/browser' => 
+  array (
+    'version' => '0.5.7',
+    'dependencies' => 
+    array (
+    ),
+    'extraFiles' => 
+    array (
+    ),
+  ),
 );
