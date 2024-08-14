@@ -32,9 +32,8 @@ class TimelineType extends AbstractType
     {
         $builder->remove('content');
         $builder
-                ->add('elevatorPitch', WikitextType::class, ['attr' => ['rows' => 4]])
+                ->add('elevatorPitch', WikitextType::class, ['attr' => ['rows' => 8]])
                 ->add('tree', Type\WikiTreeType::class)
-                ->add('debriefing', WikitextType::class, ['required' => false, 'attr' => ['rows' => 6]])
                 ->add('update_stay', SubmitType::class)
         ;
     }

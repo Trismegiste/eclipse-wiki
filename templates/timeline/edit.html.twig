@@ -24,6 +24,16 @@
     </div>
 {% endblock %}
 
+{% block _timeline_elevatorPitch_row %}
+    <h2>{{ form_label(form) }}</h2>
+    {{ form_widget(form, {attr:{class:'pure-input-1'}}) }}
+{% endblock %}
+
+{% block _timeline_tree_row %}
+    <h2>Arborescence</h2>
+    {{ form_widget(form) }}
+{% endblock %}
+
 {% block content %}
     {{ form(form) }}
 {% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html.twig" %}
+{% form_theme form _self %}
+
+{% block title %}{{ form.vars.data.title }}{% endblock %}
+
+{% block header_title %}
+    {# the header menu with title #}
+    <nav style="float: right">
+        {{ include('timeline/actions.html.twig', {vertex:form.vars.data}) }}
+    </nav>   
+    {% block header_big_title %}{{ form.vars.data.title }}{% endblock %}
+{% endblock %}
+
+{% block _timeline_debrief_debriefing_row %}
+    <h2>Debriefing</h2>
+    {{ form_widget(form, {attr:{class:'pure-input-1'}}) }}
+{% endblock %}
+
+{% block content %}
+    {{ form(form) }}
+{% endblock %}

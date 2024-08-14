@@ -9,6 +9,7 @@ namespace App\Controller;
 use App\Entity\Timeline;
 use App\Entity\Vertex;
 use App\Form\TimelineCreate;
+use App\Form\TimelineDebrief;
 use App\Form\TimelineType;
 use App\Repository\VertexRepository;
 use App\Service\DigraphExplore;
@@ -68,6 +69,14 @@ class TimelineCrud extends GenericCrud
         }
 
         return $this->render('timeline/edit.html.twig', ['form' => $form->createView()]);
+    }
+
+    #[Route('/debrief/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
+    public function debrief(Timeline $vertex, Request $request): Response
+    {
+        $form = $this->createForm(TimelineDebrief::class, $vertex, ['method' => 'PUT']);
+
+        return $this->render('timeline/debrief.html.twig', ['form' => $form->createView(), 'title' => $vertex->getTitle()]);
     }
 
     /**

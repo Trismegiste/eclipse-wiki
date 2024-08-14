@@ -177,4 +177,11 @@ class TimelineCrudTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    /** @depends testAjaxPartition */
+    public function testDebriefing(string $pk)
+    {
+        $this->client->request('GET', "/timeline/debrief/$pk");
+        $this->assertResponseIsSuccessful();
+    }
+
 }
