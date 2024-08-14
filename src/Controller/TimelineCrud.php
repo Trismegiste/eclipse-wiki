@@ -76,6 +76,14 @@ class TimelineCrud extends GenericCrud
     {
         $form = $this->createForm(TimelineDebrief::class, $vertex, ['method' => 'PUT']);
 
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $vertex = $form->getData();
+            $this->repository->save($vertex);
+
+            return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
+        }
+
         return $this->render('timeline/debrief.html.twig', ['form' => $form->createView(), 'title' => $vertex->getTitle()]);
     }
 
