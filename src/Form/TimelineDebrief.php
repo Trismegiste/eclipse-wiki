@@ -13,7 +13,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Edit the debreif in a timeline
+ * Edit the debrief in a timeline
  */
 class TimelineDebrief extends AbstractType
 {

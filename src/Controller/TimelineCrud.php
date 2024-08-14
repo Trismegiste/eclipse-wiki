@@ -71,6 +71,12 @@ class TimelineCrud extends GenericCrud
         return $this->render('timeline/edit.html.twig', ['form' => $form->createView()]);
     }
 
+    /**
+     * Edit the debriefing field in the Timeline in a separate form
+     * @param Timeline $vertex
+     * @param Request $request
+     * @return Response
+     */
     #[Route('/debrief/{pk}', methods: ['GET', 'PUT'], requirements: ['pk' => '[\\da-f]{24}'])]
     public function debrief(Timeline $vertex, Request $request): Response
     {
@@ -84,7 +90,7 @@ class TimelineCrud extends GenericCrud
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
         }
 
-        return $this->render('timeline/debrief.html.twig', ['form' => $form->createView(), 'title' => $vertex->getTitle()]);
+        return $this->render('timeline/debrief.html.twig', ['form' => $form->createView()]);
     }
 
     /**
