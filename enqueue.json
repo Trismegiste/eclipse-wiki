@@ -1,0 +1,1862 @@
+{
+    "batch": {
+        "graph": {
+            "id": "20d4fb1b-2ae9-4c8c-ac0b-05faea665a0a",
+            "nodes": {
+                "37ad9a31-93f1-4568-87f6-ef44bb46dc09": {
+                    "type": "depth_anything_image_processor",
+                    "id": "37ad9a31-93f1-4568-87f6-ef44bb46dc09",
+                    "model_size": "small",
+                    "resolution": 512,
+                    "use_cache": true,
+                    "is_intermediate": true
+                },
+                "03311de9-2494-437c-8eae-d23fe1ee2c1f": {
+                    "type": "image",
+                    "id": "03311de9-2494-437c-8eae-d23fe1ee2c1f",
+                    "image": {
+                        "image_name": "5617c3de-32c2-48d4-9c9f-f64b92e66831.png"
+                    },
+                    "use_cache": true,
+                    "is_intermediate": true
+                },
+                "sdxl_model_loader": {
+                    "type": "sdxl_model_loader",
+                    "id": "sdxl_model_loader",
+                    "model": {
+                        "key": "243d88bc-f5eb-430d-a82b-1608920e40fd",
+                        "hash": "blake3:1f500a206b3b305723705d2c11800e8d0d6f1cdae637764ea9812a83f00e0ba5",
+                        "name": "Juggernaut XL v9",
+                        "base": "sdxl",
+                        "type": "main",
+                        "submodel_type": null
+                    },
+                    "use_cache": true,
+                    "is_intermediate": true
+                },
+                "positive_conditioning": {
+                    "type": "sdxl_compel_prompt",
+                    "id": "positive_conditioning",
+                    "prompt": "scifi, clean, white, futurist, space station interior, wide angle, Sci-fi Environments",
+                    "style": "scifi, clean, white, futurist, space station interior, wide angle, Sci-fi Environments",
+                    "original_width": 1024,
+                    "original_height": 1024,
+                    "crop_top": 0,
+                    "crop_left": 0,
+                    "target_width": 1024,
+                    "target_height": 1024,
+                    "mask": null,
+                    "use_cache": true,
+                    "is_intermediate": true
+                },
+                "positive_conditioning_collect": {
+                    "type": "collect",
+                    "id": "positive_conditioning_collect",
+                    "use_cache": true,
+                    "is_intermediate": true
+                },
+                "negative_conditioning": {
+                    "type": "sdxl_compel_prompt",
+                    "id": "negative_conditioning",
+                    "prompt": "",
+                    "style": "",
+                    "original_width": 1024,
+                    "original_height": 1024,
+                    "crop_top": 0,
+                    "crop_left": 0,
+                    "target_width": 1024,
+                    "target_height": 1024,
+                    "mask": null,
+                    "use_cache": true,
+                    "is_intermediate": true
+                },
+                "negative_conditioning_collect": {
+                    "type": "collect",
+                    "id": "negative_conditioning_collect",
+                    "use_cache": true,
+                    "is_intermediate": true
+                },
+                "noise": {
+                    "type": "noise",
+                    "id": "noise",
+                    "seed": 1557514192,
+                    "width": 1024,
+                    "height": 1024,
+                    "use_cpu": true,
+                    "use_cache": true,
+                    "is_intermediate": true
+                },
+                "sdxl_denoise_latents": {
+                    "type": "denoise_latents",
+                    "id": "sdxl_denoise_latents",
+                    "steps": 50,
+                    "cfg_scale": 7.5,
+                    "denoising_start": 0,
+                    "denoising_end": 0.8,
+                    "scheduler": "euler",
+                    "control": null,
+                    "ip_adapter": null,
+                    "cfg_rescale_multiplier": 0,
+                    "latents": null,
+                    "denoise_mask": null,
+                    "use_cache": true,
+                    "is_intermediate": true
+                },
+                "latents_to_image": {
+                    "type": "l2i",
+                    "id": "latents_to_image",
+                    "board": null,
+                    "tiled": false,
+                    "tile_size": 0,
+                    "fp32": true,
+                    "use_cache": false,
+                    "is_intermediate": false
+                },
+                "vae_loader": {
+                    "type": "vae_loader",
+                    "id": "vae_loader",
+                    "vae_model": {
+                        "key": "4d1c09bd-ca49-4341-892a-7cdbb168f3be",
+                        "hash": "blake3:9705ab1c31fa96b308734214fb7571a958621c7a9247eed82b7d277145f8d9fa",
+                        "name": "sdxl-vae-fp16-fix",
+                        "base": "sdxl",
+                        "type": "vae",
+                        "submodel_type": null
+                    },
+                    "use_cache": true,
+                    "is_intermediate": true
+                },
+                "core_metadata": {
+                    "type": "core_metadata",
+                    "id": "core_metadata",
+                    "generation_mode": "sdxl_txt2img",
+                    "positive_prompt": "scifi, clean, white, futurist, space station interior, wide angle, Sci-fi Environments",
+                    "negative_prompt": "",
+                    "width": 1024,
+                    "height": 1024,
+                    "seed": 1557514192,
+                    "rand_device": "cpu",
+                    "cfg_scale": 7.5,
+                    "cfg_rescale_multiplier": 0,
+                    "steps": 50,
+                    "scheduler": "euler",
+                    "seamless_x": null,
+                    "seamless_y": null,
+                    "clip_skip": null,
+                    "model": {
+                        "key": "243d88bc-f5eb-430d-a82b-1608920e40fd",
+                        "hash": "blake3:1f500a206b3b305723705d2c11800e8d0d6f1cdae637764ea9812a83f00e0ba5",
+                        "name": "Juggernaut XL v9",
+                        "base": "sdxl",
+                        "type": "main",
+                        "submodel_type": null
+                    },
+                    "controlnets": null,
+                    "ipAdapters": null,
+                    "t2iAdapters": null,
+                    "loras": [{
+                            "model": {
+                                "key": "98cef078-7e10-4ec0-92a2-7a33bfa643a8",
+                                "hash": "blake3:c8d3c500b08d1cbc32494456893b6c5c41edb966f5cc104d434f7c27faf16e6a",
+                                "name": "Sci-fi_Environments_V2-SDXL",
+                                "base": "sdxl",
+                                "type": "lora",
+                                "submodel_type": null
+                            },
+                            "weight": 1.5
+                        }],
+                    "strength": null,
+                    "init_image": null,
+                    "vae": {
+                        "key": "4d1c09bd-ca49-4341-892a-7cdbb168f3be",
+                        "hash": "blake3:9705ab1c31fa96b308734214fb7571a958621c7a9247eed82b7d277145f8d9fa",
+                        "name": "sdxl-vae-fp16-fix",
+                        "base": "sdxl",
+                        "type": "vae",
+                        "submodel_type": null
+                    },
+                    "hrf_enabled": null,
+                    "hrf_method": null,
+                    "hrf_strength": null,
+                    "positive_style_prompt": "scifi, clean, white, futurist, space station interior, wide angle, Sci-fi Environments",
+                    "negative_style_prompt": "",
+                    "refiner_model": {
+                        "key": "81f83855-be0e-4a4d-9a41-16df6c163733",
+                        "hash": "blake3:20bd49a8db6c78d6c738b773cbb9c21ad13deaaa6628b760e69c854da7e9d826",
+                        "name": "stable-diffusion-xl-refiner-1-0",
+                        "base": "sdxl-refiner",
+                        "type": "main",
+                        "submodel_type": null
+                    },
+                    "refiner_cfg_scale": 7.5,
+                    "refiner_steps": 50,
+                    "refiner_scheduler": "euler",
+                    "refiner_positive_aesthetic_score": 6,
+                    "refiner_negative_aesthetic_score": 2.5,
+                    "refiner_start": 0.8,
+                    "use_cache": true,
+                    "is_intermediate": true
+                },
+                "lora_loader_collect": {
+                    "type": "collect",
+                    "id": "lora_loader_collect",
+                    "use_cache": true,
+                    "is_intermediate": true
+                },
+                "lora_loader": {
+                    "type": "sdxl_lora_collection_loader",
+                    "id": "lora_loader",
+                    "use_cache": true,
+                    "is_intermediate": true
+                },
+                "lora_loader_98cef078-7e10-4ec0-92a2-7a33bfa643a8": {
+                    "type": "lora_selector",
+                    "id": "lora_loader_98cef078-7e10-4ec0-92a2-7a33bfa643a8",
+                    "lora": {
+                        "key": "98cef078-7e10-4ec0-92a2-7a33bfa643a8",
+                        "hash": "blake3:c8d3c500b08d1cbc32494456893b6c5c41edb966f5cc104d434f7c27faf16e6a",
+                        "name": "Sci-fi_Environments_V2-SDXL",
+                        "base": "sdxl",
+                        "type": "lora",
+                        "submodel_type": null
+                    },
+                    "weight": 1.5,
+                    "use_cache": true,
+                    "is_intermediate": true
+                },
+                "sdxl_refiner_model_loader": {
+                    "type": "sdxl_refiner_model_loader",
+                    "id": "sdxl_refiner_model_loader",
+                    "model": {
+                        "key": "81f83855-be0e-4a4d-9a41-16df6c163733",
+                        "hash": "blake3:20bd49a8db6c78d6c738b773cbb9c21ad13deaaa6628b760e69c854da7e9d826",
+                        "name": "stable-diffusion-xl-refiner-1-0",
+                        "base": "sdxl-refiner",
+                        "type": "main",
+                        "submodel_type": null
+                    },
+                    "use_cache": true,
+                    "is_intermediate": true
+                },
+                "sdxl_refiner_positive_conditioning": {
+                    "type": "sdxl_refiner_compel_prompt",
+                    "id": "sdxl_refiner_positive_conditioning",
+                    "style": "scifi, clean, white, futurist, space station interior, wide angle, Sci-fi Environments",
+                    "original_width": 1024,
+                    "original_height": 1024,
+                    "crop_top": 0,
+                    "crop_left": 0,
+                    "aesthetic_score": 6,
+                    "use_cache": true,
+                    "is_intermediate": true
+                },
+                "sdxl_refiner_negative_conditioning": {
+                    "type": "sdxl_refiner_compel_prompt",
+                    "id": "sdxl_refiner_negative_conditioning",
+                    "style": "",
+                    "original_width": 1024,
+                    "original_height": 1024,
+                    "crop_top": 0,
+                    "crop_left": 0,
+                    "aesthetic_score": 2.5,
+                    "use_cache": true,
+                    "is_intermediate": true
+                },
+                "sdxl_refiner_denoise_latents": {
+                    "type": "denoise_latents",
+                    "id": "sdxl_refiner_denoise_latents",
+                    "noise": null,
+                    "steps": 50,
+                    "cfg_scale": 7.5,
+                    "denoising_start": 0.8,
+                    "denoising_end": 1,
+                    "scheduler": "euler",
+                    "control": null,
+                    "ip_adapter": null,
+                    "t2i_adapter": null,
+                    "cfg_rescale_multiplier": 0,
+                    "denoise_mask": null,
+                    "use_cache": true,
+                    "is_intermediate": true
+                },
+                "t2i_adapter_collect": {
+                    "type": "collect",
+                    "id": "t2i_adapter_collect",
+                    "use_cache": true,
+                    "is_intermediate": true
+                },
+                "t2i_adapter_618ef11c-83d6-42d9-afd6-abaecfcf522b": {
+                    "type": "t2i_adapter",
+                    "id": "t2i_adapter_618ef11c-83d6-42d9-afd6-abaecfcf522b",
+                    "t2i_adapter_model": {
+                        "key": "3ba5712f-07db-40ce-91a8-60875b54f72a",
+                        "hash": "blake3:1b0b6ab668cfd91f0b9a9ad6d0f3c02e630714c785972507c9207d58fb62f6ef",
+                        "name": "zoedepth-sdxl",
+                        "base": "sdxl",
+                        "type": "t2i_adapter",
+                        "submodel_type": null
+                    },
+                    "weight": 1,
+                    "begin_step_percent": 0,
+                    "end_step_percent": 1,
+                    "resize_mode": "just_resize",
+                    "use_cache": true,
+                    "is_intermediate": true
+                }
+            },
+            "edges": [{
+                    "source": {
+                        "node_id": "37ad9a31-93f1-4568-87f6-ef44bb46dc09",
+                        "field": "image"
+                    },
+                    "destination": {
+                        "node_id": "t2i_adapter_618ef11c-83d6-42d9-afd6-abaecfcf522b",
+                        "field": "image"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "03311de9-2494-437c-8eae-d23fe1ee2c1f",
+                        "field": "image"
+                    },
+                    "destination": {
+                        "node_id": "37ad9a31-93f1-4568-87f6-ef44bb46dc09",
+                        "field": "image"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "positive_conditioning",
+                        "field": "conditioning"
+                    },
+                    "destination": {
+                        "node_id": "positive_conditioning_collect",
+                        "field": "item"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "negative_conditioning",
+                        "field": "conditioning"
+                    },
+                    "destination": {
+                        "node_id": "negative_conditioning_collect",
+                        "field": "item"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "positive_conditioning_collect",
+                        "field": "collection"
+                    },
+                    "destination": {
+                        "node_id": "sdxl_denoise_latents",
+                        "field": "positive_conditioning"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "negative_conditioning_collect",
+                        "field": "collection"
+                    },
+                    "destination": {
+                        "node_id": "sdxl_denoise_latents",
+                        "field": "negative_conditioning"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "noise",
+                        "field": "noise"
+                    },
+                    "destination": {
+                        "node_id": "sdxl_denoise_latents",
+                        "field": "noise"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "lora_loader_collect",
+                        "field": "collection"
+                    },
+                    "destination": {
+                        "node_id": "lora_loader",
+                        "field": "loras"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "sdxl_model_loader",
+                        "field": "unet"
+                    },
+                    "destination": {
+                        "node_id": "lora_loader",
+                        "field": "unet"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "sdxl_model_loader",
+                        "field": "clip"
+                    },
+                    "destination": {
+                        "node_id": "lora_loader",
+                        "field": "clip"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "sdxl_model_loader",
+                        "field": "clip2"
+                    },
+                    "destination": {
+                        "node_id": "lora_loader",
+                        "field": "clip2"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "lora_loader",
+                        "field": "unet"
+                    },
+                    "destination": {
+                        "node_id": "sdxl_denoise_latents",
+                        "field": "unet"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "lora_loader",
+                        "field": "clip"
+                    },
+                    "destination": {
+                        "node_id": "positive_conditioning",
+                        "field": "clip"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "lora_loader",
+                        "field": "clip"
+                    },
+                    "destination": {
+                        "node_id": "negative_conditioning",
+                        "field": "clip"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "lora_loader",
+                        "field": "clip2"
+                    },
+                    "destination": {
+                        "node_id": "positive_conditioning",
+                        "field": "clip2"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "lora_loader",
+                        "field": "clip2"
+                    },
+                    "destination": {
+                        "node_id": "negative_conditioning",
+                        "field": "clip2"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "lora_loader_98cef078-7e10-4ec0-92a2-7a33bfa643a8",
+                        "field": "lora"
+                    },
+                    "destination": {
+                        "node_id": "lora_loader_collect",
+                        "field": "item"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "vae_loader",
+                        "field": "vae"
+                    },
+                    "destination": {
+                        "node_id": "latents_to_image",
+                        "field": "vae"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "sdxl_refiner_model_loader",
+                        "field": "unet"
+                    },
+                    "destination": {
+                        "node_id": "sdxl_refiner_denoise_latents",
+                        "field": "unet"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "sdxl_refiner_model_loader",
+                        "field": "clip2"
+                    },
+                    "destination": {
+                        "node_id": "sdxl_refiner_positive_conditioning",
+                        "field": "clip2"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "sdxl_refiner_model_loader",
+                        "field": "clip2"
+                    },
+                    "destination": {
+                        "node_id": "sdxl_refiner_negative_conditioning",
+                        "field": "clip2"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "sdxl_refiner_positive_conditioning",
+                        "field": "conditioning"
+                    },
+                    "destination": {
+                        "node_id": "sdxl_refiner_denoise_latents",
+                        "field": "positive_conditioning"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "sdxl_refiner_negative_conditioning",
+                        "field": "conditioning"
+                    },
+                    "destination": {
+                        "node_id": "sdxl_refiner_denoise_latents",
+                        "field": "negative_conditioning"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "sdxl_denoise_latents",
+                        "field": "latents"
+                    },
+                    "destination": {
+                        "node_id": "sdxl_refiner_denoise_latents",
+                        "field": "latents"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "sdxl_refiner_denoise_latents",
+                        "field": "latents"
+                    },
+                    "destination": {
+                        "node_id": "latents_to_image",
+                        "field": "latents"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "t2i_adapter_collect",
+                        "field": "collection"
+                    },
+                    "destination": {
+                        "node_id": "sdxl_denoise_latents",
+                        "field": "t2i_adapter"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "t2i_adapter_618ef11c-83d6-42d9-afd6-abaecfcf522b",
+                        "field": "t2i_adapter"
+                    },
+                    "destination": {
+                        "node_id": "t2i_adapter_collect",
+                        "field": "item"
+                    }
+                }, {
+                    "source": {
+                        "node_id": "core_metadata",
+                        "field": "metadata"
+                    },
+                    "destination": {
+                        "node_id": "latents_to_image",
+                        "field": "metadata"
+                    }
+                }]
+        },
+        "workflow": {
+            "name": "",
+            "author": "",
+            "description": "",
+            "version": "",
+            "contact": "",
+            "tags": "",
+            "notes": "",
+            "nodes": [{
+                    "id": "37ad9a31-93f1-4568-87f6-ef44bb46dc09",
+                    "type": "invocation",
+                    "data": {
+                        "id": "37ad9a31-93f1-4568-87f6-ef44bb46dc09",
+                        "version": "1.1.2",
+                        "label": "",
+                        "notes": "",
+                        "type": "depth_anything_image_processor",
+                        "inputs": {
+                            "board": {
+                                "name": "board",
+                                "label": ""
+                            },
+                            "metadata": {
+                                "name": "metadata",
+                                "label": ""
+                            },
+                            "image": {
+                                "name": "image",
+                                "label": ""
+                            },
+                            "model_size": {
+                                "name": "model_size",
+                                "label": "",
+                                "value": "small"
+                            },
+                            "resolution": {
+                                "name": "resolution",
+                                "label": "",
+                                "value": 512
+                            }
+                        },
+                        "isOpen": true,
+                        "isIntermediate": true,
+                        "useCache": true
+                    },
+                    "position": {
+                        "x": 1934.8082138913169,
+                        "y": 1492.2422284923673
+                    }
+                }, {
+                    "id": "03311de9-2494-437c-8eae-d23fe1ee2c1f",
+                    "type": "invocation",
+                    "data": {
+                        "id": "03311de9-2494-437c-8eae-d23fe1ee2c1f",
+                        "version": "1.0.2",
+                        "label": "",
+                        "notes": "",
+                        "type": "image",
+                        "inputs": {
+                            "image": {
+                                "name": "image",
+                                "label": "",
+                                "value": {
+                                    "image_name": "5617c3de-32c2-48d4-9c9f-f64b92e66831.png"
+                                }
+                            }
+                        },
+                        "isOpen": true,
+                        "isIntermediate": true,
+                        "useCache": true
+                    },
+                    "position": {
+                        "x": 1549.3122600375937,
+                        "y": 1440.0094588959437
+                    }
+                }, {
+                    "id": "sdxl_model_loader",
+                    "type": "invocation",
+                    "data": {
+                        "id": "sdxl_model_loader",
+                        "version": "1.0.3",
+                        "label": "",
+                        "notes": "",
+                        "type": "sdxl_model_loader",
+                        "inputs": {
+                            "model": {
+                                "name": "model",
+                                "label": "",
+                                "value": {
+                                    "key": "243d88bc-f5eb-430d-a82b-1608920e40fd",
+                                    "hash": "blake3:1f500a206b3b305723705d2c11800e8d0d6f1cdae637764ea9812a83f00e0ba5",
+                                    "name": "Juggernaut XL v9",
+                                    "base": "sdxl",
+                                    "type": "main",
+                                    "submodel_type": null
+                                }
+                            }
+                        },
+                        "isOpen": true,
+                        "isIntermediate": true,
+                        "useCache": true
+                    },
+                    "position": {
+                        "x": 1130,
+                        "y": 530
+                    }
+                }, {
+                    "id": "positive_conditioning",
+                    "type": "invocation",
+                    "data": {
+                        "id": "positive_conditioning",
+                        "version": "1.2.0",
+                        "label": "",
+                        "notes": "",
+                        "type": "sdxl_compel_prompt",
+                        "inputs": {
+                            "prompt": {
+                                "name": "prompt",
+                                "label": "",
+                                "value": "scifi, clean, white, futurist, space station interior, wide angle, Sci-fi Environments"
+                            },
+                            "style": {
+                                "name": "style",
+                                "label": "",
+                                "value": "scifi, clean, white, futurist, space station interior, wide angle, Sci-fi Environments"
+                            },
+                            "original_width": {
+                                "name": "original_width",
+                                "label": "",
+                                "value": 1024
+                            },
+                            "original_height": {
+                                "name": "original_height",
+                                "label": "",
+                                "value": 1024
+                            },
+                            "crop_top": {
+                                "name": "crop_top",
+                                "label": "",
+                                "value": 0
+                            },
+                            "crop_left": {
+                                "name": "crop_left",
+                                "label": "",
+                                "value": 0
+                            },
+                            "target_width": {
+                                "name": "target_width",
+                                "label": "",
+                                "value": 1024
+                            },
+                            "target_height": {
+                                "name": "target_height",
+                                "label": "",
+                                "value": 1024
+                            },
+                            "clip": {
+                                "name": "clip",
+                                "label": ""
+                            },
+                            "clip2": {
+                                "name": "clip2",
+                                "label": ""
+                            },
+                            "mask": {
+                                "name": "mask",
+                                "label": ""
+                            }
+                        },
+                        "isOpen": true,
+                        "isIntermediate": true,
+                        "useCache": true
+                    },
+                    "position": {
+                        "x": 760,
+                        "y": 1590
+                    }
+                }, {
+                    "id": "positive_conditioning_collect",
+                    "type": "invocation",
+                    "data": {
+                        "id": "positive_conditioning_collect",
+                        "version": "1.0.0",
+                        "label": "",
+                        "notes": "",
+                        "type": "collect",
+                        "inputs": {
+                            "item": {
+                                "name": "item",
+                                "label": ""
+                            }
+                        },
+                        "isOpen": true,
+                        "isIntermediate": true,
+                        "useCache": true
+                    },
+                    "position": {
+                        "x": 760,
+                        "y": 2120
+                    }
+                }, {
+                    "id": "negative_conditioning",
+                    "type": "invocation",
+                    "data": {
+                        "id": "negative_conditioning",
+                        "version": "1.2.0",
+                        "label": "",
+                        "notes": "",
+                        "type": "sdxl_compel_prompt",
+                        "inputs": {
+                            "prompt": {
+                                "name": "prompt",
+                                "label": "",
+                                "value": ""
+                            },
+                            "style": {
+                                "name": "style",
+                                "label": "",
+                                "value": ""
+                            },
+                            "original_width": {
+                                "name": "original_width",
+                                "label": "",
+                                "value": 1024
+                            },
+                            "original_height": {
+                                "name": "original_height",
+                                "label": "",
+                                "value": 1024
+                            },
+                            "crop_top": {
+                                "name": "crop_top",
+                                "label": "",
+                                "value": 0
+                            },
+                            "crop_left": {
+                                "name": "crop_left",
+                                "label": "",
+                                "value": 0
+                            },
+                            "target_width": {
+                                "name": "target_width",
+                                "label": "",
+                                "value": 1024
+                            },
+                            "target_height": {
+                                "name": "target_height",
+                                "label": "",
+                                "value": 1024
+                            },
+                            "clip": {
+                                "name": "clip",
+                                "label": ""
+                            },
+                            "clip2": {
+                                "name": "clip2",
+                                "label": ""
+                            },
+                            "mask": {
+                                "name": "mask",
+                                "label": ""
+                            }
+                        },
+                        "isOpen": true,
+                        "isIntermediate": true,
+                        "useCache": true
+                    },
+                    "position": {
+                        "x": 1130,
+                        "y": 1590
+                    }
+                }, {
+                    "id": "negative_conditioning_collect",
+                    "type": "invocation",
+                    "data": {
+                        "id": "negative_conditioning_collect",
+                        "version": "1.0.0",
+                        "label": "",
+                        "notes": "",
+                        "type": "collect",
+                        "inputs": {
+                            "item": {
+                                "name": "item",
+                                "label": ""
+                            }
+                        },
+                        "isOpen": true,
+                        "isIntermediate": true,
+                        "useCache": true
+                    },
+                    "position": {
+                        "x": 1130,
+                        "y": 2120
+                    }
+                }, {
+                    "id": "noise",
+                    "type": "invocation",
+                    "data": {
+                        "id": "noise",
+                        "version": "1.0.2",
+                        "label": "",
+                        "notes": "",
+                        "type": "noise",
+                        "inputs": {
+                            "seed": {
+                                "name": "seed",
+                                "label": "",
+                                "value": 1557514192
+                            },
+                            "width": {
+                                "name": "width",
+                                "label": "",
+                                "value": 1024
+                            },
+                            "height": {
+                                "name": "height",
+                                "label": "",
+                                "value": 1024
+                            },
+                            "use_cpu": {
+                                "name": "use_cpu",
+                                "label": "",
+                                "value": true
+                            }
+                        },
+                        "isOpen": true,
+                        "isIntermediate": true,
+                        "useCache": true
+                    },
+                    "position": {
+                        "x": 1500,
+                        "y": 2120
+                    }
+                }, {
+                    "id": "sdxl_denoise_latents",
+                    "type": "invocation",
+                    "data": {
+                        "id": "sdxl_denoise_latents",
+                        "version": "1.5.3",
+                        "label": "",
+                        "notes": "",
+                        "type": "denoise_latents",
+                        "inputs": {
+                            "positive_conditioning": {
+                                "name": "positive_conditioning",
+                                "label": ""
+                            },
+                            "negative_conditioning": {
+                                "name": "negative_conditioning",
+                                "label": ""
+                            },
+                            "noise": {
+                                "name": "noise",
+                                "label": ""
+                            },
+                            "steps": {
+                                "name": "steps",
+                                "label": "",
+                                "value": 50
+                            },
+                            "cfg_scale": {
+                                "name": "cfg_scale",
+                                "label": "",
+                                "value": 7.5
+                            },
+                            "denoising_start": {
+                                "name": "denoising_start",
+                                "label": "",
+                                "value": 0
+                            },
+                            "denoising_end": {
+                                "name": "denoising_end",
+                                "label": "",
+                                "value": 0.8
+                            },
+                            "scheduler": {
+                                "name": "scheduler",
+                                "label": "",
+                                "value": "euler"
+                            },
+                            "unet": {
+                                "name": "unet",
+                                "label": ""
+                            },
+                            "control": {
+                                "name": "control",
+                                "label": ""
+                            },
+                            "ip_adapter": {
+                                "name": "ip_adapter",
+                                "label": ""
+                            },
+                            "t2i_adapter": {
+                                "name": "t2i_adapter",
+                                "label": ""
+                            },
+                            "cfg_rescale_multiplier": {
+                                "name": "cfg_rescale_multiplier",
+                                "label": "",
+                                "value": 0
+                            },
+                            "latents": {
+                                "name": "latents",
+                                "label": ""
+                            },
+                            "denoise_mask": {
+                                "name": "denoise_mask",
+                                "label": ""
+                            }
+                        },
+                        "isOpen": true,
+                        "isIntermediate": true,
+                        "useCache": true
+                    },
+                    "position": {
+                        "x": 1500,
+                        "y": 2650
+                    }
+                }, {
+                    "id": "latents_to_image",
+                    "type": "invocation",
+                    "data": {
+                        "id": "latents_to_image",
+                        "version": "1.3.0",
+                        "label": "",
+                        "notes": "",
+                        "type": "l2i",
+                        "inputs": {
+                            "board": {
+                                "name": "board",
+                                "label": ""
+                            },
+                            "metadata": {
+                                "name": "metadata",
+                                "label": ""
+                            },
+                            "latents": {
+                                "name": "latents",
+                                "label": ""
+                            },
+                            "vae": {
+                                "name": "vae",
+                                "label": ""
+                            },
+                            "tiled": {
+                                "name": "tiled",
+                                "label": "",
+                                "value": false
+                            },
+                            "tile_size": {
+                                "name": "tile_size",
+                                "label": "",
+                                "value": 0
+                            },
+                            "fp32": {
+                                "name": "fp32",
+                                "label": "",
+                                "value": true
+                            }
+                        },
+                        "isOpen": true,
+                        "isIntermediate": false,
+                        "useCache": false
+                    },
+                    "position": {
+                        "x": 370,
+                        "y": 3710
+                    }
+                }, {
+                    "id": "vae_loader",
+                    "type": "invocation",
+                    "data": {
+                        "id": "vae_loader",
+                        "version": "1.0.3",
+                        "label": "",
+                        "notes": "",
+                        "type": "vae_loader",
+                        "inputs": {
+                            "vae_model": {
+                                "name": "vae_model",
+                                "label": "",
+                                "value": {
+                                    "key": "4d1c09bd-ca49-4341-892a-7cdbb168f3be",
+                                    "hash": "blake3:9705ab1c31fa96b308734214fb7571a958621c7a9247eed82b7d277145f8d9fa",
+                                    "name": "sdxl-vae-fp16-fix",
+                                    "base": "sdxl",
+                                    "type": "vae",
+                                    "submodel_type": null
+                                }
+                            }
+                        },
+                        "isOpen": true,
+                        "isIntermediate": true,
+                        "useCache": true
+                    },
+                    "position": {
+                        "x": 0,
+                        "y": 3180
+                    }
+                }, {
+                    "id": "core_metadata",
+                    "type": "invocation",
+                    "data": {
+                        "id": "core_metadata",
+                        "version": "2.0.0",
+                        "label": "",
+                        "notes": "",
+                        "type": "core_metadata",
+                        "inputs": {
+                            "generation_mode": {
+                                "name": "generation_mode",
+                                "label": "",
+                                "value": "sdxl_txt2img"
+                            },
+                            "positive_prompt": {
+                                "name": "positive_prompt",
+                                "label": "",
+                                "value": "scifi, clean, white, futurist, space station interior, wide angle, Sci-fi Environments"
+                            },
+                            "negative_prompt": {
+                                "name": "negative_prompt",
+                                "label": "",
+                                "value": ""
+                            },
+                            "width": {
+                                "name": "width",
+                                "label": "",
+                                "value": 1024
+                            },
+                            "height": {
+                                "name": "height",
+                                "label": "",
+                                "value": 1024
+                            },
+                            "seed": {
+                                "name": "seed",
+                                "label": "",
+                                "value": 1557514192
+                            },
+                            "rand_device": {
+                                "name": "rand_device",
+                                "label": "",
+                                "value": "cpu"
+                            },
+                            "cfg_scale": {
+                                "name": "cfg_scale",
+                                "label": "",
+                                "value": 7.5
+                            },
+                            "cfg_rescale_multiplier": {
+                                "name": "cfg_rescale_multiplier",
+                                "label": "",
+                                "value": 0
+                            },
+                            "steps": {
+                                "name": "steps",
+                                "label": "",
+                                "value": 50
+                            },
+                            "scheduler": {
+                                "name": "scheduler",
+                                "label": "",
+                                "value": "euler"
+                            },
+                            "seamless_x": {
+                                "name": "seamless_x",
+                                "label": ""
+                            },
+                            "seamless_y": {
+                                "name": "seamless_y",
+                                "label": ""
+                            },
+                            "clip_skip": {
+                                "name": "clip_skip",
+                                "label": ""
+                            },
+                            "model": {
+                                "name": "model",
+                                "label": "",
+                                "value": {
+                                    "key": "243d88bc-f5eb-430d-a82b-1608920e40fd",
+                                    "hash": "blake3:1f500a206b3b305723705d2c11800e8d0d6f1cdae637764ea9812a83f00e0ba5",
+                                    "name": "Juggernaut XL v9",
+                                    "base": "sdxl",
+                                    "type": "main",
+                                    "submodel_type": null
+                                }
+                            },
+                            "controlnets": {
+                                "name": "controlnets",
+                                "label": ""
+                            },
+                            "ipAdapters": {
+                                "name": "ipAdapters",
+                                "label": ""
+                            },
+                            "t2iAdapters": {
+                                "name": "t2iAdapters",
+                                "label": ""
+                            },
+                            "loras": {
+                                "name": "loras",
+                                "label": ""
+                            },
+                            "strength": {
+                                "name": "strength",
+                                "label": ""
+                            },
+                            "init_image": {
+                                "name": "init_image",
+                                "label": ""
+                            },
+                            "vae": {
+                                "name": "vae",
+                                "label": "",
+                                "value": {
+                                    "key": "4d1c09bd-ca49-4341-892a-7cdbb168f3be",
+                                    "hash": "blake3:9705ab1c31fa96b308734214fb7571a958621c7a9247eed82b7d277145f8d9fa",
+                                    "name": "sdxl-vae-fp16-fix",
+                                    "base": "sdxl",
+                                    "type": "vae",
+                                    "submodel_type": null
+                                }
+                            },
+                            "hrf_enabled": {
+                                "name": "hrf_enabled",
+                                "label": ""
+                            },
+                            "hrf_method": {
+                                "name": "hrf_method",
+                                "label": ""
+                            },
+                            "hrf_strength": {
+                                "name": "hrf_strength",
+                                "label": ""
+                            },
+                            "positive_style_prompt": {
+                                "name": "positive_style_prompt",
+                                "label": "",
+                                "value": "scifi, clean, white, futurist, space station interior, wide angle, Sci-fi Environments"
+                            },
+                            "negative_style_prompt": {
+                                "name": "negative_style_prompt",
+                                "label": "",
+                                "value": ""
+                            },
+                            "refiner_model": {
+                                "name": "refiner_model",
+                                "label": "",
+                                "value": {
+                                    "key": "81f83855-be0e-4a4d-9a41-16df6c163733",
+                                    "hash": "blake3:20bd49a8db6c78d6c738b773cbb9c21ad13deaaa6628b760e69c854da7e9d826",
+                                    "name": "stable-diffusion-xl-refiner-1-0",
+                                    "base": "sdxl-refiner",
+                                    "type": "main",
+                                    "submodel_type": null
+                                }
+                            },
+                            "refiner_cfg_scale": {
+                                "name": "refiner_cfg_scale",
+                                "label": "",
+                                "value": 7.5
+                            },
+                            "refiner_steps": {
+                                "name": "refiner_steps",
+                                "label": "",
+                                "value": 50
+                            },
+                            "refiner_scheduler": {
+                                "name": "refiner_scheduler",
+                                "label": "",
+                                "value": "euler"
+                            },
+                            "refiner_positive_aesthetic_score": {
+                                "name": "refiner_positive_aesthetic_score",
+                                "label": "",
+                                "value": 6
+                            },
+                            "refiner_negative_aesthetic_score": {
+                                "name": "refiner_negative_aesthetic_score",
+                                "label": "",
+                                "value": 2.5
+                            },
+                            "refiner_start": {
+                                "name": "refiner_start",
+                                "label": "",
+                                "value": 0.8
+                            }
+                        },
+                        "isOpen": true,
+                        "isIntermediate": true,
+                        "useCache": true
+                    },
+                    "position": {
+                        "x": 740,
+                        "y": 3180
+                    }
+                }, {
+                    "id": "lora_loader_collect",
+                    "type": "invocation",
+                    "data": {
+                        "id": "lora_loader_collect",
+                        "version": "1.0.0",
+                        "label": "",
+                        "notes": "",
+                        "type": "collect",
+                        "inputs": {
+                            "item": {
+                                "name": "item",
+                                "label": ""
+                            }
+                        },
+                        "isOpen": true,
+                        "isIntermediate": true,
+                        "useCache": true
+                    },
+                    "position": {
+                        "x": 760,
+                        "y": 530
+                    }
+                }, {
+                    "id": "lora_loader",
+                    "type": "invocation",
+                    "data": {
+                        "id": "lora_loader",
+                        "version": "1.0.0",
+                        "label": "",
+                        "notes": "",
+                        "type": "sdxl_lora_collection_loader",
+                        "inputs": {
+                            "loras": {
+                                "name": "loras",
+                                "label": ""
+                            },
+                            "unet": {
+                                "name": "unet",
+                                "label": ""
+                            },
+                            "clip": {
+                                "name": "clip",
+                                "label": ""
+                            },
+                            "clip2": {
+                                "name": "clip2",
+                                "label": ""
+                            }
+                        },
+                        "isOpen": true,
+                        "isIntermediate": true,
+                        "useCache": true
+                    },
+                    "position": {
+                        "x": 760,
+                        "y": 1060
+                    }
+                }, {
+                    "id": "lora_loader_98cef078-7e10-4ec0-92a2-7a33bfa643a8",
+                    "type": "invocation",
+                    "data": {
+                        "id": "lora_loader_98cef078-7e10-4ec0-92a2-7a33bfa643a8",
+                        "version": "1.0.1",
+                        "label": "",
+                        "notes": "",
+                        "type": "lora_selector",
+                        "inputs": {
+                            "lora": {
+                                "name": "lora",
+                                "label": "",
+                                "value": {
+                                    "key": "98cef078-7e10-4ec0-92a2-7a33bfa643a8",
+                                    "hash": "blake3:c8d3c500b08d1cbc32494456893b6c5c41edb966f5cc104d434f7c27faf16e6a",
+                                    "name": "Sci-fi_Environments_V2-SDXL",
+                                    "base": "sdxl",
+                                    "type": "lora",
+                                    "submodel_type": null
+                                }
+                            },
+                            "weight": {
+                                "name": "weight",
+                                "label": "",
+                                "value": 1.5
+                            }
+                        },
+                        "isOpen": true,
+                        "isIntermediate": true,
+                        "useCache": true
+                    },
+                    "position": {
+                        "x": 760,
+                        "y": 0
+                    }
+                }, {
+                    "id": "sdxl_refiner_model_loader",
+                    "type": "invocation",
+                    "data": {
+                        "id": "sdxl_refiner_model_loader",
+                        "version": "1.0.3",
+                        "label": "",
+                        "notes": "",
+                        "type": "sdxl_refiner_model_loader",
+                        "inputs": {
+                            "model": {
+                                "name": "model",
+                                "label": "",
+                                "value": {
+                                    "key": "81f83855-be0e-4a4d-9a41-16df6c163733",
+                                    "hash": "blake3:20bd49a8db6c78d6c738b773cbb9c21ad13deaaa6628b760e69c854da7e9d826",
+                                    "name": "stable-diffusion-xl-refiner-1-0",
+                                    "base": "sdxl-refiner",
+                                    "type": "main",
+                                    "submodel_type": null
+                                }
+                            }
+                        },
+                        "isOpen": true,
+                        "isIntermediate": true,
+                        "useCache": true
+                    },
+                    "position": {
+                        "x": 175,
+                        "y": 2120
+                    }
+                }, {
+                    "id": "sdxl_refiner_positive_conditioning",
+                    "type": "invocation",
+                    "data": {
+                        "id": "sdxl_refiner_positive_conditioning",
+                        "version": "1.1.1",
+                        "label": "",
+                        "notes": "",
+                        "type": "sdxl_refiner_compel_prompt",
+                        "inputs": {
+                            "style": {
+                                "name": "style",
+                                "label": "",
+                                "value": "scifi, clean, white, futurist, space station interior, wide angle, Sci-fi Environments"
+                            },
+                            "original_width": {
+                                "name": "original_width",
+                                "label": "",
+                                "value": 1024
+                            },
+                            "original_height": {
+                                "name": "original_height",
+                                "label": "",
+                                "value": 1024
+                            },
+                            "crop_top": {
+                                "name": "crop_top",
+                                "label": "",
+                                "value": 0
+                            },
+                            "crop_left": {
+                                "name": "crop_left",
+                                "label": "",
+                                "value": 0
+                            },
+                            "aesthetic_score": {
+                                "name": "aesthetic_score",
+                                "label": "",
+                                "value": 6
+                            },
+                            "clip2": {
+                                "name": "clip2",
+                                "label": ""
+                            }
+                        },
+                        "isOpen": true,
+                        "isIntermediate": true,
+                        "useCache": true
+                    },
+                    "position": {
+                        "x": 370,
+                        "y": 2650
+                    }
+                }, {
+                    "id": "sdxl_refiner_negative_conditioning",
+                    "type": "invocation",
+                    "data": {
+                        "id": "sdxl_refiner_negative_conditioning",
+                        "version": "1.1.1",
+                        "label": "",
+                        "notes": "",
+                        "type": "sdxl_refiner_compel_prompt",
+                        "inputs": {
+                            "style": {
+                                "name": "style",
+                                "label": "",
+                                "value": ""
+                            },
+                            "original_width": {
+                                "name": "original_width",
+                                "label": "",
+                                "value": 1024
+                            },
+                            "original_height": {
+                                "name": "original_height",
+                                "label": "",
+                                "value": 1024
+                            },
+                            "crop_top": {
+                                "name": "crop_top",
+                                "label": "",
+                                "value": 0
+                            },
+                            "crop_left": {
+                                "name": "crop_left",
+                                "label": "",
+                                "value": 0
+                            },
+                            "aesthetic_score": {
+                                "name": "aesthetic_score",
+                                "label": "",
+                                "value": 2.5
+                            },
+                            "clip2": {
+                                "name": "clip2",
+                                "label": ""
+                            }
+                        },
+                        "isOpen": true,
+                        "isIntermediate": true,
+                        "useCache": true
+                    },
+                    "position": {
+                        "x": 740,
+                        "y": 2650
+                    }
+                }, {
+                    "id": "sdxl_refiner_denoise_latents",
+                    "type": "invocation",
+                    "data": {
+                        "id": "sdxl_refiner_denoise_latents",
+                        "version": "1.5.3",
+                        "label": "",
+                        "notes": "",
+                        "type": "denoise_latents",
+                        "inputs": {
+                            "positive_conditioning": {
+                                "name": "positive_conditioning",
+                                "label": ""
+                            },
+                            "negative_conditioning": {
+                                "name": "negative_conditioning",
+                                "label": ""
+                            },
+                            "noise": {
+                                "name": "noise",
+                                "label": ""
+                            },
+                            "steps": {
+                                "name": "steps",
+                                "label": "",
+                                "value": 50
+                            },
+                            "cfg_scale": {
+                                "name": "cfg_scale",
+                                "label": "",
+                                "value": 7.5
+                            },
+                            "denoising_start": {
+                                "name": "denoising_start",
+                                "label": "",
+                                "value": 0.8
+                            },
+                            "denoising_end": {
+                                "name": "denoising_end",
+                                "label": "",
+                                "value": 1
+                            },
+                            "scheduler": {
+                                "name": "scheduler",
+                                "label": "",
+                                "value": "euler"
+                            },
+                            "unet": {
+                                "name": "unet",
+                                "label": ""
+                            },
+                            "control": {
+                                "name": "control",
+                                "label": ""
+                            },
+                            "ip_adapter": {
+                                "name": "ip_adapter",
+                                "label": ""
+                            },
+                            "t2i_adapter": {
+                                "name": "t2i_adapter",
+                                "label": ""
+                            },
+                            "cfg_rescale_multiplier": {
+                                "name": "cfg_rescale_multiplier",
+                                "label": "",
+                                "value": 0
+                            },
+                            "latents": {
+                                "name": "latents",
+                                "label": ""
+                            },
+                            "denoise_mask": {
+                                "name": "denoise_mask",
+                                "label": ""
+                            }
+                        },
+                        "isOpen": true,
+                        "isIntermediate": true,
+                        "useCache": true
+                    },
+                    "position": {
+                        "x": 370,
+                        "y": 3180
+                    }
+                }, {
+                    "id": "t2i_adapter_collect",
+                    "type": "invocation",
+                    "data": {
+                        "id": "t2i_adapter_collect",
+                        "version": "1.0.0",
+                        "label": "",
+                        "notes": "",
+                        "type": "collect",
+                        "inputs": {
+                            "item": {
+                                "name": "item",
+                                "label": ""
+                            }
+                        },
+                        "isOpen": true,
+                        "isIntermediate": true,
+                        "useCache": true
+                    },
+                    "position": {
+                        "x": 2315.208735871208,
+                        "y": 2187.6468443431468
+                    }
+                }, {
+                    "id": "t2i_adapter_618ef11c-83d6-42d9-afd6-abaecfcf522b",
+                    "type": "invocation",
+                    "data": {
+                        "id": "t2i_adapter_618ef11c-83d6-42d9-afd6-abaecfcf522b",
+                        "version": "1.0.3",
+                        "label": "",
+                        "notes": "",
+                        "type": "t2i_adapter",
+                        "inputs": {
+                            "image": {
+                                "name": "image",
+                                "label": ""
+                            },
+                            "t2i_adapter_model": {
+                                "name": "t2i_adapter_model",
+                                "label": "",
+                                "value": {
+                                    "key": "3ba5712f-07db-40ce-91a8-60875b54f72a",
+                                    "hash": "blake3:1b0b6ab668cfd91f0b9a9ad6d0f3c02e630714c785972507c9207d58fb62f6ef",
+                                    "name": "zoedepth-sdxl",
+                                    "base": "sdxl",
+                                    "type": "t2i_adapter",
+                                    "submodel_type": null
+                                }
+                            },
+                            "weight": {
+                                "name": "weight",
+                                "label": "",
+                                "value": 1
+                            },
+                            "begin_step_percent": {
+                                "name": "begin_step_percent",
+                                "label": "",
+                                "value": 0
+                            },
+                            "end_step_percent": {
+                                "name": "end_step_percent",
+                                "label": "",
+                                "value": 1
+                            },
+                            "resize_mode": {
+                                "name": "resize_mode",
+                                "label": "",
+                                "value": "just_resize"
+                            }
+                        },
+                        "isOpen": true,
+                        "isIntermediate": true,
+                        "useCache": true
+                    },
+                    "position": {
+                        "x": 2335.0937723187476,
+                        "y": 1494.8062641703132
+                    }
+                }],
+            "edges": [{
+                    "id": "reactflow__edge-37ad9a31-93f1-4568-87f6-ef44bb46dc09image-t2i_adapter_618ef11c-83d6-42d9-afd6-abaecfcf522bimage",
+                    "source": "37ad9a31-93f1-4568-87f6-ef44bb46dc09",
+                    "target": "t2i_adapter_618ef11c-83d6-42d9-afd6-abaecfcf522b",
+                    "type": "default",
+                    "sourceHandle": "image",
+                    "targetHandle": "image"
+                }, {
+                    "id": "reactflow__edge-03311de9-2494-437c-8eae-d23fe1ee2c1fimage-37ad9a31-93f1-4568-87f6-ef44bb46dc09image",
+                    "source": "03311de9-2494-437c-8eae-d23fe1ee2c1f",
+                    "target": "37ad9a31-93f1-4568-87f6-ef44bb46dc09",
+                    "type": "default",
+                    "sourceHandle": "image",
+                    "targetHandle": "image"
+                }, {
+                    "id": "0035b73b-f002-4899-901a-58601f73dbb8",
+                    "source": "positive_conditioning",
+                    "target": "positive_conditioning_collect",
+                    "type": "default",
+                    "sourceHandle": "conditioning",
+                    "targetHandle": "item"
+                }, {
+                    "id": "4f91cd84-48c5-496d-820d-351a7ebd8551",
+                    "source": "negative_conditioning",
+                    "target": "negative_conditioning_collect",
+                    "type": "default",
+                    "sourceHandle": "conditioning",
+                    "targetHandle": "item"
+                }, {
+                    "id": "52d9cb2c-a255-4112-bfdf-2d03f02fa0f7",
+                    "source": "positive_conditioning_collect",
+                    "target": "sdxl_denoise_latents",
+                    "type": "default",
+                    "sourceHandle": "collection",
+                    "targetHandle": "positive_conditioning"
+                }, {
+                    "id": "02b9e6c4-9a7f-4002-a364-868672042279",
+                    "source": "negative_conditioning_collect",
+                    "target": "sdxl_denoise_latents",
+                    "type": "default",
+                    "sourceHandle": "collection",
+                    "targetHandle": "negative_conditioning"
+                }, {
+                    "id": "63149002-9d82-4dac-bdf0-bf23e5d80e22",
+                    "source": "noise",
+                    "target": "sdxl_denoise_latents",
+                    "type": "default",
+                    "sourceHandle": "noise",
+                    "targetHandle": "noise"
+                }, {
+                    "id": "94c9de6b-a354-4f12-b8d9-030e71e5e9cb",
+                    "source": "lora_loader_collect",
+                    "target": "lora_loader",
+                    "type": "default",
+                    "sourceHandle": "collection",
+                    "targetHandle": "loras"
+                }, {
+                    "id": "7893f8cb-310e-476b-872b-c79665721f4d",
+                    "source": "sdxl_model_loader",
+                    "target": "lora_loader",
+                    "type": "default",
+                    "sourceHandle": "unet",
+                    "targetHandle": "unet"
+                }, {
+                    "id": "1e5df5af-0962-47c1-b410-f9b9a6b9a168",
+                    "source": "sdxl_model_loader",
+                    "target": "lora_loader",
+                    "type": "default",
+                    "sourceHandle": "clip",
+                    "targetHandle": "clip"
+                }, {
+                    "id": "94e4b1b8-d27e-42b6-bc42-72d9a9863cbf",
+                    "source": "sdxl_model_loader",
+                    "target": "lora_loader",
+                    "type": "default",
+                    "sourceHandle": "clip2",
+                    "targetHandle": "clip2"
+                }, {
+                    "id": "57a52007-b856-45ac-bd5c-7c3b2e097f08",
+                    "source": "lora_loader",
+                    "target": "sdxl_denoise_latents",
+                    "type": "default",
+                    "sourceHandle": "unet",
+                    "targetHandle": "unet"
+                }, {
+                    "id": "2a55e325-3a99-4217-a1fd-96582ac1989c",
+                    "source": "lora_loader",
+                    "target": "positive_conditioning",
+                    "type": "default",
+                    "sourceHandle": "clip",
+                    "targetHandle": "clip"
+                }, {
+                    "id": "58a581eb-e032-4421-93bf-d22a3a6a978c",
+                    "source": "lora_loader",
+                    "target": "negative_conditioning",
+                    "type": "default",
+                    "sourceHandle": "clip",
+                    "targetHandle": "clip"
+                }, {
+                    "id": "4c98e84e-2546-4488-9e62-8bd4709cfebd",
+                    "source": "lora_loader",
+                    "target": "positive_conditioning",
+                    "type": "default",
+                    "sourceHandle": "clip2",
+                    "targetHandle": "clip2"
+                }, {
+                    "id": "0292d147-208d-422e-a29c-fe33b2a93fd5",
+                    "source": "lora_loader",
+                    "target": "negative_conditioning",
+                    "type": "default",
+                    "sourceHandle": "clip2",
+                    "targetHandle": "clip2"
+                }, {
+                    "id": "347fb755-e92b-428b-9db2-f7a7dc725b6d",
+                    "source": "lora_loader_98cef078-7e10-4ec0-92a2-7a33bfa643a8",
+                    "target": "lora_loader_collect",
+                    "type": "default",
+                    "sourceHandle": "lora",
+                    "targetHandle": "item"
+                }, {
+                    "id": "307e3e54-d220-494f-aa9e-465cc5e8cb00",
+                    "source": "vae_loader",
+                    "target": "latents_to_image",
+                    "type": "default",
+                    "sourceHandle": "vae",
+                    "targetHandle": "vae"
+                }, {
+                    "id": "d2f56df8-2315-48fa-bc87-6f2b7f5d73ba",
+                    "source": "sdxl_refiner_model_loader",
+                    "target": "sdxl_refiner_denoise_latents",
+                    "type": "default",
+                    "sourceHandle": "unet",
+                    "targetHandle": "unet"
+                }, {
+                    "id": "f5ef13ef-9a0a-48a3-ac1b-8a7b2e9679f6",
+                    "source": "sdxl_refiner_model_loader",
+                    "target": "sdxl_refiner_positive_conditioning",
+                    "type": "default",
+                    "sourceHandle": "clip2",
+                    "targetHandle": "clip2"
+                }, {
+                    "id": "f8fc2ae8-d1e9-4263-bbbb-be167818dabd",
+                    "source": "sdxl_refiner_model_loader",
+                    "target": "sdxl_refiner_negative_conditioning",
+                    "type": "default",
+                    "sourceHandle": "clip2",
+                    "targetHandle": "clip2"
+                }, {
+                    "id": "52ca6ec8-b6fb-4cb5-979c-7d44e4b1f3e4",
+                    "source": "sdxl_refiner_positive_conditioning",
+                    "target": "sdxl_refiner_denoise_latents",
+                    "type": "default",
+                    "sourceHandle": "conditioning",
+                    "targetHandle": "positive_conditioning"
+                }, {
+                    "id": "21dd8545-d64d-4ad5-b94e-aaa8fe3e65ae",
+                    "source": "sdxl_refiner_negative_conditioning",
+                    "target": "sdxl_refiner_denoise_latents",
+                    "type": "default",
+                    "sourceHandle": "conditioning",
+                    "targetHandle": "negative_conditioning"
+                }, {
+                    "id": "314a7bce-d860-4924-b730-331319576fc6",
+                    "source": "sdxl_denoise_latents",
+                    "target": "sdxl_refiner_denoise_latents",
+                    "type": "default",
+                    "sourceHandle": "latents",
+                    "targetHandle": "latents"
+                }, {
+                    "id": "9928e115-9abe-4797-abe5-4d257ce8243c",
+                    "source": "sdxl_refiner_denoise_latents",
+                    "target": "latents_to_image",
+                    "type": "default",
+                    "sourceHandle": "latents",
+                    "targetHandle": "latents"
+                }, {
+                    "id": "e7f36f03-17fd-455a-953e-1ab1c3b25529",
+                    "source": "t2i_adapter_collect",
+                    "target": "sdxl_denoise_latents",
+                    "type": "default",
+                    "sourceHandle": "collection",
+                    "targetHandle": "t2i_adapter"
+                }, {
+                    "id": "3ed41230-9f98-40a4-8838-d97f0c17be45",
+                    "source": "t2i_adapter_618ef11c-83d6-42d9-afd6-abaecfcf522b",
+                    "target": "t2i_adapter_collect",
+                    "type": "default",
+                    "sourceHandle": "t2i_adapter",
+                    "targetHandle": "item"
+                }, {
+                    "id": "7f299ec3-b020-460d-a0b3-f3ffd6323396",
+                    "source": "core_metadata",
+                    "target": "latents_to_image",
+                    "type": "default",
+                    "sourceHandle": "metadata",
+                    "targetHandle": "metadata"
+                }],
+            "exposedFields": [{
+                    "nodeId": "03311de9-2494-437c-8eae-d23fe1ee2c1f",
+                    "fieldName": "image"
+                }],
+            "meta": {
+                "category": "user",
+                "version": "3.0.0"
+            }
+        },
+        "runs": 1
+    },
+    "prepend": false
+}

@@ -70,6 +70,9 @@ export class BattlemapBuilder
                                 this.postGmView()
                             }
                             break
+                        case 73:
+                            this.postDepthMap()
+                            break
                     }
                     break
             }
@@ -155,6 +158,15 @@ export class BattlemapBuilder
             groundSelector.isVisible = true
             itemSelector.isVisible = true
         })
+    }
+
+    async postDepthMap() {
+        const renderer = this.scene.enableDepthRenderer()
+        const map = renderer.getDepthMap()
+        const buffer = await map.readPixels()
+        console.log(map.getRenderWidth(), map.getRenderHeight())
+        console.log(buffer)
+        this.scene.disableDepthRenderer()
     }
 
     setLight() {
