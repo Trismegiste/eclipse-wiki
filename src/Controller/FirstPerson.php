@@ -17,6 +17,7 @@ use App\Form\Tool3d\TileLegend;
 use App\Form\Tool3d\TileNpc;
 use App\Repository\VertexRepository;
 use App\Service\Storage;
+use App\Service\StableDiffusion\InvokeAiClient;
 use App\Voronoi\MapBuilder;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,6 +27,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\FormFactoryInterface;
 
 /**
  * 3D real time first personwith babylon.js
@@ -36,7 +38,7 @@ class FirstPerson extends AbstractController
     protected MapBuilder $builder;
     protected VertexRepository $repository;
 
-    public function __construct(VertexRepository $repo, MapBuilder $builder)
+    public function __construct(VertexRepository $repo, MapBuilder $builder, protected FormFactoryInterface $formFactory)
     {
         $this->builder = $builder;
         $this->repository = $repo;
@@ -56,6 +58,9 @@ class FirstPerson extends AbstractController
         $gmView = $this->createForm(GmViewBroadcast::class, null, [
             'action' => $this->generateUrl('app_firstperson_pushgmview')
         ]);
+        $depthMap = $this->formFactory->createNamed('depth', GmViewBroadcast::class, null, [
+            'action' => $this->generateUrl('app_firstperson_pushdepth')
+        ]);
         $legend = $this->createForm(TileLegend::class);
         $texturing = $this->createForm(RoomTexturing::class);
         $writer = $this->createForm(Battlemap3dWrite::class, $place, [
@@ -71,6 +76,7 @@ class FirstPerson extends AbstractController
                     'writer' => $writer->createView(),
                     'broadcast' => $broadcast->createView(),
                     'gm_view' => $gmView->createView(),
+                    'depth_map' => $depthMap->createView(),
                     'spot' => $spot->createView()
         ]);
     }
@@ -95,7 +101,7 @@ class FirstPerson extends AbstractController
 
     /**
      * Gets the battlemap for a Place
-     * If it already exists, it sends back, or it generates it with voronoi algorithm
+     * If it's already existing, it sends back, or it generates it with voronoi algorithm
      */
     #[Route('/fps/scene/{pk}.{_format}', methods: ['GET'], requirements: ['pk' => '[\\da-f]{24}', '_format' => 'battlemap'])]
     public function babylon(Place $place, Storage $storage, Request $request): Response
@@ -193,6 +199,24 @@ class FirstPerson extends AbstractController
         }
 
         return new JsonResponse(['level' => 'error', 'message' => (string) $form->getErrors(true, true)], 400);
+    }
+
+    /**
+     * Broadcast the InvokeAI-generated picture, given the depth map
+     */
+    #[Route('/fps/push/depth', methods: ['POST'])]
+    public function pushDepth(Request $request, InvokeAiClient $invokeai): JsonResponse
+    {
+        $form = $thiss->formFactory->createNamed('depth', GmViewBroadcast::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $screenshot */
+            $screenshot = $form['picture']->getData();
+            $invokeai->uploadAsset($screenshot);
+        }
+
+        return new JsonResponse(['level' => 'error', 'message' => (string) $form->getErrors(true, true)], 422);
     }
 
 }

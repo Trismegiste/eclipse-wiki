@@ -12,6 +12,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use UnexpectedValueException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Client for InvokeAI Stable Diffusion
@@ -156,6 +157,18 @@ class InvokeAiClient extends PictureRepository
         }
 
         return $found;
+    }
+
+    public function uploadAsset(UploadedFile $picture): void
+    {
+        $response = $this->client->request('POST', $this->baseUrl . 'api/v1/assets', [
+            'body' => ['file' => fopen($picture->getPathname(), 'r')]
+        ]);
+
+        if ($response->getStatusCode() !== 201) {
+            throw new UnexpectedValueException('API returned ' . $response->getStatusCode() . ' status code');
+        }
+
     }
 
 }
