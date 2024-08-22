@@ -164,8 +164,7 @@ export class BattlemapBuilder
         const renderer = this.scene.enableDepthRenderer()
         const map = renderer.getDepthMap()
         const buffer = await map.readPixels()
-        console.log(map.getRenderWidth(), map.getRenderHeight())
-        console.log(buffer)
+        const picture = await BABYLON.DumpDataAsync(map.getRenderWidth(), map.getRenderHeight(), buffer, 'image/png', 'depth.png', true, true)
         this.scene.disableDepthRenderer()
     }
 
