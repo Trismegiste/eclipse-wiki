@@ -207,13 +207,13 @@ class FirstPerson extends AbstractController
     #[Route('/fps/push/depth', methods: ['POST'])]
     public function pushDepth(Request $request, InvokeAiClient $invokeai): JsonResponse
     {
-        $form = $thiss->formFactory->createNamed('depth', GmViewBroadcast::class);
+        $form = $this->formFactory->createNamed('depth', GmViewBroadcast::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var UploadedFile $screenshot */
             $screenshot = $form['picture']->getData();
-            $invokeai->uploadAsset($screenshot);
+//            $invokeai->uploadAsset($screenshot);
         }
 
         return new JsonResponse(['level' => 'error', 'message' => (string) $form->getErrors(true, true)], 422);

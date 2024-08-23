@@ -161,11 +161,23 @@ export class BattlemapBuilder
     }
 
     async postDepthMap() {
+        const formElem = document.querySelector('form[name=depth]')
+        const formData = new FormData(formElem)
+
         const renderer = this.scene.enableDepthRenderer()
+        this.scene.render()
         const map = renderer.getDepthMap()
         const buffer = await map.readPixels()
-        const picture = await BABYLON.DumpDataAsync(map.getRenderWidth(), map.getRenderHeight(), buffer, 'image/png', 'depth.png', true, true)
+        const picture = await BABYLON.DumpTools.DumpDataAsync(map.getRenderWidth(), map.getRenderHeight(), buffer, 'image/png', null, true, true)
+        formData.append(`depth[picture]`, new Blob([picture], {type: 'image/png'}))
         this.scene.disableDepthRenderer()
+
+        // post the form
+        await fetch(formElem.action, {
+            method: 'post',
+            body: formData,
+            redirect: 'manual'
+        })
     }
 
     setLight() {
