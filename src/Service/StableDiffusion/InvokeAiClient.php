@@ -171,4 +171,13 @@ class InvokeAiClient extends PictureRepository
 
     }
 
+    public function enqueueGeneration(array $payload): void
+    {
+        $response = $this->client->request('POST', $this->baseUrl . 'api/v1/queue/default/enqueue_batch', [
+            'json' => $payload
+        ]);
+
+        var_dump($response->toArray());
+    }
+
 }
