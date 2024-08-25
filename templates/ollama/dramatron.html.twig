@@ -17,9 +17,11 @@
         <div class="pure-u-3-5">
             <form class="pure-form" x-on:submit.prevent="generate">
                 <fieldset>
-                    <textarea x-model="scenario.pitch" class="pure-input-1" rows="5"></textarea>
-                    <button class="pure-button">Generate</button>                    
-                    <textarea x-model="result" class="pure-input-1" rows="20"></textarea>
+                    <h2>Pitch</h2>
+                    <textarea x-model="scenario.pitch" class="pure-input-1" rows="4"></textarea>
+                    <button class="pure-button">Générer</button>
+                    <h2>Sortie LLM</h2>
+                    <textarea x-model="result" class="pure-input-1" rows="30"></textarea>
                 </fieldset>
             </form>
         </div>
@@ -29,6 +31,29 @@
                     <li x-text="place.title"></li>
                 </template>
             </ul>
+        </div>
+        <div class="pure-u-1">
+            <template x-if="scenario.pitch">
+                <section>
+                    <h2>Pitch</h2>
+                    <article x-text="scenario.pitch">
+                    </article>
+                </section>
+            </template>
+            <template x-if="scenario.story">
+                <section>
+                    <h2>Développement</h2>
+                    <article x-text="scenario.story">
+                    </article>
+                </section>
+            </template>
+            <template x-for="scene, idx in scenario.scene">
+                <section>
+                    <h2 x-text="'Acte ' + idx"></h2>
+                    <article x-text="scene">
+                    </article>
+                </section>
+            </template>
         </div>
     </div>
 {% endblock %}
@@ -78,7 +103,7 @@
                         payload.messages.push({role: 'assistant', content: this.result})
                         this.scenario.scene[k] = this.result
                     }
-                    
+
                     console.log(this.scenario)
                 },
 
@@ -99,4 +124,13 @@
                 }
             }))
     </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        fieldset h2:nth-child(1) {
+            margin-top: 0;
+        }
+    </style>
 {% endblock %}
