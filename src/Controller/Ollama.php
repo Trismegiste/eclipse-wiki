@@ -108,4 +108,13 @@ class Ollama extends AbstractController
         ]);
     }
 
+    #[Route('/dramatron', methods: ['GET', 'POST'])]
+    public function dramatron(Request $request): Response
+    {
+        return $this->render('ollama/dramatron.html.twig', [
+                    'ollama_api' => $this->ollamaApi,
+                    'payload' => $this->payloadFactory->create('init')
+        ]);
+    }
+
 }

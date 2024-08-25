@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dramatron{% endblock %}
+{% block header_title %}
+    {{ block('title') }}
+{% endblock %}
+
+{% block content %}
+    <div class="dramatron" x-data="dramatron('{{ ollama_api }}')">
+        <textarea x-model="scenario.pitch"></textarea>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="application/json" id="init-payload">
+        {{ payload|json_encode()|raw }}
+    </script>
+    <script type="module">
+        import { Ollama } from 'ollama/browser';
+
+        class Scenario {
+            title = null
+            pitch = null
+            character = []
+            place = []
+            scene = []
+        }
+
+        Alpine.data('dramatron', url => ({
+                ollama: null,
+                scenario: null,
+                init() {
+                    this.scenario = new Scenario()
+                    this.ollama = new Ollama({host: url})
+                }
+
+            }))
+    </script>
+{% endblock %}
