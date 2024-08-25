@@ -6,8 +6,30 @@
 {% endblock %}
 
 {% block content %}
-    <div class="dramatron" x-data="dramatron('{{ ollama_api }}')">
-        <textarea x-model="scenario.pitch"></textarea>
+    <div class="pure-g" x-data="dramatron('{{ ollama_api }}')">
+        <div class="pure-u-1-5">
+            <ul>
+                <template x-for="char in scenario.character">
+                    <li x-text="char.title"></li>
+                </template>
+            </ul>
+        </div>
+        <div class="pure-u-3-5">
+            <form class="pure-form" x-on:submit.prevent="generate">
+                <fieldset>
+                    <textarea x-model="scenario.pitch" class="pure-input-1" rows="5"></textarea>
+                    <button class="pure-button">Generate</button>                    
+                    <textarea x-model="result" class="pure-input-1" rows="20"></textarea>
+                </fieldset>
+            </form>
+        </div>
+        <div class="pure-u-1-5">
+            <ul>
+                <template x-for="place in scenario.place">
+                    <li x-text="place.title"></li>
+                </template>
+            </ul>
+        </div>
     </div>
 {% endblock %}
 
@@ -18,10 +40,10 @@
     </script>
     <script type="module">
         import { Ollama } from 'ollama/browser';
-
         class Scenario {
             title = null
             pitch = null
+            story = null
             character = []
             place = []
             scene = []
@@ -30,11 +52,51 @@
         Alpine.data('dramatron', url => ({
                 ollama: null,
                 scenario: null,
+                result: '',
+
                 init() {
                     this.scenario = new Scenario()
                     this.ollama = new Ollama({host: url})
-                }
+                },
 
+                async generate(event) {
+                    let payload = this.getDefaultPayload()
+                    payload.messages[1].content = payload.messages[1].content
+                            + this.scenario.pitch
+                            + "\nDéveloppe ce synopsis en 5 actes"
+
+                    // Expansion of the pitch
+                    this.result = ''
+                    await this.printAnswer(payload)
+                    this.scenario.story = this.result
+                    payload.messages[2] = {role: 'assistant', content: this.scenario.story}
+
+                    // 5 acts expansion
+                    for (let k = 1; k <= 5; k++) {
+                        payload.messages.push({role: 'user', content: `Développe sur 5 scènes, en incluant une scène d'action, l'acte ${k} de ton synopsis`})
+                        await this.printAnswer(payload)
+                        payload.messages.push({role: 'assistant', content: this.result})
+                        this.scenario.scene[k] = this.result
+                    }
+                    
+                    console.log(this.scenario)
+                },
+
+                getDefaultPayload() {
+                    let p = JSON.parse(document.getElementById('init-payload').textContent)
+                    p.options.num_ctx = 30000
+
+                    return p
+                },
+
+                async printAnswer(payload) {
+                    this.result = ''
+                    const response = await this.ollama.chat(payload)
+                    for await (const part of response) {
+                        this.waiting = false
+                        this.result = this.result.concat(part.message.content)
+                    }
+                }
             }))
     </script>
 {% endblock %}

@@ -113,7 +113,7 @@ class Ollama extends AbstractController
     {
         return $this->render('ollama/dramatron.html.twig', [
                     'ollama_api' => $this->ollamaApi,
-                    'payload' => $this->payloadFactory->create('init')
+                    'payload' => $this->payloadFactory->create("Dans le contexte précédemment décrit, voici le synopsis du roman\n")
         ]);
     }
 
