@@ -12,7 +12,7 @@
                 <fieldset>
                     <h2>Pitch</h2>
                     <textarea x-model="scenario.pitch" class="pure-input-1" rows="4"></textarea>
-                    <button class="pure-button">Générer</button>
+                    <button class="pure-button" x-bind:disabled="!scenario.pitch">Générer</button>
                     <h2>Développement</h2>
                     <textarea x-model="scenario.story" class="pure-input-1" rows="30"></textarea>
                     <template x-for="idx in [1,2,3,4,5]">
@@ -27,6 +27,7 @@
         <div class="pure-u-1-5">
             <section>
                 <h2>Personnages</h2>
+                <textarea x-model="scenario.character" class="pure-input-1" rows="10"></textarea>
                 <ul>
                     <template x-for="entry in scenario.character">
                         <li x-text="entry.title"></li>
@@ -61,8 +62,8 @@
             act3 = null
             act4 = null
             act5 = null
-            character = []
-            place = []
+            character = null
+            place = null
         }
 
         Alpine.data('dramatron', url => ({
@@ -117,8 +118,15 @@
                         const key = 'act' + k
                         if (!this.scenario[key]) {
                             payload.messages.push(this.getQuestionForAct(k))
-                            return  {field: key, payload: payload}
+                            return {field: key, payload: payload}
                         }
+                    }
+
+                    // all 5 acts are filled, extract characters' name. 
+                    // The characters' field is a big blob of text. PostProcessing will came afterwards
+                    if (!this.scenario.character) {
+                        payload.messages.push({role: 'user', content: "Maintenant, tu vas extraire tous les noms des personnages impliqués dans ce roman. Réponds en format JSON"})
+                        return {field: 'character', payload: payload}
                     }
 
                     throw new Error('No empty field to ask the LLM to generate')
