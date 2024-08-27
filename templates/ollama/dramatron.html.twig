@@ -142,6 +142,9 @@
                     const response = await this.ollama.chat(payload)
                     for await (const part of response) {
                         this.scenario[field] = this.scenario[field].concat(part.message.content)
+                        if (part.done === true) {
+                            console.table({'prompt token': part.prompt_eval_count, 'response token': part.eval_count})
+                        }
                     }
                 }
             }))
