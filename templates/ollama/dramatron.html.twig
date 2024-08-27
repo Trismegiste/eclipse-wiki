@@ -29,7 +29,7 @@
                 <h2>Personnages</h2>
                 <textarea x-model="scenario.character" class="pure-input-1" rows="10"></textarea>
                 <ul>
-                    <template x-for="entry in scenario.character">
+                    <template x-for="entry in scenario.parsedCharacter">
                         <li x-text="entry.title"></li>
                     </template>
                 </ul>
@@ -63,6 +63,7 @@
             act4 = null
             act5 = null
             character = null
+            parsedCharacter = []
             place = null
         }
 
@@ -125,7 +126,7 @@
                     // all 5 acts are filled, extract characters' name. 
                     // The characters' field is a big blob of text. PostProcessing will came afterwards
                     if (!this.scenario.character) {
-                        payload.messages.push({role: 'user', content: "Maintenant, tu vas extraire tous les noms des personnages impliqués dans ce roman. Réponds en format JSON"})
+                        payload.messages.push({role: 'user', content: "Compile la liste de tous les noms des personnages impliqués dans toutes les scènes que tu as précédemment décrites. Réponds en format JSON"})
                         return {field: 'character', payload: payload}
                     }
 
@@ -137,6 +138,7 @@
                 },
 
                 async printAnswer(payload, field) {
+                    this.scenario[field] = ''
                     const response = await this.ollama.chat(payload)
                     for await (const part of response) {
                         this.scenario[field] = this.scenario[field].concat(part.message.content)
