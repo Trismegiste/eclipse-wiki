@@ -7,53 +7,40 @@
 
 {% block content %}
     <div class="pure-g" x-data="dramatron('{{ ollama_api }}')">
-        <div class="pure-u-1-5">
-            <ul>
-                <template x-for="char in scenario.character">
-                    <li x-text="char.title"></li>
-                </template>
-            </ul>
-        </div>
-        <div class="pure-u-3-5">
+        <div class="pure-u-4-5">
             <form class="pure-form" x-on:submit.prevent="generate">
                 <fieldset>
                     <h2>Pitch</h2>
                     <textarea x-model="scenario.pitch" class="pure-input-1" rows="4"></textarea>
                     <button class="pure-button">Générer</button>
-                    <h2>Sortie LLM</h2>
-                    <textarea x-model="result" class="pure-input-1" rows="30"></textarea>
+                    <h2>Développement</h2>
+                    <textarea x-model="scenario.story" class="pure-input-1" rows="30"></textarea>
+                    <template x-for="idx in [1,2,3,4,5]">
+                        <section>
+                            <h2 x-text="'Acte ' + idx"></h2>
+                            <textarea x-model="scenario['act' + idx]" class="pure-input-1" rows="10"></textarea>
+                        </section>
+                    </template>
                 </fieldset>
             </form>
         </div>
         <div class="pure-u-1-5">
-            <ul>
-                <template x-for="place in scenario.place">
-                    <li x-text="place.title"></li>
-                </template>
-            </ul>
-        </div>
-        <div class="pure-u-1">
-            <template x-if="scenario.pitch">
-                <section>
-                    <h2>Pitch</h2>
-                    <article x-text="scenario.pitch">
-                    </article>
-                </section>
-            </template>
-            <template x-if="scenario.story">
-                <section>
-                    <h2>Développement</h2>
-                    <article x-text="scenario.story">
-                    </article>
-                </section>
-            </template>
-            <template x-for="scene, idx in scenario.scene">
-                <section>
-                    <h2 x-text="'Acte ' + idx"></h2>
-                    <article x-text="scene">
-                    </article>
-                </section>
-            </template>
+            <section>
+                <h2>Personnages</h2>
+                <ul>
+                    <template x-for="entry in scenario.character">
+                        <li x-text="entry.title"></li>
+                    </template>
+                </ul>
+            </section>
+            <section>
+                <h2>Décors</h2>
+                <ul>
+                    <template x-for="entry in scenario.place">
+                        <li x-text="entry.title"></li>
+                    </template>
+                </ul>
+            </section>
         </div>
     </div>
 {% endblock %}
@@ -69,25 +56,18 @@
             title = null
             pitch = null
             story = null
+            act1 = null
+            act2 = null
+            act3 = null
+            act4 = null
+            act5 = null
             character = []
             place = []
-            scene = []
         }
-
-        const dramaField = [
-           'pitch',
-           'story',
-           'act1',
-           'act2',
-           'act3',
-           'act4',
-           'act5'
-        ]
 
         Alpine.data('dramatron', url => ({
                 ollama: null,
                 scenario: null,
-                result: '',
 
                 init() {
                     this.scenario = new Scenario()
@@ -95,26 +75,9 @@
                 },
 
                 async generate(event) {
-                    let payload = this.getDefaultPayload()
-                    payload.messages[1].content = payload.messages[1].content
-                            + this.scenario.pitch
-                            + "\nDéveloppe ce synopsis en 5 actes"
-
-                    // Expansion of the pitch
-                    this.result = ''
-                    await this.printAnswer(payload)
-                    this.scenario.story = this.result
-                    payload.messages[2] = {role: 'assistant', content: this.scenario.story}
-
-                    // 5 acts expansion
-                    for (let k = 1; k <= 5; k++) {
-                        payload.messages.push({role: 'user', content: `Développe sur 5 scènes, en incluant une scène d'action, l'acte ${k} de ton synopsis`})
-                        await this.printAnswer(payload)
-                        payload.messages.push({role: 'assistant', content: this.result})
-                        this.scenario.scene[k] = this.result
-                    }
-
-                    console.log(this.scenario)
+                    const newGeneration = this.getPayload()
+                    console.log('new generation for', newGeneration.field)
+                    await this.printAnswer(newGeneration.payload, newGeneration.field)
                 },
 
                 getDefaultPayload() {
@@ -124,12 +87,51 @@
                     return p
                 },
 
-                async printAnswer(payload) {
-                    this.result = ''
+                getPayload() {
+                    if (!this.scenario.pitch) {
+                        throw new Error('Pitch is empty, cannot generate anything without, at least, a pitch')
+                    }
+
+                    let payload = this.getDefaultPayload()
+                    payload.messages[1].content = payload.messages[1].content
+                            + this.scenario.pitch
+                            + "\nDéveloppe ce synopsis en 5 actes"
+
+                    // adding generated story to the train-of-thought. If it's empty, returning the payload for generation
+                    if (this.scenario.story) {
+                        payload.messages[2] = {role: 'assistant', content: this.scenario.story}
+                    } else {
+                        return {field: 'story', payload: payload}
+                    }
+
+                    // Adding the already-generated/filled acts (skipping empty acts) to the train-of-thought
+                    for (let k = 1; k <= 5; k++) {
+                        if (this.scenario['act' + k]) {
+                            payload.messages.push(this.getQuestionForAct(k))
+                            payload.messages.push({role: 'assistant', content: this.scenario['act' + k]})
+                        }
+                    }
+
+                    // finding the first empty act and returning the payload with the question at the end
+                    for (let k = 1; k <= 5; k++) {
+                        const key = 'act' + k
+                        if (!this.scenario[key]) {
+                            payload.messages.push(this.getQuestionForAct(k))
+                            return  {field: key, payload: payload}
+                        }
+                    }
+
+                    throw new Error('No empty field to ask the LLM to generate')
+                },
+
+                getQuestionForAct(n) {
+                    return {role: 'user', content: `Développe sur 5 scènes, en incluant une scène d'action, l'acte ${n} de ton synopsis`}
+                },
+
+                async printAnswer(payload, field) {
                     const response = await this.ollama.chat(payload)
                     for await (const part of response) {
-                        this.waiting = false
-                        this.result = this.result.concat(part.message.content)
+                        this.scenario[field] = this.scenario[field].concat(part.message.content)
                     }
                 }
             }))
@@ -139,7 +141,7 @@
 {% block stylesheets %}
     {{ parent() }}
     <style>
-        fieldset h2:nth-child(1) {
+        fieldset > h2:nth-child(1) {
             margin-top: 0;
         }
     </style>
