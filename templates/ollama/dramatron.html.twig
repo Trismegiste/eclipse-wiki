@@ -17,11 +17,17 @@
                     </button>
                     <button class="pure-button" x-bind:disabled="!scenario.pitch" x-on:click.prevent="save">Sauver en local</button>
                     <button class="pure-button" x-bind:disabled="!!scenario.pitch" x-on:click.prevent="load">Charger en local</button>
-                    <h2>Développement</h2>
+                    <h2>
+                        Développement
+                        <button class="pure-button" x-on:click.prevent="scenario.story=''; generate()"><i class="icon-spin3"></i></button>
+                    </h2>
                     <textarea x-model="scenario.story" class="pure-input-1" rows="30"></textarea>
                     <template x-for="idx in [1,2,3,4,5]">
                         <section>
-                            <h2 x-text="'Acte ' + idx"></h2>
+                            <h2>
+                                <span x-text="'Acte ' + idx"></span>
+                                <button class="pure-button" x-on:click.prevent="scenario['act' + idx]=''; generate()"><i class="icon-spin3"></i></button>
+                            </h2>
                             <textarea x-model="scenario['act' + idx]" class="pure-input-1" rows="10"></textarea>
                         </section>
                     </template>
@@ -43,9 +49,9 @@
                         </template>
                     </ul>
                 </fieldset>
+            </aside>
         </div>
-    </aside>
-</form>
+    </form>
 {% endblock %}
 
 {% block javascripts %}
@@ -170,6 +176,11 @@
 
         fieldset > h2:first-child {
             margin-top: 0;
+        }
+
+        fieldset h2 .pure-button {
+            font-size: 1rem;
+            float: right;
         }
     </style>
 {% endblock %}
