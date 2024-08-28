@@ -6,13 +6,17 @@
 {% endblock %}
 
 {% block content %}
-    <div class="pure-g" x-data="dramatron('{{ ollama_api }}')">
-        <div class="pure-u-4-5">
-            <form class="pure-form" x-on:submit.prevent="generate">
+    <form class="pure-form" x-data="dramatron('{{ ollama_api }}')">
+        <div class="pure-g">
+            <div class="pure-u-4-5">
                 <fieldset>
                     <h2>Pitch</h2>
                     <textarea x-model="scenario.pitch" class="pure-input-1" rows="4"></textarea>
-                    <button class="pure-button" x-bind:disabled="!scenario.pitch">Générer</button>
+                    <button class="pure-button" x-bind:disabled="!scenario.pitch" x-on:click.prevent="generate">
+                        Générer le prochain champ vide
+                    </button>
+                    <button class="pure-button" x-bind:disabled="!scenario.pitch" x-on:click.prevent="save">Sauver en local</button>
+                    <button class="pure-button" x-bind:disabled="!!scenario.pitch" x-on:click.prevent="load">Charger en local</button>
                     <h2>Développement</h2>
                     <textarea x-model="scenario.story" class="pure-input-1" rows="30"></textarea>
                     <template x-for="idx in [1,2,3,4,5]">
@@ -22,28 +26,26 @@
                         </section>
                     </template>
                 </fieldset>
-            </form>
+            </div>
+            <aside class="pure-u-1-5">
+                <fieldset>
+                    <h2>Personnages</h2>
+                    <textarea x-model="scenario.character" class="pure-input-1" rows="10"></textarea>
+                    <ul>
+                        <template x-for="entry in scenario.parsedCharacter">
+                            <li x-text="entry.title"></li>
+                        </template>
+                    </ul>
+                    <h2>Décors</h2>
+                    <ul>
+                        <template x-for="entry in scenario.place">
+                            <li x-text="entry.title"></li>
+                        </template>
+                    </ul>
+                </fieldset>
         </div>
-        <div class="pure-u-1-5">
-            <section>
-                <h2>Personnages</h2>
-                <textarea x-model="scenario.character" class="pure-input-1" rows="10"></textarea>
-                <ul>
-                    <template x-for="entry in scenario.parsedCharacter">
-                        <li x-text="entry.title"></li>
-                    </template>
-                </ul>
-            </section>
-            <section>
-                <h2>Décors</h2>
-                <ul>
-                    <template x-for="entry in scenario.place">
-                        <li x-text="entry.title"></li>
-                    </template>
-                </ul>
-            </section>
-        </div>
-    </div>
+    </aside>
+</form>
 {% endblock %}
 
 {% block javascripts %}
@@ -76,7 +78,7 @@
                     this.ollama = new Ollama({host: url})
                 },
 
-                async generate(event) {
+                async generate() {
                     const newGeneration = this.getPayload()
                     console.log('new generation for', newGeneration.field)
                     await this.printAnswer(newGeneration.payload, newGeneration.field)
@@ -122,14 +124,14 @@
                             return {field: key, payload: payload}
                         }
                     }
-
-                    // all 5 acts are filled, extract characters' name. 
-                    // The characters' field is a big blob of text. PostProcessing will came afterwards
-                    if (!this.scenario.character) {
-                        payload.messages.push({role: 'user', content: "Compile la liste de tous les noms des personnages impliqués dans toutes les scènes que tu as précédemment décrites. Réponds en format JSON"})
-                        return {field: 'character', payload: payload}
-                    }
-
+                    /*
+                     // all 5 acts are filled, extract characters' name. 
+                     // The characters' field is a big blob of text. PostProcessing will came afterwards
+                     if (!this.scenario.character) {
+                     payload.messages.push({role: 'user', content: "Compile la liste de tous les noms des personnages impliqués dans toutes les scènes que tu as précédemment décrites. Réponds en format JSON"})
+                     return {field: 'character', payload: payload}
+                     }
+                     */
                     throw new Error('No empty field to ask the LLM to generate')
                 },
 
@@ -146,6 +148,14 @@
                             console.table({'prompt token': part.prompt_eval_count, 'response token': part.eval_count})
                         }
                     }
+                },
+
+                save() {
+                    localStorage.setItem('dramatron', JSON.stringify(this.scenario))
+                },
+
+                load() {
+                    this.scenario = JSON.parse(localStorage.getItem('dramatron'))
                 }
             }))
     </script>
@@ -154,7 +164,11 @@
 {% block stylesheets %}
     {{ parent() }}
     <style>
-        fieldset > h2:nth-child(1) {
+        .pure-u-4-5 > fieldset {
+            margin-right: 2em;
+        }
+
+        fieldset > h2:first-child {
             margin-top: 0;
         }
     </style>
