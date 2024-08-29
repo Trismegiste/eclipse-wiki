@@ -39,7 +39,6 @@
                         Personnages
                         <button class="pure-button" x-bind:disabled="!scenario.pitch" x-on:click.prevent="extractCharacter"><i class="icon-spin3"></i></button>
                     </h2>
-                    <textarea x-model="scenario.characterOutput" class="pure-input-1" rows="10"></textarea>
                     <ul>
                         <template x-for="entry in scenario.character">
                             <li x-text="entry.name"></li>
@@ -168,14 +167,7 @@
                             return {field: key, payload: payload}
                         }
                     }
-                    /*
-                     // all 5 acts are filled, extract characters' name. 
-                     // The characters' field is a big blob of text. PostProcessing will came afterwards
-                     if (!this.scenario.character) {
-                     payload.messages.push({role: 'user', content: "Compile la liste de tous les noms des personnages impliqués dans toutes les scènes que tu as précédemment décrites. Réponds en format JSON"})
-                     return {field: 'character', payload: payload}
-                     }
-                     */
+
                     throw new Error('No empty field to ask the LLM to generate')
                 },
 
@@ -195,7 +187,7 @@
                         for await (const part of response) {
                             this.scenario[field] = this.scenario[field].concat(part.message.content)
                             if (part.done === true) {
-                                console.table({'prompt token': part.prompt_eval_count, 'response token': part.eval_count})
+                                console.table({'prompt token count': part.prompt_eval_count, 'response token count': part.eval_count})
                             }
                         }
                     } catch (error) {
@@ -215,19 +207,10 @@
                     this.scenario = JSON.parse(localStorage.getItem('dramatron'))
                 },
 
-                async extractCharacter() {
-                    let story = ''
-                    for (let k = 1; k <= 5; k++) {
-                        const key = 'act' + k
-                        story = story.concat(this.scenario[key] + "\n")
-                    }
-
-                    const schema = document.getElementById('character-schema').textContent
-
-                    let payload = this.getDefaultPayload()
+                getQuestionForCharacter(schema, story) {
                     // thanks to https://thoughtbot.com/blog/get-consistent-data-from-your-llm-with-json-schema for this :
-                    payload.messages[1].content = `
-Consider the following JSON Schema based on the 2020-12  specification:
+                    return `
+Consider the following JSON Schema based on the 2020-12 specification:
 \`\`\`json
 ${schema}
 \`\`\`
@@ -239,16 +222,42 @@ ${story}
 Based on all this information, generate a valid JSON object with list of characters' names. 
 Optionaly, you can add the character's role if you can determine it.
 `
+                },
+
+                async extractCharacter(event) {
+                    const icon = event.currentTarget.getElementsByTagName('i')[0]
+                    icon.classList.add('animate-spin')
+
+                    let story = ''
+                    for (let k = 1; k <= 5; k++) {
+                        const key = 'act' + k
+                        story = story.concat(this.scenario[key] + "\n")
+                    }
+
+                    const schema = document.getElementById('character-schema').textContent
+
+                    let payload = this.getDefaultPayload()
+                    payload.messages[1].content = this.getQuestionForCharacter(schema, story)
                     await this.printAnswer(payload, 'characterOutput')
+                    // @todo Better handling bad json and bad format of json
+                    const extract = this.extractJsonBlock(this.scenario.characterOutput)
+                    this.scenario.character = []
+                    for (const npc of extract.characters) {
+                        this.scenario.character.push({name: npc.name})
+                    }
+
+                    icon.classList.remove('animate-spin')
+                },
+
+                extractJsonBlock(answer) {
                     const regex = /```json\n([^`]+)\n```/
                     let match;
-                    if ((match = regex.exec(this.scenario.characterOutput)) !== null) {
-                        this.scenario.character = []
-                        const extract = JSON.parse(match[1])
-                        for (const npc of extract.characters) {
-                            this.scenario.character.push({name: npc.name})
-                        }
+                    // @todo Better handling bad json and bad format of json
+                    if ((match = regex.exec(answer)) !== null) {
+                        return JSON.parse(match[1])
                     }
+
+                    throw new Error(answer + ' does not contains JSON code')
                 }
             }))
     </script>
