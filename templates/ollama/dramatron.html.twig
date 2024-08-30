@@ -251,6 +251,7 @@ Optionaly, you can add the character's role if you can determine it.
                 },
 
                 extractJsonBlock(answer) {
+                    // @todo answer could only contain one JSON without text nor json block
                     const regex = /```json\n([^`]+)\n```/
                     let match;
                     // @todo Better handling bad json and bad format of json
@@ -262,7 +263,7 @@ Optionaly, you can add the character's role if you can determine it.
                 },
 
                 async totalCreation() {
-                    // Reboot the scnario, just keeping the pitch
+                    // Reboot the scenario, just keeping the pitch
                     let reboot = new Scenario()
                     reboot.pitch = this.scenario.pitch
                     this.scenario = reboot
@@ -271,7 +272,7 @@ Optionaly, you can add the character's role if you can determine it.
                         await this.generate()
                     }
                     // generate characters
-                    await extractCharacter()
+                    await this.extractCharacter() // this will bug since there is no event and no icon to animate
                 }
             }))
     </script>
