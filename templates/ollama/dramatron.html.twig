@@ -17,6 +17,7 @@
                     </button>
                     <button class="pure-button" x-bind:disabled="!scenario.pitch" x-on:click.prevent="save">Sauver en local</button>
                     <button class="pure-button" x-bind:disabled="!!scenario.pitch" x-on:click.prevent="load">Charger en local</button>
+                    <button class="pure-button" x-bind:disabled="!scenario.pitch" x-on:click.prevent="totalCreation">Effacer et tout générer à partir du pitch</button>
                     <h2>
                         Développement
                         <button class="pure-button" x-on:click.prevent="scenario.story=''; generate()"><i class="icon-spin3"></i></button>
@@ -258,6 +259,19 @@ Optionaly, you can add the character's role if you can determine it.
                     }
 
                     throw new Error(answer + ' does not contains JSON code')
+                },
+
+                async totalCreation() {
+                    // Reboot the scnario, just keeping the pitch
+                    let reboot = new Scenario()
+                    reboot.pitch = this.scenario.pitch
+                    this.scenario = reboot
+                    // regenerate the general story and the 5 acts
+                    for(let k=0; k<6; k++) {
+                        await this.generate()
+                    }
+                    // generate characters
+                    await extractCharacter()
                 }
             }))
     </script>
