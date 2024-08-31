@@ -57,6 +57,12 @@
     </form>
 {% endblock %}
 
+{% block info %}
+    <div x-data="llmState" x-on:llm.window="update">
+        <i class="icon-spin3 animate-spin" x-show="running"></i>
+    </div>
+{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
     <script type="application/json" id="character-schema">
@@ -130,7 +136,7 @@
 
                 getDefaultPayload() {
                     let p = JSON.parse(document.getElementById('init-payload').textContent)
-                    p.options.num_ctx = 30000
+                    p.options.num_ctx = 12000
 
                     return p
                 },
@@ -182,6 +188,7 @@
 
                     //re-init
                     this.scenario[field] = ''
+                    this.$el.dispatchEvent(new CustomEvent('llm', {bubbles: true, detail: {running: true}}))
                     const response = await this.ollama.chat(payload)
 
                     try {
@@ -197,6 +204,8 @@
                         } else {
                             console.error('An error occurred:', error)
                         }
+                    } finally {
+                        this.$el.dispatchEvent(new CustomEvent('llm', {bubbles: true, detail: {running: false}}))
                     }
                 },
 
@@ -226,9 +235,6 @@ Optionaly, you can add the character's role if you can determine it.
                 },
 
                 async extractCharacter(event) {
-                    const icon = event.currentTarget.getElementsByTagName('i')[0]
-                    icon.classList.add('animate-spin')
-
                     let story = ''
                     for (let k = 1; k <= 5; k++) {
                         const key = 'act' + k
@@ -246,8 +252,6 @@ Optionaly, you can add the character's role if you can determine it.
                     for (const npc of extract.characters) {
                         this.scenario.character.push({name: npc.name})
                     }
-
-                    icon.classList.remove('animate-spin')
                 },
 
                 extractJsonBlock(answer) {
@@ -256,7 +260,11 @@ Optionaly, you can add the character's role if you can determine it.
                     let match;
                     // @todo Better handling bad json and bad format of json
                     if ((match = regex.exec(answer)) !== null) {
+                        console.debug('Extract from json block in answer')
                         return JSON.parse(match[1])
+                    } else {
+                        console.debug('Extract from answer')
+                        return JSON.parse(answer)
                     }
 
                     throw new Error(answer + ' does not contains JSON code')
@@ -276,6 +284,15 @@ Optionaly, you can add the character's role if you can determine it.
                 }
             }))
     </script>
+    <script type="module">
+        Alpine.data('llmState', ()=>({
+            running: false,
+            
+            update(event) {
+                this.running = event.detail.running
+            }
+        }))
+    </script>
 {% endblock %}
 
 {% block stylesheets %}
@@ -284,14 +301,21 @@ Optionaly, you can add the character's role if you can determine it.
         .pure-u-4-5 > fieldset {
             margin-right: 2em;
         }
-
         fieldset > h2:first-child {
             margin-top: 0;
         }
-
         fieldset h2 .pure-button {
             font-size: 1rem;
             float: right;
+        }
+
+        .info {
+            position: sticky;
+            top: 0.5em;
+        }
+        .info i {
+            font-size: 1000%;
+            color: lightgray;
         }
     </style>
 {% endblock %}
