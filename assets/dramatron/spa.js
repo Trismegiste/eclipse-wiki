@@ -124,38 +124,42 @@ Optionaly, you can add the character's role if you can determine it.
 `
         },
 
-        async extractCharacter(event) {
+        getCompiledStory() {
             let story = ''
             for (let k = 1; k <= 5; k++) {
                 const key = 'act' + k
                 story = story.concat(this.scenario[key] + "\n")
             }
 
+            return story
+        },
+
+        async extractCharacter() {
             let payload = this.getDefaultPayload()
-            payload.messages[1].content = this.getQuestionForCharacter(JSON.stringify(characterSchema, null, 4), story)
+            payload.messages[1].content = this.getQuestionForCharacter(JSON.stringify(characterSchema, null, 4), this.getCompiledStory())
             await this.printAnswer(payload, 'characterOutput')
-            // @todo Better handling bad json and bad format of json
-            const extract = this.extractJsonBlock(this.scenario.characterOutput)
-            this.scenario.character = []
-            for (const npc of extract.characters) {
-                this.scenario.character.push({name: npc.name})
+
+            try {
+                const extract = this.extractJsonBlock(this.scenario.characterOutput)
+                this.scenario.character = extract.characters
+            } catch (ex) {
+                console.debug(this.scenario.characterOutput)
+                throw new Error('Cannot parse the extracted characters JSON')
             }
         },
 
         extractJsonBlock(answer) {
-            // @todo answer could only contain one JSON without text nor json block
             const regex = /```json\n([^`]+)\n```/
             let match;
-            // @todo Better handling bad json and bad format of json
+            // if there is a json block in markdown format
             if ((match = regex.exec(answer)) !== null) {
-                console.debug('Extract from json block in answer')
+                console.debug('Parse the json block in answer')
                 return JSON.parse(match[1])
             } else {
-                console.debug('Extract from answer')
+                // try to parse the answer as a json only
+                console.debug('Parse the answer')
                 return JSON.parse(answer)
             }
-
-            throw new Error(answer + ' does not contains JSON code')
         },
 
         async totalCreation() {
@@ -169,5 +173,9 @@ Optionaly, you can add the character's role if you can determine it.
             }
             // generate characters
             await this.extractCharacter() // this will bug since there is no event and no icon to animate
+        },
+
+        async extractPlace() {
+
         }
     })

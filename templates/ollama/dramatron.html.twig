@@ -45,7 +45,10 @@
                             <li x-text="entry.name"></li>
                         </template>
                     </ul>
-                    <h2>Décors</h2>
+                    <h2>
+                        Décors
+                        <button class="pure-button" x-bind:disabled="!scenario.pitch" x-on:click.prevent="extractPlace"><i class="icon-spin3"></i></button>
+                    </h2>
                     <ul>
                         <template x-for="entry in scenario.place">
                             <li x-text="entry.name"></li>
