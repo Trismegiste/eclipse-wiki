@@ -121,4 +121,13 @@ return [
     'ollama/browser' => [
         'version' => '0.5.7',
     ],
+    'dramatron/scenario' => [
+        'path' => 'dramatron/Scenario.js',
+    ],
+    'dramatron/extract-character-schema' => [
+        'path' => 'dramatron/extract-character-schema.js',
+    ],
+    'dramatron/spa' => [
+        'path' => 'dramatron/spa.js',
+    ]
 ];
