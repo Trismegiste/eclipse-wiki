@@ -28,7 +28,7 @@ export const factory = url => ({
         },
 
         getDefaultPayload() {
-            return defaultPayload
+            return JSON.parse(JSON.stringify(defaultPayload))
         },
 
         getStoryPayload() {
@@ -164,6 +164,7 @@ Optionaly, you can add the character's role if you can determine it.
         },
 
         async totalCreation() {
+            this.ollama.abort()
             // Reboot the scenario, just keeping the pitch
             let reboot = new Scenario()
             reboot.pitch = this.scenario.pitch
@@ -173,7 +174,9 @@ Optionaly, you can add the character's role if you can determine it.
                 await this.generate()
             }
             // generate characters
-            await this.extractCharacter() // this will bug since there is no event and no icon to animate
+            await this.extractCharacter()
+            // generate locations
+            await this.extractPlace()
         },
 
         getQuestionForPlace(schema, story) {
