@@ -4,6 +4,7 @@
 import { Ollama } from 'ollama/browser';
 import { Scenario } from 'dramatron/scenario';
 import characterSchema from 'dramatron/extract-character-schema';
+import placeSchema from 'dramatron/extract-place-schema';
 
 let defaultPayload = null
 export function setDefaultPayload(payload) {
@@ -175,7 +176,33 @@ Optionaly, you can add the character's role if you can determine it.
             await this.extractCharacter() // this will bug since there is no event and no icon to animate
         },
 
-        async extractPlace() {
+        getQuestionForPlace(schema, story) {
+            return `
+Consider the following JSON Schema based on the 2020-12 specification:
+\`\`\`json
+${schema}
+\`\`\`
 
+This JSON Schema represents the format I want you to follow to generate your answer.
+Now, generate a JSON object that will list all locations' names extracted from this story:
+${story}
+
+Based on all this information, generate a valid JSON object with list of locations' names. 
+Optionaly, you can add a quick summary of the location if you can determine it.
+`
+        },
+
+        async extractPlace() {
+            let payload = this.getDefaultPayload()
+            payload.messages[1].content = this.getQuestionForPlace(JSON.stringify(placeSchema, null, 4), this.getCompiledStory())
+            await this.printAnswer(payload, 'placeOutput')
+
+            try {
+                const extract = this.extractJsonBlock(this.scenario.placeOutput)
+                this.scenario.place = extract.locations
+            } catch (ex) {
+                console.debug(this.scenario.placeOutput)
+                throw new Error('Cannot parse the extracted locations JSON')
+            }
         }
     })

@@ -127,6 +127,9 @@ return [
     'dramatron/extract-character-schema' => [
         'path' => 'dramatron/extract-character-schema.js',
     ],
+    'dramatron/extract-place-schema' => [
+        'path' => 'dramatron/extract-place-schema.js',
+    ],
     'dramatron/spa' => [
         'path' => 'dramatron/spa.js',
     ]
