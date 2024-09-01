@@ -108,13 +108,35 @@ class Ollama extends AbstractController
         ]);
     }
 
-    #[Route('/dramatron', methods: ['GET', 'POST'])]
-    public function dramatron(Request $request): Response
+    #[Route('/dramatron', methods: ['GET'])]
+    public function dramatron(): Response
     {
         return $this->render('ollama/dramatron.html.twig', [
                     'ollama_api' => $this->ollamaApi,
                     'payload' => $this->payloadFactory->create("Dans le contexte précédemment décrit, voici le synopsis du roman\n")
         ]);
+    }
+
+    #[Route('/dramatron', methods: ['POST'])]
+    public function downloadDramatronEpub(Request $request): Response
+    {
+        $scenar = $request->toArray();
+
+        $generator = new \Tekkcraft\EpubGenerator\EpubDocument('scenar', 'MJ', 'unique-book-name', $this->getParameter('kernel.cache_dir'));
+
+        $section = ['pitch', 'story', 'act1', 'act2', 'act3', 'act4', 'act5'];
+        foreach ($section as $key) {
+            $content = new \Tekkcraft\EpubGenerator\EpubSection(
+                    $key,
+                    $key,
+                    "<h1>$key</h1><p>" . nl2br($scenar[$key]) . '</p>',
+            );
+            $generator->addSection($content);
+        }
+
+        $epubFile = $generator->generateEpub();
+
+        return new \Symfony\Component\HttpFoundation\BinaryFileResponse($epubFile);
     }
 
 }

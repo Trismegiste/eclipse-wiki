@@ -207,5 +207,21 @@ Optionaly, you can add a quick summary of the location if you can determine it.
                 console.debug(this.scenario.placeOutput)
                 throw new Error('Cannot parse the extracted locations JSON')
             }
+        },
+
+        async downloadEpub() {
+            const resp = await fetch('/ollama/dramatron', {
+                method: 'POST',
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(this.scenario)
+            })
+            const epub = await resp.blob()
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(epub);
+            a.setAttribute("download", 'scenar.epub');
+            a.click();
         }
     })

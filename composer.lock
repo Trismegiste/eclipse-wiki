@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3f170b4dab4f73aaf53d954d15f9cca3",
+    "content-hash": "e44906f4cd27729dcbfbb1e3f6218877",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -5779,6 +5779,52 @@
             "time": "2024-01-23T14:51:35+00:00"
         },
         {
+            "name": "tekkcraft/epub-generator",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/TekkCraft/epub-generator.git",
+                "reference": "3de9e1ceebd0fc7bbf06606141c299e2ff7db2f5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/TekkCraft/epub-generator/zipball/3de9e1ceebd0fc7bbf06606141c299e2ff7db2f5",
+                "reference": "3de9e1ceebd0fc7bbf06606141c299e2ff7db2f5",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-zip": "*",
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10.4"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Tekkcraft\\EpubGenerator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marc",
+                    "email": "marc.wilhelm.ch@gmail.com"
+                }
+            ],
+            "description": "Generate EPUB files",
+            "support": {
+                "issues": "https://github.com/TekkCraft/epub-generator/issues",
+                "source": "https://github.com/TekkCraft/epub-generator/tree/main"
+            },
+            "time": "2024-05-24T10:34:37+00:00"
+        },
+        {
             "name": "teknoo/gd-text",
             "version": "2.0.10",
             "source": {
@@ -9200,6 +9246,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "symfony/polyfill-php84": 20,
+        "tekkcraft/epub-generator": 20,
         "wikimedia/parsoid": 20
     },
     "prefer-stable": true,

@@ -33,6 +33,7 @@
         "symfony/twig-bundle": "^6.4",
         "symfony/validator": "^6.4",
         "symfony/yaml": "^6.4",
+        "tekkcraft/epub-generator": "dev-main",
         "teknoo/gd-text": "^2.0",
         "trismegiste/rpg-name-generator": "^1",
         "trismegiste/strangelove-bundle": "^2",
