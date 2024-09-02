@@ -13,9 +13,13 @@ use App\Form\LlmOutputAppend;
 use App\Repository\VertexRepository;
 use App\Service\Ollama\RequestFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Tekkcraft\EpubGenerator\EpubDocument;
+use Tekkcraft\EpubGenerator\EpubSection;
 
 /**
  * Controller for text generation with LLM
@@ -118,16 +122,16 @@ class Ollama extends AbstractController
     }
 
     #[Route('/dramatron', methods: ['POST'])]
-    public function downloadDramatronEpub(Request $request, \Symfony\Contracts\Translation\TranslatorInterface $trans): Response
+    public function downloadDramatronEpub(Request $request, TranslatorInterface $trans): Response
     {
         $scenar = $request->toArray();
 
-        $generator = new \Tekkcraft\EpubGenerator\EpubDocument($scenar['title'], 'MJ', 'unique-book-name', $this->getParameter('kernel.cache_dir'));
+        $generator = new EpubDocument('generative-book', 'MJ', $scenar['title'], $this->getParameter('kernel.cache_dir'));
 
         $section = ['pitch', 'story', 'act1', 'act2', 'act3', 'act4', 'act5'];
         foreach ($section as $key) {
             $title = $trans->trans('DT_' . strtoupper($key));
-            $content = new \Tekkcraft\EpubGenerator\EpubSection(
+            $content = new EpubSection(
                     $key,
                     $title,
                     "<h2>$title</h2><p>" . nl2br($scenar[$key]) . '</p>',
@@ -137,7 +141,7 @@ class Ollama extends AbstractController
 
         $epubFile = $generator->generateEpub();
 
-        return new \Symfony\Component\HttpFoundation\BinaryFileResponse($epubFile);
+        return new BinaryFileResponse($epubFile);
     }
 
 }
