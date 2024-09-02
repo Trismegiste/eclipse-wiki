@@ -11,7 +11,7 @@
             <div class="pure-u-4-5">
                 <fieldset>
                     <h2>Pitch</h2>
-                    <textarea x-model="scenario.pitch" class="pure-input-1" rows="4"></textarea>
+                    <textarea x-model="scenario.pitch" class="pure-input-1" rows="4" data-autofocus></textarea>
                     <button class="pure-button" x-bind:disabled="!scenario.pitch" x-on:click.prevent="generate">
                         Générer le prochain champ vide
                     </button>
@@ -54,6 +54,11 @@
                             <li x-text="entry.name"></li>
                         </template>
                     </ul>
+                    <h2>
+                        Title
+                        <button class="pure-button" x-bind:disabled="!scenario.story" x-on:click.prevent="inferTitle"><i class="icon-spin3"></i></button>
+                    </h2>
+                    <input class="pure-input-1" x-model="scenario.title" type="text"/>
                 </fieldset>
                 <fieldset>
                     <h2>Export</h2>

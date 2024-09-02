@@ -118,18 +118,19 @@ class Ollama extends AbstractController
     }
 
     #[Route('/dramatron', methods: ['POST'])]
-    public function downloadDramatronEpub(Request $request): Response
+    public function downloadDramatronEpub(Request $request, \Symfony\Contracts\Translation\TranslatorInterface $trans): Response
     {
         $scenar = $request->toArray();
 
-        $generator = new \Tekkcraft\EpubGenerator\EpubDocument('scenar', 'MJ', 'unique-book-name', $this->getParameter('kernel.cache_dir'));
+        $generator = new \Tekkcraft\EpubGenerator\EpubDocument($scenar['title'], 'MJ', 'unique-book-name', $this->getParameter('kernel.cache_dir'));
 
         $section = ['pitch', 'story', 'act1', 'act2', 'act3', 'act4', 'act5'];
         foreach ($section as $key) {
+            $title = $trans->trans('DT_' . strtoupper($key));
             $content = new \Tekkcraft\EpubGenerator\EpubSection(
                     $key,
-                    $key,
-                    "<h1>$key</h1><p>" . nl2br($scenar[$key]) . '</p>',
+                    $title,
+                    "<h2>$title</h2><p>" . nl2br($scenar[$key]) . '</p>',
             );
             $generator->addSection($content);
         }

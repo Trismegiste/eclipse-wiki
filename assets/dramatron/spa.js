@@ -223,5 +223,11 @@ Optionaly, you can add a quick summary of the location if you can determine it.
             a.href = URL.createObjectURL(epub);
             a.setAttribute("download", 'scenar.epub');
             a.click();
+        },
+
+        async inferTitle() {
+            let payload = this.getDefaultPayload()
+            payload.messages[1].content = "Trouve un titre court pour cette histoire :\n" + this.scenario.story
+            await this.printAnswer(payload, 'title')
         }
     })
