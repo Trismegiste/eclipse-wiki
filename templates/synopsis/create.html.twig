@@ -1,0 +1,12 @@
+{% extends "base.html.twig" %}
+{% form_theme form _self %}
+
+{% block title %}Création d'un Synopsis{% endblock %}
+
+{% block header_title %}{{ block('title') }}{% endblock %}
+
+{% block content %}
+    <section>
+        {{ form(form) }}
+    </section>
+{% endblock %}
