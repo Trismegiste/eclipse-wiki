@@ -29,15 +29,26 @@ class SynopsisType extends AbstractType
     {
         $builder
                 ->remove('content')
-                ->add('pitch', TextareaType::class)
+                ->add('pitch', TextareaType::class, ['attr' => [
+                        'rows' => 4,
+                        'x-model' => "scenario.pitch",
+                        'class' => "pure-input-1",
+                        'data-autofocus' => true
+                    ]
+                ])
                 ->add('story', TextareaType::class)
                 ->add('act', CollectionType::class, [
                     'entry_type' => TextareaType::class,
                     'entry_options' => [
                         'attr' => ['rows' => 3],
                         'required' => true,
-                        'label' => false
-                    ]
+                        'label' => false,
+                        'attr' => [
+                            'rows' => 10,
+                            'class' => "pure-input-1"
+                        ]
+                    ],
+                    'allow_add' => true
                 ])
         ;
     }

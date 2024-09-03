@@ -7,6 +7,91 @@
 
 {% block content %}
     <section>
-        {{ form(form) }}
+        {{ form(form, {attr:{'x-data':null}}) }}
     </section>
+{% endblock %}
+
+{% block _synopsis_pitch_row %}
+    <h2>Pitch</h2>
+    {{ form_widget(form) }}
+    <button class="pure-button" x-bind:disabled="!scenario.pitch" x-on:click.prevent="generate">
+        Générer le prochain champ vide
+    </button>
+    <button class="pure-button" x-bind:disabled="!scenario.pitch" x-on:click.prevent="save">Sauver en local</button>
+    <button class="pure-button" x-bind:disabled="!!scenario.pitch" x-on:click.prevent="load">Charger en local</button>
+    <button class="pure-button" x-bind:disabled="!scenario.pitch" x-on:click.prevent="totalCreation">Effacer et tout générer à partir du pitch</button>
+{% endblock %}
+
+{% block _synopsis_title_row %}
+    <h2>
+        Title
+        <button class="pure-button" x-bind:disabled="!scenario.story" x-on:click.prevent="inferTitle"><i class="icon-spin3"></i></button>
+    </h2>
+    <input class="pure-input-1" x-model="scenario.title" type="text"/>
+{% endblock %}
+
+{% block _synopsis_story_row %}
+    <h2>
+        Développement
+        <button class="pure-button" x-on:click.prevent="scenario.story=''; generate()"><i class="icon-spin3"></i></button>
+    </h2>
+    <textarea x-model="scenario.story" class="pure-input-1" rows="30"></textarea>
+{% endblock %}
+
+{% block _synopsis_act_row %}
+    <template x-for="idx in [1,2,3,4,5]">
+        <section>
+            <h2>
+                <span x-text="'Acte ' + idx"></span>
+                <button class="pure-button" x-on:click.prevent="scenario['act' + idx]=''; generate()"><i class="icon-spin3"></i></button>
+            </h2>
+            {{ form_widget(form.vars.prototype, {attr: {
+                'x-bind:name' : "'" ~ form.vars.full_name ~ "[' + idx+ ']'",
+                'x-model' : "scenario['act' + idx]"
+            }}) }}
+        </section>
+    </template>
+{% endblock %}
+
+{% block _synopsis_widget %}
+    <div class="pure-g">
+        <div class="pure-u-4-5">
+            <fieldset>
+                {{ form_row(form.pitch) }}
+                {{ form_row(form.story) }}
+                {{ form_row(form.act) }}
+                {{ form_row(form.create) }}
+            </fieldset>
+        </div>
+        <aside class="pure-u-1-5">
+            <fieldset>
+                {{ form_row(form.title) }}
+            </fieldset>
+        </aside>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .pure-u-4-5 > fieldset {
+            margin-right: 2em;
+        }
+        fieldset > h2:first-child {
+            margin-top: 0;
+        }
+        fieldset h2 .pure-button {
+            font-size: 1rem;
+            float: right;
+        }
+
+        .info {
+            position: sticky;
+            top: 0.5em;
+        }
+        .info i {
+            font-size: 1000%;
+            color: lightgray;
+        }
+    </style>
 {% endblock %}

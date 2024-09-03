@@ -6,9 +6,6 @@
 
 namespace App\Entity;
 
-use Trismegiste\Strangelove\MongoDb\Root;
-use Trismegiste\Strangelove\MongoDb\RootImpl;
-
 /**
  * A synopsis is a draft for a future set of Timeline + Scene + Transhuman + Place
  * It's a sandbox heavily driven by LLM output
