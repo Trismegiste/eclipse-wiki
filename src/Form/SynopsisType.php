@@ -7,11 +7,13 @@
 namespace App\Form;
 
 use App\Entity\Synopsis;
+use App\Service\Ollama\RequestFactory;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -19,6 +21,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class SynopsisType extends AbstractType
 {
+
+    public function __construct(protected string $ollamaApi, protected RequestFactory $payloadFactory)
+    {
+        
+    }
 
     public function getParent(): ?string
     {
@@ -58,6 +65,15 @@ class SynopsisType extends AbstractType
         $resolver->setDefault('empty_data', function (FormInterface $form) {
             return new Synopsis($form->get('title')->getData());
         });
+        $resolver->setDefault('attr', [
+            'class' => 'pure-form',
+            'x-data' => "dramatron('{$this->ollamaApi}')"
+        ]);
+    }
+
+    public function finishView(FormView $view, FormInterface $form, array $options): void
+    {
+        $view->vars['default_payload'] = $this->payloadFactory->create("Dans le contexte précédemment décrit, voici le synopsis du roman\n");
     }
 
 }

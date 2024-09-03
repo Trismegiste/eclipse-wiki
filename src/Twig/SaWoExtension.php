@@ -46,6 +46,7 @@ class SaWoExtension extends AbstractExtension
         Handout::class => 'handout/row.html.twig',
         Scene::class => 'scene/row.html.twig',
         Timeline::class => 'timeline/row.html.twig',
+        \App\Entity\Synopsis::class => 'vertex/row.html.twig',
     ];
     const showTemplate = [
         Ali::class => 'npc/ali/show.html.twig',
@@ -57,6 +58,7 @@ class SaWoExtension extends AbstractExtension
         Handout::class => 'handout/show.html.twig',
         Scene::class => 'scene/show.html.twig',
         Timeline::class => 'timeline/show.html.twig',
+        \App\Entity\Synopsis::class => 'vertex/show.html.twig',
     ];
 
     public function getFunctions(): array

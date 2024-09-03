@@ -23,6 +23,7 @@ services:
             $debugModeEnabled: '%kernel.debug%'
             $mercureLocalIp: '%network.local.ip%'
             $webLocalIp: '%network.local.ip%'
+            $ollamaApi: '%env(resolve:OLLAMA_BASE_URL)%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -144,9 +145,5 @@ services:
         arguments:
             $settingPathname: '%kernel.project_dir%/database/llm/setting.txt'
             $llmName: 'mistral-nemo:latest'
-            
-    App\Controller\Ollama:
-        arguments:
-            $ollamaApi: '%env(resolve:OLLAMA_BASE_URL)%'
             
     Twig\Extension\StringLoaderExtension:

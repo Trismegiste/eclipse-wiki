@@ -6,9 +6,7 @@
 {% block header_title %}{{ block('title') }}{% endblock %}
 
 {% block content %}
-    <section>
-        {{ form(form, {attr:{'x-data':null}}) }}
-    </section>
+    {{ form(form) }}
 {% endblock %}
 
 {% block _synopsis_pitch_row %}
@@ -27,7 +25,7 @@
         Title
         <button class="pure-button" x-bind:disabled="!scenario.story" x-on:click.prevent="inferTitle"><i class="icon-spin3"></i></button>
     </h2>
-    <input class="pure-input-1" x-model="scenario.title" type="text"/>
+    <input class="pure-input-1" x-model="scenario.title" type="text" name="{{ form.vars.full_name }}"/>
 {% endblock %}
 
 {% block _synopsis_story_row %}
@@ -46,7 +44,7 @@
                 <button class="pure-button" x-on:click.prevent="scenario['act' + idx]=''; generate()"><i class="icon-spin3"></i></button>
             </h2>
             {{ form_widget(form.vars.prototype, {attr: {
-                'x-bind:name' : "'" ~ form.vars.full_name ~ "[' + idx+ ']'",
+                'x-bind:name' : "'" ~ form.vars.prototype.vars.full_name ~ "'.replace('__name__', idx)",
                 'x-model' : "scenario['act' + idx]"
             }}) }}
         </section>
@@ -94,4 +92,32 @@
             color: lightgray;
         }
     </style>
+{% endblock %}
+
+{% block info %}
+    <div x-data="llmState" x-on:llm.window="update">
+        <i class="icon-spin3 animate-spin" x-show="running"></i>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="application/json" id="init-payload">
+        {{ form.vars.default_payload|json_encode()|raw }}
+    </script>
+    <script type="module">
+        import * as spa from 'dramatron/spa';
+
+        spa.setDefaultPayload(JSON.parse(document.getElementById('init-payload').textContent))
+        Alpine.data('dramatron', spa.factory)
+    </script>
+    <script type="module">
+        Alpine.data('llmState', () => ({
+                running: false,
+
+                update(event) {
+                    this.running = event.detail.running
+                }
+            }))
+    </script>
 {% endblock %}
