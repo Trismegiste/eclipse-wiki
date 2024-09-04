@@ -8,18 +8,17 @@ namespace App\Twig;
 
 use App\Attribute\Icon;
 use App\Entity\Ali;
-use App\Entity\Character;
 use App\Entity\DamageRoll;
 use App\Entity\Freeform;
 use App\Entity\Handout;
 use App\Entity\Loveletter;
 use App\Entity\Place;
 use App\Entity\Scene;
+use App\Entity\Synopsis;
 use App\Entity\Timeline;
 use App\Entity\Transhuman;
 use App\Entity\Vertex;
 use App\Repository\HindranceProvider;
-use OutOfBoundsException;
 use ReflectionAttribute;
 use ReflectionObject;
 use Twig\Extension\AbstractExtension;
@@ -46,7 +45,7 @@ class SaWoExtension extends AbstractExtension
         Handout::class => 'handout/row.html.twig',
         Scene::class => 'scene/row.html.twig',
         Timeline::class => 'timeline/row.html.twig',
-        \App\Entity\Synopsis::class => 'vertex/row.html.twig',
+        Synopsis::class => 'synopsis/row.html.twig',
     ];
     const showTemplate = [
         Ali::class => 'npc/ali/show.html.twig',
@@ -58,7 +57,7 @@ class SaWoExtension extends AbstractExtension
         Handout::class => 'handout/show.html.twig',
         Scene::class => 'scene/show.html.twig',
         Timeline::class => 'timeline/show.html.twig',
-        \App\Entity\Synopsis::class => 'vertex/show.html.twig',
+        Synopsis::class => 'vertex/show.html.twig',
     ];
 
     public function getFunctions(): array

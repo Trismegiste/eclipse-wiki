@@ -25,7 +25,7 @@
         Title
         <button class="pure-button" x-bind:disabled="!scenario.story" x-on:click.prevent="inferTitle"><i class="icon-spin3"></i></button>
     </h2>
-    <input class="pure-input-1" x-model="scenario.title" type="text" name="{{ form.vars.full_name }}"/>
+    <input class="pure-input-1" x-model="scenario.title" type="text" name="{{ form.vars.full_name }}" required/>
 {% endblock %}
 
 {% block _synopsis_story_row %}
@@ -33,7 +33,7 @@
         Développement
         <button class="pure-button" x-on:click.prevent="scenario.story=''; generate()"><i class="icon-spin3"></i></button>
     </h2>
-    <textarea x-model="scenario.story" class="pure-input-1" rows="30"></textarea>
+    {{ form_widget(form) }}
 {% endblock %}
 
 {% block _synopsis_act_row %}

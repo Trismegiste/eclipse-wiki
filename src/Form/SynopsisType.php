@@ -10,6 +10,7 @@ use App\Entity\Synopsis;
 use App\Service\Ollama\RequestFactory;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -43,7 +44,12 @@ class SynopsisType extends AbstractType
                         'data-autofocus' => true
                     ]
                 ])
-                ->add('story', TextareaType::class)
+                ->add('story', TextareaType::class, ['attr' => [
+                        'rows' => 30,
+                        'x-model' => "scenario.story",
+                        'class' => "pure-input-1"
+                    ]
+                ])
                 ->add('act', CollectionType::class, [
                     'entry_type' => TextareaType::class,
                     'entry_options' => [
@@ -55,6 +61,10 @@ class SynopsisType extends AbstractType
                             'class' => "pure-input-1"
                         ]
                     ],
+                    'allow_add' => true
+                ])
+                ->add('character', CollectionType::class, [
+                    'entry_type' => \Symfony\Component\Form\Extension\Core\Type\TextType::class,
                     'allow_add' => true
                 ])
         ;
