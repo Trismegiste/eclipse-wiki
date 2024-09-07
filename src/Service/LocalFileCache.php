@@ -26,6 +26,11 @@ abstract class LocalFileCache implements CacheWarmerInterface, CacheClearerInter
         
     }
 
+    public function getFolder(): string
+    {
+        return $this->folder;
+    }
+
     public function clear(string $cacheDir): void
     {
         if (is_dir($this->folder)) {

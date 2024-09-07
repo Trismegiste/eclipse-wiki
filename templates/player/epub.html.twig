@@ -1,0 +1,16 @@
+{# List of generated epub in the cache #}
+{% extends "base.html.twig" %}
+
+{% block title %}Generated ePub{% endblock %}
+
+{% block body %}
+    <h1 class="big-title">{{ block('title') }}</h1>
+    <main>
+        <ul>
+            {% for entry in listing %}
+                <li>{{ entry.basename('.epub') }}
+                </li>
+            {% endfor %}
+        </ul>
+    </main>
+{% endblock %}

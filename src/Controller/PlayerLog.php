@@ -8,6 +8,7 @@ namespace App\Controller;
 
 use App\Entity\BattlemapDocument;
 use App\Service\DocumentBroadcaster;
+use App\Service\PlayerCastCache;
 use App\Voronoi\HexaMap;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,6 +52,15 @@ class PlayerLog extends AbstractController
     public function getDocument(string $filename, DocumentBroadcaster $broad): Response
     {
         return $broad->createResponseForFilename($filename);
+    }
+
+    /**
+     * Show the list of generated epub
+     */
+    #[Route('/epub', methods: ['GET'])]
+    public function epub(PlayerCastCache $cache): Response
+    {
+        return $this->render('player/epub.html.twig', ['listing' => $cache->getEpub()]);
     }
 
 }

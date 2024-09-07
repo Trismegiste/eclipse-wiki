@@ -218,11 +218,8 @@ Optionaly, you can add a quick summary of the location if you can determine it.
                 },
                 body: JSON.stringify(this.scenario)
             })
-            const epub = await resp.blob()
-            const a = document.createElement("a");
-            a.href = URL.createObjectURL(epub);
-            a.setAttribute("download", 'scenar.epub');
-            a.click();
+            const flash = await resp.json()
+            Alpine.store('notif').push(flash.level, flash.message)
         },
 
         async inferTitle() {
