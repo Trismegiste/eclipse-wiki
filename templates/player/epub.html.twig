@@ -8,9 +8,22 @@
     <main>
         <ul>
             {% for entry in listing %}
-                <li>{{ entry.basename('.epub') }}
+                <li>
+                    <a href="{{ path('app_playerlog_getdocument',{filename:entry.basename }) }}">
+                        {{ entry.basename('.epub') }}
+                    </a>
                 </li>
             {% endfor %}
         </ul>
     </main>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        main ul {
+            font-size: 160%;
+            line-height: 2em;
+        }
+    </style>
 {% endblock %}
