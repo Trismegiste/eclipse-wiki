@@ -12,11 +12,9 @@
         <nav class="navigation">
             {% set navigation = ['picture', 'user-circle', 'file-pdf', 'hexagon', 'view3d'] %}
             {% for idx, panel in navigation %}
-                <span x-bind:class="newContent[{{ idx }}] && 'new-content'">
-                    <a href="#{{ panel }}" x-on:click.prevent="showPanel({{ idx }})">
-                        <i class="icon-{{ panel }}"></i>
-                    </a>
-                </span>
+                <a href="#{{ panel }}" x-on:click.prevent="showPanel({{ idx }})" x-bind:class="newContent[{{ idx }}] && 'new-content'">
+                    <i class="icon-{{ panel }}"></i>
+                </a>
             {% endfor %}
         </nav>
         <div x-show="panel===0"
@@ -224,11 +222,6 @@
             color: gray;
         }
 
-        .navigation i {
-            padding-left: 0.4em;
-            padding-right: 0.4em;
-        }
-
         .swiper {
             width: 100vw;
             height: calc(100dvh - var(--menu-height));
@@ -261,7 +254,7 @@
         }
 
         #renderCanvas {
-            height: calc(100vh - 2.2em);
+            height: calc(100dvh - var(--menu-height));
             width: 100vw;
             display: block;
         }
