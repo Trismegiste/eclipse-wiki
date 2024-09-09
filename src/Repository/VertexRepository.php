@@ -419,16 +419,23 @@ class VertexRepository extends DefaultRepository
      */
     public function searchPkByTitle(array $title): array
     {
-        $matched = array_combine($title, array_fill(0, count($title), null));
-        $searched = [];
-        foreach ($title as $entry) {
-            $searched[mb_ucfirst($entry)] = $entry;
-        }
-
         $this->logger->debug('Searching pk for title=' . json_encode($title));
-        $iter = $this->searchGraphVertex(['title' => ['$in' => array_keys($searched)]]);
-        foreach ($iter as $vertex) {
-            $matched[$searched[$vertex->title]] = $vertex->pk;  // in this way, we keep the case of the requested title
+
+        $matched = array_combine($title, array_fill(0, count($title), null));
+        $iter = $this->searchGraphVertex(['title' => ['$in' => array_map('mb_ucfirst', $title)]]); // we use GraphVertex to project only on useful columns
+        $found = array_column(iterator_to_array($iter), 'pk', 'title'); // we flatten the cursor and extract an array [title => pk]
+
+        // This algo seems inefficient but it's the only way to keep the character-case of the requested titles,
+        // including the wicked use-case when the same vertex appears 2 times in the list with
+        // 2 different spellings (the first character of its title is uppercase or not).
+        // Therefore, we must iterate on the $title array and check on the database content (previously flattened, see above).
+        // Iterating on the database content (see $iter above) and updating the $matched array will be
+        // too ugly (double checking, case insensitive regex... yikes)
+        foreach ($title as $entry) {
+            $searched = mb_ucfirst($entry);
+            if (key_exists($searched, $found)) {
+                $matched[$entry] = $found[$searched];
+            }
         }
 
         return $matched;
