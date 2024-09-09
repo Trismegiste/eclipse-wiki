@@ -257,4 +257,14 @@ class VertexRepositoryTest extends KernelTestCase
         $this->assertNull($match['supercanard']);
     }
 
+    public function testSearchPkByWithDoubleTitle()
+    {
+        $match = $this->sut->searchPkByTitle(['monster', 'Monster']);
+        $this->assertCount(2, $match);
+        $this->assertArrayHasKey('monster', $match);
+        $this->assertArrayHasKey('Monster', $match);
+        $this->assertNotNull($match['monster']);
+        $this->assertNotNull($match['Monster']);
+    }
+
 }
