@@ -10,12 +10,12 @@ use App\Parsoid\Parser;
 use App\Repository\VertexRepository;
 use App\Service\Storage;
 use App\Tests\Controller\PictureFixture;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Trismegiste\Strangelove\MongoDb\Repository;
 
-class ParserTest extends WebTestCase
+class ParserTest extends KernelTestCase
 {
 
     use PictureFixture;
@@ -125,7 +125,7 @@ class ParserTest extends WebTestCase
         $this->assertCount(3, $this->crawler->filter('a'));
 
         $this->assertNull($this->crawler->filter('a')->eq(1)->attr('class'), 'Second existing link is not classless');
-        $this->assertEquals('new', $this->crawler->filter('a')->eq(2)->attr('class'), 'last missing link is not red');
+        $this->assertEquals('new', $this->crawler->filter('a')->eq(2)->attr('class'), 'Last missing link is not red');
         $this->assertNull($this->crawler->filter('a')->eq(0)->attr('class'), 'First existing link is not classless');
     }
 
