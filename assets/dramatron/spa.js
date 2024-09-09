@@ -177,6 +177,8 @@ Optionaly, you can add the character's role if you can determine it.
             await this.extractCharacter()
             // generate locations
             await this.extractPlace()
+            // title
+            await this.inferTitle()
         },
 
         getQuestionForPlace(schema, story) {
