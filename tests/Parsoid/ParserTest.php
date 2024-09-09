@@ -115,4 +115,18 @@ class ParserTest extends WebTestCase
         $this->assertEquals('<tag title="yolo">content</tag>', $filtered);
     }
 
+    public function testBugDoubleLinksFailWithUcFirst()
+    {
+        $scene = new Scene('First Page');
+        $this->repo->save($scene);
+
+        $html = $this->sut->parse('[[First Page]] [[first Page]] [[first page]]', 'browser');
+        $this->crawler->addHtmlContent($html);
+        $this->assertCount(3, $this->crawler->filter('a'));
+
+        $this->assertNull($this->crawler->filter('a')->eq(1)->attr('class'), 'Second existing link is not classless');
+        $this->assertEquals('new', $this->crawler->filter('a')->eq(2)->attr('class'), 'last missing link is not red');
+        $this->assertNull($this->crawler->filter('a')->eq(0)->attr('class'), 'First existing link is not classless');
+    }
+
 }
