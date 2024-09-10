@@ -37,16 +37,16 @@ class SaWoTraitType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired('provider');
+        $resolver->setAllowedTypes('provider', GenericProvider::class);
+
         $resolver->setDefaults([
             'data_class' => SaWoTrait::class,
             'expanded' => false,
             'max_modif' => 2,
-            'empty_data' => function (Options $opt) {
-                /** @var GenericProvider $provider */
-                $provider = $opt['provider'];
-                return function (FormInterface $form) use ($provider) {
+            'empty_data' => function  (FormInterface $form) {
+                    /** @var GenericProvider $provider */
+                    $provider = $form->getConfig()->getOption('provider');
                     return $provider->findOne($form->get('name')->getData());
-                };
             }
         ]);
     }

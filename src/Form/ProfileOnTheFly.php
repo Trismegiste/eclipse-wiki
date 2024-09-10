@@ -60,11 +60,9 @@ class ProfileOnTheFly extends AbstractType
         $resolver->setRequired('transhuman');
         $resolver->setAllowedTypes('transhuman', Transhuman::class);
 
-        $resolver->setDefault('empty_data', function (Options $opt) {
-            $template = $opt['transhuman'];
-            return function (FormInterface $form) use ($template) {
-                return $this->factory->createExtraFromTemplate($template, $form['title']->getData());
-            };
+        $resolver->setDefault('empty_data', function (FormInterface $form) {
+            $template = $form->getConfig()->getOption('transhuman');
+            return $this->factory->createExtraFromTemplate($template, $form['title']->getData());
         });
     }
 

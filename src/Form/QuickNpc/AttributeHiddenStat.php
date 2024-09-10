@@ -31,10 +31,8 @@ class AttributeHiddenStat extends AbstractType
     {
         $resolver->setDefault('data_class', Attribute::class);
         $resolver->setDefault(
-                'empty_data', function (Options $opt) {
-                    return function (FormInterface $form) {
+                'empty_data', function (FormInterface $form) {
                         return $this->provider->findOne($form->get('name')->getData());
-                    };
                 });
     }
 
