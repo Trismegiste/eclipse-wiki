@@ -86,7 +86,7 @@ export const factory = url => ({
 
             //re-init
             this.scenario[field] = prefix
-            this.$el.dispatchEvent(new CustomEvent('llm', {bubbles: true, detail: {running: true}}))
+            this.spinning(true)
             const response = await this.ollama.chat(payload)
 
             try {
@@ -103,8 +103,8 @@ export const factory = url => ({
                     console.error('An error occurred:', error)
                 }
             } finally {
-                this.$el.dispatchEvent(new CustomEvent('llm', {bubbles: true, detail: {running: false}}))
-            }
+                this.spinning(false)
+        }
         },
 
         save() {
@@ -113,6 +113,10 @@ export const factory = url => ({
 
         load() {
             this.scenario = JSON.parse(localStorage.getItem('dramatron'))
+        },
+
+        spinning(state) {
+            this.$el.dispatchEvent(new CustomEvent('llm', {bubbles: true, detail: {running: state}}))
         },
 
         getQuestionForCharacter(schema, story) {
@@ -233,7 +237,9 @@ Optionaly, you can add a quick summary of the location if you can determine it.
 
         async inferTitle() {
             let payload = this.getDefaultPayload()
-            payload.messages[1].content = "Trouve un titre court pour cette histoire :\n" + this.scenario.story
+            payload.messages[1].content = "Voici une courte histoire :\n"
+                    + this.scenario.story
+                    + "\nTrouve un titre court pour cette histoire. Réponds en donnant uniquement le titre pour cette histoire."
             await this.printAnswer(payload, 'title')
         }
     })
