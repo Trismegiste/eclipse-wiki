@@ -27,6 +27,14 @@ export const factory = url => ({
             await this.printAnswer(newGeneration.payload, newGeneration.field)
         },
 
+        async continueField(fieldName) {
+            const temp = this.scenario[fieldName]
+            this.scenario[fieldName] = null
+            const completion = this.getStoryPayload()
+            completion.payload.messages.push({role: 'assistant', content: temp})
+            await this.printAnswer(completion.payload, completion.field, temp)
+        },
+
         getDefaultPayload() {
             return JSON.parse(JSON.stringify(defaultPayload))
         },
@@ -45,12 +53,11 @@ export const factory = url => ({
             if (this.scenario.story) {
                 payload.messages[2] = {role: 'assistant', content: this.scenario.story}
             } else {
-                return {field: 'story', payload: payload}
+                return {field: 'story', payload: payload};
             }
 
             // Adding the already-generated/filled acts (skipping empty acts) to the train-of-thought
-            for (let k = 1;
-            k <= 5; k++) {
+            for (let k = 1; k <= 5; k++) {
                 if (this.scenario['act' + k]) {
                     payload.messages.push(this.getQuestionForAct(k))
                     payload.messages.push({role: 'assistant', content: this.scenario['act' + k]})
@@ -73,12 +80,12 @@ export const factory = url => ({
             return {role: 'user', content: `Développe sur 5 scènes, en incluant une scène d'action, l'acte ${n} de ton synopsis`}
         },
 
-        async printAnswer(payload, field) {
+        async printAnswer(payload, field, prefix = '') {
             // abort in any case
             this.ollama.abort()
 
             //re-init
-            this.scenario[field] = ''
+            this.scenario[field] = prefix
             this.$el.dispatchEvent(new CustomEvent('llm', {bubbles: true, detail: {running: true}}))
             const response = await this.ollama.chat(payload)
 

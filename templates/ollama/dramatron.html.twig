@@ -21,6 +21,7 @@
                     <h2>
                         Développement
                         <button class="pure-button" x-on:click.prevent="scenario.story=''; generate()"><i class="icon-spin3"></i></button>
+                        <button class="pure-button" x-on:click.prevent="continueField('story')"><i class="icon-doc-add"></i></button>
                     </h2>
                     <textarea x-model="scenario.story" class="pure-input-1" rows="30"></textarea>
                     <template x-for="idx in [1,2,3,4,5]">

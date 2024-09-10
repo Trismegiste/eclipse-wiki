@@ -30,7 +30,7 @@ export default {
         }
     },
     "required": [
-        "characters"
+        "locations"
     ],
     "additionalProperties": true
 }
