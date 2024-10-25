@@ -1,0 +1,1 @@
+{{{1}}}<i class="icon-view3d" data-cell-index="{{{2}}}"></i>

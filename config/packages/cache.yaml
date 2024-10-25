@@ -17,3 +17,7 @@ framework:
         pools:
             invokeai.cache:
                 adapter: cache.app
+
+            parsoid.cache:
+                adapter: cache.app
+
