@@ -13,6 +13,7 @@ use Wikimedia\Parsoid\Config\PageConfig;
 use Wikimedia\Parsoid\Config\PageContent;
 use Wikimedia\Parsoid\Core\ContentMetadataCollector;
 use Wikimedia\Parsoid\Core\LinkTarget;
+use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * Repository for MediaWiki bridging with Vertex repository and Storage service
@@ -20,12 +21,7 @@ use Wikimedia\Parsoid\Core\LinkTarget;
 class RpgDataAccess extends DataAccess
 {
 
-    const template = [
-        'legend' => '{{{1}}}<i class="icon-view3d" data-cell-index="{{{2}}}"></i>',
-        'roll' => ''
-    ];
-
-    public function __construct(protected VertexRepository $repositoy, protected Storage $storage)
+    public function __construct(protected VertexRepository $repositoy, protected Storage $storage, protected CacheInterface $parsoidCache, protected string $templateFolder)
     {
         
     }
@@ -43,9 +39,7 @@ class RpgDataAccess extends DataAccess
     public function fetchTemplateSource(PageConfig $pageConfig, LinkTarget $title): ?PageContent
     {
         if (preg_match('#^template:(.+)$#', $title, $matches)) {
-            if (key_exists($matches[1], self::template)) {
-                return new RpgPageContent(self::template[$matches[1]]);
-            }
+            return new RpgPageContent(file_get_contents($this->templateFolder. '/' . $matches[1] . '.wikitext'));
         }
 
         return null;

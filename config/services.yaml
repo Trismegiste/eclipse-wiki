@@ -52,6 +52,11 @@ services:
         $dbName: '%mongodb.dbname%'
         $man: '@mongodb'            
 
+    # Parsoid
+    App\Parsoid\Internal\RpgDataAccess:
+        arguments:
+            $templateFolder: '%kernel.project_dir%/database/parsoid'
+
     # WIKI
     App\Service\MediaWiki:
         arguments:
