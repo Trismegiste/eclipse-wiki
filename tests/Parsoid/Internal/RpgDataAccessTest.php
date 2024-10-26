@@ -8,21 +8,18 @@ use App\Entity\Scene;
 use App\Parsoid\Internal\RpgDataAccess;
 use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\DomCrawler\Crawler;
 use Trismegiste\Strangelove\MongoDb\Repository;
 
 class RpgDataAccessTest extends KernelTestCase
 {
 
     protected RpgDataAccess $sut;
-    protected Crawler $crawler;
     protected Repository $repo;
 
     protected function setUp(): void
     {
         static::bootKernel();
         $this->sut = static::getContainer()->get(RpgDataAccess::class);
-        $this->crawler = new Crawler();
         $this->repo = static::getContainer()->get(VertexRepository::class);
     }
 
