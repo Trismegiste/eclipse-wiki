@@ -28,6 +28,9 @@ class Param extends ExtensionTagHandler
 
         foreach ($parameter as $row) {
             $param = explode(':', $row);
+            if (count($param) !== 2) {
+                continue;
+            }
             $tr = $doc->createElement('tr');
             $tr->appendChild($doc->createElement('th', mb_convert_case(trim($param[0]), MB_CASE_TITLE,)));
             $tr->appendChild($doc->createElement('td', trim($param[1])));

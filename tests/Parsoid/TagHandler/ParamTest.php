@@ -25,4 +25,16 @@ WIKITEXT;
         $this->assertStringContainsString('<td', $html);
     }
 
+    /** @dataProvider getTarget */
+    public function testParsingBadEntry(string $target)
+    {
+        $wikitext = <<<WIKITEXT
+<param>
+population 12000
+</param>
+WIKITEXT;
+        $html = $this->parser->parse($wikitext, $target);
+        $this->assertStringNotContainsString('<tr>', $html);
+    }
+
 }
