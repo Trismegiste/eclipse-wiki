@@ -1,12 +1,12 @@
 == Known locations ==
-<table>
+<table class="location">
 {{#if: {{{work|}}}
-    |<tr><th>Travail</th><td>[[{{{work}}}]]</td><td><i class="icon-ollama"></i></td></tr>
+    |<tr><th>Travail</th><td>[[{{{work}}}]]</td><td><i class="icon-ollama" data-location-type="work" data-location-name="{{{work}}}"></i></td></tr>
 }}
 {{#if: {{{habitat|}}}
-    |<tr><th>Habitat</th><td>[[{{{habitat}}}]]</td><td><i class="icon-ollama"></i></td></tr>
+    |<tr><th>Habitat</th><td>[[{{{habitat}}}]]</td><td><i class="icon-ollama" data-location-type="habitat" data-location-name="{{{habitat}}}"></i></td></tr>
 }}
 {{#if: {{{fun|}}}
-    |<tr><th>Fun</th><td>[[{{{fun}}}]]</td><td><i class="icon-ollama"></i></td></tr>
+    |<tr><th>Fun</th><td>[[{{{fun}}}]]</td><td><i class="icon-ollama" data-location-type="fun" data-location-name="{{{fun}}}"></i></td></tr>
 }}
 </table>
