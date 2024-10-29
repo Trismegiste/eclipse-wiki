@@ -15,7 +15,7 @@ use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Trismegiste\Strangelove\MongoDb\Repository;
 
-class ParserTest extends KernelTestCase
+class ParserTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 {
 
     use PictureFixture;
@@ -25,10 +25,11 @@ class ParserTest extends KernelTestCase
     protected UrlGeneratorInterface $routing;
     protected Repository $repo;
     protected Storage $storage;
+    protected $client;
 
     protected function setUp(): void
     {
-        static::bootKernel();
+        $this->client = static::createClient();
         $this->sut = static::getContainer()->get(Parser::class);
         $this->routing = static::getContainer()->get(UrlGeneratorInterface::class);
         $this->crawler = new Crawler();
@@ -127,6 +128,77 @@ class ParserTest extends KernelTestCase
         $this->assertNull($this->crawler->filter('a')->eq(1)->attr('class'), 'Second existing link is not classless');
         $this->assertEquals('new', $this->crawler->filter('a')->eq(2)->attr('class'), 'Last missing link is not red');
         $this->assertNull($this->crawler->filter('a')->eq(0)->attr('class'), 'First existing link is not classless');
+    }
+
+    public function getLink(): array
+    {
+        return [
+            ['Àvà'],
+            ['Évé'],
+            ['Çaça'],
+            ['Æther'],
+            ['Espacé titre'],
+            ["Quo'ta'tion"]
+        ];
+    }
+
+    /**
+     * @dataProvider getLink
+     */
+    public function testNotExistingLink(string $title)
+    {
+        $html = $this->sut->parse("Lien vers [[$title]]", 'browser');
+        $this->crawler->addHtmlContent($html);
+        $link = $this->crawler->filter('a');
+        $this->assertCount(1, $link);
+        $this->assertEquals($title, $link->text());
+
+        $url = $link->attr('href');
+        parse_str(parse_url($url, PHP_URL_QUERY), $queryParam);
+        $this->assertEquals(1, $queryParam['redlink'], 'Redlink query param on not nexisting vertex');
+
+        $this->client->request('GET', $url);
+        $this->assertResponseRedirects();
+        $this->assertEquals($title, $this->client->getRequest()->get('title'));
+    }
+
+    /**
+     * @dataProvider getLink
+     */
+    public function testNotExistingLinkWithText(string $title)
+    {
+        $html = $this->sut->parse("Lien vers [[$title|texte avec séparateur]]", 'browser');
+        $this->crawler->addHtmlContent($html);
+        $link = $this->crawler->filter('a');
+        $this->assertCount(1, $link);
+        $this->assertEquals('texte avec séparateur', $link->text(), 'Content of the link');
+
+        $this->client->request('GET', $link->attr('href'));
+        $this->assertResponseRedirects();
+        $this->assertEquals($title, $this->client->getRequest()->get('title'));
+    }
+
+    /**
+     * @dataProvider getLink
+     */
+    public function testExistingLinkWithText(string $title)
+    {
+        // inserting vertex
+        $scene = new Scene($title);
+        $this->repo->save($scene);
+
+        $html = $this->sut->parse("Lien vers [[$title|texte avec séparateur]]", 'browser');
+        $this->crawler->addHtmlContent($html);
+        $link = $this->crawler->filter('a');
+        $this->assertCount(1, $link, $html);
+        $this->assertEquals('texte avec séparateur', $link->text(), 'Content of the link');
+
+        $url = $link->attr('href');
+        $this->assertNull(parse_url($url, PHP_URL_QUERY));
+        $this->assertEquals("/wiki/" . rawurlencode($title), parse_url($url, PHP_URL_PATH));
+
+        $this->client->request('GET', $link->attr('href'));
+        $this->assertResponseIsSuccessful();
     }
 
 }
