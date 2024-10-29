@@ -201,4 +201,30 @@ class ParserTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    /**
+     * @dataProvider getLink
+     */
+    public function testTemplateLocationWithKnownVertex(string $title)
+    {
+        $html = $this->sut->parse("{{location|fun=$title}}", 'browser');
+        $this->crawler->addHtmlContent($html);
+        $link = $this->crawler->filter('table a');
+        $this->assertCount(1, $link, $html);
+        $url = $link->attr('href');
+        $this->assertEquals("/wiki/" . rawurlencode($title), parse_url($url, PHP_URL_PATH));
+    }
+
+    /**
+     * @dataProvider getLink
+     */
+    public function testTemplateLocationWithUnnownVertex(string $title)
+    {
+        $html = $this->sut->parse("{{location|fun=No$title}}", 'browser');
+        $this->crawler->addHtmlContent($html);
+        $link = $this->crawler->filter('table a');
+        $this->assertCount(1, $link, $html);
+        $url = $link->attr('href');
+        $this->assertEquals("/wiki/No" . rawurlencode($title), parse_url($url, PHP_URL_PATH));
+    }
+
 }

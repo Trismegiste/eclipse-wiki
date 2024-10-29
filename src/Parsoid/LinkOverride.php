@@ -38,8 +38,8 @@ abstract class LinkOverride extends DOMProcessor
 
     protected function processLink(Element $link): void
     {
-        $data = DOMDataUtils::getDataParsoid($link);
-        $this->transformLinkDom($link, $data->sa['href']);
+        $dbKey = $link->attributes['title']->value;
+        $this->transformLinkDom($link, $dbKey);
     }
 
     protected function processFile(Element $node): void
@@ -71,4 +71,5 @@ abstract class LinkOverride extends DOMProcessor
     abstract protected function transformFileDom(Element $container, Element $link, Element $img, string $wikiFilename);
 
     abstract protected function transformMissingFileDom(Element $container, Element $link, Element $info, string $wikiFilename);
+
 }
