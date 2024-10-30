@@ -49,7 +49,7 @@ class TimelineCrudTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', '/timeline/create?title=fight');
         $form = $crawler->selectButton('timeline_create_create')->form();
-        $this->assertEquals('Fight', $form['timeline_create']['title']->getValue());
+        $this->assertEquals('fight', $form['timeline_create']['title']->getValue());
     }
 
     public function testList()

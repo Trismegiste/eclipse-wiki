@@ -52,7 +52,7 @@ abstract class GenericCrud extends AbstractController
         $form = $this->createForm($formClass);
 
         if ($request->query->has('title')) {
-            $form['title']->setData(mb_ucfirst($request->query->get('title')));  // @TODO mb_ucfirst is not the responsibility of the Controller
+            $form['title']->setData($request->query->get('title'));
         }
 
         $form->handleRequest($request);

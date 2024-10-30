@@ -60,7 +60,7 @@ class PlaceCrudTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', '/place/create?title=alderaan');
         $form = $crawler->selectButton('place_create')->form();
-        $this->assertEquals('Alderaan', $form['place']['title']->getValue());
+        $this->assertEquals('alderaan', $form['place']['title']->getValue());
     }
 
     public function testList()

@@ -88,10 +88,22 @@ class VertexTest extends TestCase
         $this->assertEquals('[[ülyss|morphe]]', $this->sut->getContent());
     }
 
-    public function testSetTitle()
+    public function getTitleSample()
     {
-        $this->sut->setTitle('àlèd');
-        $this->assertEquals('Àlèd', $this->sut->getTitle());
+        return [
+            ['àlèd', 'Àlèd'],
+            ['œil perçant', 'Œil perçant'],
+            ['çaça', 'Çaça']
+        ];
+    }
+
+    /**
+     * @dataProvider getTitleSample
+     */
+    public function testSetTitle($title, $result)
+    {
+        $this->sut->setTitle($title);
+        $this->assertEquals($result, $this->sut->getTitle());
     }
 
 }

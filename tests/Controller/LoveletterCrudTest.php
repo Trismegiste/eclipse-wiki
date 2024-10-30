@@ -78,7 +78,7 @@ class LoveletterCrudTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', '/loveletter/create?title=alderaan');
         $form = $crawler->selectButton('loveletter_create')->form();
-        $this->assertEquals('Alderaan', $form['loveletter']['title']->getValue());
+        $this->assertEquals('alderaan', $form['loveletter']['title']->getValue());
     }
 
     public function testList()

@@ -42,7 +42,7 @@ class SceneCrudTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', '/scene/create?title=baston');
         $form = $crawler->selectButton('scene_create_create')->form();
-        $this->assertEquals('Baston', $form['scene_create']['title']->getValue());
+        $this->assertEquals('baston', $form['scene_create']['title']->getValue());
     }
 
     public function testList()
