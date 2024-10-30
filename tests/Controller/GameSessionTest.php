@@ -55,14 +55,19 @@ class GameSessionTest extends WebTestCase
     public function testHistoryBroadcastExport()
     {
         $crawler = $this->client->request('GET', '/session/broadcast-export');
-        $this->assertResponseIsSuccessful();;
-        $this->assertSelectorTextContains('script[type="application/json"]', 'history.png.jpg');
+        $this->assertResponseIsSuccessful('Cannot view report');
+        $listing = json_decode($crawler->filter('script[type="application/json"]')->text());
+        $this->assertContains('history.png.jpg', $listing);
         $this->assertSelectorExists('#gallery_selection_export');
 
         $form = $crawler->selectButton('gallery_selection_export')->form();
         $values = $form->getPhpValues();
-        $values['gallery_selection']['gallery'][0]['picture'] = 'history.png.jpg';
-        $values['gallery_selection']['gallery'][0]['selected'] = 'on';
+        //  check all pictures in the gallery (because other tests can add push history entries and the form cannot add/remove item in the collection)
+        foreach ($listing as $idx => $pic) {
+            $values['gallery_selection']['gallery'][$idx]['picture'] = $pic;
+            $values['gallery_selection']['gallery'][$idx]['selected'] = 'on';
+        }
+
         $this->client->request($form->getMethod(), $form->getUri(), $values, $form->getPhpFiles());
 
         // @todo the local picture at first page is crashing he PDF generation because CLI php cannot find localhost in docker
@@ -71,7 +76,7 @@ class GameSessionTest extends WebTestCase
         // 1. ne pas utiliser MwImageCache pour des images locales, c'est fait pour le remote mediawiki sur fandom
         // 2. trouver un moyen de DataURI les images locales et/ou de pouvoir linker avec un absolute_url_config_docker
         //    car chromium doit pouvoir accéder
-        $this->assertResponseIsSuccessful();
+        $this->assertResponseIsSuccessful('Cannot create PDF report');
         $this->assertStringStartsWith('attachment; filename=Rapport', $this->client->getResponse()->headers->get('content-disposition'));
     }
 

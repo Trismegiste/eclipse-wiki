@@ -32,7 +32,7 @@ class GameSession extends AbstractController
     }
 
     /**
-     * Shows the history of the GM
+     * Shows the history of shown vertices (filtered)
      * @param GameSessionTracker $tracker
      * @return Response
      */
