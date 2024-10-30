@@ -50,13 +50,13 @@ abstract class GenericCrud extends AbstractController
     protected function handleCreate(string $formClass, string $template, Request $request): Response
     {
         $obj = null;
-        $fromLink = $request->query->has('title');
+        $fromLink = $request->query->has('title'); // @TODO too verbose, use empty with default
         if ($fromLink) {
             $title = $request->query->get('title');
-            $obj = $this->createEntity(ucfirst($title));
+            $obj = $this->createEntity(ucfirst($title)); // @TODO ucfirst is useless
         }
 
-        $form = $this->createForm($formClass, $obj);
+        $form = $this->createForm($formClass, $obj); // @TODO use the handleRequest to initialize the form
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -66,7 +66,7 @@ abstract class GenericCrud extends AbstractController
             return $this->redirectToRoute('app_vertexcrud_show', ['pk' => $vertex->getPk()]);
         }
 
-        return $this->render($template, ['form' => $form->createView(), 'from_link' => $fromLink]);
+        return $this->render($template, ['form' => $form->createView(), 'from_link' => $fromLink]); // @TODO from_link is useless
     }
 
     /**
