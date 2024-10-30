@@ -49,6 +49,14 @@ class NpcGeneratorTest extends WebTestCase
         $this->client->followRedirect();
     }
 
+    public function testCreateWithDefaultTitle()
+    {
+        $crawler = $this->client->request('GET', '/npc/create?title=Sisko');
+        $this->assertResponseIsSuccessful();
+        $form = $crawler->selectButton('npc_generate')->form();
+        $this->assertEquals('Sisko', $form['npc']['title']->getValue());
+    }
+
     public function testList()
     {
         $crawler = $this->client->request('GET', '/vertex/filter');

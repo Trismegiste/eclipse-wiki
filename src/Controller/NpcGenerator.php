@@ -57,9 +57,12 @@ class NpcGenerator extends AbstractController
     #[Route('/create', methods: ['GET', 'POST'])]
     public function create(Request $request): Response
     {
-        $title = $request->query->get('title', '');
-
         $form = $this->createForm(NpcCreate::class);
+        // init the title in the form if it is set in the url query parameters
+        if ($request->query->has('title')) {
+            $form['title']->setData($request->query->get('title'));
+        }
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $npc = $form->getData();
@@ -68,10 +71,7 @@ class NpcGenerator extends AbstractController
             return $this->redirectToRoute('app_npcgenerator_edit', ['pk' => $npc->getPk()]);
         }
 
-        return $this->render('npc/create.html.twig', [
-                    'form' => $form->createView(),
-                    'default_name' => mb_ucfirst($title)
-        ]);
+        return $this->render('npc/create.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -364,7 +364,7 @@ class NpcGenerator extends AbstractController
         $html = $this->renderView('npc/character_sheet.pdf.twig', ['vertex' => $vertex]);
         $pdf = $broadcast->generatePdf($title, $html);
         $this->addFlash('success', 'PDF Fiche de perso généré');
-        
+
         return $this->redirectToRoute('app_gmpusher_pushdocument', [
                     'pk' => $vertex->getPk(),
                     'filename' => $pdf->getBasename(),

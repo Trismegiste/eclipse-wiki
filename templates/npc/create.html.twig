@@ -17,8 +17,8 @@
     <div class="pure-g character">
         <div class="pure-u-1">
             {{ form_widget(form['wildCard']) }}
-            {{ form_widget(form['title'], {value: default_name, attr:{class:'pure-input-3-4'}}) }}
-            <a href="{{ path('app_npcgraphcrud_run', {title: default_name}) }}"
+            {{ form_widget(form['title'], {attr:{class:'pure-input-3-4'}}) }}
+            <a href="{{ path('app_npcgraphcrud_run', {title: form['title'].vars.data}) }}"
                class="pure-button"
                title="Création avec Auto-PNJ">
                 <i class="icon-npcgraph"></i>
