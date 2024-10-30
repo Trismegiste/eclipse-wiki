@@ -8,9 +8,9 @@ namespace App\Controller;
 
 use App\Entity\Place;
 use App\Entity\Transhuman;
-use App\Entity\Vertex;
 use App\Form\PlaceAppendMorphBank;
 use App\Form\PlaceType;
+use App\Parsoid\Parser;
 use App\Service\DigraphExplore;
 use App\Service\DocumentBroadcaster;
 use App\Service\Mercure\Pusher;
@@ -43,11 +43,6 @@ class PlaceCrud extends GenericCrud
     public function edit(string $pk, Request $request): Response
     {
         return $this->handleEdit(PlaceType::class, 'place/edit.html.twig', $pk, $request);
-    }
-
-    protected function createEntity(string $title): Vertex
-    {
-        return new Place($title);
     }
 
     /**
@@ -143,7 +138,7 @@ class PlaceCrud extends GenericCrud
      * Push a PDF with the content of the morph bank to the player public channel
      */
     #[Route('/push-morph-bank/{pk}', methods: ['POST'], requirements: ['pk' => '[\\da-f]{24}'])]
-    public function pushMorphBank(Place $place, Request $request, DocumentBroadcaster $broadcast, Pusher $pusher, \App\Parsoid\Parser $parsoid): JsonResponse
+    public function pushMorphBank(Place $place, Request $request, DocumentBroadcaster $broadcast, Pusher $pusher, Parser $parsoid): JsonResponse
     {
         $data = $request->getPayload();
         if ($data->has('title')) {

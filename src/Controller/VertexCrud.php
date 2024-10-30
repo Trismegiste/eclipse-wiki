@@ -198,11 +198,6 @@ class VertexCrud extends GenericCrud
         return $this->render('fragment/listing_only.html.twig', ['listing' => $found]);
     }
 
-    protected function createEntity(string $title): Vertex
-    {
-        throw new LogicException('Cannot create abstract vertex ' . $title);
-    }
-
     /**
      * Archiving a vertex
      */

@@ -7,7 +7,6 @@
 namespace App\Controller;
 
 use App\Entity\Handout;
-use App\Entity\Vertex;
 use App\Form\HandoutType;
 use App\Repository\VertexRepository;
 use App\Service\DocumentBroadcaster;
@@ -25,11 +24,6 @@ class HandoutCrud extends GenericCrud
     public function __construct(VertexRepository $repo)
     {
         parent::__construct($repo);
-    }
-
-    protected function createEntity(string $title): Vertex
-    {
-        return new Handout($title);
     }
 
     /**

@@ -7,7 +7,6 @@
 namespace App\Controller;
 
 use App\Entity\Timeline;
-use App\Entity\Vertex;
 use App\Form\TimelineCreate;
 use App\Form\TimelineDebrief;
 use App\Form\TimelineType;
@@ -30,11 +29,6 @@ class TimelineCrud extends GenericCrud
     public function __construct(VertexRepository $repo, protected DigraphExplore $explorer)
     {
         parent::__construct($repo);
-    }
-
-    protected function createEntity(string $title): Vertex
-    {
-        return new Timeline($title);
     }
 
     /**

@@ -7,7 +7,6 @@
 namespace App\Controller;
 
 use App\Entity\Loveletter;
-use App\Entity\Vertex;
 use App\Form\LoveletterPcChoice;
 use App\Form\LoveletterType;
 use App\Service\DocumentBroadcaster;
@@ -24,11 +23,6 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/loveletter')]
 class LoveletterCrud extends GenericCrud
 {
-
-    protected function createEntity(string $title): Vertex
-    {
-        return new Loveletter($title);
-    }
 
     /**
      * Creates a Love letter

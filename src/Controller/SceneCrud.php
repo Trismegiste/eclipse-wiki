@@ -6,8 +6,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Scene;
-use App\Entity\Vertex;
 use App\Form\SceneCreate;
 use App\Form\VertexType;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,11 +17,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class SceneCrud extends GenericCrud
 {
-
-    protected function createEntity(string $title): Vertex
-    {
-        return new Scene($title);
-    }
 
     /**
      * @param Request $request

@@ -6,7 +6,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Vertex;
 use App\Repository\VertexRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,11 +23,6 @@ abstract class GenericCrud extends AbstractController
     {
         $this->repository = $repo;
     }
-
-    /**
-     * Creates a new entity managed in this CRUD
-     */
-    abstract protected function createEntity(string $title): Vertex;
 
     /**
      * The 'create' controller that create a new Vertex subclass instance
