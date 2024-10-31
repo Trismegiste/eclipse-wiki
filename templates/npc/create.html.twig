@@ -23,6 +23,10 @@
     </div>
 {% endblock %}
 
+{% block _npc_content_row %}
+    {{ form_widget(form) }}
+{% endblock %}
+
 {% block _npc_title_widget %}
     {{ form_widget(form, {attr:{class:'pure-input-3-4'}}) }}
     <a href="{{ path('app_npcgraphcrud_run', {title: form.vars.data}) }}"
