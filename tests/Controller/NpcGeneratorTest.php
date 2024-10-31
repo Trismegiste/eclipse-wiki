@@ -42,11 +42,15 @@ class NpcGeneratorTest extends WebTestCase
                 'title' => 'Luke',
                 'background' => 'Hilote',
                 'faction' => 'Tamiseur',
-                'morph' => 'Basique'
+                'morph' => 'Basique',
+                'content' => [
+                    'info' => 'X-wing'
+                ]
         ]]);
         $crawler = $this->client->submit($form);
         $this->assertResponseRedirects();
         $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
     }
 
     public function testCreateWithDefaultTitle()
@@ -125,9 +129,11 @@ class NpcGeneratorTest extends WebTestCase
         $url = $crawler->filterXPath('//a/i[@class="icon-edit"]/parent::a')->attr('href');
         $crawler = $this->client->request('GET', $url);
         $this->assertSelectorExists('#npc_info_create');
+
         $pk = $this->client->getRequest()->attributes->get('pk');
 
         $form = $crawler->selectButton('npc_info_create')->form();
+        $this->assertEquals('X-wing', $form['npc_info']['content']->getValue());
         $this->client->submit($form, [
             'npc_info' => [
                 'content' => 'some text',

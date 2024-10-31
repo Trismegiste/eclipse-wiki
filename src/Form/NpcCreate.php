@@ -7,9 +7,9 @@
 namespace App\Form;
 
 use App\Entity\Transhuman;
+use App\Form\Type\NpcCreationInfo;
 use App\Form\Type\ProviderChoiceType;
 use App\Form\Type\SurnameLanguageType;
-use App\Form\Type\WikitextType;
 use App\Form\Type\WikiTitleType;
 use App\Repository\BackgroundProvider;
 use App\Repository\CharacterFactory;
@@ -49,14 +49,7 @@ class NpcCreate extends AbstractType
                 ->add('background', ProviderChoiceType::class, ['provider' => $this->background, 'placeholder' => '--- Choisissez un Historique ---'])
                 ->add('faction', ProviderChoiceType::class, ['provider' => $this->faction, 'placeholder' => '--- Choisissez une Faction ---'])
                 ->add('morph', ProviderChoiceType::class, ['provider' => $this->morph, 'placeholder' => '--- Choisissez un Morphe ---'])
-                ->add('content', WikitextType::class, [
-                    'required' => false,
-                    'attr' => [
-                        'class' => 'pure-input-1',
-                        'placeholder' => 'Information au format WikiText',
-                        'rows' => 2
-                    ]
-                ])
+                ->add('content', NpcCreationInfo::class)
                 ->add('surnameLang', SurnameLanguageType::class)
                 ->add('generate', SubmitType::class);
     }

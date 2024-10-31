@@ -4,7 +4,7 @@
  * eclipse-wiki
  */
 
-namespace App\Form;
+namespace App\Form\Type;
 
 use App\Form\Type\WikitextType;
 use Symfony\Component\Form\AbstractType;
@@ -13,7 +13,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 /**
  * Quick info fields for a NPC that compile into the content
  */
-class NpCreationInfoType extends AbstractType implements \Symfony\Component\Form\DataMapperInterface
+class NpcCreationInfo extends AbstractType implements \Symfony\Component\Form\DataMapperInterface
 {
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -38,7 +38,12 @@ class NpCreationInfoType extends AbstractType implements \Symfony\Component\Form
 
     public function mapFormsToData(\Traversable $forms, &$viewData): void
     {
-        
+        if (is_null($viewData)) {
+            return;
+        }
+
+        $field = iterator_to_array($forms);
+        $viewData = $field['info']->getData();
     }
 
 }
