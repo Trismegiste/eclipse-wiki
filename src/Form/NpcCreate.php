@@ -49,8 +49,15 @@ class NpcCreate extends AbstractType
                 ->add('background', ProviderChoiceType::class, ['provider' => $this->background, 'placeholder' => '--- Choisissez un Historique ---'])
                 ->add('faction', ProviderChoiceType::class, ['provider' => $this->faction, 'placeholder' => '--- Choisissez une Faction ---'])
                 ->add('morph', ProviderChoiceType::class, ['provider' => $this->morph, 'placeholder' => '--- Choisissez un Morphe ---'])
+                ->add('content', WikitextType::class, [
+                    'required' => false,
+                    'attr' => [
+                        'class' => 'pure-input-1',
+                        'placeholder' => 'Information au format WikiText',
+                        'rows' => 2
+                    ]
+                ])
                 ->add('surnameLang', SurnameLanguageType::class)
-                ->add('content', WikitextType::class, ['required' => false])
                 ->add('generate', SubmitType::class);
     }
 

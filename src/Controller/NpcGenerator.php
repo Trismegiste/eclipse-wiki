@@ -20,7 +20,6 @@ use App\Form\QuickNpc\SingleNodeChoice;
 use App\Form\Type\ProviderChoiceType;
 use App\Form\Type\WikiTitleType;
 use App\Repository\BackgroundProvider;
-use App\Repository\CharacterFactory;
 use App\Repository\FactionProvider;
 use App\Repository\MorphProvider;
 use App\Repository\VertexRepository;
@@ -35,7 +34,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
-use function mb_ucfirst;
 
 /**
  * CRUD for NPC
@@ -44,11 +42,9 @@ use function mb_ucfirst;
 class NpcGenerator extends AbstractController
 {
 
-    protected $repository;
-
-    public function __construct(VertexRepository $repo)
+    public function __construct(protected VertexRepository $repository)
     {
-        $this->repository = $repo;
+        
     }
 
     /**
