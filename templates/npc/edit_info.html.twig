@@ -10,10 +10,24 @@
 {% block _npc_info_content_label %}
     {{ form_label(form) }}
     {% include 'fragment/form_minitoolbar.html.twig' %}
-    <div class="minitoolbar">
+    <div class="minitoolbar" x-data="npcToolbar('{{ form.vars.id }}')">
         <a href="{{ path('app_ollama_contentgenerate', {pk: form.parent.vars.data.pk, promptKey: 'npc-bg'}) }}"
            class="pure-button button-delete" title="Cancel edition and append a LLM-generated background">
             <i class="icon-background"></i>
         </a>
+        <a href="#" class="pure-button" title="Insert a known locations template" x-on:click.prevent="insertLocationTemplate">
+            <i class="icon-location"></i>
+        </a>
     </div>
+    <script type="module">
+        Alpine.data('npcToolbar', (widgetId) => ({
+                insertLocationTemplate() {
+                    const widget = document.getElementById(widgetId)
+                    let selection = widget.value.substring(widget.selectionStart, widget.selectionEnd).trim().split("\n")
+                    widget.value = widget.value.substring(0, widget.selectionStart)
+                            + "{{ '{{location|habitat=|work=|fun=}}' }}\n"
+                            + widget.value.substr(widget.selectionStart)
+                }
+            }))
+    </script>
 {% endblock %}
