@@ -133,7 +133,7 @@ class NpcGeneratorTest extends WebTestCase
         $pk = $this->client->getRequest()->attributes->get('pk');
 
         $form = $crawler->selectButton('npc_info_create')->form();
-        $this->assertEquals('X-wing', $form['npc_info']['content']->getValue());
+        $this->assertStringStartsWith("X-wing\n{{location", $form['npc_info']['content']->getValue());
         $this->client->submit($form, [
             'npc_info' => [
                 'content' => 'some text',
