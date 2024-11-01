@@ -146,4 +146,12 @@ class NpcGraphCrudTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    public function testCreateWithDefaultTitle()
+    {
+        $crawler = $this->client->request('GET', '/npc-graph/run?title=Sisko');
+        $this->assertResponseIsSuccessful();
+        $form = $crawler->selectButton('selector_generate')->form();
+        $this->assertEquals('Sisko', $form['selector']['title']->getValue());
+    }
+
 }

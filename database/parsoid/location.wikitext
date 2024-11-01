@@ -1,4 +1,4 @@
-== Known locations ==
+=== Known locations ===
 <table class="location">
 {{#if: {{{work|}}}
     |<tr><th>Travail</th><td>[[{{{work}}}]]</td><td><i class="icon-ollama" data-location-type="work" data-location-name="{{{work}}}"></i></td></tr>

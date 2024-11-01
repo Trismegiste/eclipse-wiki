@@ -101,7 +101,7 @@ class ParserTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $this->assertEquals($this->routing->generate('app_picture_uploadmissing', ['title' => 'cthulhu.jpg', 'redirect' => '/']), $this->crawler->filter('a')->attr('href'));
     }
 
-    public function testTemplateEngine()
+    public function testLegendTemplate()
     {
         $html = $this->sut->parse('{{legend|dynamic|123}}', 'browser');
         $this->assertStringContainsString('dynamic', $html);
@@ -225,6 +225,16 @@ class ParserTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $this->assertCount(1, $link, $html);
         $url = $link->attr('href');
         $this->assertEquals("/wiki/No" . rawurlencode($title), parse_url($url, PHP_URL_PATH));
+    }
+
+    public function testLocationTemplate()
+    {
+        $html = $this->sut->parse('{{location|habitat=missing place}}', 'browser');
+        $this->crawler->addHtmlContent($html);
+        $link = $this->crawler->filter('table a');
+        $this->assertCount(1, $link);
+        parse_str(parse_url($link->attr('href'), PHP_URL_QUERY), $queryParam);
+        $this->assertEquals(1, $queryParam['redlink']);
     }
 
 }

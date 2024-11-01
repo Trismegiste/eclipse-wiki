@@ -35,10 +35,12 @@ class NpcGraphCrud extends AbstractController
     #[Route('/run', methods: ['GET', 'POST'])]
     public function run(Request $request): Response
     {
-        $title = $request->query->get('title', '');
         $fullGraph = $this->provider->load();
-
         $form = $this->createForm(Selector::class);
+        // init the title in the form if it is set in the url query parameters
+        if ($request->query->has('title')) {
+            $form['title']->setData($request->query->get('title'));
+        }
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -50,8 +52,7 @@ class NpcGraphCrud extends AbstractController
 
         return $this->render('npcgraph/run.html.twig', [
                     'graph' => $fullGraph,
-                    'form' => $form->createView(),
-                    'default_name' => mb_ucfirst($title)
+                    'form' => $form->createView()
         ]);
     }
 
