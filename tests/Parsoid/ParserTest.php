@@ -10,12 +10,12 @@ use App\Parsoid\Parser;
 use App\Repository\VertexRepository;
 use App\Service\Storage;
 use App\Tests\Controller\PictureFixture;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Trismegiste\Strangelove\MongoDb\Repository;
 
-class ParserTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
+class ParserTest extends WebTestCase
 {
 
     use PictureFixture;
@@ -235,6 +235,24 @@ class ParserTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $this->assertCount(1, $link);
         parse_str(parse_url($link->attr('href'), PHP_URL_QUERY), $queryParam);
         $this->assertEquals(1, $queryParam['redlink']);
+    }
+
+    public function testExtractLocation()
+    {
+        $scene = new Scene('temp');
+        $scene->setContent('{{location|fun=Mars}}');
+        $loc = $this->sut->extractLocation($scene);
+        $this->assertCount(1, $loc);
+        $this->assertArrayHasKey('fun', $loc);
+        $this->assertEquals(['fun' => "Mars"], $loc);
+    }
+
+    public function testExtractLocationWhenEmpty()
+    {
+        $scene = new Scene('temp');
+        $scene->setContent('yolo');
+        $loc = $this->sut->extractLocation($scene);
+        $this->assertCount(0, $loc);
     }
 
 }

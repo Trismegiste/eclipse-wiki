@@ -45,4 +45,23 @@ class Parser
         return $result[0]->asXml();
     }
 
+    public function extractLocation(\App\Entity\Vertex $vertex): array
+    {
+        $html = $this->parse($vertex->getContent(), 'browser');
+        $xml = new \SimpleXMLElement("<wikitext>$html</wikitext>");
+        $result = $xml->xpath('//*[@typeof="mw:Transclusion"][@data-mw]');
+        foreach ($result as $elem) {
+            $template = json_decode((string) $elem->attributes()->{'data-mw'});
+            if ($template?->parts[0]?->template?->target?->wt === 'location') {
+                $param = (array) $template?->parts[0]?->template->params;
+                array_walk($param, function (&$val) {
+                    $val = $val->wt;
+                });
+                return $param;
+            }
+        }
+
+        return [];
+    }
+
 }
