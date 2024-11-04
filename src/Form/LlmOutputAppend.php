@@ -8,13 +8,16 @@ namespace App\Form;
 
 use App\Entity\Vertex;
 use App\Service\Ollama\OutputConverter;
+use App\Service\Ollama\ParameterizedPrompt;
+use App\Service\Ollama\RequestFactory;
 use InvalidArgumentException;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataMapperInterface;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Traversable;
 
@@ -24,7 +27,7 @@ use Traversable;
 class LlmOutputAppend extends AbstractType implements DataMapperInterface
 {
 
-    public function __construct(protected OutputConverter $converter)
+    public function __construct(protected OutputConverter $converter, protected RequestFactory $payloadFactory)
     {
         
     }
@@ -32,7 +35,6 @@ class LlmOutputAppend extends AbstractType implements DataMapperInterface
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-                ->add('subtitle', HiddenType::class, key_exists('subtitle', $options) ? ['data' => $options['subtitle']] : [])
                 ->add('generation', TextareaType::class, ['attr' => ['x-model' => 'content', 'rows' => 30]])
                 ->add('save', SubmitType::class)
                 ->setMethod('PATCH')
@@ -43,8 +45,8 @@ class LlmOutputAppend extends AbstractType implements DataMapperInterface
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('data_class', Vertex::class);
-        $resolver->setDefined('subtitle');
-        $resolver->setAllowedTypes('subtitle', 'string');
+        $resolver->setRequired('prompt');
+        $resolver->setAllowedTypes('prompt', ParameterizedPrompt::class);
     }
 
     public function mapDataToForms(mixed $viewData, Traversable $forms): void
@@ -60,6 +62,11 @@ class LlmOutputAppend extends AbstractType implements DataMapperInterface
 
         $field = iterator_to_array($forms);
         $viewData->appendBlockWithTitle($field['subtitle']->getData(), $this->converter->toWikitext($field['generation']->getData()));
+    }
+
+    public function finishView(FormView $view, FormInterface $form, array $options): void
+    {
+        $view->vars['payload'] = $this->payloadFactory->create($options['prompt']->prompt);
     }
 
 }

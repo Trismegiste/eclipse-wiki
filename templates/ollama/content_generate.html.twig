@@ -1,10 +1,9 @@
 {% extends 'base.html.twig' %}
-{% form_theme append _self %}
 
-{% block title %}{{ append.vars.data.title }}{% endblock %}
+{% block title %}{{ edited_vertex.title }}{% endblock %}
 {% block header_title %}
     <nav style="float: right">
-        <a href="{{ path('app_vertexcrud_show', {pk: append.vars.data.pk}) }}" title="Voir"><i class="icon-eye"></i></a>
+        <a href="{{ path('app_vertexcrud_show', {pk: edited_vertex.pk}) }}" title="Voir"><i class="icon-eye"></i></a>
     </nav>
     {{ block('title') }}
 {% endblock %}
@@ -13,26 +12,24 @@
     <section class="form-prompt">
         {{ form(prompt) }}
     </section>
-    <section x-data="llm('{{ ollama_api }}')">
-        <div x-show="waiting" style="text-align: center"><i class="icon-spin3 animate-spin big-waiting"></i></div>
-        <div x-show="content !== ''">
-            <hgroup>
-                <h2>Ce contenu généré s'ajoutera à {{ append.vars.data.title }}</h2>
-                <h3>(Le formatage Markdown sera converti à la volée en formatage Wikitext)</h3>
-            </hgroup>
-            {{ form(append) }}
-        </div>
-    </section>
+    {% if append is not null %}
+        {% form_theme append _self %}
+        <section x-data="llm('{{ ollama_api }}')">
+            <div x-show="waiting" style="text-align: center"><i class="icon-spin3 animate-spin big-waiting"></i></div>
+            <div x-show="content !== ''">
+                <hgroup>
+                    <h2>Ce contenu généré s'ajoutera à {{ edited_vertex.title }}</h2>
+                    <h3>(Le formatage Markdown sera converti à la volée en formatage Wikitext)</h3>
+                </hgroup>
+                {{ form(append) }}
+            </div>
+        </section>
+    {% endif %}
 {% endblock %}
 
-{% block _llm_output_append_generation_row %}
-    {{ form_widget(form, {attr:{class:'pure-input-1'}}) }}
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
+{% block _llm_output_append_widget %}
     <script type="application/json" id="ollama-payload">
-        {{ payload|json_encode()|raw }}
+        {{ form.vars.payload|json_encode()|raw }}
     </script>
     <script type="module">
         import llmClient from 'ollama-client';
@@ -40,5 +37,10 @@
         Alpine.data('llm', (url) => {
             return llmClient(url, JSON.parse(document.getElementById('ollama-payload').textContent))
         })
-    </script>
+    </script> 
+    {{ form_widget(form) }}
+{% endblock %}
+
+{% block _llm_output_append_generation_row %}
+    {{ form_widget(form, {attr:{class:'pure-input-1'}}) }}
 {% endblock %}
