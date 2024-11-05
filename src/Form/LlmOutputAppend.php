@@ -8,7 +8,6 @@ namespace App\Form;
 
 use App\Entity\Vertex;
 use App\Service\Ollama\OutputConverter;
-use App\Service\Ollama\ParameterizedPrompt;
 use App\Service\Ollama\RequestFactory;
 use InvalidArgumentException;
 use Symfony\Component\Form\AbstractType;
@@ -20,6 +19,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Traversable;
 
 /**
@@ -36,7 +36,9 @@ class LlmOutputAppend extends AbstractType implements DataMapperInterface
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-                ->add('prompt_param', HiddenType::class, ['data' => json_encode($options['prompt']->param)])
+                ->add('block_title', HiddenType::class, ['constraints' => [new NotBlank()]])
+                ->add('prompt_query', HiddenType::class, ['constraints' => [new NotBlank()]])
+                ->add('prompt_param', HiddenType::class, ['constraints' => [new NotBlank()]])
                 ->add('generation', TextareaType::class, ['attr' => ['x-model' => 'content', 'rows' => 30]])
                 ->add('save', SubmitType::class)
                 ->setMethod('PATCH')
@@ -47,8 +49,6 @@ class LlmOutputAppend extends AbstractType implements DataMapperInterface
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('data_class', Vertex::class);
-        $resolver->setRequired('prompt');
-        $resolver->setAllowedTypes('prompt', ParameterizedPrompt::class);
     }
 
     public function mapDataToForms(mixed $viewData, Traversable $forms): void
@@ -63,12 +63,12 @@ class LlmOutputAppend extends AbstractType implements DataMapperInterface
         }
 
         $field = iterator_to_array($forms);
-        $viewData->appendBlockWithTitle($field['subtitle']->getData(), $this->converter->toWikitext($field['generation']->getData()));
+        $viewData->appendBlockWithTitle($field['block_title']->getData(), $this->converter->toWikitext($field['generation']->getData()));
     }
 
     public function finishView(FormView $view, FormInterface $form, array $options): void
     {
-        $view->vars['payload'] = $this->payloadFactory->create($options['prompt']->prompt);
+        $view->vars['payload'] = $this->payloadFactory->create($form['prompt_query']->getData());
     }
 
 }

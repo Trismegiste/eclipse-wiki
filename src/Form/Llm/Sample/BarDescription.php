@@ -7,6 +7,7 @@ use App\Form\Llm\LlmContentInfo;
 use App\Form\Llm\PromptType;
 use App\Service\Ollama\ParameterizedPrompt;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -22,6 +23,7 @@ class BarDescription extends AbstractType implements LlmContentInfo
                 ->add('theme', TextType::class, ['attr' => ['placeholder' => 'un thème']])
                 ->add('ambience', TextType::class, ['attr' => ['placeholder' => 'une ambiance']])
                 ->add('crowd', TextType::class, ['attr' => ['placeholder' => 'un type de clients']])
+                ->add('block_title', HiddenType::class, ['data' => 'Description'])
         ;
     }
 
@@ -41,7 +43,7 @@ class BarDescription extends AbstractType implements LlmContentInfo
 
     public static function getContentTitle(): string
     {
-        return 'Description';
+        throw new \RuntimeException('Do not call ' . __METHOD__);
     }
 
     public static function initializeWithVertex(ParameterizedPrompt $param, Vertex $vertex): void

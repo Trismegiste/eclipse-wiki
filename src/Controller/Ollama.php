@@ -54,10 +54,13 @@ class Ollama extends AbstractController
         $append = null;
         $prompt->handleRequest($request);
         if ($prompt->isSubmitted() && $prompt->isValid()) {
+            $data = $prompt->getData();
             $append = $this->createForm(LlmOutputAppend::class, $vertex, [
-                'action' => $this->generateUrl('app_ollama_contentappend', ['pk' => $vertex->getPk()]),
-                'prompt' => $prompt->getData()
+                'action' => $this->generateUrl('app_ollama_contentappend', ['pk' => $vertex->getPk()])
             ]);
+            $append['prompt_param']->setData(json_encode($data->param));
+            $append['prompt_query']->setData(json_encode($data->prompt));
+            $append['block_title']->setData($prompt['block_title']->getData());
         }
 
         return $this->render('ollama/content_generate.html.twig', [
