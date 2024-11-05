@@ -51,18 +51,13 @@ class Ollama extends AbstractController
         // This current method only deals with prompts and payloads generation for Ollama API, by using the form in $prompt
         $prompt = $this->promptFactory->createForContentGeneration($promptKey, $vertex);
 
-        $payload = null;
         $append = null;
         $prompt->handleRequest($request);
         if ($prompt->isSubmitted() && $prompt->isValid()) {
-            $data = $prompt->getData();
-            
             $append = $this->createForm(LlmOutputAppend::class, $vertex, [
                 'action' => $this->generateUrl('app_ollama_contentappend', ['pk' => $vertex->getPk()]),
-                'prompt' => $data
+                'prompt' => $prompt->getData()
             ]);
-            
-            $payload = $this->payloadFactory->create($data->prompt);
         }
 
         return $this->render('ollama/content_generate.html.twig', [

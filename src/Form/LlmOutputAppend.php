@@ -13,6 +13,7 @@ use App\Service\Ollama\RequestFactory;
 use InvalidArgumentException;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataMapperInterface;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -35,6 +36,7 @@ class LlmOutputAppend extends AbstractType implements DataMapperInterface
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+                ->add('prompt_param', HiddenType::class, ['data' => json_encode($options['prompt']->param)])
                 ->add('generation', TextareaType::class, ['attr' => ['x-model' => 'content', 'rows' => 30]])
                 ->add('save', SubmitType::class)
                 ->setMethod('PATCH')
