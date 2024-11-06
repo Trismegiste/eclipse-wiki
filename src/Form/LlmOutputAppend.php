@@ -81,6 +81,7 @@ class LlmOutputAppend extends AbstractType implements DataMapperInterface
 
     public function finishView(FormView $view, FormInterface $form, array $options): void
     {
+        // generating the API payload for Ollama with the prompt query
         $view->vars['payload'] = $this->payloadFactory->create($form['prompt_query']->getData());
     }
 

@@ -40,24 +40,27 @@ class Ollama extends AbstractController
     /**
      * Generates a specific prompt for ollama and fills a form, on client-side, for the provided vertex
      * @param Request $request
-     * @param Transhuman $npc
+     * @param string $pk the primary key of the vertex that will store the llm-generated content
+     * @param string $promptKey the key of the form type in PromptFormFactory
      * @return Response
      */
     #[Route('/vertex/{pk}/generate/{promptKey}', methods: ['GET', 'POST'])]
     public function contentGenerate(Request $request, string $pk, string $promptKey): Response
     {
         $vertex = $this->repository->load($pk);
+
         // Warning : the form in $append is PATCHed to the controller method below (see below)
         // This current method only deals with prompts and payloads generation for Ollama API, by using the form in $prompt
-        $prompt = $this->promptFactory->createForContentGeneration($promptKey, $vertex);
-
+        $prompt = $this->promptFactory->createForContentGeneration($promptKey, $request->query->all('prefill'));
         $append = null;
+
         $prompt->handleRequest($request);
         if ($prompt->isSubmitted() && $prompt->isValid()) {
             $data = $prompt->getData();
             $append = $this->createForm(LlmOutputAppend::class, $vertex, [
                 'action' => $this->generateUrl('app_ollama_contentappend', ['pk' => $vertex->getPk()])
             ]);
+            // we pass the prompt parameters and the prompt query into the the append form
             $append['prompt_param']->setData(json_encode($data->param));
             $append['prompt_query']->setData($data->prompt);
         }

@@ -6,8 +6,8 @@
 
 namespace App\Form\Llm;
 
-use App\Entity\Vertex;
 use App\Form\Llm\Sample\BarDescription;
+use App\Form\Llm\Sample\FreePrompt;
 use App\Form\Llm\Sample\NpcBackground;
 use App\Form\Llm\Sample\NpcName;
 use App\Form\Llm\Sample\ThingName;
@@ -27,7 +27,7 @@ class PromptFormFactory
         'bar' => BarDescription::class,
         'thing-name' => ThingName::class,
         'npc-name' => NpcName::class,
-        'free' => Sample\FreePrompt::class
+        'free' => FreePrompt::class
     ];
 
     public function __construct(protected FormFactoryInterface $formFac)
@@ -38,20 +38,22 @@ class PromptFormFactory
     /**
      * Creates the form for generating a parameterized prompt for generating the LLM content
      * @param string $key the key for the prompt (see self::promptRepository above)
-     * @param Vertex $vertex the object from the content is generated, it is useful to initialize some filed in the parameterized prompt
+     * @param iterable $prefillParam parameters for prefilling the prompt form
      * @param array $options Options for the form
      * @return FormInterface Ready to use form
      */
-    public function createForContentGeneration(string $key, Vertex $vertex, array $options = []): FormInterface
+    public function createForContentGeneration(string $key, iterable $prefillParam, array $options = []): FormInterface
     {
         $fqcn = $this->getFormType($key);
         if (!is_a($fqcn, LlmContentInfo::class, true)) {
             throw new InvalidArgumentException("$fqcn does not implement LlmContentInfo");
         }
 
-        $prefill = $this->createNewParameters();
-        $fqcn::initializeWithVertex($prefill, $vertex);
-        $prompt = $this->formFac->create($fqcn, $prefill, $options);
+        $prompt = $this->formFac->create($fqcn, null, $options);
+        // prefill the form
+        foreach ($prefillParam as $key => $val) {
+            $prompt[$key]->setData($val);
+        }
 
         return $prompt;
     }
