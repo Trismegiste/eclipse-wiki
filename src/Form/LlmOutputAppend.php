@@ -19,7 +19,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Traversable;
 
 /**
@@ -36,9 +38,19 @@ class LlmOutputAppend extends AbstractType implements DataMapperInterface
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-                ->add('block_title', HiddenType::class, ['constraints' => [new NotBlank()]])
                 ->add('prompt_query', HiddenType::class, ['constraints' => [new NotBlank()]])
-                ->add('prompt_param', HiddenType::class, ['constraints' => [new NotBlank()]])
+                ->add('prompt_param', HiddenType::class, [
+                    'constraints' => [
+                        new NotBlank(),
+                        new Callback(function ($value, ExecutionContextInterface $context) {
+                                    $param = @json_decode($value, true);
+                                    if (!key_exists('block_title', $param)) {
+                                        $context->buildViolation('LLM generation parameters do not include an entry for block_title')
+                                        ->addViolation();
+                                    }
+                                })
+                    ]
+                ])
                 ->add('generation', TextareaType::class, ['attr' => ['x-model' => 'content', 'rows' => 30]])
                 ->add('save', SubmitType::class)
                 ->setMethod('PATCH')
@@ -63,7 +75,8 @@ class LlmOutputAppend extends AbstractType implements DataMapperInterface
         }
 
         $field = iterator_to_array($forms);
-        $viewData->appendBlockWithTitle($field['block_title']->getData(), $this->converter->toWikitext($field['generation']->getData()));
+        $promptParam = json_decode($field['prompt_param']->getData());
+        $viewData->appendBlockWithTitle($promptParam->block_title, $this->converter->toWikitext($field['generation']->getData()));
     }
 
     public function finishView(FormView $view, FormInterface $form, array $options): void

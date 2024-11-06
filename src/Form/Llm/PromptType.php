@@ -8,6 +8,7 @@ namespace App\Form\Llm;
 
 use App\Service\Ollama\ParameterizedPrompt;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -36,6 +37,7 @@ class PromptType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+                ->add('block_title', HiddenType::class, ['data' => 'LLM generation'])
                 ->add('generate', SubmitType::class, [
                     'attr' => ['class' => 'button-continue'],
                     'priority' => -1000
