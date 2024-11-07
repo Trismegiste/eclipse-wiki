@@ -34,7 +34,7 @@ class NpcBackground extends AbstractType implements LlmContentInfo
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefault('prompt_template', "Dans le contexte précedemment décris, rédige un historique pour le personnage nommé {{title}}. " .
+        $resolver->setDefault('prompt_template', "Dans le contexte précedemment décrit, rédige un historique pour le personnage nommé {{title}}. " .
                 "Ce personnage est {{role}} qui vit sur {{location}}. " .
                 "C'est {{gender}}, {{job}}, spécialisé dans {{speciality}}. " .
                 "Cet historique doit comporter 7 points. Un des 7 points doit comporter un evenement tragique et un autre point doit concerner sa famille. Pour chaque point, précise le lieu dans le système solaire.");
