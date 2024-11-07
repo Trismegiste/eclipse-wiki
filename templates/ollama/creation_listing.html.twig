@@ -43,7 +43,7 @@
                     const listing = JSON.parse(extract[1])
                     if (listing !== null) {
                         for (let entry of listing) {
-                            this.listing.push({{ entry_dump|raw }})
+                            this.listing.push({{ prompt.vars.js_list_transform|raw }})
                         }
                     }
                 }

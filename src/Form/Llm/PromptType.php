@@ -32,6 +32,7 @@ class PromptType extends AbstractType
         $resolver->setRequired('prompt_template');
         $resolver->setAllowedTypes('prompt_template', 'string');
         $resolver->setDefault('data_class', ParameterizedPrompt::class);
+        $resolver->setDefined('js_list_transform');
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -49,6 +50,10 @@ class PromptType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['prompt_template'] = preg_replace('#\{\{([^\}]+)\}\}#', '{{form_widget(form.$1)}}', $options['prompt_template']);
+
+        if (key_exists('js_list_transform', $options)) {
+            $view->vars['js_list_transform'] = $options['js_list_transform'];
+        }
     }
 
 }

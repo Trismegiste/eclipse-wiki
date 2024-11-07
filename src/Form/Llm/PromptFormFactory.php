@@ -62,8 +62,8 @@ class PromptFormFactory
     public function createForListingGeneration(string $key, array $options = []): FormInterface
     {
         $fqcn = $this->getFormType($key);
-        if (!is_a($fqcn, LlmListingInfo::class, true)) {
-            throw new InvalidArgumentException("$fqcn does not implement LlmListingInfo");
+        if (!is_a($fqcn, AbstractType::class, true)) {
+            throw new InvalidArgumentException("$fqcn is not an AbstractType");
         }
 
         $prompt = $this->formFac->create($fqcn, null, $options);

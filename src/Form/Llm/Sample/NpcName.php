@@ -6,7 +6,6 @@
 
 namespace App\Form\Llm\Sample;
 
-use App\Form\Llm\LlmListingInfo;
 use App\Form\Llm\PromptType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -16,7 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Generation of listing of NPC names
  */
-class NpcName extends AbstractType implements LlmListingInfo
+class NpcName extends AbstractType
 {
 
     const nameStyle = [
@@ -56,16 +55,13 @@ Voici un exemple de tableau avec un élément
 [{"firstname":"Takeshi", "lastname":"Kovacs"}];
 PROMPT
         );
+
+        $resolver->setDefault('js_list_transform', "entry.firstname + ' ' + entry.lastname");
     }
 
     public function getParent(): string
     {
         return PromptType::class;
-    }
-
-    static public function getEntryDumpJs(): string
-    {
-        return "entry.firstname + ' ' + entry.lastname";
     }
 
 }

@@ -109,8 +109,7 @@ class Ollama extends AbstractController
                     'ollama_api' => $this->ollamaApi,
                     'title' => $promptKey,
                     'prompt' => $prompt->createView(),
-                    'payload' => $payload,
-                    'entry_dump' => $this->promptFactory->getEntryDump($promptKey)
+                    'payload' => $payload
         ]);
     }
 

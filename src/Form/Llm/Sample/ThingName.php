@@ -6,7 +6,6 @@
 
 namespace App\Form\Llm\Sample;
 
-use App\Form\Llm\LlmListingInfo;
 use App\Form\Llm\PromptType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -17,7 +16,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Generation of listing of thing/location/compagnies...
  */
-class ThingName extends AbstractType implements LlmListingInfo
+class ThingName extends AbstractType
 {
 
     const nameStyle = [
@@ -47,16 +46,13 @@ Réponds sous forme de tableau JSON où chaque élément du tableau est un objet
 Voici un exemple de tableau : [{"name":"Yolo's bar"},{"name":"Discovery One"}];
 PROMPT
         );
+
+        $resolver->setDefault('js_list_transform', "entry.name");
     }
 
     public function getParent(): string
     {
         return PromptType::class;
-    }
-
-    static public function getEntryDumpJs(): string
-    {
-        return "entry.name";
     }
 
 }
