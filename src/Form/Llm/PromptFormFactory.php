@@ -71,23 +71,6 @@ class PromptFormFactory
         return $prompt;
     }
 
-    /**
-     * Gets a title for the header of the LLM-generated content
-     * @param string $key the key for the prompt
-     * @return string
-     */
-    public function getSubtitle(string $key): string
-    {
-        $fqcn = $this->getFormType($key);
-
-        return $fqcn::getContentTitle();
-    }
-
-    protected function createNewParameters(): ParameterizedPrompt
-    {
-        return new ParameterizedPrompt();
-    }
-
     protected function getFormType(string $key): string
     {
         if (!key_exists($key, self::promptRepository)) {
