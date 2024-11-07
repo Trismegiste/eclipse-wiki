@@ -15,6 +15,7 @@ use App\Service\Ollama\ParameterizedPrompt;
 use InvalidArgumentException;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\AbstractType;
 
 /**
  * A factory for generating PromptType forms
@@ -45,8 +46,8 @@ class PromptFormFactory
     public function createForContentGeneration(string $key, iterable $prefillParam, array $options = []): FormInterface
     {
         $fqcn = $this->getFormType($key);
-        if (!is_a($fqcn, LlmContentInfo::class, true)) {
-            throw new InvalidArgumentException("$fqcn does not implement LlmContentInfo");
+        if (!is_a($fqcn, AbstractType::class, true)) {
+            throw new InvalidArgumentException("$fqcn is not an AbstractType");
         }
 
         $prompt = $this->formFac->create($fqcn, null, $options);

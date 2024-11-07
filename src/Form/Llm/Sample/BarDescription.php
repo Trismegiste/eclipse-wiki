@@ -3,16 +3,14 @@
 namespace App\Form\Llm\Sample;
 
 use App\Entity\Vertex;
-use App\Form\Llm\LlmContentInfo;
 use App\Form\Llm\PromptType;
-use App\Service\Ollama\ParameterizedPrompt;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class BarDescription extends AbstractType implements LlmContentInfo
+class BarDescription extends AbstractType
 {
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -39,16 +37,6 @@ class BarDescription extends AbstractType implements LlmContentInfo
     public function getParent(): string
     {
         return PromptType::class;
-    }
-
-    public static function getContentTitle(): string
-    {
-        throw new \RuntimeException('Do not call ' . __METHOD__);
-    }
-
-    public static function initializeWithVertex(ParameterizedPrompt $param, Vertex $vertex): void
-    {
-        $param->param['title'] = $vertex->getTitle();
     }
 
 }

@@ -3,16 +3,15 @@
 namespace App\Form\Llm\Sample;
 
 use App\Entity\Vertex;
-use App\Form\Llm\LlmContentInfo;
 use App\Form\Llm\PromptType;
-use App\Service\Ollama\ParameterizedPrompt;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
-class NpcBackground extends AbstractType implements LlmContentInfo
+class NpcBackground extends AbstractType
 {
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -29,6 +28,7 @@ class NpcBackground extends AbstractType implements LlmContentInfo
                 ])
                 ->add('job', TextType::class, ['attr' => ['placeholder' => 'son travail']])
                 ->add('speciality', TextType::class, ['attr' => ['placeholder' => 'sa spécialité']])
+                ->add('block_title', HiddenType::class, ['data' => 'Background'])
         ;
     }
 
@@ -43,17 +43,6 @@ class NpcBackground extends AbstractType implements LlmContentInfo
     public function getParent(): string
     {
         return PromptType::class;
-    }
-
-    public static function getContentTitle(): string
-    {
-        return 'Background';
-    }
-
-    public static function initializeWithVertex(ParameterizedPrompt $param, Vertex $vertex): void
-    {
-        $splitted = explode(' ', $vertex->getTitle());
-        $param->param['title'] = $splitted[0];
     }
 
 }
