@@ -12,7 +12,7 @@
     {% include 'fragment/form_minitoolbar.html.twig' %}
     {% set vertex = form.parent.vars.data %}
     <div class="minitoolbar" x-data="npcToolbar('{{ form.vars.id }}')">
-        <a href="{{ path('app_ollama_contentgenerate', {pk: vertex.pk, promptKey: 'npc-bg', prefill: {title: vertex.title}}) }}"
+        <a href="{{ path('app_ollama_contentgenerate', {pk: vertex.pk, promptKey: 'npc-bg', prefill: {title: vertex.title|split(' ', 2)[0]}}) }}"
            class="pure-button button-delete" title="Cancel edition and append a LLM-generated background">
             <i class="icon-background"></i>
         </a>
