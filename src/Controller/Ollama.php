@@ -6,7 +6,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Transhuman;
 use App\Entity\Vertex;
 use App\Form\Llm\PromptFormFactory;
 use App\Form\LlmOutputAppend;

@@ -24,11 +24,19 @@ class PromptFormFactoryTest extends KernelTestCase
     }
 
     /** @dataProvider getContentPrompt */
-    public function testContentFormWithTitle($key, array $prefill)
+    public function testContentForm($key, array $prefill)
     {
         $form = $this->sut->createForContentGeneration($key, $prefill);
         $view = $form->createView();
         $this->assertInstanceOf(FormView::class, $view);
+    }
+
+    public function testPrefillTitle()
+    {
+        $form = $this->sut->createForContentGeneration('npc-bg', ['title' => 'yolo']);
+        $this->assertEquals('yolo', $form['title']->getData());
+        $view = $form->createView();
+        $this->assertEquals('yolo', $view['title']->vars['data']);
     }
 
     public function testBadKey()

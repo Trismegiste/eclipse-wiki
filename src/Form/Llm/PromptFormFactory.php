@@ -11,11 +11,10 @@ use App\Form\Llm\Sample\FreePrompt;
 use App\Form\Llm\Sample\NpcBackground;
 use App\Form\Llm\Sample\NpcName;
 use App\Form\Llm\Sample\ThingName;
-use App\Service\Ollama\ParameterizedPrompt;
 use InvalidArgumentException;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\AbstractType;
 
 /**
  * A factory for generating PromptType forms
@@ -78,13 +77,6 @@ class PromptFormFactory
         }
 
         return self::promptRepository[$key];
-    }
-
-    public function getEntryDump(string $key): string
-    {
-        $fqcn = $this->getFormType($key);
-
-        return $fqcn::getEntryDumpJs();
     }
 
 }
