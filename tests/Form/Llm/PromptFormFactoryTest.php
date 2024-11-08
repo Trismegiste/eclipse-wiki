@@ -1,36 +1,32 @@
 <?php
 
-use App\Service\Ollama\ParameterizedPrompt;
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use App\Form\Llm\PromptFormFactory;
-use App\Entity\Scene;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormView;
 
 class PromptFormFactoryTest extends KernelTestCase
 {
+
     protected PromptFormFactory $sut;
 
     protected function setUp(): void
     {
-        $this->sut = static::getContainer()->get(App\Form\Llm\PromptFormFactory::class);
+        $this->sut = static::getContainer()->get(PromptFormFactory::class);
     }
-
 
     public function getContentPrompt()
     {
         return [
-            ['npc-bg'],
-            ['bar'],
-            ['free']
+            ['npc-bg', ['title' => 'yolo']],
+            ['bar', ['title' => 'yolo']],
+            ['free', []]
         ];
     }
 
     /** @dataProvider getContentPrompt */
-    public function testContentForm($key)
+    public function testContentFormWithTitle($key, array $prefill)
     {
-        $v = new Scene('yolo');
-        $form = $this->sut->createForContentGeneration($key, $v);
+        $form = $this->sut->createForContentGeneration($key, $prefill);
         $view = $form->createView();
         $this->assertInstanceOf(FormView::class, $view);
     }
@@ -38,8 +34,7 @@ class PromptFormFactoryTest extends KernelTestCase
     public function testBadKey()
     {
         $this->expectException(InvalidArgumentException::class);
-        $v = new Scene('yolo');
-        $form = $this->sut->createForContentGeneration('missing', $v);
+        $this->sut->createForContentGeneration('missing', []);
     }
 
     public function getListingPrompt()
