@@ -1,6 +1,9 @@
 <?php
 
+use App\Entity\Background;
+use App\Entity\Faction;
 use App\Entity\Morph;
+use App\Repository\CharacterFactory;
 use App\Repository\VertexRepository;
 use App\Tests\Controller\PictureFixture;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -22,9 +25,12 @@ class OllamaTest extends WebTestCase
 
     public function testNpcBackground()
     {
-        $npc = $this->createRandomTranshuman();
+        $factory = static::getContainer()->get(CharacterFactory::class);
+        $npc = $factory->create('takeshi' . rand(), new Background('bg'), new Faction('diplo'));
+        $npc->setContent('information');
         $npc->setMorph(new Morph('dummy'));
         $this->repository->save($npc);
+
         $pk = $npc->getPk();
         $crawler = $this->client->request('GET', "/npc/info/$pk");
         $this->assertResponseIsSuccessful();
@@ -42,16 +48,20 @@ class OllamaTest extends WebTestCase
         $this->assertFormValue('form[name=npc_background]', 'npc_background[title]', $npc->getTitle());
         $form = $crawler->selectButton('npc_background_generate')->form();
 
-        $form->setValues(['npc_background' => [
-                'role' => 'diplo',
-                'location' => 'Harlan'
-        ]]);
+        $form->setValues(['npc_background' => ['role' => 'diplo']]);
         $crawler = $this->client->submit($form);
         $this->assertResponseIsSuccessful();
 
         $this->assertSelectorExists('#llm_output_append_save');
         $form = $crawler->selectButton('llm_output_append_save')->form();
         $this->assertStringStartsNotWith($form->getValues()['llm_output_append[prompt_query]'], 'Dans le contexte');
+
+        $form->setValues(['llm_output_append' => ['generation' => 'Harlan']]);
+        $crawler = $this->client->submit($form);
+        $this->assertResponseRedirects();
+        $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('main .parsed-wikitext', 'Harlan');
     }
 
     public function testBar()
