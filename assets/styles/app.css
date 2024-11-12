@@ -414,3 +414,14 @@ form .minitoolbar i {
 .form-prompt fieldset {
     line-height: 2.2em;
 }
+
+/** menu responsiveness */
+aside nav.pure-menu {
+    display: none;
+}
+
+@media screen and (min-width: 80em) {
+    aside nav.pure-menu {
+        display: block;
+    }
+}
