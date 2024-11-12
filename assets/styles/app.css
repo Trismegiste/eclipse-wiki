@@ -415,13 +415,20 @@ form .minitoolbar i {
     line-height: 2.2em;
 }
 
-/** menu responsiveness */
+/** responsiveness */
 aside nav.pure-menu {
+    display: none;
+}
+
+.entity-listing nav.listing-action {
     display: none;
 }
 
 @media screen and (min-width: 80em) {
     aside nav.pure-menu {
         display: block;
+    }
+    .entity-listing nav.listing-action {
+        display: flex;
     }
 }
