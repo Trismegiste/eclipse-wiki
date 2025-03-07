@@ -233,4 +233,15 @@ class RpgSiteConfig extends SiteConfig
         
     }
 
+    #[\Override]
+    public function incrementCounter(string $name, array $labels, float $amount = 1): void
+    {
+        
+    }
+
+    #[\Override]
+    public function observeTiming(string $name, float $value, array $labels): void
+    {
+        
+    }
 }

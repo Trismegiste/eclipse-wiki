@@ -1,4 +1,4 @@
-FROM dunglas/frankenphp
+FROM dunglas/frankenphp:1.4.4-php8.3-bookworm
 
 # Ext MongoDb for PHP
 RUN pecl install mongodb && docker-php-ext-enable mongodb

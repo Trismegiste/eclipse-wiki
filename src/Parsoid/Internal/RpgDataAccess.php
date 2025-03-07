@@ -142,4 +142,9 @@ class RpgDataAccess extends DataAccess
         
     }
 
+    #[\Override]
+    public function addTrackingCategory(PageConfig $pageConfig, ContentMetadataCollector $metadata, string $key): void
+    {
+        
+    }
 }
