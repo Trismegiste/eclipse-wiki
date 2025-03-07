@@ -14,12 +14,6 @@
         <h2>{{ document.label }}</h2>
         {{ form(form) }}
     </section>
-    <section class="cloud">
-        <form action="{{ path('app_gmpusher_cloudshare', {filename: app.request.get('filename')}) }}" method="post">
-            <button><img src="{{ asset('img/cloud-upload.svg') }}" class="pure-img"/></button>
-        </form>
-        <h2>Failover sur le Cloud</h2>
-    </section>
 {% endblock %}
 
 {% block stylesheets %}

@@ -10,12 +10,10 @@ use App\Form\PeeringConfirm;
 use App\Form\Type\TopicSelectorType;
 use App\Repository\VertexRepository;
 use App\Service\DocumentBroadcaster;
-use App\Service\FileIoClient;
 use App\Service\Mercure\Pusher;
 use App\Service\SessionPushHistory;
 use Exception;
 use GdImage;
-use SplFileInfo;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
@@ -144,27 +142,6 @@ class GmPusher extends AbstractController
     }
 
     /**
-     * This controller uploads a file to cloud service for temporary storage and show a link (qrcode) to it
-     * This is only a failover in case of degraded infrastructure during the session (no WiFi, no 5G bluetooth shared connection, etc.)
-     * @param string $filename
-     * @param DocumentBroadcaster $broadcaster
-     * @param FileIoClient $client
-     * @return Response
-     */
-    #[Route("/cloud/{filename}/share", methods: ["POST"])]
-    public function cloudShare(string $filename, DocumentBroadcaster $broadcaster, FileIoClient $client): Response
-    {
-        $link = $client->upload(new SplFileInfo($broadcaster->getLinkToDocument($filename)));
-
-        return $this->render('gmpusher/cloud_share.html.twig', [
-                    'document' => [
-                        'label' => $filename,
-                        'url' => $link
-                    ]
-        ]);
-    }
-
-    /**
      * Broadcasts a blockquote to "read aloud". The text is ajax-posted in wikitext format
      * @param string $pk
      * @param Request $request
@@ -185,5 +162,4 @@ class GmPusher extends AbstractController
 
         return new JsonResponse(['level' => 'success', 'message' => 'Blockquote sent'], 200);
     }
-
 }
