@@ -230,7 +230,7 @@ class MediaWiki
         libxml_use_internal_errors(true); // because other xml/svg namespace warning
         $doc->loadHTML($content);
         $xpath = new \DOMXpath($doc);
-        $elements = $xpath->query('//a[@class="image"]/img');
+        $elements = $xpath->query('//a[@class="mw-file-description image"]/img');
         foreach ($elements as $img) {
             /** @var DOMNode $img */
             $thumbnail = $img->attributes->getNamedItem('src')->value;
