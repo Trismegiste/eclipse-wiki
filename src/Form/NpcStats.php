@@ -117,6 +117,10 @@ class NpcStats extends AbstractType
                     'allow_delete' => true
                 ])
                 ->add('economy', Type\EconomyType::class)
+                ->add('newEconomy', CollectionType::class, [
+                    'entry_type' => \Symfony\Component\Form\Extension\Core\Type\IntegerType::class,
+                    'entry_options' => ['attr' => ['min' => 0, "max" => 10]],
+                ])
                 ->add('edit', SubmitType::class)
                 ->setMethod('PUT');
     }
@@ -180,5 +184,4 @@ class NpcStats extends AbstractType
 
         return $categ;
     }
-
 }

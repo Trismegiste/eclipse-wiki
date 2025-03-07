@@ -33,6 +33,7 @@ abstract class Character extends Vertex implements \JsonSerializable, Fighter
     public int $parryBonus = 0;
     public int $securityBonus = 0;
     public array $economy = [];
+    public array $newEconomy = [];
     public ?string $tokenPic = null;
 
     /**
