@@ -51,10 +51,11 @@ class MissingGraphPrompt extends Command
                     $promptStats[$word] = ['count' => 0, 'missing' => 0];
                 }
                 $promptStats[$word]['count']++;
-            }
-            $matching = $this->repository->searchPicture(implode(' ', $prompt));
-            if (count($matching) == 0) {
-                $promptStats[$word]['missing']++;
+
+                $matching = $this->repository->searchPicture(implode(' ', $prompt));
+                if (count($matching) == 0) {
+                    $promptStats[$word]['missing']++;
+                }
             }
             $io->progressAdvance();
         }
@@ -94,5 +95,4 @@ class MissingGraphPrompt extends Command
 
         return $combi;
     }
-
 }
