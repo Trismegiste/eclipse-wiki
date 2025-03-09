@@ -10,11 +10,18 @@ use App\Entity\Character;
 use App\Entity\Edge;
 use App\Entity\Hindrance;
 use App\Entity\Skill;
+use App\Form\Type\AttributeType;
+use App\Form\Type\EconomyType;
+use App\Form\Type\EdgeType;
+use App\Form\Type\HindranceType;
+use App\Form\Type\SkillType;
+use App\Form\Type\TraitType;
 use App\Repository\EdgeProvider;
 use App\Repository\HindranceProvider;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -40,13 +47,13 @@ class NpcStats extends AbstractType
     {
         $builder
                 ->add('attributes', CollectionType::class, [
-                    'entry_type' => Type\AttributeType::class,
+                    'entry_type' => AttributeType::class,
                     'entry_options' => [
                         'expanded' => true,
                         'max_modif' => 2
                     ]
                 ])
-                ->add('skill_list', Type\TraitType::class, [
+                ->add('skill_list', TraitType::class, [
                     'mapped' => false,
                     'category' => 'skill',
                     'expanded' => true,
@@ -57,7 +64,7 @@ class NpcStats extends AbstractType
                     }
                 ])
                 ->add('skills', CollectionType::class, [
-                    'entry_type' => Type\SkillType::class,
+                    'entry_type' => SkillType::class,
                     'entry_options' => [
                         'expanded' => true,
                         'max_modif' => 2
@@ -96,7 +103,7 @@ class NpcStats extends AbstractType
                     }
                 ])
                 ->add('edges', CollectionType::class, [
-                    'entry_type' => Type\EdgeType::class,
+                    'entry_type' => EdgeType::class,
                     'allow_add' => true,
                     'allow_delete' => true
                 ])
@@ -112,15 +119,19 @@ class NpcStats extends AbstractType
                     'attr' => ['x-on:change' => 'hindrances.push(JSON.parse($event.target.value)); $el.value=""']
                 ])
                 ->add('hindrances', CollectionType::class, [
-                    'entry_type' => Type\HindranceType::class,
+                    'entry_type' => HindranceType::class,
                     'allow_add' => true,
                     'allow_delete' => true
                 ])
-                ->add('economy', Type\EconomyType::class)
                 ->add('newEconomy', CollectionType::class, [
-                    'entry_type' => \Symfony\Component\Form\Extension\Core\Type\IntegerType::class,
-                    'entry_options' => ['attr' => ['min' => 0, "max" => 10]],
+                    'entry_type' => IntegerType::class,
+                    'entry_options' => [
+                        'attr' => ['min' => 0, "max" => 10, 'class' => 'pure-u-1-4'],
+                        'required' => false
+                    ],
+                    'allow_add' => true
                 ])
+                ->add('economy', EconomyType::class)
                 ->add('edit', SubmitType::class)
                 ->setMethod('PUT');
     }

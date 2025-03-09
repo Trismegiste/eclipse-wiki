@@ -51,6 +51,15 @@
                             </tr>
                         {% endif %}
                     {% endfor %}
+                    {% for eco, val in npc.newEconomy %}
+                        {% if val > 0 %}
+                            <tr>
+                                <td></td>
+                                <td>{{ (eco|humanize ~ ' economy')|trans }}</td>
+                                <td>{{ val }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
                 </table>
             {% endif %}
             <h2>Équipement</h2>

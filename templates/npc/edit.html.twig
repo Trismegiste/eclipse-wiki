@@ -102,7 +102,12 @@
 {% endblock %}
 
 {% block _npc_stats_newEconomy_widget %}
-    yolo
+    {% set entry = form_row(form.vars.prototype, {attr:{value: '__VALUE__'}}) %}
+    {% for economy in ['sharing', 'capitalist'] %}
+        {{ entry|replace({'__name__label__': (economy|humanize ~ ' economy')|trans})
+                |replace({'__name__': economy})
+                |replace({'__VALUE__': form.vars.data[economy]|default('')})|raw }}
+    {% endfor %}
 {% endblock %}
 
 
