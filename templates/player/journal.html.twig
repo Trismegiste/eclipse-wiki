@@ -33,10 +33,10 @@
              x-on:contextmenu.prevent="toggleFullScreen">
             <img x-ref="battlemap"/>
         </div>
-        <div x-show="panel===4">
-            <canvas id="renderCanvas">
-            </canvas>
-        </div>
+        {#    <div x-show="panel===4">
+                <canvas id="renderCanvas">
+                </canvas>
+            </div>#}
         <div x-show="panel===2">
             <ul class="document">
                 <template x-for="doc in document">
@@ -55,15 +55,15 @@
     <script type="module">
         import Swiper from 'swiper/swiper-bundle';
         import Manipulation from 'swiper/modules/manipulation';
-        import * as Cubemap from 'cubemap-viewer';
+ //       import * as Cubemap from 'cubemap-viewer';
 
         // performance issue : Babylon scene, engine objects must not be proxied by AlpineJs because it's slowing A LOT
         // That's why I initialize Babylon scene OUTSIDE of AlpineJs init()
-        Cubemap.createCubemap(
-                JSON.parse(document.getElementById("cubemap-grid").textContent),
-                document.getElementById("renderCanvas"),
-                '{{ mercure_publish_jwt }}'
-                )
+        /*   Cubemap.createCubemap(
+         JSON.parse(document.getElementById("cubemap-grid").textContent),
+         document.getElementById("renderCanvas"),
+         '{{ mercure_publish_jwt }}'
+         )*/
 
         Alpine.data('playerLog', (host) => ({
                 host: host,
@@ -140,12 +140,12 @@
                         this.notifPanel(3)
                     })
 
-                    this.socket.addEventListener('cubemap', (msg) => {
-                        console.log('New cubemap')
-                        this.setLastEvent(msg.lastEventId)
-                        Cubemap.updateEnvironment(msg)
-                        this.notifPanel(4)
-                    })
+                    /*        this.socket.addEventListener('cubemap', (msg) => {
+                     console.log('New cubemap')
+                     this.setLastEvent(msg.lastEventId)
+                     Cubemap.updateEnvironment(msg)
+                     this.notifPanel(4)
+                     })*/
 
                     this.socket.addEventListener('document', (msg) => {
                         console.log('New document')
