@@ -78,10 +78,11 @@ class AvatarMaker
         if (!empty($eco)) {
             $this->copyEconomyIcon($profile, $top, $eco);
             // socnet followers
-            $top += 10 + (int) ($this->width / 4);
-            $this->copySocNetFollowerAt($profile, $top, $npc->newEconomy[$eco]);
-        }
+            $this->copySocNetFollowerAt($profile, $top + 10 + (int) ($this->width / 4), $npc->newEconomy[$eco]);
 
+            $socnet = $this->filterEcoEdge($npc);
+            $this->copySocnetEdge($profile, $top, $socnet);
+        }
 
         // socnet icons
         /*    $this->copySocNetIconAt($profile, $top, $this->filterSocNet($npc));
@@ -112,6 +113,33 @@ class AvatarMaker
         $icon = $this->getEconomyIcon($eco);
         $resized = imagescale($icon, $iconSize, -1, IMG_BICUBIC_FIXED);
         imagecopy($profile, $resized, $imgPos, $top, 0, 0, $iconSize, $iconSize);
+    }
+
+    protected function filterEcoEdge(Transhuman $npc): array
+    {
+        $filtered = [];
+        foreach ($npc->getEdges() as $edge) {
+            if (key_exists($edge->getName(), self::hardcodedEdgeToSocnet)) {
+                $filtered[] = self::hardcodedEdgeToSocnet[$edge->getName()];
+            }
+        }
+
+        return $filtered;
+    }
+
+    protected function copySocnetEdge(GdImage $profile, int $top, array $socnet)
+    {
+        shuffle($socnet);
+        $selected = array_slice($socnet, 0, 2);
+
+        $imgPos = (int) ($this->width / 24);
+        $iconSize = (int) ($this->width / 4);
+        foreach ($selected as $key) {
+            $imgPos += (int) ($this->width / 3);
+            $icon = imagecreatefrompng(join_paths($this->publicFolder, self::iconSubDir, $key . '.png'));
+            $resized = imagescale($icon, $iconSize, -1, IMG_BICUBIC_FIXED);
+            imagecopy($profile, $resized, $imgPos, $top, 0, 0, $iconSize, $iconSize);
+        }
     }
 
     protected function filterSocNet(Transhuman $npc): array
