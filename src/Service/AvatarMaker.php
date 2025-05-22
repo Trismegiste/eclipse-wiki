@@ -6,6 +6,7 @@
 
 namespace App\Service;
 
+use App\Entity\Character;
 use App\Entity\Transhuman;
 use GdImage;
 use GDText\Box;
@@ -23,6 +24,15 @@ class AvatarMaker
 
     const fontSubDir = 'designfonts';
     const iconSubDir = 'socnet';
+    const hardcodedEdgeToSocnet = [
+        'Consumériste' => 'CivicNet',
+        'Influenceur' => 'Fame',
+        'Fixeur' => 'Guanxi',
+        'Chercheur' => 'Réseaux de Recherche Associés',
+        'Sentinelle' => "L'Œil",
+        'Baroudeur' => 'EXploreNet',
+        'Mutualiste' => 'Cercle-A'
+    ];
 
     protected int $leftPadding = 15;
     protected readonly int $paddedWidth;
@@ -62,15 +72,46 @@ class AvatarMaker
             $this->copyHashtagAt($profile, $top, $npc->hashtag);
         }
 
-        // socnet icons
+        // main economy
         $top += 110;
-        $this->copySocNetIconAt($profile, $top, $this->filterSocNet($npc));
+        $eco = $this->getFirstEconomy($npc);
+        if (!empty($eco)) {
+            $this->copyEconomyIcon($profile, $top, $eco);
+            // socnet followers
+            $top += 10 + (int) ($this->width / 4);
+            $this->copySocNetFollowerAt($profile, $top, $npc->newEconomy[$eco]);
+        }
 
-        // socnet followers
-        $top += 10 + (int) ($this->width / 4);
-        $this->copySocNetFollowerAt($profile, $top, $this->filterSocNet($npc));
+
+        // socnet icons
+        /*    $this->copySocNetIconAt($profile, $top, $this->filterSocNet($npc));
+
+          // socnet followers
+          $top += 10 + (int) ($this->width / 4);
+          $this->copySocNetFollowerAt($profile, $top, $this->filterSocNet($npc)); */
 
         return $profile;
+    }
+
+    protected function getFirstEconomy(Character $npc): ?string
+    {
+        $eco = $npc->newEconomy;
+        arsort($eco);
+        return array_key_first($eco);
+    }
+
+    protected function getEconomyIcon(string $key): \GdImage
+    {
+        return imagecreatefrompng(join_paths($this->publicFolder, 'economy', "$key.png"));
+    }
+
+    protected function copyEconomyIcon(GdImage $profile, int $top, string $eco): void
+    {
+        $imgPos = (int) ($this->width / 24);
+        $iconSize = (int) ($this->width / 4);
+        $icon = $this->getEconomyIcon($eco);
+        $resized = imagescale($icon, $iconSize, -1, IMG_BICUBIC_FIXED);
+        imagecopy($profile, $resized, $imgPos, $top, 0, 0, $iconSize, $iconSize);
     }
 
     protected function filterSocNet(Transhuman $npc): array
@@ -157,21 +198,16 @@ class AvatarMaker
         }
     }
 
-    protected function copySocNetFollowerAt(GdImage $profile, int $top, array $socnet): void
+    protected function copySocNetFollowerAt(GdImage $profile, int $top, int $level): void
     {
         $iconSize = (int) ($this->width / 4);
         $txtPos = (int) ($this->width / 24);
-        foreach ($socnet as $level) {
-            (new Box($profile))
-                    ->setFontFace($this->getFontPath('OpenSansCondensed-Light'))
-                    ->setFontColor($this->black)
-                    ->setFontSize(40)
-                    ->setBox($txtPos, $top, $iconSize, 40)
-                    ->setTextAlign(HorizontalAlignment::Center, VerticalAlignment::Top)
-                    ->draw($this->printFollowers(10 ** ($level - random_int(10, 75) / 100.0)));
-
-            $txtPos += (int) ($this->width / 3);
-        }
+        (new Box($profile))
+                ->setFontFace($this->getFontPath('OpenSansCondensed-Light'))
+                ->setFontColor($this->black)
+                ->setFontSize(40)
+                ->setBox($txtPos, $top, $iconSize, 40)
+                ->setTextAlign(HorizontalAlignment::Center, VerticalAlignment::Top)
+                ->draw($this->printFollowers(10 ** ($level - random_int(10, 75) / 100.0)));
     }
-
 }
