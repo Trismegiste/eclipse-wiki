@@ -81,7 +81,7 @@ class AvatarMaker
             $this->copySocNetFollowerAt($profile, $top + 10 + (int) ($this->width / 4), $npc->newEconomy[$eco]);
 
             $socnet = $this->filterEcoEdge($npc);
-            $this->copySocnetEdge($profile, $top, $socnet);
+            $this->copySocnetEdge($profile, $top + (int) ($this->width / 10), $socnet);
         }
 
         // socnet icons
@@ -132,8 +132,8 @@ class AvatarMaker
         shuffle($socnet);
         $selected = array_slice($socnet, 0, 2);
 
-        $imgPos = (int) ($this->width / 24);
-        $iconSize = (int) ($this->width / 4);
+        $imgPos = (int) ($this->width / 12);
+        $iconSize = (int) ($this->width / 6);
         foreach ($selected as $key) {
             $imgPos += (int) ($this->width / 3);
             $icon = imagecreatefrompng(join_paths($this->publicFolder, self::iconSubDir, $key . '.png'));
