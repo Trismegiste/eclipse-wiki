@@ -2,6 +2,14 @@
 
 {% block abilities_list %}
     {{ include('fragment/morph_detail.html.twig', {morph: npc.morph}) }}
+    <h2>Atouts (spéciaux)</h2>
+    <ul>
+        {% for edge in npc.edges %}
+            <li>
+                <a href="{{ wikilink(edge.name) }}">{{ edge.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}
 
 {% block content %}
